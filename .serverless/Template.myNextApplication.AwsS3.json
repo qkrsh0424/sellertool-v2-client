@@ -1,0 +1,6 @@
+{
+  "name": "sellertl-serverless-1",
+  "region": "us-east-1",
+  "accelerated": true,
+  "url": "https://sellertl-serverless-1.s3.amazonaws.com"
+}

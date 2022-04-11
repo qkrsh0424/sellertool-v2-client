@@ -1,0 +1,31 @@
+{
+  "name": "i7u1e9-5qmanfm",
+  "arn": "arn:aws:iam::461620480002:role/i7u1e9-5qmanfm",
+  "service": [
+    "edgelambda.amazonaws.com",
+    "lambda.amazonaws.com"
+  ],
+  "policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Resource": "*",
+        "Action": [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+      },
+      {
+        "Effect": "Allow",
+        "Resource": "arn:aws:s3:::sellertl-serverless-1/*",
+        "Action": [
+          "s3:GetObject",
+          "s3:PutObject"
+        ]
+      }
+    ]
+  },
+  "region": "us-east-1"
+}

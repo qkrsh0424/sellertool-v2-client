@@ -1,0 +1,14 @@
+{
+  "region": "us-east-1",
+  "privateZone": false,
+  "domain": "sellertl.com",
+  "subdomains": [
+    {
+      "domain": "www.sellertl.com",
+      "distributionId": "E3K99PVUDWC0JD",
+      "url": "https://d1dxkhjorlqcpu.cloudfront.net",
+      "type": "awsCloudFront"
+    }
+  ],
+  "domainMinimumProtocolVersion": "TLSv1.2_2018"
+}

@@ -11,7 +11,7 @@
 # next.js
 /.next/
 /out/
-/.severless/
+/.severless
 /.serverless_nextjs/
 /serverless.yml
 

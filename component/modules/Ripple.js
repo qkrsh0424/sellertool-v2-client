@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
 import PropTypes from "prop-types";
 
@@ -28,7 +28,7 @@ const RippleContainer = styled.div`
 `;
 
 const useDebouncedRippleCleanUp = (rippleCount, duration, cleanUpFunction) => {
-    useLayoutEffect(() => {
+    useEffect(() => {
         let bounce = null;
         if (rippleCount > 0) {
             clearTimeout(bounce);
@@ -68,7 +68,7 @@ const Ripple = props => {
         setRippleArray([...rippleArray, newRipple]);
     };
     return (
-        
+
         <RippleContainer duration={duration} color={color} scale={scale} onMouseDown={addRipple}>
             {rippleArray.length > 0 &&
                 rippleArray.map((ripple, index) => {

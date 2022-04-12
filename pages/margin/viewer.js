@@ -1,15 +1,17 @@
 import Head from "next/head";
 import FooterMain from "../../component/footer/FooterMain";
 import MainComponent from "../../component/margin/viewer/MainComponent";
-import NavbarMain from "../../component/navbar/NavbarMain";
+import PrimaryNavbarMainComponent from "../../component/navbar/primary-navbar";
+import SecondaryNavbarMainComponent from "../../component/navbar/secondary-navbar";
 
-const MarginViewerPage = () =>{
+const MarginViewerPage = () => {
     return (
         <>
             <Head>
-				<title>마진율 계산기 뷰어 | 셀러툴</title>
-			</Head>
-			<NavbarMain></NavbarMain>
+                <title>마진율 계산기 뷰어 | 셀러툴</title>
+            </Head>
+            <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
+            <SecondaryNavbarMainComponent></SecondaryNavbarMainComponent>
             <MainComponent></MainComponent>
             <FooterMain></FooterMain>
         </>

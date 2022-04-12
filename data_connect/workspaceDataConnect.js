@@ -6,12 +6,25 @@ const SCP_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.deve
 
 const workspaceDataConnect = () => {
     return {
-        getWorkspace: async function(params){
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/workspace`,{
-                params:params,
-                withCredentials:true,
+        getWorkspace: async function (workspaceId) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/workspaces/${workspaceId}`, {
+                withCredentials: true,
                 xsrfCookieName: 'auth_csrf',
-                xsrfHeaderName:'X-XSRF-TOKEN'
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        getWorkspaces: async function () {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/workspaces`, {
+                withCredentials: true,
+                xsrfCookieName: 'api_csrf',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        createPrivate: async function (body) {
+            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/workspaces/private`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'api_csrf',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         }
     }

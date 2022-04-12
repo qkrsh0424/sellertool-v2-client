@@ -29,10 +29,7 @@ const DispatchWorkspaceComponent = (props) => {
     }, [userRdx.isLoading, userRdx.info]);
 
     const _getWorkspace = async (workspaceId) => {
-        let params = {
-            workspaceId: workspaceId
-        }
-        await workspaceDataConnect().getWorkspace(params)
+        await workspaceDataConnect().getWorkspace(workspaceId)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     if (res.data?.data) {

@@ -1,20 +1,20 @@
 import Head from "next/head";
 import FooterMain from "../../component/footer/FooterMain";
-import MainComponent from "../../component/n-rank/dashboard/MainComponent";
 import PrimaryNavbarMainComponent from "../../component/navbar/primary-navbar";
 import SecondaryNavbarMainComponent from "../../component/navbar/secondary-navbar";
+import WorkspaceManagementMainComponent from "../../component/workspace/management";
 
-const NaverRankDashboard = () => {
+const WorkspaceManagementPage = (props) => {
     return (
         <>
             <Head>
-                <title>네이버 랭킹 조회 | 셀러툴</title>
+                <title>워크스페이스 관리</title>
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <SecondaryNavbarMainComponent></SecondaryNavbarMainComponent>
-            <MainComponent></MainComponent>
+            <WorkspaceManagementMainComponent></WorkspaceManagementMainComponent>
             <FooterMain></FooterMain>
         </>
     );
 }
-export default NaverRankDashboard;
+export default WorkspaceManagementPage;

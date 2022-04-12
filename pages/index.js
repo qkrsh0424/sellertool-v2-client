@@ -1,9 +1,9 @@
 
 import Head from 'next/head';
-import styled from 'styled-components';
 import FooterMain from '../component/footer/FooterMain';
 import HomeMain from '../component/home/HomeMain';
-import NavbarMain from '../component/navbar/NavbarMain';
+import PrimaryNavbarMainComponent from '../component/navbar/primary-navbar';
+import SecondaryNavbarMainComponent from '../component/navbar/secondary-navbar';
 
 export default function Home() {
 	return (
@@ -11,7 +11,8 @@ export default function Home() {
 			<Head>
 				<title>셀러툴 홈</title>
 			</Head>
-			<NavbarMain></NavbarMain>
+			<PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
+			<SecondaryNavbarMainComponent></SecondaryNavbarMainComponent>
 			<HomeMain></HomeMain>
 			<FooterMain></FooterMain>
 		</>

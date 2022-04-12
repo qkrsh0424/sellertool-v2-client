@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from 'styled-components';
 import Link from 'next/link';
 import { loginDataConnect } from "../../data_connect/loginDataConnect";
@@ -6,8 +6,9 @@ import { useRouter } from "next/router";
 import { csrfDataConnect } from "../../data_connect/csrfDataConnect";
 import WorkspaceSelectorMain from "./WokspaceSelectorMain";
 import CommonModalComponent from "../modules/CommonModalComponent";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import WorkspaceListModalComponent from "./WorkspaceListModalComponent";
+import { workspaceDataConnect } from "../../data_connect/workspaceDataConnect";
 // import MenuIcon from '@mui/icons-material/Menu';
 
 const NavbarContainer = styled.div`
@@ -77,14 +78,17 @@ const LogoImgEl = styled.img`
 `;
 
 const NavbarMain = () => {
-    const userRdx = useSelector(state => state.userState);
+    const dispatch = useDispatch();
+    const workspaceRdx = useSelector(state => state.workspaceState);
+    const userRdx = useSelector(state => state.userState)
     const router = useRouter();
 
+    const [workspaces, dispatchWorkspaces] = useReducer(workspacesReducer, initialWorkspaces);
     const [workspaceListModalOpen, setWorkspaceListModalOpen] = useState(false);
 
-    const __handleDataConnect = () => {
-        return {
-            logout: async function () {
+    const __auth = {
+        req: {
+            logout: async () => {
                 await loginDataConnect().logout()
                     .then(res => {
                         if (res.status === 200 && res.data.message === 'success') {
@@ -102,24 +106,69 @@ const NavbarMain = () => {
                         alert(res.data.memo);
                     })
             }
+        },
+        action: {
+            logout: async () => {
+                await csrfDataConnect().getAuthCsrf();
+                await __auth.req.logout();
+            }
         }
     }
 
-    const __handleEventControl = () => {
-        return {
-            logout: async function () {
-                await csrfDataConnect().getAuthCsrf();
-                await __handleDataConnect().logout();
+    const __workspace = {
+        req: {
+            fetchList: async () => {
+                await workspaceDataConnect().getWorkspaces()
+                    .then(res => {
+                        if (res.status === 200) {
+                            dispatchWorkspaces({
+                                type: 'SET_DATA',
+                                payload: res.data?.data
+                            })
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        console.log(res);
+                    })
             },
-            workspaceList: function () {
-                return {
-                    onModalOpen: function () {
-                        setWorkspaceListModalOpen(true)
-                    },
-                    onModalClose: function () {
-                        setWorkspaceListModalOpen(false)
-                    }
-                }
+            set: async function (workspaceId) {
+                await workspaceDataConnect().getWorkspace(workspaceId)
+                    .then(res => {
+                        if (res.status === 200 && res.data.message === 'success') {
+                            if (res.data?.data) {
+                                dispatch({
+                                    type: 'WORKSPACE_STATE_INIT_INFO',
+                                    payload: res.data?.data
+                                });
+                                localStorage.setItem('sellertool-wsId', res.data?.data?.id);
+                            } else {
+                                dispatch({
+                                    type: 'WORKSPACE_STATE_CLEAR_INFO'
+                                })
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        console.log(err.response);
+                    })
+            }
+        },
+        action: {
+            select: async (workspace) => {
+                await __workspace.req.set(workspace.id);
+                __workspace.action.modalClose();
+            },
+            modalOpen: async () => {
+                await __workspace.req.fetchList();
+                setWorkspaceListModalOpen(true)
+            },
+            modalClose: () => {
+                setWorkspaceListModalOpen(false);
+                dispatchWorkspaces({
+                    type: 'CLEAR'
+                })
             }
         }
     }
@@ -160,26 +209,46 @@ const NavbarMain = () => {
                             >
                                 <div className='rt-el'>내정보</div>
                             </Link>
-                            <div className='rt-el' onClick={() => __handleEventControl().logout()}>로그아웃</div>
+                            <div className='rt-el' onClick={__auth.action.logout}>로그아웃</div>
                         </RightToolbar>
                     }
 
                 </NavbarWrapper>
             </NavbarContainer>
             <WorkspaceSelectorMain
-                onWorkspaceListModalOpen={() => __handleEventControl().workspaceList().onModalOpen()}
+                onWorkspaceListModalOpen={__workspace.action.modalOpen}
             ></WorkspaceSelectorMain>
 
             {/* Modal */}
-            <CommonModalComponent
-                open={workspaceListModalOpen}
+            {(workspaceListModalOpen && userRdx.info && workspaceRdx.info && workspaces) &&
+                <CommonModalComponent
+                    open={workspaceListModalOpen}
 
-                onClose={() => __handleEventControl().workspaceList().onModalClose()}
-            >
-                <WorkspaceListModalComponent></WorkspaceListModalComponent>
-            </CommonModalComponent>
+                    onClose={__workspace.action.modalClose}
+                >
+                    <WorkspaceListModalComponent
+                        userInfo={userRdx?.info}
+                        workspaceInfo={workspaceRdx?.info}
+                        workspaces={workspaces}
+
+                        onActionSelectWorkspace={__workspace.action.select}
+                    ></WorkspaceListModalComponent>
+                </CommonModalComponent>
+            }
         </>
     );
 }
 
 export default NavbarMain;
+
+const initialWorkspaces = null;
+
+const workspacesReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialWorkspaces;
+        default: return initialWorkspaces;
+    }
+}

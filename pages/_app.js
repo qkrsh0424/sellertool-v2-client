@@ -18,6 +18,7 @@ const theme = createTheme();
  * 연 파랑 : #7DC2FF;
  * 핑크 : #db2e5e;
  * 그린 : #50bb1a;
+ * 레드 : #ff6961;
  */
 function MyApp({ Component, pageProps }) {
 	const router = useRouter();

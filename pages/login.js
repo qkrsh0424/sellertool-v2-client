@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import FooterMain from "../component/footer/FooterMain";
 import MainComponent from "../component/login/MainComponent";
-import NavbarMain from "../component/navbar/NavbarMain";
+import PrimaryNavbarMainComponent from "../component/navbar/primary-navbar";
 import { isAnonymous } from "../utils/cookieCheckUtils";
 
 const LoginPage = () => {
@@ -28,7 +28,7 @@ const LoginPage = () => {
             </Head>
             {(userRdx.isLoading === false && !userRdx.info) &&
                 <>
-                    <NavbarMain></NavbarMain>
+                    <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
                     <MainComponent></MainComponent>
                     <FooterMain></FooterMain>
                 </>

@@ -1,49 +1,24 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
+import CommonModalComponent from "../../../modules/CommonModalComponent";
 import ItemListFieldView from "./ItemListField.view";
 import OperationFieldView from "./OperationField.view";
 import { Container } from "./PageContent.styled";
 
 const PageContentComponent = (props) => {
-    const [workspaceType, dispatchWorkspaceType] = useReducer(workspaceTypeReducer, initialWorkspaceType);
-
-    const onActionSelectPublic = () => {
-        dispatchWorkspaceType({
-            type: 'SET_DATA',
-            payload: 'public'
-        })
-    }
-
-    const onActionSelectPrivate = () => {
-        dispatchWorkspaceType({
-            type: 'SET_DATA',
-            payload: 'private'
-        })
-    }
-
     return (
         <>
             <Container>
                 <ItemListFieldView
-                    workspaceType={workspaceType}
+                    workspaceType={props.workspace.publicYn === 'y' ? 'public' : 'private'}
 
-                    onActionSelectPublic={onActionSelectPublic}
-                    onActionSelectPrivate={onActionSelectPrivate}
+                    onActionSelectPublic={props._onSelectPublic}
+                    onActionSelectPrivate={props._onSelectPrivate}
                 />
                 <OperationFieldView
-
+                    onContinue={props._onOpenNameModal}
                 />
             </Container>
         </>
     );
 }
 export default PageContentComponent;
-
-const initialWorkspaceType = 'private';
-
-const workspaceTypeReducer = (state, action) => {
-    switch (action.type) {
-        case 'SET_DATA':
-            return action.payload;
-        default: return initialWorkspaceType
-    }
-}

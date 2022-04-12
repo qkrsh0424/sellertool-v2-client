@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import styled from 'styled-components';
-import Ripple from '../modules/Ripple';
+import Ripple from '../../../modules/Ripple';
 
 const Container = styled.div`
 
@@ -121,7 +121,7 @@ const AddBox = styled.div`
     }
 `;
 
-const WorkspaceListModalComponent = (props) => {
+const WorkspacesModalComponent = (props) => {
     return (
         <>
             <Container>
@@ -129,21 +129,26 @@ const WorkspaceListModalComponent = (props) => {
                     <div className='username-box'>
                         {props.userInfo?.nickname}
                     </div>
-                    <button
-                        className='button-el'
+                    <Link
+                        href='/workspace/management'
+                        passHref
                     >
-                        <div className='button-icon-figure'>
-                            <Image
-                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                src='http://localhost:3000/images/icon/setting_icon.png'
-                                layout='fill'
-                                alt=""
-                                className='button-icon'
-                                loading='lazy'
-                            ></Image>
-                        </div>
-                        <Ripple color={'#e0e0e0'} duration={1000}></Ripple>
-                    </button>
+                        <button
+                            className='button-el'
+                        >
+                            <div className='button-icon-figure'>
+                                <Image
+                                    loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                    src='http://localhost:3000/images/icon/setting_icon.png'
+                                    layout='fill'
+                                    alt=""
+                                    className='button-icon'
+                                    loading='lazy'
+                                ></Image>
+                            </div>
+                            <Ripple color={'#e0e0e0'} duration={1000}></Ripple>
+                        </button>
+                    </Link>
                 </HeadFieldWrapper>
                 {(props.workspaces && props.workspaceInfo) &&
                     <ItemListWrapper>
@@ -196,7 +201,7 @@ const WorkspaceListModalComponent = (props) => {
                                             ></Image>
                                         </div>
                                         <div className='workspace-box'>
-                                            <div className='name'>user111의 셀러툴</div>
+                                            <div className='name'>{r.name}</div>
                                             <div className='type'>Public</div>
                                         </div>
                                     </div>
@@ -234,7 +239,7 @@ const WorkspaceListModalComponent = (props) => {
         </>
     );
 }
-export default WorkspaceListModalComponent;
+export default WorkspacesModalComponent;
 
 const initialWorkspaces = null;
 

@@ -1,7 +1,7 @@
 import Head from "next/head";
-import NavbarMain from "../component/navbar/NavbarMain";
 import FooterMain from "../component/footer/FooterMain";
 import MainComponent from "../component/signup/MainComponent";
+import PrimaryNavbarMainComponent from "../component/navbar/primary-navbar";
 
 const SignupPage = () => {
     return (
@@ -9,7 +9,7 @@ const SignupPage = () => {
             <Head>
                 <title>회원가입 | 셀러툴</title>
             </Head>
-            <NavbarMain></NavbarMain>
+            <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <MainComponent></MainComponent>
             <FooterMain></FooterMain>
         </>

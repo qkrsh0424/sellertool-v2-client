@@ -14,9 +14,11 @@ const userDataConnect = () => {
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
-        checkUsernameDuplicate: async function (params) {
+        checkUsernameDuplicate: async function ({ username }) {
             return await axiosAuthInterceptor.get(`${AUTH_API_ADDRESS}/auth/v1/user/check/username-duplicate`, {
-                params: params,
+                params: {
+                    username
+                },
                 withCredentials: true
             })
         }

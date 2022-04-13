@@ -34,6 +34,9 @@ const TableFieldWrapper = styled.div`
         width: fit-content;
         /* table-layout: fixed; */
         border: none;
+        @media all and (max-width: 992px){
+            table-layout: fixed;
+        }
     }
 
     table .col-5-3 {

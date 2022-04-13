@@ -45,6 +45,7 @@ const FormFieldWrapper = styled.div`
         background: #2C73D2;
         border: none;
         color:white;
+        cursor: pointer;
     }
 `;
 

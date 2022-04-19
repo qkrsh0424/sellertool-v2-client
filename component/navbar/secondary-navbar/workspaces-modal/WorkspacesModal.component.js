@@ -153,6 +153,40 @@ const WorkspacesModalComponent = (props) => {
                 {(props.workspaces && props.workspaceInfo) &&
                     <ItemListWrapper>
                         {props.workspaces?.map(r => {
+                            if (r.publicYn === 'y') {
+                                return (
+                                    <ItemBox
+                                        key={r.id}
+                                        onClick={() => props.onActionSelectWorkspace(r)}
+                                    >
+                                        <div className='flex-box'>
+                                            <div className='avatar-figure'>
+                                                <Image
+                                                    loader={({ src, width, quality }) => `http://localhost:3000/${src}?q=${quality || 75}`}
+                                                    src='images/icon/default_group_icon.png'
+                                                    layout='fill'
+                                                    alt=""
+                                                    className='avatar-icon-el'
+                                                ></Image>
+                                            </div>
+                                            <div className='workspace-box'>
+                                                <div className='name'>{r.name}</div>
+                                                <div className='type'>Public</div>
+                                            </div>
+                                        </div>
+                                        {r.id === props.workspaceInfo?.id &&
+                                            <div className='checked-figure'>
+                                                <Image
+                                                    loader={({ src, width, quality }) => `http://localhost:3000/${src}?q=${quality || 75}`}
+                                                    src='images/icon/check_icon.png'
+                                                    layout='fill'
+                                                    alt=""
+                                                ></Image>
+                                            </div>
+                                        }
+                                    </ItemBox>
+                                )
+                            }
                             if (r.publicYn === 'n') {
                                 return (
                                     <ItemBox
@@ -188,35 +222,7 @@ const WorkspacesModalComponent = (props) => {
                                 );
                             }
 
-                            if (r.publicYn === 'y') {
-                                <ItemBox key={r.id}>
-                                    <div className='flex-box'>
-                                        <div className='avatar-figure'>
-                                            <Image
-                                                loader={({ src, width, quality }) => `http://localhost:3000/${src}?q=${quality || 75}`}
-                                                src='images/icon/default_group_icon.png'
-                                                layout='fill'
-                                                alt=""
-                                                className='avatar-icon-el'
-                                            ></Image>
-                                        </div>
-                                        <div className='workspace-box'>
-                                            <div className='name'>{r.name}</div>
-                                            <div className='type'>Public</div>
-                                        </div>
-                                    </div>
-                                    {r.id === props.workspaceInfo?.id &&
-                                        <div className='checked-figure'>
-                                            <Image
-                                                loader={({ src, width, quality }) => `http://localhost:3000/${src}?q=${quality || 75}`}
-                                                src='images/icon/check_icon.png'
-                                                layout='fill'
-                                                alt=""
-                                            ></Image>
-                                        </div>
-                                    }
-                                </ItemBox>
-                            }
+
                         })}
                         <Link
                             href='/workspace/create'

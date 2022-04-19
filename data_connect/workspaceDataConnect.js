@@ -26,6 +26,16 @@ const workspaceDataConnect = () => {
                 xsrfCookieName: 'api_csrf',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
+        },
+        changeWorkspaceName: async function ({ workspaceId, name }) {
+            return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/workspaces/${workspaceId}/name`, {
+                workspaceId: workspaceId,
+                name: name
+            }, {
+                withCredentials: true,
+                xsrfCookieName: 'api_csrf',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         }
     }
 }

@@ -14,6 +14,13 @@ const checkNicknameForm = (nickname) => {
     return true;
 }
 
+const checkNameForm = (name) => {
+    if (name.length > 15) {
+        return false;
+    }
+    return true;
+}
+
 const comparePassword = (password, passwordCheck) => {
     if (password !== passwordCheck) {
         return false;
@@ -52,6 +59,7 @@ const checkEmailFormat = (email) => {
 export {
     checkUsernameForm,
     checkNicknameForm,
+    checkNameForm,
     comparePassword,
     checkPassword,
     checkPhoneNumberFormat,

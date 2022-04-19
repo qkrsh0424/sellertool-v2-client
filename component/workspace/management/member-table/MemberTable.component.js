@@ -2,7 +2,6 @@ import { Container, TitleFieldWrapper } from "./MemberTable.styled";
 import TableFieldView from "./TableField.view";
 
 const MemberTableComponent = (props) => {
-    console.log(props.workspaceMembers);
     if (!props.workspaceMembers) {
         return null;
     }

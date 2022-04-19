@@ -1,14 +1,18 @@
 import { useEffect, useReducer } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { csrfDataConnect } from "../../../data_connect/csrfDataConnect";
 import { inviteMemberDataConnect } from "../../../data_connect/inviteMemberDataConnect";
+import { workspaceDataConnect } from "../../../data_connect/workspaceDataConnect";
 import { workspaceMemberDataConnect } from "../../../data_connect/workspaceMemberDataConnect";
 import NotAllowedComponent from "../../modules/not-allowed/NotAllowedComponent";
 import InviteMemberComponent from "./invite-member/InviteMember.component";
 import MemberTableComponent from "./member-table/MemberTable.component";
 import TitleComponent from "./title/Title.component";
+import { useRouter } from 'next/router';
 
 const WorkspaceManagementMainComponent = (props) => {
+    const router = useRouter();
+    const dispatch = useDispatch();
     const workspaceRdx = useSelector(state => state.workspaceState);
     const userRdx = useSelector(state => state.userState);
 
@@ -16,14 +20,54 @@ const WorkspaceManagementMainComponent = (props) => {
     const [inviteMembers, dispatchInviteMembers] = useReducer(inviteMembersReducer, initialInviteMembers);
 
     useEffect(() => {
-        if (!workspaceRdx.info) {
+        if (!workspaceRdx?.info?.id) {
             return;
         }
 
         __workspaceMember.req.fetchWorkspaceMember(workspaceRdx.info.id);
         __inviteMember.req.fetchInviteMembers();
-    }, [workspaceRdx.info])
+    }, [workspaceRdx?.info?.id])
 
+    const __workspace = {
+        req: {
+            dispatchWorkspace: async () => {
+                if (!workspaceRdx.info) {
+                    return;
+                }
+
+                await workspaceDataConnect().getWorkspace(workspaceRdx.info.id)
+                    .then(res => {
+                        if (res.status === 200) {
+                            dispatch({
+                                type: 'WORKSPACE_STATE_INIT_INFO',
+                                payload: res.data?.data
+                            });
+                        }
+                    })
+            },
+            changeWorkspaceName: async (body) => {
+                await csrfDataConnect().getApiCsrf();
+                await workspaceDataConnect().changeWorkspaceName(body)
+                    .catch(err => {
+                        console.log(err);
+                    })
+            }
+        },
+        action: {
+            changeWorkspacename: async (editName) => {
+                if (!workspaceRdx.info) {
+                    return;
+                }
+                let body = {
+                    workspaceId: workspaceRdx.info.id,
+                    name: editName
+                }
+
+                await __workspace.req.changeWorkspaceName(body);
+                await __workspace.req.dispatchWorkspace();
+            }
+        }
+    }
     const __workspaceMember = {
         req: {
             fetchWorkspaceMember: async (workspaceId) => {
@@ -63,13 +107,19 @@ const WorkspaceManagementMainComponent = (props) => {
             deleteByWorkspaceIdAndInviteMemberId: async (workspaceId, inviteMemberId) => {
                 await csrfDataConnect().getApiCsrf();
                 await inviteMemberDataConnect().deleteByWorkspaceIdAndInviteMemberId(workspaceId, inviteMemberId)
-                    .then(res => {
-                        if (res.status === 200) {
-                            console.log(res);
-                        }
-                    })
                     .catch(err => {
-                        console.log(err);
+                        let res = err?.response;
+
+                        if (res?.status === 500) {
+                            alert('undefined error.')
+                            return;
+                        }
+
+                        if (res?.status === 401) {
+                            alert(res?.data.memo);
+                            router.replace('/');
+                        }
+
                     })
             }
         },
@@ -99,6 +149,8 @@ const WorkspaceManagementMainComponent = (props) => {
         <>
             <TitleComponent
                 workspaceInfo={workspaceRdx.info}
+
+                onSubmitChangeWorkspaceName={__workspace.action.changeWorkspacename}
             ></TitleComponent>
             <MemberTableComponent
                 workspaceMembers={workspaceMembers}

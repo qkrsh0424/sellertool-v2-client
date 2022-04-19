@@ -21,6 +21,28 @@ const userDataConnect = () => {
                 },
                 withCredentials: true
             })
+        },
+        updateInfo: async function (body) {
+            return await axiosAuthInterceptor.put(`${AUTH_API_ADDRESS}/auth/v1/user/info/own`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'auth_csrf',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * 
+         * @param {Object} body
+         * @param {string} body.currentPassword
+         * @param {string} body.newPassword
+         * @param {string} body.checkPassword
+         * @returns 
+         */
+        changePassword: async function(body){
+            return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/user/password`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'auth_csrf',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         }
     }
 }

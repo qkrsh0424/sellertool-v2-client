@@ -45,7 +45,67 @@ const Wrapper = styled.div`
     }
 `;
 
+const EditNameModalWrapper = styled.div`
+    .title{
+        padding: 10px;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .input-box{
+        margin-top: 20px;
+        padding: 0 10px;
+    }
+
+    .input-el{
+        box-sizing: border-box;
+        width: 100%;
+        margin-top: 5px;
+        padding: 10px 5px;
+
+        border: 1px solid #e0e0e0;
+
+        &:focus{
+            outline:none;
+        }
+    }
+
+    .input-label{
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .button-wrapper{
+        display: flex;
+        margin-top: 20px;
+    }
+
+    .button-el{
+        position: relative;
+        overflow: hidden;
+        flex:1;
+        height: 34px;
+
+        background: white;
+        border: none;
+
+        font-weight: 500;
+
+        cursor: pointer;
+
+        &:hover{
+            background:#e0e0e060;
+        }
+
+        &:disabled{
+            cursor: not-allowed;
+        }
+    }
+`;
+
 export {
     Container,
-    Wrapper
+    Wrapper,
+    EditNameModalWrapper
 }

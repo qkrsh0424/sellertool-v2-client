@@ -49,8 +49,9 @@ const InviteModalComponent = (props) => {
                         }
                     })
                     .catch(err => {
-                        console.log(err);
                         let res = err?.response;
+                        setDisabledBtn(false);
+                        setIsCheckedUser(false);
 
                         if (res?.status === 401) {
                             alert(res.data.memo);

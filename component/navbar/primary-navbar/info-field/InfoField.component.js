@@ -24,10 +24,10 @@ const InfoFieldComponent = (props) => {
             {(props.isLoading === false && props.userInfo) &&
                 <Container>
                     <Link
-                        href='/login'
+                        href='/profile/account'
                         passHref
                     >
-                        <div className='rt-el'>내정보</div>
+                        <div className='rt-el'>내 정보</div>
                     </Link>
                     <div className='rt-el' onClick={props.onLogout}>로그아웃</div>
                 </Container>

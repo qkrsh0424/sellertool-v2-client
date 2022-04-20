@@ -7,7 +7,7 @@ const ProfileAccountPage = (props) => {
     return (
         <>
             <Head>
-                <title>프로필 / 내방구</title>
+                <title>프로필 / 내 정보</title>
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <ProfileAccountMainComponent></ProfileAccountMainComponent>

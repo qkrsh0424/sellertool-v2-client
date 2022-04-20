@@ -1,6 +1,7 @@
 import { useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { workspaceDataConnect } from '../../../data_connect/workspaceDataConnect';
+import DispatchWorkspaceComponent from '../../../redux/dispatch_component/DispatchWorkspaceComponent';
 import CommonModalComponent from '../../modules/CommonModalComponent';
 import { Container, SelectorBtn, SelectorBtnBox, Wrapper } from './index.styled';
 import WorkspacesModalComponent from './workspaces-modal/WorkspacesModal.component';
@@ -72,6 +73,7 @@ const SecondaryNavbarMainComponent = (props) => {
     }
     return (
         <>
+            <DispatchWorkspaceComponent></DispatchWorkspaceComponent>
             {workspaceRdx.info &&
                 <Container>
                     <Wrapper>

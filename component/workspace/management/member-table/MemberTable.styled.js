@@ -8,6 +8,10 @@ const TitleFieldWrapper = styled.div`
     padding: 0 40px;
     font-size: 24px;
     font-weight: 500;
+
+    @media all and (max-width:992px){
+        padding: 0 10px;
+    }
 `;
 
 const TableFieldWrapper = styled.div`

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -65,9 +66,14 @@ const WorkspaceListComponent = (props) => {
                                         }
                                     </div>
                                     <div className='info-box'>
-                                        <div className='workspace-name-el'>
-                                            {r.name}
-                                        </div>
+                                        <Link
+                                            href={`/workspace/management/?wsId=${r.id}`}
+                                            passHref
+                                        >
+                                            <a className='workspace-name-el'>
+                                                {r.name}
+                                            </a>
+                                        </Link>
                                         <div className='workspace-type-el'>
                                             {r.publicYn === 'y' && 'Public'}
                                             {r.publicYn === 'n' && 'Private'}

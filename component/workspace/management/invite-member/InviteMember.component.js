@@ -1,6 +1,7 @@
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import CommonModalComponent from "../../../modules/CommonModalComponent";
 import ConfirmModalComponent from "../../../modules/ConfirmModalComponent";
+import FieldLoading from "../../../modules/FieldLoading";
 import InviteModalComponent from "../invite-modal/InviteModal.component";
 import { Container, HeadFieldWrapper, ListFieldWrapper } from "./InviteMember.styled";
 
@@ -20,10 +21,20 @@ function HeaderFieldView({ onActionOpenInviteModal }) {
     );
 }
 const InviteMemberComponent = (props) => {
+    const [isLoading, setIsLoading] = useState(true);
     const [inviteModalOpen, setInviteModalOpen] = useState(false);
     const [cancelInviteModalOpen, setCancelInviteModalOpen] = useState(false);
     const [selectedCancelInviteMember, dispatchSelectedCancelInviteMember] = useReducer(selectedCancelInviteMemberReducer, initialSelectedCancelInviteMember);
 
+    useEffect(() => {
+        if (!props.inviteMembers) {
+            setIsLoading(true);
+            return;
+        }
+
+        setIsLoading(false);
+
+    }, [props.inviteMembers])
     const __invite = {
         action: {
             openModal: () => {
@@ -61,33 +72,44 @@ const InviteMemberComponent = (props) => {
                 <HeaderFieldView
                     onActionOpenInviteModal={__invite.action.openModal}
                 />
-                <ListFieldWrapper>
-                    <div className='list-box'>
-                        {props.inviteMembers?.map(r => {
-                            return (
-                                <div
-                                    key={r.id}
-                                    className='item-box'
-                                >
-                                    <div className='head-box'>
-                                        {r.user.username}
+                {isLoading &&
+                    <FieldLoading
+                        marginTop={100}
+                        marginBottom={100}
+                    />
+                }
+                {(!isLoading && props.inviteMembers?.length <= 0) &&
+                    <div style={{ textAlign: 'center', margin: '150px 0', fontWeight: '500' }}>현재 대기중인 초대 요청이 없습니다.</div>
+                }
+                {(props.inviteMembers && props.inviteMembers?.length > 0) &&
+                    <ListFieldWrapper>
+                        <div className='list-box'>
+                            {props.inviteMembers?.map(r => {
+                                return (
+                                    <div
+                                        key={r.id}
+                                        className='item-box'
+                                    >
+                                        <div className='head-box'>
+                                            {r.user.username}
+                                        </div>
+                                        <div className='footer-box'>
+                                            <div className='status-el'>요청 수락 대기중.</div>
+                                            <button
+                                                type='button'
+                                                className='delete-button-el'
+                                                onClick={() => __invite.action.openCancelModal(r)}
+                                            >
+                                                요청철회
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className='footer-box'>
-                                        <div className='status-el'>요청 수락 대기중.</div>
-                                        <button
-                                            type='button'
-                                            className='delete-button-el'
-                                            onClick={() => __invite.action.openCancelModal(r)}
-                                        >
-                                            요청철회
-                                        </button>
-                                    </div>
-                                </div>
 
-                            );
-                        })}
-                    </div>
-                </ListFieldWrapper>
+                                );
+                            })}
+                        </div>
+                    </ListFieldWrapper>
+                }
             </Container>
 
             {/* Modal */}
@@ -97,6 +119,7 @@ const InviteMemberComponent = (props) => {
                 onClose={__invite.action.closeModal}
             >
                 <InviteModalComponent
+                    workspace={props.workspace}
                     onClose={__invite.action.closeModal}
                     onFetchInviteMembers={props.onFetchInviteMembers}
                 ></InviteModalComponent>

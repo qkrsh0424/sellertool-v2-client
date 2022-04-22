@@ -101,6 +101,7 @@ const ProfileWorkspaceMainComponent = (props) => {
             acceptWorkspace: async (inviteMemberId) => {
                 await __inviteMember.req.acceptWorkspace(inviteMemberId);
                 await __inviteMember.req.fetchInviteMembers();
+                await __workspace.req.fetchWorkspaces();
             },
             rejectWorkspace: async (inviteMemberId) => {
                 await __inviteMember.req.rejectWorkspace(inviteMemberId);

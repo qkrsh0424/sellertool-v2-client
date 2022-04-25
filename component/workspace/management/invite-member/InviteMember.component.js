@@ -90,6 +90,9 @@ const InviteMemberComponent = (props) => {
                                         key={r.id}
                                         className='item-box'
                                     >
+                                        <div style={{ fontSize: '13px', color: '#57606a' }}>
+                                            요청 번호 {r.id.split('-')[0]}
+                                        </div>
                                         <div className='head-box'>
                                             {r.user.username}
                                         </div>

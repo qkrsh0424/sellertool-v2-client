@@ -105,6 +105,61 @@ const WorkspaceManagementMainComponent = (props) => {
                     .catch(err => {
                         console.log(err, err.response);
                     })
+            },
+            deleteOne: async (body) => {
+                await csrfDataConnect().getApiCsrf();
+                await workspaceMemberDataConnect().deleteOne(body)
+                    .catch(err => {
+                        let res = err.response;
+                        if (!res) {
+                            alert('네트워크가 연결이 원활하지 않습니다.');
+                            return;
+                        }
+
+                        if (res.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res.data.memo);
+                    });
+            },
+            changePermissions: async (workspaceMember) => {
+                await csrfDataConnect().getApiCsrf();
+                await workspaceMemberDataConnect().changePermissions(workspaceMember)
+                    .catch(err => {
+                        let res = err.response;
+                        if (!res) {
+                            alert('네트워크가 연결이 원활하지 않습니다.');
+                            return;
+                        }
+
+                        if (res.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res.data.memo);
+                    })
+                    ;
+            }
+        },
+        submit: {
+            deleteOne: async (workspaceMemberId) => {
+                if (!workspace) {
+                    return;
+                }
+                let body = {
+                    workspaceId: workspace.id,
+                    workspaceMemberId: workspaceMemberId
+                }
+
+                await __workspaceMember.req.deleteOne(body);
+                await __workspaceMember.req.fetchWorkspaceMember();
+            },
+            changePermissions: async (workspaceMember) => {
+                await __workspaceMember.req.changePermissions(workspaceMember);
+                await __workspaceMember.req.fetchWorkspaceMember();
             }
         }
     }
@@ -187,6 +242,9 @@ const WorkspaceManagementMainComponent = (props) => {
                     ></TitleComponent>
                     <MemberTableComponent
                         workspaceMembers={workspaceMembers}
+
+                        onSubmitDeleteWorkspaceMember={__workspaceMember.submit.deleteOne}
+                        onSubmitChangePermissions={__workspaceMember.submit.changePermissions}
                     ></MemberTableComponent>
                     <InviteMemberComponent
                         workspace={workspace}

@@ -113,42 +113,55 @@ export default function TableFieldView(props) {
                                             flag={r.workspaceMember.deletePermissionYn}
                                         />
                                     </td>
-                                    <>
-                                        <td>
-                                            <button
-                                                className='edit-button-el'
-                                            >
-                                                <div className='edit-button-icon-figure'>
-                                                    <Image
-                                                        loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                        src='http://localhost:3000/images/icon/setting_icon.png'
-                                                        layout='fill'
-                                                        alt=""
-                                                        className='button-icon'
-                                                        loading='lazy'
-                                                    ></Image>
-                                                </div>
-                                                <Ripple color={'#fff'} duration={1000}></Ripple>
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <button
-                                                className='delete-button-el'
-                                            >
-                                                <div className='delete-button-icon-figure'>
-                                                    <Image
-                                                        loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                        src='http://localhost:3000/images/icon/x_icon.png'
-                                                        layout='fill'
-                                                        alt=""
-                                                        className='delete-button-icon'
-                                                        loading='lazy'
-                                                    ></Image>
-                                                </div>
-                                                <Ripple color={'#fff'} duration={1000}></Ripple>
-                                            </button>
-                                        </td>
-                                    </>
+                                    {r.workspaceMember.userId === r.workspace.masterId ?
+                                        <>
+                                            <td></td>
+                                            <td></td>
+                                        </>
+                                        :
+                                        <>
+
+                                            <td>
+                                                <button
+                                                    type='button'
+                                                    className='edit-button-el'
+                                                    onClick={() => props.onActionOpenPermissionModal(r.workspaceMember)}
+                                                >
+                                                    <div className='edit-button-icon-figure'>
+                                                        <Image
+                                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                                            src='http://localhost:3000/images/icon/setting_icon.png'
+                                                            layout='fill'
+                                                            alt=""
+                                                            className='button-icon'
+                                                            loading='lazy'
+                                                        ></Image>
+                                                    </div>
+                                                    <Ripple color={'#fff'} duration={1000}></Ripple>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    type='button'
+                                                    className='delete-button-el'
+                                                    onClick={() => props.onActionDeleteMember(r.workspaceMember.id)}
+                                                    disabled={props.disabledBtn}
+                                                >
+                                                    <div className='delete-button-icon-figure'>
+                                                        <Image
+                                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                                            src='http://localhost:3000/images/icon/x_icon.png'
+                                                            layout='fill'
+                                                            alt=""
+                                                            className='delete-button-icon'
+                                                            loading='lazy'
+                                                        ></Image>
+                                                    </div>
+                                                    <Ripple color={'#fff'} duration={1000}></Ripple>
+                                                </button>
+                                            </td>
+                                        </>
+                                    }
                                 </tr>
                             );
                         })}

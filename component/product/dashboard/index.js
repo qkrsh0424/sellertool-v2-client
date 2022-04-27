@@ -5,10 +5,21 @@ import styled from 'styled-components';
 import { categoryDataConnect } from '../../../data_connect/categoryDataConnect';
 import { csrfDataConnect } from '../../../data_connect/csrfDataConnect';
 import FieldLoading from '../../modules/FieldLoading';
+import FlexGap from '../../modules/FlexGap';
+import LineBreakerBottom from '../../modules/LineBreakerBottom';
 import CategoryComponent from './category/Category.component';
+import ProductAndOptionLayout from './layout/ProductAndOptionLayout';
+import ProductListComponent from './product-list/ProductList.component';
 
 const Container = styled.div`
 
+`;
+const ProductListWrapper = styled.div`
+    flex:1;
+`;
+
+const OptionListWrapper = styled.div`
+    flex:1;
 `;
 
 const ProductDashboardMainComponent = (props) => {
@@ -67,8 +78,7 @@ const ProductDashboardMainComponent = (props) => {
         if (!category) {
             return;
         }
-        console.log(category);
-    }, [category])
+    }, [category]);
 
     const __category = {
         req: {
@@ -137,6 +147,24 @@ const ProductDashboardMainComponent = (props) => {
 
                         alert(res.data.memo);
                     })
+            },
+            deleteOne: async (workspaceId, categoryId) => {
+                await csrfDataConnect().getApiCsrf();
+                await categoryDataConnect().deleteOne(workspaceId, categoryId)
+                    .catch(err => {
+                        let res = err.response;
+                        if (!res) {
+                            alert('네트워크가 연결이 원활하지 않습니다.');
+                            return;
+                        }
+
+                        if (res.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res.data.memo);
+                    })
             }
         },
         submit: {
@@ -147,6 +175,12 @@ const ProductDashboardMainComponent = (props) => {
             edit: async (body) => {
                 await __category.req.updateOne(workspace.id, body);
                 await __category.req.fetchCategories();
+            },
+            delete: async () => {
+                await __category.req.deleteOne(workspace.id, category.id);
+                router.replace({
+                    pathname: router.pathname
+                })
             }
         }
     }
@@ -168,8 +202,18 @@ const ProductDashboardMainComponent = (props) => {
                         category={category}
                         onSubmitAddCategory={__category.submit.add}
                         onSubmitEditCategory={__category.submit.edit}
+                        onSubmitDeleteCategory={__category.submit.delete}
                     />
                 }
+                <ProductAndOptionLayout>
+                    <ProductListComponent
+
+                    />
+                    <FlexGap />
+                    <ProductListComponent
+
+                    />
+                </ProductAndOptionLayout>
             </Container>
         </>
     );

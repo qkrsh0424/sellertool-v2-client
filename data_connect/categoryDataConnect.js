@@ -7,21 +7,28 @@ const SCP_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.deve
 const categoryDataConnect = () => {
     return {
         searchListByWorkspaceId: async function (workspaceId) {
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/category/workspaces/${workspaceId}`, {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/categories/workspaces/${workspaceId}`, {
                 withCredentials: true,
                 xsrfCookieName: 'api_csrf',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
         createOne: async function (workspaceId, body) {
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/category/workspaces/${workspaceId}`, body, {
+            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/categories/workspaces/${workspaceId}`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'api_csrf',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
-        updateOne: async function(workspaceId, body){
-            return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/category/workspaces/${workspaceId}`, body, {
+        updateOne: async function (workspaceId, body) {
+            return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/categories/workspaces/${workspaceId}`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'api_csrf',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        deleteOne: async function (workspaceId, categoryId) {
+            return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/categories/${categoryId}/workspaces/${workspaceId}`, {
                 withCredentials: true,
                 xsrfCookieName: 'api_csrf',
                 xsrfHeaderName: 'X-XSRF-TOKEN'

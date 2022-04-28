@@ -1,6 +1,9 @@
 import Image from 'next/image';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { csrfDataConnect } from '../../../../data_connect/csrfDataConnect';
+import { uploadDataConnect } from '../../../../data_connect/uploadDataConnect';
+import useImageUploaderHooks from '../../../../hooks/useImageUploaderHooks';
 import CommonModalComponent from '../../../modules/CommonModalComponent';
 
 const Container = styled.div`
@@ -75,6 +78,57 @@ const HeadFieldWrapper = styled.div`
                 opacity: 1;
             }
         }
+    }
+`;
+
+const ProductListFieldWrapper = styled.div`
+    border: 1px solid #e0e0e0;
+    margin-top: 10px;
+    overflow: auto;
+    max-height: 500px;
+
+    .item-box:nth-last-child(1){
+        border-bottom: none;
+    }
+
+    .item-box{
+        border-bottom: 1px solid #e0e0e0;
+        cursor:pointer;
+
+        &:hover{
+            background: #2c73d210;
+        }
+    }
+
+    .code-box{
+        padding:5px;
+        font-size: 12px;
+        font-weight: 500;
+        color:#626262;
+    }
+
+    .flex-box{
+        display: flex;
+        align-items: center;
+    }
+
+    .image-box{
+        width:80px;
+    }
+
+    .content-box{
+        margin-left: 10px;
+        flex:1;
+
+        .content-text:nth-last-child(1){
+            margin-bottom: 0;
+        }
+    }
+
+    .content-text{
+        font-size: 12px;
+        margin-bottom: 5px;
+        font-weight: 500;
     }
 `;
 
@@ -196,7 +250,7 @@ function ProductAddModal({
                         >
                             <Image
                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                src={product?.imageUrl}
+                                src={product?.imageUrl || 'http://localhost:3000/images/normal/image.png'}
                                 layout='responsive'
                                 width={1}
                                 height={1}
@@ -261,8 +315,12 @@ function ProductAddModal({
 }
 export default function ProductListComponent(props) {
     const addProductImageUploaderRef = useRef();
+    const { uploadImages } = useImageUploaderHooks({
+        MAX_FILE_SIZE: 10485760
+    });
     const [addProduct, dispatchAddProduct] = useReducer(addProductReducer, initialAddProduct);
 
+    const [isLoading, setIsLoading] = useState(true);
     const [productAddModalOpen, setProductAddModalOpen] = useState(false);
     const [disabledBtn, setDisabledBtn] = useState(false);
 
@@ -277,12 +335,14 @@ export default function ProductListComponent(props) {
         return () => clearTimeout(timeout);
     }, [disabledBtn])
 
-    const __product = {
-        req: {
-            uploadImages: async () => {
+    useEffect(() => {
+        if (!props.products) {
+            return;
+        }
+        setIsLoading(false);
+    }, [props.products]);
 
-            }
-        },
+    const __product = {
         action: {
             openAddModal: () => {
                 setProductAddModalOpen(true);
@@ -296,15 +356,47 @@ export default function ProductListComponent(props) {
             openAddProductImageUploader: () => {
                 addProductImageUploaderRef.current.click();
             },
-            // TODO : 이미지 파일 업로드 기능 구현
-            setAddProductImage: (e) => {
-                console.log(e.target.files);
+            setAddProductImage: async (e) => {
+                let files = e.target.files;
+                if (!files || files?.length <= 0) {
+                    alert('이미지를 선택해 주세요.');
+                    return;
+                }
+
+                let images = await uploadImages(files);
+
+                if (!images) {
+                    return;
+                }
+
+                dispatchAddProduct({
+                    type: 'CHANGE_DATA',
+                    payload: {
+                        name: 'imageUrl',
+                        value: images[0].fileStorageUri
+                    }
+                })
             },
-            // TODO : 서밋 기능 구현
             confirmAdd: (e) => {
                 e.preventDefault();
                 setDisabledBtn(true);
-                console.log(addProduct);
+                if (!addProduct.defaultName) {
+                    alert('상품명은 필수 입력입니다.');
+                    return;
+                }
+
+                if (!addProduct.managementName) {
+                    alert('상품 관리명은 필수 입력입니다.');
+                    return;
+                }
+
+                if (!addProduct.imageUrl) {
+                    alert('잘못된 형식의 이미지 입니다.');
+                    return;
+                }
+
+                props.onSubmitAddProduct(addProduct);
+                __product.action.closeAddModal();
             }
         },
         change: {
@@ -321,6 +413,10 @@ export default function ProductListComponent(props) {
                 })
             }
         }
+    }
+
+    if (isLoading) {
+        return null;
     }
     return (
         <>
@@ -375,11 +471,44 @@ export default function ProductListComponent(props) {
                             </div>
                         </button>
                     </div>
-
                 </HeadFieldWrapper>
-                <Wrapper>
-                    hello
-                </Wrapper>
+                <ProductListFieldWrapper>
+                    {props.products.map(r => {
+                        return (
+                            <div
+                                key={r.id}
+                                className='item-box'
+                                onClick={()=>console.log(r)}
+                            >
+                                <div className='code-box'>상품 코드 : {r.code}</div>
+                                <div className='flex-box'>
+                                    <div className='image-box'>
+                                        <Image
+                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                            src={r.imageUrl}
+                                            layout={'responsive'}
+                                            width={1}
+                                            height={1}
+                                            alt={'product image'}
+                                            objectFit='cover'
+                                            loading='lazy'
+                                        ></Image>
+                                    </div>
+                                    <div className='content-box'>
+                                        <div className='flex-box'>
+                                            <div className='content-text' style={{ flex: 1 }}>상품명 : {r.defaultName}</div>
+                                            <div className='content-text' style={{ flex: 1 }}>상품 관리명 : {r.managementName}</div>
+                                        </div>
+                                        <div className='content-text'>메모1 : {r.memo1}</div>
+                                        <div className='content-text'>메모2 : {r.memo2}</div>
+                                        <div className='content-text'>메모3 : {r.memo3}</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        );
+                    })}
+                </ProductListFieldWrapper>
             </Container>
             {/* Modal */}
             {(productAddModalOpen && addProduct) &&
@@ -413,7 +542,7 @@ export default function ProductListComponent(props) {
 const initialAddProduct = {
     defaultName: '',
     managementName: '',
-    imageUrl: 'http://localhost:3000/images/normal/image.png',
+    imageUrl: 'https://assets.sellertool.io/default/no_image.png',
     memo1: '',
     memo2: '',
     memo3: ''

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { categoryDataConnect } from '../../../data_connect/categoryDataConnect';
 import { csrfDataConnect } from '../../../data_connect/csrfDataConnect';
+import { productDataConnect } from '../../../data_connect/productDataConnect';
 import FieldLoading from '../../modules/FieldLoading';
 import FlexGap from '../../modules/FlexGap';
 import LineBreakerBottom from '../../modules/LineBreakerBottom';
@@ -29,6 +30,8 @@ const ProductDashboardMainComponent = (props) => {
     const [workspace, dispatchWorkspace] = useReducer(workspaceReducer, initialWorkspace);
     const [categories, dispatchCategories] = useReducer(categoriesReducer, initialCategories);
     const [category, dispatchCategory] = useReducer(categoryReducer, initialCategory);
+    const [products, dispatchProducts] = useReducer(productsReducer, initialProducts);
+    const [product, dispatchProduct] = useReducer(productReducer, initialProduct);
 
     /**
      * 워크스페이스 여부에 따라 페이지 렌더링 결정
@@ -78,6 +81,8 @@ const ProductDashboardMainComponent = (props) => {
         if (!category) {
             return;
         }
+
+        __product.req.fetchProducts();
     }, [category]);
 
     const __category = {
@@ -185,6 +190,54 @@ const ProductDashboardMainComponent = (props) => {
         }
     }
 
+    const __product = {
+        req: {
+            fetchProducts: async () => {
+                let workspaceId = workspace.id;
+                let categoryId = category.id;
+
+                await productDataConnect().searchListByCategoryId(workspaceId, categoryId)
+                    .then(res => {
+                        if (res.status === 200) {
+                            dispatchProducts({
+                                type: 'SET_DATA',
+                                payload: res.data.data
+                            })
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err, err.response);
+                    })
+            },
+            createOne: async (workspaceId, categoryId, body) => {
+                await csrfDataConnect().getApiCsrf();
+                await productDataConnect().createOne(workspaceId, categoryId, body)
+                    .then(res => {
+                        console.log(res);
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (!res) {
+                            alert('네트워크가 연결이 원활하지 않습니다.');
+                            return;
+                        }
+
+                        if (res.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res.data.memo);
+                    })
+            }
+        },
+        submit: {
+            add: async (body) => {
+                await __product.req.createOne(workspace.id, category.id, body);
+                await __product.req.fetchProducts();
+            }
+        }
+    }
     return (
         <>
             <Container>
@@ -205,15 +258,19 @@ const ProductDashboardMainComponent = (props) => {
                         onSubmitDeleteCategory={__category.submit.delete}
                     />
                 }
-                <ProductAndOptionLayout>
-                    <ProductListComponent
-
-                    />
-                    <FlexGap />
-                    <ProductListComponent
-
-                    />
-                </ProductAndOptionLayout>
+                {category &&
+                    <ProductAndOptionLayout>
+                        <ProductListComponent
+                            products={products}
+                            onSubmitAddProduct={__product.submit.add}
+                        />
+                        <FlexGap />
+                        <ProductListComponent
+                            products={products}
+                            onSubmitAddProduct={__product.submit.add}
+                        />
+                    </ProductAndOptionLayout>
+                }
             </Container>
         </>
     );
@@ -223,6 +280,8 @@ export default ProductDashboardMainComponent;
 const initialWorkspace = null;
 const initialCategories = null;
 const initialCategory = null;
+const initialProducts = null;
+const initialProduct = null;
 
 const workspaceReducer = (state, action) => {
     switch (action.type) {
@@ -245,5 +304,25 @@ const categoryReducer = (state, action) => {
         case 'SET_DATA':
             return action.payload;
         default: return initialCategory;
+    }
+}
+
+const productsReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialProducts;
+        default: return initialProducts;
+    }
+}
+
+const productReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialProduct;
+        default: return initialProduct;
     }
 }

@@ -12,6 +12,30 @@ const workspaceMemberDataConnect = () => {
                 xsrfCookieName: 'api_csrf',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
+        },
+        /**
+         * 
+         * @param {object} body
+         * @param {string} body.workspaceId
+         * @param {string} body.workspaceMemberId
+         */
+        deleteOne: async function (body) {
+            return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/workspace-members/${body.workspaceMemberId}/workspaces/${body.workspaceId}`, {
+                withCredentials: true,
+                xsrfCookieName: 'api_csrf',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * 워크스페이스 멤버의 권한을 업데이트 한다.
+         * @param {object} body workspaceMemberDto
+         */
+        changePermissions: async function (body) {
+            return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/workspace-members/${body.id}/permissions`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'api_csrf',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         }
     }
 }

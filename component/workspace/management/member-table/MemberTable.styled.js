@@ -8,6 +8,10 @@ const TitleFieldWrapper = styled.div`
     padding: 0 40px;
     font-size: 24px;
     font-weight: 500;
+
+    @media all and (max-width:992px){
+        padding: 0 10px;
+    }
 `;
 
 const TableFieldWrapper = styled.div`
@@ -89,7 +93,7 @@ const TableFieldWrapper = styled.div`
         font-size: 11px;
         color: #444;
         font-weight: 500;
-        line-height: 1.5;
+        line-height: 3;
         word-break: keep-all;
 
         @media all and (max-width: 992px){
@@ -166,6 +170,10 @@ const TableFieldWrapper = styled.div`
         border: none;
         border-radius: 50%;
 
+        /* td 내부의 버튼 수직 가운데 정렬 */
+        display: block;
+        margin: auto;
+
         cursor: pointer;
 
         &:hover{
@@ -193,8 +201,16 @@ const TableFieldWrapper = styled.div`
         border: none;
         border-radius: 50%;
 
+        /* td 내부의 버튼 수직 가운데 정렬 */
+        display: block;
+        margin: auto;
+
         cursor: pointer;
         
+        &:disabled{
+            cursor: not-allowed;
+        }
+
         &:hover{
             background:#ff4961;
         }
@@ -214,8 +230,55 @@ const TableFieldWrapper = styled.div`
     }
 `;
 
+const PermissionModalWrapper = styled.div`
+    .head-title{
+        padding: 10px 10px;
+        font-size: 18px;
+        font-weight: 500;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .form-wrapper{
+        padding:10px;
+    }
+
+    .form-wrapper .checkbox-item-box{
+        margin-top: 20px;
+    }
+
+    .button-wrapper{
+        margin-top: 20px;
+        display: flex;
+    }
+
+    .button-wrapper .button-el{
+        position:relative;
+        overflow: hidden;
+
+        width:100%;
+
+        padding:8px 0;
+
+        background:white;
+        border:1px solid #fff;
+
+        font-weight: 500;
+        
+        cursor: pointer;
+
+        &:hover{
+            background:#e0e0e040;
+        }
+
+        &:disabled{
+            cursor: not-allowed;
+        }
+    }
+`;
+
 export {
     Container,
     TitleFieldWrapper,
-    TableFieldWrapper
+    TableFieldWrapper,
+    PermissionModalWrapper
 }

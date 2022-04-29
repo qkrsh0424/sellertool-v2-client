@@ -14,8 +14,8 @@ const productDataConnect = () => {
          */
         searchListByCategoryId: async function (workspaceId, categoryId) {
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/products/categories/${categoryId}`, {
-                params:{
-                    workspaceId:workspaceId
+                params: {
+                    workspaceId: workspaceId
                 },
                 withCredentials: true,
                 xsrfCookieName: 'api_csrf',
@@ -24,6 +24,26 @@ const productDataConnect = () => {
         },
         createOne: async function (workspaceId, categoryId, body) {
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/products/categories/${categoryId}`, body, {
+                params: {
+                    workspaceId: workspaceId
+                },
+                withCredentials: true,
+                xsrfCookieName: 'api_csrf',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        deleteOne: async function (workspaceId, productId) {
+            return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/products/${productId}`, {
+                params: {
+                    workspaceId: workspaceId
+                },
+                withCredentials: true,
+                xsrfCookieName: 'api_csrf',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        updateOne: async function (workspaceId, body) {
+            return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/products/${body.id}`, body, {
                 params: {
                     workspaceId: workspaceId
                 },

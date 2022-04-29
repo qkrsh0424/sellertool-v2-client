@@ -2,9 +2,9 @@ import styled from 'styled-components';
 
 const Container = styled.div`
     margin-top: 20px;
-    max-width: 1280px;
+    /* max-width: 1280px;
     margin-left:auto;
-    margin-right: auto;
+    margin-right: auto; */
 `;
 
 const CategorySelectorFieldWrapper = styled.div`

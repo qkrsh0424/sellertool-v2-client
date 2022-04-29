@@ -5,6 +5,8 @@ import { csrfDataConnect } from '../../../../data_connect/csrfDataConnect';
 import { uploadDataConnect } from '../../../../data_connect/uploadDataConnect';
 import useImageUploaderHooks from '../../../../hooks/useImageUploaderHooks';
 import CommonModalComponent from '../../../modules/CommonModalComponent';
+import ConfirmModalComponent from '../../../modules/ConfirmModalComponent';
+import _ from "lodash";
 
 const Container = styled.div`
     flex:1;
@@ -87,6 +89,17 @@ const ProductListFieldWrapper = styled.div`
     overflow: auto;
     max-height: 500px;
 
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #00000025;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: white;
+    }
+
     .item-box:nth-last-child(1){
         border-bottom: none;
     }
@@ -100,11 +113,20 @@ const ProductListFieldWrapper = styled.div`
         }
     }
 
+    .item-box-active{
+        background: #2c73d230 !important;
+    }
+
     .code-box{
         padding:5px;
         font-size: 12px;
         font-weight: 500;
         color:#626262;
+    }
+
+    .code-box-active{
+        font-weight: 600;
+        color:#2c73d2;
     }
 
     .flex-box{
@@ -113,26 +135,22 @@ const ProductListFieldWrapper = styled.div`
     }
 
     .image-box{
-        width:80px;
+        width:60px;
     }
 
     .content-box{
         margin-left: 10px;
         flex:1;
-
-        .content-text:nth-last-child(1){
-            margin-bottom: 0;
-        }
     }
 
     .content-text{
-        font-size: 12px;
-        margin-bottom: 5px;
+        font-size: 13px;
         font-weight: 500;
     }
 `;
 
 const ProductAddAndEditModalWrapper = styled.div`
+    
     .head-title{
         padding: 10px;
         border-bottom: 1px solid #e0e0e0;
@@ -313,15 +331,126 @@ function ProductAddModal({
         </ProductAddAndEditModalWrapper>
     );
 }
+
+function ProductEditModal({
+    product,
+    onActionChangeValueOfName,
+    onActionOpenImageUploader,
+    onClose,
+    onConfirm,
+    disabledBtn
+}) {
+    return (
+        <ProductAddAndEditModalWrapper>
+            <div className='head-title'>신규 상품 등록</div>
+            <form onSubmit={onConfirm}>
+                <div className='body-wrapper'>
+                    <div className='input-box'>
+                        <div className='input-label'>상품명</div>
+                        <input
+                            className='input-el'
+                            type='text'
+                            name='defaultName'
+                            value={product.defaultName || ''}
+                            onChange={onActionChangeValueOfName}
+                            required
+                        ></input>
+                    </div>
+                    <div className='input-box'>
+                        <div className='input-label'>상품 관리명</div>
+                        <input
+                            className='input-el'
+                            type='text'
+                            name='managementName'
+                            value={product.managementName || ''}
+                            onChange={onActionChangeValueOfName}
+                            required
+                        ></input>
+                    </div>
+                    <div className='input-box'>
+                        <div className='input-label'>이미지</div>
+                        <div
+                            className='image-box'
+                            onClick={onActionOpenImageUploader}
+                        >
+                            <Image
+                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                src={product?.imageUrl || 'http://localhost:3000/images/normal/image.png'}
+                                layout='responsive'
+                                width={1}
+                                height={1}
+                                objectFit={'cover'}
+                                alt='image'
+                                loading='lazy'
+                            ></Image>
+                        </div>
+                    </div>
+                    <div className='input-box'>
+                        <div className='input-label'>메모1</div>
+                        <input
+                            className='input-el'
+                            type='text'
+                            name='productInfo.memo1'
+                            value={product.productInfo.memo1 || ''}
+                            onChange={onActionChangeValueOfName}
+                        ></input>
+                    </div>
+                    <div className='input-box'>
+                        <div className='input-label'>메모2</div>
+                        <input
+                            className='input-el'
+                            type='text'
+                            name='productInfo.memo2'
+                            value={product.productInfo.memo2 || ''}
+                            onChange={onActionChangeValueOfName}
+                        ></input>
+                    </div>
+                    <div className='input-box'>
+                        <div className='input-label'>메모3</div>
+                        <input
+                            className='input-el'
+                            type='text'
+                            name='productInfo.memo3'
+                            value={product.productInfo.memo3 || ''}
+                            onChange={onActionChangeValueOfName}
+                        ></input>
+                    </div>
+                </div>
+                <div className='footer-wrapper'>
+                    <button
+                        type='button'
+                        className='button-el'
+                        style={{ color: '#ff6961' }}
+                        onClick={onClose}
+                    >
+                        취소
+                    </button>
+                    <button
+                        type='submit'
+                        className='button-el'
+                        style={{ color: '#2c73d2' }}
+                        disabled={disabledBtn}
+                    >
+                        등록
+                    </button>
+                </div>
+            </form>
+        </ProductAddAndEditModalWrapper>
+    );
+}
 export default function ProductListComponent(props) {
     const addProductImageUploaderRef = useRef();
+    const editProductImageUploaderRef = useRef();
     const { uploadImages } = useImageUploaderHooks({
         MAX_FILE_SIZE: 10485760
     });
     const [addProduct, dispatchAddProduct] = useReducer(addProductReducer, initialAddProduct);
+    const [editProduct, dispatchEditProduct] = useReducer(editProductReducer, initialEditProduct);
 
     const [isLoading, setIsLoading] = useState(true);
     const [productAddModalOpen, setProductAddModalOpen] = useState(false);
+    const [productDeleteModalOpen, setProductDeleteModalOpen] = useState(false);
+    const [productEditModalOpen, setProductEditModalOpen] = useState(false);
     const [disabledBtn, setDisabledBtn] = useState(false);
 
     useEffect(() => {
@@ -397,6 +526,86 @@ export default function ProductListComponent(props) {
 
                 props.onSubmitAddProduct(addProduct);
                 __product.action.closeAddModal();
+            },
+            openDeleteModal: () => {
+                if (!props.product) {
+                    alert('상품을 먼저 선택해 주세요.');
+                    return;
+                }
+                setProductDeleteModalOpen(true);
+            },
+            closeDeleteModal: () => {
+                setProductDeleteModalOpen(false);
+            },
+            confirmDelete: () => {
+                if (!props.product) {
+                    alert('상품을 먼저 선택해 주세요.');
+                    return;
+                }
+                props.onSubmitDeleteProduct(props.product.id);
+                __product.action.closeDeleteModal();
+            },
+            openEditModal: () => {
+                if (!props.product) {
+                    alert('상품을 먼저 선택해 주세요.');
+                    return;
+                }
+                dispatchEditProduct({
+                    type: 'SET_DATA',
+                    payload: { ...props.product }
+                })
+                setProductEditModalOpen(true);
+            },
+            closeEditModal: () => {
+                setProductEditModalOpen(false);
+                dispatchEditProduct({
+                    type: 'CLEAR'
+                })
+            },
+            openEditProductImageUploader: () => {
+                editProductImageUploaderRef.current.click();
+            },
+            setEditProductImage: async (e) => {
+                let files = e.target.files;
+                if (!files || files?.length <= 0) {
+                    alert('이미지를 선택해 주세요.');
+                    return;
+                }
+
+                let images = await uploadImages(files);
+
+                if (!images) {
+                    return;
+                }
+
+                dispatchEditProduct({
+                    type: 'CHANGE_DATA',
+                    payload: {
+                        name: 'imageUrl',
+                        value: images[0].fileStorageUri
+                    }
+                })
+            },
+            confirmEdit: (e) => {
+                e.preventDefault();
+                if (!editProduct.defaultName) {
+                    alert('상품명은 필수 입력입니다.');
+                    return;
+                }
+
+                if (!editProduct.managementName) {
+                    alert('상품 관리명은 필수 입력입니다.');
+                    return;
+                }
+
+                if (!editProduct.imageUrl) {
+                    alert('잘못된 형식의 이미지 입니다.');
+                    return;
+                }
+                props.onSubmitEditProduct({
+                    body: editProduct,
+                    callback: () => __product.action.closeEditModal()
+                });
             }
         },
         change: {
@@ -410,6 +619,16 @@ export default function ProductListComponent(props) {
                         name: name,
                         value: value
                     }
+                })
+            },
+            editProductValueOfName: (e) => {
+                let name = e.target.name;
+                let value = e.target.value;
+
+                const newEditProduct = _.set(editProduct, name, value);
+                dispatchEditProduct({
+                    type: 'SET_DATA',
+                    payload: { ...newEditProduct }
                 })
             }
         }
@@ -440,47 +659,56 @@ export default function ProductListComponent(props) {
                                 ></Image>
                             </div>
                         </button>
-                        <button
-                            className='button-el normal-button'
-                            type='button'
-                        >
-                            <div className='button-icon-figure'>
-                                <Image
-                                    className='button-icon'
-                                    loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src='http://localhost:3000/images/icon/pen_icon2.png'
-                                    layout='fill'
-                                    alt="add icon"
-                                    loading='lazy'
-                                ></Image>
-                            </div>
-                        </button>
-                        <button
-                            className='button-el delete-button'
-                            type='button'
-                        >
-                            <div className='button-icon-figure'>
-                                <Image
-                                    className='button-icon'
-                                    loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src='http://localhost:3000/images/icon/x_icon.png'
-                                    layout='fill'
-                                    alt="add icon"
-                                    loading='lazy'
-                                ></Image>
-                            </div>
-                        </button>
+                        {props.product &&
+                            <>
+                                <button
+                                    className='button-el normal-button'
+                                    type='button'
+                                    onClick={__product.action.openEditModal}
+                                >
+                                    <div className='button-icon-figure'>
+                                        <Image
+                                            className='button-icon'
+                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                            src='http://localhost:3000/images/icon/pen_icon2.png'
+                                            layout='fill'
+                                            alt="add icon"
+                                            loading='lazy'
+                                        ></Image>
+                                    </div>
+                                </button>
+                                <button
+                                    className='button-el delete-button'
+                                    type='button'
+                                    onClick={__product.action.openDeleteModal}
+                                >
+                                    <div className='button-icon-figure'>
+                                        <Image
+                                            className='button-icon'
+                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                            src='http://localhost:3000/images/icon/x_icon.png'
+                                            layout='fill'
+                                            alt="add icon"
+                                            loading='lazy'
+                                        ></Image>
+                                    </div>
+                                </button>
+                            </>
+                        }
                     </div>
                 </HeadFieldWrapper>
                 <ProductListFieldWrapper>
+                    {(!props.products || props.products.length <= 0) &&
+                        <div style={{fontSize:'14px', fontWeight:'600', textAlign:'center', margin:'150px 0'}}>관리중인 상품이 없습니다.</div>
+                    }
                     {props.products.map(r => {
                         return (
                             <div
                                 key={r.id}
-                                className='item-box'
-                                onClick={()=>console.log(r)}
+                                className={`item-box ${props.product?.id === r.id && 'item-box-active'}`}
+                                onClick={() => props.onActionSelectProduct(r)}
                             >
-                                <div className='code-box'>상품 코드 : {r.code}</div>
+                                <div className={`code-box ${props.product?.id === r.id && 'code-box-active'}`}>상품 코드 : {r.code}</div>
                                 <div className='flex-box'>
                                     <div className='image-box'>
                                         <Image
@@ -499,9 +727,6 @@ export default function ProductListComponent(props) {
                                             <div className='content-text' style={{ flex: 1 }}>상품명 : {r.defaultName}</div>
                                             <div className='content-text' style={{ flex: 1 }}>상품 관리명 : {r.managementName}</div>
                                         </div>
-                                        <div className='content-text'>메모1 : {r.memo1}</div>
-                                        <div className='content-text'>메모2 : {r.memo2}</div>
-                                        <div className='content-text'>메모3 : {r.memo3}</div>
                                     </div>
                                 </div>
 
@@ -527,12 +752,51 @@ export default function ProductListComponent(props) {
                     />
                 </CommonModalComponent>
             }
+            {productEditModalOpen && editProduct &&
+                <CommonModalComponent
+                    open={productEditModalOpen}
+
+                    onClose={__product.action.closeEditModal}
+                >
+                    <ProductEditModal
+                        product={editProduct}
+                        onActionChangeValueOfName={__product.change.editProductValueOfName}
+                        onActionOpenImageUploader={__product.action.openEditProductImageUploader}
+                        onClose={__product.action.closeEditModal}
+                        onConfirm={__product.action.confirmEdit}
+                        disabledBtn={disabledBtn}
+                    />
+                </CommonModalComponent>
+            }
+            {productDeleteModalOpen && props.product &&
+                <ConfirmModalComponent
+                    open={productDeleteModalOpen}
+                    message={
+                        (
+                            <>
+                                <div>연관된 옵션 등 하위 데이터들도 모두 삭제 됩니다.</div>
+                                <div>해당 상품을 정말로 삭제 하시겠습니까?</div>
+                            </>
+                        )
+                    }
+                    onClose={__product.action.closeDeleteModal}
+                    onConfirm={__product.action.confirmDelete}
+                />
+            }
             <input
                 ref={addProductImageUploaderRef}
                 type='file'
                 accept="image/*"
                 onClick={(e) => e.target.value = ''}
                 onChange={__product.action.setAddProductImage}
+                hidden
+            ></input>
+            <input
+                ref={editProductImageUploaderRef}
+                type='file'
+                accept="image/*"
+                onClick={(e) => e.target.value = ''}
+                onChange={__product.action.setEditProductImage}
                 hidden
             ></input>
         </>
@@ -548,6 +812,8 @@ const initialAddProduct = {
     memo3: ''
 }
 
+const initialEditProduct = null;
+
 const addProductReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
@@ -560,5 +826,20 @@ const addProductReducer = (state, action) => {
         case 'CLEAR':
             return initialAddProduct;
         default: return initialAddProduct;
+    }
+}
+
+const editProductReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
+        case 'CLEAR':
+            return initialEditProduct;
+        default: return initialEditProduct;
     }
 }

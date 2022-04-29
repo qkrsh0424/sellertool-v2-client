@@ -9,37 +9,53 @@ import InviteMemberComponent from "./invite-member/InviteMember.component";
 import MemberTableComponent from "./member-table/MemberTable.component";
 import TitleComponent from "./title/Title.component";
 import { useRouter } from 'next/router';
+import WorkspaceSelectorComponent from "./workspace-selector/WorkspaceSelector.component";
+import styled from 'styled-components';
+
+const Container = styled.div`
+`;
 
 const WorkspaceManagementMainComponent = (props) => {
     const router = useRouter();
-    const dispatch = useDispatch();
-    const workspaceRdx = useSelector(state => state.workspaceState);
     const userRdx = useSelector(state => state.userState);
 
+    const [workspace, dispatchWorkspace] = useReducer(workspaceReducer, initialWorkspace);
     const [workspaceMembers, dispatchWorkspaceMembers] = useReducer(workspaceMembersReducer, initialWorkspaceMembers);
     const [inviteMembers, dispatchInviteMembers] = useReducer(inviteMembersReducer, initialInviteMembers);
 
     useEffect(() => {
-        if (!workspaceRdx?.info?.id) {
+        if (!router.isReady) {
             return;
         }
 
-        __workspaceMember.req.fetchWorkspaceMember(workspaceRdx.info.id);
+        if (router.query.wsId) {
+            __workspace.req.fetchWorkspace();
+        } else {
+            dispatchWorkspace({
+                type: 'CLEAR'
+            })
+        }
+    }, [router]);
+
+    useEffect(() => {
+        if (!workspace) {
+            return;
+        }
+
+        __workspaceMember.req.fetchWorkspaceMember();
         __inviteMember.req.fetchInviteMembers();
-    }, [workspaceRdx?.info?.id])
+    }, [workspace])
 
     const __workspace = {
         req: {
-            dispatchWorkspace: async () => {
-                if (!workspaceRdx.info) {
-                    return;
-                }
+            fetchWorkspace: async () => {
+                let workspaceId = router.query.wsId;
 
-                await workspaceDataConnect().getWorkspace(workspaceRdx.info.id)
+                await workspaceDataConnect().getWorkspace(workspaceId)
                     .then(res => {
                         if (res.status === 200) {
-                            dispatch({
-                                type: 'WORKSPACE_STATE_INIT_INFO',
+                            dispatchWorkspace({
+                                type: 'SET_DATA',
                                 payload: res.data?.data
                             });
                         }
@@ -55,22 +71,28 @@ const WorkspaceManagementMainComponent = (props) => {
         },
         action: {
             changeWorkspacename: async (editName) => {
-                if (!workspaceRdx.info) {
+                if (!workspace) {
                     return;
                 }
                 let body = {
-                    workspaceId: workspaceRdx.info.id,
+                    workspaceId: workspace.id,
                     name: editName
                 }
 
                 await __workspace.req.changeWorkspaceName(body);
-                await __workspace.req.dispatchWorkspace();
+                await __workspace.req.fetchWorkspace();
             }
         }
     }
     const __workspaceMember = {
         req: {
-            fetchWorkspaceMember: async (workspaceId) => {
+            fetchWorkspaceMember: async () => {
+                if (!workspace) {
+                    return;
+                }
+
+                let workspaceId = workspace.id;
+
                 await workspaceMemberDataConnect().searchList(workspaceId)
                     .then(res => {
                         if (res.status === 200) {
@@ -83,6 +105,61 @@ const WorkspaceManagementMainComponent = (props) => {
                     .catch(err => {
                         console.log(err, err.response);
                     })
+            },
+            deleteOne: async (body) => {
+                await csrfDataConnect().getApiCsrf();
+                await workspaceMemberDataConnect().deleteOne(body)
+                    .catch(err => {
+                        let res = err.response;
+                        if (!res) {
+                            alert('네트워크가 연결이 원활하지 않습니다.');
+                            return;
+                        }
+
+                        if (res.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res.data.memo);
+                    });
+            },
+            changePermissions: async (workspaceMember) => {
+                await csrfDataConnect().getApiCsrf();
+                await workspaceMemberDataConnect().changePermissions(workspaceMember)
+                    .catch(err => {
+                        let res = err.response;
+                        if (!res) {
+                            alert('네트워크가 연결이 원활하지 않습니다.');
+                            return;
+                        }
+
+                        if (res.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res.data.memo);
+                    })
+                    ;
+            }
+        },
+        submit: {
+            deleteOne: async (workspaceMemberId) => {
+                if (!workspace) {
+                    return;
+                }
+                let body = {
+                    workspaceId: workspace.id,
+                    workspaceMemberId: workspaceMemberId
+                }
+
+                await __workspaceMember.req.deleteOne(body);
+                await __workspaceMember.req.fetchWorkspaceMember();
+            },
+            changePermissions: async (workspaceMember) => {
+                await __workspaceMember.req.changePermissions(workspaceMember);
+                await __workspaceMember.req.fetchWorkspaceMember();
             }
         }
     }
@@ -90,7 +167,12 @@ const WorkspaceManagementMainComponent = (props) => {
     const __inviteMember = {
         req: {
             fetchInviteMembers: async () => {
-                let workspaceId = workspaceRdx.info.id;
+                if (!workspace) {
+                    return;
+                }
+
+                let workspaceId = workspace.id;
+
                 await inviteMemberDataConnect().searchListByWorkspaceId(workspaceId)
                     .then(res => {
                         if (res.status === 200) {
@@ -125,11 +207,11 @@ const WorkspaceManagementMainComponent = (props) => {
         },
         action: {
             cancelRequest: async (inviteMember) => {
-                if (!workspaceRdx.info || !inviteMember) {
+                if (!workspace || !inviteMember) {
                     return;
                 }
 
-                await __inviteMember.req.deleteByWorkspaceIdAndInviteMemberId(workspaceRdx.info.id, inviteMember.id);
+                await __inviteMember.req.deleteByWorkspaceIdAndInviteMemberId(workspace.id, inviteMember.id);
                 await __inviteMember.req.fetchInviteMembers();
             }
         }
@@ -139,35 +221,59 @@ const WorkspaceManagementMainComponent = (props) => {
         return null;
     }
 
-    if (userRdx.isLoading === false && (!userRdx.info || !workspaceRdx.info)) {
+    if (userRdx.isLoading === false && !userRdx.info) {
         return (
             <NotAllowedComponent></NotAllowedComponent>
         );
     }
 
     return (
-        <>
-            <TitleComponent
-                workspaceInfo={workspaceRdx.info}
+        <Container>
+            <WorkspaceSelectorComponent />
+            {!workspace &&
+                <div style={{ textAlign: 'center', margin: '150px 0', fontWeight: '500' }}>워크스페이스를 먼저 선택해 주세요.</div>
+            }
+            {workspace &&
+                <>
+                    <TitleComponent
+                        workspaceInfo={workspace}
 
-                onSubmitChangeWorkspaceName={__workspace.action.changeWorkspacename}
-            ></TitleComponent>
-            <MemberTableComponent
-                workspaceMembers={workspaceMembers}
-            ></MemberTableComponent>
-            <InviteMemberComponent
-                inviteMembers={inviteMembers}
+                        onSubmitChangeWorkspaceName={__workspace.action.changeWorkspacename}
+                    ></TitleComponent>
+                    <MemberTableComponent
+                        workspaceMembers={workspaceMembers}
 
-                onFetchInviteMembers={__inviteMember.req.fetchInviteMembers}
-                onActionCancelInviteRequest={__inviteMember.action.cancelRequest}
-            ></InviteMemberComponent>
-        </>
+                        onSubmitDeleteWorkspaceMember={__workspaceMember.submit.deleteOne}
+                        onSubmitChangePermissions={__workspaceMember.submit.changePermissions}
+                    ></MemberTableComponent>
+                    <InviteMemberComponent
+                        workspace={workspace}
+                        inviteMembers={inviteMembers}
+
+                        onFetchInviteMembers={__inviteMember.req.fetchInviteMembers}
+                        onActionCancelInviteRequest={__inviteMember.action.cancelRequest}
+                    ></InviteMemberComponent>
+                </>
+            }
+
+        </Container>
     );
 }
 export default WorkspaceManagementMainComponent;
 
+const initialWorkspace = null;
 const initialWorkspaceMembers = null;
 const initialInviteMembers = null;
+
+const workspaceReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialWorkspace;
+        default: return initialWorkspace;
+    }
+}
 
 const workspaceMembersReducer = (state, action) => {
     switch (action.type) {

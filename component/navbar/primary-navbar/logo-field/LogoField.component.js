@@ -19,7 +19,7 @@ const LogoFieldComponent = (props) => {
                             layout='fill'
                             alt="logo"
                             className='logo-el'
-                            loading='lazy'
+                            priority={true}
                         ></Image>
                     </div>
                 </Link>

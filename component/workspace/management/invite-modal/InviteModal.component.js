@@ -10,7 +10,6 @@ import { ButtonFieldWrapper, Container, FormFieldWrapper, HeadFieldWrapper } fro
 const InviteModalComponent = (props) => {
     const router = useRouter();
     const userRdx = useSelector(state => state.userState);
-    const workspaceRdx = useSelector(state => state.workspaceState);
 
     const [disabledBtn, setDisabledBtn] = useState(false);
     const [username, setUsername] = useState('');
@@ -78,14 +77,14 @@ const InviteModalComponent = (props) => {
                 __this.req.checkUser(username);
             },
             invite: async () => {
-                if (!workspaceRdx?.info || !isCheckedUser) {
+                if (!props.workspace || !isCheckedUser) {
                     return;
                 }
 
                 setDisabledBtn(true);
                 let body = {
                     username: username,
-                    workspaceId: workspaceRdx?.info.id
+                    workspaceId: props.workspace.id
                 }
                 await __this.req.invite(body);
             }

@@ -14,14 +14,16 @@ const TitleFieldWrapper = styled.div`
 
 const FormFieldWrapper = styled.div`
     .input-box{
-        display: flex;
-        align-items: center;
         margin-bottom: 25px;
+        width: 300px;
+
+        @media screen and (max-width: 576px){
+            width: 100%;
+        }
     }
 
     .input-label{
-        width: 100px;
-        margin-right: 10px;
+        margin-bottom: 10px;
         font-size: 14px;
     }
 
@@ -33,7 +35,7 @@ const FormFieldWrapper = styled.div`
 
     .input-el{
         padding: 10px 5px;
-        width: 280px;
+        width: 100%;
         border: 1px solid #e0e0e0;
         box-sizing: border-box;
 
@@ -41,6 +43,33 @@ const FormFieldWrapper = styled.div`
             outline: none;
             background: #2C73D20D;
         }
+    }
+
+    .input-box button {
+        padding: 10px;
+        margin: 0 5px;
+        border-radius: 2px;
+        border: 1px solid #2C73D2;
+        background-color: #2C73D2;
+        color: white;
+        cursor: pointer;
+        width: 20%;
+
+        &:disabled{
+            cursor: not-allowed;
+            background: #e0e0e0;
+            border: 1px solid #e0e0e0;
+        }
+    }
+
+    .auth-box {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .auth-input {
+        width: 80%;
     }
 `;
 
@@ -60,6 +89,10 @@ const ButtonFieldWrapper = styled.div`
         &:disabled{
             cursor: not-allowed;
             background: #e0e0e0;
+        }
+
+        @media screen and (max-width: 576px){
+            width: 90%;
         }
     }
 `;

@@ -12,14 +12,16 @@ const Container = styled.div`
     }
 
     .input-box{
-        display: flex;
-        align-items: center;
         margin-bottom: 25px;
+        width: 300px;
+
+        @media screen and (max-width: 576px){
+            width: 100%;
+        }
     }
 
     .input-label{
-        width: 100px;
-        margin-right: 10px;
+        margin-bottom: 10px;
         font-size: 14px;
     }
 
@@ -31,7 +33,7 @@ const Container = styled.div`
 
     .input-el{
         padding: 10px 5px;
-        width: 280px;
+        width: 100%;
         border: 1px solid #e0e0e0;
         box-sizing: border-box;
 
@@ -56,6 +58,10 @@ const Container = styled.div`
         &:disabled{
             cursor: not-allowed;
             background: #e0e0e0;
+        }
+
+        @media screen and (max-width: 576px){
+            width: 90%;
         }
     }
 `;

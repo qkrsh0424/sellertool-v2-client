@@ -24,12 +24,12 @@ export default function SnackbarCenter(props) {
                     horizontal: props.horizontal || 'center'
                 }}
                 open={props.open || false}
-                onClose={() => props.onClose()}
+                onClose={typeof (props.onClose) === 'function' ? () => props.onClose() : () => { ; }}
                 autoHideDuration={props.autoHideDuration || 3000}
                 key={(props.vertical || 'top') + (props.horizontal || 'center')}
             >
                 <Alert
-                    onClose={() => props.onClose()}
+                    onClose={typeof (props.onClose) === 'function' ? () => props.onClose() : () => { ; }}
                     severity={props.severity || 'error'}
                     sx={{ width: '100%' }}
                 >

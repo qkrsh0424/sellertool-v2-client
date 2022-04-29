@@ -43,6 +43,40 @@ const userDataConnect = () => {
                 xsrfCookieName: 'auth_csrf',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
+        },
+        getPhoneAuthNumber: async function(phoneNumber){
+            return await axios.get(`${AUTH_API_ADDRESS}/auth/v1/user/phone`, {
+                params: {
+                    phoneNumber
+                },
+                withCredentials: true
+            })
+        },
+        verifyPhoneAuthNumber: async function(phoneNumber, phoneAuthNumber){
+            return await axios.get(`${AUTH_API_ADDRESS}/auth/v1/user/phone/verify`, {
+                params: {
+                    phoneNumber,
+                    phoneAuthNumber
+                },
+                withCredentials: true
+            })
+        },
+        getEmailAuthNumber: async function(email){
+            return await axios.get(`${AUTH_API_ADDRESS}/auth/v1/user/email`, {
+                params: {
+                    email
+                },
+                withCredentials: true
+            })
+        },
+        verifyEmailAuthNumber: async function(email, emailAuthNumber){
+            return await axios.get(`${AUTH_API_ADDRESS}/auth/v1/user/email/verify`, {
+                params: {
+                    email,
+                    emailAuthNumber
+                },
+                withCredentials: true
+            })
         }
     }
 }

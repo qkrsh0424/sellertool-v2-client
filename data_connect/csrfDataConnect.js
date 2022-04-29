@@ -13,7 +13,7 @@ const csrfDataConnect = () => {
             })
             .catch(err=>{
                 if(!err.response){
-                    alert('네트워크 연결 상태가 좋지않습니다.');
+                    alert('네트워크 연결이 원활하지 않습니다.');
                 }
             })
         },
@@ -23,7 +23,7 @@ const csrfDataConnect = () => {
             })
             .catch(err=>{
                 if(!err.response){
-                    alert('네트워크 연결 상태가 좋지않습니다.');
+                    alert('네트워크 연결이 원활하지 않습니다.');
                 }
             })
         },

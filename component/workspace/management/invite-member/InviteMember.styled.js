@@ -48,6 +48,7 @@ const ListFieldWrapper = styled.div`
         max-height: 500px;
         overflow: auto;
         border: 1px solid #e0e0e0;
+        border-radius: 5px;
         .item-box:nth-last-child(1){
             border: none;
         }    
@@ -60,7 +61,8 @@ const ListFieldWrapper = styled.div`
     }
 
     .item-box .head-box{
-        font-size: 24px;
+        margin-top: 5px;
+        font-size: 21px;
         color: #2C73D2;
     }
 
@@ -72,8 +74,9 @@ const ListFieldWrapper = styled.div`
     }
 
     .item-box .footer-box .status-el{
-        font-size: 16px;
+        font-size: 14px;
         color: #515151;
+        font-weight: 500;
     }
 
     .item-box .footer-box .delete-button-el{
@@ -82,8 +85,9 @@ const ListFieldWrapper = styled.div`
         border: none;
         border-radius: 3px;
 
-        font-size: 16px;
+        font-size: 14px;
         color:#515151;
+        font-weight: 500;
 
         cursor: pointer;
 

@@ -11,7 +11,6 @@ const WorkspaceManagementPage = (props) => {
                 <title>워크스페이스 관리</title>
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
-            <SecondaryNavbarMainComponent></SecondaryNavbarMainComponent>
             <WorkspaceManagementMainComponent></WorkspaceManagementMainComponent>
             <FooterMain></FooterMain>
         </>

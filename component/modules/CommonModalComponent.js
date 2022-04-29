@@ -8,7 +8,7 @@ const CommonModalComponent = (props) => {
                 fullWidth={props.fullWidth || true}
                 maxWidth={props.maxWidth || 'xs'}
                 open={props.open}
-                onClose={()=>props.onClose()}
+                onClose={typeof (props.onClose) === 'function' ? () => props.onClose() : () => { ; }}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >

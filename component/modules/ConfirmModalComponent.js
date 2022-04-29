@@ -38,6 +38,10 @@ const ButtonBox = styled.div`
         &:hover{
             background:#e1e1e160;
         }
+
+        &:disabled{
+            cursor: not-allowed;
+        }
     }
 `;
 
@@ -59,7 +63,7 @@ const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, onClose, 
                 open={open || false}
                 fullWidth={fullWidth || true}
                 maxWidth={maxWidth || 'xs'}
-                onClose={() => onClose() || {}}
+                onClose={typeof (onClose) === 'function' ? () => onClose() : () => { ; }}
             >
                 <TitleBox>
                     {title || '확인메세지'}
@@ -72,7 +76,7 @@ const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, onClose, 
                         <button
                             className='button-item'
                             style={{ color: '#d15120' }}
-                            onClick={() => onClose() || {}}
+                            onClick={typeof (onClose) === 'function' ? () => onClose() : () => { ; }}
                         >취소</button>
                     </ButtonBox>
                     <ButtonBox>

@@ -133,9 +133,6 @@ export default function CategoryComponent(props) {
 
     return (
         <>
-            <PageTitleField
-                title={'| 상품 관리 |'}
-            />
             <Container>
                 <CategorySelectorField
                     categories={props.categories}
@@ -144,16 +141,18 @@ export default function CategoryComponent(props) {
                     onActionOpenAddModal={__category.action.openAddModal}
                 />
                 {props.category &&
-                    <SelectedCategoryField
-                        category={props.category}
-                        onActionOpenEditModal={__category.action.openEditModal}
-                        onActionDelete={__category.action.delete}
-                        disabledBtn={disabledBtn}
-                    />
+                    <>
+                        <SelectedCategoryField
+                            category={props.category}
+                            onActionOpenEditModal={__category.action.openEditModal}
+                            onActionDelete={__category.action.delete}
+                            disabledBtn={disabledBtn}
+                        />
+                        <LineBreakerBottom
+                            gapTop={30}
+                        />
+                    </>
                 }
-                <LineBreakerBottom
-                    gapTop={30}
-                />
             </Container>
 
             {/* Modal */}
@@ -230,12 +229,6 @@ const editCategoryReducer = (state, action) => {
             return initialEditCategory;
         default: return initialEditCategory;
     }
-}
-
-function PageTitleField({ title }) {
-    return (
-        <h5 style={{ padding: '0 10px', color: '#505050' }}>{title}</h5>
-    );
 }
 
 function CategorySelectorField({

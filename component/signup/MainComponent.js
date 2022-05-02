@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { csrfDataConnect } from "../../data_connect/csrfDataConnect";
 import { signupDataConnect } from "../../data_connect/signupDataConnect";
 import { userDataConnect } from "../../data_connect/userDataConnect";
+import { userInfoAuthDataConnect } from "../../data_connect/userInfoAuthDataConnect";
 import SnackbarCenter from "../modules/SnackbarCenter";
 import BodyComponent from "./BodyComponent";
 
@@ -14,7 +15,7 @@ const Container = styled.div`
 const MainComponent = () => {
     const router = useRouter();
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarMessage, setSnackbarMessage] = useState('no message');
     const [snackbarSeverity, setSnackbarSeverity] = useState('info');
 
     const [verifiedEmail, setVerifiedEmail] = useState(null);
@@ -76,7 +77,7 @@ const MainComponent = () => {
                     })
             },
             getEmailAuthNumber: async function (email) {
-                await userDataConnect().getEmailAuthNumber(email)
+                await userInfoAuthDataConnect().getEmailAuthNumber(email)
                     .then(res => {
                         if (res.status === 200 && res.data.message === 'success') {
                             setSnackbarSeverity('success');
@@ -95,7 +96,7 @@ const MainComponent = () => {
                     });
             },
             verifyEmailAuthNumber: async function (email, emailAuthNumber) {
-                await userDataConnect().verifyEmailAuthNumber(email, emailAuthNumber)
+                await userInfoAuthDataConnect().verifyEmailAuthNumber(email, emailAuthNumber)
                     .then(res => {
                         if (res.status === 200 && res.data.message === 'success') {
                             setSnackbarSeverity('success');
@@ -116,7 +117,7 @@ const MainComponent = () => {
                     });
             },
             getPhoneAuthNumber: async function (phoneNumber) {
-                await userDataConnect().getPhoneAuthNumber(phoneNumber)
+                await userInfoAuthDataConnect().getPhoneAuthNumber(phoneNumber)
                     .then(res => {
                         if (res.status === 200 && res.data.message === 'success') {
                             setSnackbarSeverity('success');
@@ -135,7 +136,7 @@ const MainComponent = () => {
                     });
             },
             verifyPhoneAuthNumber: async function (phoneNumber, phoneAuthNumber) {
-                await userDataConnect().verifyPhoneAuthNumber(phoneNumber, phoneAuthNumber)
+                await userInfoAuthDataConnect().verifyPhoneAuthNumber(phoneNumber, phoneAuthNumber)
                     .then(res => {
                         if (res.status === 200 && res.data.message === 'success') {
                             setSnackbarSeverity('success');

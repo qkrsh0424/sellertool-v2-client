@@ -337,7 +337,7 @@ const BodyComponent = (props) => {
             type: 'SET_DATA',
             payload: {
                 name: 'verifiedPhoneNumber',
-                value: props.verifiedEmail
+                value: props.verifiedPhoneNumber
             }
         });
         dispatchInputValueState({
@@ -461,10 +461,12 @@ const BodyComponent = (props) => {
             nicknameRef.current.focus();
             return;
         }
-        if (!formValidState.email) {
-            _onSnackbarOpen('이메일 인증을 진행해 주세요.');
-            emailRef.current.focus();
-            return;
+        if (inputValueState.email) {
+            if (!formValidState.email) {
+                _onSnackbarOpen('이메일 인증을 진행해 주세요.');
+                emailRef.current.focus();
+                return;
+            }
         }
         if (!formValidState.phoneNumber) {
             _onSnackbarOpen('전화번호 인증을 진행해 주세요.');
@@ -632,7 +634,7 @@ const BodyComponent = (props) => {
                     </HeaderBox>
                     <InputBox>
                         <div
-                            className={`input-label`}
+                            className='input-label'
                         >아이디</div>
                         <input
                             type='text'

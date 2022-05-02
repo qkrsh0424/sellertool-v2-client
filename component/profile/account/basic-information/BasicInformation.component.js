@@ -145,6 +145,20 @@ const BasicInformationComponent = (props) => {
     }, [props.userInfo]);
 
     useEffect(() => {
+        if (!props.userInfo || !userInfo) {
+            setIsChanged(false);
+            return;
+        }
+
+        if (JSON.stringify(props.userInfo) != JSON.stringify(userInfo)) {
+            setIsChanged(true);
+            return;
+        }
+
+        setIsChanged(false);
+    }, [props.userInfo, userInfo])
+
+    useEffect(() => {
         if(!props.verifiedEmail) {
             return;
         }
@@ -164,7 +178,6 @@ const BasicInformationComponent = (props) => {
             }
         })
 
-        setIsEmailAddressChanged(false);
         setIsEmailAuthNumberRequest(false);
     }, [props.verifiedEmail]);
 
@@ -188,7 +201,6 @@ const BasicInformationComponent = (props) => {
             }
         })
 
-        setIsPhoneNumberChanged(false);
         setIsPhoneAuthNumberRequest(false);
     }, [props.verifiedPhoneNumber]);
 
@@ -223,20 +235,6 @@ const BasicInformationComponent = (props) => {
 
         setIsPhoneAuthNumberRequest(false);
     }, [isPhoneNumberChanged]);
-
-    useEffect(() => {
-        if (!props.userInfo || !userInfo) {
-            setIsChanged(false);
-            return;
-        }
-
-        if (JSON.stringify(props.userInfo) != JSON.stringify(userInfo)) {
-            setIsChanged(true);
-            return;
-        }
-
-        setIsChanged(false);
-    }, [props.userInfo, userInfo])
 
     const __userInfo = {
         change: {
@@ -289,19 +287,26 @@ const BasicInformationComponent = (props) => {
                     return false;
                 }
 
-                if (userInfo.phoneNumber && !checkPhoneNumberFormat(userInfo.phoneNumber)) {
-                    alert('전화번호 형식을 확인해 주세요.');
-                    return false;
-                }
-
-                if(isEmailAddressChanged && (userInfo.email !== userInfo.verifiedEmail)) {
+                if ((props.userInfo.email !== userInfo.email) && !userInfo.verifiedEmail) {
                     alert('이메일 인증을 완료해주세요.');
                     return false;
                 }
 
-                if(isPhoneNumberChanged && (userInfo.phoneNumber !== userInfo.verifiedPhoneNumber)) {
-                    alert('전화번호 인증을 완료해주세요.');
+                if(userInfo.verifiedEmail && (userInfo.email !== userInfo.verifiedEmail)) {
+                    alert('이메일 인증이 올바르지 않습니다.');
                     return false;
+                }
+
+                // 전화번호는 선택값
+                if (userInfo.phoneNumber){
+                    if((props.userInfo.phoneNumber !== userInfo.phoneNumber) && !userInfo.verifiedPhoneNumber) {
+                        alert('전화번호 인증을 완료해주세요.');
+                        return false;
+                    }
+                    if(userInfo.verifiedPhoneNumber && (userInfo.phoneNumber !== userInfo.verifiedPhoneNumber)) {
+                        alert('전화번호 인증을 완료해주세요.');
+                        return false;
+                    }
                 }
 
                 return true;

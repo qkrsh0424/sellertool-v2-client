@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import styled from "styled-components";
-import { checkEmailFormat, checkNicknameForm, checkPassword, checkPhoneNumberFormat, checkUsernameForm, comparePassword } from "../../utils/regexUtils";
+import { checkEmailFormat, checkNicknameForm, checkPassword, checkUsernameForm, comparePassword } from "../../utils/regexUtils";
 import SnackbarCenter from '../modules/SnackbarCenter';
 
 const Container = styled.div`
@@ -119,12 +119,7 @@ const AuthInputBox = styled.div`
         margin-bottom: 5px;
         color: #555;
     }
-
-    .input-label span {
-        font-size: 12px;
-        color: #707070;
-    }
-
+    
     .input-item{
         width: 90%;
         padding: 8px 5px;
@@ -285,8 +280,6 @@ const BodyComponent = (props) => {
     const nicknameRef = useRef();
     const emailRef = useRef();
     const emailAuthNumberRef = useRef();
-    const phoneNumberRef = useRef();
-    const phoneAuthNumberRef = useRef();
 
     const [inputValueState, dispatchInputValueState] = useReducer(inputValueStateReducer, initialInputValueState);
     const [formValidState, dispatchFormValidState] = useReducer(formValidStateReducer, initialFormValidState);
@@ -296,9 +289,6 @@ const BodyComponent = (props) => {
 
     const [isEmailAddressChanged, setIsEmailAddressChanged] = useState(false);
     const [isEmailAuthNumberRequest, setIsEmailAuthNumberRequest] = useState(false);
-
-    const [isPhoneNumberChanged, setIsPhoneNumberChanged] = useState(false);
-    const [isPhoneAuthNumberRequest, setIsPhoneAuthNumberRequest] = useState(false);
 
     useEffect(() => {
         if(!props.verifiedEmail) {
@@ -334,40 +324,6 @@ const BodyComponent = (props) => {
     }, [props.verifiedEmail]);
 
     useEffect(() => {
-        if(!props.verifiedPhoneNumber) {
-            return null;
-        }
-
-        dispatchInputValueState({
-            type: 'SET_DATA',
-            payload: {
-                name: 'verifiedPhoneNumber',
-                value: props.verifiedPhoneNumber
-            }
-        });
-        dispatchInputValueState({
-            type: 'SET_DATA',
-            payload: {
-                name: 'phoneAuthNumber',
-                value: ''
-            }
-        })
-
-        if(props.verifiedPhoneNumber) {
-            dispatchFormValidState({
-                type: 'SET_DATA',
-                payload: {
-                    name: 'phoneNumber',
-                    value: true
-                }
-            })
-        }
-
-        setIsPhoneNumberChanged(false);
-        setIsPhoneAuthNumberRequest(false);
-    }, [props.verifiedPhoneNumber]);
-
-    useEffect(() => {
         if(!isEmailAddressChanged) {
             return;
         }
@@ -391,30 +347,6 @@ const BodyComponent = (props) => {
         setIsEmailAuthNumberRequest(false);
     }, [isEmailAddressChanged]);
 
-    useEffect(() => {
-        if(!isPhoneNumberChanged) {
-            return;
-        }
-
-        dispatchInputValueState({
-            type: 'SET_DATA',
-            payload: {
-                name: 'phoneAuthNumber',
-                value: ''
-            }
-        })
-
-        dispatchFormValidState({
-            type: 'SET_DATA',
-            payload: {
-                name: 'phoneNumber',
-                value: false
-            }
-        })
-
-        setIsPhoneAuthNumberRequest(false);
-    }, [isPhoneNumberChanged]);
-
     const _inputValueState = () => {
         return {
             onChangeInputValue: function (e) {
@@ -431,14 +363,6 @@ const BodyComponent = (props) => {
                     
                     if(e.target.value === '') {
                         setIsEmailAddressChanged(false);
-                    }
-                }
-
-                if(e.target.name === 'phoneNumber') {
-                    setIsPhoneNumberChanged(true);
-
-                    if(e.target.value === '') {
-                        setIsPhoneNumberChanged(false);
                     }
                 }
             }
@@ -472,11 +396,6 @@ const BodyComponent = (props) => {
                 emailRef.current.focus();
                 return;
             }
-        }
-        if (!formValidState.phoneNumber) {
-            _onSnackbarOpen('전화번호 인증을 진행해 주세요.');
-            phoneNumberRef.current.focus();
-            return;
         }
 
         props.onSubmitSignup(inputValueState);
@@ -608,22 +527,6 @@ const BodyComponent = (props) => {
                     return;
                 }
                 props.onActionVerifyEmailAuthNumber(inputValueState.email, inputValueState.emailAuthNumber);
-            },
-            getPhoneAuthNumber: function () {
-                if(!checkPhoneNumberFormat(inputValueState.phoneNumber)) {
-                    _onSnackbarOpen('전화번호 형식을 확인해 주세요.');
-                    return;
-                }
-                props.onActionGetPhoneAuthNumber(inputValueState.phoneNumber);
-                setIsPhoneNumberChanged(false);
-                setIsPhoneAuthNumberRequest(true);
-            },
-            verifyPhoneAuthNumber: function () {
-                if(!inputValueState.phoneAuthNumber) {
-                    _onSnackbarOpen('인증번호를 입력해 주세요.');
-                    return;
-                }
-                props.onActionVerifyPhoneAuthNumber(inputValueState.phoneNumber, inputValueState.phoneAuthNumber);
             }
         }
     }
@@ -721,7 +624,7 @@ const BodyComponent = (props) => {
                     </InputBox>
 
                     <AuthInputBox>
-                        <div className='input-label'>이메일<span>(선택)</span></div>
+                        <div className='input-label'>이메일</div>
                         <div className='auth-input-box'>
                             <input
                                 type='text'
@@ -756,44 +659,6 @@ const BodyComponent = (props) => {
                             >인증 완료</ValidTag>
                         </div>
                         <div className='input-notice'>* 이메일이 도착하지 않는다면 재요청해주세요.</div>
-                    </AuthInputBox>
-
-                    <AuthInputBox>
-                        <div className='input-label'>전화번호</div>
-                        <div className='auth-input-box'>
-                            <input
-                                type='number'
-                                ref={phoneNumberRef}
-                                className={`input-item ${formValidState.email === true ? 'pass-input-item' : ''}`}
-                                name='phoneNumber'
-                                value={inputValueState.phoneNumber || ''}
-                                onChange={(e) => _inputValueState().onChangeInputValue(e)}
-                                onBlur={(e) => _onBlurInput(e)}
-                            ></input>
-                            <button type='button' onClick={() => _reqUserInfoAuth().getPhoneAuthNumber()} disabled={!isPhoneNumberChanged}>인증</button>
-                        </div>
-
-                        <div className='auth-input-box'>
-                            <input
-                                type='number'
-                                ref={phoneAuthNumberRef}
-                                className={`input-item ${formValidState.phoneAuthNumber === true ? 'pass-input-item' : ''}`}
-                                name='phoneAuthNumber'
-                                value={inputValueState.phoneAuthNumber || ''}
-                                onChange={(e) => _inputValueState().onChangeInputValue(e)}
-                                onBlur={(e) => _onBlurInput(e)}
-                                placeholder='전화번호 인증번호 입력'
-                                disabled={!isPhoneAuthNumberRequest}
-                            ></input>
-                            <button type='button' onClick={() => _reqUserInfoAuth().verifyPhoneAuthNumber()} disabled={!isPhoneAuthNumberRequest}
-                            >확인</button>
-                        </div>
-                        <div className='input-notice'>
-                            <ValidTag
-                                isValid={formValidState.phoneNumber}
-                            >인증 완료</ValidTag>
-                        </div>
-                        <div className='input-notice'>* 숫자만 입력해주세요.</div>
                     </AuthInputBox>
 
                     <SignupButtonBox>

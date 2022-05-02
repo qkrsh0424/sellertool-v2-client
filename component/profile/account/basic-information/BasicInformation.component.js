@@ -42,7 +42,7 @@ function FormFieldView({ userInfo, isEmailAuthNumberRequest, isPhoneAuthNumberRe
                     </div>
                 </div>
                 <div className='input-box'>
-                    <div className='input-label'>이메일<span>(선택)</span></div>
+                    <div className='input-label'>이메일</div>
                     <div className='auth-box'>
                         <div className='input-el-box'>
                             <input
@@ -51,6 +51,7 @@ function FormFieldView({ userInfo, isEmailAuthNumberRequest, isPhoneAuthNumberRe
                                 name='email'
                                 value={userInfo.email || ''}
                                 onChange={onChangeValue}
+                                required
                             ></input>
                             <div className='input-notice'>이메일이 도착하지 않는다면 재요청해주세요.</div>
                         </div>
@@ -72,7 +73,7 @@ function FormFieldView({ userInfo, isEmailAuthNumberRequest, isPhoneAuthNumberRe
                     </div>
                 </div>
                 <div className='input-box'>
-                    <div className='input-label'>전화번호</div>
+                    <div className='input-label'>전화번호<span>(선택)</span></div>
                     <div className='auth-box'>
                         <div className='input-el-box'>
                             <input
@@ -81,7 +82,6 @@ function FormFieldView({ userInfo, isEmailAuthNumberRequest, isPhoneAuthNumberRe
                                 name='phoneNumber'
                                 value={userInfo.phoneNumber || ''}
                                 onChange={onChangeValue}
-                                // required
                             ></input>
                             <div className='input-notice'>숫자만 입력해주세요.</div>
                         </div>

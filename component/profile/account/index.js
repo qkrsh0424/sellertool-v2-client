@@ -10,6 +10,7 @@ import EditPasswordComponent from './edit-password/EditPassword.component';
 import HeadComponent from './head/Head.component';
 import SnackbarCenter from "../../modules/SnackbarCenter";
 import { useState } from "react";
+import { userInfoAuthDataConnect } from '../../../data_connect/userInfoAuthDataConnect';
 
 const Container = styled.div`
 
@@ -22,6 +23,7 @@ const ProfileAccountMainComponent = (props) => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('no message');
     const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+    
     const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState(null);
     const [verifiedEmail, setVerifiedEmail] = useState(null);
 
@@ -61,7 +63,6 @@ const ProfileAccountMainComponent = (props) => {
                 await userDataConnect().changePassword(body)
                     .catch(err => {
                         let res = err?.response;
-                        console.log(res);
 
                         if (res?.status === 500) {
                             alert('undefined error.');
@@ -72,7 +73,7 @@ const ProfileAccountMainComponent = (props) => {
                     })
             },
             getPhoneAuthNumber: async (phoneNumber) => {
-                await userDataConnect().getPhoneAuthNumber(phoneNumber).then(res => {
+                await userInfoAuthDataConnect().getPhoneAuthNumber(phoneNumber).then(res => {
                     if (res?.status === 200 && res?.data?.message === 'success') {
                         setSnackbarSeverity('success');
                         _onSnackbarOpen('인증 요청되었습니다.');
@@ -90,7 +91,7 @@ const ProfileAccountMainComponent = (props) => {
                 });
             },
             verifyPhoneAuthNumber: async (phoneNumber, phoneAuthNumber) => {
-                await userDataConnect().verifyPhoneAuthNumber(phoneNumber, phoneAuthNumber).then(res => {
+                await userInfoAuthDataConnect().verifyPhoneAuthNumber(phoneNumber, phoneAuthNumber).then(res => {
                     if (res?.status === 200 && res?.data?.message === 'success') {
                         setSnackbarSeverity('success');
                         _onSnackbarOpen('인증되었습니다.');
@@ -106,10 +107,11 @@ const ProfileAccountMainComponent = (props) => {
 
                     setSnackbarSeverity('error');
                     _onSnackbarOpen(res?.data?.memo);
+                    setVerifiedPhoneNumber(null);
                 });
             },
             getEmailAuthNumber: async (email) => {
-                await userDataConnect().getEmailAuthNumber(email).then(res => {
+                await userInfoAuthDataConnect().getEmailAuthNumber(email).then(res => {
                     if (res?.status === 200 && res?.data?.message === 'success') {
                         setSnackbarSeverity('success');
                         _onSnackbarOpen('인증 요청되었습니다.');
@@ -127,7 +129,7 @@ const ProfileAccountMainComponent = (props) => {
                 });
             },
             verifyEmailAuthNumber: async (email, emailAuthNumber) => {
-                await userDataConnect().verifyEmailAuthNumber(email, emailAuthNumber).then(res => {
+                await userInfoAuthDataConnect().verifyEmailAuthNumber(email, emailAuthNumber).then(res => {
                     if (res?.status === 200 && res?.data?.message === 'success') {
                         setSnackbarSeverity('success');
                         _onSnackbarOpen('인증되었습니다.');
@@ -189,10 +191,10 @@ const ProfileAccountMainComponent = (props) => {
                         verifiedEmail={verifiedEmail}
 
                         onSubmitUpdateUserInfo={__user.submit.updateInfo}
-                        onActionGetPhoneAuthNumber={(phoneNumber) => __user.req.getPhoneAuthNumber(phoneNumber)}
-                        onActionVerifyPhoneAuthNumber={(phoneNumber, phoneAuthNumber) => __user.req.verifyPhoneAuthNumber(phoneNumber, phoneAuthNumber)}
                         onActionGetEmailAuthNumber={(email) => __user.req.getEmailAuthNumber(email)}
-                        onActionVerifyEmailAuthNumber={(email, emailAuthNumber) => __user.req.verifyEmailAuthNumber(email, emailAuthNumber)}
+                        onActionVerifyEmailAuthNumber={__user.req.verifyEmailAuthNumber}
+                        onActionGetPhoneAuthNumber={__user.req.getPhoneAuthNumber}
+                        onActionVerifyPhoneAuthNumber={__user.req.verifyPhoneAuthNumber}
                     ></BasicInformationComponent>
                     <LineBreakerBottom
                         lineColor={'#e0e0e0'}

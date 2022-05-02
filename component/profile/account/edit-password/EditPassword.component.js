@@ -13,7 +13,7 @@ const Container = styled.div`
 
     .input-box{
         margin-bottom: 25px;
-        width: 300px;
+        width: 430px;
 
         @media screen and (max-width: 576px){
             width: 100%;
@@ -63,6 +63,10 @@ const Container = styled.div`
         @media screen and (max-width: 576px){
             width: 90%;
         }
+    }
+
+    .input-el-box {
+        width: 75%;
     }
 `;
 
@@ -131,7 +135,7 @@ const EditPasswordComponent = (props) => {
                     <div style={{ marginTop: '10px' }}>
                         <div className='input-box'>
                             <div className='input-label'>현재 비밀번호</div>
-                            <div>
+                            <div className='input-el-box'>
                                 <input
                                     className='input-el'
                                     type='password'
@@ -145,7 +149,7 @@ const EditPasswordComponent = (props) => {
                         </div>
                         <div className='input-box'>
                             <div className='input-label'>새 비밀번호</div>
-                            <div>
+                            <div className='input-el-box'>
                                 <input
                                     className='input-el'
                                     type='password'
@@ -160,14 +164,16 @@ const EditPasswordComponent = (props) => {
                         </div>
                         <div className='input-box'>
                             <div className='input-label'>새 비밀번호 확인</div>
-                            <input
-                                className='input-el'
-                                type='password'
-                                name='checkPassword'
-                                value={password.checkPassword || ''}
-                                onChange={__password.change.valueOfName}
-                                required
-                            ></input>
+                            <div className='input-el-box'>
+                                <input
+                                    className='input-el'
+                                    type='password'
+                                    name='checkPassword'
+                                    value={password.checkPassword || ''}
+                                    onChange={__password.change.valueOfName}
+                                    required
+                                ></input>
+                            </div>
                         </div>
                     </div>
                     <div style={{ textAlign: 'center', marginTop: '40px' }}>

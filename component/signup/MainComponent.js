@@ -115,47 +115,7 @@ const MainComponent = () => {
                         _onSnackbarOpen(res?.data?.memo);
                         setVerifiedEmail(null);
                     });
-            },
-            getPhoneAuthNumber: async function (phoneNumber) {
-                await userInfoAuthDataConnect().getPhoneAuthNumber(phoneNumber)
-                    .then(res => {
-                        if (res.status === 200 && res.data.message === 'success') {
-                            setSnackbarSeverity('success');
-                            _onSnackbarOpen('인증 요청되었습니다.');
-                        }
-                    }).catch(err => {
-                        let res = err?.response;
-
-                        if (res?.status === 500) {
-                            alert('undefined error.');
-                            return;
-                        }
-
-                        setSnackbarSeverity('error');
-                        _onSnackbarOpen(res?.data?.memo);
-                    });
-            },
-            verifyPhoneAuthNumber: async function (phoneNumber, phoneAuthNumber) {
-                await userInfoAuthDataConnect().verifyPhoneAuthNumber(phoneNumber, phoneAuthNumber)
-                    .then(res => {
-                        if (res.status === 200 && res.data.message === 'success') {
-                            setSnackbarSeverity('success');
-                            _onSnackbarOpen('인증되었습니다.');
-                            setVerifiedPhoneNumber(phoneNumber);
-                        }
-                    }).catch(err => {
-                        let res = err?.response;
-
-                        if (res?.status === 500) {
-                            alert('undefined error.');
-                            return;
-                        }
-
-                        setSnackbarSeverity('error');
-                        _onSnackbarOpen(res?.data?.memo);
-                        setVerifiedPhoneNumber(null);
-                    });
-            },
+            }
         }
     }
 
@@ -172,12 +132,6 @@ const MainComponent = () => {
             },
             onActionVerifyEmailAuthNumber: async function(email, emailAuthNumber) {
                 await __handleDataConnect().verifyEmailAuthNumber(email, emailAuthNumber);
-            },
-            onActionGetPhoneAuthNumber: async function(phoneNumber) {
-                await __handleDataConnect().getPhoneAuthNumber(phoneNumber);
-            },
-            onActionVerifyPhoneAuthNumber: async function(phoneNumber, phoneAuthNumber) {
-                await __handleDataConnect().verifyPhoneAuthNumber(phoneNumber, phoneAuthNumber);
             }
         }
     }
@@ -193,8 +147,6 @@ const MainComponent = () => {
                     onSubmitSignup={(inputValueState) => __handleEventControl().onSubmitSignup(inputValueState)}
                     onActionGetEmailAuthNumber={(email) => __handleEventControl().onActionGetEmailAuthNumber(email)}
                     onActionVerifyEmailAuthNumber={(email, emailAuthNumber) => __handleEventControl().onActionVerifyEmailAuthNumber(email, emailAuthNumber)}
-                    onActionGetPhoneAuthNumber={(phoneNumber) => __handleEventControl().onActionGetPhoneAuthNumber(phoneNumber)}
-                    onActionVerifyPhoneAuthNumber={(phoneNumber, phoneAuthNumber) => __handleEventControl().onActionVerifyPhoneAuthNumber(phoneNumber, phoneAuthNumber)}
                 ></BodyComponent>
             </Container>
 

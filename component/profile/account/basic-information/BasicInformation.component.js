@@ -16,7 +16,7 @@ function FormFieldView({ userInfo, isEmailAuthNumberRequest, isPhoneAuthNumberRe
         <FormFieldWrapper>
             <div style={{ marginTop: '10px' }}>
                 <div className='input-box'>
-                    <div className='input-label'>이름</div>
+                    <div className='input-label'>이름<span>(선택)</span></div>
                     <div className='input-el-box'>
                         <input
                             className='input-el'
@@ -42,7 +42,7 @@ function FormFieldView({ userInfo, isEmailAuthNumberRequest, isPhoneAuthNumberRe
                     </div>
                 </div>
                 <div className='input-box'>
-                    <div className='input-label'>이메일</div>
+                    <div className='input-label'>이메일<span>(선택)</span></div>
                     <div className='auth-box'>
                         <div className='input-el-box'>
                             <input

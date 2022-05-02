@@ -120,6 +120,11 @@ const AuthInputBox = styled.div`
         color: #555;
     }
 
+    .input-label span {
+        font-size: 12px;
+        color: #707070;
+    }
+
     .input-item{
         width: 90%;
         padding: 8px 5px;
@@ -716,7 +721,7 @@ const BodyComponent = (props) => {
                     </InputBox>
 
                     <AuthInputBox>
-                        <div className='input-label'>이메일</div>
+                        <div className='input-label'>이메일<span>(선택)</span></div>
                         <div className='auth-input-box'>
                             <input
                                 type='text'

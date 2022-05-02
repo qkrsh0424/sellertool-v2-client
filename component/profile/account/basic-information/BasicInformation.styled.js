@@ -27,6 +27,11 @@ const FormFieldWrapper = styled.div`
         font-size: 14px;
     }
 
+    .input-label span {
+        font-size: 12px;
+        color: #707070;
+    }
+
     .input-notice{
         color: #707070;
         font-size: 12px;

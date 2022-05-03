@@ -39,6 +39,7 @@ const ProfileAccountMainComponent = (props) => {
                     })
             },
             updateInfo: async (body) => {
+                console.log(body);
                 await csrfDataConnect().getAuthCsrf();
                 await userDataConnect().updateInfo(body).then(res => {
                     if (res?.status === 200 && res?.data?.message === 'success') {

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { csrfDataConnect } from "../../data_connect/csrfDataConnect";
 import { signupDataConnect } from "../../data_connect/signupDataConnect";
 import { userDataConnect } from "../../data_connect/userDataConnect";
+import { userInfoAuthDataConnect } from "../../data_connect/userInfoAuthDataConnect";
 import SnackbarCenter from "../modules/SnackbarCenter";
 import BodyComponent from "./BodyComponent";
 
@@ -14,7 +15,7 @@ const Container = styled.div`
 const MainComponent = () => {
     const router = useRouter();
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarMessage, setSnackbarMessage] = useState('no message');
     const [snackbarSeverity, setSnackbarSeverity] = useState('info');
 
     const [verifiedEmail, setVerifiedEmail] = useState(null);
@@ -76,7 +77,7 @@ const MainComponent = () => {
                     })
             },
             getEmailAuthNumber: async function (email) {
-                await userDataConnect().getEmailAuthNumber(email)
+                await userInfoAuthDataConnect().getEmailAuthNumber(email)
                     .then(res => {
                         if (res.status === 200 && res.data.message === 'success') {
                             setSnackbarSeverity('success');
@@ -95,7 +96,7 @@ const MainComponent = () => {
                     });
             },
             verifyEmailAuthNumber: async function (email, emailAuthNumber) {
-                await userDataConnect().verifyEmailAuthNumber(email, emailAuthNumber)
+                await userInfoAuthDataConnect().verifyEmailAuthNumber(email, emailAuthNumber)
                     .then(res => {
                         if (res.status === 200 && res.data.message === 'success') {
                             setSnackbarSeverity('success');
@@ -114,47 +115,7 @@ const MainComponent = () => {
                         _onSnackbarOpen(res?.data?.memo);
                         setVerifiedEmail(null);
                     });
-            },
-            getPhoneAuthNumber: async function (phoneNumber) {
-                await userDataConnect().getPhoneAuthNumber(phoneNumber)
-                    .then(res => {
-                        if (res.status === 200 && res.data.message === 'success') {
-                            setSnackbarSeverity('success');
-                            _onSnackbarOpen('인증 요청되었습니다.');
-                        }
-                    }).catch(err => {
-                        let res = err?.response;
-
-                        if (res?.status === 500) {
-                            alert('undefined error.');
-                            return;
-                        }
-
-                        setSnackbarSeverity('error');
-                        _onSnackbarOpen(res?.data?.memo);
-                    });
-            },
-            verifyPhoneAuthNumber: async function (phoneNumber, phoneAuthNumber) {
-                await userDataConnect().verifyPhoneAuthNumber(phoneNumber, phoneAuthNumber)
-                    .then(res => {
-                        if (res.status === 200 && res.data.message === 'success') {
-                            setSnackbarSeverity('success');
-                            _onSnackbarOpen('인증되었습니다.');
-                            setVerifiedPhoneNumber(phoneNumber);
-                        }
-                    }).catch(err => {
-                        let res = err?.response;
-
-                        if (res?.status === 500) {
-                            alert('undefined error.');
-                            return;
-                        }
-
-                        setSnackbarSeverity('error');
-                        _onSnackbarOpen(res?.data?.memo);
-                        setVerifiedPhoneNumber(null);
-                    });
-            },
+            }
         }
     }
 
@@ -171,12 +132,6 @@ const MainComponent = () => {
             },
             onActionVerifyEmailAuthNumber: async function(email, emailAuthNumber) {
                 await __handleDataConnect().verifyEmailAuthNumber(email, emailAuthNumber);
-            },
-            onActionGetPhoneAuthNumber: async function(phoneNumber) {
-                await __handleDataConnect().getPhoneAuthNumber(phoneNumber);
-            },
-            onActionVerifyPhoneAuthNumber: async function(phoneNumber, phoneAuthNumber) {
-                await __handleDataConnect().verifyPhoneAuthNumber(phoneNumber, phoneAuthNumber);
             }
         }
     }
@@ -192,8 +147,6 @@ const MainComponent = () => {
                     onSubmitSignup={(inputValueState) => __handleEventControl().onSubmitSignup(inputValueState)}
                     onActionGetEmailAuthNumber={(email) => __handleEventControl().onActionGetEmailAuthNumber(email)}
                     onActionVerifyEmailAuthNumber={(email, emailAuthNumber) => __handleEventControl().onActionVerifyEmailAuthNumber(email, emailAuthNumber)}
-                    onActionGetPhoneAuthNumber={(phoneNumber) => __handleEventControl().onActionGetPhoneAuthNumber(phoneNumber)}
-                    onActionVerifyPhoneAuthNumber={(phoneNumber, phoneAuthNumber) => __handleEventControl().onActionVerifyPhoneAuthNumber(phoneNumber, phoneAuthNumber)}
                 ></BodyComponent>
             </Container>
 

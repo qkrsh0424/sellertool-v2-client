@@ -15,9 +15,9 @@ const TitleFieldWrapper = styled.div`
 const FormFieldWrapper = styled.div`
     .input-box{
         margin-bottom: 25px;
-        width: 300px;
+        width: 430px;
 
-        @media screen and (max-width: 576px){
+        @media screen and (max-width: 576px) {
             width: 100%;
         }
     }
@@ -25,6 +25,11 @@ const FormFieldWrapper = styled.div`
     .input-label{
         margin-bottom: 10px;
         font-size: 14px;
+    }
+
+    .input-label span {
+        font-size: 12px;
+        color: #707070;
     }
 
     .input-notice{
@@ -53,7 +58,7 @@ const FormFieldWrapper = styled.div`
         background-color: #2C73D2;
         color: white;
         cursor: pointer;
-        width: 20%;
+        width: 100px;
 
         &:disabled{
             cursor: not-allowed;
@@ -68,8 +73,8 @@ const FormFieldWrapper = styled.div`
         margin-bottom: 10px;
     }
 
-    .auth-input {
-        width: 80%;
+    .input-el-box {
+        width: 75%;
     }
 `;
 

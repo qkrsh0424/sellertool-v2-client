@@ -4,12 +4,15 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { categoryDataConnect } from '../../../data_connect/categoryDataConnect';
 import { csrfDataConnect } from '../../../data_connect/csrfDataConnect';
+import { optionDataConnect } from '../../../data_connect/optionDataConnect';
 import { productDataConnect } from '../../../data_connect/productDataConnect';
 import FieldLoading from '../../modules/FieldLoading';
 import FlexGap from '../../modules/FlexGap';
 import LineBreakerBottom from '../../modules/LineBreakerBottom';
 import CategoryComponent from './category/Category.component';
 import ProductAndOptionLayout from './layout/ProductAndOptionLayout';
+import OptionListComponent from './option-list/OptionList.component';
+import ProductDetailComponent from './product-detail/ProductDetail.component';
 import ProductListComponent from './product-list/ProductList.component';
 
 const Container = styled.div`
@@ -42,6 +45,8 @@ const ProductDashboardMainComponent = (props) => {
     const [category, dispatchCategory] = useReducer(categoryReducer, initialCategory);
     const [products, dispatchProducts] = useReducer(productsReducer, initialProducts);
     const [product, dispatchProduct] = useReducer(productReducer, initialProduct);
+    const [options, dispatchOptions] = useReducer(optionsReducer, initialOptions);
+    const [option, dispatchOption] = useReducer(optionReducer, initialOption);
 
     /**
      * 워크스페이스 여부에 따라 페이지 렌더링 결정
@@ -105,6 +110,17 @@ const ProductDashboardMainComponent = (props) => {
             payload: { ...fetchedCategory }
         })
     }, [router.isReady, categories]);
+
+    useEffect(() => {
+        if (!product) {
+            dispatchOptions({
+                type: 'CLEAR'
+            })
+            return;
+        }
+
+        __option.req.fetchOptions();
+    }, [product])
 
     const __category = {
         req: {
@@ -345,6 +361,9 @@ const ProductDashboardMainComponent = (props) => {
                 dispatchProduct({
                     type: 'SET_DATA',
                     payload: { ...selectedProduct }
+                });
+                dispatchOption({
+                    type:'CLEAR'
                 })
             }
         },
@@ -364,6 +383,175 @@ const ProductDashboardMainComponent = (props) => {
             }
         }
     }
+
+    const __option = {
+        req: {
+            fetchOptions: async () => {
+                let workspaceId = workspace.id;
+                let productId = product.id;
+
+                await optionDataConnect().searchListByProductId(workspaceId, productId)
+                    .then(res => {
+                        console.log(res);
+                        if (res.status === 200) {
+                            const fetchedOptions = res.data.data;
+
+                            dispatchOptions({
+                                type: 'SET_DATA',
+                                payload: [...fetchedOptions]
+                            })
+
+                            /*
+                            선택된 option refresh
+                            */
+                            if (option) {
+                                const fetchedOption = fetchedOptions.filter(r => r.id === option.id)[0];
+                                if (fetchedOption) {
+                                    dispatchOption({
+                                        type: 'SET_DATA',
+                                        payload: { ...fetchedOption }
+                                    })
+                                } else {
+                                    dispatchOption({
+                                        type: 'CLEAR'
+                                    })
+                                }
+                            }
+
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err, err.response);
+                    })
+            },
+            createOne: async (workspaceId, productId, body) => {
+                await csrfDataConnect().getApiCsrf();
+                await optionDataConnect().createOne(workspaceId, productId, body)
+                    .then(res => {
+                        if (res.status === 200) {
+                            /*
+                            refresh products
+                            */
+                            __option.req.fetchOptions();
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (!res) {
+                            alert('네트워크가 연결이 원활하지 않습니다.');
+                            return;
+                        }
+
+                        if (res.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res.data.memo);
+                    })
+            },
+            deleteOne: async (workspaceId, optionId) => {
+                await csrfDataConnect().getApiCsrf();
+                await optionDataConnect().deleteOne(workspaceId, optionId)
+                    .then(res => {
+                        if (res.status === 200) {
+                            /*
+                            refresh options
+                            */
+                            __option.req.fetchOptions();
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (!res) {
+                            alert('네트워크가 연결이 원활하지 않습니다.');
+                            return;
+                        }
+
+                        if (res.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res.data.memo);
+                    })
+            },
+            // updateOne: async ({
+            //     workspaceId,
+            //     body,
+            //     callback
+            // }) => {
+            //     await csrfDataConnect().getApiCsrf();
+            //     await productDataConnect().updateOne(workspaceId, body)
+            //         .then(res => {
+            //             if (res.status === 200) {
+            //                 /*
+            //                 callback 실행 => 업데이트 모달 닫기
+            //                 */
+            //                 callback();
+            //                 /*
+            //                 refresh products
+            //                 */
+            //                 __product.req.fetchProducts();
+            //             }
+            //         })
+            //         .catch(err => {
+            //             let res = err.response;
+            //             if (!res) {
+            //                 alert('네트워크가 연결이 원활하지 않습니다.');
+            //                 return;
+            //             }
+
+            //             if (res.status === 500) {
+            //                 alert('undefined error.');
+            //                 return;
+            //             }
+
+            //             alert(res.data.memo);
+            //         })
+            // }
+        },
+        action: {
+            select: (selectedOption) => {
+                if (option?.id === selectedOption.id) {
+                    dispatchOption({
+                        type: 'CLEAR'
+                    })
+                    return;
+                }
+                dispatchOption({
+                    type: 'SET_DATA',
+                    payload: { ...selectedOption }
+                })
+            }
+        },
+        submit: {
+            add: async (body) => {
+                if (!workspace) {
+                    alert('워크스페이스를 찾을 수 없습니다.');
+                    return;
+                }
+
+                if (!product) {
+                    alert('상품을 먼저 선택해 주세요.');
+                    return;
+                }
+
+                await __option.req.createOne(workspace.id, product.id, body);
+            },
+            delete: async (optionId) => {
+                await __option.req.deleteOne(workspace.id, optionId);
+            },
+            // edit: async ({ body, callback }) => {
+            //     await __product.req.updateOne({
+            //         workspaceId: workspace.id,
+            //         body: body,
+            //         callback: callback
+            //     });
+            // }
+        }
+    }
+
     return (
         <>
             <PageTitleField
@@ -397,19 +585,32 @@ const ProductDashboardMainComponent = (props) => {
                             product={product}
                             onSubmitAddProduct={__product.submit.add}
                             onSubmitEditProduct={__product.submit.edit}
-                            onActionSelectProduct={__product.action.select}
                             onSubmitDeleteProduct={__product.submit.delete}
+                            onActionSelectProduct={__product.action.select}
                         />
                         <FlexGap />
-                        <ProductListComponent
+                        <OptionListComponent
+                            options={options}
+                            option={option}
+                            product={product}
+                            onSubmitAddOption={__option.submit.add}
+                            onSubmitDeleteOption={__option.submit.delete}
+                            onActionSelectOption={__option.action.select}
+                        />
+                        {/* <ProductListComponent
                             products={products}
                             product={product}
                             onSubmitAddProduct={__product.submit.add}
                             onSubmitEditProduct={__product.submit.edit}
                             onActionSelectProduct={__product.action.select}
                             onSubmitDeleteProduct={__product.submit.delete}
-                        />
+                        /> */}
                     </ProductAndOptionLayout>
+                }
+                {product &&
+                    <ProductDetailComponent
+                        product={product}
+                    />
                 }
             </Container>
         </>
@@ -422,6 +623,8 @@ const initialCategories = null;
 const initialCategory = null;
 const initialProducts = null;
 const initialProduct = null;
+const initialOptions = null;
+const initialOption = null;
 
 const workspaceReducer = (state, action) => {
     switch (action.type) {
@@ -464,5 +667,25 @@ const productReducer = (state, action) => {
         case 'CLEAR':
             return initialProduct;
         default: return initialProduct;
+    }
+}
+
+const optionsReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialOptions;
+        default: return initialOptions;
+    }
+}
+
+const optionReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialOption;
+        default: return initialOption;
     }
 }

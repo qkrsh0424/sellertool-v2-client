@@ -170,17 +170,15 @@ const BasicInformationComponent = (props) => {
     }, [props.userInfo, userInfo])
 
     useEffect(() => {
-        if(props.isVerifiedEmail) {
-            setIsEmailAddressChanged(false);
-            setIsEmailAuthNumberRequest(false);
-            dispatchUserInfo({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: 'emailAuthNumber',
-                    value: ''
-                }
-            })
-        }
+        setIsEmailAddressChanged(false);
+        setIsEmailAuthNumberRequest(false);
+        dispatchUserInfo({
+            type: 'CHANGE_DATA',
+            payload: {
+                name: 'emailAuthNumber',
+                value: ''
+            }
+        })
     }, [props.isVerifiedEmail])
 
     useEffect(() => {
@@ -250,6 +248,16 @@ const BasicInformationComponent = (props) => {
                 e.preventDefault();
                 if (__userInfo.verify.form()) {
                     props.onSubmitUpdateUserInfo(userInfo);
+
+                    setIsEmailAddressChanged(false);
+                    setIsEmailAuthNumberRequest(false);
+                    dispatchUserInfo({
+                        type: 'CHANGE_DATA',
+                        payload: {
+                            name: 'emailAuthNumber',
+                            value: ''
+                        }
+                    })
                 }
             }
         },

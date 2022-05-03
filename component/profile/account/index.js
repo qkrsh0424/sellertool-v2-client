@@ -24,8 +24,8 @@ const ProfileAccountMainComponent = (props) => {
     const [snackbarMessage, setSnackbarMessage] = useState('no message');
     const [snackbarSeverity, setSnackbarSeverity] = useState('info');
     
+    const [isVerifiedEmail, setIsVerifiedEmail] = useState(false);
     const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState(null);
-    const [verifiedEmail, setVerifiedEmail] = useState(null);
 
     const __user = {
         req: {
@@ -41,7 +41,6 @@ const ProfileAccountMainComponent = (props) => {
                     })
             },
             updateInfo: async (body) => {
-                console.log(body);
                 await csrfDataConnect().getAuthCsrf();
                 await userDataConnect().updateInfo(body).then(res => {
                     if (res?.status === 200 && res?.data?.message === 'success') {
@@ -116,6 +115,7 @@ const ProfileAccountMainComponent = (props) => {
                     if (res?.status === 200 && res?.data?.message === 'success') {
                         setSnackbarSeverity('success');
                         _onSnackbarOpen('인증 요청되었습니다.');
+                        setIsVerifiedEmail(false);
                     }
                 }).catch(err => {
                     let res = err?.response;
@@ -134,7 +134,7 @@ const ProfileAccountMainComponent = (props) => {
                     if (res?.status === 200 && res?.data?.message === 'success') {
                         setSnackbarSeverity('success');
                         _onSnackbarOpen('인증되었습니다.');
-                        setVerifiedEmail(email);
+                        setIsVerifiedEmail(true);
                     }
                 }).catch(err => {
                     let res = err?.response;
@@ -146,18 +146,26 @@ const ProfileAccountMainComponent = (props) => {
 
                     setSnackbarSeverity('error');
                     _onSnackbarOpen(res?.data?.memo);
-                    setVerifiedEmail(null);
                 });
             }
         },
         submit: {
             updateInfo: async (body) => {
-                await __user.req.updateInfo(body);
+                let data = {
+                    ...body,
+                    verifiedEmail : isVerifiedEmail
+                }
+                await __user.req.updateInfo(data);
                 await __user.req.fetchData();
             },
             changePassword: async (body) => {
                 await __user.req.changePassword(body);
                 await __user.req.fetchData();
+            }
+        },
+        action: {
+            onActionResetVerifiedEmail: () => {
+                setIsVerifiedEmail(false);
             }
         }
     }
@@ -189,13 +197,14 @@ const ProfileAccountMainComponent = (props) => {
                     <BasicInformationComponent
                         userInfo={userRdx?.info}
                         verifiedPhoneNumber={verifiedPhoneNumber}
-                        verifiedEmail={verifiedEmail}
+                        isVerifiedEmail={isVerifiedEmail}
 
                         onSubmitUpdateUserInfo={__user.submit.updateInfo}
-                        onActionGetEmailAuthNumber={(email) => __user.req.getEmailAuthNumber(email)}
+                        onActionGetEmailAuthNumber={__user.req.getEmailAuthNumber}
                         onActionVerifyEmailAuthNumber={__user.req.verifyEmailAuthNumber}
                         onActionGetPhoneAuthNumber={__user.req.getPhoneAuthNumber}
                         onActionVerifyPhoneAuthNumber={__user.req.verifyPhoneAuthNumber}
+                        onActionResetVerifiedEmail={__user.action.onActionResetVerifiedEmail}
                     ></BasicInformationComponent>
                     <LineBreakerBottom
                         lineColor={'#e0e0e0'}

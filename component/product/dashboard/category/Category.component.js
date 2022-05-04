@@ -4,7 +4,7 @@ import { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import CommonModalComponent from '../../../modules/CommonModalComponent';
 import LineBreakerBottom from '../../../modules/LineBreakerBottom';
-import Ripple from '../../../modules/Ripple';
+import Ripple from '../../../modules/button/Ripple';
 import { CategoryModalWrapper, CategorySelectorFieldWrapper, Container, SelectedCategoryFieldWrapper } from './Category.styled';
 
 export default function CategoryComponent(props) {

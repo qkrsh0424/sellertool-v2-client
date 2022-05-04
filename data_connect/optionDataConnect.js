@@ -32,6 +32,16 @@ const optionDataConnect = () => {
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
+        updateOne: async function (workspaceId, body) {
+            return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/options/${body.id}`, body, {
+                params: {
+                    workspaceId: workspaceId
+                },
+                withCredentials: true,
+                xsrfCookieName: 'api_csrf',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
         deleteOne: async function (workspaceId, optionId) {
             return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/options/${optionId}`, {
                 params: {

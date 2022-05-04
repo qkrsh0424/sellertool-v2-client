@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useReducer, useState } from "react";
 import CommonModalComponent from "../../../modules/CommonModalComponent";
-import Ripple from "../../../modules/Ripple";
+import Ripple from "../../../modules/button/Ripple";
 import { Container, Wrapper, EditNameModalWrapper } from "./Title.styled";
 
 function EditNameModal({ editName, onChangeEditName, onClose, onConfirm }) {

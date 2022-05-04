@@ -10,7 +10,9 @@ import FieldLoading from '../../modules/FieldLoading';
 import FlexGap from '../../modules/FlexGap';
 import LineBreakerBottom from '../../modules/LineBreakerBottom';
 import CategoryComponent from './category/Category.component';
+import ProductAndOptionDetailLayout from './layout/ProductAndOptionDetailLayout';
 import ProductAndOptionLayout from './layout/ProductAndOptionLayout';
+import OptionDetailComponent from './option-detail/OptionDetail.component';
 import OptionListComponent from './option-list/OptionList.component';
 import ProductDetailComponent from './product-detail/ProductDetail.component';
 import ProductListComponent from './product-list/ProductList.component';
@@ -33,8 +35,8 @@ function PageTitleField({ title }) {
 
 /**
  * TODO : 
- * - 상품 선택 및 옵션 불러오기
- * - 상품 리스트 뷰 필드 구성 
+ * - 옵션 수정
+ * - 옵션 정보 가져오기
  */
 const ProductDashboardMainComponent = (props) => {
     const router = useRouter();
@@ -352,6 +354,9 @@ const ProductDashboardMainComponent = (props) => {
         },
         action: {
             select: (selectedProduct) => {
+                dispatchOption({
+                    type: 'CLEAR'
+                })
                 if (product?.id === selectedProduct.id) {
                     dispatchProduct({
                         type: 'CLEAR'
@@ -362,9 +367,6 @@ const ProductDashboardMainComponent = (props) => {
                     type: 'SET_DATA',
                     payload: { ...selectedProduct }
                 });
-                dispatchOption({
-                    type:'CLEAR'
-                })
             }
         },
         submit: {
@@ -476,40 +478,40 @@ const ProductDashboardMainComponent = (props) => {
                         alert(res.data.memo);
                     })
             },
-            // updateOne: async ({
-            //     workspaceId,
-            //     body,
-            //     callback
-            // }) => {
-            //     await csrfDataConnect().getApiCsrf();
-            //     await productDataConnect().updateOne(workspaceId, body)
-            //         .then(res => {
-            //             if (res.status === 200) {
-            //                 /*
-            //                 callback 실행 => 업데이트 모달 닫기
-            //                 */
-            //                 callback();
-            //                 /*
-            //                 refresh products
-            //                 */
-            //                 __product.req.fetchProducts();
-            //             }
-            //         })
-            //         .catch(err => {
-            //             let res = err.response;
-            //             if (!res) {
-            //                 alert('네트워크가 연결이 원활하지 않습니다.');
-            //                 return;
-            //             }
+            updateOne: async ({
+                workspaceId,
+                body,
+                callback
+            }) => {
+                await csrfDataConnect().getApiCsrf();
+                await optionDataConnect().updateOne(workspaceId, body)
+                    .then(res => {
+                        if (res.status === 200) {
+                            /*
+                            callback 실행 => 업데이트 모달 닫기
+                            */
+                            callback();
+                            /*
+                            refresh products
+                            */
+                            __option.req.fetchOptions();
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (!res) {
+                            alert('네트워크가 연결이 원활하지 않습니다.');
+                            return;
+                        }
 
-            //             if (res.status === 500) {
-            //                 alert('undefined error.');
-            //                 return;
-            //             }
+                        if (res.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
 
-            //             alert(res.data.memo);
-            //         })
-            // }
+                        alert(res.data.memo);
+                    })
+            }
         },
         action: {
             select: (selectedOption) => {
@@ -542,13 +544,13 @@ const ProductDashboardMainComponent = (props) => {
             delete: async (optionId) => {
                 await __option.req.deleteOne(workspace.id, optionId);
             },
-            // edit: async ({ body, callback }) => {
-            //     await __product.req.updateOne({
-            //         workspaceId: workspace.id,
-            //         body: body,
-            //         callback: callback
-            //     });
-            // }
+            edit: async ({ body, callback }) => {
+                await __option.req.updateOne({
+                    workspaceId: workspace.id,
+                    body: body,
+                    callback: callback
+                });
+            }
         }
     }
 
@@ -594,23 +596,22 @@ const ProductDashboardMainComponent = (props) => {
                             option={option}
                             product={product}
                             onSubmitAddOption={__option.submit.add}
+                            onSubmitEditOption={__option.submit.edit}
                             onSubmitDeleteOption={__option.submit.delete}
                             onActionSelectOption={__option.action.select}
                         />
-                        {/* <ProductListComponent
-                            products={products}
-                            product={product}
-                            onSubmitAddProduct={__product.submit.add}
-                            onSubmitEditProduct={__product.submit.edit}
-                            onActionSelectProduct={__product.action.select}
-                            onSubmitDeleteProduct={__product.submit.delete}
-                        /> */}
                     </ProductAndOptionLayout>
                 }
                 {product &&
-                    <ProductDetailComponent
-                        product={product}
-                    />
+                    <ProductAndOptionDetailLayout>
+                        <ProductDetailComponent
+                            product={product}
+                        />
+                        <FlexGap />
+                        <OptionDetailComponent
+                            option={option}
+                        />
+                    </ProductAndOptionDetailLayout>
                 }
             </Container>
         </>

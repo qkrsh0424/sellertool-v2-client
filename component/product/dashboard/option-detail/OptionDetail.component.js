@@ -71,22 +71,22 @@ const BodyFieldWrapper = styled.div`
     }
 `;
 
-export default function ProductDetailComponent(props) {
-    if (!props.product) {
+export default function OptionDetailComponent(props) {
+    if (!props.option) {
         return <Container></Container>;
     }
 
     return (
         <Container>
             <HeadFieldWrapper>
-                <div className='head-title'>상품 상세 정보</div>
+                <div className='head-title'>옵션 상세 정보</div>
             </HeadFieldWrapper>
             <BodyFieldWrapper>
                 <div className='flex-wrapper'>
                     <div className='thumbnail-box'>
                         <Image
                             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                            src={props.product.imageUrl}
+                            src={props.option.imageUrl}
                             layout={'responsive'}
                             width={1}
                             height={1}
@@ -97,31 +97,39 @@ export default function ProductDetailComponent(props) {
                     </div>
                     <div className='default-content-box'>
                         <div className='info-box'>
-                            <div className='title'>상품 코드</div>
-                            <div className='content'>{props.product.code}</div>
+                            <div className='title'>옵션 코드</div>
+                            <div className='content'>{props.option.code}</div>
                         </div>
                         <div className='info-box'>
-                            <div className='title'>상품명</div>
-                            <div className='content'>{props.product.defaultName}</div>
+                            <div className='title'>옵션명</div>
+                            <div className='content'>{props.option.defaultName}</div>
                         </div>
                         <div className='info-box'>
-                            <div className='title'>상품 관리명</div>
-                            <div className='content'>{props.product.managementName}</div>
+                            <div className='title'>옵션 관리명</div>
+                            <div className='content'>{props.option.managementName}</div>
                         </div>
                     </div>
                 </div>
                 <div className='detail-content-box'>
                     <div className='info-box'>
+                        <div className='title'>상태</div>
+                        <div className='content'>{props.option.optionInfo.status}</div>
+                    </div>
+                    <div className='info-box'>
+                        <div className='title'>판매 단가</div>
+                        <div className='content'>{props.option.optionInfo.salesPrice}</div>
+                    </div>
+                    <div className='info-box'>
                         <div className='title'>메모1</div>
-                        <div className='content'>{props.product.productInfo.memo1}</div>
+                        <div className='content'>{props.option.optionInfo.memo1}</div>
                     </div>
                     <div className='info-box'>
                         <div className='title'>메모2</div>
-                        <div className='content'>{props.product.productInfo.memo2}</div>
+                        <div className='content'>{props.option.optionInfo.memo2}</div>
                     </div>
                     <div className='info-box'>
                         <div className='title'>메모3</div>
-                        <div className='content'>{props.product.productInfo.memo3}</div>
+                        <div className='content'>{props.option.optionInfo.memo3}</div>
                     </div>
                 </div>
             </BodyFieldWrapper>

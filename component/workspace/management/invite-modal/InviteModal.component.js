@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { csrfDataConnect } from "../../../../data_connect/csrfDataConnect";
 import { inviteMemberDataConnect } from "../../../../data_connect/inviteMemberDataConnect";
 import { userDataConnect } from "../../../../data_connect/userDataConnect";
-import Ripple from "../../../modules/Ripple";
+import Ripple from "../../../modules/button/Ripple";
 import { ButtonFieldWrapper, Container, FormFieldWrapper, HeadFieldWrapper } from "./InviteModal.styled";
 
 const InviteModalComponent = (props) => {

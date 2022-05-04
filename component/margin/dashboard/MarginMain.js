@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { csrfDataConnect } from "../../../data_connect/csrfDataConnect";
 import { marginRecordDataConnect } from "../../../data_connect/marginRecordDataConnect";
 import CalculatorMain from "../../calculator/CalculatorMain";
-import BackdropLoading from "../../modules/BackdropLoading";
+import BackdropLoading from "../../modules/loading/BackdropLoadingComponent";
 import SnackbarCenter from "../../modules/SnackbarCenter";
 import DashboardComponent from "./DashboardComponent";
 

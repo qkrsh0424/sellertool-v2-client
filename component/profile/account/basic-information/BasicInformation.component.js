@@ -248,16 +248,7 @@ const BasicInformationComponent = (props) => {
                 e.preventDefault();
                 if (__userInfo.verify.form()) {
                     props.onSubmitUpdateUserInfo(userInfo);
-
-                    setIsEmailAddressChanged(false);
-                    setIsEmailAuthNumberRequest(false);
-                    dispatchUserInfo({
-                        type: 'CHANGE_DATA',
-                        payload: {
-                            name: 'emailAuthNumber',
-                            value: ''
-                        }
-                    })
+                    __userInfo.action.onActionResetEmailAuth();
                 }
             }
         },
@@ -293,8 +284,16 @@ const BasicInformationComponent = (props) => {
                 setIsEmailAddressChanged(!isEmailAddressChanged);
             },
             onActionResetEmailAuth: () => {
-                setIsEmailAddressChanged(true);
+                setIsEmailAddressChanged(false);
                 setIsEmailAuthNumberRequest(false);
+
+                dispatchUserInfo({
+                    type: 'CHANGE_DATA',
+                    payload: {
+                        name: 'emailAuthNumber',
+                        value: ''
+                    }
+                })
                 props.onActionResetVerifiedEmail();
             },
             getEmailAuthNumber: () => {

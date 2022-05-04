@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useEffect, useReducer, useState } from "react";
-import CommonModalComponent from "../../../modules/CommonModalComponent";
+import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
 import Ripple from "../../../modules/button/Ripple";
 import { Container, Wrapper, EditNameModalWrapper } from "./Title.styled";
 

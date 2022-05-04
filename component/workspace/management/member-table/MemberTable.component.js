@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import CustomCheckbox from "../../../modules/checkbox/CustomCheckbox";
-import CommonModalComponent from "../../../modules/CommonModalComponent";
-import ConfirmModalComponent from "../../../modules/ConfirmModalComponent";
-import FieldLoading from "../../../modules/FieldLoading";
+import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
+import ConfirmModalComponent from "../../../modules/modal/ConfirmModalComponent";
+import FieldLoading from "../../../modules/loading/FieldLoading";
 import { Container, PermissionModalWrapper, TitleFieldWrapper } from "./MemberTable.styled";
 import TableFieldView from "./TableField.view";
 import styled from 'styled-components';

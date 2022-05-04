@@ -1,7 +1,7 @@
 import { useReducer, useState } from "react"
 import styled from "styled-components";
-import LineBreakerBottom from "../../modules/LineBreakerBottom";
-import SnackbarCenter from "../../modules/SnackbarCenter";
+import LineBreakerBottom from "../../modules/fragment/LineBreakerBottom";
+import SnackbarCenter from "../../modules/snackbar/SnackbarCenter";
 
 const Container = styled.div`
     overflow: hidden;

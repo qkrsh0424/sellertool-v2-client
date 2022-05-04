@@ -2,13 +2,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { csrfDataConnect } from '../../../data_connect/csrfDataConnect';
 import { userDataConnect } from '../../../data_connect/userDataConnect';
-import LineBreakerBottom from '../../modules/LineBreakerBottom';
+import LineBreakerBottom from '../../modules/fragment/LineBreakerBottom';
 import NotAllowedComponent from '../../modules/not-allowed/NotAllowedComponent';
 import Layout from '../layout/Layout';
 import BasicInformationComponent from './basic-information/BasicInformation.component';
 import EditPasswordComponent from './edit-password/EditPassword.component';
 import HeadComponent from './head/Head.component';
-import SnackbarCenter from "../../modules/SnackbarCenter";
+import SnackbarCenter from "../../modules/snackbar/SnackbarCenter";
 import { useState } from "react";
 import { userInfoAuthDataConnect } from '../../../data_connect/userInfoAuthDataConnect';
 

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { csrfDataConnect } from '../../data_connect/csrfDataConnect';
 import BodyComponent from './BodyComponent';
 import { loginDataConnect } from '../../data_connect/loginDataConnect';
-import SnackbarCenter from '../modules/SnackbarCenter';
+import SnackbarCenter from '../modules/snackbar/SnackbarCenter';
 import { useState } from 'react';
 
 const Container = styled.div`

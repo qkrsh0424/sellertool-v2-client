@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { csrfDataConnect } from '../../../data_connect/csrfDataConnect';
 import { inviteMemberDataConnect } from '../../../data_connect/inviteMemberDataConnect';
 import { workspaceDataConnect } from '../../../data_connect/workspaceDataConnect';
-import LineBreakerBottom from '../../modules/LineBreakerBottom';
+import LineBreakerBottom from '../../modules/fragment/LineBreakerBottom';
 import Layout from '../layout/Layout';
 import HeadComponent from './head/Head.component';
 import RequestListComponent from './request-list/RequestList.component';

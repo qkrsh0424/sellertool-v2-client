@@ -6,7 +6,7 @@ import { csrfDataConnect } from "../../../data_connect/csrfDataConnect";
 import { marginRecordDataConnect } from "../../../data_connect/marginRecordDataConnect";
 import CalculatorMain from "../../calculator/CalculatorMain";
 import BackdropLoading from "../../modules/loading/BackdropLoadingComponent";
-import SnackbarCenter from "../../modules/SnackbarCenter";
+import SnackbarCenter from "../../modules/snackbar/SnackbarCenter";
 import DashboardComponent from "./DashboardComponent";
 
 const Container = styled.div`

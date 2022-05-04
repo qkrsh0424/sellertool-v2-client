@@ -4,8 +4,8 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import styled from 'styled-components';
 import useImageUploaderHooks from '../../../../hooks/useImageUploaderHooks';
 import valueUtils from '../../../../utils/valueUtils';
-import CommonModalComponent from '../../../modules/CommonModalComponent';
-import ConfirmModalComponent from '../../../modules/ConfirmModalComponent';
+import CommonModalComponent from '../../../modules/modal/CommonModalComponent';
+import ConfirmModalComponent from '../../../modules/modal/ConfirmModalComponent';
 
 const Container = styled.div`
     flex:1;

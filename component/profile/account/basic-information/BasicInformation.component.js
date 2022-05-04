@@ -1,3 +1,4 @@
+import { identity } from 'lodash';
 import { useEffect, useReducer, useState } from 'react';
 import { checkEmailFormat, checkNameForm, checkNicknameForm, checkPhoneNumberFormat } from '../../../../utils/regexUtils';
 import { ButtonFieldWrapper, Container, FormFieldWrapper, TitleFieldWrapper } from './BasicInformation.styled';
@@ -10,7 +11,8 @@ function TitleFieldView() {
     );
 }
 
-function FormFieldView({ userInfo, isEmailAuthNumberRequest, isPhoneAuthNumberRequest,
+function FormFieldView({ userInfo, isEmailAddressChanged, isEmailAuthNumberRequest, onChangeIsEmailAddressValue, onActionResetEmailAuth,
+     isPhoneAuthNumberRequest, isPhoneNumberChanged, onChangeIsPhoneNumberValue, onActionResetPhoneNumberAuth,
     onChangeValue, onActionGetPhoneAuthNumber, onActionVerifyPhoneAuthNumber, onActionGetEmailAuthNumber, onActionVerifyEmailAuthNumber }) {
     return (
         <FormFieldWrapper>
@@ -52,25 +54,34 @@ function FormFieldView({ userInfo, isEmailAuthNumberRequest, isPhoneAuthNumberRe
                                 value={userInfo.email || ''}
                                 onChange={onChangeValue}
                                 required
+                                disabled={!isEmailAddressChanged}
                             ></input>
-                            <div className='input-notice'>이메일이 도착하지 않는다면 재요청해주세요.</div>
+                            <div className='input-notice'>회원 수정을 완료해야 변경된 정보가 저장됩니다.</div>
                         </div>
-                        <button type='button' onClick={onActionGetEmailAuthNumber}>인증번호 발급</button>
+                        {!isEmailAddressChanged &&
+                            <button type='button' className='input-side-btn' onClick={() => onChangeIsEmailAddressValue()}>이메일 변경</button>
+                        }
+                        {isEmailAddressChanged &&
+                            <button type='button' className='input-side-btn' onClick={() => onActionGetEmailAuthNumber()}>인증번호 받기</button>
+                        }
                     </div>
-                    <div className='auth-box'>
-                        <div className='input-el-box'>
-                            <input
-                                className='input-el'
-                                type='number'
-                                name='emailAuthNumber'
-                                value={userInfo.emailAuthNumber || ''}
-                                placeholder='인증번호'
-                                onChange={onChangeValue}
-                                disabled={!isEmailAuthNumberRequest}
-                            ></input>
+                    {isEmailAuthNumberRequest &&
+                        <div className='auth-box'>
+                            <div className='input-el-box'>
+                                <input
+                                    className='input-el'
+                                    type='number'
+                                    name='emailAuthNumber'
+                                    value={userInfo.emailAuthNumber || ''}
+                                    placeholder='인증번호'
+                                    onChange={onChangeValue}
+                                ></input>
+                                <div className='input-notice'>이메일이 도착하지 않는다면 재요청해주세요.</div>
+                                <div className='input-notice re-request' onClick={() => onActionResetEmailAuth()}>이메일 변경 및 재요청</div>
+                            </div>
+                            <button type='button' className='input-side-btn' onClick={onActionVerifyEmailAuthNumber}>인증</button>
                         </div>
-                        <button type='button' onClick={onActionVerifyEmailAuthNumber} disabled={!isEmailAuthNumberRequest}>확인</button>
-                    </div>
+                    }
                 </div>
                 <div className='input-box'>
                     <div className='input-label'>전화번호<span>(선택)</span></div>
@@ -82,25 +93,35 @@ function FormFieldView({ userInfo, isEmailAuthNumberRequest, isPhoneAuthNumberRe
                                 name='phoneNumber'
                                 value={userInfo.phoneNumber || ''}
                                 onChange={onChangeValue}
+                                disabled={!isPhoneNumberChanged}
                             ></input>
                             <div className='input-notice'>숫자만 입력해주세요.</div>
+                            <div className='input-notice'>회원 수정을 완료해야 변경된 정보가 저장됩니다.</div>
                         </div>
-                        <button type='button' onClick={onActionGetPhoneAuthNumber}>인증번호 발급</button>
+                        {!isPhoneNumberChanged &&
+                            <button type='button' className='input-side-btn' onClick={() => onChangeIsPhoneNumberValue()}>전화번호 변경</button>
+                        }
+                        {isPhoneNumberChanged &&
+                            <button type='button' className='input-side-btn' onClick={() => onActionGetPhoneAuthNumber()}>인증번호 받기</button>
+                        }
                     </div>
-                    <div className='auth-box'>
-                        <div className='input-el-box'>
-                            <input
-                                className='input-el'
-                                type='number'
-                                name='phoneAuthNumber'
-                                value={userInfo.phoneAuthNumber || ''}
-                                placeholder='인증번호'
-                                onChange={onChangeValue}
-                                disabled={!isPhoneAuthNumberRequest}
-                            ></input>
+                    {isPhoneAuthNumberRequest &&
+                        <div className='auth-box'>
+                            <div className='input-el-box'>
+                                <input
+                                    className='input-el'
+                                    type='number'
+                                    name='phoneAuthNumber'
+                                    value={userInfo.phoneAuthNumber || ''}
+                                    placeholder='인증번호'
+                                    onChange={onChangeValue}
+                                ></input>
+                                <div className='input-notice'>메세지가 도착하지 않는다면 재요청해주세요.</div>
+                                <div className='input-notice re-request' onClick={() => onActionResetPhoneNumberAuth()}>전화번호 변경 및 재요청</div>
+                            </div>
+                            <button type='button' className='input-side-btn' onClick={onActionVerifyPhoneAuthNumber}>인증</button>
                         </div>
-                        <button type='button' onClick={onActionVerifyPhoneAuthNumber} disabled={!isPhoneAuthNumberRequest}>확인</button>
-                    </div>
+                    }
                 </div>
             </div>
         </FormFieldWrapper>
@@ -159,82 +180,34 @@ const BasicInformationComponent = (props) => {
     }, [props.userInfo, userInfo])
 
     useEffect(() => {
-        if(!props.verifiedEmail) {
-            return;
+        // 이메일 인증 성공 시
+        if(props.isVerifiedEmail) {
+            setIsEmailAddressChanged(false);
+            setIsEmailAuthNumberRequest(false);
+            dispatchUserInfo({
+                type: 'CHANGE_DATA',
+                payload: {
+                    name: 'emailAuthNumber',
+                    value: ''
+                }
+            })
         }
-
-        dispatchUserInfo({
-            type: 'CHANGE_DATA',
-            payload: {
-                name: 'verifiedEmail',
-                value: props.verifiedEmail
-            }
-        })
-        dispatchUserInfo({
-            type: 'CHANGE_DATA',
-            payload: {
-                name: 'emailAuthNumber',
-                value: ''
-            }
-        })
-
-        setIsEmailAuthNumberRequest(false);
-    }, [props.verifiedEmail]);
+    }, [props.isVerifiedEmail])
 
     useEffect(() => {
-        if(!props.verifiedPhoneNumber) {
-            return;
+        // 전화번호 인증 성공 시
+        if(props.isVerifiedPhoneNumber) {
+            setIsPhoneNumberChanged(false);
+            setIsPhoneAuthNumberRequest(false);
+            dispatchUserInfo({
+                type: 'CHANGE_DATA',
+                payload: {
+                    name: 'phoneAuthNumber',
+                    value: ''
+                }
+            })
         }
-
-        dispatchUserInfo({
-            type: 'CHANGE_DATA',
-            payload: {
-                name: 'verifiedPhoneNumber',
-                value: props.verifiedPhoneNumber
-            }
-        })
-        dispatchUserInfo({
-            type: 'CHANGE_DATA',
-            payload: {
-                name: 'phoneAuthNumber',
-                value: ''
-            }
-        })
-
-        setIsPhoneAuthNumberRequest(false);
-    }, [props.verifiedPhoneNumber]);
-
-    useEffect(() => {
-        if(!isEmailAddressChanged) {
-            return;
-        }
-
-        dispatchUserInfo({
-            type: 'CHANGE_DATA',
-            payload: {
-                name: 'emailAuthNumber',
-                value: ''
-            }
-        })
-
-        setIsEmailAuthNumberRequest(false);
-    }, [isEmailAddressChanged]);
-
-    useEffect(() => {
-        if(!isPhoneNumberChanged) {
-            return;
-        }
-
-        dispatchUserInfo({
-            type: 'CHANGE_DATA',
-            payload: {
-                name: 'phoneAuthNumber',
-                value: ''
-            }
-        })
-
-        setIsPhoneAuthNumberRequest(false);
-    }, [isPhoneNumberChanged]);
+    }, [props.isVerifiedPhoneNumber])
 
     const __userInfo = {
         change: {
@@ -249,22 +222,6 @@ const BasicInformationComponent = (props) => {
                         value: value
                     }
                 })
-
-                if(e.target.name === 'email') {
-                    setIsEmailAddressChanged(true);
-
-                    if(e.target.value === '') {
-                        setIsEmailAddressChanged(false);
-                    }
-                }
-
-                if(e.target.name === 'phoneNumber') {
-                    setIsPhoneNumberChanged(true);
-
-                    if(e.target.value === '') {
-                        setIsPhoneNumberChanged(false);
-                    }
-                }
             }
         },
         submit: {
@@ -272,6 +229,8 @@ const BasicInformationComponent = (props) => {
                 e.preventDefault();
                 if (__userInfo.verify.form()) {
                     props.onSubmitUpdateUserInfo(userInfo);
+                    __userInfo.action.onActionResetEmailAuth();
+                    __userInfo.action.onActionResetPhoneNumberAuth();
                 }
             }
         },
@@ -287,32 +246,44 @@ const BasicInformationComponent = (props) => {
                     return false;
                 }
 
-                if ((props.userInfo.email !== userInfo.email) && !userInfo.verifiedEmail) {
-                    alert('이메일 인증을 완료해주세요.');
-                    return false;
-                }
-
-                if(userInfo.verifiedEmail && (userInfo.email !== userInfo.verifiedEmail)) {
-                    alert('이메일 인증이 올바르지 않습니다.');
-                    return false;
-                }
-
-                // 전화번호는 선택값
-                if (userInfo.phoneNumber){
-                    if((props.userInfo.phoneNumber !== userInfo.phoneNumber) && !userInfo.verifiedPhoneNumber) {
-                        alert('전화번호 인증을 완료해주세요.');
-                        return false;
-                    }
-                    if(userInfo.verifiedPhoneNumber && (userInfo.phoneNumber !== userInfo.verifiedPhoneNumber)) {
-                        alert('전화번호 인증을 완료해주세요.');
-                        return false;
-                    }
-                }
-
                 return true;
             }
         },
-        req: {
+        action: {
+            onChangeIsEmailAddressValue: () => {
+                props.onActionResetVerifiedEmail();
+                setIsEmailAddressChanged(!isEmailAddressChanged);
+            },
+            onActionResetEmailAuth: () => {
+                setIsEmailAddressChanged(false);
+                setIsEmailAuthNumberRequest(false);
+
+                dispatchUserInfo({
+                    type: 'CHANGE_DATA',
+                    payload: {
+                        name: 'emailAuthNumber',
+                        value: ''
+                    }
+                })
+                props.onActionResetVerifiedEmail();
+            },
+            onChangeIsPhoneNumberValue: () => {
+                props.onActionResetVerifiedPhoneNumber();
+                setIsPhoneNumberChanged(!isPhoneNumberChanged);
+            },
+            onActionResetPhoneNumberAuth: () => {
+                setIsPhoneNumberChanged(false);
+                setIsPhoneAuthNumberRequest(false);
+
+                dispatchUserInfo({
+                    type: 'CHANGE_DATA',
+                    payload: {
+                        name: 'phoneAuthNumber',
+                        value: ''
+                    }
+                })
+                props.onActionResetVerifiedPhoneNumber();
+            },
             getEmailAuthNumber: () => {
                 if(!checkEmailFormat(userInfo.email)) {
                     alert('이메일 형식을 확인해 주세요.');
@@ -362,10 +333,14 @@ const BasicInformationComponent = (props) => {
                             isPhoneAuthNumberRequest={isPhoneAuthNumberRequest}
 
                             onChangeValue={__userInfo.change.valueOfName}
-                            onActionGetPhoneAuthNumber={__userInfo.req.getPhoneAuthNumber}
-                            onActionVerifyPhoneAuthNumber={__userInfo.req.verifyPhoneAuthNumber}
-                            onActionGetEmailAuthNumber={__userInfo.req.getEmailAuthNumber}
-                            onActionVerifyEmailAuthNumber={__userInfo.req.verifyEmailAuthNumber}
+                            onChangeIsEmailAddressValue={__userInfo.action.onChangeIsEmailAddressValue}
+                            onChangeIsPhoneNumberValue={__userInfo.action.onChangeIsPhoneNumberValue}
+                            onActionResetEmailAuth={__userInfo.action.onActionResetEmailAuth}
+                            onActionResetPhoneNumberAuth={__userInfo.action.onActionResetPhoneNumberAuth}
+                            onActionGetPhoneAuthNumber={__userInfo.action.getPhoneAuthNumber}
+                            onActionVerifyPhoneAuthNumber={__userInfo.action.verifyPhoneAuthNumber}
+                            onActionGetEmailAuthNumber={__userInfo.action.getEmailAuthNumber}
+                            onActionVerifyEmailAuthNumber={__userInfo.action.verifyEmailAuthNumber}
                         />
                         <ButtonFieldView
                             isChanged={isChanged}

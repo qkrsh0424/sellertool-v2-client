@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import FieldLoading from '../../../modules/FieldLoading';
-import Ripple from '../../../modules/Ripple';
+import Ripple from '../../../modules/button/Ripple';
 import { TableFieldWrapper } from './MemberTable.styled';
 
 function PermissionChecker({ flag }) {

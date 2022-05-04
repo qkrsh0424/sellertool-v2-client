@@ -1,4 +1,4 @@
-import Ripple from "../../../modules/Ripple";
+import Ripple from "../../../modules/button/Ripple";
 import { OperationFieldWrapper } from "./PageContent.styled";
 
 export default function OperationFieldView(props) {

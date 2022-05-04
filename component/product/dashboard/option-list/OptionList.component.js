@@ -2,7 +2,7 @@ import _ from 'lodash';
 import Image from 'next/image';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import styled from 'styled-components';
-import useImageUploaderHooks from '../../../../hooks/useImageUploaderHooks';
+import useImageUploaderHooks from '../../../../hooks/uploader/useImageUploaderHooks';
 import valueUtils from '../../../../utils/valueUtils';
 import CommonModalComponent from '../../../modules/modal/CommonModalComponent';
 import ConfirmModalComponent from '../../../modules/modal/ConfirmModalComponent';

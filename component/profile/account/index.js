@@ -25,7 +25,7 @@ const ProfileAccountMainComponent = (props) => {
     const [snackbarSeverity, setSnackbarSeverity] = useState('info');
     
     const [isVerifiedEmail, setIsVerifiedEmail] = useState(false);
-    const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState(null);
+    const [isVerifiedPhoneNumber, setIsVerifiedPhoneNumber] = useState(false);
 
     const __user = {
         req: {
@@ -95,7 +95,7 @@ const ProfileAccountMainComponent = (props) => {
                     if (res?.status === 200 && res?.data?.message === 'success') {
                         setSnackbarSeverity('success');
                         _onSnackbarOpen('인증되었습니다.');
-                        setVerifiedPhoneNumber(phoneNumber);
+                        setIsVerifiedPhoneNumber(true);
                     }
                 }).catch(err => {
                     let res = err?.response;
@@ -107,7 +107,6 @@ const ProfileAccountMainComponent = (props) => {
 
                     setSnackbarSeverity('error');
                     _onSnackbarOpen(res?.data?.memo);
-                    setVerifiedPhoneNumber(null);
                 });
             },
             getEmailAuthNumber: async (email) => {
@@ -115,7 +114,6 @@ const ProfileAccountMainComponent = (props) => {
                     if (res?.status === 200 && res?.data?.message === 'success') {
                         setSnackbarSeverity('success');
                         _onSnackbarOpen('인증 요청되었습니다.');
-                        setIsVerifiedEmail(false);
                     }
                 }).catch(err => {
                     let res = err?.response;
@@ -153,7 +151,8 @@ const ProfileAccountMainComponent = (props) => {
             updateInfo: async (body) => {
                 let data = {
                     ...body,
-                    verifiedEmail : isVerifiedEmail
+                    verifiedEmail : isVerifiedEmail,
+                    verifiedPhoneNumber : isVerifiedPhoneNumber
                 }
                 await __user.req.updateInfo(data);
                 await __user.req.fetchData();
@@ -166,6 +165,21 @@ const ProfileAccountMainComponent = (props) => {
         action: {
             onActionResetVerifiedEmail: () => {
                 setIsVerifiedEmail(false);
+            },
+            onActionResetVerifiedPhoneNumber: () => {
+                setIsVerifiedPhoneNumber(false);
+            },
+            onActionGetEmailAuthNumber: async (email) => {
+                await __user.req.getEmailAuthNumber(email);
+            },
+            onActionVerifyEmailAuthNumber: async (email, authNumber) => {
+                await __user.req.verifyEmailAuthNumber(email, authNumber);
+            },
+            onActionGetPhoneAuthNumber: async (phoneNumber) => {
+                await __user.req.getPhoneAuthNumber(phoneNumber);
+            },
+            onActionVerifyPhoneAuthNumber: async (phoneNumber, authNumber) => {
+                await __user.req.verifyPhoneAuthNumber(phoneNumber, authNumber);
             }
         }
     }
@@ -196,15 +210,16 @@ const ProfileAccountMainComponent = (props) => {
                     <HeadComponent></HeadComponent>
                     <BasicInformationComponent
                         userInfo={userRdx?.info}
-                        verifiedPhoneNumber={verifiedPhoneNumber}
                         isVerifiedEmail={isVerifiedEmail}
+                        isVerifiedPhoneNumber={isVerifiedPhoneNumber}
 
                         onSubmitUpdateUserInfo={__user.submit.updateInfo}
-                        onActionGetEmailAuthNumber={__user.req.getEmailAuthNumber}
-                        onActionVerifyEmailAuthNumber={__user.req.verifyEmailAuthNumber}
-                        onActionGetPhoneAuthNumber={__user.req.getPhoneAuthNumber}
-                        onActionVerifyPhoneAuthNumber={__user.req.verifyPhoneAuthNumber}
+                        onActionGetEmailAuthNumber={__user.action.onActionGetEmailAuthNumber}
+                        onActionVerifyEmailAuthNumber={__user.action.onActionVerifyEmailAuthNumber}
+                        onActionGetPhoneAuthNumber={__user.action.onActionGetPhoneAuthNumber}
+                        onActionVerifyPhoneAuthNumber={__user.action.onActionVerifyPhoneAuthNumber}
                         onActionResetVerifiedEmail={__user.action.onActionResetVerifiedEmail}
+                        onActionResetVerifiedPhoneNumber={__user.action.onActionResetVerifiedPhoneNumber}
                     ></BasicInformationComponent>
                     <LineBreakerBottom
                         lineColor={'#e0e0e0'}

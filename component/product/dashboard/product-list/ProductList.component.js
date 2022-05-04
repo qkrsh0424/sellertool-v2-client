@@ -123,7 +123,7 @@ export default function ProductListComponent(props) {
                 }
                 dispatchEditProduct({
                     type: 'SET_DATA',
-                    payload: { ...props.product }
+                    payload: _.cloneDeep(props.product)
                 })
                 setProductEditModalOpen(true);
             },
@@ -212,6 +212,7 @@ export default function ProductListComponent(props) {
         <>
             <Container>
                 <HeadField
+                    products={props.products}
                     product={props.product}
                     openAddModal={__product.action.openAddModal}
                     openEditModal={__product.action.openEditModal}
@@ -555,6 +556,7 @@ function ProductEditModal({
 }
 
 function HeadField({
+    products,
     product,
     openAddModal,
     openEditModal,
@@ -562,7 +564,7 @@ function HeadField({
 }) {
     return (
         <HeadFieldWrapper>
-            <div className='title'>상품</div>
+            <div className='title'>상품 ({products?.length || 0})</div>
             <div className='flex-box'>
                 <button
                     className='button-el normal-button'

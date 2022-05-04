@@ -33,10 +33,6 @@ function PageTitleField({ title }) {
     );
 }
 
-/**
- * TODO : 
- * - 컴포넌트들 구조 개선 해야됨.
- */
 const ProductDashboardMainComponent = (props) => {
     const router = useRouter();
     const workspaceRdx = useSelector(state => state.workspaceState);

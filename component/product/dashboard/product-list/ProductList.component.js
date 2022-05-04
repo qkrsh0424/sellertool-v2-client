@@ -8,6 +8,7 @@ import CommonModalComponent from '../../../modules/modal/CommonModalComponent';
 import ConfirmModalComponent from '../../../modules/modal/ConfirmModalComponent';
 import _ from "lodash";
 import { Container, HeadFieldWrapper, ProductAddAndEditModalWrapper, ProductListFieldWrapper } from './ProductList.styled';
+import FieldLoading from '../../../modules/loading/FieldLoading';
 
 export default function ProductListComponent(props) {
     const addProductImageUploaderRef = useRef();
@@ -37,6 +38,7 @@ export default function ProductListComponent(props) {
 
     useEffect(() => {
         if (!props.products) {
+            setIsLoading(true);
             return;
         }
         setIsLoading(false);
@@ -206,7 +208,15 @@ export default function ProductListComponent(props) {
     }
 
     if (isLoading) {
-        return null;
+        return (
+            <Container>
+                <FieldLoading
+                    align={'center'}
+                    marginTop={100}
+                    marginBottom={100}
+                />
+            </Container>
+        );
     }
     return (
         <>

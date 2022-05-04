@@ -1,7 +1,9 @@
+import _ from 'lodash';
 import Image from 'next/image';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import styled from 'styled-components';
 import useImageUploaderHooks from '../../../../hooks/useImageUploaderHooks';
+import valueUtils from '../../../../utils/valueUtils';
 import CommonModalComponent from '../../../modules/CommonModalComponent';
 import ConfirmModalComponent from '../../../modules/ConfirmModalComponent';
 
@@ -225,8 +227,10 @@ export default function OptionListComponent(props) {
     });
 
     const [addOption, dispatchAddOption] = useReducer(addOptionReducer, initialAddOption);
+    const [editOption, dispatchEditOption] = useReducer(editOptionReducer, initialEditOption);
 
     const [optionAddModalOpen, setOptionAddModalOpen] = useState(false);
+    const [optionEditModalOpen, setOptionEditModalOpen] = useState(false);
     const [optionDeleteModalOpen, setOptionDeleteModalOpen] = useState(false);
     const [disabledBtn, setDisabledBtn] = useState(false);
 
@@ -280,12 +284,12 @@ export default function OptionListComponent(props) {
                 e.preventDefault();
                 setDisabledBtn(true);
                 if (!addOption.defaultName) {
-                    alert('상품명은 필수 입력입니다.');
+                    alert('옵션명은 필수 입력입니다.');
                     return;
                 }
 
                 if (!addOption.managementName) {
-                    alert('상품 관리명은 필수 입력입니다.');
+                    alert('옵션 관리명은 필수 입력입니다.');
                     return;
                 }
 
@@ -314,90 +318,93 @@ export default function OptionListComponent(props) {
                 props.onSubmitDeleteOption(props.option.id);
                 __option.action.closeDeleteModal();
             },
-            // openEditModal: () => {
-            //     if (!props.product) {
-            //         alert('상품을 먼저 선택해 주세요.');
-            //         return;
-            //     }
-            //     dispatchEditProduct({
-            //         type: 'SET_DATA',
-            //         payload: { ...props.product }
-            //     })
-            //     setProductEditModalOpen(true);
-            // },
-            // closeEditModal: () => {
-            //     setProductEditModalOpen(false);
-            //     dispatchEditProduct({
-            //         type: 'CLEAR'
-            //     })
-            // },
-            // openEditProductImageUploader: () => {
-            //     editProductImageUploaderRef.current.click();
-            // },
-            // setEditProductImage: async (e) => {
-            //     let files = e.target.files;
-            //     if (!files || files?.length <= 0) {
-            //         alert('이미지를 선택해 주세요.');
-            //         return;
-            //     }
+            openEditModal: () => {
+                if (!props.option) {
+                    alert('옵션을 먼저 선택해 주세요.');
+                    return;
+                }
+                dispatchEditOption({
+                    type: 'SET_DATA',
+                    payload: _.cloneDeep(props.option)
+                })
+                setOptionEditModalOpen(true);
+            },
+            closeEditModal: () => {
+                setOptionEditModalOpen(false);
+                dispatchEditOption({
+                    type: 'CLEAR'
+                })
+            },
+            openEditOptionImageUploader: () => {
+                editOptionImageUploaderRef.current.click();
+            },
+            setEditOptionImage: async (e) => {
+                let files = e.target.files;
+                if (!files || files?.length <= 0) {
+                    alert('이미지를 선택해 주세요.');
+                    return;
+                }
 
-            //     let images = await uploadImages(files);
+                let images = await uploadImages(files);
 
-            //     if (!images) {
-            //         return;
-            //     }
+                if (!images) {
+                    return;
+                }
 
-            //     dispatchEditProduct({
-            //         type: 'CHANGE_DATA',
-            //         payload: {
-            //             name: 'imageUrl',
-            //             value: images[0].fileStorageUri
-            //         }
-            //     })
-            // },
-            // confirmEdit: (e) => {
-            //     e.preventDefault();
-            //     if (!editProduct.defaultName) {
-            //         alert('상품명은 필수 입력입니다.');
-            //         return;
-            //     }
+                dispatchEditOption({
+                    type: 'CHANGE_DATA',
+                    payload: {
+                        name: 'imageUrl',
+                        value: images[0].fileStorageUri
+                    }
+                })
+            },
+            confirmEdit: (e) => {
+                e.preventDefault();
 
-            //     if (!editProduct.managementName) {
-            //         alert('상품 관리명은 필수 입력입니다.');
-            //         return;
-            //     }
+                if (!editOption.defaultName) {
+                    alert('옵션명은 필수 입력입니다.');
+                    return;
+                }
 
-            //     if (!editProduct.imageUrl) {
-            //         alert('잘못된 형식의 이미지 입니다.');
-            //         return;
-            //     }
-            //     props.onSubmitEditProduct({
-            //         body: editProduct,
-            //         callback: () => __product.action.closeEditModal()
-            //     });
-            // }
+                if (!editOption.managementName) {
+                    alert('옵션 관리명은 필수 입력입니다.');
+                    return;
+                }
+
+                if (!editOption.imageUrl) {
+                    alert('잘못된 형식의 이미지 입니다.');
+                    return;
+                }
+                props.onSubmitEditOption({
+                    body: editOption,
+                    callback: () => __option.action.closeEditModal()
+                });
+            }
         },
         change: {
             addOptionValueOfName: (e) => {
                 let name = e.target.name;
                 let value = e.target.value;
 
-                const newAddOption = _.set(addOption, name, value);
+                const targetOption = _.cloneDeep(addOption);
+                const newAddOption = _.set(targetOption, name, value);
                 dispatchAddOption({
                     type: 'SET_DATA',
                     payload: { ...newAddOption }
                 })
             },
-            // editProductValueOfName: (e) => {
-            //     let name = e.target.name;
-            //     let value = e.target.value;
+            editOptionValueOfName: (e) => {
+                let name = e.target.name;
+                let value = e.target.value;
 
-            //     const newEditProduct = _.set(editProduct, name, value);
-            //     dispatchEditProduct({
-            //         type: 'SET_DATA',
-            //         payload: { ...newEditProduct }
-            //     })
-            // }
+                const targetOption = _.cloneDeep(editOption);
+                const newEditOption = _.set(targetOption, name, value);
+                dispatchEditOption({
+                    type: 'SET_DATA',
+                    payload: { ...newEditOption }
+                })
+            }
         }
     }
 
@@ -407,9 +414,10 @@ export default function OptionListComponent(props) {
                 {props.product &&
                     <>
                         <HeadField
+                            options={props.options}
                             option={props.option}
                             openAddModal={__option.action.openAddModal}
-                            openEditModal={null}
+                            openEditModal={__option.action.openEditModal}
                             openDeleteModal={__option.action.openDeleteModal}
                         />
                         <OptionListField
@@ -433,6 +441,23 @@ export default function OptionListComponent(props) {
                         onActionOpenImageUploader={__option.action.openAddOptionImageUploader}
                         onClose={__option.action.closeAddModal}
                         onConfirm={__option.action.confirmAdd}
+                        disabledBtn={disabledBtn}
+                    />
+                </CommonModalComponent>
+            }
+            {/* Edit Option Modal */}
+            {(optionEditModalOpen && editOption) &&
+                <CommonModalComponent
+                    open={optionEditModalOpen}
+
+                    onClose={__option.action.closeEditModal}
+                >
+                    <OptionEditModal
+                        option={editOption}
+                        onActionChangeValueOfName={__option.change.editOptionValueOfName}
+                        onActionOpenImageUploader={__option.action.openEditOptionImageUploader}
+                        onClose={__option.action.closeEditModal}
+                        onConfirm={__option.action.confirmEdit}
                         disabledBtn={disabledBtn}
                     />
                 </CommonModalComponent>
@@ -463,14 +488,14 @@ export default function OptionListComponent(props) {
                 hidden
             ></input>
             {/* Edit Option Image Uploader */}
-            {/* <input
+            <input
                 ref={editOptionImageUploaderRef}
                 type='file'
                 accept="image/*"
                 onClick={(e) => e.target.value = ''}
-                onChange={__option.action.setEditProductImage}
+                onChange={__option.action.setEditOptionImage}
                 hidden
-            ></input> */}
+            ></input>
         </>
     );
 }
@@ -487,7 +512,8 @@ const initialAddOption = {
         memo3: ''
     }
 
-}
+};
+const initialEditOption = null;
 
 const addOptionReducer = (state, action) => {
     switch (action.type) {
@@ -504,7 +530,23 @@ const addOptionReducer = (state, action) => {
     }
 }
 
+const editOptionReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
+        case 'CLEAR':
+            return initialEditOption;
+        default: return initialEditOption;
+    }
+}
+
 function HeadField({
+    options,
     option,
     openAddModal,
     openEditModal,
@@ -512,7 +554,7 @@ function HeadField({
 }) {
     return (
         <HeadFieldWrapper>
-            <div className='title'>옵션</div>
+            <div className='title'>옵션 ({options?.length || 0})</div>
             <div className='flex-box'>
                 <button
                     className='button-el normal-button'
@@ -590,7 +632,7 @@ function OptionAddModal({
                             className='input-el'
                             type='text'
                             name='defaultName'
-                            value={option.defaultName || ''}
+                            value={valueUtils.emptyCheckAndGet(option.defaultName)}
                             onChange={onActionChangeValueOfName}
                             required
                         ></input>
@@ -692,6 +734,134 @@ function OptionAddModal({
                         disabled={disabledBtn}
                     >
                         등록
+                    </button>
+                </div>
+            </form>
+        </OptionAddAndEditModalWrapper>
+    );
+}
+
+function OptionEditModal({
+    option,
+    onActionChangeValueOfName,
+    onActionOpenImageUploader,
+    onClose,
+    onConfirm,
+    disabledBtn
+}) {
+    return (
+        <OptionAddAndEditModalWrapper>
+            <div className='head-title'>옵션 수정</div>
+            <form onSubmit={onConfirm}>
+                <div className='body-wrapper'>
+                    <div className='input-box'>
+                        <div className='input-label'>옵션명</div>
+                        <input
+                            className='input-el'
+                            type='text'
+                            name='defaultName'
+                            value={valueUtils.emptyCheckAndGet(option.defaultName)}
+                            onChange={onActionChangeValueOfName}
+                            required
+                        ></input>
+                    </div>
+                    <div className='input-box'>
+                        <div className='input-label'>옵션 관리명</div>
+                        <input
+                            className='input-el'
+                            type='text'
+                            name='managementName'
+                            value={option.managementName || ''}
+                            onChange={onActionChangeValueOfName}
+                            required
+                        ></input>
+                    </div>
+                    <div className='input-box'>
+                        <div className='input-label'>이미지</div>
+                        <div
+                            className='image-box'
+                            onClick={onActionOpenImageUploader}
+                        >
+                            <Image
+                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                src={option?.imageUrl || 'https://assets.sellertool.io/default/no_image.png'}
+                                layout='responsive'
+                                width={1}
+                                height={1}
+                                objectFit={'cover'}
+                                alt='image'
+                                loading='lazy'
+                            ></Image>
+                        </div>
+                    </div>
+                    <div className='input-box'>
+                        <div className='input-label'>상태</div>
+                        <input
+                            className='input-el'
+                            type='text'
+                            name='optionInfo.status'
+                            value={option.optionInfo.status || ''}
+                            onChange={onActionChangeValueOfName}
+                        ></input>
+                    </div>
+                    <div className='input-box'>
+                        <div className='input-label'>판매 단가</div>
+                        <input
+                            className='input-el'
+                            type='number'
+                            name='optionInfo.salesPrice'
+                            value={valueUtils.emptyCheckAndGet(option.optionInfo.salesPrice)}
+                            onChange={onActionChangeValueOfName}
+                            required
+                        ></input>
+                    </div>
+                    <div className='input-box'>
+                        <div className='input-label'>메모1</div>
+                        <input
+                            className='input-el'
+                            type='text'
+                            name='optionInfo.memo1'
+                            value={option.optionInfo.memo1 || ''}
+                            onChange={onActionChangeValueOfName}
+                        ></input>
+                    </div>
+                    <div className='input-box'>
+                        <div className='input-label'>메모2</div>
+                        <input
+                            className='input-el'
+                            type='text'
+                            name='optionInfo.memo2'
+                            value={option.optionInfo.memo2 || ''}
+                            onChange={onActionChangeValueOfName}
+                        ></input>
+                    </div>
+                    <div className='input-box'>
+                        <div className='input-label'>메모3</div>
+                        <input
+                            className='input-el'
+                            type='text'
+                            name='optionInfo.memo3'
+                            value={option.optionInfo.memo3 || ''}
+                            onChange={onActionChangeValueOfName}
+                        ></input>
+                    </div>
+                </div>
+                <div className='footer-wrapper'>
+                    <button
+                        type='button'
+                        className='button-el'
+                        style={{ color: '#ff6961' }}
+                        onClick={onClose}
+                    >
+                        취소
+                    </button>
+                    <button
+                        type='submit'
+                        className='button-el'
+                        style={{ color: '#2c73d2' }}
+                        disabled={disabledBtn}
+                    >
+                        수정
                     </button>
                 </div>
             </form>

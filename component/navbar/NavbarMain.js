@@ -5,7 +5,7 @@ import { loginDataConnect } from "../../data_connect/loginDataConnect";
 import { useRouter } from "next/router";
 import { csrfDataConnect } from "../../data_connect/csrfDataConnect";
 import WorkspaceSelectorMain from "./WokspaceSelectorMain";
-import CommonModalComponent from "../modules/CommonModalComponent";
+import CommonModalComponent from "../modules/modal/CommonModalComponent";
 import { useReducer, useState } from "react";
 import WorkspaceListModalComponent from "./WorkspaceListModalComponent";
 import { workspaceDataConnect } from "../../data_connect/workspaceDataConnect";

@@ -5,7 +5,7 @@ import { csrfDataConnect } from "../../data_connect/csrfDataConnect";
 import { signupDataConnect } from "../../data_connect/signupDataConnect";
 import { userDataConnect } from "../../data_connect/userDataConnect";
 import { userInfoAuthDataConnect } from "../../data_connect/userInfoAuthDataConnect";
-import SnackbarCenter from "../modules/SnackbarCenter";
+import SnackbarCenter from "../modules/snackbar/SnackbarCenter";
 import BodyComponent from "./BodyComponent";
 
 const Container = styled.div`

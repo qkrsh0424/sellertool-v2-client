@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import styled from "styled-components";
 import { checkEmailFormat, checkNicknameForm, checkPassword, checkUsernameForm, comparePassword } from "../../utils/regexUtils";
-import SnackbarCenter from '../modules/SnackbarCenter';
+import SnackbarCenter from '../modules/snackbar/SnackbarCenter';
 
 const Container = styled.div`
     /* padding:10% 20%; */

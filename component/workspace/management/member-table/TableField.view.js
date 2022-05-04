@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import FieldLoading from '../../../modules/FieldLoading';
+import FieldLoading from '../../../modules/loading/FieldLoading';
 import Ripple from '../../../modules/button/Ripple';
 import { TableFieldWrapper } from './MemberTable.styled';
 

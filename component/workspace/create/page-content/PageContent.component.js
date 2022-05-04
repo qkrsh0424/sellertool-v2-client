@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import CommonModalComponent from "../../../modules/CommonModalComponent";
+import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
 import ItemListFieldView from "./ItemListField.view";
 import OperationFieldView from "./OperationField.view";
 import { Container } from "./PageContent.styled";

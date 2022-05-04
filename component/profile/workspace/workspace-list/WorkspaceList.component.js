@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import FieldLoading from '../../../modules/FieldLoading';
+import FieldLoading from '../../../modules/loading/FieldLoading';
 import { Container, ListFieldWrapper, TitleFieldWrapper } from './WorkspaceList.styled';
 
 function TitleFieldView() {

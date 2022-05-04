@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { csrfDataConnect } from '../../../../data_connect/csrfDataConnect';
 import { uploadDataConnect } from '../../../../data_connect/uploadDataConnect';
 import useImageUploaderHooks from '../../../../hooks/useImageUploaderHooks';
-import CommonModalComponent from '../../../modules/CommonModalComponent';
-import ConfirmModalComponent from '../../../modules/ConfirmModalComponent';
+import CommonModalComponent from '../../../modules/modal/CommonModalComponent';
+import ConfirmModalComponent from '../../../modules/modal/ConfirmModalComponent';
 import _ from "lodash";
 import { Container, HeadFieldWrapper, ProductAddAndEditModalWrapper, ProductListFieldWrapper } from './ProductList.styled';
 

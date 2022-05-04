@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { workspaceDataConnect } from '../../../../data_connect/workspaceDataConnect';
-import CommonModalComponent from '../../../modules/CommonModalComponent';
+import CommonModalComponent from '../../../modules/modal/CommonModalComponent';
 import Ripple from '../../../modules/button/Ripple';
 import WorkspacesModalComponent from '../workspaces-modal/WorkspacesModal.component';
 

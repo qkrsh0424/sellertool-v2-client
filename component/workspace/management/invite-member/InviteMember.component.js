@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
-import CommonModalComponent from "../../../modules/CommonModalComponent";
-import ConfirmModalComponent from "../../../modules/ConfirmModalComponent";
-import FieldLoading from "../../../modules/FieldLoading";
+import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
+import ConfirmModalComponent from "../../../modules/modal/ConfirmModalComponent";
+import FieldLoading from "../../../modules/loading/FieldLoading";
 import InviteModalComponent from "../invite-modal/InviteModal.component";
 import { Container, HeadFieldWrapper, ListFieldWrapper } from "./InviteMember.styled";
 

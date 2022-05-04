@@ -18,8 +18,7 @@ const MainComponent = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('no message');
     const [snackbarSeverity, setSnackbarSeverity] = useState('info');
 
-    const [verifiedEmail, setVerifiedEmail] = useState(null);
-    const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState(null);
+    const [isVerifiedEmail, setIsVerifiedEmail] = useState(false);
 
     const [isNotDuplicatedState, setIsNotDuplicatedState] = useState({
         username: false
@@ -101,7 +100,7 @@ const MainComponent = () => {
                         if (res.status === 200 && res.data.message === 'success') {
                             setSnackbarSeverity('success');
                             _onSnackbarOpen('인증되었습니다.');
-                            setVerifiedEmail(email);
+                            setIsVerifiedEmail(true);
                         }
                     }).catch(err => {
                         let res = err?.response;
@@ -113,7 +112,6 @@ const MainComponent = () => {
 
                         setSnackbarSeverity('error');
                         _onSnackbarOpen(res?.data?.memo);
-                        setVerifiedEmail(null);
                     });
             }
         }
@@ -121,8 +119,15 @@ const MainComponent = () => {
 
     const __handleEventControl = () => {
         return {
+            onActionResetVerifiedEmail: () => {
+                setIsVerifiedEmail(false);
+            },
             onSubmitSignup: async function (inputValueState) {
-                await __handleDataConnect().signup(inputValueState);
+                let body = {
+                    ...inputValueState,
+                    verifiedEmail : isVerifiedEmail
+                }
+                await __handleDataConnect().signup(body);
             },
             onCheckUsernameDuplicate: async function(inputValueState){
                 await __handleDataConnect().checkUsernameDuplicate(inputValueState);
@@ -140,11 +145,11 @@ const MainComponent = () => {
             <Container>
                 <BodyComponent
                     isNotDuplicatedState={isNotDuplicatedState}
-                    verifiedEmail={verifiedEmail}
-                    verifiedPhoneNumber={verifiedPhoneNumber}
+                    isVerifiedEmail={isVerifiedEmail}
 
                     onCheckUsernameDuplicate={(inputValueState)=>__handleEventControl().onCheckUsernameDuplicate(inputValueState)}
                     onSubmitSignup={(inputValueState) => __handleEventControl().onSubmitSignup(inputValueState)}
+                    onActionResetVerifiedEmail={() => __handleEventControl().onActionResetVerifiedEmail()}
                     onActionGetEmailAuthNumber={(email) => __handleEventControl().onActionGetEmailAuthNumber(email)}
                     onActionVerifyEmailAuthNumber={(email, emailAuthNumber) => __handleEventControl().onActionVerifyEmailAuthNumber(email, emailAuthNumber)}
                 ></BodyComponent>

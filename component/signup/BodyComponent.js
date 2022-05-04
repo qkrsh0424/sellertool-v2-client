@@ -65,11 +65,17 @@ const InputBox = styled.div`
 
         transition: all .5s;
         outline: none;
+
         &:hover{
             border: 2px solid #309FFF;
         }
         &:focus{
             border: 2px solid #2C73D2;
+        }
+        &:disabled{
+            cursor: not-allowed;
+            background: #e0e0e0;
+            border: 1px solid #e0e0e0;
         }
     }
 
@@ -85,77 +91,12 @@ const InputBox = styled.div`
         @media all and (max-width: 992px){
             font-size: 10px;
         }
-    }
-
-    .valid-label{
-        display:inline-block;
-        margin-right:5px;
-        padding:1px 5px;
-
-        border:1px solid red;
-        border-radius: 3px;
-
-        color:red;
-    }
-
-    .pass-valid-label{
-        border:1px solid #50bb1a;
-        color:#50bb1a;
-    }
-`;
-
-const AuthInputBox = styled.div`
-    width: 80%;
-    margin:auto;
-    margin-top: 30px;
-
-    input::placeholder {
-        font-size: 12px;
-    }
-
-    .input-label{
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 5px;
-        color: #555;
     }
     
-    .input-item{
-        width: 90%;
-        padding: 8px 5px;
-
-        border: 2px solid #e1e1e1;
-        border-radius: 5px;
-
-        font-size: 16px;
-
-        transition: all .5s;
-        outline: none;
-        &:hover{
-            border: 2px solid #309FFF;
-        }
-        &:focus{
-            border: 2px solid #2C73D2;
-        }
-
-        &:disabled{
-            background: #f0f0f0;
-            border: 2px solid #f0f0f0;
-        }
-    }
-
-    .pass-input-item{
-        border: 2px solid #50bb1a;
-    }
-
-    .input-notice{
-        color: #707070;
-        font-size: 12px;
-        margin-top: 3px;
-
-        @media all and (max-width: 992px){
-            font-size: 10px;
-        }
+    .re-request {
+        color: #2C73D2;
+        text-decoration: underline;
+        cursor: pointer;
     }
 
     .valid-label{
@@ -174,14 +115,25 @@ const AuthInputBox = styled.div`
         color:#50bb1a;
     }
 
-    button {
-        width: 10%;
-        margin-left: 5px;
+    .auth-box {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .input-el-box {
+        width: 80%;
+    }
+
+    .input-side-btn {
+        padding: 10px;
+        margin: 0 5px;
         border-radius: 5px;
         border: 1px solid #2C73D2;
         background-color: #2C73D2;
         color: white;
         cursor: pointer;
+        width: 100px;
 
         &:disabled{
             cursor: not-allowed;
@@ -189,15 +141,11 @@ const AuthInputBox = styled.div`
             border: 1px solid #e0e0e0;
         }
 
-        @media screen and (max-width: 576px) {
-            width: 20%;
-            font-size: 12px;
+        transition: all .3s;
+        &:hover{
+            background: #309FFF;
+            border: 1px solid #309FFF;
         }
-    }
-
-    .auth-input-box {
-        display: flex;
-        padding: 5px 0;
     }
 `;
 
@@ -210,8 +158,8 @@ const SignupButtonBox = styled.div`
         width: 100%;
         padding: 8px;
 
-        background: #309FFF;
-        border: 2px solid #309FFF;
+        background: #2C73D2;
+        border: 2px solid #2C73D2;
         border-radius: 5px;
 
         font-size: 16px;
@@ -223,8 +171,8 @@ const SignupButtonBox = styled.div`
         cursor: pointer;
         
         &:hover{
-            background: #2C73D2;
-            border: 2px solid #2C73D2;
+            background: #309FFF;
+            border: 2px solid #309FFF;
         }
 
         &:active{
@@ -291,61 +239,35 @@ const BodyComponent = (props) => {
     const [isEmailAuthNumberRequest, setIsEmailAuthNumberRequest] = useState(false);
 
     useEffect(() => {
-        if(!props.verifiedEmail) {
-            return null;
-        }
-
-        dispatchInputValueState({
-            type: 'SET_DATA',
-            payload: {
-                name: 'verifiedEmail',
-                value: props.verifiedEmail
-            }
-        });
-        dispatchInputValueState({
-            type: 'SET_DATA',
-            payload: {
-                name: 'emailAuthNumber',
-                value: ''
-            }
-        })
-
-        if(props.verifiedEmail) {
+        // 이메일 인증 성공 시
+        if(props.isVerifiedEmail) {
             dispatchFormValidState({
                 type: 'SET_DATA',
                 payload: {
                     name: 'email',
                     value: true
                 }
-            });
+            })
+
+            setIsEmailAddressChanged(false);
+            setIsEmailAuthNumberRequest(false);
+            dispatchInputValueState({
+                type: 'SET_DATA',
+                payload: {
+                    name: 'emailAuthNumber',
+                    value: ''
+                }
+            })
+        }else{
+            dispatchFormValidState({
+                type: 'SET_DATA',
+                payload: {
+                    name: 'email',
+                    value: false
+                }
+            })
         }
-        setIsEmailAddressChanged(false);
-        setIsEmailAuthNumberRequest(false);
-    }, [props.verifiedEmail]);
-
-    useEffect(() => {
-        if(!isEmailAddressChanged) {
-            return;
-        }
-
-        dispatchInputValueState({
-            type: 'SET_DATA',
-            payload: {
-                name: 'emailAuthNumber',
-                value: ''
-            }
-        })
-
-        dispatchFormValidState({
-            type: 'SET_DATA',
-            payload: {
-                name: 'email',
-                value: false
-            }
-        })
-
-        setIsEmailAuthNumberRequest(false);
-    }, [isEmailAddressChanged]);
+    }, [props.isVerifiedEmail])
 
     const _inputValueState = () => {
         return {
@@ -357,14 +279,6 @@ const BodyComponent = (props) => {
                         value: e.target.value
                     }
                 })
-
-                if(e.target.name === 'email') {
-                    setIsEmailAddressChanged(true);
-                    
-                    if(e.target.value === '') {
-                        setIsEmailAddressChanged(false);
-                    }
-                }
             }
         }
     }
@@ -390,12 +304,10 @@ const BodyComponent = (props) => {
             nicknameRef.current.focus();
             return;
         }
-        if (inputValueState.email) {
-            if (!formValidState.email) {
-                _onSnackbarOpen('이메일 인증을 진행해 주세요.');
-                emailRef.current.focus();
-                return;
-            }
+        if(!formValidState.email) {
+            alert('이메일 인증을 진행해주세요.');
+            emailRef.current.focus();
+            return;
         }
 
         props.onSubmitSignup(inputValueState);
@@ -512,7 +424,24 @@ const BodyComponent = (props) => {
 
     const _reqUserInfoAuth = () => {
         return {
-            getEmailAuthNumber: function () {
+            onChangeIsEmailAddressValue: () => {
+                props.onActionResetVerifiedEmail();
+                setIsEmailAddressChanged(!isEmailAddressChanged);
+            },
+            onActionResetEmailAuth: () => {
+                setIsEmailAddressChanged(false);
+                setIsEmailAuthNumberRequest(false);
+
+                dispatchInputValueState({
+                    type: 'SET_DATA',
+                    payload: {
+                        name: 'emailAuthNumber',
+                        value: ''
+                    }
+                })
+                props.onActionResetVerifiedEmail();
+            },
+            getEmailAuthNumber: () => {
                 if(!checkEmailFormat(inputValueState.email)) {
                     _onSnackbarOpen('이메일 형식을 확인해 주세요.');
                     return;
@@ -521,13 +450,13 @@ const BodyComponent = (props) => {
                 setIsEmailAddressChanged(false);
                 setIsEmailAuthNumberRequest(true);
             },
-            verifyEmailAuthNumber: function () {
+            verifyEmailAuthNumber: () => {
                 if(!inputValueState.emailAuthNumber) {
                     _onSnackbarOpen('인증번호를 입력해 주세요.');
                     return;
                 }
                 props.onActionVerifyEmailAuthNumber(inputValueState.email, inputValueState.emailAuthNumber);
-            }
+            },
         }
     }
 
@@ -623,43 +552,56 @@ const BodyComponent = (props) => {
                         <div className='input-notice'>* 최소 3자 최대 15자 이내로 입력해주세요.</div>
                     </InputBox>
 
-                    <AuthInputBox>
+                    <InputBox>
                         <div className='input-label'>이메일</div>
-                        <div className='auth-input-box'>
-                            <input
-                                type='text'
-                                ref={emailRef}
-                                className={`input-item ${formValidState.email === true ? 'pass-input-item' : ''}`}
-                                name='email'
-                                value={inputValueState.email || ''}
-                                onChange={(e) => _inputValueState().onChangeInputValue(e)}
-                                onBlur={(e) => _onBlurInput(e)}
-                            ></input>
-                            <button type='button' onClick={() => _reqUserInfoAuth().getEmailAuthNumber()} disabled={!isEmailAddressChanged}>인증</button>
+                        <div className='auth-box'>
+                            <div className='input-el-box'>
+                                <input
+                                    type='text'
+                                    ref={emailRef}
+                                    className={`input-item ${formValidState.email === true ? 'pass-input-item' : ''}`}
+                                    name='email'
+                                    value={inputValueState.email || ''}
+                                    onChange={(e) => _inputValueState().onChangeInputValue(e)}
+                                    onBlur={(e) => _onBlurInput(e)}
+                                    disabled={!isEmailAddressChanged}
+                                ></input>
+                                <div className='input-notice'>
+                                    <ValidTag
+                                        isValid={formValidState.email}
+                                    >인증 완료</ValidTag>
+                                </div>
+                                <div className='input-notice'>회원 수정을 완료해야 변경된 정보가 저장됩니다.</div>
+                            </div>
+                            {!isEmailAuthNumberRequest &&
+                                !isEmailAddressChanged &&
+                                <button type='button' className='input-side-btn' onClick={() => _reqUserInfoAuth().onChangeIsEmailAddressValue()}>이메일 작성</button>
+                            }
+                            {isEmailAddressChanged &&
+                                <button type='button' className='input-side-btn' onClick={() => _reqUserInfoAuth().getEmailAuthNumber()}>인증번호 받기</button>
+                            }
                         </div>
 
-                        <div className='auth-input-box'>
-                            <input
-                                type='number'
-                                ref={emailAuthNumberRef}
-                                className={`input-item ${formValidState.emailAuthNumber === true ? 'pass-input-item' : ''}`}
-                                name='emailAuthNumber'
-                                value={inputValueState.emailAuthNumber || ''}
-                                onChange={(e) => _inputValueState().onChangeInputValue(e)}
-                                onBlur={(e) => _onBlurInput(e)}
-                                placeholder='이메일 인증번호 입력'
-                                disabled={!isEmailAuthNumberRequest}
-                            ></input>
-                            <button type='button' onClick={() => _reqUserInfoAuth().verifyEmailAuthNumber()} disabled={!isEmailAuthNumberRequest}
-                            >확인</button>
-                        </div>
-                        <div className='input-notice'>
-                            <ValidTag
-                                isValid={formValidState.email}
-                            >인증 완료</ValidTag>
-                        </div>
-                        <div className='input-notice'>* 이메일이 도착하지 않는다면 재요청해주세요.</div>
-                    </AuthInputBox>
+                        {isEmailAuthNumberRequest &&
+                            <div className='auth-box'>
+                                <div className='input-el-box'>
+                                    <input
+                                        type='number'
+                                        ref={emailAuthNumberRef}
+                                        className={`input-item ${formValidState.emailAuthNumber === true ? 'pass-input-item' : ''}`}
+                                        name='emailAuthNumber'
+                                        value={inputValueState.emailAuthNumber || ''}
+                                        onChange={(e) => _inputValueState().onChangeInputValue(e)}
+                                        onBlur={(e) => _onBlurInput(e)}
+                                        placeholder='인증번호'
+                                    ></input>
+                                    <div className='input-notice'>* 이메일이 도착하지 않는다면 재요청해주세요.</div>
+                                    <div className='input-notice re-request' onClick={() => _reqUserInfoAuth().onActionResetEmailAuth()}>이메일 작성 및 재요청</div>
+                                </div>
+                                <button type='button' className='input-side-btn' onClick={() => _reqUserInfoAuth().verifyEmailAuthNumber()}>인증</button>
+                            </div>
+                        }
+                    </InputBox>
 
                     <SignupButtonBox>
                         <button type='button' className='submit-button' onClick={() => _onClickSignup()}>회원가입</button>

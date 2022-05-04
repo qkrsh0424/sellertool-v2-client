@@ -58,11 +58,13 @@ function FormFieldView({ userInfo, isEmailAddressChanged, isEmailAuthNumberReque
                             ></input>
                             <div className='input-notice'>회원 수정을 완료해야 변경된 정보가 저장됩니다.</div>
                         </div>
-                        {!isEmailAddressChanged &&
-                            <button type='button' className='input-side-btn' onClick={() => onChangeIsEmailAddressValue()}>이메일 변경</button>
-                        }
-                        {isEmailAddressChanged &&
-                            <button type='button' className='input-side-btn' onClick={() => onActionGetEmailAuthNumber()}>인증번호 받기</button>
+                        {!isEmailAuthNumberRequest && 
+                            !isEmailAddressChanged &&
+                                <button type='button' className='input-side-btn' onClick={() => onChangeIsEmailAddressValue()}>이메일 변경</button>
+                            }
+                            {isEmailAddressChanged &&
+                                <button type='button' className='input-side-btn' onClick={() => onActionGetEmailAuthNumber()}>인증번호 받기</button>
+                            
                         }
                     </div>
                     {isEmailAuthNumberRequest &&
@@ -98,11 +100,12 @@ function FormFieldView({ userInfo, isEmailAddressChanged, isEmailAuthNumberReque
                             <div className='input-notice'>숫자만 입력해주세요.</div>
                             <div className='input-notice'>회원 수정을 완료해야 변경된 정보가 저장됩니다.</div>
                         </div>
-                        {!isPhoneNumberChanged &&
-                            <button type='button' className='input-side-btn' onClick={() => onChangeIsPhoneNumberValue()}>전화번호 변경</button>
-                        }
-                        {isPhoneNumberChanged &&
-                            <button type='button' className='input-side-btn' onClick={() => onActionGetPhoneAuthNumber()}>인증번호 받기</button>
+                        {!isPhoneAuthNumberRequest &&
+                            !isPhoneNumberChanged &&
+                                <button type='button' className='input-side-btn' onClick={() => onChangeIsPhoneNumberValue()}>전화번호 변경</button>
+                            }
+                            {isPhoneNumberChanged &&
+                                <button type='button' className='input-side-btn' onClick={() => onActionGetPhoneAuthNumber()}>인증번호 받기</button>
                         }
                     </div>
                     {isPhoneAuthNumberRequest &&

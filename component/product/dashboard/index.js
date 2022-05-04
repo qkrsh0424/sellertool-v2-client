@@ -35,8 +35,7 @@ function PageTitleField({ title }) {
 
 /**
  * TODO : 
- * - 옵션 수정
- * - 옵션 정보 가져오기
+ * - 컴포넌트들 구조 개선 해야됨.
  */
 const ProductDashboardMainComponent = (props) => {
     const router = useRouter();

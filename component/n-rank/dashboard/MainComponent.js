@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import styled from "styled-components";
 import { naverRankDataConnect } from "../../../data_connect/naverRankDataConnect";
-import BackdropLoading from "../../modules/BackdropLoading";
+import BackdropLoading from "../../modules/loading/BackdropLoadingComponent";
 import LocationNavComponent from "./LocationNavComponent";
 import ResultDashboardComponent from "./ResultDashboardComponent";
 import SearchConsoleComponent from "./SearchConsoleComponent";

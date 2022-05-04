@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Ripple from "../../../modules/Ripple";
+import Ripple from "../../../modules/button/Ripple";
 import { ButtonFieldWrapper, Container, FormFieldWrapper, TitleFieldWrapper } from "./NameModal.styled";
 
 const NameModalComponent = (props) => {

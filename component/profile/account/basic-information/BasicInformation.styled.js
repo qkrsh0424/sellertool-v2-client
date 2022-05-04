@@ -36,6 +36,13 @@ const FormFieldWrapper = styled.div`
         color: #707070;
         font-size: 12px;
         margin-top: 3px;
+        padding: 2px;
+    }
+
+    .re-request {
+        color: #2C73D2;
+        text-decoration: underline;
+        cursor: pointer;
     }
 
     .input-el{
@@ -48,9 +55,14 @@ const FormFieldWrapper = styled.div`
             outline: none;
             background: #2C73D20D;
         }
+
+        :disabled {
+            background: #e0e0e0;
+            border: 1px solid #e0e0e0;
+        }
     }
 
-    .input-box button {
+    .input-box .input-side-btn {
         padding: 10px;
         margin: 0 5px;
         border-radius: 2px;
@@ -64,6 +76,12 @@ const FormFieldWrapper = styled.div`
             cursor: not-allowed;
             background: #e0e0e0;
             border: 1px solid #e0e0e0;
+        }
+
+        transition: all .3s;
+        &:hover{
+            background: #309FFF;
+            border: 1px solid #309FFF;
         }
     }
 

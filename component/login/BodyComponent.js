@@ -111,8 +111,8 @@ const SubmitButtonBox = styled.div`
         width: 100%;
         padding: 8px;
 
-        background: #309FFF;
-        border: 2px solid #309FFF;
+        background: #2C73D2;
+        border: 2px solid #2C73D2;
         border-radius: 5px;
 
         font-size: 16px;
@@ -124,8 +124,8 @@ const SubmitButtonBox = styled.div`
         cursor: pointer;
         
         &:hover{
-            background: #2C73D2;
-            border: 2px solid #2C73D2;
+            background: #309FFF;
+            border: 2px solid #309FFF;
         }
 
         &:active{

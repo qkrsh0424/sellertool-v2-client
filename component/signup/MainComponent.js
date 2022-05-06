@@ -18,8 +18,7 @@ const MainComponent = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('no message');
     const [snackbarSeverity, setSnackbarSeverity] = useState('info');
 
-    const [verifiedEmail, setVerifiedEmail] = useState(null);
-    const [verifiedPhoneNumber, setVerifiedPhoneNumber] = useState(null);
+    const [isVerifiedEmail, setIsVerifiedEmail] = useState(false);
 
     const [isNotDuplicatedState, setIsNotDuplicatedState] = useState({
         username: false
@@ -76,12 +75,13 @@ const MainComponent = () => {
                         alert('유저 중복 체크 에러');
                     })
             },
-            getEmailAuthNumber: async function (email) {
+            getEmailAuthNumber: async function ({ email, callback }) {
                 await userInfoAuthDataConnect().getEmailAuthNumber(email)
                     .then(res => {
                         if (res.status === 200 && res.data.message === 'success') {
                             setSnackbarSeverity('success');
                             _onSnackbarOpen('인증 요청되었습니다.');
+                            callback.map((func, i) => func(i));
                         }
                     }).catch(err => {
                         let res = err?.response;
@@ -101,7 +101,7 @@ const MainComponent = () => {
                         if (res.status === 200 && res.data.message === 'success') {
                             setSnackbarSeverity('success');
                             _onSnackbarOpen('인증되었습니다.');
-                            setVerifiedEmail(email);
+                            setIsVerifiedEmail(true);
                         }
                     }).catch(err => {
                         let res = err?.response;
@@ -113,7 +113,6 @@ const MainComponent = () => {
 
                         setSnackbarSeverity('error');
                         _onSnackbarOpen(res?.data?.memo);
-                        setVerifiedEmail(null);
                     });
             }
         }
@@ -121,14 +120,21 @@ const MainComponent = () => {
 
     const __handleEventControl = () => {
         return {
+            onActionResetVerifiedEmail: () => {
+                setIsVerifiedEmail(false);
+            },
             onSubmitSignup: async function (inputValueState) {
-                await __handleDataConnect().signup(inputValueState);
+                let body = {
+                    ...inputValueState,
+                    verifiedEmail : isVerifiedEmail
+                }
+                await __handleDataConnect().signup(body);
             },
             onCheckUsernameDuplicate: async function(inputValueState){
                 await __handleDataConnect().checkUsernameDuplicate(inputValueState);
             },
-            onActionGetEmailAuthNumber: async function(email) {
-                await __handleDataConnect().getEmailAuthNumber(email);
+            onActionGetEmailAuthNumber: async function({ email, callback }) {
+                await __handleDataConnect().getEmailAuthNumber({ email, callback });
             },
             onActionVerifyEmailAuthNumber: async function(email, emailAuthNumber) {
                 await __handleDataConnect().verifyEmailAuthNumber(email, emailAuthNumber);
@@ -140,11 +146,11 @@ const MainComponent = () => {
             <Container>
                 <BodyComponent
                     isNotDuplicatedState={isNotDuplicatedState}
-                    verifiedEmail={verifiedEmail}
-                    verifiedPhoneNumber={verifiedPhoneNumber}
+                    isVerifiedEmail={isVerifiedEmail}
 
                     onCheckUsernameDuplicate={(inputValueState)=>__handleEventControl().onCheckUsernameDuplicate(inputValueState)}
                     onSubmitSignup={(inputValueState) => __handleEventControl().onSubmitSignup(inputValueState)}
+                    onActionResetVerifiedEmail={() => __handleEventControl().onActionResetVerifiedEmail()}
                     onActionGetEmailAuthNumber={(email) => __handleEventControl().onActionGetEmailAuthNumber(email)}
                     onActionVerifyEmailAuthNumber={(email, emailAuthNumber) => __handleEventControl().onActionVerifyEmailAuthNumber(email, emailAuthNumber)}
                 ></BodyComponent>

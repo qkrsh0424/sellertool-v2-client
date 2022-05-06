@@ -58,11 +58,13 @@ function FormFieldView({ userInfo, isEmailAddressChanged, isEmailAuthNumberReque
                             ></input>
                             <div className='input-notice'>회원 수정을 완료해야 변경된 정보가 저장됩니다.</div>
                         </div>
-                        {!isEmailAddressChanged &&
-                            <button type='button' className='input-side-btn' onClick={() => onChangeIsEmailAddressValue()}>이메일 변경</button>
-                        }
-                        {isEmailAddressChanged &&
-                            <button type='button' className='input-side-btn' onClick={() => onActionGetEmailAuthNumber()}>인증번호 받기</button>
+                        {!isEmailAuthNumberRequest && 
+                            !isEmailAddressChanged &&
+                                <button type='button' className='input-side-btn' onClick={() => onChangeIsEmailAddressValue()}>이메일 변경</button>
+                            }
+                            {isEmailAddressChanged &&
+                                <button type='button' className='input-side-btn' onClick={() => onActionGetEmailAuthNumber()}>인증번호 받기</button>
+                            
                         }
                     </div>
                     {isEmailAuthNumberRequest &&
@@ -98,11 +100,12 @@ function FormFieldView({ userInfo, isEmailAddressChanged, isEmailAuthNumberReque
                             <div className='input-notice'>숫자만 입력해주세요.</div>
                             <div className='input-notice'>회원 수정을 완료해야 변경된 정보가 저장됩니다.</div>
                         </div>
-                        {!isPhoneNumberChanged &&
-                            <button type='button' className='input-side-btn' onClick={() => onChangeIsPhoneNumberValue()}>전화번호 변경</button>
-                        }
-                        {isPhoneNumberChanged &&
-                            <button type='button' className='input-side-btn' onClick={() => onActionGetPhoneAuthNumber()}>인증번호 받기</button>
+                        {!isPhoneAuthNumberRequest &&
+                            !isPhoneNumberChanged &&
+                                <button type='button' className='input-side-btn' onClick={() => onChangeIsPhoneNumberValue()}>전화번호 변경</button>
+                            }
+                            {isPhoneNumberChanged &&
+                                <button type='button' className='input-side-btn' onClick={() => onActionGetPhoneAuthNumber()}>인증번호 받기</button>
                         }
                     </div>
                     {isPhoneAuthNumberRequest &&
@@ -142,7 +145,6 @@ function ButtonFieldView({ isChanged }) {
     );
 }
 
-// TODO : 이메일 인증 및 전화번호 인증 구현해야됨.
 const BasicInformationComponent = (props) => {
     const [userInfo, dispatchUserInfo] = useReducer(userInfoReducer, initialUserInfo);
     const [isChanged, setIsChanged] = useState(false);
@@ -285,13 +287,18 @@ const BasicInformationComponent = (props) => {
                 props.onActionResetVerifiedPhoneNumber();
             },
             getEmailAuthNumber: () => {
-                if(!checkEmailFormat(userInfo.email)) {
+                let email = userInfo.email;
+                if(!checkEmailFormat(email)) {
                     alert('이메일 형식을 확인해 주세요.');
                     return;
                 }
-                props.onActionGetEmailAuthNumber(userInfo.email);
-                setIsEmailAddressChanged(false);
-                setIsEmailAuthNumberRequest(true);
+                props.onActionGetEmailAuthNumber({
+                    email,
+                    callback: [
+                        () => setIsEmailAuthNumberRequest(true),
+                        () => setIsEmailAddressChanged(false)
+                    ]
+                });
             },
             verifyEmailAuthNumber: () => {
                 if(!userInfo.emailAuthNumber) {

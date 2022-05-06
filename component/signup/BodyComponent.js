@@ -442,13 +442,18 @@ const BodyComponent = (props) => {
                 props.onActionResetVerifiedEmail();
             },
             getEmailAuthNumber: () => {
-                if(!checkEmailFormat(inputValueState.email)) {
+                let email = inputValueState.email;
+                if(!checkEmailFormat(email)) {
                     _onSnackbarOpen('이메일 형식을 확인해 주세요.');
                     return;
                 }
-                props.onActionGetEmailAuthNumber(inputValueState.email);
-                setIsEmailAddressChanged(false);
-                setIsEmailAuthNumberRequest(true);
+                props.onActionGetEmailAuthNumber({
+                    email,
+                    callback: [ 
+                        () => setIsEmailAuthNumberRequest(true),
+                        () => setIsEmailAddressChanged(false)
+                    ]
+                });
             },
             verifyEmailAuthNumber: () => {
                 if(!inputValueState.emailAuthNumber) {

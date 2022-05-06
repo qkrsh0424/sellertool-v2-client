@@ -75,12 +75,13 @@ const MainComponent = () => {
                         alert('유저 중복 체크 에러');
                     })
             },
-            getEmailAuthNumber: async function (email) {
+            getEmailAuthNumber: async function ({ email, callback }) {
                 await userInfoAuthDataConnect().getEmailAuthNumber(email)
                     .then(res => {
                         if (res.status === 200 && res.data.message === 'success') {
                             setSnackbarSeverity('success');
                             _onSnackbarOpen('인증 요청되었습니다.');
+                            callback.map((func, i) => func(i));
                         }
                     }).catch(err => {
                         let res = err?.response;
@@ -132,8 +133,8 @@ const MainComponent = () => {
             onCheckUsernameDuplicate: async function(inputValueState){
                 await __handleDataConnect().checkUsernameDuplicate(inputValueState);
             },
-            onActionGetEmailAuthNumber: async function(email) {
-                await __handleDataConnect().getEmailAuthNumber(email);
+            onActionGetEmailAuthNumber: async function({ email, callback }) {
+                await __handleDataConnect().getEmailAuthNumber({ email, callback });
             },
             onActionVerifyEmailAuthNumber: async function(email, emailAuthNumber) {
                 await __handleDataConnect().verifyEmailAuthNumber(email, emailAuthNumber);

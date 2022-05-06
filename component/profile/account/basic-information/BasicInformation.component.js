@@ -145,7 +145,6 @@ function ButtonFieldView({ isChanged }) {
     );
 }
 
-// TODO : 이메일 인증 및 전화번호 인증 구현해야됨.
 const BasicInformationComponent = (props) => {
     const [userInfo, dispatchUserInfo] = useReducer(userInfoReducer, initialUserInfo);
     const [isChanged, setIsChanged] = useState(false);
@@ -288,13 +287,18 @@ const BasicInformationComponent = (props) => {
                 props.onActionResetVerifiedPhoneNumber();
             },
             getEmailAuthNumber: () => {
-                if(!checkEmailFormat(userInfo.email)) {
+                let email = userInfo.email;
+                if(!checkEmailFormat(email)) {
                     alert('이메일 형식을 확인해 주세요.');
                     return;
                 }
-                props.onActionGetEmailAuthNumber(userInfo.email);
-                setIsEmailAddressChanged(false);
-                setIsEmailAuthNumberRequest(true);
+                props.onActionGetEmailAuthNumber({
+                    email,
+                    callback: [
+                        () => setIsEmailAuthNumberRequest(true),
+                        () => setIsEmailAddressChanged(false)
+                    ]
+                });
             },
             verifyEmailAuthNumber: () => {
                 if(!userInfo.emailAuthNumber) {

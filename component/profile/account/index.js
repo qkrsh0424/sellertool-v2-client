@@ -109,11 +109,12 @@ const ProfileAccountMainComponent = (props) => {
                     _onSnackbarOpen(res?.data?.memo);
                 });
             },
-            getEmailAuthNumber: async (email) => {
+            getEmailAuthNumber: async ({ email, callback }) => {
                 await userInfoAuthDataConnect().getEmailAuthNumber(email).then(res => {
                     if (res?.status === 200 && res?.data?.message === 'success') {
                         setSnackbarSeverity('success');
                         _onSnackbarOpen('인증 요청되었습니다.');
+                        callback.map((func, i) => func(i));
                     }
                 }).catch(err => {
                     let res = err?.response;
@@ -169,8 +170,8 @@ const ProfileAccountMainComponent = (props) => {
             onActionResetVerifiedPhoneNumber: () => {
                 setIsVerifiedPhoneNumber(false);
             },
-            onActionGetEmailAuthNumber: async (email) => {
-                await __user.req.getEmailAuthNumber(email);
+            onActionGetEmailAuthNumber: async ({ email, callback }) => {
+                await __user.req.getEmailAuthNumber({ email, callback });
             },
             onActionVerifyEmailAuthNumber: async (email, authNumber) => {
                 await __user.req.verifyEmailAuthNumber(email, authNumber);

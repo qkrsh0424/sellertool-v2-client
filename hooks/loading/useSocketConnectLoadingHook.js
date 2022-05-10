@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SocketConnectLoading from "../../component/module/loading/SocketConnectLoading";
+import SocketConnectLoading from "../../component/modules/loading/SocketConnectLoading";
 
 /**
  * 

@@ -153,7 +153,7 @@ const HomeBody = () => {
                     </CardContainer>
                     <CardContainer>
                         <Link
-                            href={'/n-rank/dashboard'}
+                            href={'/erp/management/order-upload'}
                             passHref
                         >
                             <CardWrapper>

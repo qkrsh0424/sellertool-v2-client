@@ -1,5 +1,5 @@
 import { useState } from "react";
-import BasicSnackbar from "../../component/module/snackbar/BasicSnackbar";
+import BasicSnackbar from "../../component/modules/snackbar/BasicSnackbar";
 
 /**
  * 

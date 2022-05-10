@@ -10,6 +10,7 @@ import _ from "lodash";
 import { Container, HeadFieldWrapper, ProductAddAndEditModalWrapper, ProductListFieldWrapper } from './ProductList.styled';
 import FieldLoading from '../../../modules/loading/FieldLoading';
 
+// TODO : onChange loadsh set 부분 딥카피로 변경해야됨.
 export default function ProductListComponent(props) {
     const addProductImageUploaderRef = useRef();
     const editProductImageUploaderRef = useRef();

@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
 import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
+import _ from 'lodash';
 
 const SOCKET_URL = process.env.NODE_ENV == 'development' ? process.env.development.socketAddress : process.env.production.socketAddress
 const useSocketClient = () => {
@@ -22,7 +23,7 @@ const useSocketClient = () => {
             // brokerURL: "ws://localhost:8081/ws", // 웹소켓 서버로 직접 접속
             webSocketFactory: () => new SockJS(SOCKET_URL), // proxy를 통한 접속
             // connectHeaders: {
-                // "auth-token": "spring-auth-token",
+            // "auth-token": "spring-auth-token",
             // },
             debug: function (str) {
                 // console.log(str);
@@ -47,58 +48,67 @@ const useSocketClient = () => {
     };
 
     const disconnect = () => {
-        onUnsubscribe();
+        // onUnsubscribe();
         setConnected(false);
         client.current.deactivate();
     };
 
     // @Deprecated
-    // const onSubscribe = ({ subscribes, callback }) => {
+    // const onSubscribe = (subscribes) => {
     //     if (!client.current.connected) {
     //         return;
     //     }
 
     //     dispatchSubscribeItems({
     //         type: 'SET_DATA',
-    //         payload: [
-    //             ...subscribeItems,
-    //             ...subscribes.map(r => {
-    //                 return client.current.subscribe(
-    //                     r,
-    //                     async (e) => {
-    //                         callback(e);
-    //                     }
-    //                 )
-    //             })
-    //         ]
+    //         payload:
+    //             _.cloneDeep(
+    //                 subscribes.map(r => {
+    //                     return client.current.subscribe(
+    //                         r.subscribeUrl,
+    //                         async (e) => {
+    //                             r.callback(e);
+    //                         }
+    //                     )
+    //                 })
+    //             )
     //     })
-    // };
-    const onSubscribe = (subscribes) => {
+    // }
+
+    const onSubscribes = async (subscribes) => {
         if (!client.current.connected) {
             return;
         }
 
-        dispatchSubscribeItems({
-            type: 'SET_DATA',
-            payload:
-                subscribes.map(r => {
-                    return client.current.subscribe(
-                        r.subscribeUrl,
-                        async (e) => {
-                            r.callback(e);
-                        }
-                    )
-                })
-        })
+        return subscribes.map(r => {
+            return client.current.subscribe(
+                r.subscribeUrl,
+                async (e) => {
+                    r.callback(e);
+                }
+            )
+        });
     }
 
-    const onUnsubscribe = () => {
-        subscribeItems.forEach(r => {
-            r.unsubscribe();
-        })
+    // @Deprecated
+    // const onUnsubscribe = () => {
+    //     console.log(subscribeItems)
+    //     let clone = _.cloneDeep(subscribeItems);
+    //     dispatchSubscribeItems({
+    //         type: 'CLEAR'
+    //     })
 
-        dispatchSubscribeItems({
-            type: 'CLEAR'
+    //     clone.forEach(r => {
+    //         r.unsubscribe();
+    //     })
+
+    // }
+
+    const onUnsubscribes = (subscribes) => {
+        if (!subscribes) return;
+
+        subscribes.forEach(r => {
+            r.unsubscribe();
         })
     }
 
@@ -115,8 +125,8 @@ const useSocketClient = () => {
 
     return {
         connected: connected,
-        onSubscribe: onSubscribe,
-        onUnsubscribe: onUnsubscribe,
+        onSubscribes: onSubscribes,
+        onUnsubscribes: onUnsubscribes,
         onPublish: onPublish,
     }
 }

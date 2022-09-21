@@ -22,8 +22,8 @@ const ErpOrderUploadComponent = (props) => {
     const {
         connected,
         onPublish,
-        onSubscribe,
-        onUnsubscribe,
+        onSubscribes,
+        onUnsubscribes,
     } = useSocketClient();
 
     const {
@@ -152,32 +152,42 @@ const ErpOrderUploadComponent = (props) => {
 
     }, [workspaceRdx.info]);
 
+    /**
+     * Socket subscribe
+     */
     useEffect(() => {
-        async function subscribeSockets() {
-            onActionOpenSocketConnectLoading();
-            if (!connected) {
-                return;
-            }
+        let subscribes = [];
 
-            if (!isWorkspaceReady) {
-                return;
-            }
+        const __effect = {
+            mount: async () => {
+                onActionOpenSocketConnectLoading();
+                if (!connected || !workspaceRdx.info) {
+                    return;
+                }
 
-            onSubscribe([
-                {
-                    subscribeUrl: `/topic/workspace.${workspaceRdx.info.id}.erp.erp-order-item`,
-                    callback: async (e) => {
-                        let body = JSON.parse(e.body);
-                        if (body?.statusCode === 200) {
+                subscribes = await onSubscribes([
+                    {
+                        subscribeUrl: `/topic/workspace.${workspaceRdx.info.id}.erp.erp-order-item`,
+                        callback: async (e) => {
+                            let body = JSON.parse(e.body);
+                            if (body?.statusCode === 200) {
+                            }
                         }
                     }
-                }
-            ]);
-            onActionCloseSocketConnectLoading();
+                ]);
+                onActionCloseSocketConnectLoading();
+            },
+            unmount: async () => {
+                onUnsubscribes(subscribes);
+            }
         }
-        subscribeSockets();
-        return () => onUnsubscribe();
-    }, [connected, isWorkspaceReady]);
+
+        __effect.mount();
+
+        return () => {
+            __effect.unmount();
+        };
+    }, [connected, workspaceRdx.info]);
 
     const _onSubmit_uploadExcelFile = async (formData) => {
         onActionOpenBackdrop();

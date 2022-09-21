@@ -1,7 +1,6 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Ripple from '../button/Ripple';
-import qs from 'query-string';
 
 const Container = styled.div`
 
@@ -107,9 +106,7 @@ const Wrapper = styled.div`
 `;
 // TODO : query-string => nextjs router 로 변경해야됨
 const PagenationComponent = (props) => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const query = qs.parse(location.search);
+    const router = useRouter();
 
     const onActionPrev = () => {
         if (props.isFirst) {
@@ -118,15 +115,13 @@ const PagenationComponent = (props) => {
 
         let pageIndex = props.pageIndex + 1;
 
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
+        router.replace({
+            pathname: router.pathname,
             query: {
-                ...query,
+                ...router.query,
                 page: pageIndex - 1
             }
-        }), {
-            replace: true
-        })
+        });
 
     }
 
@@ -137,28 +132,24 @@ const PagenationComponent = (props) => {
 
         let pageIndex = props.pageIndex + 1;
 
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
+        router.replace({
+            pathname: router.pathname,
             query: {
-                ...query,
+                ...router.query,
                 page: pageIndex + 1
             }
-        }), {
-            replace: true
-        })
+        });
     }
 
     const onActionChangeSize = (e) => {
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
+        router.replace({
+            pathname: router.pathname,
             query: {
-                ...query,
+                ...router.query,
                 size: e.target.value,
                 page: 1
             }
-        }), {
-            replace: true
-        })
+        });
     }
 
     return (

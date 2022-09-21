@@ -1,6 +1,5 @@
-import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import qs from 'query-string';
+import { useRouter } from 'next/router';
 
 const Container = styled.div`
     
@@ -46,51 +45,49 @@ const sortDirections = ['desc', 'asc'];
  */
 // TODO : query-string => nextjs router 로 변경해야됨.
 const SortButton = ({ markPoint, buttonSize, iconSize }) => {
-    const location = useLocation();
-    const query = qs.parse(location.search);
-    const navigate = useNavigate();
+    const router = useRouter();
 
-    const sortBy = query.sortBy;
-    const sortDirection = query.sortDirection;
+    const sortBy = router.query.sortBy;
+    const sortDirection = router.query.sortDirection;
 
     const onActionDesc = () => {
         let newSortBy = markPoint;
         let newSortDirection = 'desc';
 
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
+        router.replace({
+            pathname: router.pathname,
             query: {
-                ...query,
+                ...router.query,
                 sortBy: newSortBy,
                 sortDirection: newSortDirection
             }
-        }))
+        });
     }
 
     const onActionAsc = () => {
         let newSortBy = markPoint;
         let newSortDirection = 'asc';
 
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
+        router.replace({
+            pathname: router.pathname,
             query: {
-                ...query,
+                ...router.query,
                 sortBy: newSortBy,
                 sortDirection: newSortDirection
             }
-        }))
+        });
     }
 
     const onActionNone = () => {
-        delete query.sortBy;
-        delete query.sortDirection;
+        delete router.query.sortBy;
+        delete router.query.sortDirection;
 
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
+        router.replace({
+            pathname: router.pathname,
             query: {
-                ...query
+                ...router.query
             }
-        }))
+        });
     }
 
     return (
@@ -115,7 +112,7 @@ const SortButton = ({ markPoint, buttonSize, iconSize }) => {
                         onClick={onActionAsc}
                     >
                         <ButtonIcon
-                            src='/assets/icon/down_arrow_icon.png'
+                            src='/images/icon/down_arrow_icon.png'
                             iconSize={iconSize || 20}
                             active={true}
                             loading='lazy'

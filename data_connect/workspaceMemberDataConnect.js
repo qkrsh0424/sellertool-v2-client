@@ -9,7 +9,7 @@ const workspaceMemberDataConnect = () => {
         searchList: async function (workspaceId) {
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/workspace-members/workspaces/${workspaceId}`, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
@@ -22,7 +22,7 @@ const workspaceMemberDataConnect = () => {
         deleteOne: async function (body) {
             return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/workspace-members/${body.workspaceMemberId}/workspaces/${body.workspaceId}`, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
@@ -33,7 +33,7 @@ const workspaceMemberDataConnect = () => {
         changePermissions: async function (body) {
             return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/workspace-members/${body.id}/permissions`, body, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         }

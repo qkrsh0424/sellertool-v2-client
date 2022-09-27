@@ -16,7 +16,7 @@ const erpOrderHeaderSocket = () => {
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/ws/v1/erp-order-headers`, body, {
                 params: params,
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
@@ -31,7 +31,7 @@ const erpOrderHeaderSocket = () => {
             return await axiosAuthInterceptor.put(`${API_ADDRESS}/ws/v1/erp-order-headers`, body, {
                 params: params,
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         }

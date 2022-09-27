@@ -12,13 +12,16 @@ import { isAnonymous } from '../utils/cookieCheckUtils';
 const theme = createTheme();
 
 /**
+ * 메인 컬러 : #344b98;
  * 진진 파랑 : #2C73D2;
  * 진 파랑 : #309FFF;
  * 중간 파랑 : #609FFF;
  * 연 파랑 : #7DC2FF;
  * 핑크 : #db2e5e;
- * 그린 : #50bb1a;
- * 레드 : #ff6961;
+ * 그린 : #5fcf80;
+ * 레드 : #e56767;
+ * box-shadow: 1px 1px 10px 0 rgb(72 75 108 / 8%);
+ * background: #f9fbfc;
  */
 function MyApp({ Component, pageProps }) {
 	const router = useRouter();

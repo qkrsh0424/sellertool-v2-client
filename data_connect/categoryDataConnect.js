@@ -9,28 +9,28 @@ const categoryDataConnect = () => {
         searchListByWorkspaceId: async function (workspaceId) {
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/categories/workspaces/${workspaceId}`, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
         createOne: async function (workspaceId, body) {
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/categories/workspaces/${workspaceId}`, body, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
         updateOne: async function (workspaceId, body) {
             return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/categories/workspaces/${workspaceId}`, body, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
         deleteOne: async function (workspaceId, categoryId) {
             return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/categories/${categoryId}/workspaces/${workspaceId}`, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         }

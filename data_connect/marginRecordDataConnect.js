@@ -11,7 +11,7 @@ const marginRecordDataConnect = () => {
             await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/margin-record/create`, params, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
@@ -19,7 +19,7 @@ const marginRecordDataConnect = () => {
             await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/margin-record/update`, params, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
@@ -27,7 +27,7 @@ const marginRecordDataConnect = () => {
             await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/margin-record/delete`, params, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
@@ -35,7 +35,7 @@ const marginRecordDataConnect = () => {
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/margin-record/one`, {
                 params: params,
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
@@ -43,7 +43,7 @@ const marginRecordDataConnect = () => {
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/margin-record/viewer/one`, {
                 params: params,
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
@@ -51,7 +51,7 @@ const marginRecordDataConnect = () => {
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/margin-record/list`, {
                 params: params,
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         }

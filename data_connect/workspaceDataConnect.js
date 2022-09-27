@@ -16,14 +16,14 @@ const workspaceDataConnect = () => {
         getWorkspaces: async function () {
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/workspaces`, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
         createPrivate: async function (body) {
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/workspaces/private`, body, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
@@ -33,7 +33,7 @@ const workspaceDataConnect = () => {
                 name: name
             }, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         }

@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 
     border-radius: 15px;
     background:#ffffff;
-    box-shadow: 1px 1px 10px 0 rgb(72 75 108 / 8%);
+    box-shadow: var(--defaultBoxShadow);
 
     @media all and (max-width: 992px){
         width: 90%;
@@ -102,8 +102,8 @@ const FormGroup = styled.form`
         margin-bottom: 40px;
         padding:0;
 
-        background: #344b98;
-        border: 1px solid #344b98;
+        background: var(--mainColor);
+        border: 1px solid var(--mainColor);
         border-radius: 5px;
 
         font-size: 16px;
@@ -113,8 +113,8 @@ const FormGroup = styled.form`
         transition: all .5s;
         
         &:hover{
-            background: #344b98e0;
-            border: 1px solid #344b98e0;
+            background: var(--mainColorHover);
+            border: 1px solid var(--mainColorHover);
         }
 
         &:disabled{
@@ -156,11 +156,11 @@ const InputBox = styled.div`
         transition: all .5s;
         outline: none;
         &:hover{
-            box-shadow: 1px 1px 10px 0 rgb(72 75 108 / 8%);
+            box-shadow: var(--defaultBoxShadow);
         }
         &:focus{
-            box-shadow: 1px 1px 10px 0 rgb(72 75 108 / 8%);
-            border: 1px solid #344b98;
+            box-shadow: var(--defaultBoxShadow);
+            border: 1px solid var(--mainColor);
         }
 
         @media all and (max-width: 992px){

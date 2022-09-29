@@ -1,7 +1,7 @@
 import Head from "next/head";
 import FooterMain from "../../component/footer/FooterMain";
 import PrimaryNavbarMainComponent from "../../component/navbar/primary-navbar";
-import WorkspaceCreateMainComponent from "../../component/workspace/create";
+import WorkspaceCreateMainComponent from "../../component/workspace/create-v2";
 
 const WorkspaceCreatePage = () => {
     return (

@@ -4,7 +4,7 @@ const Container = styled.div`
     overflow: hidden;
     position: relative;
     height: 70px;
-    background-color: #344b98;
+    background-color: var(--mainColor);
     /* background: linear-gradient(70deg, #2C73D2, #309FFF);
     background: -webkit-linear-gradient(70deg, #2C73D2, #309FFF); */
 

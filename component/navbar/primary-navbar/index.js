@@ -1,22 +1,29 @@
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
-import { csrfDataConnect } from "../../../data_connect/csrfDataConnect";
-import { loginDataConnect } from "../../../data_connect/loginDataConnect";
+import { useDispatch } from "react-redux";
+import { userDataConnect } from "../../../data_connect/userDataConnect";
 import { Container, Wrapper } from "./index.styled";
 import InfoFieldComponent from "./info-field/InfoField.component";
 import LogoFieldComponent from "./logo-field/LogoField.component";
 
 const PrimaryNavbarMainComponent = (props) => {
     const router = useRouter();
-    const userRdx = useSelector(state => state.userState)
+    const reduxDispatch = useDispatch();
 
-    const __auth = {
+    const __handle = {
         req: {
             logout: async () => {
-                await loginDataConnect().logout()
+                await userDataConnect().logoutLocal()
                     .then(res => {
                         if (res.status === 200 && res.data.message === 'success') {
-                            router.replace('/');
+                            reduxDispatch({
+                                type: 'USER_REDUX_CLEAR_USER_INFO'
+                            })
+                            reduxDispatch({
+                                type: 'WORKSPACE_REDUX_CLEAR_WORKSPACE_INFO'
+                            })
+                            // router.push({
+                            //     pathname: '/'
+                            // });
                         }
                     })
                     .catch(err => {
@@ -34,22 +41,18 @@ const PrimaryNavbarMainComponent = (props) => {
         },
         action: {
             logout: async () => {
-                await csrfDataConnect().getAuthCsrf();
-                await __auth.req.logout();
+                await __handle.req.logout();
             }
         }
     }
-
     return (
         <>
             <Container>
                 <Wrapper>
                     <LogoFieldComponent></LogoFieldComponent>
                     <InfoFieldComponent
-                        isLoading={userRdx?.isLoading}
-                        userInfo={userRdx?.info}
-                        onLogout={__auth.action.logout}
-                    ></InfoFieldComponent>
+                        onLogout={__handle.action.logout}
+                    />
                 </Wrapper>
             </Container>
         </>

@@ -1,18 +1,18 @@
 import { combineReducers } from 'redux';
-import userState from './userState';
 import { HYDRATE } from 'next-redux-wrapper';
-import workspaceState from './workspaceState';
+import userRedux from './userRedux';
+import workspaceRedux from './workspaceRedux';
 
 const rootReducer = (state, action) => {
-    if(action.type === HYDRATE){
+    if (action.type === HYDRATE) {
         return {
             ...state,
             ...action.payload
         };
     }
     return combineReducers({
-        userState:userState,
-        workspaceState: workspaceState
+        userRedux: userRedux,
+        workspaceRedux: workspaceRedux
     })(state, action);
 }
 

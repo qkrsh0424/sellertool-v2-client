@@ -1,28 +1,56 @@
-import PropTypes from 'prop-types';
-import { Dialog } from "@mui/material";
+import { Dialog } from '@mui/material';
+import styled from 'styled-components';
 
-const CommonModalComponent = (props) => {
+const Container = styled.div`
+
+`;
+
+const CustomDialog = styled(Dialog)`
+    .MuiPaper-root::-webkit-scrollbar{
+        background: #e1e1e130;
+        height:7px;
+        width: 5px;
+    }
+
+    .MuiPaper-root::-webkit-scrollbar-track{
+        border-radius: 10px;
+    }
+    .MuiPaper-root::-webkit-scrollbar-thumb{
+        background-color: #00000020;
+        border-radius: 10px;
+    }
+
+    .MuiBackdrop-root{
+        background-color:${props => props.backgroundcolor ? props.backgroundcolor : 'inherit'};
+    }
+
+    .MuiPaper-rounded{
+        border-radius: 15px;
+    }
+`;
+
+/**
+ * 
+ * @param {Object} props
+ * @param {boolean} props.open
+ * @param {boolean} props.fullWidth
+ * @param {string} props.maxWidth [xs, sm, md, lg, xl]
+ * @param {function} props.onClose
+ * @returns 
+ */
+const CommonModalComponent = ({ open, fullWidth, maxWidth, onClose, backgroundColor, children }) => {
     return (
         <>
-            <Dialog
-                fullWidth={props.fullWidth || true}
-                maxWidth={props.maxWidth || 'xs'}
-                open={props.open}
-                onClose={typeof (props.onClose) === 'function' ? () => props.onClose() : () => { ; }}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
+            <CustomDialog
+                open={open || false}
+                fullWidth={fullWidth || true}
+                maxWidth={maxWidth || 'xs'}
+                onClose={() => onClose() || {}}
+                backgroundcolor={backgroundColor || '#00000080'}
             >
-                {props.children}
-            </Dialog>
+                {children}
+            </CustomDialog>
         </>
     );
 }
-
-CommonModalComponent.propTypes = {
-    open: PropTypes.bool.isRequired,
-    fullWidth: PropTypes.bool,
-    maxWidth: PropTypes.string,
-    onClose: PropTypes.func.isRequired
-}
-
 export default CommonModalComponent;

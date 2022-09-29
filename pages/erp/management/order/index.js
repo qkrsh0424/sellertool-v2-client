@@ -4,7 +4,7 @@ import ErpManagementNavbar from '../../../../component/erp/management/navbar/Erp
 import OrderComponent from '../../../../component/erp/management/order';
 import FooterMain from '../../../../component/footer/FooterMain';
 import PrimaryNavbarMainComponent from '../../../../component/navbar/primary-navbar';
-import SecondaryNavbarMainComponent from '../../../../component/navbar/secondary-navbar';
+import SecondaryNavbarMainComponent from '../../../../component/navbar/secondary-navbar-v2';
 const Container = styled.div`
 
 `;

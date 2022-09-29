@@ -51,9 +51,9 @@ axiosAuthInterceptor.interceptors.response.use(
 
             if (!isAuthTokenRefreshing) {
                 isAuthTokenRefreshing = true;
-                await axios.post(`${AUTH_API_ADDRESS}/auth/v1/refresh`, {}, {
+                await axios.post(`${AUTH_API_ADDRESS}/auth/v1/users/reissue/access-token`, {}, {
                     withCredentials: true,
-                    xsrfCookieName: 'auth_csrf',
+                    xsrfCookieName: 'x_auth_csrf_token',
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
                     .catch(err => {

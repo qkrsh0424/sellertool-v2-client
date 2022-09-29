@@ -58,6 +58,18 @@ const formatValidUtils = {
         let regex = /^([\w._-])*[a-zA-Z0-9]+([\w._-])*([a-zA-Z0-9])+([\w._-])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$/;
         return regex.test(email);
     },
+    isWorkspaceNameFormatValid: (name) => {
+        let spaceSearchRegex = /^(\s)|(\s)$/;
+
+        if (name.search(spaceSearchRegex) !== -1) {
+            return false;
+        }
+
+        if (name.length < 2 || name.length > 30) {
+            return false;
+        }
+        return true;
+    },
     checkPhoneNumberFormatValid: (phoneNumber) => {
         let regex = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
 

@@ -14,17 +14,6 @@ const Container = styled.div`
         cursor: pointer;
 
         transition: all .3s;
-
-        &:hover{
-            box-shadow: 
-                #2C73D220 0px 2px 1px -1px, 
-                #2C73D220 0px 1px 1px 0px, 
-                #2C73D220 3px 3px 3px 0px;
-        }
-
-        &:active{
-            background: #609FFF;
-        }
     }
 `;
 

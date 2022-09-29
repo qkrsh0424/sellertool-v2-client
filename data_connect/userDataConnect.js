@@ -16,7 +16,7 @@ const userDataConnect = () => {
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
-        login: async ({ body }) => {
+        loginLocal: async ({ body }) => {
             await csrfDataConnect().getAuthCsrf();
             return await axios.post(`${AUTH_API_ADDRESS}/auth/v1/users/login/local`, body, {
                 withCredentials: true,
@@ -24,8 +24,16 @@ const userDataConnect = () => {
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
+        logoutLocal: async function(){
+            await csrfDataConnect().getAuthCsrf();
+            return await axiosAuthInterceptor.post(`${AUTH_API_ADDRESS}/auth/v1/users/logout/local`, null, {
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
         getInfoOwn: async function () {
-            return await axiosAuthInterceptor.get(`${AUTH_API_ADDRESS}/auth/v1/users/info/own`, {
+            return await axiosAuthInterceptor.get(`${AUTH_API_ADDRESS}/auth/v1/users/info`, {
                 withCredentials: true,
                 xsrfCookieName: 'x_auth_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'

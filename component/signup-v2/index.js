@@ -8,7 +8,7 @@ import useConsentFormHook from "./hooks/useConsentFormHook";
 
 const Container = styled.div`
     padding-bottom: 150px;
-    background:#f9fbfc;
+    background:var(--defaultBackground);
     overflow: hidden;
 `;
 

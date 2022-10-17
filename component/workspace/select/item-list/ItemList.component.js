@@ -29,7 +29,18 @@ export default function ItemListComponent(props) {
                         workspaceInfo: { ...workspace }
                     }
                 })
-                router.back();
+                router.push({
+                    pathname: '/'
+                });
+            },
+            routeToPath: (path, query) => {
+                router.push({
+                    pathname: path,
+                    query: {
+                        ...router.query,
+                        ...query
+                    }
+                })
             }
         }
     }
@@ -60,6 +71,7 @@ export default function ItemListComponent(props) {
                                                 <SingleBlockButton
                                                     type='button'
                                                     className='manage-button-el'
+                                                    onClick={() => __handle.action.routeToPath(`/workspace/management`, { wsId: r.id })}
                                                 >
                                                     <div className='manage-button-icon-figure'>
                                                         <Image

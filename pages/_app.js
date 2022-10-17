@@ -18,6 +18,7 @@ const theme = createTheme();
  * 레드 : #e56767;
  * box-shadow: 1px 1px 10px 0 rgb(72 75 108 / 8%);
  * background: #f9fbfc;
+ * modalCloseButtonColor:#959eae
  */
 function MyApp({ Component, pageProps }) {
 	return (

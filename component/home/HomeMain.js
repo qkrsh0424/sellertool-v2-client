@@ -17,14 +17,22 @@ const HomeMain = () => {
     useEffect(() => {
         if (!userRedux.isLoading && userRedux.userInfo) {
             if (!workspaceRedux.isLoading && !workspaceRedux.workspaceInfo) {
-                setWorkspaceNoticeModalOpen(true);
+                __handle.action.openWorkspaceNoticeModal();
                 return;
             }
+            __handle.action.closeWorkspaceNoticeModal();
         }
     }, [userRedux.isLoading, userRedux.userInfo, workspaceRedux.isLoading, workspaceRedux.workspaceInfo]);
 
     const __handle = {
-
+        action: {
+            openWorkspaceNoticeModal: () => {
+                setWorkspaceNoticeModalOpen(true);
+            },
+            closeWorkspaceNoticeModal: () => {
+                setWorkspaceNoticeModalOpen(false);
+            }
+        }
     }
 
     return (

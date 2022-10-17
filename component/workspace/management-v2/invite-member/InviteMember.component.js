@@ -1,154 +1,202 @@
-import { useEffect, useReducer, useState } from "react";
+import Image from "next/image";
+import { useState } from "react";
+import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
-import ConfirmModalComponent from "../../../modules/modal/ConfirmModalComponent";
-import FieldLoading from "../../../modules/loading/FieldLoading";
-import InviteModalComponent from "../invite-modal/InviteModal.component";
-import { Container, HeadFieldWrapper, ListFieldWrapper } from "./InviteMember.styled";
+import useInviteMembersHook from "../hooks/useInviteMembersHook";
+import InviteMemberModalComponent from "./modal/InviteMemberModal.component";
+import { Container, ListWrapper, TitleFieldWrapper } from "./styles/InviteMember.styled";
 
-function HeaderFieldView({ onActionOpenInviteModal }) {
-    return (
-        <HeadFieldWrapper>
-            <div className='title-el'>
-                멤버 초대
-            </div>
-            <button
-                className='button-el'
-                onClick={onActionOpenInviteModal}
-            >
-                초대하기
-            </button>
-        </HeadFieldWrapper>
-    );
-}
-const InviteMemberComponent = (props) => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [inviteModalOpen, setInviteModalOpen] = useState(false);
-    const [cancelInviteModalOpen, setCancelInviteModalOpen] = useState(false);
-    const [selectedCancelInviteMember, dispatchSelectedCancelInviteMember] = useReducer(selectedCancelInviteMemberReducer, initialSelectedCancelInviteMember);
+export default function InviteMemberComponent({
+    workspace
+}) {
+    const {
+        inviteMembers,
+        reqFetchInviteMembers,
+        reqCreateInviteMemberOne,
+        reqDeleteInviteMemberOne,
+        reqRetryInviteMember
+    } = useInviteMembersHook({
+        workspace: workspace
+    });
 
-    useEffect(() => {
-        if (!props.inviteMembers) {
-            setIsLoading(true);
-            return;
-        }
+    const [inviteMemberModalOpen, setInviteMemberModalOpen] = useState(false);
 
-        setIsLoading(false);
-
-    }, [props.inviteMembers])
-    const __invite = {
+    const __handle = {
         action: {
-            openModal: () => {
-                setInviteModalOpen(true);
+            openInviteMemberModal: () => {
+                setInviteMemberModalOpen(true);
             },
-            closeModal: () => {
-                setInviteModalOpen(false);
+            closeInviteMemberModal: () => {
+                setInviteMemberModalOpen(false);
+            }
+        },
+        submit: {
+            fetchInviteMembers: async () => {
+                await reqFetchInviteMembers();
             },
-            openCancelModal: (inviteMember) => {
-                dispatchSelectedCancelInviteMember({
-                    type: 'SET_DATA',
-                    payload: inviteMember
-                })
-                setCancelInviteModalOpen(true);
-            },
-            closeCancelModal: () => {
-                setCancelInviteModalOpen(false);
-                dispatchSelectedCancelInviteMember({
-                    type: 'CLEAR'
-                })
-            },
-            confirmCancel: () => {
-                if (!selectedCancelInviteMember) {
-                    return;
+            inviteMember: async ({ inviteMemberForm }) => {
+                let body = {
+                    workspaceId: workspace?.id,
+                    username: inviteMemberForm?.username
                 }
 
-                props.onActionCancelInviteRequest(selectedCancelInviteMember);
-                __invite.action.closeCancelModal();
+                await reqCreateInviteMemberOne({
+                    body: body,
+                    successCallback: () => {
+                        __handle.action.closeInviteMemberModal();
+                    }
+                })
+            },
+            removeInvitedMember: async ({ inviteMember }) => {
+                let body = {
+                    inviteMemberId: inviteMember.id
+                }
+
+                await reqDeleteInviteMemberOne({
+                    body,
+                    successCallback: () => {
+                        __handle.action.closeInviteMemberModal()
+                    }
+                })
+            },
+            retryInviteMember: async ({ inviteMember }) => {
+                let body = {
+                    inviteMemberId: inviteMember.id
+                }
+
+                await reqRetryInviteMember({
+                    body,
+                    successCallback: () => { }
+                })
             }
         }
     }
+
     return (
         <>
             <Container>
-                <HeaderFieldView
-                    onActionOpenInviteModal={__invite.action.openModal}
-                />
-                {isLoading &&
-                    <FieldLoading
-                        marginTop={100}
-                        marginBottom={100}
-                    />
-                }
-                {(!isLoading && props.inviteMembers?.length <= 0) &&
-                    <div style={{ textAlign: 'center', margin: '150px 0', fontWeight: '500' }}>현재 대기중인 초대 요청이 없습니다.</div>
-                }
-                {(props.inviteMembers && props.inviteMembers?.length > 0) &&
-                    <ListFieldWrapper>
-                        <div className='list-box'>
-                            {props.inviteMembers?.map(r => {
-                                return (
-                                    <div
-                                        key={r.id}
-                                        className='item-box'
-                                    >
-                                        <div style={{ fontSize: '13px', color: '#57606a' }}>
-                                            요청 번호 {r.id.split('-')[0]}
-                                        </div>
-                                        <div className='head-box'>
-                                            {r.user.username}
-                                        </div>
-                                        <div className='footer-box'>
-                                            <div className='status-el'>요청 수락 대기중.</div>
-                                            <button
-                                                type='button'
-                                                className='delete-button-el'
-                                                onClick={() => __invite.action.openCancelModal(r)}
-                                            >
-                                                요청철회
-                                            </button>
-                                        </div>
+                <TitleFieldWrapper
+                    className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-spaceBetween'
+                >
+                    <div className='mgl-flex mgl-flex-alignItems-center'>
+                        <div className='title'>
+                            멤버초대
+                        </div>
+                        <SingleBlockButton
+                            type='button'
+                            className='refresh-button-el'
+                            onClick={() => __handle.submit.fetchInviteMembers()}
+                        >
+                            <div className='refresh-button-icon-figure'>
+                                <Image
+                                    loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                    src={'http://localhost:3000/images/icon/refresh_default_808080.svg'}
+                                    layout='responsive'
+                                    width={1}
+                                    height={1}
+                                    objectFit={'cover'}
+                                    alt='image'
+                                    loading='lazy'
+                                ></Image>
+                            </div>
+                        </SingleBlockButton>
+                    </div>
+                    <SingleBlockButton
+                        type='button'
+                        className='invite-button-el'
+                        onClick={() => __handle.action.openInviteMemberModal()}
+                    >
+                        초대
+                    </SingleBlockButton>
+                </TitleFieldWrapper>
+                <ListWrapper>
+                    {inviteMembers?.map((r, index) => {
+                        return (
+                            <div
+                                key={r.id}
+                                className='item-group mgl-flex mgl-flex-alignItems-center'
+                            >
+                                <div
+                                    className='content-group mgl-flex mgl-flex-justifyContent-spaceBetween mgl-flex-alignItems-center'
+                                >
+                                    <div className='profile-image-figure'>
+                                        <Image
+                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                            src={r?.user?.profileImageUri || 'http://localhost:3000/images/icon/person_default_808080.svg'}
+                                            layout='responsive'
+                                            width={1}
+                                            height={1}
+                                            objectFit={'cover'}
+                                            alt='image'
+                                            loading='lazy'
+                                        ></Image>
                                     </div>
 
-                                );
-                            })}
-                        </div>
-                    </ListFieldWrapper>
-                }
+                                    <div className='info-items mgl-flex'>
+                                        <div className='tag-items'>
+                                            <div
+                                                className='status-tag'
+                                                style={{
+                                                    color: r.status === 'rejected' ? 'var(--defaultRedColor)' : '',
+                                                    border: r.status === 'rejected' ? '1px solid var(--defaultRedColor)' : '',
+                                                }}
+                                            >
+                                                {returnConvertedStatus(r.status)}
+                                            </div>
+                                        </div>
+                                        <div className='user-items'>
+                                            <div className='user-item mgl-font-color-primary'>{r.user.username}</div>
+                                            <div className='user-item'>{r.user.nickname}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='control-items mgl-flex mgl-flex-alignItems-center'>
+                                    {r.status === 'rejected' &&
+                                        (
+                                            <SingleBlockButton
+                                                type='button'
+                                                className='control-item retry-button-el'
+                                                onClick={() => __handle.submit.retryInviteMember({ inviteMember: r })}
+                                            >
+                                                재요청
+                                            </SingleBlockButton>
+                                        )
+                                    }
+                                    <SingleBlockButton
+                                        type='button'
+                                        className='control-item remove-button-el'
+                                        onClick={() => __handle.submit.removeInvitedMember({ inviteMember: r })}
+                                    >
+                                        삭제
+                                    </SingleBlockButton>
+                                </div>
+                            </div>
+                        )
+                    })}
+                </ListWrapper>
             </Container>
 
-            {/* Modal */}
             <CommonModalComponent
-                open={inviteModalOpen}
+                open={inviteMemberModalOpen}
 
-                onClose={__invite.action.closeModal}
+                onClose={__handle.action.closeInviteMemberModal}
             >
-                <InviteModalComponent
-                    workspace={props.workspace}
-                    onClose={__invite.action.closeModal}
-                    onFetchInviteMembers={props.onFetchInviteMembers}
-                ></InviteModalComponent>
+                <InviteMemberModalComponent
+                    onConfirm={__handle.submit.inviteMember}
+                    onClose={__handle.action.closeInviteMemberModal}
+                />
             </CommonModalComponent>
-
-            {/* 초대 요청 철회 확인 메세지 */}
-            <ConfirmModalComponent
-                open={cancelInviteModalOpen}
-                message={'해당 유저의 초대 요청을 철회 하시겠습니까?'}
-
-                onClose={__invite.action.closeCancelModal}
-                onConfirm={__invite.action.confirmCancel}
-            />
         </>
     );
 }
-export default InviteMemberComponent;
 
-const initialSelectedCancelInviteMember = null;
-
-const selectedCancelInviteMemberReducer = (state, action) => {
-    switch (action.type) {
-        case 'SET_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialSelectedCancelInviteMember;
-        default: return initialSelectedCancelInviteMember;
+function returnConvertedStatus(status) {
+    switch (status) {
+        case 'pending':
+            return '대기중...'
+        case 'rejected':
+            return '거절됨'
+        default:
+            return '';
     }
 }

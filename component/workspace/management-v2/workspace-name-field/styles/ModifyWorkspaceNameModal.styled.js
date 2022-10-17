@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Wrapper = styled.div`
     .header-close-button-box{
         display: flex;
         justify-content: flex-end;
@@ -25,7 +25,6 @@ export const Container = styled.div`
     
     }
 
-
     .content-group{
         padding: 0 20px;
     }
@@ -37,7 +36,7 @@ export const Container = styled.div`
     .title-box{
         padding: 0 20px;
     }
-
+    
     .title{
         border-bottom: 1px solid #000;
         font-size: 20px;

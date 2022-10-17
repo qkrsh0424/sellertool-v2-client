@@ -1,0 +1,23 @@
+.mgl-flex {
+    display: flex;
+}
+
+.mgl-flex-growAndShrink{
+    flex:1;
+}
+
+.mgl-flex-justifyContent-spaceBetween{
+    justify-content: space-between;
+}
+
+.mgl-flex-justifyContent-center{
+    justify-content: center;
+}
+
+.mgl-flex-alignItems-center{
+    align-items: center;
+}
+
+.mgl-flex-flexWrap-wrap{
+    flex-wrap: wrap;
+}

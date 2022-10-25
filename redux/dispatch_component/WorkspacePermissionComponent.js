@@ -14,13 +14,13 @@ export default function WorkspacePermissionComponent(props) {
                 return;
             }
 
-            if (userRedux.userInfo) {
+            if (userRedux?.userInfo?.id) {
                 let workspaceId = localStorage.getItem('sellertool-wsId');
                 await __handle.req.dispatchWorkspaceRedux(workspaceId);
             }
         }
         fetchInit();
-    }, [userRedux.userInfo]);
+    }, [userRedux?.userInfo?.id]);
 
     const __handle = {
         req: {

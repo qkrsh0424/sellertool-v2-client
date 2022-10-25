@@ -24,7 +24,7 @@ const userDataConnect = () => {
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
-        logoutLocal: async function(){
+        logoutLocal: async function () {
             await csrfDataConnect().getAuthCsrf();
             return await axiosAuthInterceptor.post(`${AUTH_API_ADDRESS}/auth/v1/users/logout/local`, null, {
                 withCredentials: true,
@@ -48,7 +48,66 @@ const userDataConnect = () => {
             })
         },
         updateInfo: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
             return await axiosAuthInterceptor.put(`${AUTH_API_ADDRESS}/auth/v1/users/info/own`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * 
+         * @param {object} body
+         * @param {string} body.nickname
+         * @returns 
+         */
+        changeNickname: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
+            return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/users/nickname`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * 
+         * @param {object} body
+         * @param {string} body.name
+         * @returns 
+         */
+        changeName: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
+            return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/users/name`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * 
+         * @param {object} body
+         * @param {string} body.phoneNumber
+         * @param {string} body.phoneNumberValidationCode
+         * @returns 
+         */
+        changePhoneNumber: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
+            return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/users/phoneNumber`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * 
+         * @param {object} body
+         * @param {string} body.email
+         * @param {string} body.emailValidationCode
+         * @returns 
+         */
+        changeEmail: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
+            return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/users/email`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_auth_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
@@ -59,10 +118,11 @@ const userDataConnect = () => {
          * @param {Object} body
          * @param {string} body.currentPassword
          * @param {string} body.newPassword
-         * @param {string} body.checkPassword
+         * @param {string} body.newPasswordChecker
          * @returns 
          */
         changePassword: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
             return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/users/password`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_auth_csrf_token',

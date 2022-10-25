@@ -447,7 +447,6 @@ export default function FormFieldComponent(props) {
                                         value={signupForm.phoneNumberValidationCode || ''}
                                         placeholder="인증번호를 입력하세요."
                                         onChange={(e) => onChangeValueOfNameForSignupForm(e)}
-                                        minLength={6}
                                         maxLength={6}
                                         required
                                     ></input>

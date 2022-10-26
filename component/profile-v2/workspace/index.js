@@ -6,6 +6,8 @@ import { workspaceDataConnect } from '../../../data_connect/workspaceDataConnect
 import LineBreakerBottom from '../../modules/fragment/LineBreakerBottom';
 import Layout from '../layout/Layout';
 import HeadComponent from './head/Head.component';
+import useInviteMembersHook from './hooks/useInviteMembersHook';
+import useWorkspacesHook from './hooks/useWorkspacesHook';
 import RequestListComponent from './request-list/RequestList.component';
 import WorkspaceListComponent from './workspace-list/WorkspaceList.component';
 
@@ -15,51 +17,55 @@ const Container = styled.div`
 `;
 
 const ProfileWorkspaceMainComponent = (props) => {
-    // const [workspaces, dispatchWorkspaces] = useReducer(workspacesReducer, initialWorkspaces);
-    // const [inviteMembers, dispatchInviteMembers] = useReducer(inviteMembersReducer, initialInviteMembers);
+    const {
+        workspaces,
+        reqFetchWorkspaces
+    } = useWorkspacesHook();
 
-    // useEffect(() => {
-    //     __workspace.req.fetchWorkspaces();
-    //     __inviteMember.req.fetchInviteMembers();
-    // }, []);
+    const {
+        inviteMembers,
+        reqFetchInviteMembers,
+        reqAcceptWorkspace,
+        reqRejectWorkspace
+    } = useInviteMembersHook();
 
-    // const __workspace = {
-    //     req: {
-    //         fetchWorkspaces: async () => {
-    //             await workspaceDataConnect().getWorkspaces()
-    //                 .then(res => {
-    //                     if (res.status === 200) {
-    //                         dispatchWorkspaces({
-    //                             type: 'SET_DATA',
-    //                             payload: res.data.data
-    //                         })
-    //                     }
-    //                 })
-    //                 .catch(err => {
-    //                     let res = err.response;
-    //                     console.log(res);
-    //                 })
-    //         }
-    //     }
-    // }
-
+    const __handle = {
+        submit: {
+            refreshWorkspaces: () => {
+                reqFetchWorkspaces();
+            },
+            refreshInviteMembers: () => {
+                reqFetchInviteMembers();
+            },
+            acceptWorkspace: async ({
+                body,
+                successCallback
+            }) => {
+                await reqAcceptWorkspace({
+                    body: body,
+                    successCallback: () => {
+                        successCallback();
+                        reqFetchInviteMembers();
+                        reqFetchWorkspaces();
+                    }
+                })
+            },
+            rejectWorkspace: async ({
+                body,
+                successCallback
+            }) => {
+                await reqRejectWorkspace({
+                    body: body,
+                    successCallback: () => {
+                        successCallback();
+                        reqFetchInviteMembers();
+                    }
+                })
+            }
+        }
+    }
     // const __inviteMember = {
     //     req: {
-    //         fetchInviteMembers: async () => {
-    //             await inviteMemberDataConnect().searchListByRequested()
-    //                 .then(res => {
-    //                     if (res.status === 200) {
-    //                         dispatchInviteMembers({
-    //                             type: 'SET_DATA',
-    //                             payload: res.data.data
-    //                         })
-    //                     }
-    //                 })
-    //                 .catch(err => {
-    //                     let res = err.response;
-    //                     console.log(res);
-    //                 })
-    //         },
     //         acceptWorkspace: async (inviteMemberId) => {
     //             await csrfDataConnect().getApiCsrf();
     //             await inviteMemberDataConnect().actionAccept({ inviteMemberId })
@@ -117,6 +123,20 @@ const ProfileWorkspaceMainComponent = (props) => {
             <Container>
                 <HeadComponent></HeadComponent>
                 <Layout>
+                    <>
+                        <WorkspaceListComponent
+                            workspaces={workspaces}
+
+                            onSubmitRefreshWorkspaces={__handle.submit.refreshWorkspaces}
+                        />
+                        <RequestListComponent
+                            inviteMembers={inviteMembers}
+
+                            onSubmitRefreshInviteMembers={__handle.submit.refreshInviteMembers}
+                            onSubmitAcceptWorkspace={__handle.submit.acceptWorkspace}
+                            onSubmitRejectWorkspace={__handle.submit.rejectWorkspace}
+                        />
+                    </>
                 </Layout>
             </Container>
             {/* <Layout>
@@ -138,26 +158,3 @@ const ProfileWorkspaceMainComponent = (props) => {
     );
 }
 export default ProfileWorkspaceMainComponent;
-
-const initialWorkspaces = null;
-const initialInviteMembers = null;
-
-const workspacesReducer = (state, action) => {
-    switch (action.type) {
-        case 'SET_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialWorkspaces;
-        default: return initialWorkspaces;
-    }
-}
-
-const inviteMembersReducer = (state, action) => {
-    switch (action.type) {
-        case 'SET_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialWorkspaces;
-        default: return initialWorkspaces;
-    }
-}

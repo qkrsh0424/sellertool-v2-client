@@ -224,6 +224,6 @@ function returnConvertedGrade(grade) {
     switch (grade) {
         case 'host':
             return '관리자'
-        default: return '일반'
+        default: return '멤버'
     }
 }

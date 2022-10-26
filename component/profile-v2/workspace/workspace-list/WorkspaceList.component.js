@@ -3,87 +3,108 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import SingleBlockButton from '../../../modules/button/SingleBlockButton';
 import FieldLoading from '../../../modules/loading/FieldLoading';
-import { Container, ListFieldWrapper, TitleFieldWrapper } from './WorkspaceList.styled';
+import useWorkspacesHook from '../hooks/useWorkspacesHook';
+import { Container, ListFieldWrapper, TitleFieldWrapper } from './styles/WorkspaceList.styled';
 
-function TitleFieldView() {
-    return (
-        <TitleFieldWrapper>
-            <div className='title'>나의 워크스페이스</div>
-        </TitleFieldWrapper>
-    );
-}
-
-const WorkspaceListComponent = (props) => {
-    const [isLoading, setIsLoading] = useState(true);
-    const userRdx = useSelector(state => state.userState);
-
-    useEffect(() => {
-        if (props.workspaces) {
-            setIsLoading(false)
+const WorkspaceListComponent = ({
+    workspaces,
+    onSubmitRefreshWorkspaces
+}) => {
+    const __handle = {
+        submit: {
+            refresh: () => {
+                onSubmitRefreshWorkspaces();
+            }
         }
-    }, [props.workspaces]);
+    }
 
     return (
         <>
             <Container>
-                <TitleFieldView />
+                <TitleFieldWrapper>
+                    <div className='mgl-flex mgl-flex-alignItems-center'>
+                        <div>
+                            나의 워크스페이스
+                        </div>
+                        <SingleBlockButton
+                            type='button'
+                            className='refresh-button-el'
+                            onClick={() => __handle.submit.refresh()}
+                        >
+                            <div className='refresh-button-icon-figure'>
+                                <Image
+                                    loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                    src={'http://localhost:3000/images/icon/refresh_default_808080.svg'}
+                                    layout='responsive'
+                                    width={1}
+                                    height={1}
+                                    objectFit={'cover'}
+                                    alt='image'
+                                    loading='lazy'
+                                ></Image>
+                            </div>
+                        </SingleBlockButton>
+                    </div>
+                </TitleFieldWrapper>
                 <ListFieldWrapper>
-                    {isLoading &&
-                        <FieldLoading
-                            marginTop={130}
-                            marginBottom={130}
-                            size={20}
-                        />
-                    }
-                    {!isLoading && props.workspaces?.map(r => {
+                    {workspaces?.map(r => {
                         return (
                             <div
                                 key={r.id}
-                                className='item-wrapper'
+                                className='item-group mgl-flex mgl-flex-alignItems-center'
                             >
                                 <div
-                                    className='item-box'
+                                    className='content-group mgl-flex mgl-flex-justifyContent-spaceBetween mgl-flex-alignItems-center'
                                 >
-                                    <div className='item-icon-figure'>
+                                    <div className='profile-image-figure'>
                                         {r.publicYn === 'y' &&
                                             <Image
                                                 className='item-icon-el'
                                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                src='http://localhost:3000/images/icon/default_group_icon.png'
+                                                src='http://localhost:3000/images/icon/groups_default_808080.svg'
                                                 layout='fill'
-                                                alt="face icon"
+                                                alt='image'
+                                                loading='lazy'
                                             ></Image>
                                         }
                                         {r.publicYn === 'n' &&
                                             <Image
                                                 className='item-icon-el'
                                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                src='http://localhost:3000/images/icon/default_private_icon.png'
+                                                src='http://localhost:3000/images/icon/person_default_808080.svg'
                                                 layout='fill'
-                                                alt="face icon"
+                                                alt='image'
+                                                loading='lazy'
                                             ></Image>
                                         }
                                     </div>
-                                    <div className='info-box'>
-                                        <Link
-                                            href={`/workspace/management/?wsId=${r.id}`}
-                                            passHref
-                                        >
-                                            <a className='workspace-name-el'>
-                                                {r.name}
-                                            </a>
-                                        </Link>
-                                        <div className='workspace-type-el'>
-                                            {r.publicYn === 'y' && 'Public'}
-                                            {r.publicYn === 'n' && 'Private'}
+
+                                    <div className='info-items mgl-flex'>
+                                        <div className='tag-items'>
+                                            <div className='grade-tag'>
+                                                {r.publicYn === 'n' &&
+                                                    '개인용'
+                                                }
+                                                {r.publicYn === 'y' &&
+                                                    '단체용'
+                                                }
+                                            </div>
+                                        </div>
+                                        <div className='user-items'>
+                                            <div className='user-item mgl-font-color-primary'>
+                                                <Link
+                                                    href={`/workspace/management/?wsId=${r.id}`}
+                                                    passHref
+                                                >
+                                                    <a>
+                                                        {r.name}
+                                                    </a>
+                                                </Link>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div>
-                                    {userRdx?.info?.id === r.masterId &&
-                                        <span className='badge'>HOST</span>
-                                    }
                                 </div>
                             </div>
                         );

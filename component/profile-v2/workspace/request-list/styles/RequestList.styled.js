@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    margin-top: 100px;
+    margin-top: 40px;
 `;
 
 export const TitleFieldWrapper = styled.div`
-    font-size: 24px;
+    font-size: 21px;
     font-weight: 600;
     color: #404040;
 

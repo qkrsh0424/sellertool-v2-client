@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
 import useInviteMembersHook from "../hooks/useInviteMembersHook";
@@ -7,8 +8,10 @@ import InviteMemberModalComponent from "./modal/InviteMemberModal.component";
 import { Container, ListWrapper, TitleFieldWrapper } from "./styles/InviteMember.styled";
 
 export default function InviteMemberComponent({
-    workspace
+    workspace,
+    isWorkspaceMaster
 }) {
+    const userRedux = useSelector(state => state.userRedux);
     const {
         inviteMembers,
         reqFetchInviteMembers,
@@ -101,13 +104,17 @@ export default function InviteMemberComponent({
                             </div>
                         </SingleBlockButton>
                     </div>
-                    <SingleBlockButton
-                        type='button'
-                        className='invite-button-el'
-                        onClick={() => __handle.action.openInviteMemberModal()}
-                    >
-                        초대
-                    </SingleBlockButton>
+                    {isWorkspaceMaster &&
+                        (
+                            <SingleBlockButton
+                                type='button'
+                                className='invite-button-el'
+                                onClick={() => __handle.action.openInviteMemberModal()}
+                            >
+                                초대
+                            </SingleBlockButton>
+                        )
+                    }
                 </TitleFieldWrapper>
                 <ListWrapper>
                     {inviteMembers?.map((r, index) => {
@@ -150,26 +157,30 @@ export default function InviteMemberComponent({
                                         </div>
                                     </div>
                                 </div>
-                                <div className='control-items mgl-flex mgl-flex-alignItems-center'>
-                                    {r.status === 'rejected' &&
-                                        (
+                                {isWorkspaceMaster &&
+                                    (
+                                        <div className='control-items mgl-flex mgl-flex-alignItems-center'>
+                                            {r.status === 'rejected' &&
+                                                (
+                                                    <SingleBlockButton
+                                                        type='button'
+                                                        className='control-item retry-button-el'
+                                                        onClick={() => __handle.submit.retryInviteMember({ inviteMember: r })}
+                                                    >
+                                                        재요청
+                                                    </SingleBlockButton>
+                                                )
+                                            }
                                             <SingleBlockButton
                                                 type='button'
-                                                className='control-item retry-button-el'
-                                                onClick={() => __handle.submit.retryInviteMember({ inviteMember: r })}
+                                                className='control-item remove-button-el'
+                                                onClick={() => __handle.submit.removeInvitedMember({ inviteMember: r })}
                                             >
-                                                재요청
+                                                삭제
                                             </SingleBlockButton>
-                                        )
-                                    }
-                                    <SingleBlockButton
-                                        type='button'
-                                        className='control-item remove-button-el'
-                                        onClick={() => __handle.submit.removeInvitedMember({ inviteMember: r })}
-                                    >
-                                        삭제
-                                    </SingleBlockButton>
-                                </div>
+                                        </div>
+                                    )
+                                }
                             </div>
                         )
                     })}

@@ -1,6 +1,6 @@
 import Head from "next/head";
 import FooterMain from "../../component/footer/FooterMain";
-import MarginMain from "../../component/margin/dashboard/MarginMain";
+import MainComponent from "../../component/margin/dashboard-v2";
 import PrimaryNavbarMainComponent from "../../component/navbar/primary-navbar";
 import SecondaryNavbarMainComponent from "../../component/navbar/secondary-navbar-v2";
 
@@ -12,7 +12,7 @@ const MarginDashboardPage = () => {
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <SecondaryNavbarMainComponent></SecondaryNavbarMainComponent>
-            <MarginMain></MarginMain>
+            <MainComponent></MainComponent>
             <FooterMain></FooterMain>
         </>
     );

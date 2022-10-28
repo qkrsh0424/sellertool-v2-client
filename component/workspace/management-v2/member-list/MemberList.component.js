@@ -11,7 +11,8 @@ import useWorkspaceMembersHook from "../hooks/useWorkspaceMembersHook";
 
 
 const MemberListComponent = ({
-    workspace
+    workspace,
+    isWorkspaceMaster
 }) => {
     const {
         workspaceMembers,
@@ -101,7 +102,7 @@ const MemberListComponent = ({
             }
         }
     }
-    
+
     return (
         <>
             <Container>
@@ -163,22 +164,26 @@ const MemberListComponent = ({
                                         </div>
                                     </div>
                                 </div>
-                                <div className='control-items mgl-flex mgl-flex-alignItems-center'>
-                                    <SingleBlockButton
-                                        type='button'
-                                        className='control-item setting-button-el'
-                                        onClick={() => __handle.action.openPermissionSettingModal(r)}
-                                    >
-                                        권한설정
-                                    </SingleBlockButton>
-                                    <SingleBlockButton
-                                        type='button'
-                                        className='control-item remove-button-el'
-                                        onClick={() => __handle.action.openRemoveMemberModal(r)}
-                                    >
-                                        멤버제명
-                                    </SingleBlockButton>
-                                </div>
+                                {isWorkspaceMaster &&
+                                    (
+                                        <div className='control-items mgl-flex mgl-flex-alignItems-center'>
+                                            <SingleBlockButton
+                                                type='button'
+                                                className='control-item setting-button-el'
+                                                onClick={() => __handle.action.openPermissionSettingModal(r)}
+                                            >
+                                                권한설정
+                                            </SingleBlockButton>
+                                            <SingleBlockButton
+                                                type='button'
+                                                className='control-item remove-button-el'
+                                                onClick={() => __handle.action.openRemoveMemberModal(r)}
+                                            >
+                                                멤버제명
+                                            </SingleBlockButton>
+                                        </div>
+                                    )
+                                }
                             </div>
                         )
                     })}

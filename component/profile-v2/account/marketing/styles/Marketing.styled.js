@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+    margin-top: 40px;
 `;
 
 export const TitleFieldWrapper = styled.div`
@@ -25,8 +26,8 @@ export const TitleFieldWrapper = styled.div`
     }
 `;
 
-export const ProfileWrapper = styled.div`
-    border: 1px solid var(--mainColor);
+export const ContentWrapper = styled.div`
+    border: 1px solid #e0e0e0;
     border-radius: 15px;
     padding: 0 20px;
     margin-top: 10px;
@@ -108,25 +109,26 @@ export const ProfileWrapper = styled.div`
             }
         }
 
-        .modify-button{
+        .switch-button{
             margin:0;
             padding:0;
             width: 40px;
             border-radius: 5px;
             height: 28px;
             font-size: 13px;
-            background: #f0f0f0;
-            color: #808080;
-
-            &:hover{
-                background: var(--mainColor);
-                color: #fff;
-                border:1px solid var(--mainColor);
-            }
         }
 
-        .modify-button-w-md{
-            width: 70px;
+        .switch-button-on{
+            background: #fff;
+            border: 1px solid var(--defaultGreenColor);
+            color: var(--defaultGreenColor);
+        }
+
+        .switch-button-off{
+            background: #fff;
+            border: 1px solid var(--defaultRedColor);
+            color: var(--defaultRedColor);
         }
     }
 `;
+

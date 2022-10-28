@@ -8,7 +8,7 @@ export const Container = styled.div`
 
 export const TitleFieldWrapper = styled.div`
     .title{
-        font-size: 24px;
+        font-size: 21px;
         font-weight: 600;
         color: #404040;
     }
@@ -52,10 +52,10 @@ export const ListWrapper = styled.div`
     margin-top: 10px;
     border-radius: 15px;
     box-shadow: var(--defaultBoxShadow);
-    
+    padding:0 20px;
 
     .item-group{
-        padding:10px;
+        padding:10px 0;
         font-size: 14px;
         color:#404040;
         border-bottom: 1px solid #f0f0f0;

@@ -139,11 +139,10 @@ const CalculatorDashboard2 = (props) => {
             inputDigit(parseInt(key, 10))
         } else if (key in CalculatorOperations) {
             event.preventDefault()
-            console.log(key);
             performOperation(key)
         } else if (key === '.') {
             event.preventDefault()
-            this.inputDot()
+            inputDot()
         } else if (key === 'Backspace') {
             event.preventDefault()
             clearLastChar()
@@ -152,6 +151,23 @@ const CalculatorDashboard2 = (props) => {
             clearDisplay();
         }
     };
+
+    const inputDot = () => {
+        if (displayValue.length > 30) {
+            return;
+        }
+
+        let regex = /\./g;
+
+        if(displayValue.search(regex) !== -1){
+            return;
+        }
+
+        dispatchDisplayValue({
+            type: 'SET_DATA',
+            payload: displayValue + '.'
+        })
+    }
 
     const inputDigit = (digit) => {
         if (displayValue.length > 30) {
@@ -185,6 +201,7 @@ const CalculatorDashboard2 = (props) => {
     }
 
     const clearDisplay = () => {
+        setPrevFormula('0')
         dispatchDisplayValue({
             type: 'CLEAR'
         })
@@ -223,7 +240,7 @@ const CalculatorDashboard2 = (props) => {
                 <CopyField>
                     <CopyBtnBox onClick={() => onCopyFormular()}>수식 복사</CopyBtnBox>
                     <CopyBtnBox onClick={() => onCopyValue()}>결과 값 복사</CopyBtnBox>
-                    <CopyBtnBox style={{ width:'50%' }}onClick={() => onCopyValue()}>D</CopyBtnBox>
+                    <CopyBtnBox style={{ width: '50%' }} onClick={() => clearLastChar()}>D</CopyBtnBox>
                 </CopyField>
                 <ControlContainer>
                     <ControlEl type='button' onClick={() => clearDisplay()}>C</ControlEl>

@@ -106,11 +106,50 @@ export default function ItemListComponent(props) {
                         공유 워크스페이스
                     </Title>
                     <ItemListWrapper>
-                        {publicWorkspaces && valueUtils.isEmptyValues(publicWorkspaces) &&
+                        {publicWorkspaces &&
                             (
-                                <div className='empty-item'>
-                                    워크스페이스가 비었습니다.
-                                </div>
+                                <>
+                                    {publicWorkspaces?.map(r => {
+                                        return (
+                                            <div
+                                                key={r.id}
+                                                className='item-group'
+                                            >
+                                                <div
+                                                    className={`item-box ${workspaceRedux?.workspaceInfo?.id === r.id ? 'item-box-active' : ''}`}
+                                                    onClick={() => __handle.action.selectWorkspace(r)}
+                                                >
+                                                    {r.name}
+                                                </div>
+                                                <SingleBlockButton
+                                                    type='button'
+                                                    className='manage-button-el'
+                                                    onClick={() => __handle.action.routeToPath(`/workspace/management`, { wsId: r.id })}
+                                                >
+                                                    <div className='manage-button-icon-figure'>
+                                                        <Image
+                                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                                            src={`http://localhost:3000/images/icon/settings_default_808080.svg`}
+                                                            className='icon-el'
+                                                            layout="responsive"
+                                                            width={1}
+                                                            height={1}
+                                                            alt={'add icon'}
+                                                        />
+                                                    </div>
+                                                </SingleBlockButton>
+                                            </div>
+                                        );
+                                    })}
+
+                                    {valueUtils.isEmptyValues(publicWorkspaces) &&
+                                        (
+                                            <div className='empty-item'>
+                                                워크스페이스가 비었습니다.
+                                            </div>
+                                        )
+                                    }
+                                </>
                             )
                         }
                     </ItemListWrapper>

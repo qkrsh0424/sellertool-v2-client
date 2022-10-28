@@ -1,105 +1,13 @@
 import Link from "next/link";
 import styled from "styled-components";
-
-const ContentContainer = styled.div`
-    padding: 0 30px;
-    margin-top: 30px;
-    /* overflow: hidden;
-    padding: 30px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-
-    @media all and (max-width:992px) {
-        padding: 10px;
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    @media all and (max-width:576px) {
-        padding: 10px;
-        grid-template-columns: repeat(1, 1fr);
-    } */
-`;
-
-const ContentWrapper = styled.div`
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    padding: 10px 0;
-    margin-top: 10px;
-    
-
-    @media all and (max-width:992px) {
-        padding: 10px;
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    @media all and (max-width:576px) {
-        padding: 10px;
-        grid-template-columns: repeat(1, 1fr);
-    }
-`;
-
-const CardContainer = styled.div`
-    padding: 0 10px;
-
-    @media all and (max-width:992px) {
-        padding: 5px;
-    }
-`;
-
-const CardWrapper = styled.div`
-    /* border:2px solid #e1e1e1; */
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 
-        rgb(0 0 0 / 20%) 0px 2px 1px -1px, 
-        rgb(0 0 0 / 14%) 0px 1px 1px 0px, 
-        rgb(0 0 0 / 12%) 0px 1px 3px 0px;
-    cursor: pointer;
-    transition: all .5s;
-
-    &:hover{
-        box-shadow: 
-            rgb(0 0 0 / 20%) 0px 2px 1px -1px, 
-            rgb(0 0 0 / 14%) 0px 1px 1px 0px, 
-            rgb(100 100 100 / 24%) 3px 3px 3px 0px;
-    }
-`;
-
-const CardTitle = styled.div`
-    text-align: center;
-    color: #444;
-    font-weight: 600;
-    padding: 20px 0;
-    font-size: 18px;
-
-    @media all and (max-width:992px){
-        padding: 10px 0;
-        font-size: 16px;
-    }
-`;
-
-const CardDescription = styled.div`
-    padding-top: 10px;
-    height: 100px;
-    line-height: 25px;
-    text-align: center;
-    color: #666;
-    word-break: keep-all;
-    font-size: 14px;
-
-    @media all and (max-width:992px){
-        font-size: 12px;
-        height: 70px;
-    }
-`;
+import { CardContainer, CardDescription, CardTitle, CardWrapper, CategoryTitle, ContentContainer, ContentWrapper } from "./styles/ServiceList.styled";
 
 
-const HomeBody = () => {
+const ServiceListComponent = () => {
     return (
         <>
             <ContentContainer>
-                <div style={{ fontSize: '21px', fontWeight: '500' }}>유용한 기능</div>
+                <CategoryTitle>유용한 기능</CategoryTitle>
                 <ContentWrapper>
                     <CardContainer>
                         <Link
@@ -132,7 +40,7 @@ const HomeBody = () => {
                 </ContentWrapper>
             </ContentContainer>
             <ContentContainer>
-                <div style={{ fontSize: '24px', fontWeight: '500' }}>관리 기능</div>
+                <CategoryTitle>관리 기능</CategoryTitle>
                 <ContentWrapper>
                     <CardContainer>
                         <Link
@@ -179,4 +87,4 @@ const HomeBody = () => {
     );
 }
 
-export default HomeBody;
+export default ServiceListComponent;

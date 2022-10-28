@@ -7,6 +7,7 @@ import ModifyWorkspaceNameModalComponent from "./modal/ModifyWorkspaceNameModal.
 
 const WorkspaceNameFieldComponent = ({
     workspace,
+    isWorkspaceMaster,
     onSubmitModifyWorkspaceName
 }) => {
     const [modifyWorkspaceNameModalOpen, setModifyWorkspaceNameModalOpen] = useState(false);
@@ -45,25 +46,29 @@ const WorkspaceNameFieldComponent = ({
                     <div className='title-box'>
                         {workspace?.name}
                     </div>
-                    <div className='button-box'>
-                        <button
-                            type='button'
-                            className='button-el'
-                            onClick={() => __handle.action.openModifyWorkspaceNameModal()}
-                        >
-                            <div className='button-icon-figure'>
-                                <Image
-                                    loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src='http://localhost:3000/images/icon/pen_icon2.png'
-                                    layout='fill'
-                                    alt="modify icon"
-                                    className='button-icon'
-                                    loading='lazy'
-                                ></Image>
+                    {isWorkspaceMaster &&
+                        (
+                            <div className='button-box'>
+                                <button
+                                    type='button'
+                                    className='button-el'
+                                    onClick={() => __handle.action.openModifyWorkspaceNameModal()}
+                                >
+                                    <div className='button-icon-figure'>
+                                        <Image
+                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                            src='http://localhost:3000/images/icon/pen_icon2.png'
+                                            layout='fill'
+                                            alt="modify icon"
+                                            className='button-icon'
+                                            loading='lazy'
+                                        ></Image>
+                                    </div>
+                                    <Ripple color={'#fff'} duration={1000}></Ripple>
+                                </button>
                             </div>
-                            <Ripple color={'#fff'} duration={1000}></Ripple>
-                        </button>
-                    </div>
+                        )
+                    }
                 </Wrapper>
             </Container>
 

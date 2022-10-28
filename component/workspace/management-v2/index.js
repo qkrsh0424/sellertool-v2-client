@@ -8,6 +8,9 @@ import useWorkspaceHook from "./hooks/useWorkspaceHook";
 import LayoutComponent from "./layout/Layout.component";
 import useInviteMembersHook from "./hooks/useInviteMembersHook";
 import InviteMemberComponent from "./invite-member/InviteMember.component";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import useIsWorkspaceMasterHook from "./hooks/useIsWorkspaceMasterHook";
 
 const Container = styled.div`
     background-color: var(--defaultBackground);
@@ -20,6 +23,12 @@ const WorkspaceManagementMainComponent = (props) => {
         workspace,
         reqChangeWorkspaceName
     } = useWorkspaceHook();
+
+    const {
+        isWorkspaceMaster
+    } = useIsWorkspaceMasterHook({
+        workspace: workspace
+    })
 
     const __handle = {
         submit: {
@@ -44,6 +53,8 @@ const WorkspaceManagementMainComponent = (props) => {
                 <>
                     <WorkspaceNameFieldComponent
                         workspace={workspace}
+                        isWorkspaceMaster={isWorkspaceMaster}
+                        
                         onSubmitModifyWorkspaceName={__handle.submit.modifyWorkspaceName}
                     />
                     <LayoutComponent>
@@ -51,6 +62,7 @@ const WorkspaceManagementMainComponent = (props) => {
                             (
                                 <MemberListComponent
                                     workspace={workspace}
+                                    isWorkspaceMaster={isWorkspaceMaster}
                                 />
                             )
                         }
@@ -58,6 +70,7 @@ const WorkspaceManagementMainComponent = (props) => {
                             (
                                 <InviteMemberComponent
                                     workspace={workspace}
+                                    isWorkspaceMaster={isWorkspaceMaster}
                                 />
                             )
                         }

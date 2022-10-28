@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import CommonModalComponent from "../modules/modal/CommonModalComponent";
-import HomeBody from "./HomeBody";
+import ServiceListComponent from "./service-list/ServiceList.component";
 import WorkspaceNoticeModalComponent from "./modal/WorkspaceNoticeModal.component";
 
 const Container = styled.div`
-    margin-bottom: 150px;
+    background: var(--defaultBackground);
+    overflow: hidden;
+    padding-bottom: 150px;
 `;
 
 const HomeMain = () => {
@@ -38,7 +40,7 @@ const HomeMain = () => {
     return (
         <>
             <Container>
-                <HomeBody></HomeBody>
+                <ServiceListComponent></ServiceListComponent>
             </Container>
 
             <CommonModalComponent

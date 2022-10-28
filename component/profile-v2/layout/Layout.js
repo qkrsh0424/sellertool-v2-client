@@ -18,7 +18,7 @@ const Container = styled.div`
     }
 `;
 const Block = styled.div`
-    padding: 10px;
+    padding: 20px;
 `;
 
 const ContentWrapper = styled.div`

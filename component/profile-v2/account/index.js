@@ -4,6 +4,7 @@ import NotAllowedComponent from '../../modules/not-allowed/NotAllowedComponent';
 import Layout from '../layout/Layout';
 import HeadComponent from './head/Head.component';
 import InformationComponent from './information/Information.component';
+import MarketingComponent from './marketing/Marketing.component';
 
 const Container = styled.div`
     overflow: hidden;
@@ -11,17 +12,6 @@ const Container = styled.div`
 `;
 
 const ProfileAccountMainComponent = (props) => {
-    const userRedux = useSelector(state => state.userRedux);
-
-    // if (userRedux.isLoading === true) {
-    //     return null;
-    // }
-
-    // if (userRedux.isLoading === false && (!userRedux.userInfo)) {
-    //     return (
-    //         <NotAllowedComponent></NotAllowedComponent>
-    //     );
-    // }
 
     return (
         <>
@@ -29,6 +19,7 @@ const ProfileAccountMainComponent = (props) => {
                 <HeadComponent></HeadComponent>
                 <Layout>
                     <InformationComponent />
+                    <MarketingComponent />
                 </Layout>
             </Container>
         </>

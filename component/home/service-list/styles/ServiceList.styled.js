@@ -33,6 +33,8 @@ export const CardContainer = styled.div`
 `;
 
 export const CardWrapper = styled.div`
+    user-select: none;
+    -webkit-tap-highlight-color: #00000000;
     background: #fff;
     border-radius: 15px;
     padding: 10px;

@@ -21,10 +21,15 @@ const ServiceListComponent = () => {
                         </Link>
                     </CardContainer>
                     <CardContainer>
-                        <CardWrapper>
-                            <CardTitle>엑셀 변환기</CardTitle>
-                            <CardDescription>네이버, 쿠팡, 자사몰... 너무 다양한 발주서 양식... 나만의 양식으로 자유롭게 변환해요.</CardDescription>
-                        </CardWrapper>
+                        <Link
+                            href={'/excel-translator'}
+                            passHref
+                        >
+                            <CardWrapper>
+                                <CardTitle>엑셀 변환기</CardTitle>
+                                <CardDescription>네이버, 쿠팡, 자사몰... 너무 다양한 발주서 양식... 나만의 양식으로 자유롭게 변환해요.</CardDescription>
+                            </CardWrapper>
+                        </Link>
                     </CardContainer>
                     <CardContainer>
                         <Link

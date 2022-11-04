@@ -35,7 +35,7 @@ function PageTitleField({ title }) {
 
 const ProductDashboardMainComponent = (props) => {
     const router = useRouter();
-    const workspaceRdx = useSelector(state => state.workspaceState);
+    const workspaceRedux = useSelector(state => state.workspaceRedux);
     const [isLoading, setIsLoading] = useState(true);
     const [workspace, dispatchWorkspace] = useReducer(workspaceReducer, initialWorkspace);
     const [categories, dispatchCategories] = useReducer(categoriesReducer, initialCategories);
@@ -49,17 +49,17 @@ const ProductDashboardMainComponent = (props) => {
      * 워크스페이스 여부에 따라 페이지 렌더링 결정
      */
     useEffect(() => {
-        if (!workspaceRdx.info) {
+        if (!workspaceRedux.workspaceInfo) {
             setIsLoading(true);
             return;
         }
         dispatchWorkspace({
             type: 'SET_DATA',
-            payload: { ...workspaceRdx.info }
+            payload: { ...workspaceRedux.workspaceInfo }
         })
         setIsLoading(false);
 
-    }, [workspaceRdx.info]);
+    }, [workspaceRedux.workspaceInfo]);
 
     /**
      * 워크스페이스 로딩후 패치 작업

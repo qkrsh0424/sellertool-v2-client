@@ -15,8 +15,8 @@ import PreviewTableComponent from "./preview-table/PreviewTable.component";
 
 
 const ErpOrderUploadComponent = (props) => {
-    const userRdx = useSelector(state => state.userState);
-    const workspaceRdx = useSelector(state => state.workspaceState);
+    const userRedux = useSelector(state => state.userRedux);
+    const workspaceRedux = useSelector(state => state.workspaceRedux);
     const router = useRouter();
 
     const {
@@ -129,7 +129,7 @@ const ErpOrderUploadComponent = (props) => {
      * 로그인 체크
      */
     useEffect(() => {
-        if (!userRdx.isLoading && !userRdx.info) {
+        if (!userRedux.isLoading && !userRedux?.userInfo) {
             alert('로그인이 필요한 서비스 입니다.');
             router.replace({
                 pathname: '/login'
@@ -137,20 +137,20 @@ const ErpOrderUploadComponent = (props) => {
             return;
         }
 
-    }, [userRdx.isLoading, userRdx.info]);
+    }, [userRedux.isLoading, userRedux?.userInfo]);
 
     /**
      * 워크스페이스 상태 체크
      */
     useEffect(() => {
-        if (!workspaceRdx.info) {
+        if (!workspaceRedux.workspaceInfo) {
             setIsWorkspaceReady(false);
             return;
         }
 
         setIsWorkspaceReady(true);
 
-    }, [workspaceRdx.info]);
+    }, [workspaceRedux.workspaceInfo]);
 
     /**
      * Socket subscribe
@@ -161,13 +161,13 @@ const ErpOrderUploadComponent = (props) => {
         const __effect = {
             mount: async () => {
                 onActionOpenSocketConnectLoading();
-                if (!connected || !workspaceRdx.info) {
+                if (!connected || !workspaceRedux.workspaceInfo) {
                     return;
                 }
 
                 subscribes = await onSubscribes([
                     {
-                        subscribeUrl: `/topic/workspace.${workspaceRdx.info.id}.erp.erp-order-item`,
+                        subscribeUrl: `/topic/workspace.${workspaceRedux.workspaceInfo.id}.erp.erp-order-item`,
                         callback: async (e) => {
                             let body = JSON.parse(e.body);
                             if (body?.statusCode === 200) {
@@ -187,7 +187,7 @@ const ErpOrderUploadComponent = (props) => {
         return () => {
             __effect.unmount();
         };
-    }, [connected, workspaceRdx.info]);
+    }, [connected, workspaceRedux.workspaceInfo]);
 
     const _onSubmit_uploadExcelFile = async (formData) => {
         onActionOpenBackdrop();
@@ -204,7 +204,7 @@ const ErpOrderUploadComponent = (props) => {
             alert('워크스페이스를 선택해 주세요.');
             return;
         }
-        let workspaceId = workspaceRdx.info.id;
+        let workspaceId = workspaceRedux.workspaceInfo.id;
         onActionOpenBackdrop();
         await __reqCreateOrderItemsSocket(workspaceId, excelDataList);
         onActionCloseBackdrop();
@@ -244,11 +244,11 @@ const ErpOrderUploadComponent = (props) => {
         })
     }
 
-    if (userRdx.isLoading === true) {
+    if (userRedux.isLoading === true) {
         return null;
     }
 
-    if (userRdx.isLoading === false && (!userRdx.info)) {
+    if (userRedux.isLoading === false && (!userRedux?.userInfo)) {
         return (
             <NotAllowedComponent></NotAllowedComponent>
         );

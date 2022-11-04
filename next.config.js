@@ -10,15 +10,20 @@ module.exports = {
       socketAddress: 'http://localhost:8081/wsc'
     },
     production: {
-      clientAddress: 'https://www.sellertool.io',
-      apiAddress: 'https://api.sellertl.com',
-      scpApiAddress: 'https://scp.sellertl.com',
-      authApiAddress: 'https://auth.sellertl.com',
-      socketAddress: 'http://api.sellertl.com/wsc'
+      // clientAddress: 'https://www.sellertool.io',
+      // apiAddress: 'https://api.sellertl.com',
+      // scpApiAddress: 'https://scp.sellertl.com',
+      // authApiAddress: 'https://auth.sellertl.com',
+      // socketAddress: 'http://api.sellertl.com/wsc'
+      clientAddress: 'http://localhost:3000',
+      apiAddress: 'http://localhost:8081',
+      scpApiAddress: 'http://localhost:7081',
+      authApiAddress: 'http://localhost:9081',
+      socketAddress: 'http://localhost:8081/wsc'
     }
   },
   images: {
     loader: "imgix",
-    path: "http://localhost:3000",
+    path: "http://localhost:300",
   },
 }

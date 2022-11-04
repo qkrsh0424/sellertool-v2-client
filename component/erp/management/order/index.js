@@ -34,7 +34,7 @@ const DEFAULT_HEADER_FIELDS = getDefaultHeaderFields();
 
 const OrderComponent = (props) => {
     const router = useRouter();
-    const workspaceRdx = useSelector(state => state.workspaceState);
+    const workspaceRedux = useSelector(state => state.workspaceRedux);
 
     const {
         connected,
@@ -72,7 +72,7 @@ const OrderComponent = (props) => {
 
     // Search
     const __reqSearchViewHeaderOne = async () => {
-        let workspaceId = workspaceRdx.info.id;
+        let workspaceId = workspaceRedux.workspaceInfo.id;
 
         console.log(workspaceId);
         let params = {
@@ -189,7 +189,7 @@ const OrderComponent = (props) => {
     // Create
     const __reqCreateOrderHeaderOneSocket = async (body) => {
         let params = {
-            workspaceId: workspaceRdx.info.id
+            workspaceId: workspaceRedux.workspaceInfo.id
         }
         await csrfDataConnect().getApiCsrf();
         await erpOrderHeaderSocket().createOne(params, body)
@@ -207,7 +207,7 @@ const OrderComponent = (props) => {
     // Update And Change
     const __reqUpdateOrderHeaderOneSocket = async (body) => {
         let params = {
-            workspaceId: workspaceRdx.info.id
+            workspaceId: workspaceRedux.workspaceInfo.id
         }
         await csrfDataConnect().getApiCsrf();
         await erpOrderHeaderSocket().updateOne(params, body)
@@ -304,14 +304,14 @@ const OrderComponent = (props) => {
     }
 
     useEffect(() => {
-        if (!workspaceRdx.info) {
+        if (!workspaceRedux.workspaceInfo) {
             return;
         }
 
         __reqSearchViewHeaderOne();
         __reqSearchProductOptionList();
         __reqSearchDownloadExcelHeaders();
-    }, [workspaceRdx.info]);
+    }, [workspaceRedux.workspaceInfo]);
 
     useEffect(() => {
         async function fetchInit() {
@@ -331,7 +331,7 @@ const OrderComponent = (props) => {
         const __effect = {
             mount: async () => {
                 onActionOpenSocketConnectLoading();
-                if (!connected || !workspaceRdx.info) {
+                if (!connected || !workspaceRedux.workspaceInfo) {
                     return;
                 }
 
@@ -371,7 +371,7 @@ const OrderComponent = (props) => {
         return () => {
             __effect.unmount();
         };
-    }, [connected, workspaceRdx.info]);
+    }, [connected, workspaceRedux.workspaceInfo]);
 
     useEffect(() => {
         async function fetchCheckedOrderItems() {
@@ -515,7 +515,7 @@ const OrderComponent = (props) => {
         <>
             {connected &&
                 <Container>
-                    <div>{workspaceRdx?.info?.id}</div>
+                    <div>{workspaceRedux?.workspaceInfo?.id}</div>
                     <div>{viewHeader?.id}</div>
                     <HeaderComponent
                         _onAction_openHeaderSettingModal={_onAction_openHeaderSettingModal}

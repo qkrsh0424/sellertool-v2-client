@@ -5,9 +5,6 @@ import ErpOrderUploadComponent from '../../../../component/erp/management/order-
 import FooterMain from '../../../../component/footer/FooterMain';
 import PrimaryNavbarMainComponent from '../../../../component/navbar/primary-navbar';
 import SecondaryNavbarMainComponent from '../../../../component/navbar/secondary-navbar-v2';
-// import ErpManagementNavbar from '../../../../component/erp/management/navbar/ErpManagementNavbar';
-// import ErpOrderUploadComponent from '../../../../component/erp/management/order-upload';
-// import NavbarMain from '../../../../component/navbar/NavbarMain';
 const Container = styled.div`
 
 `;

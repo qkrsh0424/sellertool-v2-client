@@ -14,8 +14,16 @@
     justify-content: center;
 }
 
+.mgl-flex-justifyContent-flexEnd{
+    justify-content: flex-end;
+}
+
 .mgl-flex-alignItems-center{
     align-items: center;
+}
+
+.mgl-flex-alignItems-flexStart{
+    align-items: flex-start;
 }
 
 .mgl-flex-flexWrap-wrap{

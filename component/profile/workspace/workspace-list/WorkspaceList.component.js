@@ -16,7 +16,7 @@ function TitleFieldView() {
 
 const WorkspaceListComponent = (props) => {
     const [isLoading, setIsLoading] = useState(true);
-    const userRdx = useSelector(state => state.userState);
+    const userRedux = useSelector(state => state.userRedux);
 
     useEffect(() => {
         if (props.workspaces) {
@@ -81,7 +81,7 @@ const WorkspaceListComponent = (props) => {
                                     </div>
                                 </div>
                                 <div>
-                                    {userRdx?.info?.id === r.masterId &&
+                                    {userRedux?.userInfo?.id === r.masterId &&
                                         <span className='badge'>HOST</span>
                                     }
                                 </div>

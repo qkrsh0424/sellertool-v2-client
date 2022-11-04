@@ -73,7 +73,7 @@ export default function MarketingComponent(props) {
                         <div className='icon-figure'>
                             <Image
                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                src={'http://localhost:3000/images/icon/phone_default_808080.svg'}
+                                src={'/images/icon/phone_default_808080.svg'}
                                 layout='responsive'
                                 width={1}
                                 height={1}
@@ -118,7 +118,7 @@ export default function MarketingComponent(props) {
                         <div className='icon-figure'>
                             <Image
                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                src={'http://localhost:3000/images/icon/mail_default_808080.svg'}
+                                src={'/images/icon/mail_default_808080.svg'}
                                 layout='responsive'
                                 width={1}
                                 height={1}

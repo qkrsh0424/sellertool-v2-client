@@ -88,7 +88,7 @@ const Layout = (props) => {
                                     <Image
                                         className='link-icon'
                                         loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                        src='http://localhost:3000/images/icon/face_icon.png'
+                                        src='/images/icon/face_icon.png'
                                         layout='fill'
                                         alt="face icon"
                                     ></Image>
@@ -107,7 +107,7 @@ const Layout = (props) => {
                                     <Image
                                         className='link-icon'
                                         loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                        src='http://localhost:3000/images/icon/workspace_icon.png'
+                                        src='/images/icon/workspace_icon.png'
                                         layout='fill'
                                         alt="workspace icon"
                                     ></Image>

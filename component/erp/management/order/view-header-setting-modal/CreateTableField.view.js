@@ -45,7 +45,7 @@ export default function CreateTableFieldView(props) {
                                                     <div className='icon-item'>
                                                         <Image
                                                             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                            src={`http://localhost:3000/images/icon/left_arrow_white_icon.png`}
+                                                            src={`/images/icon/left_arrow_white_icon.png`}
                                                             className='icon-el'
                                                             layout="responsive"
                                                             width={1}
@@ -64,7 +64,7 @@ export default function CreateTableFieldView(props) {
                                                     <div className='icon-item'>
                                                         <Image
                                                             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                            src={`http://localhost:3000/images/icon/right_arrow_white_icon.png`}
+                                                            src={`/images/icon/right_arrow_white_icon.png`}
                                                             className='icon-el'
                                                             layout="responsive"
                                                             width={1}

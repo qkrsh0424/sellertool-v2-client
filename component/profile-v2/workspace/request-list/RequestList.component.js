@@ -67,7 +67,7 @@ const RequestListComponent = ({
                             <div className='refresh-button-icon-figure'>
                                 <Image
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src={'http://localhost:3000/images/icon/refresh_default_808080.svg'}
+                                    src={'/images/icon/refresh_default_808080.svg'}
                                     layout='responsive'
                                     width={1}
                                     height={1}

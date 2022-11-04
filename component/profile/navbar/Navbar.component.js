@@ -44,7 +44,7 @@ export default function NavbarComponent(props) {
                     >
                         <Image
                             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                            src={'http://localhost:3000/images/icon/groups_default_808080.svg'}
+                            src={'/images/icon/groups_default_808080.svg'}
                             layout='responsive'
                             width={1}
                             height={1}
@@ -66,7 +66,7 @@ export default function NavbarComponent(props) {
                     >
                         <Image
                             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                            src={'http://localhost:3000/images/icon/groupAdd_default_808080.svg'}
+                            src={'/images/icon/groupAdd_default_808080.svg'}
                             layout='responsive'
                             width={1}
                             height={1}

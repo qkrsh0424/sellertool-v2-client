@@ -287,7 +287,7 @@ function CategorySelectorField({
                 <div className='category-add-button-icon-figure'>
                     <Image
                         loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                        src='http://localhost:3000/images/icon/add_icon2.png'
+                        src='/images/icon/add_icon2.png'
                         layout='fill'
                         alt="add icon"
                     />

@@ -88,7 +88,7 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
                         <div className='header-close-button-icon'>
                             <Image
                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                src='http://localhost:3000/images/icon/close_default_959eae.svg'
+                                src='/images/icon/close_default_959eae.svg'
                                 layout='responsive'
                                 width={1}
                                 height={1}
@@ -152,7 +152,7 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
                                                                     <div className='icon-figure'>
                                                                         <Image
                                                                             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                                            src='http://localhost:3000/images/icon/arrowUpDown_default_808080.svg'
+                                                                            src='/images/icon/arrowUpDown_default_808080.svg'
                                                                             layout='responsive'
                                                                             width={1}
                                                                             height={1}
@@ -243,7 +243,7 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
                                                                         <div className='icon-figure'>
                                                                             <Image
                                                                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                                                src='http://localhost:3000/images/icon/delete_default_e56767.svg'
+                                                                                src='/images/icon/delete_default_e56767.svg'
                                                                                 layout='responsive'
                                                                                 width={1}
                                                                                 height={1}
@@ -281,7 +281,7 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
                                 <div className='icon-figure'>
                                     <Image
                                         loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                        src='http://localhost:3000/images/icon/add_default_ffffff.svg'
+                                        src='/images/icon/add_default_ffffff.svg'
                                         layout='responsive'
                                         width={1}
                                         height={1}

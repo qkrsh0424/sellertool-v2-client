@@ -161,7 +161,7 @@ export default function InformationComponent(props) {
                             >
                                 <Image
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src={userRedux?.userInfo?.profileImageUri || 'http://localhost:3000/images/icon/person_default_808080.svg'}
+                                    src={userRedux?.userInfo?.profileImageUri || '/images/icon/person_default_808080.svg'}
                                     layout='responsive'
                                     width={1}
                                     height={1}
@@ -196,7 +196,7 @@ export default function InformationComponent(props) {
                             <div className='icon-figure'>
                                 <Image
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src={'http://localhost:3000/images/icon/person_default_808080.svg'}
+                                    src={'/images/icon/person_default_808080.svg'}
                                     layout='responsive'
                                     width={1}
                                     height={1}
@@ -224,7 +224,7 @@ export default function InformationComponent(props) {
                             <div className='icon-figure'>
                                 <Image
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src={'http://localhost:3000/images/icon/phone_default_808080.svg'}
+                                    src={'/images/icon/phone_default_808080.svg'}
                                     layout='responsive'
                                     width={1}
                                     height={1}
@@ -252,7 +252,7 @@ export default function InformationComponent(props) {
                             <div className='icon-figure'>
                                 <Image
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src={'http://localhost:3000/images/icon/mail_default_808080.svg'}
+                                    src={'/images/icon/mail_default_808080.svg'}
                                     layout='responsive'
                                     width={1}
                                     height={1}
@@ -280,7 +280,7 @@ export default function InformationComponent(props) {
                             <div className='icon-figure'>
                                 <Image
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src={'http://localhost:3000/images/icon/lock_default_808080.svg'}
+                                    src={'/images/icon/lock_default_808080.svg'}
                                     layout='responsive'
                                     width={1}
                                     height={1}

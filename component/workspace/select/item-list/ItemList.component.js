@@ -76,7 +76,7 @@ export default function ItemListComponent(props) {
                                                     <div className='manage-button-icon-figure'>
                                                         <Image
                                                             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                            src={`http://localhost:3000/images/icon/settings_default_808080.svg`}
+                                                            src={`/images/icon/settings_default_808080.svg`}
                                                             className='icon-el'
                                                             layout="responsive"
                                                             width={1}
@@ -129,7 +129,7 @@ export default function ItemListComponent(props) {
                                                     <div className='manage-button-icon-figure'>
                                                         <Image
                                                             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                            src={`http://localhost:3000/images/icon/settings_default_808080.svg`}
+                                                            src={`/images/icon/settings_default_808080.svg`}
                                                             className='icon-el'
                                                             layout="responsive"
                                                             width={1}

@@ -173,7 +173,7 @@ const ViewHeaderSettingModalComponent = (props) => {
                 <div style={{ textAlign: 'center', marginTop: '20px', padding: '20px 0' }}>
                     <Image
                         loader={({src, width, quality})=>`${src}?q=${quality || 75}`}
-                        src={`http://localhost:3000/images/icon/down_arrow_icon.png`}
+                        src={`/images/icon/down_arrow_icon.png`}
                         width={32}
                         height={32}
                         alt={'down arrow icon'}

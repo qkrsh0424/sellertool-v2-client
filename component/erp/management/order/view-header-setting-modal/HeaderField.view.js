@@ -21,7 +21,7 @@ function Button({ onActionSaveAndModify }) {
                 <div className='icon-box'>
                     <Image
                         loader={({src, width, quality}) => `${src}?q=${quality || 75}`}
-                        src={`http://localhost:3000/images/icon/add_white_icon.png`}
+                        src={`/images/icon/add_white_icon.png`}
                         className='icon-el'
                         layout="responsive"
                         width={1}

@@ -50,7 +50,7 @@ const WorkspaceListComponent = (props) => {
                                             <Image
                                                 className='item-icon-el'
                                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                src='http://localhost:3000/images/icon/default_group_icon.png'
+                                                src='/images/icon/default_group_icon.png'
                                                 layout='fill'
                                                 alt="face icon"
                                             ></Image>
@@ -59,7 +59,7 @@ const WorkspaceListComponent = (props) => {
                                             <Image
                                                 className='item-icon-el'
                                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                src='http://localhost:3000/images/icon/default_private_icon.png'
+                                                src='/images/icon/default_private_icon.png'
                                                 layout='fill'
                                                 alt="face icon"
                                             ></Image>

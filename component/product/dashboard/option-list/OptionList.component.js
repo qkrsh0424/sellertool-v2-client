@@ -356,7 +356,7 @@ function HeadField({
                         <Image
                             className='button-icon'
                             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                            src='http://localhost:3000/images/icon/add_icon2.png'
+                            src='/images/icon/add_icon2.png'
                             layout='fill'
                             alt="add icon"
                             loading='lazy'
@@ -374,7 +374,7 @@ function HeadField({
                                 <Image
                                     className='button-icon'
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src='http://localhost:3000/images/icon/pen_icon2.png'
+                                    src='/images/icon/pen_icon2.png'
                                     layout='fill'
                                     alt="add icon"
                                     loading='lazy'
@@ -390,7 +390,7 @@ function HeadField({
                                 <Image
                                     className='button-icon'
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src='http://localhost:3000/images/icon/x_icon.png'
+                                    src='/images/icon/x_icon.png'
                                     layout='fill'
                                     alt="add icon"
                                     loading='lazy'

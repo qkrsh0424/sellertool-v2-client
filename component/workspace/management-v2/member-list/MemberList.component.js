@@ -119,7 +119,7 @@ const MemberListComponent = ({
                             <div className='refresh-button-icon-figure'>
                                 <Image
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src={'http://localhost:3000/images/icon/refresh_default_808080.svg'}
+                                    src={'/images/icon/refresh_default_808080.svg'}
                                     layout='responsive'
                                     width={1}
                                     height={1}
@@ -144,7 +144,7 @@ const MemberListComponent = ({
                                     <div className='profile-image-figure'>
                                         <Image
                                             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                            src={r?.user?.profileImageUri || 'http://localhost:3000/images/icon/person_default_808080.svg'}
+                                            src={r?.user?.profileImageUri || '/images/icon/person_default_808080.svg'}
                                             layout='responsive'
                                             width={1}
                                             height={1}

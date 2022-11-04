@@ -38,7 +38,7 @@ export default function InviteMemberModalComponent({
                         <div className='header-close-button-icon'>
                             <Image
                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                src='http://localhost:3000/images/icon/close_default_959eae.svg'
+                                src='/images/icon/close_default_959eae.svg'
                                 layout='responsive'
                                 width={1}
                                 height={1}

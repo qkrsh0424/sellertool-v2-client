@@ -103,7 +103,7 @@ const CustomCheckboxV2 = ({
             >
                 <Image
                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                    src={`http://localhost:3000/images/icon/check_default_ffffff.svg`}
+                    src={`/images/icon/check_default_ffffff.svg`}
                     className='icon-el'
                     layout="responsive"
                     width={1}

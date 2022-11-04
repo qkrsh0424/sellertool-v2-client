@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Container, LogoImgEl } from "./LogoField.styled";
 
-const LogoSrc = 'http://localhost:3000/images/logo/logo1.png';
+const LogoSrc = '/images/logo/logo1.png';
 
 const LogoFieldComponent = (props) => {
     return (

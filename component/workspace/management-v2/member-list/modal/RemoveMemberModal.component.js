@@ -31,7 +31,7 @@ export default function RemoveMemberModalComponent({
                         <div className='header-close-button-icon'>
                             <Image
                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                src='http://localhost:3000/images/icon/close_default_959eae.svg'
+                                src='/images/icon/close_default_959eae.svg'
                                 layout='responsive'
                                 width={1}
                                 height={1}
@@ -54,7 +54,7 @@ export default function RemoveMemberModalComponent({
                             <div className='profile-figure'>
                                 <Image
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src={removeTargetMember?.user?.profileImageUri || 'http://localhost:3000/images/icon/person_default_808080.svg'}
+                                    src={removeTargetMember?.user?.profileImageUri || '/images/icon/person_default_808080.svg'}
                                     layout='responsive'
                                     width={1}
                                     height={1}

@@ -8,7 +8,7 @@ function Checkbox({ publicYn, selectedPublicYn }) {
                 <div className={`icon-figure ${publicYn === selectedPublicYn ? 'icon-figure-active' : ''}`}>
                     <Image
                         loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                        src='http://localhost:3000/images/icon/check_default_ffffff.svg'
+                        src='/images/icon/check_default_ffffff.svg'
                         layout='fill'
                         alt=""
                         loading="lazy"
@@ -89,7 +89,7 @@ export default function ItemListFieldView(props) {
                 <Item
                     publicYn={'y'}
                     selectedPublicYn={props.workspaceCreateForm.publicYn}
-                    avatarSrc={'http://localhost:3000/images/icon/groups_default_505050.svg'}
+                    avatarSrc={'/images/icon/groups_default_505050.svg'}
                     title={'팀용'}
                     description={'팀원들과 셀러툴의 기능들을 함께 사용해 보세요.'}
                     serviceDescription={'무료 서비스 체험하기'}
@@ -98,7 +98,7 @@ export default function ItemListFieldView(props) {
                 <Item
                     publicYn={'n'}
                     selectedPublicYn={props.workspaceCreateForm.publicYn}
-                    avatarSrc={'http://localhost:3000/images/icon/person_default_505050.svg'}
+                    avatarSrc={'/images/icon/person_default_505050.svg'}
                     title={'개인용'}
                     description={'사용 목적에 맞게 더욱 체계적으로 관리해 보세요.'}
                     serviceDescription={'개인 사용자에게 무료 제공'}

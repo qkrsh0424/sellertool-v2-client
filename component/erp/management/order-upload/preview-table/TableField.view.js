@@ -45,7 +45,7 @@ export default function TableFieldView(props) {
                                             <div className='delete-button-icon-figure'>
                                                 <Image
                                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                    src={`http://localhost:3000/images/icon/delete_white_icon.png`}
+                                                    src={`/images/icon/delete_white_icon.png`}
                                                     layout={'responsive'}
                                                     width={1}
                                                     height={1}

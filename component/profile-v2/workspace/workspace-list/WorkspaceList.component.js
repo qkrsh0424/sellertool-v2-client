@@ -36,7 +36,7 @@ const WorkspaceListComponent = ({
                             <div className='refresh-button-icon-figure'>
                                 <Image
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src={'http://localhost:3000/images/icon/refresh_default_808080.svg'}
+                                    src={'/images/icon/refresh_default_808080.svg'}
                                     layout='responsive'
                                     width={1}
                                     height={1}
@@ -63,7 +63,7 @@ const WorkspaceListComponent = ({
                                             <Image
                                                 className='item-icon-el'
                                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                src='http://localhost:3000/images/icon/groups_default_808080.svg'
+                                                src='/images/icon/groups_default_808080.svg'
                                                 layout='fill'
                                                 alt='image'
                                                 loading='lazy'
@@ -73,7 +73,7 @@ const WorkspaceListComponent = ({
                                             <Image
                                                 className='item-icon-el'
                                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                src='http://localhost:3000/images/icon/person_default_808080.svg'
+                                                src='/images/icon/person_default_808080.svg'
                                                 layout='fill'
                                                 alt='image'
                                                 loading='lazy'

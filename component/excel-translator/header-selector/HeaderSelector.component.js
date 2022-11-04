@@ -177,7 +177,7 @@ export default function HeaderSelectorComponent({
                                 <div className='button-icon-figure'>
                                     <Image
                                         loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                        src={'http://localhost:3000/images/icon/settings_default_808080.svg'}
+                                        src={'/images/icon/settings_default_808080.svg'}
                                         layout='responsive'
                                         width={1}
                                         height={1}
@@ -197,7 +197,7 @@ export default function HeaderSelectorComponent({
                                 <div className='button-icon-figure'>
                                     <Image
                                         loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                        src={'http://localhost:3000/images/icon/add_default_808080.svg'}
+                                        src={'/images/icon/add_default_808080.svg'}
                                         layout='responsive'
                                         width={1}
                                         height={1}
@@ -219,7 +219,7 @@ export default function HeaderSelectorComponent({
                                             <div className='button-icon-figure'>
                                                 <Image
                                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                    src={'http://localhost:3000/images/icon/rename_default_808080.svg'}
+                                                    src={'/images/icon/rename_default_808080.svg'}
                                                     layout='responsive'
                                                     width={1}
                                                     height={1}
@@ -237,7 +237,7 @@ export default function HeaderSelectorComponent({
                                             <div className='button-icon-figure'>
                                                 <Image
                                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                    src={'http://localhost:3000/images/icon/delete_default_e56767.svg'}
+                                                    src={'/images/icon/delete_default_e56767.svg'}
                                                     layout='responsive'
                                                     width={1}
                                                     height={1}

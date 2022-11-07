@@ -24,6 +24,23 @@ export default function useModifyDownloadHeaderDetailFormHook({
         setModifyDownloadHeaderDetailForm(excelTranslatorHeader?.downloadHeaderDetail);
     }
 
+    const onActionSelectExistingHeaderDetail = (data) => {
+        if (!data?.downloadHeaderDetail) {
+            setModifyDownloadHeaderDetailForm({
+                details: []
+            });
+            return;
+        }
+
+        let downloadHeaderDetail = _.cloneDeep(data?.downloadHeaderDetail);
+        downloadHeaderDetail?.details.forEach(r=>{
+            r.targetCellNumber = '0';
+            r.fixedValue = '';
+        })
+
+        setModifyDownloadHeaderDetailForm(downloadHeaderDetail);
+    }
+
     const reqUploadSampleExcel = async ({
         formData,
         successCallback
@@ -256,7 +273,7 @@ export default function useModifyDownloadHeaderDetailFormHook({
 
     const checkFixedValueFormatValid = () => {
         modifyDownloadHeaderDetailForm?.details?.forEach((r, index) => {
-            if(r.targetCellNumber != '-1'){
+            if (r.targetCellNumber != '-1') {
                 return;
             }
 
@@ -276,6 +293,7 @@ export default function useModifyDownloadHeaderDetailFormHook({
 
     return {
         modifyDownloadHeaderDetailForm,
+        onActionSelectExistingHeaderDetail,
         reqUploadSampleExcel,
         onActionAddDetails,
         onActionDeleteDetail,

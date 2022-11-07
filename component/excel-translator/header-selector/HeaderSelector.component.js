@@ -6,7 +6,7 @@ import SingleBlockButton from "../../modules/button/SingleBlockButton";
 import CommonModalComponent from "../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../modules/modal/ConfirmModalComponentV2";
 import CustomSelect from "../../modules/select/CustomSelect";
-import useExcelTranslatorHeaderHook from "./hooks/useExcelTranslatorHeaderHook";
+import useExcelTranslatorHeaderHook from "../hooks/useExcelTranslatorHeaderHook";
 import CreateExcelTranslatorHeaderModalComponent from "./modal/CreateExcelTranslatorHeaderModal.component";
 import ModifyExcelTranslatorHeaderModalComponent from "./modal/ModifyExcelTranslatorHeaderModal.component";
 import ModifyViewExcelTranslatorHeadersModalComponent from "./modal/ModifyViewExcelTranslatorHeadersModal.component";

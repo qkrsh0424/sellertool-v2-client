@@ -44,6 +44,7 @@ export const Container = styled.div`
 
     .content-group{
         padding: 0 20px;
+        margin-bottom: 20px;
 
         
         .content-box{
@@ -52,90 +53,14 @@ export const Container = styled.div`
             padding: 10px;
             border-radius: 15px;
             box-shadow: var(--defaultBoxShadow);
-            
-            .input-box{
-                flex:1;
-                padding: 0 10px;
+            line-height: 1.7;
+            cursor: pointer;
+            font-size: 16px;
+            color:#404040;
 
-                .input-label{
-                    font-size: 10px;
-                    margin-bottom: 2px;
-                    color: #808080;
-                }
-
-                .input-el{
-                    width:100%;
-                    box-sizing: border-box;
-                    padding: 15px 10px;
-                    font-size: 14px;
-                    border:1px solid #e0e0e0;
-                    border-radius: 5px;
-                    flex:1;
-
-                    &:focus{
-                        outline:none;
-                        border:1px solid var(--mainColor);
-                        box-shadow: var(--defaultBoxShadow);
-                    }
-                }
-            }
-
-            .order-box{
-                padding:0 10px;
-
-                @media all and (max-width: 992px){
-                    display: none;
-                }
-                
-                .icon-figure{
-                    width:20px;
-                    height: 20px;
-                }
-            }
-
-            .number-box{
-                padding:0 10px;
-                .number{
-
-                }
-            }
-
-            .delete-button-box{
-                padding:0 10px;
-                .delete-button{
-                    margin:0;
-                    padding:0;
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 50%;
-                    border:1px solid #f0f0f0;
-                    box-shadow: var(--defaultBoxShadow);
-
-                    .icon-figure{
-                        width:70%;
-                        height: 70%;
-                        margin-left: auto;
-                        margin-right: auto;
-                    }
-                }
-            }
-        }
-
-        .add-button{
-            margin:0;
-            padding:0;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border:1px solid #f0f0f0;
-            background: var(--mainColor);
-            box-shadow: var(--defaultBoxShadow);
-
-            .icon-figure{
-                width:70%;
-                height: 70%;
-                margin-left: auto;
-                margin-right: auto;
+            .header-count{
+                font-size: 14px;
+                color: #808080
             }
         }
     }

@@ -1,17 +1,30 @@
 import Image from "next/image";
 import { useState } from "react";
+import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
+import { dateToYYMMDDhhmmss } from "../../../utils/dateFormatUtils";
 import valueUtils from "../../../utils/valueUtils";
 import SingleBlockButton from "../../modules/button/SingleBlockButton";
 import CommonModalComponent from "../../modules/modal/CommonModalComponent";
 import ResizableTh from "../../modules/table/ResizableTh";
+import CustomExcelFileUploader from "../../modules/uploader/CustomExcelFileUploader";
 import ModifyUploadHeaderDetailsModalComponent from "./modal/ModifyUploadHeaderDetailsModal.component";
 import { ButtonGroup, Container, TableBox, TableWrapper, Title, Wrapper } from "./styles/UploadField.styled";
 
 export default function UploadFieldComponent({
+    excelTranslatorHeaders,
     excelTranslatorHeader,
-    onSubmitModifyUploadHeaderDetail
+    excelTranslatorDatas,
+    onSubmitModifyUploadHeaderDetail,
+    onSubmitUploadDataExcel,
+    onSubmitDownloadSampleExcelForUploadHeader
 }) {
     const [modifyUploadHeaderDetailsModalOpen, setModifyUploadHeaderDetailsModalOpen] = useState(false);
+    const [excelUploaderModalOpen, setExcelUploaderModalOpen] = useState(false);
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
 
     const __handle = {
         action: {
@@ -20,6 +33,12 @@ export default function UploadFieldComponent({
             },
             closeModifyUploadHeaderDetailsModal: () => {
                 setModifyUploadHeaderDetailsModalOpen(false);
+            },
+            openExcelUploaderModal: () => {
+                setExcelUploaderModalOpen(true);
+            },
+            closeExcelUploaderModal: () => {
+                setExcelUploaderModalOpen(false);
             }
         },
         submit: {
@@ -35,6 +54,18 @@ export default function UploadFieldComponent({
                         __handle.action.closeModifyUploadHeaderDetailsModal();
                     }
                 })
+            },
+            uploadDataExcel: async ({
+                formData
+            }) => {
+                onActionOpenBackdrop();
+                await onSubmitUploadDataExcel({
+                    formData: formData,
+                    successCallback: () => {
+                        __handle.action.closeExcelUploaderModal();
+                    }
+                })
+                onActionCloseBackdrop();
             }
         }
     }
@@ -46,49 +77,60 @@ export default function UploadFieldComponent({
                     <Title>
                         업로드 엑셀
                     </Title>
-                    <ButtonGroup className='mgl-flex'>
+                    <ButtonGroup>
                         <div className='wrapper'>
                             <SingleBlockButton
                                 type='button'
-                                className='icon-button'
+                                className='box-button'
+                                onClick={() => __handle.action.openExcelUploaderModal()}
                             >
-                                <div className='button-icon-figure'>
-                                    <Image
-                                        loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                        src={'/images/icon/download_default_808080.svg'}
-                                        layout='responsive'
-                                        width={1}
-                                        height={1}
-                                        objectFit={'cover'}
-                                        alt='image'
-                                        loading='lazy'
-                                    ></Image>
-                                </div>
+                                엑셀 업로드
                             </SingleBlockButton>
-                            <SingleBlockButton
-                                type='button'
-                                className='icon-button'
-                                onClick={() => __handle.action.openModifyUploadHeaderDetailsModal()}
-                            >
-                                <div className='button-icon-figure'>
-                                    <Image
-                                        loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                        src={'/images/icon/settings_default_808080.svg'}
-                                        layout='responsive'
-                                        width={1}
-                                        height={1}
-                                        objectFit={'cover'}
-                                        alt='image'
-                                        loading='lazy'
-                                    ></Image>
-                                </div>
-                            </SingleBlockButton>
+                            <div className='mgl-flex'>
+                                <SingleBlockButton
+                                    type='button'
+                                    className='icon-button'
+                                    onClick={() => onSubmitDownloadSampleExcelForUploadHeader()}
+                                >
+                                    <div className='button-icon-figure'>
+                                        <Image
+                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                            src={'/images/icon/download_default_808080.svg'}
+                                            layout='responsive'
+                                            width={1}
+                                            height={1}
+                                            objectFit={'cover'}
+                                            alt='image'
+                                            loading='lazy'
+                                        ></Image>
+                                    </div>
+                                </SingleBlockButton>
+                                <SingleBlockButton
+                                    type='button'
+                                    className='icon-button'
+                                    onClick={() => __handle.action.openModifyUploadHeaderDetailsModal()}
+                                >
+                                    <div className='button-icon-figure'>
+                                        <Image
+                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                            src={'/images/icon/settings_default_808080.svg'}
+                                            layout='responsive'
+                                            width={1}
+                                            height={1}
+                                            objectFit={'cover'}
+                                            alt='image'
+                                            loading='lazy'
+                                        ></Image>
+                                    </div>
+                                </SingleBlockButton>
+                            </div>
                         </div>
                     </ButtonGroup>
                     {!valueUtils.isEmptyValues(excelTranslatorHeader?.uploadHeaderDetail?.details) &&
                         (
                             <Table
                                 uploadHeaderDetail={excelTranslatorHeader?.uploadHeaderDetail}
+                                excelTranslatorDatas={excelTranslatorDatas}
                             />
                         )
                     }
@@ -129,18 +171,40 @@ export default function UploadFieldComponent({
                     onClose={__handle.action.closeModifyUploadHeaderDetailsModal}
                 >
                     <ModifyUploadHeaderDetailsModalComponent
+                        excelTranslatorHeaders={excelTranslatorHeaders}
                         excelTranslatorHeader={excelTranslatorHeader}
                         onClose={__handle.action.closeModifyUploadHeaderDetailsModal}
                         onConfirm={__handle.submit.modifyUploadHeaderDetail}
                     />
                 </CommonModalComponent>
             }
+
+            {excelUploaderModalOpen &&
+                (
+                    <CustomExcelFileUploader
+                        open={excelUploaderModalOpen}
+
+                        onClose={__handle.action.closeExcelUploaderModal}
+                        onConfirm={__handle.submit.uploadDataExcel}
+                    />
+                )
+            }
+
+            {backdropOpen &&
+                (
+                    <BackdropHookComponent
+                        open={backdropOpen}
+                        onClose={() => { }}
+                    />
+                )
+            }
         </>
     );
 }
 
 function Table({
-    uploadHeaderDetail
+    uploadHeaderDetail,
+    excelTranslatorDatas
 }) {
     return (
         <TableWrapper>
@@ -151,68 +215,24 @@ function Table({
                     <TableHead
                         uploadHeaderDetail={uploadHeaderDetail}
                     />
-                    {/* <tbody>
-                        {rentalOrderProducts?.map((r, index) => {
-                            let pDate = dateFormatUtils().dateFromDateAndHH_mm(r.rentalOrderInfo.pickupDate, r.rentalOrderInfo.pickupTime);
-                            let rDate = dateFormatUtils().dateFromDateAndHH_mm(r.rentalOrderInfo.returnDate, r.rentalOrderInfo.returnTime);
-                            let diffHours = dateFormatUtils().getDiffHoursFromDates(pDate, rDate);
-
+                    <tbody>
+                        {excelTranslatorDatas?.map((r, index) => {
                             return (
                                 <tr
                                     key={r.id}
-                                    onClick={() => onActionSelectOne(r.id)}
                                 >
-                                    <td
-                                        className='fixed-col-left'
-                                    >
-                                        <input
-                                            type='checkbox'
-                                            checked={selectIds.includes(r.id) || false}
-                                            readOnly
-                                        ></input>
-                                    </td>
-                                    <td
-                                        className='fixed-col-left'
-                                        style={{
-                                            left: '50px'
-                                        }}
-                                    >{dateFormatUtils().dateToYYMMDDHHmmss(r.rentalOrderInfo.createdAt, 'Invalid Date')}</td>
-                                    <td
-                                        className='fixed-col-left'
-                                        style={{
-                                            left: '180px',
-                                            width: '130px'
-                                        }}
-                                    >
-                                        {r.rentalOrderInfo.borrower}
-                                    </td>
-                                    <td>{r.rentalOrderInfo.borrowerPhoneNumber}</td>
-                                    <td>{r.productName}</td>
-                                    <td>{r.unit} 개</td>
-                                    <td>{dateFormatUtils().dateToYYMMDD(r.rentalOrderInfo.pickupDate, 'Invalid Date')} {r.rentalOrderInfo.pickupTime}</td>
-                                    <td>{dateFormatUtils().dateToYYMMDD(r.rentalOrderInfo.returnDate, 'Invalid Date')} {r.rentalOrderInfo.returnTime}</td>
-                                    <td>{r.rentalOrderInfo.pickupPlace}</td>
-                                    <td>{r.rentalOrderInfo.returnPlace}</td>
-                                    <td>{diffHours}H</td>
-                                    <td>{numberFormatHandler().numberWithCommas(r.price || 0)} 원</td>
-                                    <td>{r.discountYn === 'y' && (diffHours >= r.discountMinimumHour) ? r.discountRate : '0'} %</td>
-                                    <td>
+                                    {r?.details?.map(detail => {
+                                        return (
+                                            <td key={detail.id}>
+                                                <span>{detail.cellType === 'Date' ? dateToYYMMDDhhmmss(detail.colData) : detail.colData}</span>
+                                            </td>
 
-                                        {
-                                            numberFormatHandler().numberWithCommas(__ext_calcTotalPrice({
-                                                price: r.price,
-                                                unit: r.unit,
-                                                diffHours: diffHours,
-                                                discountYn: r.discountYn,
-                                                discountRate: r.discountRate,
-                                                discountMinimumHour: r.discountMinimumHour
-                                            }) || 0)
-                                        } 원
-                                    </td>
+                                        );
+                                    })}
                                 </tr>
                             );
                         })}
-                    </tbody> */}
+                    </tbody>
                 </table>
             </TableBox>
         </TableWrapper>

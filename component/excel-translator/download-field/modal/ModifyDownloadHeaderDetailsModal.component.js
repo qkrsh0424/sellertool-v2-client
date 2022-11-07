@@ -9,8 +9,11 @@ import CustomSelect from "../../../modules/select/CustomSelect";
 import CustomCheckboxV2 from "../../../modules/checkbox/CustomCheckboxV2";
 import CustomExcelFileUploader from "../../../modules/uploader/CustomExcelFileUploader";
 import { useState } from "react";
+import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
+import LoadExistingModalComponent from "./LoadExistingModal.component";
 
 export default function ModifyDownloadHeaderDetailsModalComponent({
+    excelTranslatorHeaders,
     excelTranslatorHeader,
     onClose,
     onConfirm
@@ -18,6 +21,7 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
     const {
         modifyDownloadHeaderDetailForm,
+        onActionSelectExistingHeaderDetail,
         reqUploadSampleExcel,
         onActionAddDetails,
         onActionDeleteDetail,
@@ -36,6 +40,7 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
     });
 
     const [excelUploaderModalOpen, setExcelUploaderModalOpen] = useState(false);
+    const [loadExistingModeOpen, setLoadExistingModeOpen] = useState(false);
 
     const __handle = {
         action: {
@@ -44,6 +49,12 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
             },
             closeExcelUploaderModal: () => {
                 setExcelUploaderModalOpen(false);
+            },
+            openLoadExistingMode: () => {
+                setLoadExistingModeOpen(true);
+            },
+            closeLoadExistingMode: () => {
+                setLoadExistingModeOpen(false);
             }
         },
         submit: {
@@ -112,6 +123,7 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
                         <SingleBlockButton
                             type='button'
                             className='loadSampleExcel-button'
+                            onClick={() => __handle.action.openLoadExistingMode()}
                         >
                             양식 불러오기
                         </SingleBlockButton>
@@ -318,6 +330,22 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
                     </div>
                 </form>
             </Container>
+            {loadExistingModeOpen &&
+                (
+                    <CommonModalComponent
+                        open={loadExistingModeOpen}
+
+                        onClose={__handle.action.closeLoadExistingMode}
+                    >
+                        <LoadExistingModalComponent
+                            excelTranslatorHeaders={excelTranslatorHeaders}
+                            onClose={__handle.action.closeLoadExistingMode}
+                            onActionSelectExistingHeaderDetail={onActionSelectExistingHeaderDetail}
+                        />
+                    </CommonModalComponent>
+                )
+            }
+
             {excelUploaderModalOpen &&
                 (
                     <CustomExcelFileUploader

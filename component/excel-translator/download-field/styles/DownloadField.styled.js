@@ -28,9 +28,22 @@ export const ButtonGroup = styled.div`
     .wrapper{
         flex:1;
         display: flex;
-        justify-content: flex-end;
-        padding: 10px 0;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 0;
         border-bottom: 1px solid #f0f0f0;
+    }
+
+    .box-button{
+        margin:0;
+        padding:0;
+        width: 150px;
+        height: 44px;
+        border: 1px solid #f0f0f0;
+        box-shadow: var(--defaultBoxShadow);
+        background:var(--mainColor);
+        color: #fff;
+        border-radius: 5px;
     }
 
     .icon-button{
@@ -115,7 +128,7 @@ export const TableBox = styled.div`
         box-sizing: border-box;
         padding:10px 5px;
 
-        background:#f0f0f060;
+        background:#f7f7f7;
         color: #333;
         font-weight: 600;
         position: sticky;

@@ -1,17 +1,43 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import valueUtils from "../../../utils/valueUtils";
 import SingleBlockButton from "../../modules/button/SingleBlockButton";
 import CommonModalComponent from "../../modules/modal/CommonModalComponent";
 import ResizableTh from "../../modules/table/ResizableTh";
 import ModifyDownloadHeaderDetailsModalComponent from "./modal/ModifyDownloadHeaderDetailsModal.component";
 import { ButtonGroup, Container, TableBox, TableWrapper, Title, Wrapper } from "./styles/DownloadField.styled";
+import { v4 as uuidv4 } from 'uuid';
+import _ from "lodash";
+import useDisabledBtn from "../../../hooks/button/useDisabledBtn";
+import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
+import LoadExistingModalComponent from "./modal/LoadExistingModal.component";
 
 export default function DownloadFieldComponent({
+    excelTranslatorHeaders,
     excelTranslatorHeader,
-    onSubmitModifyDownloadHeaderDetail
+    excelTranslatorDatas,
+    onSubmitModifyDownloadHeaderDetail,
+    onSubmitDownloadDataExcel,
+    onSubmitDownloadSampleExcelForDownloadHeader
 }) {
     const [modifyDownloadHeaderDetailsModalOpen, setModifyDownloadHeaderDetailsModalOpen] = useState(false);
+    const [downloadExcelDatas, setDownloadExcelDatas] = useState(null);
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
+
+    useEffect(() => {
+        if (!excelTranslatorDatas || !excelTranslatorHeader?.downloadHeaderDetail?.details) {
+            setDownloadExcelDatas(null);
+            return;
+        }
+
+        __handle.action.setDownloadExcelDatas();
+
+    }, [excelTranslatorDatas, excelTranslatorHeader?.downloadHeaderDetail?.details]);
 
     const __handle = {
         action: {
@@ -24,6 +50,38 @@ export default function DownloadFieldComponent({
             },
             closeModifyDownloadHeaderDetailsModal: () => {
                 setModifyDownloadHeaderDetailsModalOpen(false);
+            },
+            setDownloadExcelDatas: () => {
+                let datas = [];
+
+                for (let i = 0; i < excelTranslatorDatas.length; i++) {
+                    let detailDatas = [];
+                    for (let j = 0; j < excelTranslatorHeader?.downloadHeaderDetail?.details.length; j++) {
+                        if (excelTranslatorHeader?.downloadHeaderDetail?.details[j].targetCellNumber == '-1') {
+                            let detailData = {
+                                id: uuidv4(),
+                                colData: excelTranslatorHeader?.downloadHeaderDetail?.details[j].fixedValue,
+                                cellType: 'String'
+                            }
+
+                            detailDatas.push(detailData);
+                        } else {
+                            let detailData = {
+                                id: uuidv4(),
+                                colData: excelTranslatorDatas[i].details[excelTranslatorHeader?.downloadHeaderDetail?.details[j].targetCellNumber].colData,
+                                cellType: excelTranslatorDatas[i].details[excelTranslatorHeader?.downloadHeaderDetail?.details[j].targetCellNumber].cellType
+                            }
+                            detailDatas.push(detailData);
+                        }
+                    }
+
+                    datas.push({
+                        id: uuidv4(),
+                        details: detailDatas
+                    });
+                }
+
+                setDownloadExcelDatas(datas);
             }
         },
         submit: {
@@ -39,6 +97,41 @@ export default function DownloadFieldComponent({
                         __handle.action.closeModifyDownloadHeaderDetailsModal();
                     }
                 })
+            },
+            downloadDataExcel: async () => {
+                setDisabledBtn(true);
+                if (!excelTranslatorDatas || !downloadExcelDatas) {
+                    return;
+                }
+
+                // 엑셀 헤더 데이터 생성
+                let headerDetails = excelTranslatorHeader?.downloadHeaderDetail?.details.map(r => {
+                    return {
+                        id: uuidv4(),
+                        colData: r.headerName,
+                        cellType: 'String'
+                    }
+                })
+
+                let datas = _.cloneDeep(downloadExcelDatas);
+                datas.unshift({
+                    id: uuidv4(),
+                    details: headerDetails
+                });
+
+                let body = {
+                    uploadHeaderTitle: excelTranslatorHeader.uploadHeaderTitle,
+                    downloadHeaderTitle: excelTranslatorHeader.downloadHeaderTitle,
+                    excelTranslatorDatas: datas
+                };
+
+                onActionOpenBackdrop();
+                await onSubmitDownloadDataExcel({
+                    body: body,
+                    successCallback: () => {
+                    }
+                })
+                onActionCloseBackdrop();
             }
         }
     }
@@ -50,49 +143,61 @@ export default function DownloadFieldComponent({
                     <Title>
                         다운로드 엑셀
                     </Title>
-                    <ButtonGroup className='mgl-flex'>
+                    <ButtonGroup>
                         <div className='wrapper'>
                             <SingleBlockButton
                                 type='button'
-                                className='icon-button'
+                                className='box-button'
+                                onClick={() => __handle.submit.downloadDataExcel()}
+                                disabled={disabledBtn}
                             >
-                                <div className='button-icon-figure'>
-                                    <Image
-                                        loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                        src={'/images/icon/download_default_808080.svg'}
-                                        layout='responsive'
-                                        width={1}
-                                        height={1}
-                                        objectFit={'cover'}
-                                        alt='image'
-                                        loading='lazy'
-                                    ></Image>
-                                </div>
+                                엑셀 다운로드
                             </SingleBlockButton>
-                            <SingleBlockButton
-                                type='button'
-                                className='icon-button'
-                                onClick={() => __handle.action.openModifyDownloadHeaderDetailsModal()}
-                            >
-                                <div className='button-icon-figure'>
-                                    <Image
-                                        loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                        src={'/images/icon/settings_default_808080.svg'}
-                                        layout='responsive'
-                                        width={1}
-                                        height={1}
-                                        objectFit={'cover'}
-                                        alt='image'
-                                        loading='lazy'
-                                    ></Image>
-                                </div>
-                            </SingleBlockButton>
+                            <div className='mgl-flex'>
+                                <SingleBlockButton
+                                    type='button'
+                                    className='icon-button'
+                                    onClick={() => onSubmitDownloadSampleExcelForDownloadHeader()}
+                                >
+                                    <div className='button-icon-figure'>
+                                        <Image
+                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                            src={'/images/icon/download_default_808080.svg'}
+                                            layout='responsive'
+                                            width={1}
+                                            height={1}
+                                            objectFit={'cover'}
+                                            alt='image'
+                                            loading='lazy'
+                                        ></Image>
+                                    </div>
+                                </SingleBlockButton>
+                                <SingleBlockButton
+                                    type='button'
+                                    className='icon-button'
+                                    onClick={() => __handle.action.openModifyDownloadHeaderDetailsModal()}
+                                >
+                                    <div className='button-icon-figure'>
+                                        <Image
+                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                            src={'/images/icon/settings_default_808080.svg'}
+                                            layout='responsive'
+                                            width={1}
+                                            height={1}
+                                            objectFit={'cover'}
+                                            alt='image'
+                                            loading='lazy'
+                                        ></Image>
+                                    </div>
+                                </SingleBlockButton>
+                            </div>
                         </div>
                     </ButtonGroup>
                     {!valueUtils.isEmptyValues(excelTranslatorHeader?.downloadHeaderDetail?.details) &&
                         (
                             <Table
                                 downloadHeaderDetail={excelTranslatorHeader?.downloadHeaderDetail}
+                                downloadExcelDatas={downloadExcelDatas}
                             />
                         )
                     }
@@ -134,18 +239,29 @@ export default function DownloadFieldComponent({
                     onClose={__handle.action.closeModifyDownloadHeaderDetailsModal}
                 >
                     <ModifyDownloadHeaderDetailsModalComponent
+                        excelTranslatorHeaders={excelTranslatorHeaders}
                         excelTranslatorHeader={excelTranslatorHeader}
                         onClose={__handle.action.closeModifyDownloadHeaderDetailsModal}
                         onConfirm={__handle.submit.modifyDownloadHeaderDetail}
                     />
                 </CommonModalComponent>
             }
+
+            {backdropOpen &&
+                (
+                    <BackdropHookComponent
+                        open={backdropOpen}
+                        onClose={() => { }}
+                    />
+                )
+            }
         </>
     );
 }
 
 function Table({
-    downloadHeaderDetail
+    downloadHeaderDetail,
+    downloadExcelDatas
 }) {
     return (
         <TableWrapper>
@@ -156,68 +272,24 @@ function Table({
                     <TableHead
                         downloadHeaderDetail={downloadHeaderDetail}
                     />
-                    {/* <tbody>
-                        {rentalOrderProducts?.map((r, index) => {
-                            let pDate = dateFormatUtils().dateFromDateAndHH_mm(r.rentalOrderInfo.pickupDate, r.rentalOrderInfo.pickupTime);
-                            let rDate = dateFormatUtils().dateFromDateAndHH_mm(r.rentalOrderInfo.returnDate, r.rentalOrderInfo.returnTime);
-                            let diffHours = dateFormatUtils().getDiffHoursFromDates(pDate, rDate);
-
+                    <tbody>
+                        {downloadExcelDatas?.map((r, index) => {
                             return (
                                 <tr
                                     key={r.id}
-                                    onClick={() => onActionSelectOne(r.id)}
                                 >
-                                    <td
-                                        className='fixed-col-left'
-                                    >
-                                        <input
-                                            type='checkbox'
-                                            checked={selectIds.includes(r.id) || false}
-                                            readOnly
-                                        ></input>
-                                    </td>
-                                    <td
-                                        className='fixed-col-left'
-                                        style={{
-                                            left: '50px'
-                                        }}
-                                    >{dateFormatUtils().dateToYYMMDDHHmmss(r.rentalOrderInfo.createdAt, 'Invalid Date')}</td>
-                                    <td
-                                        className='fixed-col-left'
-                                        style={{
-                                            left: '180px',
-                                            width: '130px'
-                                        }}
-                                    >
-                                        {r.rentalOrderInfo.borrower}
-                                    </td>
-                                    <td>{r.rentalOrderInfo.borrowerPhoneNumber}</td>
-                                    <td>{r.productName}</td>
-                                    <td>{r.unit} 개</td>
-                                    <td>{dateFormatUtils().dateToYYMMDD(r.rentalOrderInfo.pickupDate, 'Invalid Date')} {r.rentalOrderInfo.pickupTime}</td>
-                                    <td>{dateFormatUtils().dateToYYMMDD(r.rentalOrderInfo.returnDate, 'Invalid Date')} {r.rentalOrderInfo.returnTime}</td>
-                                    <td>{r.rentalOrderInfo.pickupPlace}</td>
-                                    <td>{r.rentalOrderInfo.returnPlace}</td>
-                                    <td>{diffHours}H</td>
-                                    <td>{numberFormatHandler().numberWithCommas(r.price || 0)} 원</td>
-                                    <td>{r.discountYn === 'y' && (diffHours >= r.discountMinimumHour) ? r.discountRate : '0'} %</td>
-                                    <td>
+                                    {r?.details?.map(detail => {
+                                        return (
+                                            <td key={detail.id}>
+                                                <span>{detail.cellType === 'Date' ? dateToYYMMDDhhmmss(detail.colData) : detail.colData}</span>
+                                            </td>
 
-                                        {
-                                            numberFormatHandler().numberWithCommas(__ext_calcTotalPrice({
-                                                price: r.price,
-                                                unit: r.unit,
-                                                diffHours: diffHours,
-                                                discountYn: r.discountYn,
-                                                discountRate: r.discountRate,
-                                                discountMinimumHour: r.discountMinimumHour
-                                            }) || 0)
-                                        } 원
-                                    </td>
+                                        );
+                                    })}
                                 </tr>
                             );
                         })}
-                    </tbody> */}
+                    </tbody>
                 </table>
             </TableBox>
         </TableWrapper>

@@ -25,6 +25,16 @@ export default function useModifyUploadHeaderDetailFormHook({
         setModifyUploadHeaderDetailForm(excelTranslatorHeader?.uploadHeaderDetail);
     }
 
+    const onActionSelectExistingHeaderDetail = (data) => {
+        if (!data?.uploadHeaderDetail) {
+            setModifyUploadHeaderDetailForm({
+                details: []
+            });
+            return;
+        }
+        setModifyUploadHeaderDetailForm(data?.uploadHeaderDetail);
+    }
+
     const reqUploadSampleExcel = async ({
         formData,
         successCallback
@@ -153,6 +163,7 @@ export default function useModifyUploadHeaderDetailFormHook({
 
     return {
         modifyUploadHeaderDetailForm,
+        onActionSelectExistingHeaderDetail,
         reqUploadSampleExcel,
         onActionAddDetails,
         onActionDeleteDetail,

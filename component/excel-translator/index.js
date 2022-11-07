@@ -1,9 +1,10 @@
 import DownloadFieldComponent from "./download-field/DownloadField.component";
 import HeadComponent from "./head/Head.component";
 import HeaderSelectorComponent from "./header-selector/HeaderSelector.component";
-import useExcelTranslatorHeaderHook from "./header-selector/hooks/useExcelTranslatorHeaderHook";
-import useExcelTranslatorHeadersHook from "./header-selector/hooks/useExcelTranslatorHeadersHook";
-import useViewExcelTranslatorHeaderIdsHook from "./header-selector/hooks/useViewExcelTranslatorHeaderIdsHook";
+import useExcelTranslatorDatasHook from "./hooks/useExcelTranslatorDatasHook";
+import useExcelTranslatorHeaderHook from "./hooks/useExcelTranslatorHeaderHook";
+import useExcelTranslatorHeadersHook from "./hooks/useExcelTranslatorHeadersHook";
+import useViewExcelTranslatorHeaderIdsHook from "./hooks/useViewExcelTranslatorHeaderIdsHook";
 import { Container } from "./styles/Main.styled";
 import UploadFieldComponent from "./upload-field/UploadField.component";
 
@@ -14,7 +15,9 @@ export default function MainComponent(props) {
         reqModifyExcelTranslatorHeader,
         reqDeleteExcelTranslatorHeader,
         reqChangeUploadHeaderDetail,
-        reqChangeDownloadHeaderDetail
+        reqChangeDownloadHeaderDetail,
+        reqDownloadSampleExcelForUploadHeader,
+        reqDownloadSampleExcelForDownloadHeader
     } = useExcelTranslatorHeadersHook();
 
     const {
@@ -28,6 +31,14 @@ export default function MainComponent(props) {
         onSetViewExcelTranslatorHeaderIds
     } = useViewExcelTranslatorHeaderIdsHook({
         excelTranslatorHeaders: excelTranslatorHeaders
+    });
+
+    const {
+        excelTranslatorDatas,
+        reqUploadData,
+        reqDownloadData
+    } = useExcelTranslatorDatasHook({
+        excelTranslatorHeader: excelTranslatorHeader
     });
 
     const __handle = {
@@ -105,6 +116,58 @@ export default function MainComponent(props) {
                         successCallback();
                     }
                 })
+            },
+            uploadDataExcel: async ({
+                formData,
+                successCallback
+            }) => {
+                await reqUploadData({
+                    formData: formData,
+                    successCallback: () => {
+                        successCallback();
+                    }
+                })
+            },
+            downloadDataExcel: async ({
+                body,
+                successCallback
+            }) => {
+                await reqDownloadData({
+                    body: body,
+                    successCallback: () => {
+                        successCallback();
+                    }
+                })
+            },
+            downloadSampleExcelForUploadHeader: async () => {
+                if(!excelTranslatorHeader?.uploadHeaderDetail?.details){
+                    alert('업로드 엑셀 양식을 먼저 설정해 주세요.');
+                    return;
+                }
+
+                let body = {
+                    excelTranslatorHeaderId: excelTranslatorHeader.id
+                }
+
+                await reqDownloadSampleExcelForUploadHeader({
+                    body,
+                    successCallback: () => { }
+                })
+            },
+            downloadSampleExcelForDownloadHeader: async () => {
+                if(!excelTranslatorHeader?.downloadHeaderDetail?.details){
+                    alert('다운로드 엑셀 양식을 먼저 설정해 주세요.');
+                    return;
+                }
+
+                let body = {
+                    excelTranslatorHeaderId: excelTranslatorHeader.id
+                }
+
+                await reqDownloadSampleExcelForDownloadHeader({
+                    body,
+                    successCallback: () => { }
+                })
             }
         }
     }
@@ -127,9 +190,13 @@ export default function MainComponent(props) {
                 {excelTranslatorHeader &&
                     (
                         <UploadFieldComponent
+                            excelTranslatorHeaders={excelTranslatorHeaders}
                             excelTranslatorHeader={excelTranslatorHeader}
+                            excelTranslatorDatas={excelTranslatorDatas}
 
                             onSubmitModifyUploadHeaderDetail={__handle.submit.modifyUploadHeaderDetail}
+                            onSubmitUploadDataExcel={__handle.submit.uploadDataExcel}
+                            onSubmitDownloadSampleExcelForUploadHeader={__handle.submit.downloadSampleExcelForUploadHeader}
                         />
                     )
                 }
@@ -137,13 +204,16 @@ export default function MainComponent(props) {
                     (
 
                         <DownloadFieldComponent
+                            excelTranslatorHeaders={excelTranslatorHeaders}
                             excelTranslatorHeader={excelTranslatorHeader}
+                            excelTranslatorDatas={excelTranslatorDatas}
 
                             onSubmitModifyDownloadHeaderDetail={__handle.submit.modifyDownloadHeaderDetail}
+                            onSubmitDownloadDataExcel={__handle.submit.downloadDataExcel}
+                            onSubmitDownloadSampleExcelForDownloadHeader={__handle.submit.downloadSampleExcelForDownloadHeader}
                         />
                     )
                 }
-                je;p
             </Container>
         </>
     );

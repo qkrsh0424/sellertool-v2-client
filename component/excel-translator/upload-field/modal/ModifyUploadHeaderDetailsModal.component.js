@@ -3,12 +3,15 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import useDisabledBtn from "../../../../hooks/button/useDisabledBtn";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import useModifyUploadHeaderDetailFormHook from "../hooks/useModifyUploadHeaderDetailFormHook";
-import { Container, ControlGroup, FlexBlock } from "../styles/ModifyUploadHeaderDetailModal.styled";
+import { Container, ControlGroup, FlexBlock, LoadExistingModeContainer, LoadExistingModeWrapper } from "../styles/ModifyUploadHeaderDetailModal.styled";
 import { v4 as uuidv4 } from 'uuid';
 import { useRef, useState } from "react";
 import CustomExcelFileUploader from "../../../modules/uploader/CustomExcelFileUploader";
+import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
+import LoadExistingModalComponent from "./LoadExistingModal.component";
 
 export default function ModifyUploadHeaderDetailsModalComponent({
+    excelTranslatorHeaders,
     excelTranslatorHeader,
     onClose,
     onConfirm
@@ -17,6 +20,7 @@ export default function ModifyUploadHeaderDetailsModalComponent({
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
     const {
         modifyUploadHeaderDetailForm,
+        onActionSelectExistingHeaderDetail,
         reqUploadSampleExcel,
         onActionAddDetails,
         onActionDeleteDetail,
@@ -28,6 +32,7 @@ export default function ModifyUploadHeaderDetailsModalComponent({
     } = useModifyUploadHeaderDetailFormHook({
         excelTranslatorHeader: excelTranslatorHeader
     });
+    const [loadExistingModeOpen, setLoadExistingModeOpen] = useState(false);
 
     const [excelUploaderModalOpen, setExcelUploaderModalOpen] = useState(false);
 
@@ -38,6 +43,12 @@ export default function ModifyUploadHeaderDetailsModalComponent({
             },
             closeExcelUploaderModal: () => {
                 setExcelUploaderModalOpen(false);
+            },
+            openLoadExistingMode: () => {
+                setLoadExistingModeOpen(true);
+            },
+            closeLoadExistingMode: () => {
+                setLoadExistingModeOpen(false);
             }
         },
         submit: {
@@ -106,6 +117,7 @@ export default function ModifyUploadHeaderDetailsModalComponent({
                         <SingleBlockButton
                             type='button'
                             className='loadSampleExcel-button'
+                            onClick={() => __handle.action.openLoadExistingMode()}
                         >
                             양식 불러오기
                         </SingleBlockButton>
@@ -257,6 +269,23 @@ export default function ModifyUploadHeaderDetailsModalComponent({
                 </form>
             </Container>
 
+            {loadExistingModeOpen &&
+                (
+                    <>
+                        <CommonModalComponent
+                            open={loadExistingModeOpen}
+
+                            onClose={__handle.action.closeLoadExistingMode}
+                        >
+                            <LoadExistingModalComponent
+                                excelTranslatorHeaders={excelTranslatorHeaders}
+                                onClose={__handle.action.closeLoadExistingMode}
+                                onActionSelectExistingHeaderDetail={onActionSelectExistingHeaderDetail}
+                            />
+                        </CommonModalComponent>
+                    </>
+                )
+            }
             {excelUploaderModalOpen &&
                 (
                     <CustomExcelFileUploader

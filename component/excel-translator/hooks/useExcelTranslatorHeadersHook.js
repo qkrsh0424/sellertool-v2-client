@@ -179,7 +179,6 @@ export default function useExcelTranslatorHeaderHook(props) {
     }) => {
         await excelTranslatorHeaderDataConnect().downloadSampleExcelForUploadHeader(body)
             .then(res => {
-                console.log(res);
                 if (res.status === 200) {
                     successCallback();
                     const blob = new Blob([res.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
@@ -217,7 +216,6 @@ export default function useExcelTranslatorHeaderHook(props) {
     }) => {
         await excelTranslatorHeaderDataConnect().downloadSampleExcelForDownloadHeader(body)
             .then(res => {
-                console.log(res);
                 if (res.status === 200) {
                     successCallback();
                     const blob = new Blob([res.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });

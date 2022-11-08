@@ -3,6 +3,8 @@
 :root {
     --mainColor: #344b98;
     --mainColorHover: #344b98f0;
+    --mainColorOpacity500:#344b9880;
+    --mainColorOpacity100:#344b9820;
     --mainColorSelected1: #344b9820;
     --defaultBackground: #f9fbfc;
     --defaultBoxShadow: 1px 1px 10px 0 rgb(72 75 108 / 8%);

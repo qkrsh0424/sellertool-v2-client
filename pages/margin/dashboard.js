@@ -14,12 +14,17 @@ const MarginDashboardPage = () => {
     useEffect(() => {
         async function fetchInit() {
             if (userRedux.isLoading === false && !userRedux.userInfo) {
+                alert('로그인이 필요한 서비스 입니다.');
                 router.replace('/');
                 return;
             }
         }
         fetchInit();
     }, [userRedux.isLoading, userRedux.userInfo]);
+
+    if(userRedux.isLoading || !userRedux.userInfo){
+        return null;
+    }
 
     return (
         <>

@@ -7,8 +7,7 @@ export default function useModifyExcelTranslatorHeaderFormHook({
 }) {
     const [modifyExcelTranslatorHeaderForm, setModifyExcelTranslatorHeaderForm] = useState({
         uploadHeaderTitle: '',
-        downloadHeaderTitle: '',
-        rowStartNumber: '1'
+        downloadHeaderTitle: ''
     });
 
     useEffect(() => {
@@ -19,8 +18,7 @@ export default function useModifyExcelTranslatorHeaderFormHook({
         setModifyExcelTranslatorHeaderForm(_.cloneDeep({
             id: excelTranslatorHeader.id,
             uploadHeaderTitle: excelTranslatorHeader.uploadHeaderTitle,
-            downloadHeaderTitle: excelTranslatorHeader.downloadHeaderTitle,
-            rowStartNumber: excelTranslatorHeader.rowStartNumber
+            downloadHeaderTitle: excelTranslatorHeader.downloadHeaderTitle
         }))
     }, [excelTranslatorHeader]);
 
@@ -46,16 +44,9 @@ export default function useModifyExcelTranslatorHeaderFormHook({
         }
     }
 
-    const checkRowStartNumberFormatValid = (rowStartNumber, errorMessage) => {
-        if (rowStartNumber < 1 || rowStartNumber > 30) {
-            throw new Error(errorMessage);
-        }
-    }
-
     return {
         modifyExcelTranslatorHeaderForm,
         onChangeModifyExcelTranslatorHeaderFormValueOfName,
-        checkHeaderNameFormatValid,
-        checkRowStartNumberFormatValid
+        checkHeaderNameFormatValid
     }
 }

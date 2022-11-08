@@ -3,8 +3,7 @@ import { useState } from "react";
 export default function useCreateExcelTranslatorHeaderFormHook(props) {
     const [createExcelTranslatorHeaderForm, setCreateExcelTranslatorHeaderForm] = useState({
         uploadHeaderTitle: '',
-        downloadHeaderTitle: '',
-        rowStartNumber: '1'
+        downloadHeaderTitle: ''
     });
 
     const onChangeCreateExcelTranslatorHeaderFormValueOfName = (e) => {
@@ -29,16 +28,10 @@ export default function useCreateExcelTranslatorHeaderFormHook(props) {
         }
     }
 
-    const checkRowStartNumberFormatValid = (rowStartNumber, errorMessage) => {
-        if (rowStartNumber < 1 || rowStartNumber > 30) {
-            throw new Error(errorMessage);
-        }
-    }
 
     return {
         createExcelTranslatorHeaderForm,
         onChangeCreateExcelTranslatorHeaderFormValueOfName,
-        checkHeaderNameFormatValid,
-        checkRowStartNumberFormatValid
+        checkHeaderNameFormatValid
     }
 }

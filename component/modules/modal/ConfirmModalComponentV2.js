@@ -82,8 +82,9 @@ const ContentContainer = styled.div`
 
             .message{
                 text-align: center;
-                font-weight: 600;
+                font-weight: 500;
                 font-size: 18px;
+                color:#404040;
             }
         }
     }

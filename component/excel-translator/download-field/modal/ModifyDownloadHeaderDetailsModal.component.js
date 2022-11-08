@@ -5,12 +5,11 @@ import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import useModifyDownloadHeaderDetailFormHook from "../hooks/useModifyDownloadHeaderDetailFormHook";
 import { Container, ControlGroup, FlexBlock } from "../styles/ModifyDownloadHeaderDetailModal.styled";
 import { v4 as uuidv4 } from 'uuid';
-import CustomSelect from "../../../modules/select/CustomSelect";
-import CustomCheckboxV2 from "../../../modules/checkbox/CustomCheckboxV2";
 import CustomExcelFileUploader from "../../../modules/uploader/CustomExcelFileUploader";
 import { useState } from "react";
 import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
 import LoadExistingModalComponent from "./LoadExistingModal.component";
+import SelectFieldValueModalComponent from "./SelectFieldValueModal.component";
 
 export default function ModifyDownloadHeaderDetailsModalComponent({
     excelTranslatorHeaders,
@@ -41,6 +40,8 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
 
     const [excelUploaderModalOpen, setExcelUploaderModalOpen] = useState(false);
     const [loadExistingModeOpen, setLoadExistingModeOpen] = useState(false);
+    const [selectFieldValueModalOpen, setSelectFieldValueModalOpen] = useState(false);
+    const [selectedDetailId, setSelectedDetailId] = useState(null);
 
     const __handle = {
         action: {
@@ -55,6 +56,20 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
             },
             closeLoadExistingMode: () => {
                 setLoadExistingModeOpen(false);
+            },
+            openSelectFieldValueModal: (detailId) => {
+                setSelectedDetailId(detailId);
+                setSelectFieldValueModalOpen(true);
+            },
+            closeSelectFieldValueModal: () => {
+                setSelectFieldValueModalOpen(false);
+                setSelectedDetailId(null);
+            }
+        },
+        change: {
+            targetCellNumber: (cellNumber) => {
+                onChangeTargetCellNumber(cellNumber, selectedDetailId);
+                __handle.action.closeSelectFieldValueModal();
             }
         },
         submit: {
@@ -145,6 +160,8 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
                                         ref={provided.innerRef}
                                     >
                                         {modifyDownloadHeaderDetailForm?.details?.map((detail, index) => {
+                                            let uploadDetail = excelTranslatorHeader?.uploadHeaderDetail?.details?.find(r => r.cellNumber == detail.targetCellNumber);
+
                                             return (
                                                 <Draggable
                                                     key={detail.id}
@@ -193,24 +210,14 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
                                                                     </div>
                                                                     <div className='select-box'>
                                                                         <div className='select-label'>필드값</div>
-                                                                        <CustomSelect
-                                                                            className='select-el'
-                                                                            onChange={(e) => onChangeTargetCellNumber(e, detail.id)}
-                                                                            value={detail.targetCellNumber || ''}
+                                                                        <SingleBlockButton
+                                                                            type='button'
+                                                                            className='selectField-button'
+                                                                            onClick={() => __handle.action.openSelectFieldValueModal(detail.id)}
                                                                             disabled={detail.targetCellNumber == '-1'}
                                                                         >
-                                                                            {excelTranslatorHeader?.uploadHeaderDetail?.details?.map((uploadDetail) => {
-                                                                                return (
-                                                                                    <option
-                                                                                        key={uploadDetail.id}
-                                                                                        value={uploadDetail.cellNumber}
-                                                                                    >
-                                                                                        {uploadDetail.headerName}
-                                                                                    </option>
-                                                                                )
-                                                                            })}
-                                                                            <option value={'-1'}>고정값</option>
-                                                                        </CustomSelect>
+                                                                            {uploadDetail?.headerName || '고정값'}
+                                                                        </SingleBlockButton>
                                                                     </div>
                                                                     <div className='switch-box'>
                                                                         <div className='switch-label'>고정값 여부</div>
@@ -330,6 +337,24 @@ export default function ModifyDownloadHeaderDetailsModalComponent({
                     </div>
                 </form>
             </Container>
+
+            {selectFieldValueModalOpen && selectedDetailId &&
+                (
+                    <CommonModalComponent
+                        open={selectFieldValueModalOpen}
+
+                        onClose={__handle.action.closeSelectFieldValueModal}
+                    >
+                        <SelectFieldValueModalComponent
+                            excelTranslatorHeader={excelTranslatorHeader}
+
+                            onClose={__handle.action.closeSelectFieldValueModal}
+                            onChangeTargetCellNumber={__handle.change.targetCellNumber}
+                        />
+                    </CommonModalComponent>
+                )
+            }
+
             {loadExistingModeOpen &&
                 (
                     <CommonModalComponent

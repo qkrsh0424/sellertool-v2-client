@@ -184,8 +184,8 @@ export default function useModifyDownloadHeaderDetailFormHook({
         })
     }
 
-    const onChangeTargetCellNumber = (e, detailId) => {
-        let value = e.target.value;
+    const onChangeTargetCellNumber = (cellNumber, detailId) => {
+        let value = cellNumber;
 
         if (value == '-1') {
             setModifyDownloadHeaderDetailForm({

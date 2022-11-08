@@ -12,7 +12,6 @@ export default function CreateExcelTranslatorHeaderModalComponent({
         createExcelTranslatorHeaderForm,
         onChangeCreateExcelTranslatorHeaderFormValueOfName,
         checkHeaderNameFormatValid,
-        checkRowStartNumberFormatValid
     } = useCreateExcelTranslatorHeaderFormHook();
 
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
@@ -26,7 +25,6 @@ export default function CreateExcelTranslatorHeaderModalComponent({
                 try {
                     checkHeaderNameFormatValid(createExcelTranslatorHeaderForm.uploadHeaderTitle, '업로드 엑셀 이름의 형식을 다시 확인해 주세요.\n[앞뒤 공백 제외 2-50자로 입력해 주세요.]');
                     checkHeaderNameFormatValid(createExcelTranslatorHeaderForm.downloadHeaderTitle, '다운로드 엑셀 이름의 형식을 다시 확인해 주세요.\n[앞뒤 공백 제외 2-50자로 입력해 주세요.]');
-                    checkRowStartNumberFormatValid(createExcelTranslatorHeaderForm.rowStartNumber, '데이터 시작 행의 형식을 다시 확인해 주세요.\n[1-30의 숫자만 입력해 주세요.]');
                 } catch (err) {
                     alert(err.message);
                     return;
@@ -92,22 +90,6 @@ export default function CreateExcelTranslatorHeaderModalComponent({
                                     value={createExcelTranslatorHeaderForm?.downloadHeaderTitle || ''}
                                     onChange={(e) => onChangeCreateExcelTranslatorHeaderFormValueOfName(e)}
                                     placeholder="앞뒤 공백 제외 2-50자"
-                                    required
-                                ></input>
-                            </div>
-                        </div>
-                        <div className='content-box'>
-                            <div className='input-box'>
-                                <div className='input-label'>데이터 시작 행 (헤더 번호)</div>
-                                <input
-                                    type='number'
-                                    className='input-el'
-                                    name='rowStartNumber'
-                                    value={createExcelTranslatorHeaderForm?.rowStartNumber || ''}
-                                    onChange={(e) => onChangeCreateExcelTranslatorHeaderFormValueOfName(e)}
-                                    min={1}
-                                    max={30}
-                                    placeholder="1~30의 숫자"
                                     required
                                 ></input>
                             </div>

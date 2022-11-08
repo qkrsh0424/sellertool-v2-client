@@ -115,6 +115,19 @@ export const Container = styled.div`
                     color: #808080;
                 }
 
+                .selectField-button{
+                    margin:0;
+                    padding:0;
+                    width:100%;
+                    height: 48px;
+                    box-sizing: border-box;
+                    padding: 15px 10px;
+                    font-size: 14px;
+                    border:1px solid #e0e0e0;
+                    border-radius: 5px;
+                    flex:1;
+                }
+
                 .select-el{
                     width:100%;
                     box-sizing: border-box;

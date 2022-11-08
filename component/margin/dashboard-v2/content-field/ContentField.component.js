@@ -170,8 +170,8 @@ const ContentFieldComponent = (props) => {
                         >
                             <div className='icon'>
                                 <Image
-                                    loader={({ src, width, quality }) => `http://localhost:3000/${src}?q=${quality || 75}`}
-                                    src='images/icon/refresh_default_808080.svg'
+                                    loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                    src='/images/icon/refresh_default_808080.svg'
                                     layout='fill'
                                     alt=""
                                 ></Image>
@@ -188,7 +188,12 @@ const ContentFieldComponent = (props) => {
                                 onMouseLeave={() => onActionClosePopover()}
                             >
                                 <div className='icon'>
-                                    <Image src='/images/icon/folder_default_808080.svg' layout='fill' alt=""></Image>
+                                    <Image
+                                        loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                        src='/images/icon/folder_default_808080.svg'
+                                        layout='fill'
+                                        alt=""
+                                    ></Image>
                                 </div>
                             </SingleBlockButton>
                         }
@@ -205,7 +210,12 @@ const ContentFieldComponent = (props) => {
                                         onMouseLeave={() => onActionClosePopover()}
                                     >
                                         <div className='icon'>
-                                            <Image src='/images/icon/add_default_808080.svg' layout='fill' alt=""></Image>
+                                            <Image
+                                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                                src='/images/icon/add_default_808080.svg'
+                                                layout='fill'
+                                                alt=""
+                                            ></Image>
                                         </div>
                                     </SingleBlockButton>
                                 }
@@ -224,7 +234,12 @@ const ContentFieldComponent = (props) => {
                                         onMouseLeave={() => onActionClosePopover()}
                                     >
                                         <div className='icon'>
-                                            <Image src='/images/icon/rename_default_808080.svg' layout='fill' alt=""></Image>
+                                            <Image
+                                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                                src='/images/icon/rename_default_808080.svg'
+                                                layout='fill'
+                                                alt=""
+                                            ></Image>
                                         </div>
                                     </SingleBlockButton>
                                 }
@@ -243,7 +258,12 @@ const ContentFieldComponent = (props) => {
                                         onMouseLeave={() => onActionClosePopover()}
                                     >
                                         <div className='icon'>
-                                            <Image src='/images/icon/copy_default_808080.svg' layout='fill' alt=""></Image>
+                                            <Image
+                                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                                src='/images/icon/copy_default_808080.svg'
+                                                layout='fill'
+                                                alt=""
+                                            ></Image>
                                         </div>
                                     </SingleBlockButton>
                                 }

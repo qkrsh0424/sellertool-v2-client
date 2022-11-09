@@ -85,7 +85,7 @@ export default function ModifyViewExcelTranslatorHeadersModalComponent({
                                                 className={`item ${selectedExcelTranslatorHeaderId === r.id ? 'item-active' : ''}`}
                                                 onClick={() => __handle.action.selectHeader(r.id)}
                                             >
-                                                {r.uploadHeaderTitle} &gt; {r.downloadHeaderTitle} (시작행: {r.rowStartNumber})
+                                                {r.uploadHeaderTitle} &gt; {r.downloadHeaderTitle}
                                             </div>
                                         );
                                     }
@@ -162,7 +162,7 @@ export default function ModifyViewExcelTranslatorHeadersModalComponent({
                                                 className={`item ${selectedExcelTranslatorHeaderId === data.id ? 'item-active' : ''}`}
                                                 onClick={() => __handle.action.selectHeader(data.id)}
                                             >
-                                                {data.uploadHeaderTitle} &gt; {data.downloadHeaderTitle} (시작행: {data.rowStartNumber})
+                                                {data.uploadHeaderTitle} &gt; {data.downloadHeaderTitle}
                                             </div>
                                         );
                                     }

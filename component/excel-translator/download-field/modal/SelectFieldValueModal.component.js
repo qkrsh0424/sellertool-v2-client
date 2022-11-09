@@ -64,20 +64,25 @@ export default function SelectFieldValueModalComponent({
                 <div className='content-group'>
                     <div className='content-box'>
                         {excelTranslatorHeader?.uploadHeaderDetail?.details?.map(r => {
-                            if (r.headerName.includes(inputValue)) {
-                                return (
-                                    <span
-                                        key={r.id}
-                                        className='tag'
-                                        onClick={() => onChangeTargetCellNumber(r.cellNumber)}
-                                    >
+                            let isAccent = inputValue && r.headerName.includes(inputValue);
+
+                            return (
+                                <span
+                                    key={r.id}
+                                    className={`${isAccent ? 'tag-accent' : 'tag'}`}
+                                    onClick={() => onChangeTargetCellNumber(r.cellNumber)}
+                                >
+                                    {isAccent ?
                                         <HighlightedText
                                             text={`${r.headerName}`}
                                             query={inputValue}
+                                            highlightColor={'var(--defaultRedColor)'}
                                         />
-                                    </span>
-                                );
-                            }
+                                        :
+                                        r.headerName
+                                    }
+                                </span>
+                            );
                         })}
                     </div>
                 </div>

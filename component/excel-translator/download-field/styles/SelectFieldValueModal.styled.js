@@ -93,6 +93,20 @@ export const Container = styled.div`
                 margin: 0 10px 10px 0;
                 cursor: pointer;
             }
+
+            .tag-accent{
+                color:#fff;
+                display: inline-block;
+                border:1px solid var(--mainColorOpacity500);
+                padding: 5px;
+                background: var(--mainColor);
+                box-sizing: border-box;
+                font-size: 14px;
+                border-radius: 5px;
+                box-shadow: var(--defaultBoxShadow);
+                margin: 0 10px 10px 0;
+                cursor: pointer;
+            }
         }
     }
 

@@ -1,10 +1,25 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import FooterMain from "../../component/footer/FooterMain";
 import PrimaryNavbarMainComponent from "../../component/navbar/primary-navbar";
-import SecondaryNavbarMainComponent from "../../component/navbar/secondary-navbar";
-import WorkspaceManagementMainComponent from "../../component/workspace/management";
+import WorkspaceManagementMainComponent from "../../component/workspace/management-v2";
 
 const WorkspaceManagementPage = (props) => {
+    const userRedux = useSelector(state => state.userRedux);
+    const router = useRouter();
+
+    useEffect(() => {
+        async function fetchInit() {
+            if (userRedux.isLoading === false && !userRedux.userInfo) {
+                router.replace('/');
+                return;
+            }
+        }
+        fetchInit();
+    }, [userRedux.isLoading, userRedux.userInfo]);
+
     return (
         <>
             <Head>

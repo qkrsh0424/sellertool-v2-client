@@ -3,14 +3,14 @@ import styled from 'styled-components';
 const Container = styled.div`
     overflow: hidden;
     position: relative;
-    height: 70px;
-    background-color: #2C73D2;
+    height: 64px;
+    background-color: var(--mainColor);
     /* background: linear-gradient(70deg, #2C73D2, #309FFF);
     background: -webkit-linear-gradient(70deg, #2C73D2, #309FFF); */
 
-    @media all and (max-width:992px){
+    /* @media all and (max-width:992px){
         height: 52px;
-    }
+    } */
 `;
 
 const Wrapper = styled.div`

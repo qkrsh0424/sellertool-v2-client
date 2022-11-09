@@ -2,28 +2,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { csrfDataConnect } from '../../../data_connect/csrfDataConnect';
 import { userDataConnect } from '../../../data_connect/userDataConnect';
-import LineBreakerBottom from '../../modules/LineBreakerBottom';
+import LineBreakerBottom from '../../modules/fragment/LineBreakerBottom';
 import NotAllowedComponent from '../../modules/not-allowed/NotAllowedComponent';
 import Layout from '../layout/Layout';
 import BasicInformationComponent from './basic-information/BasicInformation.component';
 import EditPasswordComponent from './edit-password/EditPassword.component';
 import HeadComponent from './head/Head.component';
-import SnackbarCenter from "../../modules/SnackbarCenter";
+import SnackbarCenter from "../../modules/snackbar/SnackbarCenter";
 import { useState } from "react";
 import { userInfoAuthDataConnect } from '../../../data_connect/userInfoAuthDataConnect';
 
 const Container = styled.div`
-
+    background-color: var(--defaultBackground);
 `;
 
 const ProfileAccountMainComponent = (props) => {
     const dispatch = useDispatch();
-    const userRdx = useSelector(state => state.userState);
+    const userRedux = useSelector(state => state.userRedux);
 
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('no message');
     const [snackbarSeverity, setSnackbarSeverity] = useState('info');
-    
+
     const [isVerifiedEmail, setIsVerifiedEmail] = useState(false);
     const [isVerifiedPhoneNumber, setIsVerifiedPhoneNumber] = useState(false);
 
@@ -151,8 +151,8 @@ const ProfileAccountMainComponent = (props) => {
             updateInfo: async (body) => {
                 let data = {
                     ...body,
-                    verifiedEmail : isVerifiedEmail,
-                    verifiedPhoneNumber : isVerifiedPhoneNumber
+                    verifiedEmail: isVerifiedEmail,
+                    verifiedPhoneNumber: isVerifiedPhoneNumber
                 }
                 await __user.req.updateInfo(data);
                 await __user.req.fetchData();
@@ -184,32 +184,32 @@ const ProfileAccountMainComponent = (props) => {
         }
     }
 
-    if (userRdx.isLoading === true) {
+    if (userRedux.isLoading === true) {
         return null;
     }
 
-    if (userRdx.isLoading === false && (!userRdx.info)) {
+    if (userRedux.isLoading === false && (!userRedux.userInfo)) {
         return (
             <NotAllowedComponent></NotAllowedComponent>
         );
     }
 
-    const _onSnackbarOpen = (message) =>{
+    const _onSnackbarOpen = (message) => {
         setSnackbarMessage(message);
         setSnackbarOpen(true);
     }
 
-    const _onSnackbarClose = () =>{
+    const _onSnackbarClose = () => {
         setSnackbarOpen(false);
     }
 
     return (
         <>
-            <Layout>
-                <Container>
+            <Container>
+                <Layout>
                     <HeadComponent></HeadComponent>
                     <BasicInformationComponent
-                        userInfo={userRdx?.info}
+                        userInfo={userRedux?.info}
                         isVerifiedEmail={isVerifiedEmail}
                         isVerifiedPhoneNumber={isVerifiedPhoneNumber}
 
@@ -225,21 +225,21 @@ const ProfileAccountMainComponent = (props) => {
                         lineColor={'#e0e0e0'}
                     />
                     <EditPasswordComponent
-                        userInfo={userRdx?.info}
+                        userInfo={userRedux?.info}
 
                         onSubmitChangePassword={__user.submit.changePassword}
                     ></EditPasswordComponent>
-                </Container>
 
-                {/* Snackbar */}
-                <SnackbarCenter
-                    open={snackbarOpen}
-                    message={snackbarMessage}
-                    severity={snackbarSeverity}
+                    {/* Snackbar */}
+                    <SnackbarCenter
+                        open={snackbarOpen}
+                        message={snackbarMessage}
+                        severity={snackbarSeverity}
 
-                    onClose={() => _onSnackbarClose()}
-                ></SnackbarCenter>
-            </Layout>
+                        onClose={() => _onSnackbarClose()}
+                    ></SnackbarCenter>
+                </Layout>
+            </Container>
         </>
     );
 }

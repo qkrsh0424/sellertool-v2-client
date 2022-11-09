@@ -2,10 +2,11 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
-import CommonModalComponent from '../../../modules/CommonModalComponent';
-import LineBreakerBottom from '../../../modules/LineBreakerBottom';
+import CommonModalComponent from '../../../modules/modal/CommonModalComponent';
+import LineBreakerBottom from '../../../modules/fragment/LineBreakerBottom';
 import Ripple from '../../../modules/button/Ripple';
 import { CategoryModalWrapper, CategorySelectorFieldWrapper, Container, SelectedCategoryFieldWrapper } from './Category.styled';
+import ConfirmModalComponent from '../../../modules/modal/ConfirmModalComponent';
 
 export default function CategoryComponent(props) {
     const router = useRouter();
@@ -15,6 +16,7 @@ export default function CategoryComponent(props) {
 
     const [addNewCategoryModalOpen, setAddNewCategoryModalOpen] = useState(false);
     const [editCategoryModalOpen, setEditCategoryModalOpen] = useState(false);
+    const [deleteCategoryModalOpen, setDeleteCategoryModalOpen] = useState(false);
     const [disabledBtn, setDisabledBtn] = useState(false);
 
     useEffect(() => {
@@ -98,9 +100,16 @@ export default function CategoryComponent(props) {
                     )
                 }
             },
-            delete: () => {
+            openDeleteModal: () => {
+                setDeleteCategoryModalOpen(true);
+            },
+            closeDeleteModal: () => {
+                setDeleteCategoryModalOpen(false);
+            },
+            confirmDelete: () => {
                 setDisabledBtn(true);
                 props.onSubmitDeleteCategory();
+                __category.action.closeDeleteModal();
             }
         },
         change: {
@@ -145,7 +154,7 @@ export default function CategoryComponent(props) {
                         <SelectedCategoryField
                             category={props.category}
                             onActionOpenEditModal={__category.action.openEditModal}
-                            onActionDelete={__category.action.delete}
+                            onActionDelete={__category.action.openDeleteModal}
                             disabledBtn={disabledBtn}
                         />
                         <LineBreakerBottom
@@ -191,6 +200,20 @@ export default function CategoryComponent(props) {
                     />
                 </CommonModalComponent>
             }
+
+            <ConfirmModalComponent
+                open={deleteCategoryModalOpen}
+                message={
+                    (
+                        <>
+                            <div>연관된 상품 및 옵션 등 하위 데이터들도 모두 삭제 됩니다.</div>
+                            <div>해당 카테고리를 정말로 삭제 하시겠습니까?</div>
+                        </>
+                    )
+                }
+                onClose={__category.action.closeDeleteModal}
+                onConfirm={__category.action.confirmDelete}
+            />
         </>
     );
 }
@@ -264,7 +287,7 @@ function CategorySelectorField({
                 <div className='category-add-button-icon-figure'>
                     <Image
                         loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                        src='http://localhost:3000/images/icon/add_icon2.png'
+                        src='/images/icon/add_icon2.png'
                         layout='fill'
                         alt="add icon"
                     />

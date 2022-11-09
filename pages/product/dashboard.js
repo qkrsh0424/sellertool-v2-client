@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import FooterMain from '../../component/footer/FooterMain';
 import PrimaryNavbarMainComponent from '../../component/navbar/primary-navbar';
-import SecondaryNavbarMainComponent from '../../component/navbar/secondary-navbar';
+import SecondaryNavbarMainComponent from '../../component/navbar/secondary-navbar-v2';
 import ProductDashboardMainComponent from '../../component/product/dashboard';
 
 export default function ProductDashboardPage(props) {

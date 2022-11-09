@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CircularProgress from '@mui/material/CircularProgress';
-import FieldLoading from '../../../modules/FieldLoading';
+import FieldLoading from '../../../modules/loading/FieldLoading';
 
 const Container = styled.div`
     margin-top: 40px;

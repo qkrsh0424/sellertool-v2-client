@@ -6,9 +6,9 @@ import { categoryDataConnect } from '../../../data_connect/categoryDataConnect';
 import { csrfDataConnect } from '../../../data_connect/csrfDataConnect';
 import { optionDataConnect } from '../../../data_connect/optionDataConnect';
 import { productDataConnect } from '../../../data_connect/productDataConnect';
-import FieldLoading from '../../modules/FieldLoading';
-import FlexGap from '../../modules/FlexGap';
-import LineBreakerBottom from '../../modules/LineBreakerBottom';
+import FieldLoading from '../../modules/loading/FieldLoading';
+import FlexGap from '../../modules/fragment/FlexGap';
+import LineBreakerBottom from '../../modules/fragment/LineBreakerBottom';
 import CategoryComponent from './category/Category.component';
 import ProductAndOptionDetailLayout from './layout/ProductAndOptionDetailLayout';
 import ProductAndOptionLayout from './layout/ProductAndOptionLayout';
@@ -33,14 +33,9 @@ function PageTitleField({ title }) {
     );
 }
 
-/**
- * TODO : 
- * - 옵션 수정
- * - 옵션 정보 가져오기
- */
 const ProductDashboardMainComponent = (props) => {
     const router = useRouter();
-    const workspaceRdx = useSelector(state => state.workspaceState);
+    const workspaceRedux = useSelector(state => state.workspaceRedux);
     const [isLoading, setIsLoading] = useState(true);
     const [workspace, dispatchWorkspace] = useReducer(workspaceReducer, initialWorkspace);
     const [categories, dispatchCategories] = useReducer(categoriesReducer, initialCategories);
@@ -54,17 +49,17 @@ const ProductDashboardMainComponent = (props) => {
      * 워크스페이스 여부에 따라 페이지 렌더링 결정
      */
     useEffect(() => {
-        if (!workspaceRdx.info) {
+        if (!workspaceRedux.workspaceInfo) {
             setIsLoading(true);
             return;
         }
         dispatchWorkspace({
             type: 'SET_DATA',
-            payload: { ...workspaceRdx.info }
+            payload: { ...workspaceRedux.workspaceInfo }
         })
         setIsLoading(false);
 
-    }, [workspaceRdx.info]);
+    }, [workspaceRedux.workspaceInfo]);
 
     /**
      * 워크스페이스 로딩후 패치 작업

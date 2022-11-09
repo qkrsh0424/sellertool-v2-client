@@ -3,12 +3,14 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { csrfDataConnect } from '../../../../data_connect/csrfDataConnect';
 import { uploadDataConnect } from '../../../../data_connect/uploadDataConnect';
-import useImageUploaderHooks from '../../../../hooks/useImageUploaderHooks';
-import CommonModalComponent from '../../../modules/CommonModalComponent';
-import ConfirmModalComponent from '../../../modules/ConfirmModalComponent';
+import useImageUploaderHooks from '../../../../hooks/uploader/useImageUploaderHooks';
+import CommonModalComponent from '../../../modules/modal/CommonModalComponent';
+import ConfirmModalComponent from '../../../modules/modal/ConfirmModalComponent';
 import _ from "lodash";
 import { Container, HeadFieldWrapper, ProductAddAndEditModalWrapper, ProductListFieldWrapper } from './ProductList.styled';
+import FieldLoading from '../../../modules/loading/FieldLoading';
 
+// TODO : onChange loadsh set 부분 딥카피로 변경해야됨.
 export default function ProductListComponent(props) {
     const addProductImageUploaderRef = useRef();
     const editProductImageUploaderRef = useRef();
@@ -37,6 +39,7 @@ export default function ProductListComponent(props) {
 
     useEffect(() => {
         if (!props.products) {
+            setIsLoading(true);
             return;
         }
         setIsLoading(false);
@@ -206,7 +209,15 @@ export default function ProductListComponent(props) {
     }
 
     if (isLoading) {
-        return null;
+        return (
+            <Container>
+                <FieldLoading
+                    align={'center'}
+                    marginTop={100}
+                    marginBottom={100}
+                />
+            </Container>
+        );
     }
     return (
         <>
@@ -575,7 +586,7 @@ function HeadField({
                         <Image
                             className='button-icon'
                             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                            src='http://localhost:3000/images/icon/add_icon2.png'
+                            src='/images/icon/add_icon2.png'
                             layout='fill'
                             alt="add icon"
                             loading='lazy'
@@ -593,7 +604,7 @@ function HeadField({
                                 <Image
                                     className='button-icon'
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src='http://localhost:3000/images/icon/pen_icon2.png'
+                                    src='/images/icon/pen_icon2.png'
                                     layout='fill'
                                     alt="add icon"
                                     loading='lazy'
@@ -609,7 +620,7 @@ function HeadField({
                                 <Image
                                     className='button-icon'
                                     loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src='http://localhost:3000/images/icon/x_icon.png'
+                                    src='/images/icon/x_icon.png'
                                     layout='fill'
                                     alt="add icon"
                                     loading='lazy'

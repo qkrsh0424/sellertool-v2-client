@@ -1,0 +1,15 @@
+.mgl-font-color-primary{
+    color:var(--mainColor);
+}
+
+.mgl-font-fontWeight-500{
+    font-weight: 500;
+}
+
+.mgl-font-fontWeight-600{
+    font-weight: 600;
+}
+
+.mgl-font-fontWeight-700{
+    font-weight: 700;
+}

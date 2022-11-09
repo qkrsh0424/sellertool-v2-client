@@ -18,7 +18,7 @@ const productDataConnect = () => {
                     workspaceId: workspaceId
                 },
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
@@ -28,7 +28,7 @@ const productDataConnect = () => {
                     workspaceId: workspaceId
                 },
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
@@ -38,7 +38,7 @@ const productDataConnect = () => {
                     workspaceId: workspaceId
                 },
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
@@ -48,7 +48,7 @@ const productDataConnect = () => {
                     workspaceId: workspaceId
                 },
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         }

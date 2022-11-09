@@ -8,7 +8,7 @@ const uploadDataConnect = () => {
         uploadImagesToS3: async function (formData) {
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/upload/s3/images`, formData, {
                 withCredentials: true,
-                xsrfCookieName: 'api_csrf',
+                xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         }

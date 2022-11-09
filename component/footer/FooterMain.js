@@ -94,12 +94,12 @@ const FooterMain = () => {
                             <div className='item-el'>이용약관</div>
                         </MenuItemsBox>
                         <ComponyInfoBox>
-                            <div className="item-el">상호명: 삼마이</div>
+                            <div className="item-el">상호명: 피아르 첫째</div>
                             <div className="item-el">주소: 서울특별시 마포구 와우산로 11길 25, 3층</div>
                             <div className="item-el">사업자등록번호: 262-17-01212</div>
                             <div className="item-el">통신판매업 신고: 제2020-인천서구-0154호</div>
-                            <div className="item-el">고객센터: 070-7704-7720</div>
-                            <div className="item-el">이메일: piaartechteam@gmail.com</div>
+                            <div className="item-el">고객센터: 02-338-9464</div>
+                            <div className="item-el">이메일: help@piaar.co.kr</div>
                             <div className="item-el">대표: 양태영</div>
                             <div className="item-el">개인정보관리책임자: 박세훈</div>
                         </ComponyInfoBox>

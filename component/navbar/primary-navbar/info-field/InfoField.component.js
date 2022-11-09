@@ -1,10 +1,13 @@
 import Link from "next/link";
+import { useSelector } from "react-redux";
 import { Container } from "./InfoField.styled";
 
 const InfoFieldComponent = (props) => {
+    const userRedux = useSelector(state => state.userRedux);
+
     return (
         <>
-            {(props.isLoading === false && props.userInfo === null) &&
+            {(userRedux.isLoading === false && userRedux.userInfo === null) &&
                 <Container>
                     <Link
                         href='/login'
@@ -21,7 +24,7 @@ const InfoFieldComponent = (props) => {
                 </Container>
             }
 
-            {(props.isLoading === false && props.userInfo) &&
+            {(userRedux.isLoading === false && userRedux.userInfo) &&
                 <Container>
                     <Link
                         href='/profile/account'

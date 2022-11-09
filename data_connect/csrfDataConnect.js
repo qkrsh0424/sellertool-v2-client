@@ -26,13 +26,6 @@ const csrfDataConnect = () => {
                     alert('네트워크 연결이 원활하지 않습니다.');
                 }
             })
-        },
-        postCsrf: async function(){
-            return await axiosAuthInterceptor.post(`${AUTH_API_ADDRESS}/auth/v1/csrf`,{},{
-                xsrfCookieName:'csrf_token',
-                xsrfHeaderName:'X-XSRF-TOKEN',
-                withCredentials: true
-            });
         }
     }
 }

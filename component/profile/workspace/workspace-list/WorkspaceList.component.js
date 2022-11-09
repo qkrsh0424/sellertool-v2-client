@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import FieldLoading from '../../../modules/FieldLoading';
+import FieldLoading from '../../../modules/loading/FieldLoading';
 import { Container, ListFieldWrapper, TitleFieldWrapper } from './WorkspaceList.styled';
 
 function TitleFieldView() {
@@ -16,7 +16,7 @@ function TitleFieldView() {
 
 const WorkspaceListComponent = (props) => {
     const [isLoading, setIsLoading] = useState(true);
-    const userRdx = useSelector(state => state.userState);
+    const userRedux = useSelector(state => state.userRedux);
 
     useEffect(() => {
         if (props.workspaces) {
@@ -50,7 +50,7 @@ const WorkspaceListComponent = (props) => {
                                             <Image
                                                 className='item-icon-el'
                                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                src='http://localhost:3000/images/icon/default_group_icon.png'
+                                                src='/images/icon/default_group_icon.png'
                                                 layout='fill'
                                                 alt="face icon"
                                             ></Image>
@@ -59,7 +59,7 @@ const WorkspaceListComponent = (props) => {
                                             <Image
                                                 className='item-icon-el'
                                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                src='http://localhost:3000/images/icon/default_private_icon.png'
+                                                src='/images/icon/default_private_icon.png'
                                                 layout='fill'
                                                 alt="face icon"
                                             ></Image>
@@ -81,7 +81,7 @@ const WorkspaceListComponent = (props) => {
                                     </div>
                                 </div>
                                 <div>
-                                    {userRdx?.info?.id === r.masterId &&
+                                    {userRedux?.userInfo?.id === r.masterId &&
                                         <span className='badge'>HOST</span>
                                     }
                                 </div>

@@ -83,8 +83,9 @@ const ContentContainer = styled.div`
             .message{
                 text-align: center;
                 font-weight: 500;
-                font-size: 18px;
+                font-size: 15px;
                 color:#404040;
+                word-break: keep-all;
             }
         }
     }
@@ -112,6 +113,9 @@ const ContentContainer = styled.div`
  * @param {boolean} props.fullWidth
  * @param {string} props.maxWidth [xs, sm, md, lg, xl]
  * @param {function} props.onClose
+ * @param {element} props.title
+ * @param {element} props.message
+ * @param {object} props.confirmBtnStyle
  * @returns 
  */
 const ConfirmModalComponentV2 = ({
@@ -123,6 +127,7 @@ const ConfirmModalComponentV2 = ({
     onConfirm,
     title,
     message,
+    confirmBtnStyle,
     children
 }) => {
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
@@ -144,14 +149,14 @@ const ConfirmModalComponentV2 = ({
                 open={open || false}
                 fullWidth={fullWidth ?? true}
                 maxWidth={maxWidth || 'xs'}
-                onClose={() => onClose() || {}}
+                onClose={typeof (onClose) === 'function' ? () => onClose() : () => { ; }}
                 backgroundcolor={backgroundColor || '#00000080'}
             >
                 <ContentContainer>
                     <div className='header-close-button-box'>
                         <button
                             type='button'
-                            onClick={onClose}
+                            onClick={typeof (onClose) === 'function' ? () => onClose() : () => { ; }}
                             className='header-close-button-el'
                         >
                             <div className='header-close-button-icon'>
@@ -174,7 +179,7 @@ const ConfirmModalComponentV2 = ({
                             {title || '확인메세지'}
                         </div>
                     </div>
-                    <form onSubmit={(e) => __handle.submit.confirm(e)}>
+                    <div>
                         {message &&
                             (
 
@@ -202,23 +207,25 @@ const ConfirmModalComponentV2 = ({
                                     background: '#959eae',
                                     flex: 1
                                 }}
-                                onClick={() => onClose()}
+                                onClick={typeof (onClose) === 'function' ? () => onClose() : () => { ; }}
                             >
                                 취소
                             </SingleBlockButton>
                             <SingleBlockButton
-                                type='submit'
+                                type='button'
                                 className='button-el'
+                                onClick={(e) => __handle.submit.confirm(e)}
                                 style={{
                                     background: 'var(--mainColor)',
-                                    width: '60%'
+                                    width: '60%',
+                                    ...confirmBtnStyle
                                 }}
                                 disabled={disabledBtn}
                             >
                                 확인
                             </SingleBlockButton>
                         </div>
-                    </form>
+                    </div>
                 </ContentContainer>
             </CustomDialog>
         </>

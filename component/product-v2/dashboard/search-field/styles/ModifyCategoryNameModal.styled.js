@@ -44,13 +44,16 @@ export const Container = styled.div`
 
     .content-group{
         padding: 0 20px;
-        /* margin-bottom: 20px; */
+        margin-top: 40px;
         
         .content-box{
-            padding: 20px 0;
             border-bottom: 1px solid #e0e0e0;
             font-size: 16px;
             
+            &:last-child{
+                border-bottom: none;
+            }
+
             .input-box{
                 .input-label{
                     font-size: 10px;
@@ -84,11 +87,11 @@ export const Container = styled.div`
                 color:#404040;
                 display: inline-block;
                 border:1px solid var(--mainColorOpacity500);
-                padding: 5px;
+                padding: 5px 10px;
                 background: #fff;
                 box-sizing: border-box;
                 font-size: 14px;
-                border-radius: 5px;
+                border-radius: 15px;
                 box-shadow: var(--defaultBoxShadow);
                 margin: 0 10px 10px 0;
                 cursor: pointer;
@@ -96,16 +99,8 @@ export const Container = styled.div`
 
             .tag-accent{
                 color:#fff;
-                display: inline-block;
                 border:1px solid var(--mainColorOpacity500);
-                padding: 5px;
                 background: var(--mainColor);
-                box-sizing: border-box;
-                font-size: 14px;
-                border-radius: 5px;
-                box-shadow: var(--defaultBoxShadow);
-                margin: 0 10px 10px 0;
-                cursor: pointer;
             }
         }
     }

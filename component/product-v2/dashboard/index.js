@@ -11,10 +11,43 @@ const ProductDashboardMainComponent = (props) => {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const {
-        productCategories
+        productCategories,
+        productCategory,
+        reqChangeProductCategoryName,
+        reqDeleteProductCategory
     } = useProductCategoriesHook();
 
-    console.log(productCategories);
+    console.log(productCategories, productCategory);
+
+    const __handle = {
+        submit: {
+            modifyProductCategoryName: async ({
+                body,
+                successCallback
+            }) => {
+                await reqChangeProductCategoryName({
+                    body: body,
+                    successCallback: () => {
+                        successCallback();
+                    }
+                })
+            },
+            deleteProductCategory: async ({
+                body,
+                successCallback
+            }) => {
+                await reqDeleteProductCategory({
+                    body: body,
+                    successCallback: () => {
+                        router.replace({
+                            pathname: router.pathname
+                        })
+                        successCallback();
+                    }
+                })
+            }
+        }
+    }
     return (
         <>
             <Container>
@@ -22,6 +55,10 @@ const ProductDashboardMainComponent = (props) => {
                 <Layout>
                     <SearchFieldComponent
                         productCategories={productCategories}
+                        productCategory={productCategory}
+
+                        onSubmitModifyProductCategoryName={__handle.submit.modifyProductCategoryName}
+                        onSubmitDeleteProductCategory={__handle.submit.deleteProductCategory}
                     />
                 </Layout>
             </Container>

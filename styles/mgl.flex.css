@@ -10,6 +10,10 @@
     justify-content: space-between;
 }
 
+.mgl-flex-justifyContent-spaceAround{
+    justify-content: space-around;
+}
+
 .mgl-flex-justifyContent-center{
     justify-content: center;
 }

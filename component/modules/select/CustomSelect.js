@@ -1,3 +1,4 @@
+import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 
 const Select = styled.select`
@@ -13,6 +14,7 @@ const Select = styled.select`
     -webkit-tap-highlight-color: #00000000;
     appearance: none;
     background:url('/images/icon/arrowDropDown_default_808080.svg') no-repeat 97% 50%/25px auto;
+    background-color: #fff;
     color:#505050;
     cursor: pointer;
     
@@ -33,21 +35,48 @@ const Select = styled.select`
         width: 100%;
     }
 `;
+// /**
+//  * Version1 of CustomSelect
+//  * @param {object} props
+//  * @param {string} props.width
+//  * @param {string} props.height
+//  * @returns 
+//  */
+// export default function CustomSelect({
+//     children,
+//     width,
+//     height,
+//     ...props
+// }) {
+
+//     return (
+//         <Select
+//             width={width || '100%'}
+//             height={height || '48px'}
+//             {...props}
+//         >
+//             {children}
+//         </Select>
+//     );
+// }
+
 /**
- * 
+ * Version2 of CustomSelect
+ * Version1 을 forwardRef로 감싸서 처리함.
  * @param {object} props
  * @param {string} props.width
  * @param {string} props.height
  * @returns 
  */
-export default function CustomSelect({
+const CustomSelect = React.forwardRef(({
     children,
     width,
     height,
     ...props
-}) {
+}, ref) => {
     return (
         <Select
+            ref={ref}
             width={width || '100%'}
             height={height || '48px'}
             {...props}
@@ -55,4 +84,8 @@ export default function CustomSelect({
             {children}
         </Select>
     );
-}
+});
+
+CustomSelect.displayName = 'CustomSelect';
+
+export default CustomSelect;

@@ -49,6 +49,18 @@ export default function AddModalComponent({
                         </a>
                     </Link>
                     <Link
+                        href='/product/add-sub-category'
+                        passHref
+                    >
+                        <a>
+                            <SingleBlockButton
+                                className='link-button'
+                            >
+                                서브 카테고리 추가
+                            </SingleBlockButton>
+                        </a>
+                    </Link>
+                    <Link
                         href='/product/add-product'
                         passHref
                     >

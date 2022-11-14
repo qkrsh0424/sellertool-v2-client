@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
-import { Container, LinkButton } from "../styles/SettingCategory.styled";
+import { Container, LinkButton } from "../styles/SettingSubCategory.styled";
 
-export default function SettingCategoryModalComponent({
-    onActionOpenModifyCategoryNameModal,
-    onActionOpenDeleteCategoryModal,
+export default function SettingSubCategoryModalComponent({
+    onActionOpenModifySubCategoryNameModal,
+    onActionOpenDeleteSubCategoryModal,
     onClose
 }) {
     return (
@@ -34,14 +34,14 @@ export default function SettingCategoryModalComponent({
                     className='title-box'
                 >
                     <div className='title'>
-                        카테고리 수정 및 삭제
+                        서브 카테고리 수정 및 삭제
                     </div>
                 </div>
                 <div className='content-group'>
                     <SingleBlockButton
                         type='button'
                         className='link-button'
-                        onClick={() => onActionOpenModifyCategoryNameModal()}
+                        onClick={() => onActionOpenModifySubCategoryNameModal()}
                     >
                         수정
                     </SingleBlockButton>
@@ -51,7 +51,7 @@ export default function SettingCategoryModalComponent({
                         style={{
                             color: 'var(--defaultRedColor)'
                         }}
-                        onClick={() => onActionOpenDeleteCategoryModal()}
+                        onClick={() => onActionOpenDeleteSubCategoryModal()}
                     >
                         삭제
                     </SingleBlockButton>

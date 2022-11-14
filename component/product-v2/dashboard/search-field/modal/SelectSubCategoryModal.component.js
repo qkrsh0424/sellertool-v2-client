@@ -2,11 +2,11 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import HighlightedText from "../../../../modules/text/HighlightedText";
-import { Container } from "../styles/SelectCategoryModal.styled";
+import { Container } from "../styles/SelectSubCategoryModal.styled";
 
-export default function SelectCategoryModalComponent({
-    productCategory,
-    productCategories,
+export default function SelectSubCategoryModalComponent({
+    category,
+    categories,
     onClose,
 }) {
     const router = useRouter();
@@ -17,13 +17,17 @@ export default function SelectCategoryModalComponent({
             routeWithCategoryParam: (id) => {
                 if (!id) {
                     router.replace({
-                        pathname: router.pathname
+                        pathname: router.pathname,
+                        query: {
+                            ...router.query
+                        }
                     });
                 } else {
                     router.replace({
                         pathname: router.pathname,
                         query: {
-                            productCategoryId: id
+                            ...router.query,
+                            productSubCategoryId: id
                         }
                     })
                 }
@@ -86,19 +90,19 @@ export default function SelectCategoryModalComponent({
                 <div className='content-group'>
                     <div className='content-box'>
                         <span
-                            className={`tag ${!productCategory && 'tag-accent'}`}
+                            className={`tag ${!category && 'tag-accent'}`}
                             onClick={() => __handle.action.routeWithCategoryParam()}
                         >
                             전체
                         </span>
-                        {productCategories?.map(r => {
+                        {categories?.map(r => {
                             let isMatched = inputValue && r.name.includes(inputValue);
 
                             if (!inputValue) {
                                 return (
                                     <span
                                         key={r.id}
-                                        className={`tag ${productCategory?.id === r.id && 'tag-accent'}`}
+                                        className={`tag ${category?.id === r.id && 'tag-accent'}`}
                                         onClick={() => __handle.action.routeWithCategoryParam(r.id)}
                                     >
                                         {r.name}
@@ -110,7 +114,7 @@ export default function SelectCategoryModalComponent({
                                 return (
                                     <span
                                         key={r.id}
-                                        className={`tag ${productCategory?.id === r.id && 'tag-accent'}`}
+                                        className={`tag ${category?.id === r.id && 'tag-accent'}`}
                                         onClick={() => __handle.action.routeWithCategoryParam(r.id)}
                                     >
                                         <HighlightedText

@@ -27,10 +27,15 @@ export const ContentWrapper = styled.div`
 `;
 
 export const CategoryWrapper = styled.div`
-    padding: 20px 0;
+    padding: 40px 0;
     border-bottom: 1px solid #f0f0f0;
     
-
+    .group{
+        &:last-child{
+            margin-top: 40px;
+        }
+    }
+    
     .title{
         margin-bottom: 10px;
         color:#404040;
@@ -83,7 +88,7 @@ export const CategoryWrapper = styled.div`
 `;
 
 export const SearchConsoleWrapper = styled.div`
-    padding: 20px 0;
+    padding: 40px 0;
 
     .title{
         margin-bottom: 10px;
@@ -98,7 +103,7 @@ export const SearchConsoleWrapper = styled.div`
     }
 
     .input-box{
-        margin-top: 10px;
+        margin-top: 20px;
         .input-el{
             box-sizing: border-box;
             width: 100%;
@@ -111,7 +116,7 @@ export const SearchConsoleWrapper = styled.div`
     }
 
     .search-button{
-        margin:20px 0 0 0;
+        margin:40px 0 0 0;
         padding:0;
         width: 100%;
         height: 48px;

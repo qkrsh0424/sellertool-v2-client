@@ -17,8 +17,6 @@ const ProductDashboardMainComponent = (props) => {
         reqDeleteProductCategory
     } = useProductCategoriesHook();
 
-    console.log(productCategories, productCategory);
-
     const __handle = {
         submit: {
             modifyProductCategoryName: async ({

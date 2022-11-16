@@ -10,6 +10,8 @@ const productSubCategoryDataConnect = () => {
          * 
          * @param {object} params 
          * @param {string} params.productCategoryId
+         * @param {object} headers
+         * @param {string} headers.wsId
          * @returns 
          */
         searchList: async function (params, headers) {

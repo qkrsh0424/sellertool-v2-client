@@ -3,12 +3,12 @@ import { useState } from "react";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../modules/image/CustomImage";
 import CustomSelect from "../../../modules/select/CustomSelect";
-import { Container, FormWrapper, HeadWrapper, Wrapper } from "./styles/CategoryField.styled";
+import { Container, FormWrapper, HeadWrapper, Wrapper } from "./styles/SubCategoryField.styled";
 
-export default function CategoryFieldComponent({
-    productCategories,
-    productCategoryId,
-    onChangeProductCategoryId
+export default function SubCategoryFieldComponent({
+    productSubCategories,
+    productSubCategoryId,
+    onChangeProductSubCategoryId
 }) {
     const [dropDownOpen, setDropDownOpen] = useState(true);
 
@@ -31,7 +31,7 @@ export default function CategoryFieldComponent({
                         <div className='mgl-flex mgl-flex-alignItems-center'>
                             <span className='required-tag'></span>
                             <div className='title'>
-                                카테고리
+                                서브 카테고리
                             </div>
                         </div>
                         {dropDownOpen ?
@@ -68,11 +68,11 @@ export default function CategoryFieldComponent({
                             <FormWrapper>
                                 <CustomSelect
                                     className='select-item'
-                                    value={productCategoryId || ''}
-                                    onChange={(e) => onChangeProductCategoryId(e)}
+                                    value={productSubCategoryId || ''}
+                                    onChange={(e) => onChangeProductSubCategoryId(e)}
                                 >
                                     <option value=''>선택</option>
-                                    {productCategories?.map(r => {
+                                    {productSubCategories?.map(r => {
                                         return (
                                             <option key={r.id} value={r.id}>{r.name}</option>
                                         );

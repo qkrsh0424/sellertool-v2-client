@@ -36,7 +36,7 @@ const useDebouncedRippleCleanUp = (rippleCount, duration, cleanUpFunction) => {
             bounce = setTimeout(() => {
                 cleanUpFunction();
                 clearTimeout(bounce);
-            }, duration * 4);
+            }, duration * 1.5);
         }
 
         return () => clearTimeout(bounce);

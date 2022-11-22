@@ -1,35 +1,22 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    width: 300px;
-    background: white;
-    border-radius: 15px;
+    width: 100%;
     box-sizing: border-box;
-    box-shadow: var(--defaultBoxShadow);
-    /* min-height: 500px; */
     overflow: hidden;
-
-    @media all and (max-width:992px){
-        min-height: 0;
-    }
-`;
-
-export const Title = styled.div`
-    padding: 10px 20px;
-    background: var(--contentHeadBackground);
-    font-size: 18px;
-    font-weight: 600;
-    color: #404040;
+    transition: all 0.5s ease 0s;
 `;
 
 export const ContentWrapper = styled.div`
     padding: 0 20px;
+    transition: all 0.5s;
 `;
 
 export const CategoryWrapper = styled.div`
+    position:relative;
     padding: 40px 0;
     border-bottom: 1px solid #f0f0f0;
-    
+
     .group{
         &:last-child{
             margin-top: 40px;
@@ -89,7 +76,6 @@ export const CategoryWrapper = styled.div`
 
 export const SearchConsoleWrapper = styled.div`
     padding: 40px 0;
-
     .title{
         margin-bottom: 10px;
         color:#404040;

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
+import CustomImage from "../../../modules/image/CustomImage";
 import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../modules/modal/ConfirmModalComponentV2";
 import CustomSelect from "../../../modules/select/CustomSelect";
@@ -12,7 +13,7 @@ import SelectCategoryModalComponent from "./modal/SelectCategoryModal.component"
 import SelectSubCategoryModalComponent from "./modal/SelectSubCategoryModal.component";
 import SettingCategoryModalComponent from "./modal/SettingCategoryModal.component";
 import SettingSubCategoryModalComponent from "./modal/SettingSubCategoryModal.component";
-import { CategoryWrapper, Container, ContentWrapper, LinkButton, SearchButtonWrapper, SearchConsoleWrapper, Title } from "./styles/SearchField.styled";
+import { CategoryWrapper, Container, ContentWrapper, LinkButton, SearchButtonWrapper, SearchConsoleWrapper } from "./styles/SearchField.styled";
 
 export default function SearchFieldComponent({
     productCategories,
@@ -31,6 +32,8 @@ export default function SearchFieldComponent({
     const [settingSubCategoryModalOpen, setSettingSubCategoryModalOpen] = useState(false);
     const [modifySubCategoryNameModalOpen, setModifySubCategoryNameModalOpen] = useState(false);
     const [deleteSubCategoryModalOpen, setDeleteSubCategoryModalOpen] = useState(false);
+
+    const [viewOpen, setViewOpen] = useState(false);
 
     const {
         productSubCategories,
@@ -121,6 +124,12 @@ export default function SearchFieldComponent({
             closeDeleteSubCategoryModal: () => {
                 setDeleteSubCategoryModalOpen(false);
             },
+            openView: () => {
+                setViewOpen(true);
+            },
+            closeView: () => {
+                setViewOpen(false);
+            }
         },
         submit: {
             modifyProductCategoryName: (name) => {
@@ -206,9 +215,6 @@ export default function SearchFieldComponent({
     return (
         <>
             <Container>
-                <Title>
-                    상품조회
-                </Title>
                 <ContentWrapper>
                     <CategoryWrapper>
                         <div className='group'>

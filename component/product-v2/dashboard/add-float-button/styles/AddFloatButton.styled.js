@@ -4,6 +4,7 @@ export const Container = styled.div`
     position: fixed;
     bottom:30px;
     right:30px;
+    z-index: 30;
 
     .float-button{
         margin:0;

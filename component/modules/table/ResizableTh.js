@@ -84,9 +84,7 @@ export default function ResizableTh({
 
                 }}
             ></Resizer>
-            {/* <div> */}
             {children}
-            {/* </div> */}
         </Th>
     );
 }

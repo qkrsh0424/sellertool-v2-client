@@ -8,30 +8,14 @@ export default function SelectSubCategoryModalComponent({
     category,
     categories,
     onClose,
+    onChangeProductSubCategory
 }) {
-    const router = useRouter();
     const [inputValue, setInputValue] = useState('');
 
     const __handle = {
         action: {
             routeWithCategoryParam: (id) => {
-                if (!id) {
-                    router.replace({
-                        pathname: router.pathname,
-                        query: {
-                            ...router.query
-                        }
-                    });
-                } else {
-                    router.replace({
-                        pathname: router.pathname,
-                        query: {
-                            ...router.query,
-                            productSubCategoryId: id
-                        }
-                    })
-                }
-
+                onChangeProductSubCategory(id);
                 onClose();
 
             }
@@ -91,7 +75,7 @@ export default function SelectSubCategoryModalComponent({
                     <div className='content-box'>
                         <span
                             className={`tag ${!category && 'tag-accent'}`}
-                            onClick={() => __handle.action.routeWithCategoryParam()}
+                            onClick={() => __handle.action.routeWithCategoryParam('')}
                         >
                             전체
                         </span>

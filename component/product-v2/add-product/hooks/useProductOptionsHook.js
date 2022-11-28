@@ -172,7 +172,7 @@ export default function useProductOptionsHook(props) {
                 totalPurchasePrice: !r.totalPurchasePrice ? '0' : r.totalPurchasePrice.trim(),
                 status: r.status.trim(),
                 memo: r.memo.trim(),
-                releaseLocation: r.releaseLocation.trim(),
+                releaseLocation: r.releaseLocation.trim()
             }
         })
         return data;

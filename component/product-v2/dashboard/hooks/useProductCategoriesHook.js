@@ -101,6 +101,11 @@ export default function useProductCategoriesHook(props) {
             })
     }
 
+    const onChangeProductCategory = (productCategoryId) =>{
+        let data = productCategories?.find(r => r.id === productCategoryId);
+        setProductCategory(_.cloneDeep(data));
+    }
+
     const onInitProductCategory = () => {
         let productCategoryId = router?.query?.productCategoryId;
         let data = productCategories?.find(r => r.id === productCategoryId);
@@ -112,6 +117,7 @@ export default function useProductCategoriesHook(props) {
         productCategories,
         productCategory,
         reqChangeProductCategoryName,
-        reqDeleteProductCategory
+        reqDeleteProductCategory,
+        onChangeProductCategory
     }
 }

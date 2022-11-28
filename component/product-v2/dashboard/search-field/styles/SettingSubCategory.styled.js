@@ -54,8 +54,9 @@ export const Container = styled.div`
 
     .link-button{
         width:100%;
+        max-width: 250px;
         border: 1px solid #f0f0f0;
-        margin:0;
+        margin:0 auto 0 auto;
         padding:0;
         margin-top: 20px;
         height: 48px;

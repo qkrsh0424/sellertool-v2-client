@@ -36,42 +36,48 @@ export default function AddModalComponent({
                     </div>
                 </div>
                 <div className='content-group'>
-                    <Link
-                        href='/product/add-category'
-                        passHref
-                    >
-                        <a>
-                            <SingleBlockButton
-                                className='link-button'
-                            >
-                                카테고리 추가
-                            </SingleBlockButton>
-                        </a>
-                    </Link>
-                    <Link
-                        href='/product/add-sub-category'
-                        passHref
-                    >
-                        <a>
-                            <SingleBlockButton
-                                className='link-button'
-                            >
-                                서브 카테고리 추가
-                            </SingleBlockButton>
-                        </a>
-                    </Link>
-                    <Link
-                        href='/product/add-product'
-                        passHref
-                    >
-                        <a>
-                            <SingleBlockButton
-                                className='link-button'
-                            >
-                                상품 추가
-                            </SingleBlockButton>
-                        </a>
-                    </Link>
+                    <div className='link-box'>
+                        <Link
+                            href='/product/add-category'
+                            passHref
+                        >
+                            <a>
+                                <SingleBlockButton
+                                    className='link-button'
+                                >
+                                    카테고리 추가
+                                </SingleBlockButton>
+                            </a>
+                        </Link>
+                    </div>
+                    <div className='link-box'>
+                        <Link
+                            href='/product/add-sub-category'
+                            passHref
+                        >
+                            <a>
+                                <SingleBlockButton
+                                    className='link-button'
+                                >
+                                    서브 카테고리 추가
+                                </SingleBlockButton>
+                            </a>
+                        </Link>
+                    </div>
+                    <div className='link-box'>
+                        <Link
+                            href='/product/add-product'
+                            passHref
+                        >
+                            <a>
+                                <SingleBlockButton
+                                    className='link-button'
+                                >
+                                    상품 추가
+                                </SingleBlockButton>
+                            </a>
+                        </Link>
+                    </div>
                 </div>
             </Container>
         </>

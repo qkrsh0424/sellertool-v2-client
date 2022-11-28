@@ -18,7 +18,7 @@ export default function ModifySubCategoryNameModalComponent({
                 e.preventDefault();
                 setDisabledBtn(true);
 
-                let originName = productSubCategory.name;
+                let originName = productSubCategory?.name;
                 let currName = categoryNameRef.current.value;
 
                 if (originName === currName) {

@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { productSubCategoryDataConnect } from "../../../../data_connect/productSubCategoryDataConnect";
-import valueUtils from "../../../../utils/valueUtils";
 
 export default function useProductSubCategoriesHook({
     productCategory
@@ -12,6 +11,7 @@ export default function useProductSubCategoriesHook({
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const [productSubCategories, setProductSubCategories] = useState(null);
     const [productSubCategory, setProductSubCategory] = useState(null);
+    const [productSubCategoryId, setProductSubCategoryId] = useState(null);
 
     useEffect(() => {
         if (!workspaceRedux?.workspaceInfo?.id || !productCategory?.id) {
@@ -23,13 +23,23 @@ export default function useProductSubCategoriesHook({
     }, [workspaceRedux?.workspaceInfo?.id, productCategory?.id]);
 
     useEffect(() => {
-        if (!productSubCategories || !router?.query?.productSubCategoryId) {
+        if (!router?.query?.productSubCategoryId) {
+            setProductSubCategoryId(null);
+            return;
+        }
+
+        setProductSubCategoryId(router?.query?.productSubCategoryId);
+
+    }, [router?.query?.productSubCategoryId]);
+
+    useEffect(() => {
+        if (!productSubCategories || !productSubCategoryId) {
             setProductSubCategory(null);
             return;
         }
 
         onSetProductSubCategory();
-    }, [productSubCategories, router?.query?.productSubCategoryId]);
+    }, [productSubCategories, productSubCategoryId]);
 
     const reqFetchProductSubCategories = async () => {
 
@@ -107,6 +117,12 @@ export default function useProductSubCategoriesHook({
             })
     }
 
+    const onChangeProductSubCategory = (productSubCategoryId) => {
+        let data = productSubCategories?.find(r => r.id === productSubCategoryId);
+
+        setProductSubCategory(_.cloneDeep(data));
+    }
+
     const onSetProductSubCategory = () => {
         let productSubCategoryId = router?.query?.productSubCategoryId;
         let data = productSubCategories?.find(r => r.id === productSubCategoryId);
@@ -114,10 +130,16 @@ export default function useProductSubCategoriesHook({
         setProductSubCategory(_.cloneDeep(data));
     }
 
+    const clearProductSubCategory = () => {
+        setProductSubCategoryId(null);
+    }
+
     return {
         productSubCategories,
         productSubCategory,
         reqChangeName,
-        reqDeleteProductSubCategory
+        reqDeleteProductSubCategory,
+        onChangeProductSubCategory,
+        clearProductSubCategory
     }
 }

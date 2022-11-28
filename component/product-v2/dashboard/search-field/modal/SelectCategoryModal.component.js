@@ -8,6 +8,8 @@ export default function SelectCategoryModalComponent({
     productCategory,
     productCategories,
     onClose,
+    onChangeProductCategory,
+    onClearProductSubCategory
 }) {
     const router = useRouter();
     const [inputValue, setInputValue] = useState('');
@@ -15,19 +17,8 @@ export default function SelectCategoryModalComponent({
     const __handle = {
         action: {
             routeWithCategoryParam: (id) => {
-                if (!id) {
-                    router.replace({
-                        pathname: router.pathname
-                    });
-                } else {
-                    router.replace({
-                        pathname: router.pathname,
-                        query: {
-                            productCategoryId: id
-                        }
-                    })
-                }
-
+                onChangeProductCategory(id);
+                onClearProductSubCategory();
                 onClose();
 
             }

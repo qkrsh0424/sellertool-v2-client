@@ -1,12 +1,14 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../modules/image/CustomImage";
 import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../modules/modal/ConfirmModalComponentV2";
 import CustomSelect from "../../../modules/select/CustomSelect";
+import useProductCategoriesHook from "../hooks/useProductCategoriesHook";
 import useProductSubCategoriesHook from "../hooks/useProductSubCategoriesHook";
+import useSearchConditionsHook from "../hooks/useSearchConditionsHook";
 import ModifyCategoryNameModalComponent from "./modal/ModifyCategoryNameModal.component";
 import ModifySubCategoryNameModalComponent from "./modal/ModifySubCategoryNameModal.component";
 import SelectCategoryModalComponent from "./modal/SelectCategoryModal.component";
@@ -16,10 +18,7 @@ import SettingSubCategoryModalComponent from "./modal/SettingSubCategoryModal.co
 import { CategoryWrapper, Container, ContentWrapper, LinkButton, SearchButtonWrapper, SearchConsoleWrapper } from "./styles/SearchField.styled";
 
 export default function SearchFieldComponent({
-    productCategories,
-    productCategory,
-    onSubmitModifyProductCategoryName,
-    onSubmitDeleteProductCategory
+
 }) {
     const router = useRouter();
 
@@ -33,16 +32,31 @@ export default function SearchFieldComponent({
     const [modifySubCategoryNameModalOpen, setModifySubCategoryNameModalOpen] = useState(false);
     const [deleteSubCategoryModalOpen, setDeleteSubCategoryModalOpen] = useState(false);
 
-    const [viewOpen, setViewOpen] = useState(false);
+    const {
+        productCategories,
+        productCategory,
+        reqChangeProductCategoryName,
+        reqDeleteProductCategory,
+        onChangeProductCategory
+    } = useProductCategoriesHook();
 
     const {
         productSubCategories,
         productSubCategory,
         reqChangeName,
-        reqDeleteProductSubCategory
+        reqDeleteProductSubCategory,
+        onChangeProductSubCategory,
+        clearProductSubCategory
     } = useProductSubCategoriesHook({
         productCategory
     });
+
+    const {
+        searchCondition,
+        searchQuery,
+        onChangeSearchCondition,
+        onChangeSearchQuery
+    } = useSearchConditionsHook();
 
     const __handle = {
         action: {
@@ -123,16 +137,10 @@ export default function SearchFieldComponent({
             },
             closeDeleteSubCategoryModal: () => {
                 setDeleteSubCategoryModalOpen(false);
-            },
-            openView: () => {
-                setViewOpen(true);
-            },
-            closeView: () => {
-                setViewOpen(false);
             }
         },
         submit: {
-            modifyProductCategoryName: (name) => {
+            modifyProductCategoryName: async (name) => {
                 if (!productCategory) {
                     alert('카테고리를 먼저 선택해 주세요.');
                     return;
@@ -143,14 +151,14 @@ export default function SearchFieldComponent({
                     name: name
                 }
 
-                onSubmitModifyProductCategoryName({
+                await reqChangeProductCategoryName({
                     body: body,
                     successCallback: () => {
                         __handle.action.closeModifyCategoryNameModal();
                     }
-                })
+                });
             },
-            deleteProductCategory: () => {
+            deleteProductCategory: async () => {
                 if (!productCategory) {
                     alert('카테고리를 먼저 선택해 주세요.');
                     return;
@@ -160,12 +168,15 @@ export default function SearchFieldComponent({
                     productCategoryId: productCategory.id
                 }
 
-                onSubmitDeleteProductCategory({
+                await reqDeleteProductCategory({
                     body: body,
                     successCallback: () => {
+                        router.replace({
+                            pathname: router.pathname
+                        })
                         __handle.action.closeDeleteCategoryModal()
                     }
-                });
+                })
             },
             modifyProductSubCategoryName: async (name) => {
                 if (!productSubCategory) {
@@ -174,7 +185,7 @@ export default function SearchFieldComponent({
                 }
 
                 let body = {
-                    productSubCategoryId: productSubCategory.id,
+                    productSubCategoryId: productSubCategory?.id,
                     name: name
                 }
 
@@ -192,7 +203,7 @@ export default function SearchFieldComponent({
                 }
 
                 let body = {
-                    productSubCategoryId: productSubCategory.id
+                    productSubCategoryId: productSubCategory?.id
                 }
 
                 await reqDeleteProductSubCategory({
@@ -209,6 +220,43 @@ export default function SearchFieldComponent({
                     }
                 });
             },
+            searchItems: (e) => {
+                e.preventDefault();
+                let newQuery = { ...router.query };
+
+                if (productCategory) {
+                    newQuery.productCategoryId = productCategory.id;
+                } else {
+                    delete newQuery.productCategoryId;
+                    delete newQuery.productSubCategoryId;
+                }
+
+                if (productSubCategory) {
+                    newQuery.productSubCategoryId = productSubCategory.id;
+                } else {
+                    delete newQuery.productSubCategoryId;
+                }
+
+                if (searchCondition && searchQuery) {
+                    newQuery.searchCondition = searchCondition
+                    newQuery.searchQuery = searchQuery
+                } else {
+                    delete newQuery.searchCondition
+                    delete newQuery.searchQuery
+                }
+
+                router.replace({
+                    pathname: router.pathname,
+                    query: {
+                        ...newQuery
+                    }
+                })
+            },
+            clearSearchConditions: () => {
+                router.replace({
+                    pathname: router.pathname
+                })
+            }
         }
     }
 
@@ -216,109 +264,125 @@ export default function SearchFieldComponent({
         <>
             <Container>
                 <ContentWrapper>
-                    <CategoryWrapper>
-                        <div className='group'>
-                            <div className='title'>카테고리</div>
-                            <div className='mgl-flex'>
-                                <SingleBlockButton
-                                    type='button'
-                                    className='select-button'
-                                    onClick={() => __handle.action.openSelectCategoryModal()}
-                                >
-                                    {productCategory?.name || '전체'}
-                                </SingleBlockButton>
-                                {productCategory &&
-                                    (
-                                        <SingleBlockButton
-                                            type='button'
-                                            className='icon-button'
-                                            onClick={() => __handle.action.openSettingCategoryModal()}
-                                        >
-                                            <div
-                                                className='icon-figure'
+                    <form onSubmit={(e) => __handle.submit.searchItems(e)}>
+                        <CategoryWrapper>
+                            <div className='group'>
+                                <div className='title'>카테고리</div>
+                                <div className='mgl-flex'>
+                                    <SingleBlockButton
+                                        type='button'
+                                        className='select-button'
+                                        onClick={() => __handle.action.openSelectCategoryModal()}
+                                    >
+                                        {productCategory?.name || '전체'}
+                                    </SingleBlockButton>
+                                    {productCategory &&
+                                        (
+                                            <SingleBlockButton
+                                                type='button'
+                                                className='icon-button'
+                                                onClick={() => __handle.action.openSettingCategoryModal()}
                                             >
-                                                <Image
-                                                    loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                    src='/images/icon/settings_default_808080.svg'
-                                                    layout='responsive'
-                                                    width={1}
-                                                    height={1}
-                                                    objectFit={'cover'}
-                                                    alt='image'
-                                                    loading='lazy'
-                                                ></Image>
-                                            </div>
-                                        </SingleBlockButton>
-                                    )
-                                }
+                                                <div
+                                                    className='icon-figure'
+                                                >
+                                                    <Image
+                                                        loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                                        src='/images/icon/settings_default_808080.svg'
+                                                        layout='responsive'
+                                                        width={1}
+                                                        height={1}
+                                                        objectFit={'cover'}
+                                                        alt='image'
+                                                        loading='lazy'
+                                                    ></Image>
+                                                </div>
+                                            </SingleBlockButton>
+                                        )
+                                    }
+                                </div>
                             </div>
-                        </div>
-                        <div className='group'>
-                            <div className='title'>서브 카테고리</div>
-                            <div className='mgl-flex'>
-                                <SingleBlockButton
-                                    type='button'
-                                    className='select-button'
-                                    onClick={() => __handle.action.openSelectSubCategoryModal()}
-                                >
-                                    {productSubCategory?.name || '전체'}
-                                </SingleBlockButton>
-                                {productSubCategory &&
-                                    (
-                                        <SingleBlockButton
-                                            type='button'
-                                            className='icon-button'
-                                            onClick={() => __handle.action.openSettingSubCategoryModal()}
-                                        >
-                                            <div
-                                                className='icon-figure'
+                            <div className='group'>
+                                <div className='title'>서브 카테고리</div>
+                                <div className='mgl-flex'>
+                                    <SingleBlockButton
+                                        type='button'
+                                        className='select-button'
+                                        onClick={() => __handle.action.openSelectSubCategoryModal()}
+                                    >
+                                        {productSubCategory?.name || '전체'}
+                                    </SingleBlockButton>
+                                    {productSubCategory &&
+                                        (
+                                            <SingleBlockButton
+                                                type='button'
+                                                className='icon-button'
+                                                onClick={() => __handle.action.openSettingSubCategoryModal()}
                                             >
-                                                <Image
-                                                    loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                    src='/images/icon/settings_default_808080.svg'
-                                                    layout='responsive'
-                                                    width={1}
-                                                    height={1}
-                                                    objectFit={'cover'}
-                                                    alt='image'
-                                                    loading='lazy'
-                                                ></Image>
-                                            </div>
-                                        </SingleBlockButton>
-                                    )
-                                }
+                                                <div
+                                                    className='icon-figure'
+                                                >
+                                                    <Image
+                                                        loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                                        src='/images/icon/settings_default_808080.svg'
+                                                        layout='responsive'
+                                                        width={1}
+                                                        height={1}
+                                                        objectFit={'cover'}
+                                                        alt='image'
+                                                        loading='lazy'
+                                                    ></Image>
+                                                </div>
+                                            </SingleBlockButton>
+                                        )
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    </CategoryWrapper>
-                    <SearchConsoleWrapper>
-                        <div className='title'>조회 조건</div>
-                        <CustomSelect
-                            className='select-button'
-                        >
-                            <option>선택</option>
-                            <option>상품명</option>
-                            <option>옵션명</option>
-                            <option>상품코드</option>
-                            <option>옵션코드</option>
-                        </CustomSelect>
-                        <div className='input-box'>
-                            <input
-                                type='text'
-                                className='input-el'
-                                placeholder="검색어를 입력하세요."
-                            ></input>
-                        </div>
-                        <SingleBlockButton
-                            type='button'
-                            className='search-button'
-                        >
-                            조회
-                        </SingleBlockButton>
-                    </SearchConsoleWrapper>
+                        </CategoryWrapper>
+                        <SearchConsoleWrapper>
+
+                            <div className='title'>조회 조건</div>
+                            <CustomSelect
+                                className='select-button'
+                                value={searchCondition || ''}
+                                onChange={(e) => onChangeSearchCondition(e)}
+                            >
+                                <option value=''>선택</option>
+                                {SEARCH_CONDITIONS?.map(r => {
+                                    return (
+                                        <option value={r.fieldName} key={r.fieldName}>{r.name}</option>
+                                    );
+                                })}
+                            </CustomSelect>
+                            <div className='input-box'>
+                                <input
+                                    type='text'
+                                    className='input-el'
+                                    placeholder="검색어를 입력하세요."
+                                    value={searchQuery || ''}
+                                    onChange={(e) => onChangeSearchQuery(e)}
+                                ></input>
+                            </div>
+                            <SingleBlockButton
+                                type='submit'
+                                className='search-button'
+                            >
+                                조회
+                            </SingleBlockButton>
+                            <SingleBlockButton
+                                type='button'
+                                className='initialize-button'
+                                onClick={() => __handle.submit.clearSearchConditions()}
+                            >
+                                초기화
+                            </SingleBlockButton>
+                        </SearchConsoleWrapper>
+                    </form>
                 </ContentWrapper>
             </Container>
 
-            {selectCategoryModalOpen &&
+            {
+                selectCategoryModalOpen &&
                 (
                     <CommonModalComponent
                         open={selectCategoryModalOpen}
@@ -329,12 +393,15 @@ export default function SearchFieldComponent({
                             productCategory={productCategory}
                             productCategories={productCategories}
                             onClose={__handle.action.closeSelectCategoryModal}
+                            onChangeProductCategory={onChangeProductCategory}
+                            onClearProductSubCategory={clearProductSubCategory}
                         />
                     </CommonModalComponent>
                 )
             }
 
-            {settingCategoryModalOpen &&
+            {
+                settingCategoryModalOpen &&
                 (
                     <CommonModalComponent
                         open={settingCategoryModalOpen}
@@ -350,7 +417,8 @@ export default function SearchFieldComponent({
                 )
             }
 
-            {modifyCategoryNameModalOpen &&
+            {
+                modifyCategoryNameModalOpen &&
                 (
                     <CommonModalComponent
                         open={modifyCategoryNameModalOpen}
@@ -366,7 +434,8 @@ export default function SearchFieldComponent({
                 )
             }
 
-            {deleteCategoryModalOpen &&
+            {
+                deleteCategoryModalOpen &&
                 (
                     <ConfirmModalComponentV2
                         open={deleteCategoryModalOpen}
@@ -388,7 +457,8 @@ export default function SearchFieldComponent({
                 )
             }
 
-            {selectSubCategoryModalOpen &&
+            {
+                selectSubCategoryModalOpen &&
                 (
                     <CommonModalComponent
                         open={selectSubCategoryModalOpen}
@@ -399,12 +469,14 @@ export default function SearchFieldComponent({
                             category={productSubCategory}
                             categories={productSubCategories}
                             onClose={__handle.action.closeSelectSubCategoryModal}
+                            onChangeProductSubCategory={onChangeProductSubCategory}
                         />
                     </CommonModalComponent>
                 )
             }
 
-            {settingSubCategoryModalOpen &&
+            {
+                settingSubCategoryModalOpen &&
                 (
                     <CommonModalComponent
                         open={settingSubCategoryModalOpen}
@@ -420,7 +492,8 @@ export default function SearchFieldComponent({
                 )
             }
 
-            {modifySubCategoryNameModalOpen &&
+            {
+                modifySubCategoryNameModalOpen &&
                 (
                     <CommonModalComponent
                         open={modifySubCategoryNameModalOpen}
@@ -428,7 +501,6 @@ export default function SearchFieldComponent({
                         onClose={__handle.action.closeModifySubCategoryNameModal}
                     >
                         <ModifySubCategoryNameModalComponent
-                            productCategories={productCategories}
                             productSubCategory={productSubCategory}
                             onClose={__handle.action.closeModifySubCategoryNameModal}
                             onConfirm={__handle.submit.modifyProductSubCategoryName}
@@ -437,7 +509,8 @@ export default function SearchFieldComponent({
                 )
             }
 
-            {deleteSubCategoryModalOpen &&
+            {
+                deleteSubCategoryModalOpen &&
                 (
                     <ConfirmModalComponentV2
                         open={deleteSubCategoryModalOpen}
@@ -461,3 +534,38 @@ export default function SearchFieldComponent({
         </>
     );
 }
+
+const SEARCH_CONDITIONS = [
+    {
+        fieldName: 'product.name',
+        name: '상품명',
+    },
+    {
+        fieldName: 'product.code',
+        name: '상품코드',
+    },
+    {
+        fieldName: 'product.productTag',
+        name: '상품태그',
+    },
+    {
+        fieldName: 'productOption.name',
+        name: '옵션명',
+    },
+    {
+        fieldName: 'productOption.code',
+        name: '옵션코드',
+    },
+    {
+        fieldName: 'productOption.optionTag',
+        name: '옵션태그',
+    },
+    {
+        fieldName: 'productOption.status',
+        name: '옵션상태',
+    },
+    {
+        fieldName: 'productOption.releaseLocation',
+        name: '출고지',
+    }
+]

@@ -1,14 +1,16 @@
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import usePopoverHook from "../../../../hooks/popover/usePopoverHook";
 import { BasicSnackbarHookComponent, useBasicSnackbarHook } from "../../../../hooks/snackbar/useBasicSnackbarHook";
 import { numberFormatUtils } from "../../../../utils/numberFormatUtils";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../modules/image/CustomImage";
+import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../modules/modal/ConfirmModalComponentV2";
 import MouseOverPopover from "../../../modules/popover/MouseOverPopover";
 import ResizableTh from "../../../modules/table/ResizableTh";
 import useProductOptionsHook from "../hooks/useProductOptionsHook";
+import ProductOptionPackageModalComponent from "./modal/ProductOptionPackageModal.component";
 import { Container, ContentWrapper, OptionsWrapper, ProductDetailWrapper, ProductWrapper, TableBox, TableWrapper, ThumbnailWrapper } from "./styles/ProductCard.styled";
 
 export default function ProductCardComponent({
@@ -20,6 +22,8 @@ export default function ProductCardComponent({
     const [optionsFieldOpen, setOptionsFieldOpen] = useState(false);
     const [deleteProductModalOpen, setDeleteProductModalOpen] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState(null);
+    const [optionPackageModalOpen, setOptionPackageModalOpen] = useState(false);
+    const [selectedOptionId, setSelectedOptionId] = useState(null);
 
     const {
         popoverAnchorEl,
@@ -40,14 +44,27 @@ export default function ProductCardComponent({
         reqFetchProductOptions
     } = useProductOptionsHook({
         product: product
-    })
+    });
 
-    const handleActionOpenOptionsField = useCallback(() => {
+    useEffect(() => {
+        if (!router?.query?.optionsFoldable) {
+            handleCloseOptionsField();
+            return;
+        }
+
+        if (router?.query?.optionsFoldable === 'unfold') {
+            handleOpenOptionsField();
+        } else {
+            handleCloseOptionsField();
+        }
+    }, [router?.query?.optionsFoldable])
+
+    const handleOpenOptionsField = useCallback(() => {
         reqFetchProductOptions();
         setOptionsFieldOpen(true);
     }, [])
 
-    const handleActionCloseOptionsField = useCallback(() => {
+    const handleCloseOptionsField = useCallback(() => {
         setOptionsFieldOpen(false);
     }, []);
 
@@ -77,6 +94,17 @@ export default function ProductCardComponent({
         setSelectedProductId(null);
     }, []);
 
+    const handleOpenOptionPackageModal = useCallback((optionId) => {
+        setSelectedOptionId(optionId);
+        setOptionPackageModalOpen(true);
+    }, []);
+
+    const handleCloseOptionPackageModal = useCallback(() => {
+        setOptionPackageModalOpen(false);
+        setSelectedOptionId(null);
+    }, []);
+
+    // Submit handler
     const handleSubmitDeleteProduct = useCallback(() => {
         if (!selectedProductId) {
             return;
@@ -122,7 +150,7 @@ export default function ProductCardComponent({
                             <SingleBlockButton
                                 type='button'
                                 className='dropdown-button-item'
-                                onClick={() => handleActionCloseOptionsField()}
+                                onClick={() => handleCloseOptionsField()}
                             >
                                 <div>
                                     <CustomImage
@@ -134,7 +162,7 @@ export default function ProductCardComponent({
                             <SingleBlockButton
                                 type='button'
                                 className='dropdown-button-item'
-                                onClick={() => handleActionOpenOptionsField()}
+                                onClick={() => handleOpenOptionsField()}
                             >
                                 <div>
                                     <CustomImage
@@ -217,6 +245,7 @@ export default function ProductCardComponent({
                                 productOptions={productOptions}
                                 onActionOpenPopover={onActionOpenPopover}
                                 onActionClosePopover={onActionClosePopover}
+                                onActionOpenOptionPackageModal={handleOpenOptionPackageModal}
                             />
                         </OptionsWrapper>
                     </>
@@ -245,6 +274,24 @@ export default function ProductCardComponent({
                     />
                 )
             }
+
+            {optionPackageModalOpen &&
+                (
+                    <CommonModalComponent
+                        open={optionPackageModalOpen}
+                        onClose={handleCloseOptionPackageModal}
+                        maxWidth={'sm'}
+                    >
+                        <ProductOptionPackageModalComponent
+                            selectedOptionId={selectedOptionId}
+
+                            onReqFetchProductOptions={reqFetchProductOptions}
+                            onClose={handleCloseOptionPackageModal}
+                        />
+                    </CommonModalComponent>
+                )
+            }
+
             {/* Popover */}
             {Boolean(popoverAnchorEl) &&
                 <MouseOverPopover
@@ -275,7 +322,8 @@ export default function ProductCardComponent({
 function Table({
     productOptions,
     onActionOpenPopover,
-    onActionClosePopover
+    onActionClosePopover,
+    onActionOpenOptionPackageModal
 }) {
 
     return (
@@ -353,13 +401,22 @@ function Table({
                                             type='button'
                                             className='icon-button-item'
                                             style={{
-                                                borderColor: option?.packageYn === 'y' ? 'var(--defaultGreenColor)' : ''
+                                                borderColor: option?.packageYn === 'y' ? 'var(--defaultGreenColor)' : '',
+                                                backgroundColor: option?.packageYn === 'y' ? 'var(--defaultGreenColor)' : '',
                                             }}
+                                            onClick={() => onActionOpenOptionPackageModal(option.id)}
                                         >
                                             <div className='icon-figure'>
-                                                <CustomImage
-                                                    src={'/images/icon/edit_note_808080.svg'}
-                                                />
+                                                {option?.packageYn === 'y' ?
+                                                    <CustomImage
+                                                        src={'/images/icon/edit_note_ffffff.svg'}
+                                                    />
+                                                    :
+                                                    <CustomImage
+                                                        src={'/images/icon/edit_note_808080.svg'}
+                                                    />
+                                                }
+
                                             </div>
                                         </SingleBlockButton>
                                     </td>

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { productOptionDataConnect } from "../../../../data_connect/productOptionDataConnect";
 
@@ -9,7 +9,6 @@ const SCP_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.deve
 export default function useProductOptionsHook({
     product
 }) {
-    const router = useRouter();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
 
     const [productOptions, setProductOptions] = useState(null);

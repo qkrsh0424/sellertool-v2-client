@@ -52,6 +52,12 @@ export const Container = styled.div`
         padding: 20px 0;
     }
 
+    .link-box{
+        width: 100%;
+        max-width: 250px;
+        margin: 0 auto 0 auto;
+    }
+
     .link-button{
         width:100%;
         border: 1px solid #f0f0f0;

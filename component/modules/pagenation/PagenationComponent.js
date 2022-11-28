@@ -43,8 +43,9 @@ const Wrapper = styled.div`
         width: 34px; 
         height: 34px;
         border-radius: 50%;
-        border: 1px solid #00000000;
-        background: white;
+        border: none;
+        background: none;
+        box-sizing: border-box;
 
         cursor: pointer;
 
@@ -176,7 +177,7 @@ const PagenationComponent = (props) => {
                             {(!props.isFirst) &&
                                 <button className={`circle-button-el`} onClick={onActionPrev}>
                                     <img
-                                        src='/assets/icon/left_navigation_icon.png'
+                                        src='/images/icon/arrowLeft_chevron_808080.svg'
                                         className='button-icon-el'
                                         alt='left navigation icon'
                                         loading='lazy'
@@ -192,7 +193,7 @@ const PagenationComponent = (props) => {
                             {(!props.isLast) &&
                                 <button className={`circle-button-el`} onClick={onActionNext}>
                                     <img
-                                        src='/assets/icon/right_navigation_icon.png'
+                                        src='/images/icon/arrowRight_chevron_808080.svg'
                                         className='button-icon-el'
                                         alt='right navigation icon'
                                         loading='lazy'

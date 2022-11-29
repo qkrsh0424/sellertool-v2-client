@@ -361,7 +361,7 @@ const PagenationComponentStateV2 = ({
                                 </PageInputWrapper>
                             </>
                         )}
-                    >{console.log('hello')}</CustomPopper>
+                    ></CustomPopper>
                 )
             }
         </>

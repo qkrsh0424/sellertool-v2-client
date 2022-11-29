@@ -49,7 +49,6 @@ export const ContentContainer = styled.div`
 `;
 
 export const ContentWrapper = styled.div`
-
     .item-list-wrapper{
         .body{
             background: white;
@@ -57,6 +56,10 @@ export const ContentWrapper = styled.div`
             border-radius: 10px;
             box-shadow: var(--defaultBoxShadow);
             margin-bottom: 5px;
+
+            @media all and (max-width: 992px){
+                flex-direction: column-reverse;
+            }
 
             .content-wrapper{
                 flex:1;
@@ -67,11 +70,13 @@ export const ContentWrapper = styled.div`
 
                 .button-item{
                     margin:0;
-                    padding:0;
+                    padding:0 5px;
                     height: 40px;
                     border-radius: 5px;
-                    font-size: 14px;
+                    font-size: 13px;
                     color: #505050;
+                    white-space: pre-line;
+                    word-break: break-all;
                 }
 
                 .label{
@@ -101,6 +106,11 @@ export const ContentWrapper = styled.div`
                 align-items: center;
                 justify-content: center;
 
+                @media all and (max-width: 992px){
+                    width:100%;
+                    justify-content: right;
+                    padding: 10px 10px 0 0;
+                }
 
                 .delete-button-item{
                     margin:0;
@@ -121,8 +131,8 @@ export const ContentWrapper = styled.div`
         .add-button-item{
             margin:0;
             padding:0;
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: var(--mainColor);
             border:none;

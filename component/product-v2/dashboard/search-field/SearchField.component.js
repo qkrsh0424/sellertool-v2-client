@@ -248,7 +248,8 @@ export default function SearchFieldComponent({
                 router.replace({
                     pathname: router.pathname,
                     query: {
-                        ...newQuery
+                        ...newQuery,
+                        page: 1
                     }
                 })
             },

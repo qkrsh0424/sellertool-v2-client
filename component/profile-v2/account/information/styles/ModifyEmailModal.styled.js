@@ -80,6 +80,7 @@ export const Container = styled.div`
                 margin-left: 10px;
                 font-size: 17px;
                 font-weight: 500;
+                word-break: break-all;
             }
 
             .validation-button-el{

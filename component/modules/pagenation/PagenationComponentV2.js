@@ -209,16 +209,15 @@ const PagenationComponentV2 = ({
             return;
         }
 
-        let pageIndex = pageIndex + 1;
+        let newPage = pageIndex;
 
         router.replace({
             pathname: router.pathname,
             query: {
                 ...router.query,
-                page: pageIndex - 1
+                page: newPage
             }
         });
-
     }
 
     const onActionNext = () => {
@@ -226,13 +225,13 @@ const PagenationComponentV2 = ({
             return;
         }
 
-        let pageIndex = pageIndex + 1;
+        let newPage = pageIndex + 2;
 
         router.replace({
             pathname: router.pathname,
             query: {
                 ...router.query,
-                page: pageIndex + 1
+                page: newPage
             }
         });
     }

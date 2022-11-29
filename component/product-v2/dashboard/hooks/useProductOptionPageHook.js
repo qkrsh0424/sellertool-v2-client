@@ -9,11 +9,6 @@ const DEFAULT_SIZE = 20;
 export default function useProdutOptionPageHook(props) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const [productOptionPage, setProductOptionPage] = useState(null);
-    const [pageable, setPageable] = useState({
-        page: DEFAULT_PAGE,
-        size: DEFAULT_SIZE
-    });
-
     const [mergeSearchConditionFlag, setIsMergeSearchCondition] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -24,7 +19,7 @@ export default function useProdutOptionPageHook(props) {
         }
 
         reqFetchProductOptionPage();
-    }, [workspaceRedux?.workspaceInfo?.id, pageable]);
+    }, [workspaceRedux?.workspaceInfo?.id]);
 
     useEffect(() => {
         if (!searchQuery) {
@@ -35,10 +30,10 @@ export default function useProdutOptionPageHook(props) {
         setIsMergeSearchCondition(true);
     }, [searchQuery])
 
-    const reqFetchProductOptionPage = useCallback(async () => {
+    const reqFetchProductOptionPage = useCallback(async (reqPage, reqSize) => {
         let params = {
-            page: pageable.page,
-            size: pageable.size,
+            page: reqPage ? reqPage : DEFAULT_PAGE,
+            size: reqSize ? reqSize : DEFAULT_SIZE,
             mergeSearchConditionFlag: mergeSearchConditionFlag,
             searchQuery: searchQuery,
             sort: 'cid_asc'
@@ -57,22 +52,7 @@ export default function useProdutOptionPageHook(props) {
             .catch(err => {
                 console.log(err, err.response);
             })
-    }, [workspaceRedux?.workspaceInfo?.id, pageable, mergeSearchConditionFlag, searchQuery]);
-
-    const onChangePage = useCallback((pageIndex) => {
-        setPageable({
-            ...pageable,
-            page: pageIndex
-        })
-    }, [pageable]);
-
-    const onChangeSize = useCallback((size) => {
-        setPageable({
-            ...pageable,
-            page: 1,
-            size: size
-        })
-    }, [pageable]);
+    }, [workspaceRedux?.workspaceInfo?.id, mergeSearchConditionFlag, searchQuery]);
 
     const onChangeSearchQuery = useCallback((e) => {
         let value = e.target.value;
@@ -80,14 +60,10 @@ export default function useProdutOptionPageHook(props) {
         setSearchQuery(value);
     }, []);
 
-
     return {
         productOptionPage,
-        pageable,
         searchQuery,
         reqFetchProductOptionPage,
-        onChangePage,
-        onChangeSize,
         onChangeSearchQuery
     }
 }

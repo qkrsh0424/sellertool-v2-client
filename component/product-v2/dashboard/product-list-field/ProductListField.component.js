@@ -157,7 +157,7 @@ export default function ProductListFieldComponent(props) {
                         isFirst={products?.first}
                         isLast={products?.last}
                         totalElements={products?.totalElements}
-                        sizeElements={[20, 50, 100]}
+                        sizeElements={[10, 20, 50]}
                     />
                 </PagenationWrapper>
             </Container>

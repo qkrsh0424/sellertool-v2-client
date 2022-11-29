@@ -1,6 +1,5 @@
 import { useCallback, useEffect } from "react";
 import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
-import valueUtils from "../../../../../utils/valueUtils";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../modules/image/CustomImage";
 import PagenationComponentStateV2 from "../../../../modules/pagenation/PagenationStateComponentV2";
@@ -16,11 +15,8 @@ export default function ProductOptionPackageSearchOptionModalComponent({
 }) {
     const {
         productOptionPage,
-        pageable,
         searchQuery,
         reqFetchProductOptionPage,
-        onChangePage,
-        onChangeSize,
         onChangeSearchQuery
     } = useProdutOptionPageHook();
     const {
@@ -34,8 +30,16 @@ export default function ProductOptionPackageSearchOptionModalComponent({
     const handleSubmitFetchProductOptionPage = useCallback((e) => {
         e.preventDefault();
         setDisabledBtn(true);
-        reqFetchProductOptionPage();
+        reqFetchProductOptionPage(1);
     }, [reqFetchProductOptionPage]);
+
+    const handlePaging = (pageIndex) => {
+        reqFetchProductOptionPage(pageIndex, productOptionPage.size);
+    }
+
+    const handleSizing = (size) => {
+        reqFetchProductOptionPage(1, size);
+    }
 
     return (
         <>
@@ -107,9 +111,9 @@ export default function ProductOptionPackageSearchOptionModalComponent({
                                 isLast={productOptionPage?.last}
                                 totalElements={productOptionPage?.totalElements}
                                 sizeElements={[10, 20, 50]}
-                                size={pageable?.size}
-                                onChangePage={onChangePage}
-                                onChangeSize={onChangeSize}
+                                size={productOptionPage?.size}
+                                onChangePage={handlePaging}
+                                onChangeSize={handleSizing}
                             />
                         </div>
                     </ContentWrapper>

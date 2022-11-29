@@ -8,17 +8,7 @@ export default function useProductOptionPackagesHook({
     selectedOptionId
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
-    const [productOptionPackages, setProductOptionPackages] = useState([
-        {
-            cid: null,
-            id: null,
-            targetOptionId: null,
-            targetOptionCode: null,
-            tag: '',
-            unit: '0',
-            productOptionId: selectedOptionId
-        }
-    ]);
+    const [productOptionPackages, setProductOptionPackages] = useState([]);
 
     useEffect(() => {
         if (!workspaceRedux?.workspaceInfo?.id || !selectedOptionId) {

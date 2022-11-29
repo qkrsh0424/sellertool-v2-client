@@ -198,28 +198,38 @@ export default function ProductCardComponent({
                                     삭제
                                 </SingleBlockButton>
                             </div>
-                            <div>
+                            <div className='inventory-button-box'>
                                 {product?.stockManagementYn === 'y' ?
-                                    <span
-                                        className='inventory-on'
+                                    <SingleBlockButton
+                                        type='button'
+                                        className='inventory-button-item'
                                         onClick={() => onChangeStockManagement(product?.id)}
                                     >
-                                        재고관리ON
-                                    </span>
+                                        <div className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-center'>
+                                            <div>재고관리</div>
+                                            <div className='inventory-on'></div>
+                                        </div>
+                                    </SingleBlockButton>
                                     :
-                                    <span
-                                        className='inventory-off'
+                                    <SingleBlockButton
+                                        type='button'
+                                        className='inventory-button-item'
                                         onClick={() => onChangeStockManagement(product?.id)}
                                     >
-                                        재고관리OFF
-                                    </span>
+                                        <div className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-center'>
+                                            <div>재고관리</div>
+                                            <div className='inventory-off'></div>
+                                        </div>
+                                    </SingleBlockButton>
                                 }
+                            </div>
+                            <div className='extraInfos-group'>
                                 <span
                                     className='tag'
                                     style={{
                                         cursor: 'pointer'
                                     }}
-                                    onMouseEnter={(e) => onActionOpenPopover(e, `${product?.memo}`)}
+                                    onMouseEnter={(e) => onActionOpenPopover(e, `${product?.memo ? product?.memo : '지정된 메모가 없습니다.'}`)}
                                     onMouseLeave={() => onActionClosePopover()}
                                     onClick={() => handleCopyText(product?.memo)}
                                 >
@@ -231,7 +241,7 @@ export default function ProductCardComponent({
                                         style={{
                                             cursor: 'pointer'
                                         }}
-                                        onMouseEnter={(e) => onActionOpenPopover(e, `${product?.purchaseUri}`)}
+                                        onMouseEnter={(e) => onActionOpenPopover(e, `${product?.purchaseUri ? product?.purchaseUri : '지정된 구매 URL이 없습니다.'}`)}
                                         onMouseLeave={() => onActionClosePopover()}
                                         onClick={() => handleCopyText(product?.purchaseUri)}
                                     >
@@ -252,7 +262,8 @@ export default function ProductCardComponent({
                 }
             </Container>
 
-            {deleteProductModalOpen &&
+            {
+                deleteProductModalOpen &&
                 (
                     <ConfirmModalComponentV2
                         open={deleteProductModalOpen}
@@ -275,7 +286,8 @@ export default function ProductCardComponent({
                 )
             }
 
-            {optionPackageModalOpen &&
+            {
+                optionPackageModalOpen &&
                 (
                     <CommonModalComponent
                         open={optionPackageModalOpen}
@@ -293,7 +305,8 @@ export default function ProductCardComponent({
             }
 
             {/* Popover */}
-            {Boolean(popoverAnchorEl) &&
+            {
+                Boolean(popoverAnchorEl) &&
                 <MouseOverPopover
                     open={Boolean(popoverAnchorEl)}
                     anchorEl={popoverAnchorEl}
@@ -303,7 +316,8 @@ export default function ProductCardComponent({
                 />
             }
 
-            {snackbarOpen &&
+            {
+                snackbarOpen &&
                 <BasicSnackbarHookComponent
                     open={snackbarOpen}
                     message={snackbarMessage}

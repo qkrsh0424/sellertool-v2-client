@@ -83,6 +83,9 @@ const HeaerWrapper = styled.div`
         font-size: 24px;
         font-weight: 700;
 
+        @media all and (max-width: 992px){
+            font-size: 20px;
+        }
     }
 `;
 

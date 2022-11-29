@@ -11,11 +11,19 @@ export const Container = styled.div`
     overflow: hidden;
     border: 1px solid #f0f0f0;
     box-sizing: border-box;
+
+    @media all and (max-width: 992px){
+        padding: 0 10px;
+    }
 `;
 
 export const ProductWrapper = styled.div`
     padding: 20px 0;
 
+    @media all and (max-width: 992px){
+        padding: 15px 0;
+    }
+    
     .dropdown-button-item{
         margin:0;
         padding:0;
@@ -23,6 +31,11 @@ export const ProductWrapper = styled.div`
         height: 38px;
         border-radius: 5px;
         margin-left: 10px;
+
+        @media all and (max-width: 992px){
+            width: 30px;
+            height: 30px;
+        }
     }
 `;
 
@@ -33,8 +46,8 @@ export const ThumbnailWrapper = styled.div`
     border-radius: 5px;
 
     @media all and (max-width: 992px){
-        width: 70px;
-        height: 70px;
+        width: 55px;
+        height: 55px;
     }
 `;
 
@@ -49,6 +62,11 @@ export const ContentWrapper = styled.div`
         margin-bottom: 10px;
         white-space: pre-line;
         word-break: break-all;
+
+        @media all and (max-width: 992px){
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
     }
 
     .product-tag{
@@ -57,6 +75,10 @@ export const ContentWrapper = styled.div`
         color: #707070;
         white-space: pre-line;
         word-break: break-all;
+
+        @media all and (max-width: 992px){
+            font-size: 11px;
+        }
     }
 
     .code{
@@ -65,6 +87,10 @@ export const ContentWrapper = styled.div`
         color:#707070;
         white-space: pre-line;
         word-break: break-all;
+
+        @media all and (max-width: 992px){
+            font-size: 11px;
+        }
     }
 
     .category{
@@ -75,14 +101,18 @@ export const ContentWrapper = styled.div`
         color:#707070;
         white-space: pre-line;
         word-break: break-all;
+
+        @media all and (max-width: 992px){
+            font-size: 10px;
+        }
     }
 `;
 
 export const ProductDetailWrapper = styled.div`
-    padding: 20px 0 0 10px;
+    padding: 10px 0 10px 0;
 
     .event-button-group{
-        padding-bottom: 20px;
+        padding-bottom: 10px;
     }
 
     .event-button-item{
@@ -95,39 +125,71 @@ export const ProductDetailWrapper = styled.div`
         border-radius: 15px;
         border: none;
         background:#f0f0f0;
+
+        @media all and (max-width: 992px){
+            width:60px;
+            font-size: 12px;
+        }
     }
 
-    .tag{
-        display: inline-block;
-        padding: 5px 5px;
-        font-size: 14px;
-        text-align: center;
-        border-radius: 5px;
-        color:var(--mainColor);
-        margin: 0 5px 5px 0;
+    .inventory-button-box{
+        .inventory-button-item{
+            margin:0;
+            padding:0;
+            width:100px;
+            height: 33px;
+            background: #f4f4f4;
+            border-radius: 15px;
+            border:none;
+            color: #606060;
+            font-size: 13px;
+    
+            @media all and (max-width: 992px){
+                width:90px;
+                font-size: 12px;
+            }
+        }
+    
+        .inventory-on{
+            margin-left: 5px;
+            display: inline-block;
+            width:10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--defaultGreenColor);
+            align-items: center;
+        }
+    
+        .inventory-off{
+            margin-left: 5px;
+            display: inline-block;
+            width:10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--defaultRedColor);
+            align-items: center;
+        }
     }
+    
+    .extraInfos-group{
+        margin-top: 10px;
 
-    .inventory-on{
-        display: inline-block;
-        padding: 5px 5px;
-        font-size: 14px;
-        text-align: center;
-        border-radius: 5px;
-        color:var(--defaultGreenColor);
-        margin: 0 5px 5px 0;
-        cursor: pointer;
-    }
+        .tag{
+            display: inline-block;
+            padding:5px 10px;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 10px;
+            color:var(--mainColor);
+            margin: 0 5px 5px 0;
+            border: 1px solid #f0f0f0;
 
-    .inventory-off{
-        display: inline-block;
-        padding: 5px 5px;
-        font-size: 14px;
-        text-align: center;
-        border-radius: 5px;
-        color:var(--defaultRedColor);
-        margin: 0 5px 5px 0;
-        cursor: pointer;
+            @media all and (max-width: 992px){
+                font-size: 12px;
+            }
+        }
     }
+    
 `;
 
 export const OptionsWrapper = styled.div`
@@ -193,10 +255,8 @@ export const TableBox = styled.div`
         height: 35px;
 
         box-sizing: border-box;
-        padding:10px 5px;
-
         background:#fafafa;
-        color: #333;
+        color: #404040;
         font-weight: 600;
         position: sticky;
         top:0;
@@ -210,6 +270,11 @@ export const TableBox = styled.div`
         white-space:nowrap;
         font-size: 12px;
         
+        @media all and (max-width: 992px){
+            font-size: 11px;
+            height: 30px;
+        }
+
         .control-button-item{
             width:20px;
             height: 20px;
@@ -238,7 +303,7 @@ export const TableBox = styled.div`
 
     table tbody td{
         height: 35px;
-        padding:8px 0;
+        padding:0;
 
         box-sizing: border-box;
 
@@ -249,12 +314,17 @@ export const TableBox = styled.div`
         text-overflow:ellipsis;
         white-space:nowrap;
         font-size: 12px;
-        color: #333;
+        color: #404040;
+
+        @media all and (max-width: 992px){
+            font-size: 11px;
+            height: 30px;
+        }
         
         .info-item{
             background: none;
             text-align: center;
-            padding: 3px 10px;
+            padding: 0 10px;
             box-sizing: border-box;
             width: 100%;
 
@@ -289,13 +359,18 @@ export const TableBox = styled.div`
     }
 
     .icon-button-item{
-        width:30px;
-        height: 30px;
+        width:28px;
+        height: 28px;
         margin:0;
         padding:0;
         margin-left: auto;
         margin-right: auto;
         border-radius: 5px;
+
+        @media all and (max-width: 992px){
+            width:24px;
+            height: 24px;
+        }
 
         .icon-figure{
             width:70%;

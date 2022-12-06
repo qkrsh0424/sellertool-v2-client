@@ -265,10 +265,10 @@ export default function ProductOptionFieldComponent({
                                 <FormWrapper>
                                     <div className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-spaceBetween'>
                                         <div style={{
-                                            fontSize:'14px',
-                                            color:'#404040'
+                                            fontSize: '14px',
+                                            color: '#404040'
                                         }}>
-                                            <span className='required-tag'></span>옵션 목록 (총 <span style={{color:'var(--mainColor)'}}>{productOptions?.length}</span>개)
+                                            <span className='required-tag'></span>옵션 목록 (총 <span style={{ color: 'var(--mainColor)' }}>{productOptions?.length}</span>개)
                                         </div>
                                         <SingleBlockButton
                                             type='button'

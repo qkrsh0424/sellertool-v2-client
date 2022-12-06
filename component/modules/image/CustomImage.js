@@ -8,7 +8,7 @@ export default function CustomImage({
     return (
         <Image
             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-            src={src}
+            src={src || '/images/normal/image.png'}
             layout='responsive'
             width={1}
             height={1}

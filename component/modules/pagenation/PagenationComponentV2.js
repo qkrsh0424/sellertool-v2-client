@@ -184,6 +184,7 @@ const PageInputWrapper = styled.div`
  * @param {boolean} viewTotal 총 아이템 개수를 표시하는 필드의 전시 여부 default: false
  * @returns 
  */
+
 const PagenationComponentV2 = ({
     align = 'center',
     pageIndex = 0,
@@ -193,9 +194,12 @@ const PagenationComponentV2 = ({
     totalElements = 0,
     sizeElements = [],
     viewTotal = false,
+    autoScrollTop = true,
+    popperDisablePortal = false,
     ...props
 }) => {
     const router = useRouter();
+
     const pageInputRef = useRef();
     const {
         popperAnchorEl: pageInputPopperAnchorEl,
@@ -216,8 +220,8 @@ const PagenationComponentV2 = ({
             query: {
                 ...router.query,
                 page: newPage
-            }
-        });
+            },
+        }, undefined, { scroll: autoScrollTop });
     }
 
     const onActionNext = () => {
@@ -233,7 +237,7 @@ const PagenationComponentV2 = ({
                 ...router.query,
                 page: newPage
             }
-        });
+        }, undefined, { scroll: autoScrollTop });
     }
 
     const onActionChangeSize = (e) => {
@@ -244,7 +248,7 @@ const PagenationComponentV2 = ({
                 size: e.target.value,
                 page: 1
             }
-        });
+        }, undefined, { scroll: autoScrollTop });
     }
 
     const handleSubmitChangePageNumber = (e) => {
@@ -263,7 +267,7 @@ const PagenationComponentV2 = ({
                 ...router.query,
                 page: newPage
             }
-        });
+        }, undefined, { scroll: autoScrollTop });
 
         onActionClosePageInputPopper();
     }
@@ -336,6 +340,7 @@ const PagenationComponentV2 = ({
             <CustomPopper
                 open={pageInputPopperOpen}
                 anchorEl={pageInputPopperAnchorEl}
+                disablePortal={popperDisablePortal}
                 element={(
                     <>
                         <PageInputWrapper>

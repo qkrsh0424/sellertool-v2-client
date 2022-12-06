@@ -36,6 +36,18 @@ const productDataConnect = () => {
                 }
             })
         },
+        searchPageForInventory: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/products/page/related:productCategoryAndProductSubCategoryAndProductOptions`, {
+                params: params,
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN',
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                }
+            })
+        },
         /**
          * 
          * @param {object} params 

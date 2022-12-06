@@ -32,9 +32,11 @@ export default function useProdutOptionPageHook(props) {
 
     const reqFetchProductOptionPage = useCallback(async (reqPage, reqSize) => {
         let params = {
+            searchType:'ALL',
             page: reqPage ? reqPage : DEFAULT_PAGE,
             size: reqSize ? reqSize : DEFAULT_SIZE,
             mergeSearchConditionFlag: mergeSearchConditionFlag,
+            packageYn: 'n',
             searchQuery: searchQuery,
             sort: 'cid_asc'
         }

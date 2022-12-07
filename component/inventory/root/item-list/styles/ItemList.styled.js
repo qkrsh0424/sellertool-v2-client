@@ -4,19 +4,6 @@ export const Container = styled.div`
 
 `;
 
-export const SortControlContainer = styled.div`
-    padding: 20px 20px 0 20px;
-    display: flex;
-    justify-content: flex-end;
-
-    .select-item{
-        width: 150px;
-        height: 35px;
-        font-size: 12px;
-        border-radius: 5px;
-    }
-`;
-
 export const TableWrapper = styled.div`
     padding: 10px 20px 0px 20px;
 `;
@@ -144,6 +131,19 @@ export const TableBox = styled.div`
                 text-overflow:ellipsis;
                 white-space:nowrap;
             }
+
+            .stockRegisterStatusView-button-item{
+                margin:0;
+                padding:0;
+                width: 50px;
+                height: 30px;
+                margin-left: auto;
+                margin-right: auto;
+                border-radius: 5px;
+                color: #606060;
+                background: #f5f5f5;
+                font-size: 12px;
+            }
         }
     }
 
@@ -195,4 +195,22 @@ export const PagenationContainer = styled.div`
     border-radius: 15px;
     background: #fff;
     box-shadow: var(--defaultBoxShadow);
+`;
+
+export const ControlFieldContainer = styled.div`
+    padding: 20px 20px 0 20px;
+    display: flex;
+    justify-content: space-between;
+`;
+
+export const SortControlContainer = styled.div`
+    /* display: flex;
+    justify-content: flex-end; */
+
+    .select-item{
+        width: 150px;
+        height: 35px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
 `;

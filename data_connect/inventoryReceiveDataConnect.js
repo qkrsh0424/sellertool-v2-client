@@ -15,6 +15,21 @@ const inventoryReceiveDataConnect = () => {
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
+        },
+        /**
+         * 
+         * @param {object} body 
+         * @param {string} body.id
+         * @param {string} body.memo
+         * @param {string} body.workspaceId
+         */
+        changeMemo: async function (body) {
+            await csrfDataConnect().getApiCsrf();
+            return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/inventory-receives/target:memo`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         }
     }
 }

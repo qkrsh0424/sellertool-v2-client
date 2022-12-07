@@ -61,18 +61,6 @@ export default function FloatingControlBarComponent({
                     <SingleBlockButton
                         type='button'
                         className='control-button-item'
-                    >
-                        입고현황
-                    </SingleBlockButton>
-                    <SingleBlockButton
-                        type='button'
-                        className='control-button-item'
-                    >
-                        출고현황
-                    </SingleBlockButton>
-                    <SingleBlockButton
-                        type='button'
-                        className='control-button-item'
                         onClick={() => onSelectClearAllProductOptions()}
                     >
                         전체해제

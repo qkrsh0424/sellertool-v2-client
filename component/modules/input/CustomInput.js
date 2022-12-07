@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 const Input = styled.input`
@@ -14,14 +15,31 @@ const Input = styled.input`
     }
 `;
 
-export default function CustomInput({
+// export default function CustomInput({
+//     ...props
+// }) {
+//     return (
+//         <>
+//             <Input
+//                 {...props}
+//             />
+//         </>
+//     );
+// }
+
+const CustomInput = React.forwardRef(({
     ...props
-}) {
+}, ref) => {
     return (
         <>
             <Input
+                ref={ref}
                 {...props}
             />
         </>
     );
-}
+})
+
+CustomInput.displayName = 'CustomInput';
+
+export default CustomInput;

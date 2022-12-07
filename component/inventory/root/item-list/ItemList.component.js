@@ -1,8 +1,10 @@
 import { useRouter } from "next/router";
 import { useRef } from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../modules/image/CustomImage";
+import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
 import PagenationComponentV2 from "../../../modules/pagenation/PagenationComponentV2";
 import CustomSelect from "../../../modules/select/CustomSelect";
 import ResizableTh from "../../../modules/table/ResizableTh";
@@ -10,7 +12,9 @@ import FloatingControlBarComponent from "./FloatingControlBar.component";
 import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
 import useProductOptionsHook from "./hooks/useProductOptionPageHook";
 import useSelectedProductOptions from "./hooks/useSelectedProductOptionsHook";
-import { Container, PagenationContainer, SortControlContainer, TableBox, TableWrapper } from "./styles/ItemList.styled";
+import StockRegisterStatusModalComponent from "./modal/StockRegisterStatusModal.component";
+import RegisteredStockByDateComponent from "./RegisteredStockByDate.component";
+import { Container, ControlFieldContainer, PagenationContainer, RegisteredStockByDateContainer, SortControlContainer, TableBox, TableWrapper } from "./styles/ItemList.styled";
 
 export default function ItemListComponent(props) {
     const router = useRouter();
@@ -36,6 +40,9 @@ export default function ItemListComponent(props) {
         productOptions: productOptionPage?.content
     });
 
+    const [selectedProductOption, setSelectedProductOption] = useState(null);
+    const [stockRegisterStatusModalOpen, setStockRegisterStatusModalOpen] = useState(false);
+
     const handleSelectSort = (e) => {
         let value = e.target.value;
 
@@ -49,35 +56,36 @@ export default function ItemListComponent(props) {
         }, undefined, { scroll: false })
     }
 
+    const handleOpenStockRegisterStatusModal = (e, productOption) => {
+        e.stopPropagation();
+        setStockRegisterStatusModalOpen(true);
+        setSelectedProductOption(productOption);
+    }
+
+    const handleCloseStockRegisterStatusModal = () => {
+        setStockRegisterStatusModalOpen(false);
+        setSelectedProductOption(null);
+    }
+
     return (
         <>
             <Container>
-                <PagenationContainer>
-                    <PagenationComponentV2
-                        align={'center'}
-                        pageIndex={productOptionPage?.number}
-                        totalPages={productOptionPage?.totalPages}
-                        isFirst={productOptionPage?.first}
-                        isLast={productOptionPage?.last}
-                        totalElements={productOptionPage?.totalElements}
-                        sizeElements={[50, 100, 200]}
-                        autoScrollTop={false}
-                        popperDisablePortal={true}
-                    />
-                </PagenationContainer>
-                <SortControlContainer>
-                    <CustomSelect
-                        className='select-item'
-                        onChange={(e) => handleSelectSort(e)}
-                        value={router?.query?.sort || SORTED_BY[0]}
-                    >
-                        {SORTED_BY?.map(r => {
-                            return (
-                                <option key={r.sort} value={r.sort}>{r.name}</option>
-                            )
-                        })}
-                    </CustomSelect>
-                </SortControlContainer>
+                <ControlFieldContainer>
+                    <RegisteredStockByDateComponent />
+                    <SortControlContainer>
+                        <CustomSelect
+                            className='select-item'
+                            onChange={(e) => handleSelectSort(e)}
+                            value={router?.query?.sort || SORTED_BY[0]}
+                        >
+                            {SORTED_BY?.map(r => {
+                                return (
+                                    <option key={r.sort} value={r.sort}>{r.name}</option>
+                                )
+                            })}
+                        </CustomSelect>
+                    </SortControlContainer>
+                </ControlFieldContainer>
                 <Table
                     productOptions={productOptionPage?.content}
                     inventoryStocks={inventoryStocks}
@@ -85,15 +93,42 @@ export default function ItemListComponent(props) {
                     onActionSelectProductOption={onSelectProductOption}
                     onActionSelectAllProductOptions={onSelectAllProductOptions}
                     onActionSelectClearAllProductOptionsInPage={onSelectClearAllProductOptionsInPage}
+                    onActionOpenStockRegisterStatusModal={handleOpenStockRegisterStatusModal}
                 />
 
             </Container>
+            <PagenationContainer>
+                <PagenationComponentV2
+                    align={'center'}
+                    pageIndex={productOptionPage?.number}
+                    totalPages={productOptionPage?.totalPages}
+                    isFirst={productOptionPage?.first}
+                    isLast={productOptionPage?.last}
+                    totalElements={productOptionPage?.totalElements}
+                    sizeElements={[50, 100, 200]}
+                    autoScrollTop={false}
+                    popperDisablePortal={true}
+                />
+            </PagenationContainer>
+
             {selectedProductOptions?.length > 0 &&
                 <FloatingControlBarComponent
                     selectedProductOptions={selectedProductOptions}
                     onSelectClearAllProductOptions={onSelectClearAllProductOptions}
                     onReqFetchInventoryStocks={reqFetchInventoryStocks}
                 />
+            }
+
+            {stockRegisterStatusModalOpen &&
+                <CommonModalComponent
+                    open={stockRegisterStatusModalOpen}
+                    onClose={handleCloseStockRegisterStatusModal}
+                >
+                    <StockRegisterStatusModalComponent
+                        selectedProductOption={selectedProductOption}
+                        onClose={handleCloseStockRegisterStatusModal}
+                    />
+                </CommonModalComponent>
             }
         </>
     );
@@ -102,11 +137,12 @@ export default function ItemListComponent(props) {
 
 function Table({
     productOptions,
-    inventoryStocks,    
+    inventoryStocks,
     selectedProductOptions,
     onActionSelectProductOption,
     onActionSelectAllProductOptions,
-    onActionSelectClearAllProductOptionsInPage
+    onActionSelectClearAllProductOptionsInPage,
+    onActionOpenStockRegisterStatusModal
 }) {
     return (
         <TableWrapper>
@@ -216,12 +252,23 @@ function Table({
                                     </td>
                                     <td>
                                         <div className='content-box'>
-                                            <div style={{ color: 'var(--mainColor)' }}>{inventoryStocks?.find(r=>r.productOptionId === option?.id)?.stockUnit}</div>
+                                            <div style={{ color: 'var(--mainColor)' }}>{inventoryStocks?.find(r => r.productOptionId === option?.id)?.stockUnit}</div>
                                         </div>
                                     </td>
                                     <td>
                                         <div className='content-box'>
                                             <div>{option?.code}</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className='content-box'>
+                                            <SingleBlockButton
+                                                type='button'
+                                                className='stockRegisterStatusView-button-item'
+                                                onClick={(e) => onActionOpenStockRegisterStatusModal(e, option)}
+                                            >
+                                                보기
+                                            </SingleBlockButton>
                                         </div>
                                     </td>
                                     <td>
@@ -285,6 +332,12 @@ const TABLE_HEADER = [
         name: 'optionCode',
         headerName: '옵션코드',
         defaultWidth: 200
+    },
+    {
+        resizable: false,
+        name: 'stockRegisterStatus',
+        headerName: '입/출고현황',
+        defaultWidth: 80
     },
     {
         resizable: true,

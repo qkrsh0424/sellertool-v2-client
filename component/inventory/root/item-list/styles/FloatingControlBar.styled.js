@@ -46,4 +46,5 @@ export const ControlButtonsContainer = styled.div`
     align-items: center;
     overflow: hidden;
     transition: all .3s;
+    height: ${props => props.controlButtonsViewOpen ? 'auto' : 0};
 `;

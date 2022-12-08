@@ -215,12 +215,13 @@ function Table({
                                 <tr
                                     key={option.id}
                                     className={`${isSelected ? 'tr-selected' : ''}`}
-                                    onClick={() => onActionSelectProductOption(option)}
+                                    onClick={(e) => { e.stopPropagation(); onActionSelectProductOption(option); }}
                                 >
                                     <td>
                                         <input
                                             type='checkbox'
                                             onChange={() => onActionSelectProductOption(option)}
+                                            onClick={(e) => e.stopPropagation()}
                                             checked={isSelected ?? false}
                                         ></input>
                                     </td>

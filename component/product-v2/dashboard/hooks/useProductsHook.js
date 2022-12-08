@@ -34,7 +34,7 @@ export default function useProductsHook(props) {
             searchQuery: router?.query?.searchQuery,
             sort: router?.query?.sort || 'createdAt_asc',
             page: router?.query?.page || 1,
-            size: router?.query?.size || 20
+            size: router?.query?.size || 10
         }
 
         let headers = {

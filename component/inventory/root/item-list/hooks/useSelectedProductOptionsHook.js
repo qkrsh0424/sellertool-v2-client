@@ -18,6 +18,7 @@ export default function useSelectedProductOptions() {
                 alert(err.message);
                 return;
             }
+
             setSelectedProductOptions([...selectedProductOptions, option]);
         }
     }

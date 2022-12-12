@@ -71,11 +71,11 @@ const ServiceListComponent = () => {
                     </CardContainer>
                     <CardContainer>
                         <Link
-                            href={'/erp/management/order-upload'}
+                            href={'/erp/collection/dashboard'}
                             passHref
                         >
                             <CardWrapper>
-                                <CardTitle>리소스 관리</CardTitle>
+                                <CardTitle>주문수집 관리</CardTitle>
                                 <CardDescription>네이버 쇼핑의 내 상품은 도대체 어디에 있는 걸까?... 쉽게 찾아볼 수 있는 방법이 없을까?</CardDescription>
                             </CardWrapper>
                         </Link>

@@ -7,6 +7,10 @@ export default function useErpCollectionHeadersHook(props) {
     const [erpCollectionHeaders, setErpCollectionHeaders] = useState(null);
 
     useEffect(() => {
+        if (!workspaceRedux?.workspaceInfo?.id) {
+            return;
+        }
+
         reqFetchErpCollectionHeaders();
     }, [workspaceRedux?.workspaceInfo?.id]);
 

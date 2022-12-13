@@ -17,4 +17,15 @@ export const HeadContainer = styled.div`
         font-size: 24px;
         font-weight: 600;
     }
+
+    .delete-button-item{
+        margin:0;
+        padding:0;
+        width: 80px;
+        height: 34px;
+        background: var(--defaultRedColor);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+    }
 `;

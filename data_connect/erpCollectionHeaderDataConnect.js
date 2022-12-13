@@ -38,6 +38,14 @@ const erpCollectionHeaderDataConnect = () => {
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
+        },
+        delete: async function (body){
+            await csrfDataConnect().getApiCsrf();
+            return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/erp-collection-headers/${body.id}`, {
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         }
     }
 }

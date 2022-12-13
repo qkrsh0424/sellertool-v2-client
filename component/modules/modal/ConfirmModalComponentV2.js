@@ -113,6 +113,7 @@ const ContentContainer = styled.div`
  * @param {boolean} props.fullWidth
  * @param {string} props.maxWidth [xs, sm, md, lg, xl]
  * @param {function} props.onClose
+ * @param {function} props.onConfirm
  * @param {element} props.title
  * @param {element} props.message
  * @param {object} props.confirmBtnStyle

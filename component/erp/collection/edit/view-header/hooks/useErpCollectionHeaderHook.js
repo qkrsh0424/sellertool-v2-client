@@ -64,8 +64,37 @@ export default function useErpCollectionHeaderHook(props) {
             ;
     }
 
+    const reqDeleteErpCollectionHeader = async ({
+        body,
+        successCallback
+    }) => {
+        await erpCollectionHeaderDataConnect().delete(body)
+            .then(res => {
+                if (res.status === 200) {
+                    successCallback();
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (!res) {
+                    alert('네트워크 연결이 원활하지 않습니다.');
+                    return;
+                }
+
+                if (res.status === 500) {
+                    alert('undefined error. 관리자에 문의해 주세요.');
+                    return;
+                }
+
+                alert(res.data.memo);
+            })
+            ;
+    }
+
     return {
         erpCollectionHeader,
-        reqUpdateErpCollectionHeader
+        reqUpdateErpCollectionHeader,
+        reqDeleteErpCollectionHeader
     }
 }

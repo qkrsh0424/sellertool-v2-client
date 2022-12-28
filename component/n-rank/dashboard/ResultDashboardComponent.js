@@ -170,7 +170,6 @@ const getNaverShoppingUrl = (query, pageIndex) => {
 }
 
 const ResultDashboardComponent = (props) => {
-    console.log(props.rankDataState)
     return (
         <>
             <Container>

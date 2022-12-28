@@ -40,10 +40,12 @@ export default function ViewHeaderComponent(props) {
                     <ItemListContainer>
                         {erpCollectionHeaders?.map(r => {
                             return (
-                                <ItemBox key={r.id}>
+                                <ItemBox
+                                    key={r.id}
+                                >
                                     <div>
                                         <div className='name'>{r.name}</div>
-                                        <div className='description'>{r.description}</div>
+                                        <div className='description'>{r.description || '지정된 설명이 없습니다.'}</div>
                                     </div>
                                     <div className='mgl-flex'>
                                         <SingleBlockButton

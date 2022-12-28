@@ -12,7 +12,6 @@ export default function useApiHook(props) {
             body: { ...body }
         })
             .then(res => {
-                console.log(res);
                 if (res.status === 200) {
                     localStorage.setItem('sellertool-wsId', res.data.data.id);
                     reduxDispatch({

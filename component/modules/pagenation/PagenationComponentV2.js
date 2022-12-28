@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import styled from 'styled-components';
+import useDisabledBtn from '../../../hooks/button/useDisabledBtn';
 import usePopperHook from '../../../hooks/popper/usePopperHook';
 import Ripple from '../button/Ripple';
 import SingleBlockButton from '../button/SingleBlockButton';
@@ -199,6 +200,7 @@ const PagenationComponentV2 = ({
     ...props
 }) => {
     const router = useRouter();
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn(500);
 
     const pageInputRef = useRef();
     const {
@@ -209,6 +211,7 @@ const PagenationComponentV2 = ({
     } = usePopperHook();
 
     const onActionPrev = () => {
+        setDisabledBtn(true);
         if (isFirst) {
             return;
         }
@@ -225,6 +228,7 @@ const PagenationComponentV2 = ({
     }
 
     const onActionNext = () => {
+        setDisabledBtn(true);
         if (isLast) {
             return;
         }
@@ -287,6 +291,7 @@ const PagenationComponentV2 = ({
                                     className='select-el'
                                     onChange={onActionChangeSize}
                                     value={sizeElements?.find(r => r == router?.query?.size) ? router?.query?.size : sizeElements[0]}
+                                    disabled={disabledBtn}
                                 >
                                     {sizeElements.map((r, index) => {
                                         return (
@@ -301,7 +306,7 @@ const PagenationComponentV2 = ({
                                 type='button'
                                 className={`circle-button-el`}
                                 onClick={onActionPrev}
-                                disabled={isFirst}
+                                disabled={isFirst || disabledBtn}
                             >
                                 <div className='button-icon-figure'>
                                     <CustomImage
@@ -318,7 +323,7 @@ const PagenationComponentV2 = ({
                                 type='button'
                                 className={`circle-button-el`}
                                 onClick={onActionNext}
-                                disabled={isLast}
+                                disabled={isLast || disabledBtn}
                             >
                                 <div className='button-icon-figure'>
                                     <CustomImage
@@ -327,7 +332,7 @@ const PagenationComponentV2 = ({
                                 </div>
                             </SingleBlockButton>
                         </div>
-                        {totalElements && viewTotal &&
+                        {viewTotal &&
                             <div className='number-box'>
                                 총 {totalElements}
                             </div>

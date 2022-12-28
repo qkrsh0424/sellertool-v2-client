@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
+import CustomImage from '../image/CustomImage';
 
 const Container = styled.div`
     
@@ -33,6 +34,19 @@ const ButtonIcon = styled.img`
     }
 `;
 
+const ButtonIconFigure = styled.div`
+    width:${props => props.iconSize ? props.iconSize : 20}px;
+    height:${props => props.iconSize ? props.iconSize : 20}px;
+    margin-left: auto;
+    margin-right: auto;
+
+    opacity: ${props => props.active ? 1 : 0.4};
+
+    ${Container}:hover &{
+        opacity:1;
+    }
+`;
+
 const sortDirections = ['desc', 'asc'];
 
 /**
@@ -43,44 +57,34 @@ const sortDirections = ['desc', 'asc'];
  * @param {Number} props.iconSize
  * @returns 
  */
-// TODO : query-string => nextjs router 로 변경해야됨.
 const SortButton = ({ markPoint, buttonSize, iconSize }) => {
     const router = useRouter();
+    const sort = router?.query?.sort;
+    const sortBy = sort?.split('_')[0];
+    const sortDirection = sort?.split('_')[1];
 
-    const sortBy = router.query.sortBy;
-    const sortDirection = router.query.sortDirection;
-
-    const onActionDesc = () => {
-        let newSortBy = markPoint;
-        let newSortDirection = 'desc';
-
+    const handleSortToDesc = () => {
         router.replace({
             pathname: router.pathname,
             query: {
                 ...router.query,
-                sortBy: newSortBy,
-                sortDirection: newSortDirection
+                sort: `${markPoint}_desc`
             }
         });
     }
 
-    const onActionAsc = () => {
-        let newSortBy = markPoint;
-        let newSortDirection = 'asc';
-
+    const handleSortToAsc = () => {
         router.replace({
             pathname: router.pathname,
             query: {
                 ...router.query,
-                sortBy: newSortBy,
-                sortDirection: newSortDirection
+                sort: `${markPoint}_asc`
             }
         });
     }
 
-    const onActionNone = () => {
-        delete router.query.sortBy;
-        delete router.query.sortDirection;
+    const handleSortToNone = () => {
+        delete router?.query?.sort;
 
         router.replace({
             pathname: router.pathname,
@@ -93,44 +97,50 @@ const SortButton = ({ markPoint, buttonSize, iconSize }) => {
     return (
         <>
             <Container>
-                {(sortBy !== markPoint || !sortDirections.includes(sortDirection)) &&
+                {(sortBy !== markPoint || !sortDirections?.includes(sortDirection)) &&
                     <ButtonEl
                         buttonSize={buttonSize || 30}
-                        onClick={onActionDesc}
+                        onClick={() => handleSortToDesc()}
                     >
-                        <ButtonIcon
-                            src='/assets/icon/sort_icon.png'
+                        <ButtonIconFigure
                             iconSize={iconSize || 20}
-                            loading='lazy'
-                        ></ButtonIcon>
+                        >
+                            <CustomImage
+                                src='/images/icon/arrowUpDown_default_808080.svg'
+                            />
+                        </ButtonIconFigure>
                     </ButtonEl>
                 }
                 {/* 내림차순 */}
                 {((sortBy === markPoint) && (sortDirection === 'desc')) &&
                     <ButtonEl
                         buttonSize={buttonSize || 30}
-                        onClick={onActionAsc}
+                        onClick={() => handleSortToAsc()}
                     >
-                        <ButtonIcon
-                            src='/images/icon/down_arrow_icon.png'
+                        <ButtonIconFigure
                             iconSize={iconSize || 20}
                             active={true}
-                            loading='lazy'
-                        ></ButtonIcon>
+                        >
+                            <CustomImage
+                                src='/images/icon/arrow_downward_808080.svg'
+                            />
+                        </ButtonIconFigure>
                     </ButtonEl>
                 }
                 {/* 오름차순 */}
                 {((sortBy === markPoint) && (sortDirection === 'asc')) &&
                     <ButtonEl
                         buttonSize={buttonSize || 30}
-                        onClick={onActionNone}
+                        onClick={() => handleSortToNone()}
                     >
-                        <ButtonIcon
-                            src='/assets/icon/up_arrow_icon.png'
+                        <ButtonIconFigure
                             iconSize={iconSize || 20}
                             active={true}
-                            loading='lazy'
-                        ></ButtonIcon>
+                        >
+                            <CustomImage
+                                src='/images/icon/arrow_upward_808080.svg'
+                            />
+                        </ButtonIconFigure>
                     </ButtonEl>
                 }
             </Container>

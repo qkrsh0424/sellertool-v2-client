@@ -389,7 +389,6 @@ const ProductDashboardMainComponent = (props) => {
 
                 await optionDataConnect().searchListByProductId(workspaceId, productId)
                     .then(res => {
-                        console.log(res);
                         if (res.status === 200) {
                             const fetchedOptions = res.data.data;
 

@@ -46,7 +46,6 @@ export default function CategoryComponent(props) {
                 if (!props.category) {
                     return;
                 }
-                console.log(props.category)
                 dispatchEditCategory({
                     type: 'SET_DATA',
                     payload: props.category

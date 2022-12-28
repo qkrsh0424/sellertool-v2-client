@@ -6,10 +6,18 @@ const ContainerDiv = styled.div`
 `;
 
 const ContainerTr = styled.tr`
+    :hover {
+        background: none !important;
+    }
 
+    td {
+        :hover {
+            background: none !important;
+        }
+    }
 `;
 
-const InfiniteScrollObserver = ({ elementTagType, totalSize, startOffset, endOffset, fetchData, loadingElementTag, endElementTag }) => {
+const InfiniteScrollObserver = ({ elementTagType, totalSize, threshold, startOffset, endOffset, fetchData, loadingElementTag, endElementTag }) => {
     const [target, setTarget] = useState(null);
 
     const onIntersect = useCallback(async (entries, observer) => {
@@ -30,7 +38,7 @@ const InfiniteScrollObserver = ({ elementTagType, totalSize, startOffset, endOff
 
         if (target) {
             observer = new IntersectionObserver(onIntersect, {
-                threshold: 0,
+                threshold: threshold || 0,
             });
             observer.observe(target);
         }

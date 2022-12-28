@@ -74,7 +74,6 @@ const OrderComponent = (props) => {
     const __reqSearchViewHeaderOne = async () => {
         let workspaceId = workspaceRedux.workspaceInfo.id;
 
-        console.log(workspaceId);
         let params = {
             workspaceId: workspaceId
         }

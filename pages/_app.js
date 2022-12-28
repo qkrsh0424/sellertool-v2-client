@@ -4,6 +4,7 @@ import wrapper from '../redux/reducers/configureStore';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import UserPermissionComponent from '../redux/dispatch_component/UserPermissionComponent';
 import WorkspacePermissionComponent from '../redux/dispatch_component/WorkspacePermissionComponent';
+import Router, { useRouter } from 'next/router';
 
 const theme = createTheme();
 
@@ -20,6 +21,25 @@ const theme = createTheme();
  * background: #f9fbfc;
  * modalCloseButtonColor:#959eae
  */
+// == NProgress Module START ==
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+
+
+Router.onRouteChangeStart = () => {
+	NProgress.start();
+}
+Router.onRouteChangeComplete = () => {
+	// console.log('onRouteChangeComplete triggered');
+	NProgress.done();
+};
+
+Router.onRouteChangeError = () => {
+	// console.log('onRouteChangeError triggered');
+	NProgress.done();
+};
+// == NProgress Module END ==
+
 function MyApp({ Component, pageProps }) {
 	return (
 		<>

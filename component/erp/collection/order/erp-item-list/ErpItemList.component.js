@@ -2,6 +2,7 @@ import _ from "lodash";
 import { useRouter } from "next/router";
 import { createRef, useEffect, useRef, useState } from "react";
 import { dateToYYYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
+import { numberWithCommas } from "../../../../../utils/numberFormatUtils";
 import SortButton from "../../../../modules/button/SortButton";
 import CustomImage from "../../../../modules/image/CustomImage";
 import FieldLoading from "../../../../modules/loading/FieldLoading";
@@ -13,6 +14,7 @@ import ResizableTh from "../../../../modules/table/ResizableTh";
 import useErpItemPageHook from "../hooks/useErpItemPageHook";
 import FloatingControlBarComponent from "./FloatingControlBar.component";
 import EditOptionCodeModalComponent from "./modal/EditOptionCodeModal.component";
+import ItemsForSameReceiverModalComponent from "./modal/ItemsForSameReceiverModal.component";
 import { TableFieldWrapper } from "./styles/ErpItemList.styled";
 
 const TABLE_DATA_VIEW_SIZE = 50;
@@ -39,6 +41,9 @@ export default function ErpItemListComponent({
     const [editOptionCodeModalOpen, setEditOptionCodeModalOpen] = useState(false);
     const [editReleaseOptionCodeModalOpen, setEditReleaseOptionCodeModalOpen] = useState(false);
     const [targetErpItem, setTargetErpItem] = useState(null);
+
+    const [itemsForSameReceiverModalOpen, setItemsFormSameReceiverModalOpen] = useState(false);
+    const [targetSameReceiverId, setTargetSameReceiverId] = useState(null);
 
     useEffect(() => {
         tableScrollRef.current.scrollTop = 0;
@@ -109,6 +114,18 @@ export default function ErpItemListComponent({
             handleCloseEditReleaseOptionCodeModal();
         })
     }
+
+    const handleOpenItemsForSameReceiverModal = (e, sameReceiverId) => {
+        e.stopPropagation()
+
+        setTargetSameReceiverId(sameReceiverId);
+        setItemsFormSameReceiverModalOpen(true);
+    }
+
+    const handleCloseItemsForSameReceiverModal = () => {
+        setItemsFormSameReceiverModalOpen(false);
+        setTargetSameReceiverId(null);
+    }
     return (
         <>
             <TableFieldWrapper>
@@ -175,13 +192,6 @@ export default function ErpItemListComponent({
                                             </ResizableTh>
                                         )
                                     })}
-                                    <th
-                                        className="fixed-header fixed-col-right"
-                                        style={{ zIndex: 12, boxShadow: '0.5px -0.5px 0 0 #e0e0e0 inset' }}
-                                        width={50}
-                                    >
-                                        수정
-                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -248,6 +258,12 @@ export default function ErpItemListComponent({
                                                     )
                                                 }
 
+                                                if (matchedFieldName === 'price' || matchedFieldName === 'deliveryCharge') {
+                                                    return (
+                                                        <td key={`col-${matchedFieldName}`}>{r1[matchedFieldName] ? numberWithCommas(r1[matchedFieldName]) : "0"}</td>
+                                                    );
+                                                }
+
                                                 if (matchedFieldName === 'optionCode') {
                                                     return (
                                                         <td key={`col-${matchedFieldName}`} className='td-highlight' onClick={(e) => handleOpenEditOptionCodeModal(e, r1)}>{r1[matchedFieldName]}</td>
@@ -262,30 +278,42 @@ export default function ErpItemListComponent({
 
                                                 if (matchedFieldName === 'optionStockUnit') {
                                                     return (
-                                                        <td key={`col-${matchedFieldName}`}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
+                                                        <td key={`col-${matchedFieldName}`} style={{ background: isOutOfStock ? 'var(--defaultRedColorOpacity500)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
                                                     )
+                                                }
+
+                                                if (matchedFieldName === 'receiver') {
+                                                    return (
+                                                        <td
+                                                            key={`col-${matchedFieldName}`}
+                                                            className={`${matchedFieldName}`}
+                                                            style={{
+                                                                color: r1.sameReceiverId ? 'var(--defaultRedColor)' : ''
+                                                            }}
+                                                        >
+                                                            {r1[matchedFieldName]}
+                                                            {r1.sameReceiverId &&
+                                                                <button
+                                                                    type='button'
+                                                                    className='view-sameReceiver-button-item'
+                                                                    onClick={(e) => handleOpenItemsForSameReceiverModal(e, r1.sameReceiverId)}
+                                                                >
+                                                                    보기
+                                                                </button>
+                                                            }
+                                                        </td>
+                                                    );
                                                 }
 
                                                 return (
                                                     <td
                                                         key={`col-${matchedFieldName}`}
-                                                        className={`${(matchedFieldName === 'receiver' && r1[`duplicationUser`]) ? 'user-duplication' : ''}`}
+                                                        className={``}
                                                     >
                                                         {r1[matchedFieldName]}
                                                     </td>
                                                 )
                                             })}
-                                            <td className='fixed-col-right'>
-                                                <button
-                                                    type='button'
-                                                    className='fix-button-el'
-                                                >
-
-                                                    <CustomImage
-                                                        src={'/images/icon/edit_note_808080.svg'}
-                                                    />
-                                                </button>
-                                            </td>
                                         </tr>
                                     )
                                 })}
@@ -332,6 +360,22 @@ export default function ErpItemListComponent({
                     <EditOptionCodeModalComponent
                         onClose={handleCloseEditReleaseOptionCodeModal}
                         onConfirm={handleSubmitEditReleaseOptionCode}
+                    />
+                </CommonModalComponent>
+            }
+
+            {itemsForSameReceiverModalOpen &&
+                <CommonModalComponent
+                    open={itemsForSameReceiverModalOpen}
+                    onClose={handleCloseItemsForSameReceiverModal}
+                    maxWidth={'xl'}
+                >
+                    <ItemsForSameReceiverModalComponent
+                        targetSameReceiverId={targetSameReceiverId}
+                        erpCollectionHeader={erpCollectionHeader}
+                        selectedErpItems={selectedErpItems}
+                        onSelectErpItem={onSelectErpItem}
+                        onClose={handleCloseItemsForSameReceiverModal}
                     />
                 </CommonModalComponent>
             }

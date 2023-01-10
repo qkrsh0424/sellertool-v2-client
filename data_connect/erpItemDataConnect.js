@@ -46,13 +46,22 @@ const erpItemDataConnect = () => {
         },
         searchListByIds: async function (body) {
             await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/ids`, body, {
+            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/search/ids`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN',
                 paramsSerializer: params => {
                     return qs.stringify(params, { arrayFormat: 'brackets' })
                 }
+            })
+        },
+        searchListBySameReceiverId: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/erp-items/same-receiver`, {
+                headers: headers,
+                params: params,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
         changeOptionCode: async function (body) {
@@ -91,6 +100,29 @@ const erpItemDataConnect = () => {
         changeStatusToSales: async function (body) {
             await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/erp-items/target:status/action:sales`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        uploadWithExcel: async function (formData) {
+            await csrfDataConnect().getApiCsrf();
+            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/upload/excel`, formData, {
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * 
+         * @param {object} formData
+         * @param {string} formData.workspaceId
+         * @param {object[]} formData.contents
+         * @returns 
+         */
+        createAll: async function (formData) {
+            await csrfDataConnect().getApiCsrf();
+            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items`, formData, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'

@@ -146,6 +146,7 @@ export default function ConditionFieldComponent({
             query: {
                 page: 1,
                 size: 50,
+                periodSearchCondition: 'releaseAt',
                 startDateTime: dateToYYYYMMDD(new Date()),
                 endDateTime: dateToYYYYMMDD(new Date())
             }

@@ -243,13 +243,13 @@ export default function CustomExcelFileUploader({
             <CommonModalComponent
                 open={open}
 
-                onClose={() => { }}
+                onClose={typeof (onClose) === 'function' ? () => onClose() : () => { ; }}
             >
                 <Container>
                     <div className='header-close-button-box'>
                         <button
                             type='button'
-                            onClick={() => onClose()}
+                            onClick={typeof (onClose) === 'function' ? () => onClose() : () => { ; }}
                             className='header-close-button-el'
                         >
                             <div className='header-close-button-icon'>

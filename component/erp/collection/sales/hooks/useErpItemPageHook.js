@@ -116,7 +116,7 @@ export default function useErpItemPageHook(props) {
             diSearchQuery: router?.query?.diSearchQuery,
             page: router?.query?.page || 1,
             size: router?.query?.size || 50,
-            sort: router?.query?.sort?.split(',') || 'createdAt_asc',
+            sort: router?.query?.sort?.split(',') || 'salesAt_asc',
             matchedCode: router?.query?.matchedCode || 'releaseOptionCode'
         }
 

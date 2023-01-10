@@ -2,6 +2,7 @@ import { useState } from "react";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
+import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
 import EditErpItemModalComponent from "./modal/EditErpItemsModal.component";
 import { Container, ControlButtonsContainer } from "./styles/FloatingControlBar.styled";
 
@@ -18,6 +19,7 @@ export default function FloatingControlBarComponent({
     const [editErpItemsModalOpen, setEditErpItemsModalOpen] = useState(false);
     const [deleteErpItemsConfirmModalOpen, setDeleteErpItemsConfirmModalOpen] = useState(false);
     const [changeStatusToSalesModalOpen, setChangeStatusToSalesModalOpen] = useState(false);
+    const [excelDownloadModalOpen, setExcelDownloadModalOpen] = useState(false);
 
 
     const handleOpenControlButtonsView = () => {
@@ -79,6 +81,14 @@ export default function FloatingControlBarComponent({
             onSelectClearAllErpItems();
         })
     }
+
+    const handleOpenExcelDownloadModal = () => {
+        setExcelDownloadModalOpen(true);
+    }
+
+    const handleCloseExcelDownloadModal = () => {
+        setExcelDownloadModalOpen(false);
+    }
     return (
         <>
             <Container
@@ -122,7 +132,10 @@ export default function FloatingControlBarComponent({
                     <div className='groups'>
                         <div className='label'>기타</div>
                         <div>
-                            <span className='control-button-item'>
+                            <span
+                                className='control-button-item'
+                                onClick={() => handleOpenExcelDownloadModal()}
+                            >
                                 엑셀 다운로드
                             </span>
                             <span
@@ -179,6 +192,18 @@ export default function FloatingControlBarComponent({
                     title={'판매전환 확인메세지'}
                     message={'선택된 데이터를 판매전환 합니다.'}
                 />
+            }
+
+            {excelDownloadModalOpen &&
+                <CommonModalComponent
+                    open={excelDownloadModalOpen}
+                    onClose={handleCloseExcelDownloadModal}
+                    maxWidth={'xl'}
+                >
+                    <ExcelDownloadModalComponent
+
+                    />
+                </CommonModalComponent>
             }
         </>
     );

@@ -55,7 +55,7 @@ const erpItemDataConnect = () => {
                 }
             })
         },
-        searchListBySameReceiverId: async function (params, headers) {
+        searchListBySameReceiverHint: async function (params, headers) {
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/erp-items/same-receiver`, {
                 headers: headers,
                 params: params,

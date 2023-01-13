@@ -25,6 +25,8 @@ export default function ErpItemListComponent({
     erpItemPage,
     selectedErpItems,
     inventoryStocks,
+    erpItemSameReceiverHints,
+
     onSelectErpItem,
     onSelectAllErpItems,
     onSelectClearAllErpItemsInPage,
@@ -43,7 +45,7 @@ export default function ErpItemListComponent({
     const [targetErpItem, setTargetErpItem] = useState(null);
 
     const [itemsForSameReceiverModalOpen, setItemsFormSameReceiverModalOpen] = useState(false);
-    const [targetSameReceiverId, setTargetSameReceiverId] = useState(null);
+    const [targetSameReceiverHint, setTargetSameReceiverHint] = useState(null);
 
     useEffect(() => {
         tableScrollRef.current.scrollTop = 0;
@@ -115,16 +117,16 @@ export default function ErpItemListComponent({
         })
     }
 
-    const handleOpenItemsForSameReceiverModal = (e, sameReceiverId) => {
+    const handleOpenItemsForSameReceiverModal = (e, sameReceiverHint) => {
         e.stopPropagation()
 
-        setTargetSameReceiverId(sameReceiverId);
+        setTargetSameReceiverHint(sameReceiverHint);
         setItemsFormSameReceiverModalOpen(true);
     }
 
     const handleCloseItemsForSameReceiverModal = () => {
         setItemsFormSameReceiverModalOpen(false);
-        setTargetSameReceiverId(null);
+        setTargetSameReceiverHint(null);
     }
     return (
         <>
@@ -283,20 +285,23 @@ export default function ErpItemListComponent({
                                                 }
 
                                                 if (matchedFieldName === 'receiver') {
+                                                    let sameReceiverHint = `${r1.receiver}${r1.receiverContact1}${r1.destination}${r1.destinationDetail}`;
+                                                    let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
+
                                                     return (
                                                         <td
                                                             key={`col-${matchedFieldName}`}
                                                             className={`${matchedFieldName}`}
                                                             style={{
-                                                                color: r1.sameReceiverId ? 'var(--defaultRedColor)' : ''
+                                                                color: hasSameReceiver ? 'var(--defaultRedColor)' : ''
                                                             }}
                                                         >
                                                             {r1[matchedFieldName]}
-                                                            {r1.sameReceiverId &&
+                                                            {hasSameReceiver &&
                                                                 <button
                                                                     type='button'
                                                                     className='view-sameReceiver-button-item'
-                                                                    onClick={(e) => handleOpenItemsForSameReceiverModal(e, r1.sameReceiverId)}
+                                                                    onClick={(e) => handleOpenItemsForSameReceiverModal(e, sameReceiverHint)}
                                                                 >
                                                                     보기
                                                                 </button>
@@ -371,7 +376,7 @@ export default function ErpItemListComponent({
                     maxWidth={'xl'}
                 >
                     <ItemsForSameReceiverModalComponent
-                        targetSameReceiverId={targetSameReceiverId}
+                        targetSameReceiverHint={targetSameReceiverHint}
                         erpCollectionHeader={erpCollectionHeader}
                         selectedErpItems={selectedErpItems}
                         onSelectErpItem={onSelectErpItem}

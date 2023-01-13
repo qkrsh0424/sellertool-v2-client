@@ -145,7 +145,7 @@ export const CardItem = styled.div`
 
     .fixedValue-box{
         margin-left: 10px;
-        width: 300px;
+        width: 350px;
         
         .label{
             font-size: 10px;

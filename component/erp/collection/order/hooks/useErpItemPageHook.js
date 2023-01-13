@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { erpItemDataConnect } from "../../../../../data_connect/erpItemDataConnect";
+import { erpItemSameReceiverDataConnect } from "../../../../../data_connect/erpItemSameReceiverDataConnect";
 import { getEndDate, getStartDate } from "../../../../../utils/dateFormatUtils";
 
 export default function useErpItemPageHook(props) {
@@ -11,6 +12,7 @@ export default function useErpItemPageHook(props) {
     const [erpItemPagePending, setErpItemPagePending] = useState(false);
     const [totalSize, setTotalSize] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
+    const [erpItemSameReceiverHints, setErpItemSameReceiverHints] = useState(null);
 
     useEffect(() => {
         if (
@@ -51,6 +53,40 @@ export default function useErpItemPageHook(props) {
         router?.query?.matchedCode
     ]);
 
+    useEffect(() => {
+        if (!erpItemPage?.content || erpItemPage?.content?.length <= 0) {
+            return;
+        }
+
+        reqFetchSameReceiversCount();
+    }, [erpItemPage?.content])
+
+    const reqFetchSameReceiversCount = async () => {
+        if (!erpItemPage?.content || !workspaceRedux?.workspaceInfo?.id) {
+            return;
+        }
+
+        let sameReceiverHints = erpItemPage?.content?.map(r => {
+            return `${r.receiver}${r.receiverContact1}${r.destination}${r.destinationDetail}`;
+        })
+
+        let body = {
+            workspaceId: workspaceRedux?.workspaceInfo?.id,
+            sameReceiverHints: sameReceiverHints
+        }
+
+        await erpItemSameReceiverDataConnect().count(body)
+            .then(res => {
+                if (res.status === 200) {
+                    setErpItemSameReceiverHints(res.data.data);
+                }
+            })
+            .catch(err => {
+                console.log(err, err.response);
+            })
+            ;
+    }
+
     const reqFetchCountErpItems = async () => {
         let headers = {
             wsId: workspaceRedux?.workspaceInfo?.id
@@ -79,7 +115,7 @@ export default function useErpItemPageHook(props) {
             .then(res => {
                 if (res.status === 200) {
                     let resTotalSize = res.data.data.totalSize;
-                    if(resTotalSize <= 0){
+                    if (resTotalSize <= 0) {
                         setTotalSize(0);
                         setTotalPages(1);
                         return;
@@ -88,7 +124,7 @@ export default function useErpItemPageHook(props) {
                     let totalPages = Math.ceil(resTotalSize / size);
                     setTotalSize(resTotalSize);
                     setTotalPages(totalPages);
-                    
+
                 }
             })
             .catch(err => {
@@ -234,6 +270,7 @@ export default function useErpItemPageHook(props) {
             .then(res => {
                 if (res.status === 200) {
                     reqFetchErpItemPage();
+                    reqFetchCountErpItems();
                     successCallback();
                 }
             })
@@ -264,6 +301,7 @@ export default function useErpItemPageHook(props) {
             .then(res => {
                 if (res.status === 200) {
                     reqFetchErpItemPage();
+                    reqFetchCountErpItems();
                     successCallback();
                 }
             })
@@ -289,6 +327,8 @@ export default function useErpItemPageHook(props) {
         erpItemPagePending,
         totalSize,
         totalPages,
+        erpItemSameReceiverHints,
+        
         reqFetchErpItemPage,
         reqChangeOptionCode,
         reqChangeReleaseOptionCode,

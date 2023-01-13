@@ -1,7 +1,48 @@
 import styled from 'styled-components';
 
 const Container = styled.div`
-    margin-bottom: 50px;
+    padding-bottom: 50px;
+    background: var(--defaultBackground);
+    
+    .header-close-button-box{
+        display: flex;
+        justify-content: flex-end;
+        padding: 20px 20px 0 20px;
+
+        .header-close-button-el{
+            user-select: none;
+            -webkit-tap-highlight-color: #00000000;
+            width:40px;
+            height: 40px;
+            padding: 0;
+            margin:0;
+            border:none;
+            background:none;
+            cursor: pointer;
+
+            .header-close-button-icon{
+                width:100%;
+                height: 100%;
+            }
+        }
+    
+    }
+
+    .title-box{
+        padding: 0 20px;
+
+        .title{
+            border-bottom: 1px solid #000;
+            font-size: 20px;
+            font-weight: 400;
+            color:#303030;
+            padding-bottom: 20px;
+
+            .accent-text{
+                color:var(--mainColor);
+            }
+        }
+    }
 `;
 
 const TitleContainer = styled.div`
@@ -14,13 +55,9 @@ const TitleContainer = styled.div`
     }
 `;
 
-const CombineOperatorsWrapper = styled.div`
-    margin-top: 10px;
-    padding: 0 30px;
-
-    @media all and (max-width: 992px){
-        padding: 0 10px;
-    }
+const OperatorsFieldWrapper = styled.div`
+    margin-top: 20px;
+    padding: 0 20px;
 
     .flex-box{
         display: flex;
@@ -29,43 +66,50 @@ const CombineOperatorsWrapper = styled.div`
     }
 
     .button-item{
-        overflow: hidden;
-        position: relative;
-
-        margin-right: 10px;
+        margin:0 10px 0 0;
+        padding:0;
         width: 120px;
         height: 34px;
 
         background: #fff;
-        border: 1px solid #444;
-        border-radius: 3px;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        box-shadow: var(--defaultBoxShadow);
 
         font-size: 12px;
-        font-weight: 600;
-        color: #444;
+        font-weight: 500;
+        color: #606060;
 
         cursor: pointer;
 
         &:hover{
-            background: #444;
+            background: var(--mainColor);
             color: white;
+        }
+
+        @media all and (max-width: 992px){
+            width: 60px;
+            margin:0 10px 10px 0;
+            padding: 0 5px;
+
+            font-size: 10px;
+            word-break: keep-all;
+            line-height: 1.3;
         }
     }
 `;
 
-const PreviewTableWrapper = styled.div`
+const PreviewTableFieldWrapper = styled.div`
     margin-top: 10px;
-    padding: 0 30px;
-
-    @media all and (max-width: 992px){
-        padding: 0 10px;
-    }
+    padding: 0 20px;
 `;
 
 const TableBox = styled.div`
     height: 300px;
 	overflow: auto;
     border: 1px solid #77777740;
+    background: #fff;
+    border-radius: 10px;
 
     table{
         position:relative;
@@ -146,9 +190,9 @@ const TableBox = styled.div`
     }
 `;
 
-const ExcelHeaderSelectorWrapper = styled.div`
-    margin-top: 10px;
-    padding: 0 30px;
+const ExcelDownloadFormSelectorFieldWrapper = styled.div`
+    margin-top: 40px;
+    padding: 0 20px;
 
     .select-wrapper{
 
@@ -156,7 +200,7 @@ const ExcelHeaderSelectorWrapper = styled.div`
 
     .select-wrapper .select-label{
         font-size: 13px;
-        font-weight: 600;
+        font-weight: 500;
     }
 
     .select-wrapper .select-el{
@@ -167,10 +211,8 @@ const ExcelHeaderSelectorWrapper = styled.div`
         border: 1px solid #e1e1e1;
         border-radius: 0;
         font-size: 14px;
-        -webkit-appearance: none;
-        -moz-appearance: none; 
-        appearance: none;
-        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+        border-radius: 5px;
+        box-shadow: var(--defaultBoxShadow);
 
         &:focus{
             outline: none;
@@ -183,14 +225,16 @@ const ExcelHeaderSelectorWrapper = styled.div`
     }
 `;
 
-const ExcelHeaderDisplayWrapper = styled.div`
+const ExcelDownloadFormTableWrapper = styled.div`
     margin-top: 10px;
-    padding: 0 30px;
+    padding: 0 20px;
 
     .table-box{
         /* height: 300px; */
         overflow: auto;
         border: 1px solid #77777740;
+        background: #fff;
+        border-radius: 10px;
     }
 
     table{
@@ -294,37 +338,47 @@ const DownloadButtonFieldWrapper = styled.div`
 `;
 
 const InputFieldWrapper = styled.div`
-    margin-top: 10px;
-    padding: 0 30px;
-    display: flex;
-    gap: 10px;
+    margin-top: 20px;
+    padding: 0 20px;
     font-size: 14px;
     align-items: center;
 
-    .input-el {
-        border: 1px solid #fff;
-        border-bottom: 1px solid #ced4da;
-        width : 500px;
-        color: #444;
-        padding: 5px;
+    .label{
+        font-size: 13px;
+        color:#404040;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
 
-        :focus{
-            outline: none;
-            border: 1px solid #4662B4;
+    .input-el {
+        width : 400px;
+        color: #444;
+        border-radius: 5px;
+
+        @media all and (max-width: 992px){
+            width: 100%;
         }
+    }
+
+    .button-item{
+        margin:0 0 0 10px;
+        padding:0;
+        width: 150px;
+        border-radius: 5px;
+        background: var(--mainColor);
+        color: #fff;
+        border: none;
     }
 `;
 
 const TipFieldWrapper = styled.div`
-    margin-top: 20px;
-    padding:0 40px;
+    margin-top: 10px;
+    padding:0 20px;
     display: flex;
-    /* flex-direction: row-reverse; */
 
     font-size: 14px;
 
     @media all and (max-width:992px){
-        padding:0 10px;
         font-size: 12px;
     }
 
@@ -350,11 +404,11 @@ const TipFieldWrapper = styled.div`
 export {
     Container,
     TitleContainer,
-    CombineOperatorsWrapper,
-    PreviewTableWrapper,
+    OperatorsFieldWrapper,
+    PreviewTableFieldWrapper,
     TableBox,
-    ExcelHeaderSelectorWrapper,
-    ExcelHeaderDisplayWrapper,
+    ExcelDownloadFormSelectorFieldWrapper,
+    ExcelDownloadFormTableWrapper,
     DownloadButtonFieldWrapper,
     InputFieldWrapper,
     TipFieldWrapper

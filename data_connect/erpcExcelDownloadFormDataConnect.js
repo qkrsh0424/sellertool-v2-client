@@ -24,6 +24,14 @@ const erpcExcelDownloadFormDataConnect = () => {
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
+        searchFormDetails: async function (params) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/erpc-excel-download-forms/${params.erpcExcelDownloadFormId}/erpc-excel-download-form-details`, {
+                params: params,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
         create: async function (body) {
             await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erpc-excel-download-forms`, body, {
@@ -43,6 +51,16 @@ const erpcExcelDownloadFormDataConnect = () => {
         delete: async function (body) {
             await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/erpc-excel-download-forms/${body.id}`, {
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        actionExcelDownload: async function (erpcExcelDownloadFormId, downloadItems, headers) {
+            await csrfDataConnect().getApiCsrf();
+            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erpc-excel-download-forms/${erpcExcelDownloadFormId}/action:download`, downloadItems, {
+                headers: headers,
+                responseType: 'blob',
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'

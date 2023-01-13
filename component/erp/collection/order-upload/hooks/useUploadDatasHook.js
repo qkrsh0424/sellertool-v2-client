@@ -42,6 +42,7 @@ export default function useUploadDatasHook(props) {
         await erpItemDataConnect().createAll(formData)
             .then(res => {
                 if (res.status === 200) {
+                    setUploadDatas([]);
                     alert(res.data.memo);
                 }
             })

@@ -9,7 +9,7 @@ import useErpItemsFormSameReceiverHook from "../hooks/useErpItemsForSameReceiver
 import { Container, SubmitButtonContainer, TableFieldWrapper } from "../styles/ItemsForSameReceiverModal.styled";
 
 export default function ItemsForSameReceiverModalComponent({
-    targetSameReceiverId,
+    targetSameReceiverHint,
     erpCollectionHeader,
     selectedErpItems,
     onSelectErpItem,
@@ -18,7 +18,7 @@ export default function ItemsForSameReceiverModalComponent({
     const router = useRouter();
     const {
         erpItems
-    } = useErpItemsFormSameReceiverHook(targetSameReceiverId);
+    } = useErpItemsFormSameReceiverHook(targetSameReceiverHint);
 
     const {
         inventoryStocks

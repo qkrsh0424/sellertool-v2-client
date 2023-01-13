@@ -1,27 +1,16 @@
-import { useEffect, useReducer, useState } from "react";
-import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
-import { dateToYYYYMMDDhhmmFile } from "../../../../../utils/dateFormatUtils";
-import { checkFileNameFormat } from "../../../../../utils/regexUtils";
-import CombineOperators from "./CombineOperators.view";
+import { useRouter } from "next/router";
+import React, { useEffect, useReducer, useState } from "react";
+import { dateToYYYYMMDDhhmmssFile, dateToYYYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
+import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
+import CustomImage from "../../../../modules/image/CustomImage";
+import CustomSelect from "../../../../modules/select/CustomSelect";
+import useErpcExcelDownloadFormsHook from "../hooks/useErpcExcelDownloadFormsHook";
+import useRefErpCollectionHeadersHook from "../hooks/useRefErpCollectionHeadersHook";
 import DownloadButtonFieldView from "./DownloadButtonField.view";
-import { Container, TipFieldWrapper } from "./ExcelDownloadModal.styled";
-import ExcelHeaderDisplayView from "./ExcelHeaderDisplay.view";
-import ExcelHeaderSelectorView from "./ExcelHeaderSelector.view";
+import { Container, ExcelDownloadFormSelectorFieldWrapper, OperatorsFieldWrapper, PreviewTableFieldWrapper, TableBox, TipFieldWrapper } from "./ExcelDownloadModal.styled";
 import InputFieldView from "./InputField.view";
-import PreviewTableView from "./PreviewTable.view";
-import TitleView from "./Title.view";
-
-function Tip({ selectedMatchCode }) {
-    return (
-        <TipFieldWrapper>
-            <div>
-                ※ 상품 매칭 항목 : <span className='highlight'>{selectedMatchCode === 'optionCode' ? '[피아르 옵션코드]' : '[출고 옵션코드]'}</span>
-            </div>
-        </TipFieldWrapper>
-    );
-}
-
-const defaultHeaderDetails = getDefaultHeaderDetails();
+import ExcelDownloadFormTableComponent from "./ExcelDownloadFormTable.component";
+import { checkFileNameFormat } from "../../../../../utils/regexUtils";
 
 // collections를 가지고 downloadOrderItem 폼으로 변환, collection = [...orderItem]
 const getDownloadOrderItem = (collections) => {
@@ -34,19 +23,33 @@ const getDownloadOrderItem = (collections) => {
     }
 }
 
-const ExcelDownloadModalComponent = (props) => {
+const ExcelDownloadModalComponent = ({
+    erpCollectionHeader,
+    selectedErpItems,
+
+    onClose,
+    ...props
+}) => {
+    const router = useRouter();
     const [downloadOrderItemList, dispatchDownloadOrderItemList] = useReducer(downloadOrderItemListReducer, initialDownloadOrderItemList);
     const [checkedItemList, dispatchCheckedItemList] = useReducer(checkedItemListReducer, initialCheckedItemList);
     const [selectedExcelHeader, dispatchSelectedExcelHeader] = useReducer(selectedExcelHeaderReducer, initialSelectedExcelHeader);
     const [downloadExcelFileName, dispatchDownloadExcelFileName] = useReducer(downloadExcelFileNameReducer, initialDownloadExcelFileName);
+    const {
+        refErpCollectionHeaders
+    } = useRefErpCollectionHeadersHook();
+    const {
+        erpcExcelDownloadForms,
+        reqDownloadForm
+    } = useErpcExcelDownloadFormsHook();
 
     useEffect(() => {
-        if (!props.checkedOrderItemList || props.checkedOrderItemList?.length <= 0) {
+        if (!selectedErpItems || selectedErpItems?.length <= 0) {
             return;
         }
 
         // downloadOrderItem 폼으로 List 변환
-        let dataList = props.checkedOrderItemList.map(r => {
+        let dataList = selectedErpItems.map(r => {
             let collections = [r];
             return getDownloadOrderItem(collections);
         })
@@ -60,14 +63,14 @@ const ExcelDownloadModalComponent = (props) => {
 
         _onSet_downloadOrderItemList(dataList);
 
-    }, [props.checkedOrderItemList]);
+    }, [selectedErpItems]);
 
     useEffect(() => {
-        if(!selectedExcelHeader) {
+        if (!selectedExcelHeader) {
             return;
         }
 
-        let fileName = '[' + dateToYYYYMMDDhhmmFile(new Date()) + ']' + selectedExcelHeader.title + '_피아르_주문수집';
+        let fileName = `${dateToYYYYMMDDhhmmssFile(new Date())}_${selectedExcelHeader.name}_주문수집`;
 
         dispatchDownloadExcelFileName({
             type: 'SET_DATA',
@@ -83,7 +86,7 @@ const ExcelDownloadModalComponent = (props) => {
     }
 
     // 전체 주문건 합치기
-    const _onAction_combineDownloadOrderItemList = () => {
+    const handleCombineAll = () => {
         let orderItemList = [];
         // 일반 orderItem 폼으로 list 변환
         downloadOrderItemList.forEach(r => {
@@ -126,7 +129,7 @@ const ExcelDownloadModalComponent = (props) => {
     }
 
     // 전체 주문건 분리
-    const _onAction_insulateDownloadOrderItemList = () => {
+    const handleInsulateAll = () => {
         let orderItemList = [];
         downloadOrderItemList.forEach(r => {
             orderItemList.push(...r.collections)
@@ -140,7 +143,7 @@ const ExcelDownloadModalComponent = (props) => {
     }
 
     // 선택된 주문건 분리
-    const _onAction_insulateDownloadOrderItemListSelectOnly = () => {
+    const handleInsulateSelected = () => {
         if (checkedItemList.length <= 0) {
             return;
         }
@@ -177,7 +180,7 @@ const ExcelDownloadModalComponent = (props) => {
         _onSet_downloadOrderItemList(dataList);
     }
 
-    const _onAction_checkItem = (item) => {
+    const handleCheckItem = (item) => {
         let checked = isCheckedItem(item);
         let data = [...checkedItemList];
 
@@ -197,9 +200,9 @@ const ExcelDownloadModalComponent = (props) => {
         return checkedItemList.some(r => r.id === item.id);
     }
 
-    const onActionSelectExcelFormHeader = (e) => {
+    const handleSelectExcelDownloadForm = (e) => {
         let id = e.target.value;
-        let header = props.downloadExcelList.filter(r => r.id === id)[0];
+        let header = erpcExcelDownloadForms.filter(r => r.id === id)[0];
 
         if (!id) {
             dispatchSelectedExcelHeader({
@@ -213,12 +216,12 @@ const ExcelDownloadModalComponent = (props) => {
     }
 
     const onActionDownloadExcel = () => {
-        if(!checkFileNameFormat(downloadExcelFileName)) {
+        if (!checkFileNameFormat(downloadExcelFileName)) {
             alert('파일명에 허용되지 않은 특수문자가 포함되어 있습니다. \n제거해야 할 특수문자 : \/:*?%."<>|');
             return;
         }
 
-        props.onActionDownloadExcel(downloadExcelFileName, selectedExcelHeader, downloadOrderItemList)
+        reqDownloadForm(selectedExcelHeader?.id, downloadOrderItemList, downloadExcelFileName)
     }
 
     const onChangeDownloadExcelFileName = (e) => {
@@ -231,47 +234,41 @@ const ExcelDownloadModalComponent = (props) => {
     return (
         <>
             <Container>
-                <TitleView
-                    title={'엑셀 다운로드'}
-                ></TitleView>
-                <CombineOperators
-                    _onAction_combineDownloadOrderItemList={_onAction_combineDownloadOrderItemList}
-                    _onAction_insulateDownloadOrderItemList={_onAction_insulateDownloadOrderItemList}
-                    _onAction_insulateDownloadOrderItemListSelectOnly={_onAction_insulateDownloadOrderItemListSelectOnly}
-                ></CombineOperators>
-                <Tip selectedMatchCode={props.selectedMatchCode} />
-                {(downloadOrderItemList && props.viewHeader) &&
-                    <PreviewTableView
-                        viewHeader={props.viewHeader}
-                        downloadOrderItemList={downloadOrderItemList}
-                        checkedItemList={checkedItemList}
-                        selectedMatchCode={props.selectedMatchCode}
+                <HeadField
+                    onClose={onClose}
+                />
+                <OperatorsField
+                    onActionCombineAll={handleCombineAll}
+                    onActionInsulateAll={handleInsulateAll}
+                    onActionInsulateSelected={handleInsulateSelected}
+                />
+                <TipField
+                    matchedCode={router?.query?.matchedCode || 'releaseOption'}
+                />
+                <PreviewTableField
+                    matchedCode={router?.query?.matchedCode || 'releaseOption'}
+                    erpCollectionHeader={erpCollectionHeader}
+                    downloadOrderItemList={downloadOrderItemList}
+                    isCheckedItem={isCheckedItem}
+                    onActionCheckItem={handleCheckItem}
+                />
+                <ExcelDownloadFormSelectorField
+                    erpcExcelDownloadForms={erpcExcelDownloadForms}
+                    selectedExcelHeader={selectedExcelHeader}
 
-                        isCheckedItem={isCheckedItem}
-                        _onAction_checkItem={_onAction_checkItem}
-                    ></PreviewTableView>
-                }
-                {props.downloadExcelList &&
-                    <ExcelHeaderSelectorView
-                        downloadExcelList={props.downloadExcelList}
-                        selectedExcelHeader={selectedExcelHeader}
-
-                        onActionSelectExcelFormHeader={onActionSelectExcelFormHeader}
-                    ></ExcelHeaderSelectorView>
-                }
+                    onActionSelectExcelDownloadForm={handleSelectExcelDownloadForm}
+                />
                 {selectedExcelHeader &&
                     <>
-                        <ExcelHeaderDisplayView
-                            defaultHeaderDetails={defaultHeaderDetails}
+                        <ExcelDownloadFormTableComponent
+                            refErpCollectionHeaders={refErpCollectionHeaders}
                             selectedExcelHeader={selectedExcelHeader}
-                        ></ExcelHeaderDisplayView>
+                        ></ExcelDownloadFormTableComponent>
                         <InputFieldView
                             downloadExcelFileName={downloadExcelFileName}
                             onChangeDownloadExcelFileName={onChangeDownloadExcelFileName}
-                        ></InputFieldView>
-                        <DownloadButtonFieldView
                             onActionDownloadExcel={onActionDownloadExcel}
-                        ></DownloadButtonFieldView>
+                        ></InputFieldView>
                     </>
                 }
             </Container>
@@ -322,3 +319,203 @@ const downloadExcelFileNameReducer = (state, action) => {
         default: return initialDownloadExcelFileName;
     }
 }
+
+function HeadField({
+    onClose
+}) {
+    return (
+        <>
+            <div className='header-close-button-box'>
+                <button
+                    type='button'
+                    className='header-close-button-el'
+                    onClick={() => onClose()}
+                >
+                    <CustomImage
+                        src='/images/icon/close_default_959eae.svg'
+                    />
+                </button>
+            </div>
+            <div className='title-box'>
+                <div className='title'>
+                    엑셀 다운로드
+                </div>
+            </div>
+        </>
+    );
+}
+
+function OperatorsField({
+    onActionCombineAll,
+    onActionInsulateAll,
+    onActionInsulateSelected,
+}) {
+    return (
+        <OperatorsFieldWrapper>
+            <div className='flex-box'>
+                <SingleBlockButton
+                    type='button'
+                    className='button-item'
+                    onClick={() => onActionCombineAll()}
+                >
+                    전체 주문건 합치기
+                </SingleBlockButton>
+                <SingleBlockButton
+                    type='button'
+                    className='button-item'
+                    onClick={() => onActionInsulateAll()}
+                >
+                    전체 주문건 분리
+                </SingleBlockButton>
+                <SingleBlockButton
+                    type='button'
+                    className='button-item'
+                    onClick={() => onActionInsulateSelected()}
+                >
+                    선택 주문건 분리
+                </SingleBlockButton>
+            </div>
+        </OperatorsFieldWrapper>
+    );
+}
+
+function TipField({ matchedCode }) {
+    return (
+        <TipFieldWrapper>
+            <div>
+                ※ 상품 매칭 항목 : <span className='highlight'>{matchedCode === 'optionCode' ? '[M] 옵션코드' : '[M] 출고옵션코드'}</span>
+            </div>
+        </TipFieldWrapper>
+    );
+}
+
+function PreviewTableField({
+    erpCollectionHeader,
+    matchedCode,
+    downloadOrderItemList,
+    isCheckedItem,
+    onActionCheckItem
+}) {
+    return (
+        <PreviewTableFieldWrapper>
+            <TableBox>
+                <table cellSpacing="0">
+                    <colgroup>
+                        <col width={'50px'}></col>
+                        <col width={'50px'}></col>
+                        {erpCollectionHeader?.erpCollectionHeaderDetails?.map((r, index) => {
+                            return (
+                                <col key={index} width={'200px'}></col>
+                            );
+                        })}
+
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th className="fixed-header" scope="col">#</th>
+                            <th className="fixed-header" scope="col">선택</th>
+                            {erpCollectionHeader?.erpCollectionHeaderDetails?.map((r, index) => {
+                                return (
+                                    <th key={index} className="fixed-header" scope="col">
+                                        <div>{r.customHeaderName}</div>
+                                        {(HIGHLIGHT_FIELDS.includes(r.matchedFieldName) || r.matchedFieldName === matchedCode) &&
+                                            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '10%', background: '#b9c2e1' }}></div>
+                                        }
+                                    </th>
+                                )
+                            })}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {downloadOrderItemList?.map((r1, r1Index) => {
+                            return (
+                                <React.Fragment key={r1Index}>
+                                    <tr>
+                                        <td
+                                            rowSpan={r1.collections.length + 1}
+                                            style={{ background: '#d1d1d1', fontSize: '13px', fontWeight: '700' }}
+                                        >
+                                            {r1Index + 1}
+                                        </td>
+                                    </tr>
+                                    {r1.collections?.map((r2, r2Index) => {
+                                        let checked = isCheckedItem(r2);
+                                        return (
+                                            <tr
+                                                key={r2.id}
+                                            >
+                                                <td
+                                                    style={{ background: '#d1d1d1' }}
+                                                >
+                                                    <input
+                                                        type='checkbox'
+                                                        className='checkbox-item'
+                                                        checked={checked}
+                                                        onChange={() => onActionCheckItem(r2)}
+                                                    ></input>
+                                                </td>
+                                                {erpCollectionHeader?.erpCollectionHeaderDetails?.map(r3 => {
+                                                    let matchedFieldName = r3.matchedFieldName;
+                                                    if (matchedFieldName === 'createdAt' || matchedFieldName === 'salesAt' || matchedFieldName === 'releaseAt') {
+                                                        return (
+                                                            <td key={matchedFieldName}>{r2[matchedFieldName] ? dateToYYYYMMDDhhmmss(r2[matchedFieldName]) : ""}</td>
+                                                        )
+                                                    }
+                                                    return (
+                                                        <td key={matchedFieldName}>{r2[matchedFieldName]}</td>
+                                                    )
+                                                })}
+                                            </tr>
+                                        )
+                                    })}
+                                </React.Fragment>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </TableBox>
+        </PreviewTableFieldWrapper>
+    );
+}
+
+function ExcelDownloadFormSelectorField({
+    erpcExcelDownloadForms,
+    selectedExcelHeader,
+    onActionSelectExcelDownloadForm
+}) {
+    return (
+        <>
+            <ExcelDownloadFormSelectorFieldWrapper>
+                <div className='select-wrapper'>
+                    <div className='select-label'>다운로드 양식을 선택해 주세요.</div>
+                    <CustomSelect
+                        className='select-el'
+                        value={selectedExcelHeader?.id || ''}
+                        onChange={(e) => onActionSelectExcelDownloadForm(e)}
+                    >
+                        <option value=''>선택</option>
+                        {erpcExcelDownloadForms?.map(excelDownloadForm => {
+                            return (
+                                <option
+                                    key={excelDownloadForm?.id}
+                                    value={excelDownloadForm?.id}
+                                >{excelDownloadForm?.name}</option>
+                            );
+                        })}
+                    </CustomSelect>
+                </div>
+            </ExcelDownloadFormSelectorFieldWrapper>
+        </>
+    );
+}
+
+const HIGHLIGHT_FIELDS = [
+    'productCategoryName',
+    'productSubCategoryName',
+    'productName',
+    'productTag',
+    'productOptionName',
+    'productOptionTag',
+    'productOptionReleaseLocation',
+    'optionStockUnit'
+];

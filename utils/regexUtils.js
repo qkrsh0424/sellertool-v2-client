@@ -57,6 +57,12 @@ const checkEmailFormat = (email) => {
     return regex.test(email);
 }
 
+
+function checkFileNameFormat(fileName) {
+    let notAllowCharIdx = fileName.search(/[\\\/:*?%."<>\|]/gi);
+    return notAllowCharIdx < 0;
+}
+
 export {
     checkUsernameForm,
     checkNicknameForm,
@@ -64,5 +70,6 @@ export {
     comparePassword,
     checkPassword,
     checkPhoneNumberFormat,
-    checkEmailFormat
+    checkEmailFormat,
+    checkFileNameFormat
 }

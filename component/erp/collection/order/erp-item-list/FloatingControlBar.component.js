@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
+import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadingComponent";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
 import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
@@ -7,6 +8,7 @@ import EditErpItemModalComponent from "./modal/EditErpItemsModal.component";
 import { Container, ControlButtonsContainer } from "./styles/FloatingControlBar.styled";
 
 export default function FloatingControlBarComponent({
+    erpCollectionHeader,
     selectedErpItems,
     onSelectClearAllErpItems,
     onSelectClearErpItem,
@@ -20,7 +22,18 @@ export default function FloatingControlBarComponent({
     const [deleteErpItemsConfirmModalOpen, setDeleteErpItemsConfirmModalOpen] = useState(false);
     const [changeStatusToSalesModalOpen, setChangeStatusToSalesModalOpen] = useState(false);
     const [excelDownloadModalOpen, setExcelDownloadModalOpen] = useState(false);
+    const [backdropOpen, setBackdropOpen] = useState(false);
 
+    useEffect(() => {
+        return () => {
+            setControlButtonsViewOpen(false);
+            setEditErpItemsModalOpen(false);
+            setDeleteErpItemsConfirmModalOpen(false);
+            setChangeStatusToSalesModalOpen(false);
+            setExcelDownloadModalOpen(false);
+            setBackdropOpen(false);
+        };
+    }, []);
 
     const handleOpenControlButtonsView = () => {
         if (controlButtonsViewOpen) {
@@ -38,11 +51,13 @@ export default function FloatingControlBarComponent({
         setEditErpItemsModalOpen(false);
     }
 
-    const handleSubmitUpdateErpItems = (body) => {
-        reqUpdateErpItems(body, () => {
+    const handleSubmitUpdateErpItems = async (body) => {
+        handleOpenBackdrop();
+        await reqUpdateErpItems(body, () => {
             handleCloseEditErpItems();
             reqFetchSelectedErpItems();
         })
+        handleCloseBackdrop();
     }
 
     const handleOpenDeleteErpItemsConfirmModal = () => {
@@ -53,15 +68,16 @@ export default function FloatingControlBarComponent({
         setDeleteErpItemsConfirmModalOpen(false);
     }
 
-    const handleSubmitDeleteErpItems = () => {
+    const handleSubmitDeleteErpItems = async () => {
+        handleOpenBackdrop();
         let body = {
             ids: selectedErpItems?.map(r => r.id)
         }
-
-        reqDeleteErpItems(body, () => {
+        await reqDeleteErpItems(body, () => {
             handleCloseDeleteErpItemsConfirmModal();
             onSelectClearAllErpItems();
         })
+        handleCloseBackdrop();
     }
 
     const handleOpenChangeStatusToSalesModal = () => {
@@ -72,14 +88,16 @@ export default function FloatingControlBarComponent({
         setChangeStatusToSalesModalOpen(false);
     }
 
-    const handleSubmitChangeStatusToSales = () => {
+    const handleSubmitChangeStatusToSales = async () => {
+        handleOpenBackdrop();
         let body = {
             ids: selectedErpItems?.map(r => r.id)
         }
-        reqChangeStatusToSales(body, () => {
+        await reqChangeStatusToSales(body, () => {
             handleCloseChangeStatusToSalesModal();
             onSelectClearAllErpItems();
         })
+        handleCloseBackdrop();
     }
 
     const handleOpenExcelDownloadModal = () => {
@@ -89,6 +107,15 @@ export default function FloatingControlBarComponent({
     const handleCloseExcelDownloadModal = () => {
         setExcelDownloadModalOpen(false);
     }
+
+    const handleOpenBackdrop = () => {
+        setBackdropOpen(true);
+    }
+
+    const handleCloseBackdrop = () => {
+        setBackdropOpen(false);
+    }
+
     return (
         <>
             <Container
@@ -201,9 +228,18 @@ export default function FloatingControlBarComponent({
                     maxWidth={'xl'}
                 >
                     <ExcelDownloadModalComponent
+                        erpCollectionHeader={erpCollectionHeader}
+                        selectedErpItems={selectedErpItems}
 
+                        onClose={handleCloseExcelDownloadModal}
                     />
                 </CommonModalComponent>
+            }
+
+            {backdropOpen &&
+                <BackdropLoadingComponent
+                    open={backdropOpen}
+                />
             }
         </>
     );

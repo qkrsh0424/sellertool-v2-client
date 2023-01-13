@@ -9,6 +9,7 @@ import FloatingPagenationComponent from "./floating-pagenation/FloatingPagenatio
 import HeaderSettingComponent from "./header-setting/HeaderSetting.component";
 import useErpCollectionHeaderHook from "./hooks/useErpCollectionHeaderHook";
 import useErpItemPageHook from "./hooks/useErpItemPageHook";
+import useErpItemSameReceiverHintsHook from "./hooks/useErpItemSameReceiverHintsHook";
 import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
 import useSelectedErpItemsHook from "./hooks/useSelectedErpItemsHook";
 import { Container } from "./index.styled";
@@ -26,7 +27,6 @@ export default function MainComponent(props) {
         erpItemPagePending,
         totalSize,
         totalPages,
-        erpItemSameReceiverHints,
 
         reqChangeOptionCode,
         reqChangeReleaseOptionCode,
@@ -38,6 +38,10 @@ export default function MainComponent(props) {
     const {
         inventoryStocks
     } = useInventoryStocksHook(erpItemPage?.content);
+
+    const {
+        erpItemSameReceiverHints
+    } = useErpItemSameReceiverHintsHook(erpItemPage);
 
     const {
         selectedErpItems,
@@ -78,7 +82,7 @@ export default function MainComponent(props) {
                             selectedErpItems={selectedErpItems}
                             inventoryStocks={inventoryStocks}
                             erpItemSameReceiverHints={erpItemSameReceiverHints}
-                            
+
                             onSelectErpItem={onSelectErpItem}
                             onSelectAllErpItems={onSelectAllErpItems}
                             onSelectClearAllErpItemsInPage={onSelectClearAllErpItemsInPage}

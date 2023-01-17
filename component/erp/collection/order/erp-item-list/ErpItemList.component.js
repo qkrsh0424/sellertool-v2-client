@@ -128,6 +128,7 @@ export default function ErpItemListComponent({
         setItemsFormSameReceiverModalOpen(false);
         setTargetSameReceiverHint(null);
     }
+
     return (
         <>
             <TableFieldWrapper>
@@ -201,6 +202,7 @@ export default function ErpItemListComponent({
                                     const isSelected = selectedErpItems?.find(r => r.id === r1.id);
                                     let inventoryStock = inventoryStocks?.find(r => r.productOptionId === r1.productOptionId);
                                     let isOutOfStock = inventoryStock && inventoryStock?.stockUnit <= 0;
+
                                     if (rowIndex < prevViewSize) {
                                         return (
                                             <tr key={r1.id}>
@@ -239,7 +241,11 @@ export default function ErpItemListComponent({
                                     return (
                                         <tr
                                             key={r1.id}
-                                            className={`${isSelected && 'tr-active'} ${isOutOfStock && 'tr-highlight'}`}
+                                            className={`${isSelected ? 'tr-active' : ''} ${isOutOfStock ? 'tr-highlight' : ''}`}
+                                            style={{
+                                                position: 'relative',
+                                                background: !r1.productOptionId ? 'var(--defaultYellowColorOpacity30)' : ''
+                                            }}
                                             onClick={(e) => { e.stopPropagation(); onSelectErpItem(r1); }}
                                         >
                                             <td>{rowIndex + 1}</td>

@@ -5,6 +5,7 @@ import CommonModalComponent from "../../../../modules/modal/CommonModalComponent
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
 import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
 import EditErpItemModalComponent from "./modal/EditErpItemsModal.component";
+import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
 import { Container, ControlButtonsContainer } from "./styles/FloatingControlBar.styled";
 
 export default function FloatingControlBarComponent({
@@ -17,6 +18,8 @@ export default function FloatingControlBarComponent({
     reqDeleteErpItems,
     reqChangeStatusToSales
 }) {
+    const [controlDrawerOpen, setControlDrawerOpen] = useState(false);
+
     const [controlButtonsViewOpen, setControlButtonsViewOpen] = useState(false);
     const [editErpItemsModalOpen, setEditErpItemsModalOpen] = useState(false);
     const [deleteErpItemsConfirmModalOpen, setDeleteErpItemsConfirmModalOpen] = useState(false);
@@ -26,6 +29,7 @@ export default function FloatingControlBarComponent({
 
     useEffect(() => {
         return () => {
+            setControlDrawerOpen(false);
             setControlButtonsViewOpen(false);
             setEditErpItemsModalOpen(false);
             setDeleteErpItemsConfirmModalOpen(false);
@@ -35,12 +39,8 @@ export default function FloatingControlBarComponent({
         };
     }, []);
 
-    const handleOpenControlButtonsView = () => {
-        if (controlButtonsViewOpen) {
-            setControlButtonsViewOpen(false);
-            return;
-        }
-        setControlButtonsViewOpen(true);
+    const handleControlDrawerOpen = (setOpen) => {
+        setControlDrawerOpen(setOpen);
     }
 
     const handleOpenEditErpItems = () => {
@@ -121,63 +121,10 @@ export default function FloatingControlBarComponent({
             <Container
                 controlButtonsViewOpen={controlButtonsViewOpen}
             >
-                <ControlButtonsContainer
-                    controlButtonsViewOpen={controlButtonsViewOpen}
-                >
-                    <div className='groups'>
-                        <div className='label'>일괄 데이터 처리</div>
-                        <div>
-                            <span
-                                className='control-button-item'
-                                onClick={() => handleOpenEditErpItems()}
-                            >
-                                수정
-                            </span>
-                        </div>
-                    </div>
-                    <div className='groups'>
-                        <div className='label'>상태 관리</div>
-                        <div>
-                            <span
-                                className='control-button-item'
-                                onClick={() => handleOpenChangeStatusToSalesModal()}
-                            >
-                                판매전환
-                            </span>
-                            <span
-                                className='control-button-item'
-                                style={{
-                                    color: 'var(--defaultRedColor)',
-                                    border: '1px solid var(--defaultRedColor)'
-                                }}
-                                onClick={() => handleOpenDeleteErpItemsConfirmModal()}
-                            >
-                                데이터 삭제
-                            </span>
-                        </div>
-                    </div>
-                    <div className='groups'>
-                        <div className='label'>기타</div>
-                        <div>
-                            <span
-                                className='control-button-item'
-                                onClick={() => handleOpenExcelDownloadModal()}
-                            >
-                                엑셀 다운로드
-                            </span>
-                            <span
-                                className='control-button-item'
-                                onClick={() => onSelectClearAllErpItems()}
-                            >
-                                전체해제
-                            </span>
-                        </div>
-                    </div>
-                </ControlButtonsContainer>
                 <SingleBlockButton
                     type='button'
                     className='floating-button-item'
-                    onClick={() => handleOpenControlButtonsView()}
+                    onClick={() => handleControlDrawerOpen(true)}
                 >
                     <span className='accent'>{selectedErpItems?.length || '0'}</span> 개 선택됨
                 </SingleBlockButton>
@@ -241,6 +188,16 @@ export default function FloatingControlBarComponent({
                     open={backdropOpen}
                 />
             }
+
+            <FloatingControlBarModalComponent
+                open={controlDrawerOpen}
+                onClose={() => handleControlDrawerOpen(false)}
+                handleOpenEditErpItems={handleOpenEditErpItems}
+                handleOpenChangeStatusToSalesModal={handleOpenChangeStatusToSalesModal}
+                handleOpenDeleteErpItemsConfirmModal={handleOpenDeleteErpItemsConfirmModal}
+                handleOpenExcelDownloadModal={handleOpenExcelDownloadModal}
+                onSelectClearAllErpItems={onSelectClearAllErpItems}
+            />
         </>
     );
 }

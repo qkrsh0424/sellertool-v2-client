@@ -302,11 +302,6 @@ const TABLE_HEADERS = [
         defaultWidth: 150
     },
     {
-        fieldName: "releaseLocation",
-        headerName: "[M] 출고지",
-        defaultWidth: 150
-    },
-    {
         fieldName: "managementMemo1",
         headerName: "관리메모1",
         defaultWidth: 150

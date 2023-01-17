@@ -415,13 +415,6 @@ const HEADERS = [
         valueType: 'string',
     },
     {
-        fieldName: "releaseLocation",
-        headerName: "[M] 출고지",
-        defaultWidth: 150,
-        requiredFlag: false,
-        valueType: 'string',
-    },
-    {
         fieldName: "managementMemo1",
         headerName: "관리메모1",
         defaultWidth: 150,

@@ -3,9 +3,9 @@ import PagenationComponentV2 from "../../../../modules/pagenation/PagenationComp
 import { PagenationContainer } from "./FloatingPagenation.styled";
 
 export default function FloatingPagenationComponent({
+    erpItemPage,
     totalSize,
-    totalPages,
-    erpItemPage
+    totalPages
 }) {
     const [pageIndex, setPageIndex] = useState(1);
     const [isFirst, setIsFirst] = useState(true);
@@ -15,11 +15,10 @@ export default function FloatingPagenationComponent({
         if (!erpItemPage) {
             return;
         }
-
         setPageIndex(erpItemPage?.number);
         setIsFirst(erpItemPage?.first);
         setIsLast(erpItemPage?.last);
-    }, [erpItemPage])
+    }, [erpItemPage]);
 
     return (
         <>

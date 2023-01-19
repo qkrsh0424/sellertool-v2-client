@@ -1,31 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
+import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadingComponent";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
+import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
 import EditErpItemModalComponent from "./modal/EditErpItemsModal.component";
+import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
 import { Container, ControlButtonsContainer } from "./styles/FloatingControlBar.styled";
 
 export default function FloatingControlBarComponent({
+    erpCollectionHeader,
     selectedErpItems,
+    inventoryStocks,
+
     onSelectClearAllErpItems,
     onSelectClearErpItem,
     reqUpdateErpItems,
     reqFetchSelectedErpItems,
     reqDeleteErpItems,
-    reqChangeStatusToSales
+    reqChangeStatusToSales,
+    reqCopyCreateErpItems
 }) {
+    const [controlDrawerOpen, setControlDrawerOpen] = useState(false);
+
     const [controlButtonsViewOpen, setControlButtonsViewOpen] = useState(false);
     const [editErpItemsModalOpen, setEditErpItemsModalOpen] = useState(false);
     const [deleteErpItemsConfirmModalOpen, setDeleteErpItemsConfirmModalOpen] = useState(false);
     const [changeStatusToSalesModalOpen, setChangeStatusToSalesModalOpen] = useState(false);
+    const [excelDownloadModalOpen, setExcelDownloadModalOpen] = useState(false);
+    const [backdropOpen, setBackdropOpen] = useState(false);
 
-
-    const handleOpenControlButtonsView = () => {
-        if (controlButtonsViewOpen) {
+    useEffect(() => {
+        return () => {
+            setControlDrawerOpen(false);
             setControlButtonsViewOpen(false);
-            return;
-        }
-        setControlButtonsViewOpen(true);
+            setEditErpItemsModalOpen(false);
+            setDeleteErpItemsConfirmModalOpen(false);
+            setChangeStatusToSalesModalOpen(false);
+            setExcelDownloadModalOpen(false);
+            setBackdropOpen(false);
+        };
+    }, []);
+
+    const handleControlDrawerOpen = (setOpen) => {
+        setControlDrawerOpen(setOpen);
     }
 
     const handleOpenEditErpItems = () => {
@@ -36,11 +54,14 @@ export default function FloatingControlBarComponent({
         setEditErpItemsModalOpen(false);
     }
 
-    const handleSubmitUpdateErpItems = (body) => {
-        reqUpdateErpItems(body, () => {
+    const handleSubmitUpdateErpItems = async (body) => {
+        handleOpenBackdrop();
+        await reqUpdateErpItems(body, () => {
             handleCloseEditErpItems();
             reqFetchSelectedErpItems();
+            handleControlDrawerOpen(false);
         })
+        handleCloseBackdrop();
     }
 
     const handleOpenDeleteErpItemsConfirmModal = () => {
@@ -51,15 +72,16 @@ export default function FloatingControlBarComponent({
         setDeleteErpItemsConfirmModalOpen(false);
     }
 
-    const handleSubmitDeleteErpItems = () => {
+    const handleSubmitDeleteErpItems = async () => {
+        handleOpenBackdrop();
         let body = {
             ids: selectedErpItems?.map(r => r.id)
         }
-
-        reqDeleteErpItems(body, () => {
+        await reqDeleteErpItems(body, () => {
             handleCloseDeleteErpItemsConfirmModal();
             onSelectClearAllErpItems();
         })
+        handleCloseBackdrop();
     }
 
     const handleOpenChangeStatusToSalesModal = () => {
@@ -70,93 +92,48 @@ export default function FloatingControlBarComponent({
         setChangeStatusToSalesModalOpen(false);
     }
 
-    const handleSubmitChangeStatusToSales = () => {
+    const handleSubmitChangeStatusToSales = async () => {
+        handleOpenBackdrop();
         let body = {
             ids: selectedErpItems?.map(r => r.id)
         }
-        reqChangeStatusToSales(body, () => {
+        await reqChangeStatusToSales(body, () => {
             handleCloseChangeStatusToSalesModal();
             onSelectClearAllErpItems();
         })
+        handleCloseBackdrop();
+    }
+
+    const handleOpenExcelDownloadModal = () => {
+        setExcelDownloadModalOpen(true);
+    }
+
+    const handleCloseExcelDownloadModal = () => {
+        setExcelDownloadModalOpen(false);
+    }
+
+    const handleOpenBackdrop = () => {
+        setBackdropOpen(true);
+    }
+
+    const handleCloseBackdrop = () => {
+        setBackdropOpen(false);
+    }
+
+    const handleSubmitCopyCreateErpItems = async (body, successCallback) => {
+        handleOpenBackdrop();
+        await reqCopyCreateErpItems(body, () => { successCallback(); handleControlDrawerOpen(false) })
+        handleCloseBackdrop();
     }
     return (
         <>
             <Container
                 controlButtonsViewOpen={controlButtonsViewOpen}
             >
-                <ControlButtonsContainer
-                    controlButtonsViewOpen={controlButtonsViewOpen}
-                >
-                    <div className='groups'>
-                        <div className='label'>일괄 데이터 처리</div>
-                        <div>
-                            <span
-                                className='control-button-item'
-                                onClick={() => handleOpenEditErpItems()}
-                            >
-                                수정
-                            </span>
-                            <span className='control-button-item'>
-                                운송장 등록
-                            </span>
-                            <span className='control-button-item'>
-                                출고리스트
-                            </span>
-                        </div>
-                    </div>
-                    <div className='groups'>
-                        <div className='label'>재고 관리</div>
-                        <div>
-                            <span className='control-button-item'>
-                                재고반영
-                            </span>
-                            <span
-                                className='control-button-item'
-                            >
-                                재고 반영 취소
-                            </span>
-                        </div>
-                    </div>
-                    <div className='groups'>
-                        <div className='label'>상태 관리</div>
-                        <div>
-                            <span
-                                className='control-button-item'
-                                onClick={() => handleOpenChangeStatusToSalesModal()}
-                            >
-                                판매전환
-                            </span>
-                            <span
-                                className='control-button-item'
-                                style={{
-                                    color: 'var(--defaultRedColor)',
-                                    border: '1px solid var(--defaultRedColor)'
-                                }}
-                                onClick={() => handleOpenDeleteErpItemsConfirmModal()}
-                            >
-                                데이터 삭제
-                            </span>
-                        </div>
-                    </div>
-                    <div className='groups'>
-                        <div className='label'>기타</div>
-                        <div>
-                            <span className='control-button-item'>
-                                엑셀 다운로드
-                            </span>
-                            <span
-                                className='control-button-item'
-                                onClick={() => onSelectClearAllErpItems()}
-                            >
-                                전체해제
-                            </span>
-                        </div>
-                    </div>
-                </ControlButtonsContainer>
                 <SingleBlockButton
                     type='button'
                     className='floating-button-item'
-                    onClick={() => handleOpenControlButtonsView()}
+                    onClick={() => handleControlDrawerOpen(true)}
                 >
                     <span className='accent'>{selectedErpItems?.length || '0'}</span> 개 선택됨
                 </SingleBlockButton>
@@ -199,6 +176,41 @@ export default function FloatingControlBarComponent({
                     message={'선택된 데이터를 판매전환 합니다.'}
                 />
             }
+
+            {excelDownloadModalOpen &&
+                <CommonModalComponent
+                    open={excelDownloadModalOpen}
+                    onClose={handleCloseExcelDownloadModal}
+                    maxWidth={'xl'}
+                >
+                    <ExcelDownloadModalComponent
+                        erpCollectionHeader={erpCollectionHeader}
+                        selectedErpItems={selectedErpItems}
+                        inventoryStocks={inventoryStocks}
+
+                        onClose={handleCloseExcelDownloadModal}
+                    />
+                </CommonModalComponent>
+            }
+
+            {backdropOpen &&
+                <BackdropLoadingComponent
+                    open={backdropOpen}
+                />
+            }
+
+            <FloatingControlBarModalComponent
+                open={controlDrawerOpen}
+                selectedErpItems={selectedErpItems}
+
+                onClose={() => handleControlDrawerOpen(false)}
+                handleOpenEditErpItems={handleOpenEditErpItems}
+                handleOpenChangeStatusToSalesModal={handleOpenChangeStatusToSalesModal}
+                handleOpenDeleteErpItemsConfirmModal={handleOpenDeleteErpItemsConfirmModal}
+                handleOpenExcelDownloadModal={handleOpenExcelDownloadModal}
+                onSelectClearAllErpItems={onSelectClearAllErpItems}
+                reqCopyCreateErpItems={handleSubmitCopyCreateErpItems}
+            />
         </>
     );
 }

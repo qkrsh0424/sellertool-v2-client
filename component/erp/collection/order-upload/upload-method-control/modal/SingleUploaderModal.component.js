@@ -5,7 +5,7 @@ import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../../modules/image/CustomImage";
 import ResizableTh from "../../../../../modules/table/ResizableTh";
 import useSingleUploadDatasForm from "../hooks/useSingleUploadDatasForm";
-import { AddButtonBox, Container, CountBox, DeleteTd, SubmitButtonContainer, TableBox, TableWrapper } from "../styles/SingleUploaderModal.styled";
+import { AddButtonBox, Container, CountBox, ControlTd, SubmitButtonContainer, TableBox, TableWrapper } from "../styles/SingleUploaderModal.styled";
 
 export default function SingleUploaderModalComponent({
     onClose,
@@ -15,6 +15,7 @@ export default function SingleUploaderModalComponent({
         singleUploadDatasForm,
         onAddSingleUploadData,
         onDeleteSingleUploadData,
+        onCopySingleUploadData,
         onChangeOptionValueOfName,
         onChangeNumberValueOfName,
         checkSubmitFormatValid
@@ -85,6 +86,7 @@ export default function SingleUploaderModalComponent({
                     <Table
                         uploadDatas={singleUploadDatasForm}
                         onActionDeleteUploadData={handleDeleteSingleUploadData}
+                        onActionCopyUploadData={onCopySingleUploadData}
                         onChangeOptionValueOfName={onChangeOptionValueOfName}
                         onChangeNumberValueOfName={onChangeNumberValueOfName}
                     />
@@ -120,6 +122,7 @@ export default function SingleUploaderModalComponent({
 function Table({
     uploadDatas,
     onActionDeleteUploadData,
+    onActionCopyUploadData,
     onChangeOptionValueOfName,
     onChangeNumberValueOfName
 }) {
@@ -139,7 +142,7 @@ function Table({
                                     <td>
                                         {index + 1}
                                     </td>
-                                    <DeleteTd>
+                                    <ControlTd>
                                         <button
                                             type='button'
                                             className='button-item'
@@ -149,7 +152,18 @@ function Table({
                                                 src='/images/icon/delete_default_e56767.svg'
                                             />
                                         </button>
-                                    </DeleteTd>
+                                    </ControlTd>
+                                    <ControlTd>
+                                        <button
+                                            type='button'
+                                            className='button-item'
+                                            onClick={() => onActionCopyUploadData(index)}
+                                        >
+                                            <CustomImage
+                                                src='/images/icon/copy_default_418cff.svg'
+                                            />
+                                        </button>
+                                    </ControlTd>
                                     {HEADERS?.map((header) => {
                                         if (header.fieldName === 'unit' || header.fieldName === 'price' || header.fieldName === 'deliveryCharge') {
                                             return (
@@ -216,6 +230,16 @@ function TableHead(props) {
                     }}
                 >
                     삭제
+                </th>
+                <th
+                    className="fixed-header"
+                    width={50}
+                    scope="col"
+                    style={{
+                        zIndex: '10'
+                    }}
+                >
+                    복사
                 </th>
                 {HEADERS?.map((r, index) => {
                     return (

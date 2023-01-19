@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocalStorageHook } from "../../../../hooks/local_storage/useLocalStorageHook";
+import BackdropLoadingComponent from "../../../modules/loading/BackdropLoadingComponent";
 import Layout from "../layout/Layout";
 import ConditionFieldComponent from "./condition-field/ConditionField.component";
 import ErpItemListComponent from "./erp-item-list/ErpItemList.component";
@@ -8,6 +9,7 @@ import FloatingPagenationComponent from "./floating-pagenation/FloatingPagenatio
 import HeaderSettingComponent from "./header-setting/HeaderSetting.component";
 import useErpCollectionHeaderHook from "./hooks/useErpCollectionHeaderHook";
 import useErpItemPageHook from "./hooks/useErpItemPageHook";
+import useErpItemSameReceiverHintsHook from "./hooks/useErpItemSameReceiverHintsHook";
 import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
 import useSelectedErpItemsHook from "./hooks/useSelectedErpItemsHook";
 import { Container } from "./index.styled";
@@ -25,16 +27,22 @@ export default function MainComponent(props) {
         erpItemPagePending,
         totalSize,
         totalPages,
+
         reqChangeOptionCode,
         reqChangeReleaseOptionCode,
         reqUpdateErpItems,
         reqDeleteErpItems,
-        reqChangeStatusToSales
+        reqChangeStatusToSales,
+        reqCopyCreateErpItems
     } = useErpItemPageHook();
 
     const {
         inventoryStocks
     } = useInventoryStocksHook(erpItemPage?.content);
+
+    const {
+        erpItemSameReceiverHints
+    } = useErpItemSameReceiverHintsHook(erpItemPage);
 
     const {
         selectedErpItems,
@@ -74,6 +82,8 @@ export default function MainComponent(props) {
                             erpItemPage={erpItemPage}
                             selectedErpItems={selectedErpItems}
                             inventoryStocks={inventoryStocks}
+                            erpItemSameReceiverHints={erpItemSameReceiverHints}
+
                             onSelectErpItem={onSelectErpItem}
                             onSelectAllErpItems={onSelectAllErpItems}
                             onSelectClearAllErpItemsInPage={onSelectClearAllErpItemsInPage}
@@ -94,13 +104,17 @@ export default function MainComponent(props) {
             />
             {selectedErpItems?.length > 0 &&
                 <FloatingControlBarComponent
+                    erpCollectionHeader={erpCollectionHeader}
                     selectedErpItems={selectedErpItems}
+                    inventoryStocks={inventoryStocks}
+                    
                     onSelectClearAllErpItems={onSelectClearAllErpItems}
                     onSelectClearErpItem={onSelectClearErpItem}
                     reqUpdateErpItems={reqUpdateErpItems}
                     reqFetchSelectedErpItems={reqFetchSelectedErpItems}
                     reqDeleteErpItems={reqDeleteErpItems}
                     reqChangeStatusToSales={reqChangeStatusToSales}
+                    reqCopyCreateErpItems={reqCopyCreateErpItems}
                 />
             }
         </>

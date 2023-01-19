@@ -1,4 +1,6 @@
+import _ from "lodash";
 import { useState } from "react";
+import { dateToYYYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
 import { getRemovedPrefixZero } from "../../../../../../utils/numberFormatUtils";
 
 export default function useSingleUploadDatasForm(props) {
@@ -10,6 +12,17 @@ export default function useSingleUploadDatasForm(props) {
 
     const onDeleteSingleUploadData = (reqIndex) => {
         setSingleUploadDatasForm(singleUploadDatasForm?.filter((r, index) => index !== reqIndex));
+    }
+
+    const onCopySingleUploadData = (reqIndex) => {
+        let targetData = singleUploadDatasForm?.find((r, index) => index === reqIndex);
+        let newData = _.cloneDeep(targetData);
+        newData = {
+            ...newData,
+            channelOrderDate: dateToYYYYMMDDhhmmss(new Date())
+        }
+
+        setSingleUploadDatasForm(singleUploadDatasForm?.slice(0, reqIndex + 1).concat(newData).concat(singleUploadDatasForm?.slice(reqIndex + 1, singleUploadDatasForm?.length)))
     }
 
     const onChangeOptionValueOfName = (e, reqIndex) => {
@@ -79,9 +92,10 @@ export default function useSingleUploadDatasForm(props) {
         singleUploadDatasForm,
         onAddSingleUploadData,
         onDeleteSingleUploadData,
+        onCopySingleUploadData,
         onChangeOptionValueOfName,
         onChangeNumberValueOfName,
-        checkSubmitFormatValid
+        checkSubmitFormatValid,
     }
 }
 

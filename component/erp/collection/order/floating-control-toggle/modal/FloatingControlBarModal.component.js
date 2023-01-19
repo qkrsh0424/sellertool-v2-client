@@ -3,7 +3,6 @@ import Drawer from '@mui/material/Drawer';
 import SingleBlockButton from '../../../../../modules/button/SingleBlockButton';
 import styled from 'styled-components';
 import CustomImage from '../../../../../modules/image/CustomImage';
-
 const CloseButtonBox = styled.div`
     height: 100%;
     .button-item{
@@ -63,12 +62,15 @@ const ContentGroup = styled.div`
 
 export default function FloatingControlBarModalComponent({
     open,
+
     onClose,
-    handleOpenEditErpItems,
-    handleOpenChangeStatusToSalesModal,
-    handleOpenDeleteErpItemsConfirmModal,
-    handleOpenExcelDownloadModal,
-    onSelectClearAllErpItems,
+    onActionOpenEditErpItemsModal,
+    onActionOpenChangeStatusToSalesModal,
+    onActionOpenDeleteErpItemsConfirmModal,
+    onActionOpenExcelDownloadModal,
+    onActionOpenCopyCreateErpItemModal,
+    onActionClearAllSelectedItems,
+    onActionOpenViewSelectedModal
 }) {
     return (
         <div>
@@ -102,21 +104,28 @@ export default function FloatingControlBarModalComponent({
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => handleOpenEditErpItems()}
+                                onClick={() => onActionOpenEditErpItemsModal()}
                             >
                                 수정
+                            </SingleBlockButton>
+                            <SingleBlockButton
+                                type='button'
+                                className='button-item'
+                                onClick={() => onActionOpenCopyCreateErpItemModal()}
+                            >
+                                복사 생성
                             </SingleBlockButton>
                             {/* <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => handleOpenEditErpItems()}
+                                onClick={() => onActionOpenEditErpItemsModal()}
                             >
                                 운송장 등록
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => handleOpenEditErpItems()}
+                                onClick={() => onActionOpenEditErpItemsModal()}
                             >
                                 출고리스트
                             </SingleBlockButton> */}
@@ -126,14 +135,14 @@ export default function FloatingControlBarModalComponent({
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => handleOpenEditErpItems()}
+                                onClick={() => onActionOpenEditErpItemsModal()}
                             >
                                 재고반영
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => handleOpenEditErpItems()}
+                                onClick={() => onActionOpenEditErpItemsModal()}
                             >
                                 재고반영 취소
                             </SingleBlockButton>
@@ -143,21 +152,21 @@ export default function FloatingControlBarModalComponent({
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => handleOpenChangeStatusToSalesModal()}
+                                onClick={() => onActionOpenChangeStatusToSalesModal()}
                             >
                                 판매전환
                             </SingleBlockButton>
                             {/* <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => handleOpenChangeStatusToSalesModal()}
+                                onClick={() => onActionOpenChangeStatusToSalesModal()}
                             >
                                 판매취소
                             </SingleBlockButton> */}
                             <SingleBlockButton
                                 type='button'
                                 className='button-item warning-button'
-                                onClick={() => handleOpenDeleteErpItemsConfirmModal()}
+                                onClick={() => onActionOpenDeleteErpItemsConfirmModal()}
                             >
                                 데이터 삭제
                             </SingleBlockButton>
@@ -167,14 +176,21 @@ export default function FloatingControlBarModalComponent({
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => handleOpenExcelDownloadModal()}
+                                onClick={() => onActionOpenViewSelectedModal()}
+                            >
+                                선택 데이터 보기
+                            </SingleBlockButton>
+                            <SingleBlockButton
+                                type='button'
+                                className='button-item'
+                                onClick={() => onActionOpenExcelDownloadModal()}
                             >
                                 엑셀 다운로드
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => onSelectClearAllErpItems()}
+                                onClick={() => onActionClearAllSelectedItems()}
                             >
                                 전체해제
                             </SingleBlockButton>

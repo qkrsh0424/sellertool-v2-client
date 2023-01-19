@@ -29,7 +29,7 @@ export const ConditionContainer = styled.div`
 
 export const RadioContainer = styled.div`
     padding: 10px 20px;
-
+    line-height: 1.5;
     .title{
         font-size: 14px;
         font-weight: 600;
@@ -57,6 +57,7 @@ export const RadioContainer = styled.div`
         display: flex;
         align-items: center;
         margin-right: 15px;
+        margin-bottom: 5px;
         cursor: pointer;
 
         .radio-item{

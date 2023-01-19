@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
     background: var(--defaultBackground);
+    padding-bottom: 40px;
     
     .header-close-button-box{
         display: flex;
@@ -44,47 +45,39 @@ export const Container = styled.div`
     }
 `;
 
-export const AddButtonBox = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 40px;
-    padding: 0 20px;
-    .button-item{
-        margin:0;
-        padding:0;
-        width:35px;
-        height: 35px;
-        background: var(--mainColor);
-        border-radius: 5px;
-    }
-
-    .button-icon-figure{
-        width: 70%;
-        height: 70%;
-        margin: auto;
-    }
-`;
-
-export const SubmitButtonContainer = styled.div`
-    margin-top: 40px;
+export const TipFieldWrapper = styled.div`
+    margin-top: 10px;
+    padding:0 20px;
     display: flex;
 
-    .button-item{
-        margin:0;
-        padding:0;
-        height: 48px;
-        border:none;
-        color:#fff;
-        font-size: 18px;
-        font-weight: 500;
+    font-size: 14px;
+
+    @media all and (max-width:992px){
+        font-size: 12px;
+    }
+
+    .highlight{
+        display: inline-block;
+        position:relative;
+        font-weight: 700;
+        color: var(--erp-main-color);
+    }
+
+    .highlight:after{
+        content:"";
+        position: absolute;
+        bottom:0;
+        left:0;
+        width: 100%;
+        height: 10px;
+        display: inline-block;
+        background: #b9c2e160;
     }
 `;
 
 export const TableWrapper = styled.div`
     margin-top: 10px;
     padding: 0 20px;
-
     .empty-box{
         padding: 50px 0;
 
@@ -110,8 +103,7 @@ export const TableBox = styled.div`
     min-height: 300px;
     max-height: 300px;
     border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    box-shadow: var(--defaultBoxShadow);
+    border-radius: 5px;
     background:#fcfcfc;
 
     &::-webkit-scrollbar{
@@ -161,6 +153,20 @@ export const TableBox = styled.div`
         white-space:nowrap;
         font-size: 12px;
         
+        .control-button-item{
+            width:20px;
+            height: 20px;
+            margin:0;
+            padding:0;
+            margin-left: 3px;
+            background: none;
+            border-radius: 50%;
+            border: none;
+            .icon-figure{
+                width:80%;
+                height: 80%;
+            }
+        }
     }
 
     table tbody tr{
@@ -186,7 +192,7 @@ export const TableBox = styled.div`
         white-space:nowrap;
         font-size: 12px;
         color: #333;
-
+        
         .input-item{
             background: none;
             text-align: center;
@@ -212,6 +218,47 @@ export const TableBox = styled.div`
                 cursor: text;
             }
         }
+
+        .div-item{
+            background: none;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+            width: 100%;
+            border: none;
+            font-size: 12px;
+            color: #404040;
+            font-weight: 400;
+
+            word-break: keep-all;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+
+        .button-item{
+            margin:0;
+            background: none;
+            text-align: center;
+            padding: 0 10px;
+            box-sizing: border-box;
+            width: 100%;
+            height: 44px;
+            border: none;
+            outline:none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 12px;
+
+            word-break: keep-all;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+    }
+
+    .optionCodeTd{
+        background: var(--mainColorOpacity100);
     }
 
     table .fixed-col-left {
@@ -230,34 +277,21 @@ export const TableBox = styled.div`
         margin: auto;
         font-size: 12px;
     }
-`;
 
-export const CountBox = styled.div`
-    font-size: 14px;
-    color: #404040;
-    font-weight: 600;
-
-    .accent{
-        color: var(--defaultBlueColor);
-    }
-`;
-
-export const ControlTd = styled.td`
-    padding:0 !important;
-    .button-item{
-        position:relative;
+    .delete-button-item{
+        width:30px;
+        height: 30px;
         margin:0;
-        padding: 0;
-        height: 24px;
-        width: 24px;
-        margin: 0 auto;
-        border: 1px solid #00000000;
-        cursor: pointer;
-        background: none;
-    }
+        padding:0;
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 5px;
 
-    .button-icon-figure{
-        width: 100%;
-        height: 100%;
+        .icon-figure{
+            width:70%;
+            height: 70%;
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
 `;

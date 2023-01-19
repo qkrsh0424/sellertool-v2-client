@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { useLocalStorageHook } from "../../../../hooks/local_storage/useLocalStorageHook";
-import BackdropLoadingComponent from "../../../modules/loading/BackdropLoadingComponent";
 import Layout from "../layout/Layout";
 import ConditionFieldComponent from "./condition-field/ConditionField.component";
 import ErpItemListComponent from "./erp-item-list/ErpItemList.component";
-import FloatingControlBarComponent from "./erp-item-list/FloatingControlBar.component";
+import FloatingControlToggle from "./floating-control-toggle/FloatingControlToggle";
 import FloatingPagenationComponent from "./floating-pagenation/FloatingPagenation.component";
 import HeaderSettingComponent from "./header-setting/HeaderSetting.component";
 import useErpCollectionHeaderHook from "./hooks/useErpCollectionHeaderHook";
@@ -32,7 +30,8 @@ export default function MainComponent(props) {
         reqChangeReleaseOptionCode,
         reqUpdateErpItems,
         reqDeleteErpItems,
-        reqChangeStatusToSales
+        reqChangeStatusToSales,
+        reqCopyCreateErpItems
     } = useErpItemPageHook();
 
     const {
@@ -101,16 +100,21 @@ export default function MainComponent(props) {
                 totalSize={totalSize}
                 totalPages={totalPages}
             />
+
             {selectedErpItems?.length > 0 &&
-                <FloatingControlBarComponent
+                <FloatingControlToggle
                     erpCollectionHeader={erpCollectionHeader}
                     selectedErpItems={selectedErpItems}
-                    onSelectClearAllErpItems={onSelectClearAllErpItems}
-                    onSelectClearErpItem={onSelectClearErpItem}
-                    reqUpdateErpItems={reqUpdateErpItems}
-                    reqFetchSelectedErpItems={reqFetchSelectedErpItems}
-                    reqDeleteErpItems={reqDeleteErpItems}
-                    reqChangeStatusToSales={reqChangeStatusToSales}
+                    inventoryStocks={inventoryStocks}
+
+                    onActionClearAllSelectedItems={onSelectClearAllErpItems}
+                    onActionClearSelectedItem={onSelectClearErpItem}
+
+                    onSubmitUpdateErpItems={reqUpdateErpItems}
+                    onSubmitFetchSelectedErpItems={reqFetchSelectedErpItems}
+                    onSubmitDeleteErpItems={reqDeleteErpItems}
+                    onSubmitChangeStatusToSales={reqChangeStatusToSales}
+                    onSubmitCopyCreateErpItems={reqCopyCreateErpItems}
                 />
             }
         </>

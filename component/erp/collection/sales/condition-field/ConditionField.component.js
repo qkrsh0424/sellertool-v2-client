@@ -76,9 +76,9 @@ export default function ConditionFieldComponent({
         }
 
         if (periodSearchYn === 'y') {
-            if(startDateTime > endDateTime){
+            if (startDateTime > endDateTime) {
                 alert('종료일은 시작일 이후로 지정해 주세요.');
-                return ;
+                return;
             }
 
             params.periodSearchCondition = periodSearchCondition;

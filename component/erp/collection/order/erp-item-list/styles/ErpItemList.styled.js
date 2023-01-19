@@ -64,7 +64,7 @@ export const TableFieldWrapper = styled.div`
 
     table tbody tr{
         &:hover{
-            background: #0000000a;
+            /* background: #0000000a; */
         }
     }
 
@@ -73,7 +73,7 @@ export const TableFieldWrapper = styled.div`
     }
 
     table tbody .tr-highlight{
-        background: #ececec;
+        background: var(--defaultRedColorOpacity30);
     }
 
     table tbody tr td{

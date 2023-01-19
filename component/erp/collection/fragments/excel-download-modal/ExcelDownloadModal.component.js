@@ -11,6 +11,7 @@ import { Container, ExcelDownloadFormSelectorFieldWrapper, OperatorsFieldWrapper
 import InputFieldView from "./InputField.view";
 import ExcelDownloadFormTableComponent from "./ExcelDownloadFormTable.component";
 import { checkFileNameFormat } from "../../../../../utils/regexUtils";
+import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
 
 // collections를 가지고 downloadOrderItem 폼으로 변환, collection = [...orderItem]
 const getDownloadOrderItem = (collections) => {
@@ -43,14 +44,23 @@ const ExcelDownloadModalComponent = ({
         reqDownloadForm
     } = useErpcExcelDownloadFormsHook();
 
+    const {
+        inventoryStocks
+    } = useInventoryStocksHook(selectedErpItems);
+
+    
     useEffect(() => {
-        if (!selectedErpItems || selectedErpItems?.length <= 0) {
+        if (!selectedErpItems || selectedErpItems?.length <= 0 || !inventoryStocks) {
             return;
         }
-
+        
         // downloadOrderItem 폼으로 List 변환
         let dataList = selectedErpItems.map(r => {
-            let collections = [r];
+            let stockUnit = inventoryStocks?.find(inventoryStock => inventoryStock.productOptionId === r.productOptionId)?.stockUnit ?? 0;
+            let collections = [{
+                ...r,
+                optionStockUnit: stockUnit
+            }];
             return getDownloadOrderItem(collections);
         })
 
@@ -63,7 +73,7 @@ const ExcelDownloadModalComponent = ({
 
         _onSet_downloadOrderItemList(dataList);
 
-    }, [selectedErpItems]);
+    }, [selectedErpItems, inventoryStocks]);
 
     useEffect(() => {
         if (!selectedExcelHeader) {
@@ -249,6 +259,7 @@ const ExcelDownloadModalComponent = ({
                     matchedCode={router?.query?.matchedCode || 'releaseOption'}
                     erpCollectionHeader={erpCollectionHeader}
                     downloadOrderItemList={downloadOrderItemList}
+
                     isCheckedItem={isCheckedItem}
                     onActionCheckItem={handleCheckItem}
                 />
@@ -393,6 +404,7 @@ function PreviewTableField({
     erpCollectionHeader,
     matchedCode,
     downloadOrderItemList,
+
     isCheckedItem,
     onActionCheckItem
 }) {
@@ -428,6 +440,7 @@ function PreviewTableField({
                     </thead>
                     <tbody>
                         {downloadOrderItemList?.map((r1, r1Index) => {
+
                             return (
                                 <React.Fragment key={r1Index}>
                                     <tr>
@@ -440,6 +453,7 @@ function PreviewTableField({
                                     </tr>
                                     {r1.collections?.map((r2, r2Index) => {
                                         let checked = isCheckedItem(r2);
+
                                         return (
                                             <tr
                                                 key={r2.id}
@@ -461,6 +475,7 @@ function PreviewTableField({
                                                             <td key={matchedFieldName}>{r2[matchedFieldName] ? dateToYYYYMMDDhhmmss(r2[matchedFieldName]) : ""}</td>
                                                         )
                                                     }
+
                                                     return (
                                                         <td key={matchedFieldName}>{r2[matchedFieldName]}</td>
                                                     )

@@ -60,7 +60,7 @@ export const TipFieldWrapper = styled.div`
         display: inline-block;
         position:relative;
         font-weight: 700;
-        color: var(--erp-main-color);
+        color: #404040;
     }
 
     .highlight:after{
@@ -69,9 +69,10 @@ export const TipFieldWrapper = styled.div`
         bottom:0;
         left:0;
         width: 100%;
-        height: 10px;
+        height: 7px;
+        border-radius: 3px;
         display: inline-block;
-        background: #b9c2e160;
+        background: var(--mainColorOpacity500);
     }
 `;
 

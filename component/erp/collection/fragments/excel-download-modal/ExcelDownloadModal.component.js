@@ -431,7 +431,7 @@ function PreviewTableField({
                                     <th key={index} className="fixed-header" scope="col">
                                         <div>{r.customHeaderName}</div>
                                         {(HIGHLIGHT_FIELDS.includes(r.matchedFieldName) || r.matchedFieldName === matchedCode) &&
-                                            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '10%', background: '#b9c2e1' }}></div>
+                                            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '10%', background: 'var(--mainColorOpacity500)' }}></div>
                                         }
                                     </th>
                                 )
@@ -446,7 +446,7 @@ function PreviewTableField({
                                     <tr>
                                         <td
                                             rowSpan={r1.collections.length + 1}
-                                            style={{ background: '#d1d1d1', fontSize: '13px', fontWeight: '700' }}
+                                            style={{ background: '#e0e0e0', fontSize: '13px', fontWeight: '700' }}
                                         >
                                             {r1Index + 1}
                                         </td>
@@ -459,7 +459,7 @@ function PreviewTableField({
                                                 key={r2.id}
                                             >
                                                 <td
-                                                    style={{ background: '#d1d1d1' }}
+                                                    style={{ background: '#e0e0e0' }}
                                                 >
                                                     <input
                                                         type='checkbox'

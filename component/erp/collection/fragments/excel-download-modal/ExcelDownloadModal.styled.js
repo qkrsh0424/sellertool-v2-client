@@ -123,8 +123,8 @@ const TableBox = styled.div`
         vertical-align: middle !important;
         text-align: center;
         /* background: #309FFF; */
-        background: #777777;
-        color: white;
+        background: #e0e0e0;
+        color: #404040;
         padding: 10px;
         font-size: 12px;
     }
@@ -181,7 +181,7 @@ const TableBox = styled.div`
         border-radius: 10px;
     }
     &::-webkit-scrollbar-thumb{
-        background-color: #777777;
+        background-color: #e0e0e0;
         border-radius: 10px;
     }
 
@@ -249,8 +249,8 @@ const ExcelDownloadFormTableWrapper = styled.div`
         vertical-align: middle !important;
         text-align: center;
         /* background: #309FFF; */
-        background: #777777;
-        color: white;
+        background: #e0e0e0;
+        color: #404040;
         padding: 10px;
         font-size: 12px;
     }
@@ -307,7 +307,7 @@ const ExcelDownloadFormTableWrapper = styled.div`
         border-radius: 10px;
     }
     .table-box::-webkit-scrollbar-thumb{
-        background-color: #777777;
+        background-color: #e0e0e0;
         border-radius: 10px;
     }
 
@@ -386,7 +386,7 @@ const TipFieldWrapper = styled.div`
         display: inline-block;
         position:relative;
         font-weight: 700;
-        color: var(--erp-main-color);
+        color: #404040;
     }
 
     .highlight:after{
@@ -395,9 +395,10 @@ const TipFieldWrapper = styled.div`
         bottom:0;
         left:0;
         width: 100%;
-        height: 10px;
+        height: 7px;
+        border-radius: 3px;
         display: inline-block;
-        background: #b9c2e160;
+        background: var(--mainColorOpacity500);
     }
 `;
 

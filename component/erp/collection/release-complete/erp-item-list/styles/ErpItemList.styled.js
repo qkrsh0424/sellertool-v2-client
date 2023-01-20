@@ -64,7 +64,7 @@ export const TableFieldWrapper = styled.div`
 
     table tbody tr{
         &:hover{
-            background: #0000000a;
+            /* background: #0000000a; */
         }
     }
 
@@ -73,7 +73,7 @@ export const TableFieldWrapper = styled.div`
     }
 
     table tbody .tr-highlight{
-        background: #ececec;
+        background: var(--defaultRedColorOpacity30);
     }
 
     table tbody tr td{
@@ -185,5 +185,18 @@ export const TableFieldWrapper = styled.div`
             width: 18px;
             height: 18px;
         }
+    }
+
+    .view-sameReceiver-button-item{
+        user-select: none;
+        -webkit-tap-highlight-color: #00000000;
+        cursor: pointer;
+        outline: none;
+        font-size: 11px;
+        margin-left: 3px;
+        background: #f7f7f7;
+        border-radius: 3px;
+        border: 1px solid #e0e0e0;
+        color: #606060;
     }
 `;

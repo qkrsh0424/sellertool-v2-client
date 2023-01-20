@@ -12,7 +12,8 @@ import EditOptionCodeModalComponent from "./EditOptionCodeModal.component";
 const TABLE_DATA_VIEW_SIZE = 40;
 const TABLE_DATA_INC_DEC_SIZE = 20;
 
-export default function OrderInfoTable({
+export default function DataTableFragment({
+    tableHeaders,
     editErpItems,
     onChangeValueOfName,
     onChangeNumberValueOfName,
@@ -141,7 +142,7 @@ export default function OrderInfoTable({
                                 >
                                     해제
                                 </th>
-                                {HEADERS?.map?.((r, index) => {
+                                {tableHeaders?.map?.((r, index) => {
                                     if (r.name === 'optionCode') {
                                         return (
                                             <ResizableTh
@@ -305,7 +306,7 @@ export default function OrderInfoTable({
                                                 </div>
                                             </SingleBlockButton>
                                         </td>
-                                        {HEADERS.map((header) => {
+                                        {tableHeaders.map((header) => {
                                             if (header.name === 'optionCode') {
                                                 return (
                                                     <td
@@ -443,104 +444,3 @@ export default function OrderInfoTable({
         </>
     );
 }
-
-const HEADERS = [
-    {
-        name: 'prodCode',
-        headerName: '[M] 상품코드',
-        required: false,
-        defaultWidth: 180,
-        valueType: 'productCode'
-    },
-    {
-        name: 'optionCode',
-        headerName: '[M] 옵션코드',
-        defaultWidth: 180,
-        required: false,
-        valueType: 'optionCode'
-    },
-    {
-        name: 'releaseOptionCode',
-        headerName: '[M] 출고옵션코드',
-        defaultWidth: 180,
-        required: false,
-        valueType: 'optionCode'
-    },
-    {
-        name: 'prodName',
-        headerName: '상품명',
-        required: true,
-        defaultWidth: 180,
-        valueType: 'string'
-    },
-    {
-        name: 'optionName',
-        headerName: '옵션명',
-        required: true,
-        defaultWidth: 180,
-        valueType: 'string'
-    },
-    {
-        name: 'unit',
-        headerName: '수량',
-        required: true,
-        defaultWidth: 180,
-        valueType: 'number'
-    },
-    {
-        name: 'salesChannel',
-        headerName: '판매채널',
-        required: false,
-        defaultWidth: 180,
-        valueType: 'string'
-    },
-    {
-        name: 'orderNumber1',
-        headerName: '주문번호1',
-        required: false,
-        defaultWidth: 180,
-        valueType: 'string'
-    },
-    {
-        name: 'orderNumber2',
-        headerName: '주문번호2',
-        required: false,
-        defaultWidth: 180,
-        valueType: 'string'
-    },
-    {
-        name: 'channelProdCode',
-        headerName: '상품코드',
-        required: false,
-        defaultWidth: 180,
-        valueType: 'string'
-    },
-    {
-        name: 'channelOptionCode',
-        headerName: '옵션코드',
-        required: false,
-        defaultWidth: 180,
-        valueType: 'string'
-    },
-    {
-        name: 'price',
-        headerName: '가격',
-        required: false,
-        defaultWidth: 180,
-        valueType: 'numberWithCommas'
-    },
-    {
-        name: 'deliveryCharge',
-        headerName: '배송비',
-        required: false,
-        defaultWidth: 180,
-        valueType: 'numberWithCommas'
-    },
-    {
-        name: 'barcode',
-        headerName: '바코드',
-        required: false,
-        defaultWidth: 180,
-        valueType: 'string'
-    },
-]

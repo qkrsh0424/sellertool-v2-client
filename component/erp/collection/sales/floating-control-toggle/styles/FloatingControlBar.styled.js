@@ -5,7 +5,7 @@ export const Container = styled.div`
     right:20px;
     bottom:90px;
     z-index: 99;
-    width: ${props => props.controlButtonsViewOpen ? '100%' : 'auto'};
+    /* width: ${props => props.controlButtonsViewOpen ? '100%' : 'auto'}; */
     display: flex;
     justify-content: flex-end;
 

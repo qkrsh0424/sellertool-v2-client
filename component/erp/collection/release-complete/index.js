@@ -1,13 +1,13 @@
-import { useState } from "react";
 import { useLocalStorageHook } from "../../../../hooks/local_storage/useLocalStorageHook";
 import Layout from "../layout/Layout";
 import ConditionFieldComponent from "./condition-field/ConditionField.component";
 import ErpItemListComponent from "./erp-item-list/ErpItemList.component";
-import FloatingControlBarComponent from "./erp-item-list/FloatingControlBar.component";
+import FloatingControlToggle from "./floating-control-toggle/FloatingControlToggle";
 import FloatingPagenationComponent from "./floating-pagenation/FloatingPagenation.component";
 import HeaderSettingComponent from "./header-setting/HeaderSetting.component";
 import useErpCollectionHeaderHook from "./hooks/useErpCollectionHeaderHook";
 import useErpItemPageHook from "./hooks/useErpItemPageHook";
+import useErpItemSameReceiverHintsHook from "./hooks/useErpItemSameReceiverHintsHook";
 import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
 import useSelectedErpItemsHook from "./hooks/useSelectedErpItemsHook";
 import { Container } from "./index.styled";
@@ -25,16 +25,24 @@ export default function MainComponent(props) {
         erpItemPagePending,
         totalSize,
         totalPages,
+
         reqChangeOptionCode,
         reqChangeReleaseOptionCode,
         reqUpdateErpItems,
         reqDeleteErpItems,
-        reqChangeStatusToSales
+        reqChangeStatusToSales,
+        reqChangeStatusToRelease,
+        reqChangeStatusToOrder,
+        reqCopyCreateErpItems
     } = useErpItemPageHook();
 
     const {
         inventoryStocks
     } = useInventoryStocksHook(erpItemPage?.content);
+
+    const {
+        erpItemSameReceiverHints
+    } = useErpItemSameReceiverHintsHook(erpItemPage);
 
     const {
         selectedErpItems,
@@ -59,7 +67,7 @@ export default function MainComponent(props) {
             <Container>
                 <Layout
                     sidebarName={'발주관리'}
-                    headerName={'출고관리'}
+                    headerName={'판매관리'}
                     sidebarColor={'#ffffff'}
                 >
                     <>
@@ -74,6 +82,8 @@ export default function MainComponent(props) {
                             erpItemPage={erpItemPage}
                             selectedErpItems={selectedErpItems}
                             inventoryStocks={inventoryStocks}
+                            erpItemSameReceiverHints={erpItemSameReceiverHints}
+
                             onSelectErpItem={onSelectErpItem}
                             onSelectAllErpItems={onSelectAllErpItems}
                             onSelectClearAllErpItemsInPage={onSelectClearAllErpItemsInPage}
@@ -92,15 +102,22 @@ export default function MainComponent(props) {
                 totalSize={totalSize}
                 totalPages={totalPages}
             />
+
             {selectedErpItems?.length > 0 &&
-                <FloatingControlBarComponent
+                <FloatingControlToggle
+                    erpCollectionHeader={erpCollectionHeader}
                     selectedErpItems={selectedErpItems}
-                    onSelectClearAllErpItems={onSelectClearAllErpItems}
-                    onSelectClearErpItem={onSelectClearErpItem}
-                    reqUpdateErpItems={reqUpdateErpItems}
-                    reqFetchSelectedErpItems={reqFetchSelectedErpItems}
-                    reqDeleteErpItems={reqDeleteErpItems}
-                    reqChangeStatusToSales={reqChangeStatusToSales}
+                    inventoryStocks={inventoryStocks}
+
+                    onActionClearAllSelectedItems={onSelectClearAllErpItems}
+                    onActionClearSelectedItem={onSelectClearErpItem}
+
+                    onSubmitUpdateErpItems={reqUpdateErpItems}
+                    onSubmitFetchSelectedErpItems={reqFetchSelectedErpItems}
+                    onSubmitDeleteErpItems={reqDeleteErpItems}
+                    onSubmitChangeStatusToRelease={reqChangeStatusToRelease}
+                    onSubmitChangeStatusToOrder={reqChangeStatusToOrder}
+                    onSubmitCopyCreateErpItems={reqCopyCreateErpItems}
                 />
             }
         </>

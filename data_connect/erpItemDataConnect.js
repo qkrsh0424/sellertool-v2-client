@@ -105,6 +105,22 @@ const erpItemDataConnect = () => {
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
+        changeStatusToRelease: async function (body) {
+            await csrfDataConnect().getApiCsrf();
+            return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/erp-items/target:status/action:release`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        changeStatusToOrder: async function (body) {
+            await csrfDataConnect().getApiCsrf();
+            return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/erp-items/target:status/action:order`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
         uploadWithExcel: async function (formData) {
             await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/upload/excel`, formData, {

@@ -133,7 +133,7 @@ export const TableFieldWrapper = styled.div`
     }
 
     table tbody .tr-highlight{
-        background: #ececec;
+        background: var(--defaultRedColorOpacity30);
     }
 
     table tbody tr td{

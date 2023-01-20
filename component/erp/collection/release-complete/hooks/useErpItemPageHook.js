@@ -58,6 +58,7 @@ export default function useErpItemPageHook(props) {
 
         let params = {
             salesYn: 'y',
+            releaseYn: 'n',
             periodSearchCondition: router?.query?.periodSearchCondition,
             startDateTime: router?.query?.startDateTime && getStartDate(router?.query?.startDateTime),
             endDateTime: router?.query?.endDateTime && getEndDate(router?.query?.endDateTime),
@@ -78,7 +79,7 @@ export default function useErpItemPageHook(props) {
             .then(res => {
                 if (res.status === 200) {
                     let resTotalSize = res.data.data.totalSize;
-                    if(resTotalSize <= 0){
+                    if (resTotalSize <= 0) {
                         setTotalSize(0);
                         setTotalPages(1);
                         return;
@@ -87,7 +88,7 @@ export default function useErpItemPageHook(props) {
                     let totalPages = Math.ceil(resTotalSize / size);
                     setTotalSize(resTotalSize);
                     setTotalPages(totalPages);
-                    
+
                 }
             })
             .catch(err => {
@@ -103,6 +104,7 @@ export default function useErpItemPageHook(props) {
 
         let params = {
             salesYn: 'y',
+            releaseYn: 'n',
             periodSearchCondition: router?.query?.periodSearchCondition,
             startDateTime: router?.query?.startDateTime && getStartDate(router?.query?.startDateTime),
             endDateTime: router?.query?.endDateTime && getEndDate(router?.query?.endDateTime),
@@ -116,7 +118,7 @@ export default function useErpItemPageHook(props) {
             diSearchQuery: router?.query?.diSearchQuery,
             page: router?.query?.page || 1,
             size: router?.query?.size || 50,
-            sort: router?.query?.sort?.split(',') || 'createdAt_asc',
+            sort: router?.query?.sort?.split(',') || 'salesAt_asc',
             matchedCode: router?.query?.matchedCode || 'releaseOptionCode'
         }
 
@@ -232,6 +234,7 @@ export default function useErpItemPageHook(props) {
             .then(res => {
                 if (res.status === 200) {
                     reqFetchErpItemPage();
+                    reqFetchCountErpItems();
                     successCallback();
                 }
             })
@@ -262,6 +265,7 @@ export default function useErpItemPageHook(props) {
             .then(res => {
                 if (res.status === 200) {
                     reqFetchErpItemPage();
+                    reqFetchCountErpItems();
                     successCallback();
                 }
             })
@@ -282,16 +286,115 @@ export default function useErpItemPageHook(props) {
             })
     }
 
+    const reqChangeStatusToRelease = async (body, successCallback) => {
+        body = {
+            ...body,
+            workspaceId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await erpItemDataConnect().changeStatusToRelease(body)
+            .then(res => {
+                if (res.status === 200) {
+                    reqFetchErpItemPage();
+                    reqFetchCountErpItems();
+                    successCallback();
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (!res) {
+                    alert('네트워크 연결이 원활하지 않습니다.');
+                    return;
+                }
+
+                if (res.status === 500) {
+                    alert('undefined error. 관리자에 문의해 주세요.');
+                    return;
+                }
+
+                alert(res.data.memo);
+            })
+    }
+
+    const reqChangeStatusToOrder = async (body, successCallback) => {
+        body = {
+            ...body,
+            workspaceId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await erpItemDataConnect().changeStatusToOrder(body)
+            .then(res => {
+                if (res.status === 200) {
+                    reqFetchErpItemPage();
+                    reqFetchCountErpItems();
+                    successCallback();
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (!res) {
+                    alert('네트워크 연결이 원활하지 않습니다.');
+                    return;
+                }
+
+                if (res.status === 500) {
+                    alert('undefined error. 관리자에 문의해 주세요.');
+                    return;
+                }
+
+                alert(res.data.memo);
+            })
+    }
+
+    const reqCopyCreateErpItems = async (body, successCallback) => {
+        body = {
+            ...body,
+            workspaceId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await erpItemDataConnect().copyCreateErpItems(body)
+            .then(res => {
+                if (res.status === 200) {
+                    alert(res.data.memo);
+                    reqFetchErpItemPage();
+                    reqFetchCountErpItems();
+                    successCallback();
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (!res) {
+                    alert('네트워크 연결이 원활하지 않습니다.');
+                    return;
+                }
+
+                if (res.status === 500) {
+                    alert('undefined error. 관리자에 문의해 주세요.');
+                    return;
+                }
+
+                alert(res.data.memo);
+            })
+            ;
+    }
+
     return {
         erpItemPage,
         erpItemPagePending,
         totalSize,
         totalPages,
+
         reqFetchErpItemPage,
         reqChangeOptionCode,
         reqChangeReleaseOptionCode,
         reqUpdateErpItems,
         reqDeleteErpItems,
         reqChangeStatusToSales,
+        reqChangeStatusToRelease,
+        reqChangeStatusToOrder,
+        reqCopyCreateErpItems
     }
 }

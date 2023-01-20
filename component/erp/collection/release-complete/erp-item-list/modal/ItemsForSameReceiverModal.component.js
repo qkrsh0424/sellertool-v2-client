@@ -85,7 +85,7 @@ export default function ItemsForSameReceiverModalComponent({
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {erpItems?.filter(r => r.salesYn === 'n' && r.releaseYn === 'n')?.map((r1, rowIndex) => {
+                                    {erpItems?.map((r1, rowIndex) => {
                                         const isSelected = selectedErpItems?.find(r => r.id === r1.id);
                                         let inventoryStock = inventoryStocks?.find(r => r.productOptionId === r1.productOptionId);
                                         let isOutOfStock = inventoryStock && inventoryStock?.stockUnit <= 0;

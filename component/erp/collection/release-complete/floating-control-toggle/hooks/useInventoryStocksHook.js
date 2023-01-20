@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { inventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
+import { inventoryDataConnect } from "../../../../../../data_connect/inventoryDataConnect";
 
 export default function useInventoryStocksHook(erpItems) {
     const [inventoryStocks, setInventoryStocks] = useState(null);

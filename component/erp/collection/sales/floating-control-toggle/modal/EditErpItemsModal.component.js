@@ -3,9 +3,8 @@ import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../../modules/image/CustomImage";
 import useEditErpItemsHook from "../hooks/useEditErpItemsHook";
 import { Container, NavigationContainer, SubmitButtonContainer, TableBox, TableWrapper } from "../styles/EditErpItemsModal.styled";
-import ManagementMemoTableFragment from "./ManagementMemoTable.fragment";
-import MatchingCodeAndOrderInfoTableFragment from "./MatchingCodeAndOrderInfoTable.fragment";
-import ReceiverAndDeliveryInfoTableFragment from "./ReceiverAndDeliveryInfoTable.fragment";
+import staticValues from "../utils/staticValues";
+import DataTableFragment from "./DataTable.fragment";
 
 export default function EditErpItemModalComponent({
     selectedErpItems,
@@ -13,7 +12,9 @@ export default function EditErpItemModalComponent({
     onSelectClearErpItem,
     onSubmitUpdateErpItems
 }) {
-    const [tableView, setTableView] = useState('orderInfo')
+    const [tableView, setTableView] = useState('orderInfo');
+    const [tableHeaders, setTableHeaders] = useState(staticValues.ORDER_INFO_HEADERS);
+
     const {
         editErpItems,
         onChangeValueOfName,
@@ -27,7 +28,15 @@ export default function EditErpItemModalComponent({
     } = useEditErpItemsHook(selectedErpItems);
 
     const handleChangeTableView = (value) => {
-        setTableView(value);
+        let target = TABLE_VIEW_TYPES.find(r => r.value === value);
+
+        if (!target) {
+            setTableView('orderInfo');
+            setTableHeaders(staticValues.ORDER_INFO_HEADERS);
+            return;
+        }
+        setTableView(target.value);
+        setTableHeaders(target.tableHeaders);
     }
 
     const handleSubmit = (e) => {
@@ -78,38 +87,17 @@ export default function EditErpItemModalComponent({
                     </div>
                 </NavigationContainer>
                 <form onSubmit={(e) => handleSubmit(e)}>
-                    {tableView === 'orderInfo' &&
-                        <MatchingCodeAndOrderInfoTableFragment
-                            editErpItems={editErpItems}
-                            onChangeValueOfName={onChangeValueOfName}
-                            onChangeNumberValueOfName={onChangeNumberValueOfName}
-                            onChangeOptionCodeAll={onChangeOptionCodeAll}
-                            onChangeReleaseOptionCodeAll={onChangeReleaseOptionCodeAll}
-                            onChangeOptionCode={onChangeOptionCode}
-                            onChangeReleaseOptionCode={onChangeReleaseOptionCode}
-                            onSelectClearErpItem={onSelectClearErpItem}
-                        />
-                    }
-
-                    {tableView === 'receiverAndDeliveryInfo' &&
-                        <ReceiverAndDeliveryInfoTableFragment
-                            editErpItems={editErpItems}
-                            onChangeValueOfName={onChangeValueOfName}
-                            onSelectClearErpItem={onSelectClearErpItem}
-                        />
-                    }
-
-                    {tableView === 'matchingCodeAndManagementMemo' &&
-                        <ManagementMemoTableFragment
-                            editErpItems={editErpItems}
-                            onChangeValueOfName={onChangeValueOfName}
-                            onChangeOptionCodeAll={onChangeOptionCodeAll}
-                            onChangeReleaseOptionCodeAll={onChangeReleaseOptionCodeAll}
-                            onChangeOptionCode={onChangeOptionCode}
-                            onChangeReleaseOptionCode={onChangeReleaseOptionCode}
-                            onSelectClearErpItem={onSelectClearErpItem}
-                        />
-                    }
+                    <DataTableFragment
+                        tableHeaders={tableHeaders}
+                        editErpItems={editErpItems}
+                        onChangeValueOfName={onChangeValueOfName}
+                        onChangeNumberValueOfName={onChangeNumberValueOfName}
+                        onChangeOptionCodeAll={onChangeOptionCodeAll}
+                        onChangeReleaseOptionCodeAll={onChangeReleaseOptionCodeAll}
+                        onChangeOptionCode={onChangeOptionCode}
+                        onChangeReleaseOptionCode={onChangeReleaseOptionCode}
+                        onSelectClearErpItem={onSelectClearErpItem}
+                    />
 
                     <SubmitButtonContainer>
                         <SingleBlockButton
@@ -143,14 +131,18 @@ export default function EditErpItemModalComponent({
 const TABLE_VIEW_TYPES = [
     {
         value: 'orderInfo',
-        name: '주문정보'
+        name: '주문정보',
+        tableHeaders: staticValues.ORDER_INFO_HEADERS
     },
     {
         value: 'receiverAndDeliveryInfo',
-        name: '수취인 및 배송정보'
+        name: '수취인 및 배송정보',
+        tableHeaders: staticValues.RECEIEVR_INFO_HEADERS
     },
     {
         value: 'matchingCodeAndManagementMemo',
-        name: '매칭코드 및 관리메모'
+        name: '관리메모',
+        tableHeaders: staticValues.MANAGEMENT_MEMO_HEADERS
     },
 ];
+

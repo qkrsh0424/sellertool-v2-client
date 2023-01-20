@@ -286,6 +286,68 @@ export default function useErpItemPageHook(props) {
             })
     }
 
+    const reqChangeStatusToRelease = async (body, successCallback) => {
+        body = {
+            ...body,
+            workspaceId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await erpItemDataConnect().changeStatusToRelease(body)
+            .then(res => {
+                if (res.status === 200) {
+                    reqFetchErpItemPage();
+                    reqFetchCountErpItems();
+                    successCallback();
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (!res) {
+                    alert('네트워크 연결이 원활하지 않습니다.');
+                    return;
+                }
+
+                if (res.status === 500) {
+                    alert('undefined error. 관리자에 문의해 주세요.');
+                    return;
+                }
+
+                alert(res.data.memo);
+            })
+    }
+
+    const reqChangeStatusToOrder = async (body, successCallback) => {
+        body = {
+            ...body,
+            workspaceId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await erpItemDataConnect().changeStatusToOrder(body)
+            .then(res => {
+                if (res.status === 200) {
+                    reqFetchErpItemPage();
+                    reqFetchCountErpItems();
+                    successCallback();
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (!res) {
+                    alert('네트워크 연결이 원활하지 않습니다.');
+                    return;
+                }
+
+                if (res.status === 500) {
+                    alert('undefined error. 관리자에 문의해 주세요.');
+                    return;
+                }
+
+                alert(res.data.memo);
+            })
+    }
+
     const reqCopyCreateErpItems = async (body, successCallback) => {
         body = {
             ...body,
@@ -331,6 +393,8 @@ export default function useErpItemPageHook(props) {
         reqUpdateErpItems,
         reqDeleteErpItems,
         reqChangeStatusToSales,
+        reqChangeStatusToRelease,
+        reqChangeStatusToOrder,
         reqCopyCreateErpItems
     }
 }

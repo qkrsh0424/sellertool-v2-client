@@ -143,7 +143,7 @@ export default function useErpItemPageHook(props) {
     const reqChangeOptionCode = async (body, successCallback) => {
         body = {
             ...body,
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+            workspaceId: workspaceRedux?.workspaceInfo?.id,
         }
 
         await erpItemDataConnect().changeOptionCode(body)
@@ -173,7 +173,7 @@ export default function useErpItemPageHook(props) {
     const reqChangeReleaseOptionCode = async (body, successCallback) => {
         body = {
             ...body,
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+            workspaceId: workspaceRedux?.workspaceInfo?.id,
         }
 
         await erpItemDataConnect().changeReleaseOptionCode(body)
@@ -258,7 +258,7 @@ export default function useErpItemPageHook(props) {
     const reqChangeStatusToSales = async (body, successCallback) => {
         body = {
             ...body,
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+            workspaceId: workspaceRedux?.workspaceInfo?.id,
         }
 
         await erpItemDataConnect().changeStatusToSales(body)
@@ -289,7 +289,7 @@ export default function useErpItemPageHook(props) {
     const reqChangeStatusToRelease = async (body, successCallback) => {
         body = {
             ...body,
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+            workspaceId: workspaceRedux?.workspaceInfo?.id,
         }
 
         await erpItemDataConnect().changeStatusToRelease(body)
@@ -320,7 +320,7 @@ export default function useErpItemPageHook(props) {
     const reqChangeStatusToOrder = async (body, successCallback) => {
         body = {
             ...body,
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+            workspaceId: workspaceRedux?.workspaceInfo?.id,
         }
 
         await erpItemDataConnect().changeStatusToOrder(body)

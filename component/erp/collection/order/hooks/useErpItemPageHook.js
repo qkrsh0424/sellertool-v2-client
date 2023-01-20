@@ -258,7 +258,7 @@ export default function useErpItemPageHook(props) {
     const reqChangeStatusToSales = async (body, successCallback) => {
         body = {
             ...body,
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+            workspaceId: workspaceRedux?.workspaceInfo?.id,
         }
 
         await erpItemDataConnect().changeStatusToSales(body)

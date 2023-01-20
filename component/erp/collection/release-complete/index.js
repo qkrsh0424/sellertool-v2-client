@@ -18,7 +18,7 @@ export default function MainComponent(props) {
 
     const {
         erpCollectionHeader
-    } = useErpCollectionHeaderHook(selectedErpCollectionHeaderIds?.orderHeaderId);
+    } = useErpCollectionHeaderHook(selectedErpCollectionHeaderIds?.releaseCompleteHeaderId);
 
     const {
         erpItemPage,
@@ -58,7 +58,7 @@ export default function MainComponent(props) {
     const handleSelectOrderHeaderId = (erpCollectionHeaderId) => {
         setSelectedErpCollectionHeaderIds({
             ...selectedErpCollectionHeaderIds,
-            orderHeaderId: erpCollectionHeaderId
+            releaseCompleteHeaderId: erpCollectionHeaderId
         })
     }
 
@@ -67,7 +67,7 @@ export default function MainComponent(props) {
             <Container>
                 <Layout
                     sidebarName={'발주관리'}
-                    headerName={'판매관리'}
+                    headerName={'출고관리'}
                     sidebarColor={'#ffffff'}
                 >
                     <>
@@ -115,6 +115,7 @@ export default function MainComponent(props) {
                     onSubmitUpdateErpItems={reqUpdateErpItems}
                     onSubmitFetchSelectedErpItems={reqFetchSelectedErpItems}
                     onSubmitDeleteErpItems={reqDeleteErpItems}
+                    onSubmitChangeStatusToSales={reqChangeStatusToSales}
                     onSubmitChangeStatusToRelease={reqChangeStatusToRelease}
                     onSubmitChangeStatusToOrder={reqChangeStatusToOrder}
                     onSubmitCopyCreateErpItems={reqCopyCreateErpItems}

@@ -20,6 +20,7 @@ export default function FloatingControlToggle({
     onSubmitUpdateErpItems,
     onSubmitFetchSelectedErpItems,
     onSubmitDeleteErpItems,
+    onSubmitChangeStatusToSales,
     onSubmitChangeStatusToRelease,
     onSubmitChangeStatusToOrder,
     onSubmitCopyCreateErpItems,
@@ -27,6 +28,7 @@ export default function FloatingControlToggle({
     const [controlDrawerOpen, setControlDrawerOpen] = useState(false);
     const [editErpItemsModalOpen, setEditErpItemsModalOpen] = useState(false);
     const [deleteErpItemsConfirmModalOpen, setDeleteErpItemsConfirmModalOpen] = useState(false);
+    const [changeStatusToSalesModalOpen, setChangeStatusToSalesModalOpen] = useState(false);
     const [changeStatusToReleaseModalOpen, setChangeStatusToReleaseModalOpen] = useState(false);
     const [changeStatusToOrderModalOpen, setChangeStatusToOrderModalOpen] = useState(false);
     const [excelDownloadModalOpen, setExcelDownloadModalOpen] = useState(false);
@@ -39,6 +41,7 @@ export default function FloatingControlToggle({
             handleToggleControlDrawerOpen(false);
             handleToggleEditErpItemModalOpen(false);
             handleToggleDeleteErpItemsConfirmModalOpen(false);
+            handleToggleChangeStatusToSalesModalOpen(false)
             handleToggleChangeStatusToReleaseModalOpen(false);
             handleToggleChangeStatusToOrderModalOpen(false);
             handleToggleExcelDownloadModalOpen(false);
@@ -59,6 +62,10 @@ export default function FloatingControlToggle({
 
     const handleToggleDeleteErpItemsConfirmModalOpen = (setOpen) => {
         setDeleteErpItemsConfirmModalOpen(setOpen);
+    }
+
+    const handleToggleChangeStatusToSalesModalOpen = (setOpen) => {
+        setChangeStatusToSalesModalOpen(setOpen);
     }
 
     const handleToggleChangeStatusToReleaseModalOpen = (setOpen) => {
@@ -111,6 +118,19 @@ export default function FloatingControlToggle({
         }
         await onSubmitDeleteErpItems(body, () => {
             handleToggleDeleteErpItemsConfirmModalOpen(false);
+            onActionClearAllSelectedItems();
+        })
+        handleToggleBackdropOpen(false);
+    }
+
+    const handleSubmitChangeStatusToSales = async () => {
+        handleToggleBackdropOpen(true)
+        let body = {
+            ids: selectedErpItems?.map(r => r.id),
+            initializeFlag: false
+        }
+        await onSubmitChangeStatusToSales(body, () => {
+            handleToggleChangeStatusToSalesModalOpen(false);
             onActionClearAllSelectedItems();
         })
         handleToggleBackdropOpen(false);
@@ -178,6 +198,7 @@ export default function FloatingControlToggle({
                 onClose={() => handleToggleControlDrawerOpen(false)}
 
                 onActionOpenEditErpItemsModal={() => handleToggleEditErpItemModalOpen(true)}
+                onActionOpenChangeStatusToSalesModal={() => handleToggleChangeStatusToSalesModalOpen(true)}
                 onActionOpenChangeStatusToReleaseModal={() => handleToggleChangeStatusToReleaseModalOpen(true)}
                 onActionOpenChangeStatusToOrderModal={() => handleToggleChangeStatusToOrderModalOpen(true)}
                 onActionOpenDeleteErpItemsConfirmModal={() => handleToggleDeleteErpItemsConfirmModalOpen(true)}
@@ -212,6 +233,14 @@ export default function FloatingControlToggle({
                 }}
             />
 
+
+            <ConfirmModalComponentV2
+                open={changeStatusToSalesModalOpen}
+                onClose={() => handleToggleChangeStatusToSalesModalOpen(false)}
+                onConfirm={handleSubmitChangeStatusToSales}
+                title={'출고취소 확인메세지'}
+                message={'선택된 데이터를 출고취소 합니다.'}
+            />
 
             <ConfirmModalComponentV2
                 open={changeStatusToReleaseModalOpen}

@@ -50,7 +50,7 @@ export default function SortModalComponent({
                                 <div className='sortName'>{r.name}</div>
                                 <div className='button-group'>
                                     {r.sortList?.map(r2 => {
-                                        let sort = router?.query?.sort || 'createdAt_asc';
+                                        let sort = router?.query?.sort || 'releaseAt_asc';
                                         let isSelected = r2.sort.join() === sort;
                                         return (
                                             <SingleBlockButton

@@ -65,6 +65,7 @@ export default function FloatingControlBarModalComponent({
 
     onClose,
     onActionOpenEditErpItemsModal,
+    onActionOpenChangeStatusToSalesModal,
     onActionOpenChangeStatusToReleaseModal,
     onActionOpenChangeStatusToOrderModal,
     onActionOpenDeleteErpItemsConfirmModal,
@@ -153,16 +154,9 @@ export default function FloatingControlBarModalComponent({
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => onActionOpenChangeStatusToReleaseModal()}
+                                onClick={() => onActionOpenChangeStatusToSalesModal()}
                             >
-                                출고전환
-                            </SingleBlockButton>
-                            <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenChangeStatusToOrderModal()}
-                            >
-                                판매취소
+                                출고취소
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'

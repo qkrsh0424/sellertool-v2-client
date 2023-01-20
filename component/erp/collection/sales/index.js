@@ -18,7 +18,7 @@ export default function MainComponent(props) {
 
     const {
         erpCollectionHeader
-    } = useErpCollectionHeaderHook(selectedErpCollectionHeaderIds?.orderHeaderId);
+    } = useErpCollectionHeaderHook(selectedErpCollectionHeaderIds?.salesHeaderId);
 
     const {
         erpItemPage,
@@ -58,7 +58,7 @@ export default function MainComponent(props) {
     const handleSelectOrderHeaderId = (erpCollectionHeaderId) => {
         setSelectedErpCollectionHeaderIds({
             ...selectedErpCollectionHeaderIds,
-            orderHeaderId: erpCollectionHeaderId
+            salesHeaderId: erpCollectionHeaderId
         })
     }
 

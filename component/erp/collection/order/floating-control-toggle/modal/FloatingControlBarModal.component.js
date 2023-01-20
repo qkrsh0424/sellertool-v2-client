@@ -21,6 +21,8 @@ const CloseButtonBox = styled.div`
 `;
 
 const ContentContainer = styled.div`
+    height: 100%;
+    overflow: auto;
     padding: 0 30px;
 `;
 

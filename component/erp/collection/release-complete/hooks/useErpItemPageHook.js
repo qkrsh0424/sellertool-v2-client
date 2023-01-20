@@ -58,7 +58,7 @@ export default function useErpItemPageHook(props) {
 
         let params = {
             salesYn: 'y',
-            releaseYn: 'n',
+            releaseYn: 'y',
             periodSearchCondition: router?.query?.periodSearchCondition,
             startDateTime: router?.query?.startDateTime && getStartDate(router?.query?.startDateTime),
             endDateTime: router?.query?.endDateTime && getEndDate(router?.query?.endDateTime),
@@ -104,7 +104,7 @@ export default function useErpItemPageHook(props) {
 
         let params = {
             salesYn: 'y',
-            releaseYn: 'n',
+            releaseYn: 'y',
             periodSearchCondition: router?.query?.periodSearchCondition,
             startDateTime: router?.query?.startDateTime && getStartDate(router?.query?.startDateTime),
             endDateTime: router?.query?.endDateTime && getEndDate(router?.query?.endDateTime),
@@ -118,7 +118,7 @@ export default function useErpItemPageHook(props) {
             diSearchQuery: router?.query?.diSearchQuery,
             page: router?.query?.page || 1,
             size: router?.query?.size || 50,
-            sort: router?.query?.sort?.split(',') || 'salesAt_asc',
+            sort: router?.query?.sort?.split(',') || 'releaseAt_asc',
             matchedCode: router?.query?.matchedCode || 'releaseOptionCode'
         }
 
@@ -258,7 +258,7 @@ export default function useErpItemPageHook(props) {
     const reqChangeStatusToSales = async (body, successCallback) => {
         body = {
             ...body,
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+            workspaceId: workspaceRedux?.workspaceInfo?.id,
         }
 
         await erpItemDataConnect().changeStatusToSales(body)
@@ -289,7 +289,7 @@ export default function useErpItemPageHook(props) {
     const reqChangeStatusToRelease = async (body, successCallback) => {
         body = {
             ...body,
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+            workspaceId: workspaceRedux?.workspaceInfo?.id,
         }
 
         await erpItemDataConnect().changeStatusToRelease(body)
@@ -320,7 +320,7 @@ export default function useErpItemPageHook(props) {
     const reqChangeStatusToOrder = async (body, successCallback) => {
         body = {
             ...body,
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+            workspaceId: workspaceRedux?.workspaceInfo?.id,
         }
 
         await erpItemDataConnect().changeStatusToOrder(body)

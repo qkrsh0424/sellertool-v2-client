@@ -405,10 +405,6 @@ const PERIOD_TYPES = [
     {
         value: 'salesAt',
         name: '판매등록일'
-    },
-    {
-        value: 'releaseAt',
-        name: '출고등록일'
     }
 ]
 

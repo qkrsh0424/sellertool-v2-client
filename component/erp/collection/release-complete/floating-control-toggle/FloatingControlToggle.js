@@ -6,6 +6,7 @@ import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalCompo
 import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
 import EditErpItemModalComponent from "./modal/EditErpItemsModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
+import ReleaseListModalComponent from "./modal/ReleaseListModal.component";
 import ViewSelectedModalComponent from "./modal/ViewSelectedModal.component";
 import { Container } from "./styles/FloatingControlBar.styled";
 
@@ -34,6 +35,8 @@ export default function FloatingControlToggle({
     const [excelDownloadModalOpen, setExcelDownloadModalOpen] = useState(false);
     const [copyCreateErpItemsModalOpen, setCopyCreateErpItemsModalOpen] = useState(false);
     const [viewSelectedModalOpen, setViewSelectedModalOpen] = useState(false);
+    const [releaseListModalOpen, setReleaseListModalOpen] = useState(false);
+
     const [backdropOpen, setBackdropOpen] = useState(false);
 
     useEffect(() => {
@@ -78,6 +81,10 @@ export default function FloatingControlToggle({
 
     const handleToggleExcelDownloadModalOpen = (setOpen) => {
         setExcelDownloadModalOpen(setOpen);
+    }
+
+    const handleToggleReleaseListModalOpen = (setOpen) => {
+        setReleaseListModalOpen(setOpen);
     }
 
     const handleToggleBackdropOpen = (setOpen) => {
@@ -205,6 +212,7 @@ export default function FloatingControlToggle({
                 onActionOpenExcelDownloadModal={() => handleToggleExcelDownloadModalOpen(true)}
                 onActionOpenCopyCreateErpItemModal={() => handleToggleCopyCreateErpItemsModalOpen(true)}
                 onActionOpenViewSelectedModal={() => handleToggleViewSelectedModalOpen(true)}
+                onActionOpenReleaseListModal={() => handleToggleReleaseListModalOpen(true)}
 
                 onActionClearAllSelectedItems={handleClearAllSelectedItems}
             />
@@ -291,6 +299,18 @@ export default function FloatingControlToggle({
                     selectedErpItems={selectedErpItems}
                     onClose={() => handleToggleViewSelectedModalOpen(false)}
                     onActionClearSelectedItem={handleClearSelectedItem}
+                />
+            </CommonModalComponent>
+
+            <CommonModalComponent
+                open={releaseListModalOpen}
+                onClose={() => handleToggleReleaseListModalOpen(false)}
+                maxWidth={'xs'}
+            >
+                <ReleaseListModalComponent
+                    erpCollectionHeader={erpCollectionHeader}
+                    selectedErpItems={selectedErpItems}
+                    onClose={() => handleToggleReleaseListModalOpen(false)}
                 />
             </CommonModalComponent>
 

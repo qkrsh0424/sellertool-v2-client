@@ -72,7 +72,8 @@ export default function FloatingControlBarModalComponent({
     onActionOpenExcelDownloadModal,
     onActionOpenCopyCreateErpItemModal,
     onActionClearAllSelectedItems,
-    onActionOpenViewSelectedModal
+    onActionOpenViewSelectedModal,
+    onActionOpenReleaseListModal
 }) {
     return (
         <div>
@@ -123,13 +124,6 @@ export default function FloatingControlBarModalComponent({
                                 onClick={() => onActionOpenEditErpItemsModal()}
                             >
                                 운송장 등록
-                            </SingleBlockButton>
-                            <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenEditErpItemsModal()}
-                            >
-                                출고리스트
                             </SingleBlockButton> */}
                         </ContentGroup>
                         {/* <ContentGroup>
@@ -174,6 +168,13 @@ export default function FloatingControlBarModalComponent({
                                 onClick={() => onActionOpenViewSelectedModal()}
                             >
                                 선택 데이터 보기
+                            </SingleBlockButton>
+                            <SingleBlockButton
+                                type='button'
+                                className='button-item'
+                                onClick={() => onActionOpenReleaseListModal()}
+                            >
+                                출고리스트
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'

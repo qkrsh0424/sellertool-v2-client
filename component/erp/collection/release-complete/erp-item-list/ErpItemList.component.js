@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { createRef, useEffect, useRef, useState } from "react";
 import { dateToYYYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import { numberWithCommas } from "../../../../../utils/numberFormatUtils";
+import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
+import CustomImage from "../../../../modules/image/CustomImage";
 import FieldLoadingV2 from "../../../../modules/loading/FieldLoadingV2";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import InfiniteScrollObserver from "../../../../modules/observer/InfiniteScrollObserver";
@@ -38,6 +40,7 @@ export default function ErpItemListComponent({
     const [editOptionCodeModalOpen, setEditOptionCodeModalOpen] = useState(false);
     const [editReleaseOptionCodeModalOpen, setEditReleaseOptionCodeModalOpen] = useState(false);
     const [targetErpItem, setTargetErpItem] = useState(null);
+    const [stockPin, setStockPin] = useState(false);
 
     const [itemsForSameReceiverModalOpen, setItemsFormSameReceiverModalOpen] = useState(false);
     const [targetSameReceiverHint, setTargetSameReceiverHint] = useState(null);
@@ -124,6 +127,9 @@ export default function ErpItemListComponent({
         setTargetSameReceiverHint(null);
     }
 
+    const handleToggleStockPin = (pin) => {
+        setStockPin(pin)
+    }
     return (
         <>
             <TableFieldWrapper>
@@ -148,6 +154,26 @@ export default function ErpItemListComponent({
                                         width={40}
                                     >
                                         No.
+                                    </th>
+                                    <th
+                                        className={`fixed-header ${stockPin ? 'fixed-col-left' : ''}`}
+                                        width={80}
+                                        style={{
+                                            zIndex: '11',
+                                            padding: '5px'
+                                        }}
+                                    >
+                                        <div className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-center'>
+                                            재고반영
+                                            <SingleBlockButton
+                                                type='button'
+                                                style={{ width: 17, height: 17, display: 'inline-block', margin: 0, padding: 0, border: 'none' }}
+                                                onClick={() => handleToggleStockPin(!stockPin)}
+                                            >
+                                                {stockPin ? <CustomImage src={`/images/icon/pushPin_default_344b98.svg`} /> : <CustomImage src={`/images/icon/pushPin_default_a0a0a0.svg`} />}
+
+                                            </SingleBlockButton>
+                                        </div>
                                     </th>
                                     <th
                                         className="fixed-header"
@@ -244,6 +270,31 @@ export default function ErpItemListComponent({
                                             onClick={(e) => { e.stopPropagation(); onSelectErpItem(r1); }}
                                         >
                                             <td>{rowIndex + 1}</td>
+                                            <td
+                                                className={`${stockPin ? 'fixed-col-left' : ''}`}
+                                                style={{
+                                                    // background: !r1.productOptionId ? 'var(--defaultYellowColor)' : '',
+                                                    // background: isOutOfStock ? 'var(--defaultRedColor)': '',
+                                                    background: isSelected ? '#d9e5f6' : isOutOfStock ? '#fbe3e2' : !r1.productOptionId ? '#fcf7d9' : '#ffffff',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        width: 20,
+                                                        margin: '0 auto'
+                                                    }}
+                                                >
+                                                    {r1.stockReflectYn === 'y' ?
+                                                        <CustomImage
+                                                            src='/images/icon/check_default_5fcf80.svg'
+                                                        />
+                                                        :
+                                                        <CustomImage
+                                                            src='/images/icon/close_default_e56767.svg'
+                                                        />
+                                                    }
+                                                </div>
+                                            </td>
                                             <td>
                                                 <input
                                                     type='checkbox'

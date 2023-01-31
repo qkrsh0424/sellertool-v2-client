@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadingComponent";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
@@ -7,6 +8,7 @@ import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/Ex
 import EditErpItemModalComponent from "./modal/EditErpItemsModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
 import ReleaseListModalComponent from "./modal/ReleaseListModal.component";
+import StockReleaseModalComponent from "./modal/StockReleaseModal.component";
 import ViewSelectedModalComponent from "./modal/ViewSelectedModal.component";
 import { Container } from "./styles/FloatingControlBar.styled";
 
@@ -25,7 +27,10 @@ export default function FloatingControlToggle({
     onSubmitChangeStatusToRelease,
     onSubmitChangeStatusToOrder,
     onSubmitCopyCreateErpItems,
+    onSubmitStockRelease,
+    onSubmitCancelStockRelease
 }) {
+    const workspaceRedux = useSelector(state => state.workspaceRedux);
     const [controlDrawerOpen, setControlDrawerOpen] = useState(false);
     const [editErpItemsModalOpen, setEditErpItemsModalOpen] = useState(false);
     const [deleteErpItemsConfirmModalOpen, setDeleteErpItemsConfirmModalOpen] = useState(false);
@@ -36,6 +41,7 @@ export default function FloatingControlToggle({
     const [copyCreateErpItemsModalOpen, setCopyCreateErpItemsModalOpen] = useState(false);
     const [viewSelectedModalOpen, setViewSelectedModalOpen] = useState(false);
     const [releaseListModalOpen, setReleaseListModalOpen] = useState(false);
+    const [stockReleaseModalOpen, setStockReleaseModalOpen] = useState(false);
 
     const [backdropOpen, setBackdropOpen] = useState(false);
 
@@ -89,6 +95,34 @@ export default function FloatingControlToggle({
 
     const handleToggleBackdropOpen = (setOpen) => {
         setBackdropOpen(setOpen);
+    }
+
+    const handleToggleStockReleaseModalOpen = (setOpen) => {
+        if (setOpen) {
+            let stockReflectedItems = [];
+            let notSetReleaseOptionCodeItems = [];
+
+            selectedErpItems?.forEach(r => {
+                if (r.stockReflectYn === 'y') {
+                    stockReflectedItems.push(r);
+                }
+
+                if (!r.releaseOptionCode) {
+                    notSetReleaseOptionCodeItems.push(r);
+                }
+            });
+
+            if (stockReflectedItems?.length >= 1) {
+                alert(`이미 재고반영 처리된 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
+                return;
+            }
+
+            if (notSetReleaseOptionCodeItems?.length >= 1) {
+                alert(`[M] 출고옵션코드가 지정되지 않은 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
+                return;
+            }
+        }
+        setStockReleaseModalOpen(setOpen);
     }
 
     const handleToggleCopyCreateErpItemsModalOpen = (setOpen) => {
@@ -186,6 +220,30 @@ export default function FloatingControlToggle({
         onActionClearSelectedItem(erpItemId);
     }
 
+    const handleSubmitStockRelease = async () => {
+        handleToggleBackdropOpen(true);
+        let body = {
+            erpItemIds: selectedErpItems?.map(r => r.id),
+            workspaceId: workspaceRedux?.workspaceInfo?.id,
+            memo: '발주관리에서 재고반영'
+        }
+
+        onSubmitStockRelease(body, () => handleToggleStockReleaseModalOpen(false));
+        handleToggleBackdropOpen(false);
+    }
+
+    const handleSubmitCancelStockRelease = async () => {
+        handleToggleBackdropOpen(true);
+        let body = {
+            erpItemIds: selectedErpItems?.map(r => r.id),
+            workspaceId: workspaceRedux?.workspaceInfo?.id,
+        }
+
+        onSubmitStockRelease(body, () => handleToggleStockReleaseModalOpen(false));
+        handleToggleBackdropOpen(false);
+    }
+
+
     return (
         <>
             <Container>
@@ -213,6 +271,7 @@ export default function FloatingControlToggle({
                 onActionOpenCopyCreateErpItemModal={() => handleToggleCopyCreateErpItemsModalOpen(true)}
                 onActionOpenViewSelectedModal={() => handleToggleViewSelectedModalOpen(true)}
                 onActionOpenReleaseListModal={() => handleToggleReleaseListModalOpen(true)}
+                onActionOpenStockReleaseModal={() => handleToggleStockReleaseModalOpen(true)}
 
                 onActionClearAllSelectedItems={handleClearAllSelectedItems}
             />
@@ -240,7 +299,6 @@ export default function FloatingControlToggle({
                     background: 'var(--defaultRedColor)'
                 }}
             />
-
 
             <ConfirmModalComponentV2
                 open={changeStatusToSalesModalOpen}
@@ -314,6 +372,23 @@ export default function FloatingControlToggle({
                 />
             </CommonModalComponent>
 
+            {/* <ConfirmModalComponentV2
+                open={stockReleaseModalOpen}
+                onClose={() => handleToggleStockReleaseModalOpen(false)}
+                onConfirm={() => handleSubmitStockRelease()}
+                message={
+                    <div>선택된 데이터들의 재고를 차감합니다.</div>
+                }
+            /> */}
+            <CommonModalComponent
+                open={stockReleaseModalOpen}
+                onClose={() => handleToggleStockReleaseModalOpen(false)}
+            >
+                <StockReleaseModalComponent
+                    onClose={() => handleToggleStockReleaseModalOpen(false)}
+                    onConfirm={() => handleSubmitStockRelease()}
+                />
+            </CommonModalComponent>
             <BackdropLoadingComponent
                 open={backdropOpen}
             />

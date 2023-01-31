@@ -31,6 +31,22 @@ const inventoryDataConnect = () => {
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
+        },
+        createReleaseByErpItems: async function (body) {
+            await csrfDataConnect().getApiCsrf();
+            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/create/release/by-erp`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        cancelReleaseByErpItems: async function (body) {
+            await csrfDataConnect().getApiCsrf();
+            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/cancel/release/by-erp`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         }
     }
 }

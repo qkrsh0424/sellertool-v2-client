@@ -133,10 +133,9 @@ export const TableFieldWrapper = styled.div`
 
     .table-box .fixed-col-left {
         position: sticky;
-        background: white;
         left: 0;
         z-index:10;
-        box-shadow: -0.5px 0 0 0 #e0e0e0 inset;
+        border-right: 1px dashed #c0c0c0;
     }
 
     .table-box .fixed-col-right {

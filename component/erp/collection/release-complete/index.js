@@ -26,6 +26,7 @@ export default function MainComponent(props) {
         totalSize,
         totalPages,
 
+        reqFetchErpItemPage,
         reqChangeOptionCode,
         reqChangeReleaseOptionCode,
         reqUpdateErpItems,
@@ -37,7 +38,10 @@ export default function MainComponent(props) {
     } = useErpItemPageHook();
 
     const {
-        inventoryStocks
+        inventoryStocks,
+        reqFetchInventoryStocks,
+        reqStockRelease,
+        reqCancelStockRelease
     } = useInventoryStocksHook(erpItemPage?.content);
 
     const {
@@ -62,6 +66,21 @@ export default function MainComponent(props) {
         })
     }
 
+    const handleSubmitStockRelease = async (body, successCallback) => {
+        await reqStockRelease(body, () => {
+            reqFetchErpItemPage();
+            reqFetchSelectedErpItems();
+            successCallback();
+        });
+    }
+
+    const handleSubmitCancelStockRelease = async (body, successCallback) => {
+        await reqCancelStockRelease(body, () => {
+            reqFetchErpItemPage();
+            reqFetchSelectedErpItems();
+            successCallback();
+        })
+    }
     return (
         <>
             <Container>
@@ -119,6 +138,8 @@ export default function MainComponent(props) {
                     onSubmitChangeStatusToRelease={reqChangeStatusToRelease}
                     onSubmitChangeStatusToOrder={reqChangeStatusToOrder}
                     onSubmitCopyCreateErpItems={reqCopyCreateErpItems}
+                    onSubmitStockRelease={handleSubmitStockRelease}
+                    onSubmitCancelStockRelease={handleSubmitCancelStockRelease}
                 />
             }
         </>

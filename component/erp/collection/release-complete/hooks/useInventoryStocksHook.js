@@ -36,8 +36,57 @@ export default function useInventoryStocksHook(erpItems) {
             })
     }
 
+    const reqStockRelease = async (body, successCallback) => {
+        await inventoryDataConnect().createReleaseByErpItems(body)
+            .then(res => {
+                if (res.status === 200) {
+                    successCallback();
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (!res) {
+                    alert('네트워크가 연결이 원활하지 않습니다.');
+                    return;
+                }
+
+                if (res.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res.data.memo);
+            })
+    }
+
+    const reqCancelStockRelease = async (body, successCallback) => {
+        await inventoryDataConnect().cancelReleaseByErpItems(body)
+            .then(res => {
+                if (res.status === 200) {
+                    console.log(res);
+                    successCallback();
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (!res) {
+                    alert('네트워크가 연결이 원활하지 않습니다.');
+                    return;
+                }
+
+                if (res.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res.data.memo);
+            })
+    }
+
     return {
         inventoryStocks,
-        reqFetchInventoryStocks
+        reqFetchInventoryStocks,
+        reqStockRelease,
+        reqCancelStockRelease
     }
 }

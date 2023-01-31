@@ -2,9 +2,9 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import FooterMain from "../component/footer/FooterMain";
-import MainComponent from "../component/login-v2";
-import PrimaryNavbarMainComponent from "../component/navbar/primary-navbar";
+import FooterMain from "../views/footer/FooterMain";
+import MainComponent from "../views/login-v2";
+import PrimaryNavbarMainComponent from "../views/navbar/primary-navbar";
 import { isAnonymous } from "../utils/cookieCheckUtils";
 
 const LoginPage = () => {

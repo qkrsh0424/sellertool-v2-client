@@ -1,5 +1,5 @@
 import { useState } from "react";
-import BackdropLoadingComponent from "../../component/modules/loading/BackdropLoadingComponent";
+import BackdropLoadingComponent from "../../views/modules/loading/BackdropLoadingComponent";
 
 /**
  * 

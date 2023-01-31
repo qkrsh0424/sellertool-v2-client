@@ -2,10 +2,10 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import FooterMain from "../../component/footer/FooterMain";
-import PrimaryNavbarMainComponent from "../../component/navbar/primary-navbar";
-import SecondaryNavbarMainComponent from "../../component/navbar/secondary-navbar-v2";
-import MainComponent from "../../component/workspace/select";
+import FooterMain from "../../views/footer/FooterMain";
+import PrimaryNavbarMainComponent from "../../views/navbar/primary-navbar";
+import SecondaryNavbarMainComponent from "../../views/navbar/secondary-navbar-v2";
+import MainComponent from "../../views/workspace/select";
 
 export default function WorkspaceSelectPage(props) {
     const userRedux = useSelector(state => state.userRedux);

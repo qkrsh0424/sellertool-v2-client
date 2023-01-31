@@ -1,8 +1,8 @@
 import Head from "next/head";
-import FooterMain from "../../../component/footer/FooterMain";
-import PrimaryNavbarMainComponent from "../../../component/navbar/primary-navbar";
-import SecondaryNavbarMainComponent from "../../../component/navbar/secondary-navbar-v2";
-import MainComponent from "../../../component/product-v2/add-product";
+import FooterMain from "../../../views/footer/FooterMain";
+import PrimaryNavbarMainComponent from "../../../views/navbar/primary-navbar";
+import SecondaryNavbarMainComponent from "../../../views/navbar/secondary-navbar-v2";
+import MainComponent from "../../../views/product-v2/add-product";
 
 export default function ProductAddProductPage(props) {
     return (

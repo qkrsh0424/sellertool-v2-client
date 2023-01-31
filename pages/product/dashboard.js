@@ -1,8 +1,8 @@
 import Head from 'next/head';
-import FooterMain from '../../component/footer/FooterMain';
-import PrimaryNavbarMainComponent from '../../component/navbar/primary-navbar';
-import SecondaryNavbarMainComponent from '../../component/navbar/secondary-navbar-v2';
-import ProductDashboardMainComponent from '../../component/product-v2/dashboard';
+import FooterMain from '../../views/footer/FooterMain';
+import PrimaryNavbarMainComponent from '../../views/navbar/primary-navbar';
+import SecondaryNavbarMainComponent from '../../views/navbar/secondary-navbar-v2';
+import ProductDashboardMainComponent from '../../views/product-v2/dashboard';
 
 export default function ProductDashboardPage(props) {
     return (

@@ -4,6 +4,7 @@
     --mainColor: #344b98;
     --mainColorHover: #344b98f0;
     --mainColorOpacity500: #344b9880;
+    --mainColorOpacity30: #344b9830;
     --mainColorOpacity100: #344b9810;
     --mainColorSelected1: #344b9820;
     --defaultBackground: #f9fbfc;
@@ -17,6 +18,7 @@
     --defaultYellowColor:#eed202;
     --defaultYellowColorOpacity30:#eed20230;
     --defaultGreenColor: #5fcf80;
+    --defaultGreenColorOpacity40: #5fcf8040;
     --defaultGrayColor: #f1f3f9;
     --defaultModalCloseColor: #959eae;
     --contentHeadBackground: #eef2f9;

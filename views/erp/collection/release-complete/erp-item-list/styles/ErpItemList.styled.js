@@ -1,5 +1,25 @@
 import styled from 'styled-components';
 
+export const PinButtonBox = styled.div`
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    
+    .button-item{
+        width: 70px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        font-size: 13px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom: none;
+        color: #606060;
+    }
+`;
+
 export const TableFieldWrapper = styled.div`
     padding: 0 20px;
     position:relative;
@@ -14,6 +34,7 @@ export const TableFieldWrapper = styled.div`
         overflow: auto;
         border: 1px solid #e0e0e0;
         border-radius: 15px;
+        border-top-left-radius: 0;
         background: #fff;
         box-shadow: var(--defaultBoxShadow);
 
@@ -135,15 +156,13 @@ export const TableFieldWrapper = styled.div`
         position: sticky;
         left: 0;
         z-index:10;
-        border-right: 1px dashed #c0c0c0;
     }
 
     .table-box .fixed-col-right {
         position: sticky;
-        background: white;
         right: 0;
         z-index:10;
-        box-shadow: 0.5px 0 0 0 #e0e0e0 inset;
+        /* border-left: 1px dashed #c0c0c0; */
     }
 
     .table-box::-webkit-scrollbar{

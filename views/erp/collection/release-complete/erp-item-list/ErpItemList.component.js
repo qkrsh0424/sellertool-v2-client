@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { useRouter } from "next/router";
-import { createRef, useEffect, useRef, useState } from "react";
+import React, { createRef, useEffect, useRef, useState } from "react";
+import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { dateToYYYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import { numberWithCommas } from "../../../../../utils/numberFormatUtils";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
@@ -12,7 +13,7 @@ import ReverseScrollObserver from "../../../../modules/observer/ReverseScrollObs
 import ResizableTh from "../../../../modules/table/ResizableTh";
 import EditOptionCodeModalComponent from "./modal/EditOptionCodeModal.component";
 import ItemsForSameReceiverModalComponent from "./modal/ItemsForSameReceiverModal.component";
-import { TableFieldWrapper } from "./styles/ErpItemList.styled";
+import { PinButtonBox, TableFieldWrapper } from "./styles/ErpItemList.styled";
 
 const TABLE_DATA_VIEW_SIZE = 50;
 const TABLE_DATA_INC_DEC_SIZE = 30;
@@ -132,6 +133,19 @@ export default function ErpItemListComponent({
     }
     return (
         <>
+            <PinButtonBox>
+                <CustomBlockButton
+                    type='button'
+                    onClick={() => handleToggleStockPin(!stockPin)}
+                    className='button-item'
+                >
+                    <div style={stockPin ? { color: 'var(--mainColor)' } : {}}>상태창</div>
+                    <span style={{ width: 17, height: 17, display: 'inline-block', margin: 0, padding: 0, border: 'none' }}>
+                        {stockPin ? <CustomImage src={`/images/icon/pushPin_default_344b98.svg`} /> : <CustomImage src={`/images/icon/pushPin_default_a0a0a0.svg`} />}
+                    </span>
+
+                </CustomBlockButton>
+            </PinButtonBox>
             <TableFieldWrapper>
                 <div style={{ position: 'relative' }}>
                     {erpItemPagePending &&
@@ -154,26 +168,6 @@ export default function ErpItemListComponent({
                                         width={40}
                                     >
                                         No.
-                                    </th>
-                                    <th
-                                        className={`fixed-header ${stockPin ? 'fixed-col-left' : ''}`}
-                                        width={80}
-                                        style={{
-                                            zIndex: '11',
-                                            padding: '5px'
-                                        }}
-                                    >
-                                        <div className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-center'>
-                                            재고반영
-                                            <SingleBlockButton
-                                                type='button'
-                                                style={{ width: 17, height: 17, display: 'inline-block', margin: 0, padding: 0, border: 'none' }}
-                                                onClick={() => handleToggleStockPin(!stockPin)}
-                                            >
-                                                {stockPin ? <CustomImage src={`/images/icon/pushPin_default_344b98.svg`} /> : <CustomImage src={`/images/icon/pushPin_default_a0a0a0.svg`} />}
-
-                                            </SingleBlockButton>
-                                        </div>
                                     </th>
                                     <th
                                         className="fixed-header"
@@ -216,6 +210,38 @@ export default function ErpItemListComponent({
                                             </ResizableTh>
                                         )
                                     })}
+                                    <th
+                                        className={`fixed-header ${stockPin ? 'fixed-col-right' : ''}`}
+                                        width={45}
+                                        style={stockPin ? {
+                                            zIndex: '11',
+                                            right: 45,
+                                            borderLeft: '1px dashed #c0c0c0',
+                                            padding: 0,
+                                            fontSize: '10px'
+                                        } : {
+                                            padding: 0,
+                                            fontSize: '10px'
+                                        }}
+                                    >
+                                        <div className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-center'>
+                                            재고반영
+                                        </div>
+                                    </th>
+                                    <th
+                                        className={`fixed-header ${stockPin ? 'fixed-col-right' : ''}`}
+                                        width={45}
+                                        style={stockPin ? {
+                                            zIndex: '11',
+                                            padding: 0,
+                                            fontSize: '10px'
+                                        } : {
+                                            padding: 0,
+                                            fontSize: '10px'
+                                        }}
+                                    >
+                                        패키지
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -223,6 +249,7 @@ export default function ErpItemListComponent({
                                     const isSelected = selectedErpItems?.find(r => r.id === r1.id);
                                     let inventoryStock = inventoryStocks?.find(r => r.productOptionId === r1.productOptionId);
                                     let isOutOfStock = inventoryStock && inventoryStock?.stockUnit <= 0;
+                                    let isPackaged = r1.packageYn === 'y' ? true : false;
 
                                     if (rowIndex < prevViewSize) {
                                         return (
@@ -260,118 +287,140 @@ export default function ErpItemListComponent({
                                     }
 
                                     return (
-                                        <tr
-                                            key={r1.id}
-                                            className={`${isSelected ? 'tr-active' : ''} ${isOutOfStock ? 'tr-highlight' : ''}`}
-                                            style={{
-                                                position: 'relative',
-                                                background: !r1.productOptionId ? 'var(--defaultYellowColorOpacity30)' : ''
-                                            }}
-                                            onClick={(e) => { e.stopPropagation(); onSelectErpItem(r1); }}
-                                        >
-                                            <td>{rowIndex + 1}</td>
-                                            <td
-                                                className={`${stockPin ? 'fixed-col-left' : ''}`}
+                                        <React.Fragment key={r1.id}>
+                                            <tr
+                                                className={`${isSelected ? 'tr-active' : ''} ${(isOutOfStock && !isPackaged) ? 'tr-highlight' : ''}`}
                                                 style={{
-                                                    // background: !r1.productOptionId ? 'var(--defaultYellowColor)' : '',
-                                                    // background: isOutOfStock ? 'var(--defaultRedColor)': '',
-                                                    background: isSelected ? '#d9e5f6' : isOutOfStock ? '#fbe3e2' : !r1.productOptionId ? '#fcf7d9' : '#ffffff',
+                                                    position: 'relative',
+                                                    background: !r1.productOptionId ? 'var(--defaultYellowColorOpacity30)' : ''
                                                 }}
+                                                onClick={(e) => { e.stopPropagation(); onSelectErpItem(r1); }}
                                             >
-                                                <div
-                                                    style={{
-                                                        width: 20,
-                                                        margin: '0 auto'
-                                                    }}
-                                                >
-                                                    {r1.stockReflectYn === 'y' ?
-                                                        <CustomImage
-                                                            src='/images/icon/check_default_5fcf80.svg'
-                                                        />
-                                                        :
-                                                        <CustomImage
-                                                            src='/images/icon/close_default_e56767.svg'
-                                                        />
+                                                <td>{rowIndex + 1}</td>
+                                                <td>
+                                                    <input
+                                                        type='checkbox'
+                                                        checked={isSelected || false}
+                                                        onChange={() => onSelectErpItem(r1)}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        style={{ cursor: 'pointer' }}
+                                                    ></input>
+                                                </td>
+                                                {erpCollectionHeader?.erpCollectionHeaderDetails?.map(r2 => {
+                                                    let matchedFieldName = r2.matchedFieldName;
+                                                    if (matchedFieldName === 'createdAt' || matchedFieldName === 'salesAt' || matchedFieldName === 'releaseAt' || matchedFieldName === 'channelOrderDate') {
+                                                        return (
+                                                            <td key={`col-${matchedFieldName}`}>{r1[matchedFieldName] ? dateToYYYYMMDDhhmmss(r1[matchedFieldName]) : ""}</td>
+                                                        )
                                                     }
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <input
-                                                    type='checkbox'
-                                                    checked={isSelected || false}
-                                                    onChange={() => onSelectErpItem(r1)}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                    style={{ cursor: 'pointer' }}
-                                                ></input>
-                                            </td>
-                                            {erpCollectionHeader?.erpCollectionHeaderDetails?.map(r2 => {
-                                                let matchedFieldName = r2.matchedFieldName;
-                                                if (matchedFieldName === 'createdAt' || matchedFieldName === 'salesAt' || matchedFieldName === 'releaseAt' || matchedFieldName === 'channelOrderDate') {
-                                                    return (
-                                                        <td key={`col-${matchedFieldName}`}>{r1[matchedFieldName] ? dateToYYYYMMDDhhmmss(r1[matchedFieldName]) : ""}</td>
-                                                    )
-                                                }
 
-                                                if (matchedFieldName === 'price' || matchedFieldName === 'deliveryCharge') {
-                                                    return (
-                                                        <td key={`col-${matchedFieldName}`}>{r1[matchedFieldName] ? numberWithCommas(r1[matchedFieldName]) : "0"}</td>
-                                                    );
-                                                }
+                                                    if (matchedFieldName === 'price' || matchedFieldName === 'deliveryCharge') {
+                                                        return (
+                                                            <td key={`col-${matchedFieldName}`}>{r1[matchedFieldName] ? numberWithCommas(r1[matchedFieldName]) : "0"}</td>
+                                                        );
+                                                    }
 
-                                                if (matchedFieldName === 'optionCode') {
-                                                    return (
-                                                        <td key={`col-${matchedFieldName}`} className='td-highlight' onClick={(e) => handleOpenEditOptionCodeModal(e, r1)}>{r1[matchedFieldName]}</td>
-                                                    )
-                                                }
+                                                    if (matchedFieldName === 'optionCode') {
+                                                        return (
+                                                            <td key={`col-${matchedFieldName}`} className='td-highlight' onClick={(e) => handleOpenEditOptionCodeModal(e, r1)}>{r1[matchedFieldName]}</td>
+                                                        )
+                                                    }
 
-                                                if (matchedFieldName === 'releaseOptionCode') {
-                                                    return (
-                                                        <td key={`col-${matchedFieldName}`} className='td-highlight' onClick={(e) => handleOpenEditReleaseOptionCodeModal(e, r1)}>{r1[matchedFieldName]}</td>
-                                                    )
-                                                }
+                                                    if (matchedFieldName === 'releaseOptionCode') {
+                                                        return (
+                                                            <td key={`col-${matchedFieldName}`} className='td-highlight' onClick={(e) => handleOpenEditReleaseOptionCodeModal(e, r1)}>{r1[matchedFieldName]}</td>
+                                                        )
+                                                    }
 
-                                                if (matchedFieldName === 'optionStockUnit') {
-                                                    return (
-                                                        <td key={`col-${matchedFieldName}`} style={{ background: isOutOfStock ? 'var(--defaultRedColorOpacity500)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
-                                                    )
-                                                }
+                                                    if (matchedFieldName === 'optionStockUnit') {
+                                                        return (
+                                                            <td key={`col-${matchedFieldName}`} style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity500)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
+                                                        )
+                                                    }
 
-                                                if (matchedFieldName === 'receiver') {
-                                                    let sameReceiverHint = `${r1.receiver}${r1.receiverContact1}${r1.destination}${r1.destinationDetail}`;
-                                                    let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
+                                                    if (matchedFieldName === 'receiver') {
+                                                        let sameReceiverHint = `${r1.receiver}${r1.receiverContact1}${r1.destination}${r1.destinationDetail}`;
+                                                        let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
+
+                                                        return (
+                                                            <td
+                                                                key={`col-${matchedFieldName}`}
+                                                                className={`${matchedFieldName}`}
+                                                                style={{
+                                                                    color: hasSameReceiver ? 'var(--defaultRedColor)' : ''
+                                                                }}
+                                                            >
+                                                                {r1[matchedFieldName]}
+                                                                {hasSameReceiver &&
+                                                                    <button
+                                                                        type='button'
+                                                                        className='view-sameReceiver-button-item'
+                                                                        onClick={(e) => handleOpenItemsForSameReceiverModal(e, sameReceiverHint)}
+                                                                    >
+                                                                        보기
+                                                                    </button>
+                                                                }
+                                                            </td>
+                                                        );
+                                                    }
 
                                                     return (
                                                         <td
                                                             key={`col-${matchedFieldName}`}
-                                                            className={`${matchedFieldName}`}
-                                                            style={{
-                                                                color: hasSameReceiver ? 'var(--defaultRedColor)' : ''
-                                                            }}
+                                                            className={``}
                                                         >
                                                             {r1[matchedFieldName]}
-                                                            {hasSameReceiver &&
-                                                                <button
-                                                                    type='button'
-                                                                    className='view-sameReceiver-button-item'
-                                                                    onClick={(e) => handleOpenItemsForSameReceiverModal(e, sameReceiverHint)}
-                                                                >
-                                                                    보기
-                                                                </button>
-                                                            }
                                                         </td>
-                                                    );
-                                                }
-
-                                                return (
-                                                    <td
-                                                        key={`col-${matchedFieldName}`}
-                                                        className={``}
+                                                    )
+                                                })}
+                                                <td
+                                                    className={`${stockPin ? 'fixed-col-right' : ''}`}
+                                                    style={stockPin ? {
+                                                        background: '#fff',
+                                                        right: 45,
+                                                        borderLeft: '1px dashed #c0c0c0',
+                                                        padding: 0
+                                                    } : {}}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            width: 20,
+                                                            margin: '0 auto'
+                                                        }}
                                                     >
-                                                        {r1[matchedFieldName]}
-                                                    </td>
-                                                )
-                                            })}
-                                        </tr>
+                                                        {r1.stockReflectYn === 'y' ?
+                                                            <CustomImage
+                                                                src='/images/icon/check_default_5fcf80.svg'
+                                                            />
+                                                            :
+                                                            <CustomImage
+                                                                src='/images/icon/close_default_e56767.svg'
+                                                            />
+                                                        }
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    className={`${stockPin ? 'fixed-col-right' : ''}`}
+                                                    style={stockPin ? {
+                                                        background: '#fff',
+                                                        padding: 0
+                                                    } : {}}
+                                                >
+                                                    {isPackaged &&
+                                                        <div
+                                                            style={{
+                                                                width: 20,
+                                                                margin: '0 auto'
+                                                            }}
+                                                        >
+                                                            <CustomImage
+                                                                src='/images/icon/check_default_5fcf80.svg'
+                                                            />
+                                                        </div>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </React.Fragment>
                                     )
                                 })}
                                 <InfiniteScrollObserver

@@ -74,7 +74,8 @@ export default function FloatingControlBarModalComponent({
     onActionClearAllSelectedItems,
     onActionOpenViewSelectedModal,
     onActionOpenReleaseListModal,
-    onActionOpenStockReleaseModal
+    onActionOpenStockReleaseModal,
+    onActionOpenCancelStockReleaseModal
 }) {
     return (
         <div>
@@ -139,7 +140,7 @@ export default function FloatingControlBarModalComponent({
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                // onClick={() => onActionOpenEditErpItemsModal()}
+                                onClick={() => onActionOpenCancelStockReleaseModal()}
                             >
                                 재고반영 취소
                             </SingleBlockButton>

@@ -1,45 +1,30 @@
 import styled from 'styled-components';
+import CustomBlockButton from '../../../../../../components/buttons/block-button/v1/CustomBlockButton';
 
 export const Container = styled.div`
     background: var(--defaultBackground);
-    
-    .header-close-button-box{
-        display: flex;
-        justify-content: flex-end;
-        padding: 20px 20px 0 20px;
+`;
 
-        .header-close-button-el{
-            user-select: none;
-            -webkit-tap-highlight-color: #00000000;
-            width:40px;
-            height: 40px;
-            padding: 0;
-            margin:0;
-            border:none;
-            background:none;
-            cursor: pointer;
+export const CancelButton = styled(CustomBlockButton)`
+    background: var(--defaultModalCloseColor);
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    flex:1;
+`;
 
-            .header-close-button-icon{
-                width:100%;
-                height: 100%;
-            }
-        }
-    
-    }
+export const SubmitButton = styled(CustomBlockButton)`
+    background: var(--mainColor);
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    width: 60%;
+`;
 
-    .title-box{
-        padding: 0 20px;
+export const InputBox = styled.div`
+    padding: 40px 20px;
 
-        .title{
-            border-bottom: 1px solid #000;
-            font-size: 20px;
-            font-weight: 400;
-            color:#303030;
-            padding-bottom: 20px;
-
-            .accent-text{
-                color:var(--mainColor);
-            }
-        }
+    .input-item{
+        border-radius: 5px;
     }
 `;

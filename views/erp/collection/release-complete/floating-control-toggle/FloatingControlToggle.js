@@ -42,6 +42,7 @@ export default function FloatingControlToggle({
     const [viewSelectedModalOpen, setViewSelectedModalOpen] = useState(false);
     const [releaseListModalOpen, setReleaseListModalOpen] = useState(false);
     const [stockReleaseModalOpen, setStockReleaseModalOpen] = useState(false);
+    const [cancelStockReleaseModalOpen, setCancelStockReleaseModalOpen] = useState(false);
 
     const [backdropOpen, setBackdropOpen] = useState(false);
 
@@ -123,6 +124,24 @@ export default function FloatingControlToggle({
             }
         }
         setStockReleaseModalOpen(setOpen);
+    }
+
+    const handleToggleCancelStockReleaseModalOpen = (setOpen) => {
+        if (setOpen) {
+            let stockReflectNItems = [];
+
+            selectedErpItems?.forEach(r => {
+                if (r.stockReflectYn === 'n') {
+                    stockReflectNItems.push(r);
+                }
+            });
+
+            if (stockReflectNItems?.length >= 1) {
+                alert(`재고반영이 되지 않은 데이터가 선택되었습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectNItems?.map(r => r.uniqueCode)?.join()}`);
+                return;
+            }
+        }
+        setCancelStockReleaseModalOpen(setOpen);
     }
 
     const handleToggleCopyCreateErpItemsModalOpen = (setOpen) => {
@@ -220,12 +239,12 @@ export default function FloatingControlToggle({
         onActionClearSelectedItem(erpItemId);
     }
 
-    const handleSubmitStockRelease = async () => {
+    const handleSubmitStockRelease = async (memo) => {
         handleToggleBackdropOpen(true);
         let body = {
             erpItemIds: selectedErpItems?.map(r => r.id),
             workspaceId: workspaceRedux?.workspaceInfo?.id,
-            memo: '발주관리에서 재고반영'
+            memo: memo
         }
 
         onSubmitStockRelease(body, () => handleToggleStockReleaseModalOpen(false));
@@ -239,7 +258,7 @@ export default function FloatingControlToggle({
             workspaceId: workspaceRedux?.workspaceInfo?.id,
         }
 
-        onSubmitStockRelease(body, () => handleToggleStockReleaseModalOpen(false));
+        onSubmitCancelStockRelease(body, () => handleToggleCancelStockReleaseModalOpen(false));
         handleToggleBackdropOpen(false);
     }
 
@@ -272,6 +291,7 @@ export default function FloatingControlToggle({
                 onActionOpenViewSelectedModal={() => handleToggleViewSelectedModalOpen(true)}
                 onActionOpenReleaseListModal={() => handleToggleReleaseListModalOpen(true)}
                 onActionOpenStockReleaseModal={() => handleToggleStockReleaseModalOpen(true)}
+                onActionOpenCancelStockReleaseModal={() => handleToggleCancelStockReleaseModalOpen(true)}
 
                 onActionClearAllSelectedItems={handleClearAllSelectedItems}
             />
@@ -372,23 +392,21 @@ export default function FloatingControlToggle({
                 />
             </CommonModalComponent>
 
-            {/* <ConfirmModalComponentV2
+            <StockReleaseModalComponent
                 open={stockReleaseModalOpen}
                 onClose={() => handleToggleStockReleaseModalOpen(false)}
-                onConfirm={() => handleSubmitStockRelease()}
+                onConfirm={handleSubmitStockRelease}
+            />
+
+            <ConfirmModalComponentV2
+                open={cancelStockReleaseModalOpen}
+                onClose={() => handleToggleCancelStockReleaseModalOpen(false)}
+                onConfirm={handleSubmitCancelStockRelease}
                 message={
-                    <div>선택된 데이터들의 재고를 차감합니다.</div>
+                    <div>선택된 데이터들의 재고반영을 취소 합니다.</div>
                 }
-            /> */}
-            <CommonModalComponent
-                open={stockReleaseModalOpen}
-                onClose={() => handleToggleStockReleaseModalOpen(false)}
-            >
-                <StockReleaseModalComponent
-                    onClose={() => handleToggleStockReleaseModalOpen(false)}
-                    onConfirm={() => handleSubmitStockRelease()}
-                />
-            </CommonModalComponent>
+            />
+
             <BackdropLoadingComponent
                 open={backdropOpen}
             />

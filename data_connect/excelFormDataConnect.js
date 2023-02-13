@@ -29,6 +29,15 @@ const excelFormDataConnect = () => {
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
+        },
+        downloadSampleExcelForWaybillRegistration: async function(){
+            await csrfDataConnect().getApiCsrf();
+            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-forms/download-sample-excel/waybill-registration`, null, {
+                responseType: 'blob',
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         }
     }
 }

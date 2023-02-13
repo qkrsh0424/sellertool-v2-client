@@ -1,5 +1,3 @@
-import CustomBlockButton from "../../../../components/buttons/block-button/v1/CustomBlockButton";
-import { CustomDialog } from "../../../../components/dialog/v1/CustomDialog";
 import { useLocalStorageHook } from "../../../../hooks/local_storage/useLocalStorageHook";
 import Layout from "../layout/Layout";
 import ConditionFieldComponent from "./condition-field/ConditionField.component";
@@ -12,6 +10,7 @@ import useErpItemPageHook from "./hooks/useErpItemPageHook";
 import useErpItemSameReceiverHintsHook from "./hooks/useErpItemSameReceiverHintsHook";
 import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
 import useSelectedErpItemsHook from "./hooks/useSelectedErpItemsHook";
+import useWaybillRegistrationHook from "./hooks/useWaybillRegistrationHook";
 import { Container } from "./index.styled";
 import SortFieldComponent from "./sort-field/SortField.component";
 
@@ -36,12 +35,12 @@ export default function MainComponent(props) {
         reqChangeStatusToSales,
         reqChangeStatusToRelease,
         reqChangeStatusToOrder,
-        reqCopyCreateErpItems
+        reqCopyCreateErpItems,
+        reqUploadWaybillForm
     } = useErpItemPageHook();
 
     const {
         inventoryStocks,
-        reqFetchInventoryStocks,
         reqStockRelease,
         reqCancelStockRelease
     } = useInventoryStocksHook(erpItemPage?.content);
@@ -60,6 +59,9 @@ export default function MainComponent(props) {
         reqFetchSelectedErpItems,
     } = useSelectedErpItemsHook();
 
+    const {
+        downloadSampleExcelForWaybillRegistration
+    } = useWaybillRegistrationHook();
 
     const handleSelectOrderHeaderId = (erpCollectionHeaderId) => {
         setSelectedErpCollectionHeaderIds({
@@ -70,19 +72,31 @@ export default function MainComponent(props) {
 
     const handleSubmitStockRelease = async (body, successCallback) => {
         await reqStockRelease(body, () => {
+            alert('정상적으로 재고가 반영되었습니다.');
             reqFetchErpItemPage();
-            reqFetchSelectedErpItems();
             successCallback();
         });
     }
 
     const handleSubmitCancelStockRelease = async (body, successCallback) => {
         await reqCancelStockRelease(body, () => {
+            alert('정상적으로 재고반영이 취소되었습니다.');
             reqFetchErpItemPage();
-            reqFetchSelectedErpItems();
             successCallback();
         })
     }
+
+    const handleSubmitDownloadSampleExcelForWaybillRegistration = async () => {
+        await downloadSampleExcelForWaybillRegistration();
+    }
+
+    const handleSubmitUploadWaybillForm = async (formData, successCallback) => {
+        await reqUploadWaybillForm(formData, () => {
+            reqFetchErpItemPage();
+            successCallback();
+        });
+    }
+
     return (
         <>
             <Container>
@@ -142,6 +156,8 @@ export default function MainComponent(props) {
                     onSubmitCopyCreateErpItems={reqCopyCreateErpItems}
                     onSubmitStockRelease={handleSubmitStockRelease}
                     onSubmitCancelStockRelease={handleSubmitCancelStockRelease}
+                    onSubmitDownloadSampleExcelForWaybillRegistration={handleSubmitDownloadSampleExcelForWaybillRegistration}
+                    onSubmitUploadWaybillForm={handleSubmitUploadWaybillForm}
                 />
             }
         </>

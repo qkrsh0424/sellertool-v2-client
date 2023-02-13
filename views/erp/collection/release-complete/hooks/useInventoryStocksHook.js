@@ -63,7 +63,6 @@ export default function useInventoryStocksHook(erpItems) {
         await inventoryDataConnect().cancelReleaseByErpItems(body)
             .then(res => {
                 if (res.status === 200) {
-                    console.log(res);
                     successCallback();
                 }
             })

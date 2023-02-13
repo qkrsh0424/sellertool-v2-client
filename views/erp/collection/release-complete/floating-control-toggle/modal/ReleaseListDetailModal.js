@@ -4,6 +4,7 @@ import CustomImage from "../../../../../modules/image/CustomImage";
 import { useEffect, useState } from "react";
 import ResizableTh from "../../../../../modules/table/ResizableTh";
 import { numberFormatUtils } from "../../../../../../utils/numberFormatUtils";
+import { dateToYYYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
 
 const Container = styled.div`
     background: var(--defaultBackground);
@@ -355,7 +356,11 @@ export default function ReleaseListDetailModal({
                             <div className='info'>
                                 <div className='productName'>{productOption?.product?.name}</div>
                                 <div className='productOptionName'>{productOption?.name}</div>
-                                <div className='stockUnit' style={{ color: inventoryStock?.stockUnit <= 0 ? 'var(--defaultRedColor)' : '' }}>남은재고 : {inventoryStock?.stockUnit} 개</div>
+                                {productOption?.packageYn === 'y' ?
+                                    <div className='stockUnit' style={{ color: 'var(--defaultGreenColor)' }}>패키지상품</div>
+                                    :
+                                    <div className='stockUnit' style={{ color: inventoryStock?.stockUnit <= 0 ? 'var(--defaultRedColor)' : '' }}>남은재고 : {inventoryStock?.stockUnit} 개</div>
+                                }
                                 <div className='category'>{productOption?.productCategory?.name} &gt; {productOption?.productSubCategory?.name}</div>
                             </div>
                         </div>
@@ -437,13 +442,14 @@ function TableBody({
             <tbody>
                 {selectedErpItems?.filter(r => r.productOptionId === null)?.map((erpItem, index) => {
                     let isOutOfStock = inventoryStock && inventoryStock?.stockUnit <= 0;
+                    let isPackaged = erpItem.packageYn === 'y' ? true : false;
 
                     return (
                         <tr
                             key={erpItem.id}
                             style={{
                                 position: 'relative',
-                                background: !erpItem.productOptionId ? 'var(--defaultYellowColorOpacity30)' : isOutOfStock ? 'var(--defaultRedColorOpacity30)' : ''
+                                background: !erpItem.productOptionId ? 'var(--defaultYellowColorOpacity30)' : (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity30)' : ''
                             }}
                         >
                             <td>
@@ -459,10 +465,22 @@ function TableBody({
                                         </td>
 
                                     );
-                                } else if (matchedFieldName === 'optionStockUnit') {
+                                } else if (matchedFieldName === 'createdAt' || matchedFieldName === 'salesAt' || matchedFieldName === 'releaseAt') {
                                     return (
-                                        <td key={`col-${matchedFieldName}`} style={{ background: isOutOfStock ? 'var(--defaultRedColorOpacity30)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
+                                        <td key={matchedFieldName}>
+                                            <div className='div-item'>{dateToYYYYMMDDhhmmss(erpItem[matchedFieldName])}</div>
+                                        </td>
                                     )
+                                } else if (matchedFieldName === 'optionStockUnit') {
+                                    if (isPackaged) {
+                                        return (
+                                            <td key={`col-${matchedFieldName}`} style={{ color: 'var(--defaultGreenColor)' }}>패키지상품</td>
+                                        )
+                                    } else {
+                                        return (
+                                            <td key={`col-${matchedFieldName}`} style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity30)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
+                                        )
+                                    }
                                 } else {
                                     return (
                                         <td key={matchedFieldName}>
@@ -482,13 +500,14 @@ function TableBody({
         <tbody>
             {selectedErpItems?.filter(r => r.productOptionId === productOption?.id)?.map((erpItem, index) => {
                 let isOutOfStock = inventoryStock && inventoryStock?.stockUnit <= 0;
+                let isPackaged = erpItem.packageYn === 'y' ? true : false;
 
                 return (
                     <tr
                         key={erpItem.id}
                         style={{
                             position: 'relative',
-                            background: !erpItem.productOptionId ? 'var(--defaultYellowColorOpacity30)' : isOutOfStock ? 'var(--defaultRedColorOpacity30)' : ''
+                            background: !erpItem.productOptionId ? 'var(--defaultYellowColorOpacity30)' : (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity30)' : ''
                         }}
                     >
                         <td>
@@ -504,10 +523,22 @@ function TableBody({
                                     </td>
 
                                 );
-                            } else if (matchedFieldName === 'optionStockUnit') {
+                            } else if (matchedFieldName === 'createdAt' || matchedFieldName === 'salesAt' || matchedFieldName === 'releaseAt') {
                                 return (
-                                    <td key={`col-${matchedFieldName}`} style={{ background: isOutOfStock ? 'var(--defaultRedColorOpacity30)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
+                                    <td key={matchedFieldName}>
+                                        <div className='div-item'>{dateToYYYYMMDDhhmmss(erpItem[matchedFieldName])}</div>
+                                    </td>
                                 )
+                            } else if (matchedFieldName === 'optionStockUnit') {
+                                if (isPackaged) {
+                                    return (
+                                        <td key={`col-${matchedFieldName}`} style={{ color: 'var(--defaultGreenColor)' }}>패키지상품</td>
+                                    )
+                                } else {
+                                    return (
+                                        <td key={`col-${matchedFieldName}`} style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity30)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
+                                    )
+                                }
                             } else {
                                 return (
                                     <td key={matchedFieldName}>

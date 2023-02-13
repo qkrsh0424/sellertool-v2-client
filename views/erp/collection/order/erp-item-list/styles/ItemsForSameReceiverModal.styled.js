@@ -68,12 +68,49 @@ export const TableFieldWrapper = styled.div`
         padding: 0 10px;
     }
     
+    .title{
+        cursor: pointer;
+        background: #f8f9fa;
+        padding: 10px;
+        width: 100px;
+        text-align: center;
+        border: 1px solid #e0e0e0;
+        font-size: 14px;
+        color: #777;
+        font-weight: 500;
+        margin-bottom: -1px;
+
+        &:not(:first-child){
+            margin-left: -5px;
+        }
+
+        &:first-child{
+            border-top-left-radius: 5px;    
+        }
+
+        &:last-child{
+            border-top-right-radius: 5px;
+        }
+    }
+
+    .title-active{
+        position: relative;
+        border-bottom: 1px solid #fff !important;
+        z-index: 10;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        background: #fff;
+        color: #404040;
+        font-weight: 700;
+    }
+
     .table-box{
         position:relative;
         height: 300px;
         overflow: auto;
         border: 1px solid #e0e0e0;
         border-radius: 15px;
+        border-top-left-radius: 0;
         background: #fff;
         box-shadow: var(--defaultBoxShadow);
 

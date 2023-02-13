@@ -4,6 +4,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import 'dayjs/locale/ko';
 import { useRouter } from "next/router";
+import { CustomDatePeriodButtonGroup } from "../../../../../components/buttons/date-period/v1/CustomDatePeriodButtonGroup";
 import { dateToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CustomInput from "../../../../modules/input/CustomInput";
@@ -28,7 +29,8 @@ export default function ConditionFieldComponent({
         endDateTime,
         onChangePeriodType,
         onChangeStartDateTime,
-        onChangeEndDateTime
+        onChangeEndDateTime,
+        onChangePeriod
     } = usePeriodSearchConditionFormHook();
 
     const {
@@ -226,6 +228,29 @@ export default function ConditionFieldComponent({
                                     </LocalizationProvider>
                                 </div>
                             </PeriodWrapper>
+                            <CustomDatePeriodButtonGroup style={{marginTop:'15px'}}>
+                                <CustomDatePeriodButtonGroup.TodayButton
+                                    callback={(result) => onChangePeriod(result)}
+                                />
+                                <CustomDatePeriodButtonGroup.YesterdayButton
+                                    callback={(result) => onChangePeriod(result)}
+                                />
+                                <CustomDatePeriodButtonGroup.Days7Button
+                                    callback={(result) => onChangePeriod(result)}
+                                />
+                                <CustomDatePeriodButtonGroup.Days30Button
+                                    callback={(result) => onChangePeriod(result)}
+                                />
+                                <CustomDatePeriodButtonGroup.Days90Button
+                                    callback={(result) => onChangePeriod(result)}
+                                />
+                                <CustomDatePeriodButtonGroup.ThisMonthButton
+                                    callback={(result) => onChangePeriod(result)}
+                                />
+                                <CustomDatePeriodButtonGroup.LastMonthButton
+                                    callback={(result) => onChangePeriod(result)}
+                                />
+                            </CustomDatePeriodButtonGroup>
                         </ConditionContainer>
                         <FlexGroup>
                             <ConditionContainer>

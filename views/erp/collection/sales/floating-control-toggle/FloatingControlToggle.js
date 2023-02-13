@@ -18,7 +18,6 @@ export default function FloatingControlToggle({
     onActionClearSelectedItem,
 
     onSubmitUpdateErpItems,
-    onSubmitFetchSelectedErpItems,
     onSubmitDeleteErpItems,
     onSubmitChangeStatusToRelease,
     onSubmitChangeStatusToOrder,
@@ -98,8 +97,8 @@ export default function FloatingControlToggle({
         handleToggleBackdropOpen(true)
         await onSubmitUpdateErpItems(body, () => {
             handleToggleEditErpItemModalOpen(false);
-            onSubmitFetchSelectedErpItems();
             handleToggleControlDrawerOpen(false);
+            onActionClearAllSelectedItems();
         })
         handleToggleBackdropOpen(false);
     }
@@ -111,6 +110,7 @@ export default function FloatingControlToggle({
         }
         await onSubmitDeleteErpItems(body, () => {
             handleToggleDeleteErpItemsConfirmModalOpen(false);
+            handleToggleControlDrawerOpen(false);
             onActionClearAllSelectedItems();
         })
         handleToggleBackdropOpen(false);
@@ -124,6 +124,7 @@ export default function FloatingControlToggle({
         }
         await onSubmitChangeStatusToRelease(body, () => {
             handleToggleChangeStatusToReleaseModalOpen(false);
+            handleToggleControlDrawerOpen(false);
             onActionClearAllSelectedItems();
         })
         handleToggleBackdropOpen(false);
@@ -136,6 +137,7 @@ export default function FloatingControlToggle({
         }
         await onSubmitChangeStatusToOrder(body, () => {
             handleToggleChangeStatusToOrderModalOpen(false);
+            handleToggleControlDrawerOpen(false);
             onActionClearAllSelectedItems();
         })
         handleToggleBackdropOpen(false);
@@ -147,7 +149,11 @@ export default function FloatingControlToggle({
             erpItemIds: selectedErpItems?.map(r => r.id)
         }
 
-        await onSubmitCopyCreateErpItems(body, () => { handleToggleCopyCreateErpItemsModalOpen(false); handleToggleControlDrawerOpen(false); })
+        await onSubmitCopyCreateErpItems(body, () => {
+            handleToggleCopyCreateErpItemsModalOpen(false);
+            handleToggleControlDrawerOpen(false);
+            onActionClearAllSelectedItems();
+        })
         handleToggleBackdropOpen(false);
     }
 

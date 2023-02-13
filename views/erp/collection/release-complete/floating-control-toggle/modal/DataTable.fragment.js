@@ -66,6 +66,18 @@ export default function DataTableFragment({
     }
 
     const handleOpenEditAllReleaseOptionCodeModal = () => {
+        let stockReflectedItemIds = [];
+        let stockReflectedItems = editErpItems.filter((r, idx) => {
+            if (r.stockReflectYn === 'y') {
+                stockReflectedItemIds.push(idx + 1);
+                return r;
+            }
+        });
+
+        if (stockReflectedItems?.length >= 1) {
+            alert(`No. = [${stockReflectedItemIds?.join()}]\n이미 재고에 반영된 데이터는 [M] 출고옵션코드를 변경할 수 없습니다.\n재고반영을 취소 후 변경해 주세요.`);
+            return;
+        }
         setEditAllReleaseOptionCodeModalOpen(true);
     }
 
@@ -94,6 +106,21 @@ export default function DataTableFragment({
     }
 
     const handleOpenEditReleaseOptionCodeModal = (erpItemId) => {
+        let selectedErpItem = null;
+        let index = null;
+
+        editErpItems.forEach((r, idx) => {
+            if (r.id === erpItemId) {
+                selectedErpItem = r;
+                index = idx;
+                return;
+            }
+        });
+
+        if (selectedErpItem.stockReflectYn === 'y') {
+            alert(`No. = [${index + 1}]\n이미 재고에 반영된 데이터는 [M] 출고옵션코드를 변경할 수 없습니다.\n재고반영을 취소 후 변경해 주세요.`);
+            return;
+        }
         setTargetErpItemId(erpItemId);
         setEditReleaseOptionCodeModalOpen(true);
     }
@@ -341,7 +368,23 @@ export default function DataTableFragment({
                                                 );
                                             }
 
-                                            if (header.name === 'unit' || header.name === 'price' || header.name === 'deliveryCharge') {
+                                            if (header.name === 'unit') {
+                                                return (
+                                                    <td key={header.name}>
+                                                        <input
+                                                            type='text'
+                                                            className='input-item'
+                                                            name={header.name}
+                                                            value={numberFormatUtils.numberWithCommas(erpItem[header.name])}
+                                                            placeholder={`${header.headerName}을(를) 입력`}
+                                                            onChange={(e) => onChangeNumberValueOfName(e, erpItem.id)}
+                                                            onFocus={(e) => { if (erpItem.stockReflectYn === 'y') { e.target.blur(); alert('이미 재고에 반영된 데이터는 수량을 변경할 수 없습니다.'); return; } }}
+                                                        ></input>
+                                                    </td>
+                                                );
+                                            }
+
+                                            if (header.name === 'price' || header.name === 'deliveryCharge') {
                                                 return (
                                                     <td key={header.name}>
                                                         <input

@@ -29,7 +29,7 @@ export default function useErpItemsFormSameReceiverHook(targetSameReceiverHint) 
         await erpItemDataConnect().searchListBySameReceiverHint(params, headers)
             .then(res => {
                 if (res.status === 200) {
-                    setErpItems(res.data.data?.filter(r => r.salesYn === 'y' && r.releaseYn === 'y'));
+                    setErpItems(res.data.data);
                 }
             })
             .catch(err => {

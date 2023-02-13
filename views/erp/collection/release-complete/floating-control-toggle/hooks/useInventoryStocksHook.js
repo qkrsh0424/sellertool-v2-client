@@ -9,9 +9,10 @@ export default function useInventoryStocksHook(erpItems) {
             return;
         }
 
+        if (inventoryStocks) {
+            return;
+        }
         reqFetchInventoryStocks();
-
-        return () => setInventoryStocks(null);
     }, [erpItems]);
 
     const reqFetchInventoryStocks = async () => {

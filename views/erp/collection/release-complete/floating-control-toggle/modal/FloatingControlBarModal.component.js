@@ -75,7 +75,8 @@ export default function FloatingControlBarModalComponent({
     onActionOpenViewSelectedModal,
     onActionOpenReleaseListModal,
     onActionOpenStockReleaseModal,
-    onActionOpenCancelStockReleaseModal
+    onActionOpenCancelStockReleaseModal,
+    onActionOpenWaybillRegistrationModal,
 }) {
     return (
         <div>
@@ -120,13 +121,13 @@ export default function FloatingControlBarModalComponent({
                             >
                                 복사 생성
                             </SingleBlockButton>
-                            {/* <SingleBlockButton
+                            <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => onActionOpenEditErpItemsModal()}
+                                onClick={() => onActionOpenWaybillRegistrationModal()}
                             >
-                                운송장 등록
-                            </SingleBlockButton> */}
+                                운송장 일괄등록
+                            </SingleBlockButton>
                         </ContentGroup>
                         <ContentGroup>
                             <div className='title'>재고 관리</div>

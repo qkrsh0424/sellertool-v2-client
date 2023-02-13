@@ -1,8 +1,10 @@
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { createRef, useEffect, useRef, useState } from "react";
+import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { dateToYYYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import { numberWithCommas } from "../../../../../utils/numberFormatUtils";
+import CustomImage from "../../../../modules/image/CustomImage";
 import FieldLoadingV2 from "../../../../modules/loading/FieldLoadingV2";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import InfiniteScrollObserver from "../../../../modules/observer/InfiniteScrollObserver";
@@ -10,7 +12,7 @@ import ReverseScrollObserver from "../../../../modules/observer/ReverseScrollObs
 import ResizableTh from "../../../../modules/table/ResizableTh";
 import EditOptionCodeModalComponent from "./modal/EditOptionCodeModal.component";
 import ItemsForSameReceiverModalComponent from "./modal/ItemsForSameReceiverModal.component";
-import { TableFieldWrapper } from "./styles/ErpItemList.styled";
+import { PinButtonBox, TableFieldWrapper } from "./styles/ErpItemList.styled";
 
 const TABLE_DATA_VIEW_SIZE = 50;
 const TABLE_DATA_INC_DEC_SIZE = 30;
@@ -38,6 +40,7 @@ export default function ErpItemListComponent({
     const [editOptionCodeModalOpen, setEditOptionCodeModalOpen] = useState(false);
     const [editReleaseOptionCodeModalOpen, setEditReleaseOptionCodeModalOpen] = useState(false);
     const [targetErpItem, setTargetErpItem] = useState(null);
+    const [statusPin, setStatusPin] = useState(false);
 
     const [itemsForSameReceiverModalOpen, setItemsFormSameReceiverModalOpen] = useState(false);
     const [targetSameReceiverHint, setTargetSameReceiverHint] = useState(null);
@@ -124,8 +127,25 @@ export default function ErpItemListComponent({
         setTargetSameReceiverHint(null);
     }
 
+    const handleToggleStatusPin = (pin) => {
+        setStatusPin(pin)
+    }
+
     return (
         <>
+            <PinButtonBox>
+                <CustomBlockButton
+                    type='button'
+                    onClick={() => handleToggleStatusPin(!statusPin)}
+                    className='button-item'
+                >
+                    <div style={statusPin ? { color: 'var(--mainColor)' } : {}}>상태창</div>
+                    <span style={{ width: 17, height: 17, display: 'inline-block', margin: 0, padding: 0, border: 'none' }}>
+                        {statusPin ? <CustomImage src={`/images/icon/pushPin_default_344b98.svg`} /> : <CustomImage src={`/images/icon/pushPin_default_a0a0a0.svg`} />}
+                    </span>
+
+                </CustomBlockButton>
+            </PinButtonBox>
             <TableFieldWrapper>
                 <div style={{ position: 'relative' }}>
                     {erpItemPagePending &&
@@ -190,6 +210,22 @@ export default function ErpItemListComponent({
                                             </ResizableTh>
                                         )
                                     })}
+                                    {statusPin &&
+                                        <>
+                                            <th
+                                                className={`fixed-header fixed-col-right`}
+                                                width={45}
+                                                style={{
+                                                    zIndex: '11',
+                                                    padding: 0,
+                                                    fontSize: '10px',
+                                                    borderLeft: '1px dashed #c0c0c0',
+                                                }}
+                                            >
+                                                패키지
+                                            </th>
+                                        </>
+                                    }
                                 </tr>
                             </thead>
                             <tbody>
@@ -197,6 +233,7 @@ export default function ErpItemListComponent({
                                     const isSelected = selectedErpItems?.find(r => r.id === r1.id);
                                     let inventoryStock = inventoryStocks?.find(r => r.productOptionId === r1.productOptionId);
                                     let isOutOfStock = inventoryStock && inventoryStock?.stockUnit <= 0;
+                                    let isPackaged = r1.packageYn === 'y' ? true : false;
 
                                     if (rowIndex < prevViewSize) {
                                         return (
@@ -236,7 +273,7 @@ export default function ErpItemListComponent({
                                     return (
                                         <tr
                                             key={r1.id}
-                                            className={`${isSelected ? 'tr-active' : ''} ${isOutOfStock ? 'tr-highlight' : ''}`}
+                                            className={`${isSelected ? 'tr-active' : ''} ${(isOutOfStock && !isPackaged) ? 'tr-highlight' : ''}`}
                                             style={{
                                                 position: 'relative',
                                                 background: !r1.productOptionId ? 'var(--defaultYellowColorOpacity30)' : ''
@@ -255,71 +292,46 @@ export default function ErpItemListComponent({
                                             </td>
                                             {erpCollectionHeader?.erpCollectionHeaderDetails?.map(r2 => {
                                                 let matchedFieldName = r2.matchedFieldName;
-                                                if (matchedFieldName === 'createdAt' || matchedFieldName === 'salesAt' || matchedFieldName === 'releaseAt' || matchedFieldName === 'channelOrderDate') {
-                                                    return (
-                                                        <td key={`col-${matchedFieldName}`}>{r1[matchedFieldName] ? dateToYYYYMMDDhhmmss(r1[matchedFieldName]) : ""}</td>
-                                                    )
-                                                }
-
-                                                if (matchedFieldName === 'price' || matchedFieldName === 'deliveryCharge') {
-                                                    return (
-                                                        <td key={`col-${matchedFieldName}`}>{r1[matchedFieldName] ? numberWithCommas(r1[matchedFieldName]) : "0"}</td>
-                                                    );
-                                                }
-
-                                                if (matchedFieldName === 'optionCode') {
-                                                    return (
-                                                        <td key={`col-${matchedFieldName}`} className='td-highlight' onClick={(e) => handleOpenEditOptionCodeModal(e, r1)}>{r1[matchedFieldName]}</td>
-                                                    )
-                                                }
-
-                                                if (matchedFieldName === 'releaseOptionCode') {
-                                                    return (
-                                                        <td key={`col-${matchedFieldName}`} className='td-highlight' onClick={(e) => handleOpenEditReleaseOptionCodeModal(e, r1)}>{r1[matchedFieldName]}</td>
-                                                    )
-                                                }
-
-                                                if (matchedFieldName === 'optionStockUnit') {
-                                                    return (
-                                                        <td key={`col-${matchedFieldName}`} style={{ background: isOutOfStock ? 'var(--defaultRedColorOpacity500)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
-                                                    )
-                                                }
-
-                                                if (matchedFieldName === 'receiver') {
-                                                    let sameReceiverHint = `${r1.receiver}${r1.receiverContact1}${r1.destination}${r1.destinationDetail}`;
-                                                    let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
-
-                                                    return (
-                                                        <td
-                                                            key={`col-${matchedFieldName}`}
-                                                            className={`${matchedFieldName}`}
-                                                            style={{
-                                                                color: hasSameReceiver ? 'var(--defaultRedColor)' : ''
-                                                            }}
-                                                        >
-                                                            {r1[matchedFieldName]}
-                                                            {hasSameReceiver &&
-                                                                <button
-                                                                    type='button'
-                                                                    className='view-sameReceiver-button-item'
-                                                                    onClick={(e) => handleOpenItemsForSameReceiverModal(e, sameReceiverHint)}
-                                                                >
-                                                                    보기
-                                                                </button>
-                                                            }
-                                                        </td>
-                                                    );
-                                                }
-
                                                 return (
-                                                    <td
-                                                        key={`col-${matchedFieldName}`}
-                                                        className={``}
-                                                    >
-                                                        {r1[matchedFieldName]}
-                                                    </td>
-                                                )
+                                                    <Td
+                                                        key={matchedFieldName}
+                                                        erpItem={r1}
+                                                        matchedFieldName={matchedFieldName}
+                                                        isOutOfStock={isOutOfStock}
+                                                        isPackaged={isPackaged}
+                                                        inventoryStock={inventoryStock}
+                                                        erpItemSameReceiverHints={erpItemSameReceiverHints}
+
+                                                        onActionOpenEditOptionCodeModal={handleOpenEditOptionCodeModal}
+                                                        onActionOpenEditReleaseOptionCodeModal={handleOpenEditReleaseOptionCodeModal}
+                                                        onActionOpenItemsForSameReceiverModal={handleOpenItemsForSameReceiverModal}
+                                                    />
+                                                );
                                             })}
+                                            {statusPin &&
+                                                <>
+                                                    <td
+                                                        className={`fixed-col-right`}
+                                                        style={{
+                                                            background: '#fff',
+                                                            padding: 0
+                                                        }}
+                                                    >
+                                                        {isPackaged &&
+                                                            <div
+                                                                style={{
+                                                                    width: 20,
+                                                                    margin: '0 auto'
+                                                                }}
+                                                            >
+                                                                <CustomImage
+                                                                    src='/images/icon/check_default_5fcf80.svg'
+                                                                />
+                                                            </div>
+                                                        }
+                                                    </td>
+                                                </>
+                                            }
                                         </tr>
                                     )
                                 })}
@@ -399,3 +411,75 @@ const HIGHLIGHT_FIELDS = [
     'productOptionReleaseLocation',
     'optionStockUnit'
 ];
+
+function Td({
+    erpItem,
+    matchedFieldName,
+    isOutOfStock,
+    isPackaged,
+    inventoryStock,
+    erpItemSameReceiverHints,
+
+    onActionOpenEditOptionCodeModal,
+    onActionOpenEditReleaseOptionCodeModal,
+    onActionOpenItemsForSameReceiverModal
+}) {
+    switch (matchedFieldName) {
+        case 'createdAt': case 'salesAt': case 'releaseAt':
+            return (
+                <td>{erpItem[matchedFieldName] ? dateToYYYYMMDDhhmmss(erpItem[matchedFieldName]) : ""}</td>
+            );
+        case 'price': case 'deliveryCharge':
+            return (
+                <td>{erpItem[matchedFieldName] ? numberWithCommas(erpItem[matchedFieldName]) : "0"}</td>
+            );
+        case 'optionCode':
+            return (
+                <td className='td-highlight' onClick={(e) => onActionOpenEditOptionCodeModal(e, erpItem)}>{erpItem[matchedFieldName]}</td>
+            )
+        case 'releaseOptionCode':
+            return (
+                <td className='td-highlight' onClick={(e) => onActionOpenEditReleaseOptionCodeModal(e, erpItem)}>{erpItem[matchedFieldName]}</td>
+            )
+        case 'optionStockUnit':
+            if (isPackaged) {
+                return (
+                    <td style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity500)' : '', color: 'var(--defaultGreenColor)' }}>패키지상품</td>
+                );
+            } else {
+                return (
+                    <td style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity500)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
+                );
+            }
+
+        case 'receiver':
+            let sameReceiverHint = `${erpItem.receiver}${erpItem.receiverContact1}${erpItem.destination}${erpItem.destinationDetail}`;
+            let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
+            return (
+                <td
+                    className={`${matchedFieldName}`}
+                    style={{
+                        color: hasSameReceiver ? 'var(--defaultRedColor)' : ''
+                    }}
+                >
+                    {erpItem[matchedFieldName]}
+                    {hasSameReceiver &&
+                        <button
+                            type='button'
+                            className='view-sameReceiver-button-item'
+                            onClick={(e) => onActionOpenItemsForSameReceiverModal(e, sameReceiverHint)}
+                        >
+                            보기
+                        </button>
+                    }
+                </td>
+            );
+        default:
+            return (
+                <td>
+                    {erpItem[matchedFieldName]}
+                </td>
+            )
+    }
+
+}

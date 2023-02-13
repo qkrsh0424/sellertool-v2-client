@@ -48,6 +48,7 @@ export default function ReleaseListModalComponent({
             let productSubCategoryName = selectedErpItems[i].productSubCategoryName;
             let productTag = selectedErpItems[i].productTag;
             let unit = parseInt(selectedErpItems[i].unit);
+            let packageYn = selectedErpItems[i].packageYn;
 
             if (productOptionIdSet.has(productOptionId)) {
                 let data = datas.find(r => r.productOptionId === productOptionId);
@@ -64,7 +65,8 @@ export default function ReleaseListModalComponent({
                     productOptionTag: productOptionTag,
                     productSubCategoryName: productSubCategoryName,
                     productTag: productTag,
-                    unit: unit
+                    unit: unit,
+                    packageYn: packageYn
                 })
             }
         }
@@ -113,17 +115,12 @@ export default function ReleaseListModalComponent({
                 ...r,
                 stockUnit: inventoryStock?.stockUnit
             }
-
-
         })
 
         let body = {
             workspaceId: workspaceRedux?.workspaceInfo?.id,
             items: datas
         }
-
-        // TODO : 로직 완성해야됨. 23.01.26
-        console.log(body);
 
         await erpItemDataConnect().releaseListExcelDownload(body)
             .then(res => {
@@ -193,6 +190,7 @@ export default function ReleaseListModalComponent({
                             let inventoryStock = inventoryStocks?.find(r2 => r2.productOptionId === r.productOptionId);
                             let stockUnit = inventoryStock?.stockUnit;
                             let isOutOfStocks = stockUnit < r.unit;
+                            let isPackaged = r.packageYn === 'y' ? true : false
 
                             return (
                                 <div
@@ -207,12 +205,23 @@ export default function ReleaseListModalComponent({
                                         </div>
                                         <div>
                                             <div className='unit'>수량 : {r.unit}</div>
-                                            <div
-                                                className='stock'
-                                                style={{
-                                                    color: isOutOfStocks ? 'var(--defaultRedColor)' : ''
-                                                }}
-                                            >남은재고 : {stockUnit}</div>
+                                            {isPackaged ?
+                                                <div
+                                                    className='stock'
+                                                    style={{
+                                                        color: 'var(--defaultGreenColor)'
+                                                    }}
+                                                >
+                                                    패키지 상품
+                                                </div>
+                                                :
+                                                <div
+                                                    className='stock'
+                                                    style={{
+                                                        color: isOutOfStocks ? 'var(--defaultRedColor)' : ''
+                                                    }}
+                                                >남은재고 : {stockUnit}</div>
+                                            }
                                         </div>
                                     </div>
                                     <div className='codeAndCategories'>

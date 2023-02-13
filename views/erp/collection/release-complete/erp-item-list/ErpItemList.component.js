@@ -41,7 +41,7 @@ export default function ErpItemListComponent({
     const [editOptionCodeModalOpen, setEditOptionCodeModalOpen] = useState(false);
     const [editReleaseOptionCodeModalOpen, setEditReleaseOptionCodeModalOpen] = useState(false);
     const [targetErpItem, setTargetErpItem] = useState(null);
-    const [stockPin, setStockPin] = useState(false);
+    const [statusPin, setStatusPin] = useState(false);
 
     const [itemsForSameReceiverModalOpen, setItemsFormSameReceiverModalOpen] = useState(false);
     const [targetSameReceiverHint, setTargetSameReceiverHint] = useState(null);
@@ -84,6 +84,10 @@ export default function ErpItemListComponent({
 
     const handleOpenEditReleaseOptionCodeModal = (e, erpItem) => {
         e.stopPropagation();
+        if(erpItem.stockReflectYn === 'y'){
+            alert('이미 재고에 반영된 데이터는 [M] 출고옵션코드를 변경할 수 없습니다.\n재고반영을 취소 후 변경해 주세요.');
+            return;
+        }
         setTargetErpItem(_.cloneDeep(erpItem));
         setEditReleaseOptionCodeModalOpen(true);
 
@@ -128,20 +132,20 @@ export default function ErpItemListComponent({
         setTargetSameReceiverHint(null);
     }
 
-    const handleToggleStockPin = (pin) => {
-        setStockPin(pin)
+    const handleToggleStatusPin = (pin) => {
+        setStatusPin(pin)
     }
     return (
         <>
             <PinButtonBox>
                 <CustomBlockButton
                     type='button'
-                    onClick={() => handleToggleStockPin(!stockPin)}
+                    onClick={() => handleToggleStatusPin(!statusPin)}
                     className='button-item'
                 >
-                    <div style={stockPin ? { color: 'var(--mainColor)' } : {}}>상태창</div>
+                    <div style={statusPin ? { color: 'var(--mainColor)' } : {}}>상태창</div>
                     <span style={{ width: 17, height: 17, display: 'inline-block', margin: 0, padding: 0, border: 'none' }}>
-                        {stockPin ? <CustomImage src={`/images/icon/pushPin_default_344b98.svg`} /> : <CustomImage src={`/images/icon/pushPin_default_a0a0a0.svg`} />}
+                        {statusPin ? <CustomImage src={`/images/icon/pushPin_default_344b98.svg`} /> : <CustomImage src={`/images/icon/pushPin_default_a0a0a0.svg`} />}
                     </span>
 
                 </CustomBlockButton>
@@ -210,38 +214,36 @@ export default function ErpItemListComponent({
                                             </ResizableTh>
                                         )
                                     })}
-                                    <th
-                                        className={`fixed-header ${stockPin ? 'fixed-col-right' : ''}`}
-                                        width={45}
-                                        style={stockPin ? {
-                                            zIndex: '11',
-                                            right: 45,
-                                            borderLeft: '1px dashed #c0c0c0',
-                                            padding: 0,
-                                            fontSize: '10px'
-                                        } : {
-                                            padding: 0,
-                                            fontSize: '10px'
-                                        }}
-                                    >
-                                        <div className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-center'>
-                                            재고반영
-                                        </div>
-                                    </th>
-                                    <th
-                                        className={`fixed-header ${stockPin ? 'fixed-col-right' : ''}`}
-                                        width={45}
-                                        style={stockPin ? {
-                                            zIndex: '11',
-                                            padding: 0,
-                                            fontSize: '10px'
-                                        } : {
-                                            padding: 0,
-                                            fontSize: '10px'
-                                        }}
-                                    >
-                                        패키지
-                                    </th>
+                                    {statusPin &&
+                                        <>
+                                            <th
+                                                className={`fixed-header fixed-col-right`}
+                                                width={45}
+                                                style={{
+                                                    zIndex: '11',
+                                                    right: 45,
+                                                    borderLeft: '1px dashed #c0c0c0',
+                                                    padding: 0,
+                                                    fontSize: '10px'
+                                                }}
+                                            >
+                                                <div className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-center'>
+                                                    재고반영
+                                                </div>
+                                            </th>
+                                            <th
+                                                className={`fixed-header fixed-col-right`}
+                                                width={45}
+                                                style={{
+                                                    zIndex: '11',
+                                                    padding: 0,
+                                                    fontSize: '10px'
+                                                }}
+                                            >
+                                                패키지
+                                            </th>
+                                        </>
+                                    }
                                 </tr>
                             </thead>
                             <tbody>
@@ -308,117 +310,72 @@ export default function ErpItemListComponent({
                                                 </td>
                                                 {erpCollectionHeader?.erpCollectionHeaderDetails?.map(r2 => {
                                                     let matchedFieldName = r2.matchedFieldName;
-                                                    if (matchedFieldName === 'createdAt' || matchedFieldName === 'salesAt' || matchedFieldName === 'releaseAt' || matchedFieldName === 'channelOrderDate') {
-                                                        return (
-                                                            <td key={`col-${matchedFieldName}`}>{r1[matchedFieldName] ? dateToYYYYMMDDhhmmss(r1[matchedFieldName]) : ""}</td>
-                                                        )
-                                                    }
-
-                                                    if (matchedFieldName === 'price' || matchedFieldName === 'deliveryCharge') {
-                                                        return (
-                                                            <td key={`col-${matchedFieldName}`}>{r1[matchedFieldName] ? numberWithCommas(r1[matchedFieldName]) : "0"}</td>
-                                                        );
-                                                    }
-
-                                                    if (matchedFieldName === 'optionCode') {
-                                                        return (
-                                                            <td key={`col-${matchedFieldName}`} className='td-highlight' onClick={(e) => handleOpenEditOptionCodeModal(e, r1)}>{r1[matchedFieldName]}</td>
-                                                        )
-                                                    }
-
-                                                    if (matchedFieldName === 'releaseOptionCode') {
-                                                        return (
-                                                            <td key={`col-${matchedFieldName}`} className='td-highlight' onClick={(e) => handleOpenEditReleaseOptionCodeModal(e, r1)}>{r1[matchedFieldName]}</td>
-                                                        )
-                                                    }
-
-                                                    if (matchedFieldName === 'optionStockUnit') {
-                                                        return (
-                                                            <td key={`col-${matchedFieldName}`} style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity500)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
-                                                        )
-                                                    }
-
-                                                    if (matchedFieldName === 'receiver') {
-                                                        let sameReceiverHint = `${r1.receiver}${r1.receiverContact1}${r1.destination}${r1.destinationDetail}`;
-                                                        let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
-
-                                                        return (
-                                                            <td
-                                                                key={`col-${matchedFieldName}`}
-                                                                className={`${matchedFieldName}`}
-                                                                style={{
-                                                                    color: hasSameReceiver ? 'var(--defaultRedColor)' : ''
-                                                                }}
-                                                            >
-                                                                {r1[matchedFieldName]}
-                                                                {hasSameReceiver &&
-                                                                    <button
-                                                                        type='button'
-                                                                        className='view-sameReceiver-button-item'
-                                                                        onClick={(e) => handleOpenItemsForSameReceiverModal(e, sameReceiverHint)}
-                                                                    >
-                                                                        보기
-                                                                    </button>
-                                                                }
-                                                            </td>
-                                                        );
-                                                    }
-
                                                     return (
-                                                        <td
-                                                            key={`col-${matchedFieldName}`}
-                                                            className={``}
-                                                        >
-                                                            {r1[matchedFieldName]}
-                                                        </td>
-                                                    )
+                                                        <Td
+                                                            key={matchedFieldName}
+                                                            erpItem={r1}
+                                                            matchedFieldName={matchedFieldName}
+                                                            isOutOfStock={isOutOfStock}
+                                                            isPackaged={isPackaged}
+                                                            inventoryStock={inventoryStock}
+                                                            erpItemSameReceiverHints={erpItemSameReceiverHints}
+
+                                                            onActionOpenEditOptionCodeModal={handleOpenEditOptionCodeModal}
+                                                            onActionOpenEditReleaseOptionCodeModal={handleOpenEditReleaseOptionCodeModal}
+                                                            onActionOpenItemsForSameReceiverModal={handleOpenItemsForSameReceiverModal}
+                                                        />
+                                                    );
                                                 })}
-                                                <td
-                                                    className={`${stockPin ? 'fixed-col-right' : ''}`}
-                                                    style={stockPin ? {
-                                                        background: '#fff',
-                                                        right: 45,
-                                                        borderLeft: '1px dashed #c0c0c0',
-                                                        padding: 0
-                                                    } : {}}
-                                                >
-                                                    <div
-                                                        style={{
-                                                            width: 20,
-                                                            margin: '0 auto'
-                                                        }}
-                                                    >
-                                                        {r1.stockReflectYn === 'y' ?
-                                                            <CustomImage
-                                                                src='/images/icon/check_default_5fcf80.svg'
-                                                            />
-                                                            :
-                                                            <CustomImage
-                                                                src='/images/icon/close_default_e56767.svg'
-                                                            />
-                                                        }
-                                                    </div>
-                                                </td>
-                                                <td
-                                                    className={`${stockPin ? 'fixed-col-right' : ''}`}
-                                                    style={stockPin ? {
-                                                        background: '#fff',
-                                                        padding: 0
-                                                    } : {}}
-                                                >
-                                                    {isPackaged &&
-                                                        <div
+                                                {statusPin &&
+                                                    <>
+                                                        <td
+                                                            className={`fixed-col-right`}
                                                             style={{
-                                                                width: 20,
-                                                                margin: '0 auto'
+                                                                background: '#fff',
+                                                                right: 45,
+                                                                borderLeft: '1px dashed #c0c0c0',
+                                                                padding: 0
                                                             }}
                                                         >
-                                                            <CustomImage
-                                                                src='/images/icon/check_default_5fcf80.svg'
-                                                            />
-                                                        </div>
-                                                    }
-                                                </td>
+                                                            <div
+                                                                style={{
+                                                                    width: 20,
+                                                                    margin: '0 auto'
+                                                                }}
+                                                            >
+                                                                {r1.stockReflectYn === 'y' ?
+                                                                    <CustomImage
+                                                                        src='/images/icon/check_default_5fcf80.svg'
+                                                                    />
+                                                                    :
+                                                                    <CustomImage
+                                                                        src='/images/icon/close_default_e56767.svg'
+                                                                    />
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td
+                                                            className={`fixed-col-right`}
+                                                            style={{
+                                                                background: '#fff',
+                                                                padding: 0
+                                                            }}
+                                                        >
+                                                            {isPackaged &&
+                                                                <div
+                                                                    style={{
+                                                                        width: 20,
+                                                                        margin: '0 auto'
+                                                                    }}
+                                                                >
+                                                                    <CustomImage
+                                                                        src='/images/icon/check_default_5fcf80.svg'
+                                                                    />
+                                                                </div>
+                                                            }
+                                                        </td>
+                                                    </>
+                                                }
                                             </tr>
                                         </React.Fragment>
                                     )
@@ -499,3 +456,74 @@ const HIGHLIGHT_FIELDS = [
     'productOptionReleaseLocation',
     'optionStockUnit'
 ];
+
+function Td({
+    erpItem,
+    matchedFieldName,
+    isOutOfStock,
+    isPackaged,
+    inventoryStock,
+    erpItemSameReceiverHints,
+
+    onActionOpenEditOptionCodeModal,
+    onActionOpenEditReleaseOptionCodeModal,
+    onActionOpenItemsForSameReceiverModal
+}) {
+    switch (matchedFieldName) {
+        case 'createdAt': case 'salesAt': case 'releaseAt':
+            return (
+                <td>{erpItem[matchedFieldName] ? dateToYYYYMMDDhhmmss(erpItem[matchedFieldName]) : ""}</td>
+            );
+        case 'price': case 'deliveryCharge':
+            return (
+                <td>{erpItem[matchedFieldName] ? numberWithCommas(erpItem[matchedFieldName]) : "0"}</td>
+            );
+        case 'optionCode':
+            return (
+                <td className='td-highlight' onClick={(e) => onActionOpenEditOptionCodeModal(e, erpItem)}>{erpItem[matchedFieldName]}</td>
+            )
+        case 'releaseOptionCode':
+            return (
+                <td className='td-highlight' onClick={(e) => onActionOpenEditReleaseOptionCodeModal(e, erpItem)}>{erpItem[matchedFieldName]}</td>
+            )
+        case 'optionStockUnit':
+            if (isPackaged) {
+                return (
+                    <td style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity500)' : '', color: 'var(--defaultGreenColor)' }}>패키지상품</td>
+                );
+            } else {
+                return (
+                    <td style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity500)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
+                );
+            }
+
+        case 'receiver':
+            let sameReceiverHint = `${erpItem.receiver}${erpItem.receiverContact1}${erpItem.destination}${erpItem.destinationDetail}`;
+            let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
+            return (
+                <td
+                    className={`${matchedFieldName}`}
+                    style={{
+                        color: hasSameReceiver ? 'var(--defaultRedColor)' : ''
+                    }}
+                >
+                    {erpItem[matchedFieldName]}
+                    {hasSameReceiver &&
+                        <button
+                            type='button'
+                            className='view-sameReceiver-button-item'
+                            onClick={(e) => onActionOpenItemsForSameReceiverModal(e, sameReceiverHint)}
+                        >
+                            보기
+                        </button>
+                    }
+                </td>
+            );
+        default:
+            return (
+                <td>
+                    {erpItem[matchedFieldName]}
+                </td>
+            )
+    }
+}

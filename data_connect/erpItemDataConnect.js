@@ -160,6 +160,17 @@ const erpItemDataConnect = () => {
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
+        },
+        uploadWaybillForm: async function (formData) {
+            await csrfDataConnect().getApiCsrf();
+            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/waybill/upload`, formData, {
+                headers: {
+                    "content-types": "multipart/form-data"
+                },
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         }
     }
 }

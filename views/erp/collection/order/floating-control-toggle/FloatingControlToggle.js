@@ -18,13 +18,11 @@ export default function FloatingControlToggle({
     onActionClearSelectedItem,
 
     onSubmitUpdateErpItems,
-    onSubmitFetchSelectedErpItems,
     onSubmitDeleteErpItems,
     onSubmitChangeStatusToSales,
     onSubmitCopyCreateErpItems,
 }) {
     const [controlDrawerOpen, setControlDrawerOpen] = useState(false);
-    const [controlButtonsViewOpen, setControlButtonsViewOpen] = useState(false);
     const [editErpItemsModalOpen, setEditErpItemsModalOpen] = useState(false);
     const [deleteErpItemsConfirmModalOpen, setDeleteErpItemsConfirmModalOpen] = useState(false);
     const [changeStatusToSalesModalOpen, setChangeStatusToSalesModalOpen] = useState(false);
@@ -36,7 +34,6 @@ export default function FloatingControlToggle({
     useEffect(() => {
         return () => {
             setControlDrawerOpen(false);
-            setControlButtonsViewOpen(false);
             setEditErpItemsModalOpen(false);
             setDeleteErpItemsConfirmModalOpen(false);
             setChangeStatusToSalesModalOpen(false);
@@ -90,8 +87,8 @@ export default function FloatingControlToggle({
         handleToggleBackdropOpen(true)
         await onSubmitUpdateErpItems(body, () => {
             handleToggleEditErpItemModalOpen(false);
-            onSubmitFetchSelectedErpItems();
             handleToggleControlDrawerOpen(false);
+            onActionClearAllSelectedItems();
         })
         handleToggleBackdropOpen(false);
     }
@@ -103,6 +100,7 @@ export default function FloatingControlToggle({
         }
         await onSubmitDeleteErpItems(body, () => {
             handleToggleDeleteErpItemsConfirmModalOpen(false);
+            handleToggleControlDrawerOpen(false);
             onActionClearAllSelectedItems();
         })
         handleToggleBackdropOpen(false);
@@ -116,6 +114,7 @@ export default function FloatingControlToggle({
         }
         await onSubmitChangeStatusToSales(body, () => {
             handleToggleChangeStatusToSalesModalOpen(false);
+            handleToggleControlDrawerOpen(false);
             onActionClearAllSelectedItems();
         })
         handleToggleBackdropOpen(false);
@@ -127,7 +126,11 @@ export default function FloatingControlToggle({
             erpItemIds: selectedErpItems?.map(r => r.id)
         }
 
-        await onSubmitCopyCreateErpItems(body, () => { handleToggleCopyCreateErpItemsModalOpen(false); handleToggleControlDrawerOpen(false); })
+        await onSubmitCopyCreateErpItems(body, () => {
+            handleToggleCopyCreateErpItemsModalOpen(false);
+            handleToggleControlDrawerOpen(false);
+            onActionClearAllSelectedItems();
+        })
         handleToggleBackdropOpen(false);
     }
 

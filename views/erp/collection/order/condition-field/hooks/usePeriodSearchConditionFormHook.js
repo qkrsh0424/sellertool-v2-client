@@ -58,6 +58,11 @@ export default function usePeriodSearchConditionFormHook(props) {
         setEndDateTime(getEndDate(value || new Date()));
     }
 
+    const onChangePeriod = (value) => {
+        setStartDateTime(value.startDateTime);
+        setEndDateTime(value.endDateTime);
+    }
+
     return {
         periodSearchYn,
         periodSearchCondition,
@@ -65,6 +70,7 @@ export default function usePeriodSearchConditionFormHook(props) {
         endDateTime,
         onChangePeriodType,
         onChangeStartDateTime,
-        onChangeEndDateTime
+        onChangeEndDateTime,
+        onChangePeriod
     }
 }

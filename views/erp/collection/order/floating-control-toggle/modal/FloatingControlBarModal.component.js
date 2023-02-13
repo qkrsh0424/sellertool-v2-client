@@ -117,20 +117,6 @@ export default function FloatingControlBarModalComponent({
                             >
                                 복사 생성
                             </SingleBlockButton>
-                            {/* <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenEditErpItemsModal()}
-                            >
-                                운송장 등록
-                            </SingleBlockButton>
-                            <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenEditErpItemsModal()}
-                            >
-                                출고리스트
-                            </SingleBlockButton> */}
                         </ContentGroup>
                         {/* <ContentGroup>
                             <div className='title'>재고 관리</div>

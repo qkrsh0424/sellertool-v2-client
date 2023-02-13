@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { dateToYYYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
 import { numberFormatUtils } from "../../../../../../utils/numberFormatUtils";
 import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../../modules/image/CustomImage";
@@ -96,6 +97,16 @@ export default function ViewSelectedModalComponent({
                                     >
                                         해제
                                     </th>
+                                    <th
+                                        className="fixed-header"
+                                        scope="col"
+                                        width={50}
+                                        style={{
+                                            zIndex: '10'
+                                        }}
+                                    >
+                                        패키지
+                                    </th>
                                     {erpCollectionHeader?.erpCollectionHeaderDetails?.map?.((r, index) => {
                                         return (
                                             <ResizableTh
@@ -143,6 +154,7 @@ export default function ViewSelectedModalComponent({
                                 {selectedErpItems?.slice(0, viewSize)?.map((erpItem, index) => {
                                     let inventoryStock = inventoryStocks?.find(r => r.productOptionId === erpItem.productOptionId);
                                     let isOutOfStock = inventoryStock && inventoryStock?.stockUnit <= 0;
+                                    let isPackaged = erpItem.packageYn === 'y' ? true : false;
 
                                     if (index < prevViewSize) {
                                         return (
@@ -184,7 +196,7 @@ export default function ViewSelectedModalComponent({
                                             key={erpItem.id}
                                             style={{
                                                 position: 'relative',
-                                                background: !erpItem.productOptionId ? 'var(--defaultYellowColorOpacity30)' : isOutOfStock ? 'var(--defaultRedColorOpacity30)' : ''
+                                                background: !erpItem.productOptionId ? 'var(--defaultYellowColorOpacity30)' : (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity30)' : ''
                                             }}
                                         >
                                             <td>
@@ -203,32 +215,39 @@ export default function ViewSelectedModalComponent({
                                                     </div>
                                                 </SingleBlockButton>
                                             </td>
+                                            <td>
+                                                <div
+                                                    style={{
+                                                        width: 20,
+                                                        margin: '0 auto'
+                                                    }}
+                                                >
+                                                    {isPackaged &&
+                                                        <CustomImage
+                                                            src='/images/icon/check_default_5fcf80.svg'
+                                                        />
+                                                    }
+                                                </div>
+                                            </td>
                                             {erpCollectionHeader?.erpCollectionHeaderDetails.map((header) => {
                                                 let matchedFieldName = header.matchedFieldName;
 
-                                                if (matchedFieldName === 'unit' || matchedFieldName === 'price' || matchedFieldName === 'deliveryCharge') {
-                                                    return (
-                                                        <td key={matchedFieldName}>
-                                                            <div className='div-item'>{numberFormatUtils.numberWithCommas(erpItem[matchedFieldName])}</div>
-                                                        </td>
-
-                                                    );
-                                                } else if (matchedFieldName === 'optionStockUnit') {
-                                                    return (
-                                                        <td key={`col-${matchedFieldName}`} style={{ background: isOutOfStock ? 'var(--defaultRedColorOpacity30)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
-                                                    )
-                                                } else {
-                                                    return (
-                                                        <td key={matchedFieldName}>
-                                                            <div className='div-item'>{erpItem[matchedFieldName]}</div>
-                                                        </td>
-                                                    );
-                                                }
+                                                return (
+                                                    <Td
+                                                        key={matchedFieldName}
+                                                        erpItem={erpItem}
+                                                        matchedFieldName={matchedFieldName}
+                                                        inventoryStock={inventoryStock}
+                                                        isOutOfStock={isOutOfStock}
+                                                        isPackaged={isPackaged}
+                                                    />
+                                                );
 
                                             })}
                                         </tr>
                                     );
                                 })}
+
                                 <InfiniteScrollObserver
                                     elementTagType={'tr'}
                                     totalSize={selectedErpItems?.length || 0}
@@ -263,4 +282,42 @@ function TipField({ matchedCode }) {
             </div>
         </TipFieldWrapper>
     );
+}
+
+function Td({
+    erpItem,
+    matchedFieldName,
+    inventoryStock,
+    isOutOfStock,
+    isPackaged
+}) {
+
+    switch (matchedFieldName) {
+        case 'unit': case 'price': case 'deliveryCharge':
+            return (
+                <td key={matchedFieldName}>
+                    <div className='div-item'>{numberFormatUtils.numberWithCommas(erpItem[matchedFieldName])}</div>
+                </td>
+            );
+        case 'createdAt': case 'salesAt': case 'releaseAt':
+            return (
+                <td key={`col-${matchedFieldName}`}>{erpItem[matchedFieldName] ? dateToYYYYMMDDhhmmss(erpItem[matchedFieldName]) : ""}</td>
+            )
+        case 'optionStockUnit':
+            if (isPackaged) {
+                return (
+                    <td key={`col-${matchedFieldName}`} style={{ color: 'var(--defaultGreenColor)' }}>패키지상품</td>
+                )
+            } else {
+                return (
+                    <td key={`col-${matchedFieldName}`} style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity30)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
+                )
+            }
+        default:
+            return (
+                <td key={matchedFieldName}>
+                    <div className='div-item'>{erpItem[matchedFieldName]}</div>
+                </td>
+            );
+    }
 }

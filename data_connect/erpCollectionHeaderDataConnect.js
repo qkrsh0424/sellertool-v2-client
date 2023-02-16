@@ -4,6 +4,7 @@ import { csrfDataConnect } from "./csrfDataConnect";
 
 const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress
 
+// UPDATED wsId -> headers
 const erpCollectionHeaderDataConnect = () => {
     return {
         /**
@@ -23,16 +24,13 @@ const erpCollectionHeaderDataConnect = () => {
             })
         },
         /**
-         * 
-         * @param {object} params 
          * @param {object} headers 
          * @param {string} headers.wsId
          * @returns 
          */
-        searchList: async function (params, headers) {
+        searchList: async function (headers) {
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/erp-collection-headers`, {
                 headers: headers,
-                params: params,
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
@@ -47,8 +45,12 @@ const erpCollectionHeaderDataConnect = () => {
          * @returns 
          */
         create: async function (body) {
+            let headers = {
+                wsId: body.workspaceId
+            }
             await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-collection-headers`, body, {
+                headers: headers,
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
@@ -65,8 +67,12 @@ const erpCollectionHeaderDataConnect = () => {
          * @returns 
          */
         update: async function (body) {
+            let headers = {
+                wsId: body.workspaceId
+            }
             await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/erp-collection-headers/${body.id}`, body, {
+                headers: headers,
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
@@ -76,11 +82,17 @@ const erpCollectionHeaderDataConnect = () => {
          * 
          * @param {object} body 
          * @param {string} body.id
+         * @param {string} body.workspaceId
          * @returns 
          */
         delete: async function (body) {
+            let headers = {
+                wsId: body.workspaceId
+            }
+
             await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/erp-collection-headers/${body.id}`, {
+                headers: headers,
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'

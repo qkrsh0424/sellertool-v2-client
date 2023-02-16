@@ -87,7 +87,8 @@ export default function MainComponent(props) {
 
     const handleSubmitDelete = async () => {
         let body = {
-            id: erpCollectionHeader.id
+            id: erpCollectionHeader.id,
+            workspaceId: workspaceRedux?.workspaceInfo?.id
         }
 
         await reqDeleteErpCollectionHeader({

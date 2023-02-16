@@ -15,11 +15,10 @@ export default function useErpCollectionHeadersHook(vhF) {
     }, [vhF, workspaceRedux?.workspaceInfo?.id]);
 
     const reqFetchErpCollectionHeaders = async () => {
-        let params = {}
         let headers = {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
-        await erpCollectionHeaderDataConnect().searchList(params, headers)
+        await erpCollectionHeaderDataConnect().searchList(headers)
             .then(res => {
                 if (res.status === 200) {
                     setErpCollectionHeaders(res.data.data);

@@ -18,7 +18,7 @@ export default function useErpCollectionHeaders(props) {
         let headers = {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
-        await erpCollectionHeaderDataConnect().searchList(null, headers)
+        await erpCollectionHeaderDataConnect().searchList(headers)
             .then(res => {
                 if (res.status === 200) {
                     setErpCollectionHeaders(res.data.data);

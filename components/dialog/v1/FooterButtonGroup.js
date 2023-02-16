@@ -24,11 +24,13 @@ const Container = styled.div`
 export default function FooterButtonGroup({
     isFlex,
     children,
+    style,
     ...props
 }) {
     return (
         <Container
-            style={{ display: isFlex ? 'flex' : '' }}
+            style={{ display: isFlex ? 'flex' : '', ...style }}
+            {...props}
         >
             {children}
         </Container>

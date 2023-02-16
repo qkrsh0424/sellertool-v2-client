@@ -19,11 +19,11 @@ export default function useProductCategoriesHook(props) {
     }, [workspaceRedux?.workspaceInfo?.id]);
 
     const reqFetchProductCategories = async () => {
-        let params = {
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+        let headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await productCategoryDataConnect().searchList(params)
+        await productCategoryDataConnect().searchList(headers)
             .then(res => {
                 if (res.status === 200) {
                     setProductCategories(res.data.data);

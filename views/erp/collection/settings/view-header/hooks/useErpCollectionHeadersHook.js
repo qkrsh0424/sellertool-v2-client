@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { erpCollectionHeaderDataConnect } from "../../../../../../data_connect/erpCollectionHeaderDataConnect";
 
-export default function useErpCollectionHeadersHook(props) {
+export default function useErpCollectionHeadersHook(vhF) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const [erpCollectionHeaders, setErpCollectionHeaders] = useState(null);
 
     useEffect(() => {
-        if (!workspaceRedux?.workspaceInfo?.id) {
+        if (!vhF || vhF === 'fold' || !workspaceRedux?.workspaceInfo?.id || erpCollectionHeaders) {
             return;
         }
 
         reqFetchErpCollectionHeaders();
-    }, [workspaceRedux?.workspaceInfo?.id]);
+    }, [vhF, workspaceRedux?.workspaceInfo?.id]);
 
     const reqFetchErpCollectionHeaders = async () => {
         let params = {}
@@ -31,6 +31,6 @@ export default function useErpCollectionHeadersHook(props) {
     }
 
     return {
-        erpCollectionHeaders
+        erpCollectionHeaders,
     }
 }

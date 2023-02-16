@@ -4,6 +4,7 @@ import Title from "./Title";
 
 import { Dialog } from '@mui/material';
 import styled from 'styled-components';
+import FooterButton from "./FooterButton";
 
 const DialogContainer = styled(Dialog)`
     .MuiPaper-root::-webkit-scrollbar{
@@ -29,12 +30,26 @@ const DialogContainer = styled(Dialog)`
     }
 `;
 
+const Container = styled.div`
+`;
+
+
+/**
+ * 
+ * @param {boolean} open
+ * @param {string} fullWidth
+ * @param {string} maxWidth
+ * @param {function} onClose
+ * @param {string} backdropColor
+ * @returns 
+ */
 function DialogMain({
     open,
     fullWidth,
     maxWidth,
     onClose,
     backdropColor,
+    backgroundColor,
     children,
 }) {
 
@@ -47,7 +62,9 @@ function DialogMain({
                 onClose={typeof (onClose) === 'function' ? () => onClose() : () => { ; }}
                 backdropcolor={backdropColor || '#00000080'}
             >
-                {children}
+                <Container style={{ background: backgroundColor ? backgroundColor : 'var(--defaultBackground)' }}>
+                    {children}
+                </Container>
             </DialogContainer>
         </>
     );
@@ -56,5 +73,6 @@ function DialogMain({
 export const CustomDialog = Object.assign(DialogMain, {
     CloseButton: CloseButton,
     Title: Title,
-    FooterButtonGroup: FooterButtonGroup
+    FooterButtonGroup: FooterButtonGroup,
+    FooterButton: FooterButton
 })

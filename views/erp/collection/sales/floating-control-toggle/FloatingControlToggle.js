@@ -6,6 +6,7 @@ import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalCompo
 import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
 import EditErpItemModalComponent from "./modal/EditErpItemsModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
+import StatusNextModalComponent from "./modal/StatusNextModal.component";
 import ViewSelectedModalComponent from "./modal/ViewSelectedModal.component";
 import { Container } from "./styles/FloatingControlBar.styled";
 
@@ -218,13 +219,11 @@ export default function FloatingControlToggle({
                 }}
             />
 
-
-            <ConfirmModalComponentV2
+            <StatusNextModalComponent
+                selectedErpItems={selectedErpItems}
                 open={changeStatusToReleaseModalOpen}
                 onClose={() => handleToggleChangeStatusToReleaseModalOpen(false)}
                 onConfirm={handleSubmitChangeStatusToRelease}
-                title={'출고전환 확인메세지'}
-                message={'선택된 데이터를 출고전환 합니다.'}
             />
 
             <ConfirmModalComponentV2

@@ -30,11 +30,11 @@ export default function useProductCategoriesHook(props) {
     }, [productCategories, router?.query?.productCategoryId])
 
     const reqFetchProductCategories = async () => {
-        let params = {
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+        let headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await productCategoryDataConnect().searchList(params)
+        await productCategoryDataConnect().searchList(headers)
             .then(res => {
                 if (res.status === 200) {
                     setProductCategories(res.data.data);
@@ -49,6 +49,11 @@ export default function useProductCategoriesHook(props) {
         body,
         successCallback
     }) => {
+        body = {
+            ...body,
+            workspaceId: workspaceRedux?.workspaceInfo?.id
+        }
+
         await productCategoryDataConnect().changeName(body)
             .then(res => {
                 if (res.status === 200) {
@@ -77,6 +82,11 @@ export default function useProductCategoriesHook(props) {
         body,
         successCallback
     }) => {
+        body = {
+            ...body,
+            workspaceId: workspaceRedux?.workspaceInfo?.id
+        }
+        
         await productCategoryDataConnect().delete(body)
             .then(res => {
                 if (res.status === 200) {

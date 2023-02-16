@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { erpcExcelDownloadFormDataConnect } from "../../../../../../data_connect/erpcExcelDownloadFormDataConnect";
 
-export default function useErpcExcelDownloadFormsHook(props) {
+export default function useErpcExcelDownloadFormsHook(edF) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const [erpcExcelDownloadForms, setErpcExcelDownloadForms] = useState(null);
 
     useEffect(() => {
-        if (!workspaceRedux?.workspaceInfo?.id) {
+        if (!edF || edF === 'fold' || !workspaceRedux?.workspaceInfo?.id || erpcExcelDownloadForms) {
             return;
         }
 
         reqFetch();
-    }, [workspaceRedux?.workspaceInfo?.id]);
+    }, [edF, workspaceRedux?.workspaceInfo?.id]);
 
     const reqFetch = async () => {
         let params = {}

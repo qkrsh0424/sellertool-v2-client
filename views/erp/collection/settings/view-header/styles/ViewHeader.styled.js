@@ -18,6 +18,7 @@ export const TitleContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
 
     .title{
         font-size: 18px;
@@ -36,6 +37,27 @@ export const TitleContainer = styled.div`
 
 export const ItemListContainer = styled.div`
     padding: 0 20px;
+    max-height: 400px;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar{
+        background: #e1e1e130;
+        height:7px;
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track{
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb{
+        background-color: #00000020;
+        border-radius: 10px;
+    }
+
+    .isEmpty-notice{
+        padding: 20px 0;
+        font-size: 14px;
+    }
 `;
 
 export const ItemBox = styled.div`

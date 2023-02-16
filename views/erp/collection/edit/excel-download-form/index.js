@@ -125,7 +125,8 @@ export default function MainComponent(props) {
 
     const handleSubmitDelete = async () => {
         let body = {
-            id: erpcExcelDownloadForm?.id
+            id: erpcExcelDownloadForm?.id,
+            workspaceId: workspaceRedux?.workspaceInfo?.id
         }
 
         await reqDeleteErpcExcelDownloadForm(

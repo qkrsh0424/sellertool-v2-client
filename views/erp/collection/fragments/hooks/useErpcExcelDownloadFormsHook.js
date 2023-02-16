@@ -15,11 +15,10 @@ export default function useErpcExcelDownloadFormsHook(props) {
     }, [workspaceRedux?.workspaceInfo?.id]);
 
     const reqFetch = async () => {
-        let params = {}
         let headers = {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
-        await erpcExcelDownloadFormDataConnect().searchList(params, headers)
+        await erpcExcelDownloadFormDataConnect().searchList(headers)
             .then(res => {
                 if (res.status === 200) {
                     setErpcExcelDownloadForms(res.data.data);

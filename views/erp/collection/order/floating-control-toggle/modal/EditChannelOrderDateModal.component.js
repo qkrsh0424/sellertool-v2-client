@@ -4,7 +4,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { CustomDialog } from "../../../../../../components/dialog/v1/CustomDialog";
 import styled from 'styled-components';
-import { dateToYYYYMMDD } from "../../../../../../utils/dateFormatUtils";
+import { dateToUTC, dateToYYYYMMDD } from "../../../../../../utils/dateFormatUtils";
 import { useEffect, useRef, useState } from "react";
 import CustomSelect from "../../../../../../components/select/default/v1/CustomSelect";
 
@@ -82,7 +82,10 @@ export default function EditChannelOrderDateModalComponent({
     }
 
     const handleConfirm = () => {
-        onConfirm(`${parseDateTime?.ymd} ${parseDateTime?.hours}:${parseDateTime?.minutes}:${parseDateTime?.seconds}`)
+        let date = `${parseDateTime?.ymd} ${parseDateTime?.hours}:${parseDateTime?.minutes}:${parseDateTime?.seconds}`;
+        let parsedDate = !isNaN(Date.parse(date)) ? new Date(date) : null;
+
+        onConfirm(parsedDate);
     }
 
     return (

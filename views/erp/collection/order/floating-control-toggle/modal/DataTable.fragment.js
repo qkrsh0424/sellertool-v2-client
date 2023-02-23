@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { dateToYYYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
 import { numberFormatUtils } from "../../../../../../utils/numberFormatUtils";
 import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../../modules/image/CustomImage";
@@ -426,7 +427,7 @@ export default function DataTableFragment({
                                                             className='button-item'
                                                             onClick={() => toggleEditChannelOrderDateModalOpen(true, erpItem.id)}
                                                         >
-                                                            {erpItem[header.name]}
+                                                            {erpItem[header.name] ? dateToYYYYMMDDhhmmss(erpItem[header.name]) : ''}
                                                         </SingleBlockButton>
                                                     </td>
                                                 );

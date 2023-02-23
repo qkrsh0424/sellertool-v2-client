@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { dateToYYYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../modules/image/CustomImage";
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
@@ -129,6 +130,14 @@ function Table({
                                             </button>
                                         </DeleteTd>
                                         {TABLE_HEADERS?.map(header => {
+                                            if (header.fieldName === 'channelOrderDate') {
+                                                return (
+                                                    <td key={header.fieldName}>
+                                                        {dateToYYYYMMDDhhmmss(data[header.fieldName])}
+                                                    </td>
+                                                );
+                                            }
+
                                             return (
                                                 <td key={header.fieldName}>
                                                     {data[header.fieldName]}

@@ -82,7 +82,10 @@ export default function EditChannelOrderDateModalComponent({
     }
 
     const handleConfirm = () => {
-        onConfirm(`${parseDateTime?.ymd} ${parseDateTime?.hours}:${parseDateTime?.minutes}:${parseDateTime?.seconds}`)
+        let date = `${parseDateTime?.ymd} ${parseDateTime?.hours}:${parseDateTime?.minutes}:${parseDateTime?.seconds}`;
+        let parsedDate = !isNaN(Date.parse(date)) ? new Date(date) : null;
+
+        onConfirm(parsedDate);
     }
 
     return (

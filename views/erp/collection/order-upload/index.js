@@ -35,6 +35,13 @@ export default function MainComponent(props) {
         if (datas?.length <= 0) {
             return;
         }
+        datas = datas?.map(r => {
+            return {
+                ...r,
+                channelOrderDate: isNaN(Date.parse(r.channelOrderDate)) ? null : new Date(r.channelOrderDate)
+            }
+        })
+
         handleOpenBackdrop();
 
         await reqSaveUploadDatas(datas);

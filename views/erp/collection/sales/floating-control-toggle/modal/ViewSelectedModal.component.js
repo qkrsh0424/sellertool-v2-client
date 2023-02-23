@@ -299,7 +299,7 @@ function Td({
                     <div className='div-item'>{numberFormatUtils.numberWithCommas(erpItem[matchedFieldName])}</div>
                 </td>
             );
-        case 'createdAt': case 'salesAt': case 'releaseAt':
+        case 'createdAt': case 'salesAt': case 'releaseAt': case 'channelOrderDate':
             return (
                 <td key={`col-${matchedFieldName}`}>{erpItem[matchedFieldName] ? dateToYYYYMMDDhhmmss(erpItem[matchedFieldName]) : ""}</td>
             )

@@ -4,7 +4,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { CustomDialog } from "../../../../../../components/dialog/v1/CustomDialog";
 import styled from 'styled-components';
-import { dateToUTC, dateToYYYYMMDD } from "../../../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD } from "../../../../../../utils/dateFormatUtils";
 import { useEffect, useRef, useState } from "react";
 import CustomSelect from "../../../../../../components/select/default/v1/CustomSelect";
 

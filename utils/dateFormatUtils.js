@@ -60,10 +60,6 @@ function getDiffDate(startDate, endDate) {
     return Math.floor(diffDay) <= 0 ? 1 : Math.floor(diffDay);
 }
 
-function dateToUTC(idate){
-    var date = new Date(idate);
-    return moment(date).format("YYYY-MM-DDTHH:mm:ssZ")
-}
 
 export {
     getStartDate,
@@ -74,6 +70,5 @@ export {
     dateToYYMMDDhhmmss,
     dateToYYYYMMDDhhmmssFile,
     getRemainingDateCount,
-    getDiffDate,
-    dateToUTC
+    getDiffDate
 }

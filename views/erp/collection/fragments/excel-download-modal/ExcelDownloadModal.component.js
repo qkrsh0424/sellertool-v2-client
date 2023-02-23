@@ -470,7 +470,7 @@ function PreviewTableField({
                                                 </td>
                                                 {erpCollectionHeader?.erpCollectionHeaderDetails?.map(r3 => {
                                                     let matchedFieldName = r3.matchedFieldName;
-                                                    if (matchedFieldName === 'createdAt' || matchedFieldName === 'salesAt' || matchedFieldName === 'releaseAt') {
+                                                    if (matchedFieldName === 'createdAt' || matchedFieldName === 'salesAt' || matchedFieldName === 'releaseAt' || matchedFieldName === 'channelOrderDate') {
                                                         return (
                                                             <td key={matchedFieldName}>{r2[matchedFieldName] ? dateToYYYYMMDDhhmmss(r2[matchedFieldName]) : ""}</td>
                                                         )

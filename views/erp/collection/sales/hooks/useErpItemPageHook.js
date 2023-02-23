@@ -201,7 +201,10 @@ export default function useErpItemPageHook(props) {
     }
 
     const reqUpdateErpItems = async (body, successCallback) => {
-        await erpItemDataConnect().updateAll(body)
+        let headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        await erpItemDataConnect().updateAll(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchErpItemPage();

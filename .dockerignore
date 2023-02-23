@@ -1,0 +1,14 @@
+node_modules
+out
+.next
+.serverless
+.serverless_nextjs
+.serverless.yml
+
+.git
+.gitignore
+
+Dockerfile
+.dockerignore
+
+.package-lock.json

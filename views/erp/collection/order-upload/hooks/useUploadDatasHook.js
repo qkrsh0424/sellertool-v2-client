@@ -7,9 +7,11 @@ export default function useUploadDatasHook(props) {
     const [uploadDatas, setUploadDatas] = useState([]);
 
     const reqUploadWithExcel = async (formData, successCallback) => {
-        formData.append('workspaceId', workspaceRedux?.workspaceInfo?.id);
+        let headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
 
-        await erpItemDataConnect().uploadWithExcel(formData)
+        await erpItemDataConnect().uploadWithExcel(formData, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

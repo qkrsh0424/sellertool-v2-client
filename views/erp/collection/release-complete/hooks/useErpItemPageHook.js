@@ -201,7 +201,10 @@ export default function useErpItemPageHook(props) {
     }
 
     const reqUpdateErpItems = async (body, successCallback) => {
-        await erpItemDataConnect().updateAll(body)
+        let headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        await erpItemDataConnect().updateAll(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchErpItemPage();
@@ -382,7 +385,11 @@ export default function useErpItemPageHook(props) {
     }
 
     const reqUploadWaybillForm = async (formData, successCallback) => {
-        await erpItemDataConnect().uploadWaybillForm(formData)
+        let headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await erpItemDataConnect().uploadWaybillForm(formData, headers)
             .then(res => {
                 if (res.status === 200) {
                     alert(res.data.memo);

@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { CardContainer, CardDescription, CardTitle, CardWrapper, CategoryTitle, ContentContainer, ContentWrapper } from "./styles/ServiceList.styled";
-
+const SALES_ANALISIS_CLIENT_ORIGIN = process.env.NODE_ENV == 'development' ? process.env.development.salesAnalisisClientAddress : process.env.production.salesAnalisisClientAddress;
 
 const ServiceListComponent = () => {
+    const workspaceRedux = useSelector(state => state?.workspaceRedux);
     return (
         <>
             <ContentContainer>
@@ -82,7 +84,7 @@ const ServiceListComponent = () => {
                     </CardContainer>
                     <CardContainer>
                         <Link
-                            href={'/n-rank/dashboard'}
+                            href={`${SALES_ANALISIS_CLIENT_ORIGIN}/?workspaceId=${workspaceRedux?.workspaceInfo?.id}`}
                             passHref
                         >
                             <CardWrapper>

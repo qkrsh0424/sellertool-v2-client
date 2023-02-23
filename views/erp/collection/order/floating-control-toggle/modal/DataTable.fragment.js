@@ -7,6 +7,7 @@ import InfiniteScrollObserver from "../../../../../modules/observer/InfiniteScro
 import ReverseScrollObserver from "../../../../../modules/observer/ReverseScrollObserver";
 import ResizableTh from "../../../../../modules/table/ResizableTh";
 import { TableBox, TableWrapper } from "../styles/EditErpItemsModal.styled";
+import EditChannelOrderDateModalComponent from "./EditChannelOrderDateModal.component";
 import EditOptionCodeModalComponent from "./EditOptionCodeModal.component";
 
 const TABLE_DATA_VIEW_SIZE = 40;
@@ -21,6 +22,7 @@ export default function DataTableFragment({
     onChangeReleaseOptionCodeAll,
     onChangeOptionCode,
     onChangeReleaseOptionCode,
+    onChangeChannelOrderDate,
     onSelectClearErpItem
 }) {
     const [prevViewSize, setPrevViewSize] = useState(0);
@@ -29,6 +31,7 @@ export default function DataTableFragment({
     const [editAllReleaseOptionCodeModalOpen, setEditAllReleaseOptionCodeModalOpen] = useState(false);
     const [editOptionCodeModalOpen, setEditOptionCodeModalOpen] = useState(false);
     const [editReleaseOptionCodeModalOpen, setEditReleaseOptionCodeModalOpen] = useState(false);
+    const [editChannelOrderDateModalOpen, setEditChannelOrderDateModalOpen] = useState(false);
     const [targetErpItemId, setTargetErpItemId] = useState(null);
 
     useEffect(() => {
@@ -103,6 +106,15 @@ export default function DataTableFragment({
         setTargetErpItemId(null);
     }
 
+    const toggleEditChannelOrderDateModalOpen = (setOpen, erpItemId) => {
+        if (setOpen) {
+            setTargetErpItemId(erpItemId);
+        } else {
+            setTargetErpItemId(null);
+        }
+        setEditChannelOrderDateModalOpen(setOpen);
+    }
+
     const handleChangeOptionCode = (optionCode) => {
         onChangeOptionCode(targetErpItemId, optionCode);
         handleCloseEditOptionCodeModal();
@@ -111,6 +123,11 @@ export default function DataTableFragment({
     const handleChangeReleaseOptionCode = (optionCode) => {
         onChangeReleaseOptionCode(targetErpItemId, optionCode);
         handleCloseEditReleaseOptionCodeModal();
+    }
+
+    const handleChangeChannelOrderDate = (value) => {
+        onChangeChannelOrderDate(targetErpItemId, value);
+        toggleEditChannelOrderDateModalOpen(false);
     }
 
     return (
@@ -353,9 +370,25 @@ export default function DataTableFragment({
                                                             onChange={(e) => onChangeNumberValueOfName(e, erpItem.id)}
                                                         ></input>
                                                     </td>
-
                                                 );
                                             }
+
+                                            if (header.name === 'channelOrderDate') {
+                                                return (
+                                                    <td
+                                                        key={header.name}
+                                                    >
+                                                        <SingleBlockButton
+                                                            type='button'
+                                                            className='button-item'
+                                                            onClick={() => toggleEditChannelOrderDateModalOpen(true, erpItem.id)}
+                                                        >
+                                                            {erpItem[header.name]}
+                                                        </SingleBlockButton>
+                                                    </td>
+                                                );
+                                            }
+
                                             return (
                                                 <td key={header.name}>
                                                     <input
@@ -440,6 +473,14 @@ export default function DataTableFragment({
                         onConfirm={handleChangeReleaseOptionCode}
                     />
                 </CommonModalComponent>
+            }
+
+            {editChannelOrderDateModalOpen &&
+                <EditChannelOrderDateModalComponent
+                    open={editChannelOrderDateModalOpen}
+                    onClose={() => toggleEditChannelOrderDateModalOpen(false)}
+                    onConfirm={(value) => handleChangeChannelOrderDate(value)}
+                />
             }
         </>
     );

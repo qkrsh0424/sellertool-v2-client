@@ -21,6 +21,13 @@ const ORDER_INFO_HEADERS = [
         valueType: 'optionCode'
     },
     {
+        name: 'channelOrderDate',
+        headerName: '판매채널 주문일시',
+        required: true,
+        defaultWidth: 180,
+        valueType: 'date'
+    },
+    {
         name: 'prodName',
         headerName: '상품명',
         required: true,

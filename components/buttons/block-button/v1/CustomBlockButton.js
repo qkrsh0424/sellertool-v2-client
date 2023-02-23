@@ -23,7 +23,7 @@ const Button = styled.button`
 
     &:hover{
         color:${props => props.hoverColor && props.hoverColor};
-        background:${props => props.hoverBackground && hoverBackground};
+        background:${props => props.hoverBackground && props.hoverBackground};
     }
 
     &:disabled{

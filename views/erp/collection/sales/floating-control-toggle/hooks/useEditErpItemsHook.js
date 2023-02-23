@@ -115,6 +115,30 @@ export default function useEditErpItemsHook(selectedErpItems) {
         }))
     }
 
+    const onChangeChannelOrderDate = (erpItemId, channelOrderDate) => {
+        setEditErpItems(editErpItems?.map(r => {
+            if (r.id === erpItemId) {
+                return {
+                    ...r,
+                    channelOrderDate: channelOrderDate
+                }
+            }
+
+            return {
+                ...r
+            }
+        }))
+    }
+
+    const onChangeChannelOrderDateAll = (channelOrderDate) => {
+        setEditErpItems(editErpItems?.map(r => {
+            return {
+                ...r,
+                channelOrderDate: channelOrderDate
+            }
+        }))
+    }
+
     const getSubmitForm = () => {
         return editErpItems.map(r => {
             return {
@@ -272,6 +296,8 @@ export default function useEditErpItemsHook(selectedErpItems) {
         onChangeReleaseOptionCodeAll,
         onChangeOptionCode,
         onChangeReleaseOptionCode,
+        onChangeChannelOrderDate,
+        onChangeChannelOrderDateAll,
         getSubmitForm,
         checkSubmitFormatValid
     }

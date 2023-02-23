@@ -23,6 +23,7 @@ export default function DataTableFragment({
     onChangeOptionCode,
     onChangeReleaseOptionCode,
     onChangeChannelOrderDate,
+    onChangeChannelOrderDateAll,
     onSelectClearErpItem
 }) {
     const [prevViewSize, setPrevViewSize] = useState(0);
@@ -32,6 +33,7 @@ export default function DataTableFragment({
     const [editOptionCodeModalOpen, setEditOptionCodeModalOpen] = useState(false);
     const [editReleaseOptionCodeModalOpen, setEditReleaseOptionCodeModalOpen] = useState(false);
     const [editChannelOrderDateModalOpen, setEditChannelOrderDateModalOpen] = useState(false);
+    const [editAllChannelOrderDateModalOpen, setEditAllChannelOrderDateModalOpen] = useState(false);
     const [targetErpItemId, setTargetErpItemId] = useState(null);
 
     useEffect(() => {
@@ -115,6 +117,10 @@ export default function DataTableFragment({
         setEditChannelOrderDateModalOpen(setOpen);
     }
 
+    const toggleEditAllChannelOrderDateModalOpen = (setOpen) => {
+        setEditAllChannelOrderDateModalOpen(setOpen);
+    }
+
     const handleChangeOptionCode = (optionCode) => {
         onChangeOptionCode(targetErpItemId, optionCode);
         handleCloseEditOptionCodeModal();
@@ -128,6 +134,11 @@ export default function DataTableFragment({
     const handleChangeChannelOrderDate = (value) => {
         onChangeChannelOrderDate(targetErpItemId, value);
         toggleEditChannelOrderDateModalOpen(false);
+    }
+
+    const handleChangeChannelOrderDateAll = (value) => {
+        onChangeChannelOrderDateAll(value);
+        toggleEditAllChannelOrderDateModalOpen(false);
     }
 
     return (
@@ -212,6 +223,38 @@ export default function DataTableFragment({
                                                         type='button'
                                                         className='control-button-item'
                                                         onClick={() => handleOpenEditAllReleaseOptionCodeModal()}
+                                                    >
+                                                        <div className='icon-figure'>
+                                                            <CustomImage
+                                                                src={'/images/icon/edit_note_808080.svg'}
+                                                            />
+                                                        </div>
+                                                    </SingleBlockButton>
+                                                </div>
+                                            </ResizableTh>
+                                        )
+                                    }
+
+                                    if (r.name === 'channelOrderDate') {
+                                        return (
+                                            <ResizableTh
+                                                key={r.name}
+                                                className="fixed-header"
+                                                scope="col"
+                                                width={r.defaultWidth}
+                                                style={{
+                                                    zIndex: '10'
+                                                }}
+                                            >
+                                                <div className='mgl-flex mgl-flex-justifyContent-center mgl-flex-alignItems-center'>
+                                                    {r.required &&
+                                                        <span className='required-tag'></span>
+                                                    }
+                                                    {r.headerName}
+                                                    <SingleBlockButton
+                                                        type='button'
+                                                        className='control-button-item'
+                                                        onClick={() => toggleEditAllChannelOrderDateModalOpen(true)}
                                                     >
                                                         <div className='icon-figure'>
                                                             <CustomImage
@@ -478,8 +521,18 @@ export default function DataTableFragment({
             {editChannelOrderDateModalOpen &&
                 <EditChannelOrderDateModalComponent
                     open={editChannelOrderDateModalOpen}
+                    channelOrderDate={editErpItems.find(r => r.id === targetErpItemId)?.channelOrderDate}
                     onClose={() => toggleEditChannelOrderDateModalOpen(false)}
                     onConfirm={(value) => handleChangeChannelOrderDate(value)}
+                />
+            }
+
+            {editAllChannelOrderDateModalOpen &&
+                <EditChannelOrderDateModalComponent
+                    open={editAllChannelOrderDateModalOpen}
+                    channelOrderDate={new Date()}
+                    onClose={() => toggleEditAllChannelOrderDateModalOpen(false)}
+                    onConfirm={(value) => handleChangeChannelOrderDateAll(value)}
                 />
             }
         </>

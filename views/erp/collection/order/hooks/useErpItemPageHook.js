@@ -204,6 +204,7 @@ export default function useErpItemPageHook(props) {
         let headers = {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
+        
         await erpItemDataConnect().updateAll(body, headers)
             .then(res => {
                 if (res.status === 200) {

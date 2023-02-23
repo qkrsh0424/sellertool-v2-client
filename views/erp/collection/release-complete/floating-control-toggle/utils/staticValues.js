@@ -21,6 +21,13 @@ const ORDER_INFO_HEADERS = [
         valueType: 'optionCode'
     },
     {
+        name: 'channelOrderDate',
+        headerName: '판매채널 주문일시',
+        required: true,
+        defaultWidth: 180,
+        valueType: 'date'
+    },
+    {
         name: 'prodName',
         headerName: '상품명',
         required: true,
@@ -246,9 +253,9 @@ const MANAGEMENT_MEMO_HEADERS = [
 ]
 
 const staticValues = {
-    ORDER_INFO_HEADERS:ORDER_INFO_HEADERS,
-    RECEIEVR_INFO_HEADERS:RECEIEVR_INFO_HEADERS,
-    MANAGEMENT_MEMO_HEADERS:MANAGEMENT_MEMO_HEADERS
+    ORDER_INFO_HEADERS: ORDER_INFO_HEADERS,
+    RECEIEVR_INFO_HEADERS: RECEIEVR_INFO_HEADERS,
+    MANAGEMENT_MEMO_HEADERS: MANAGEMENT_MEMO_HEADERS
 }
 
 export default staticValues;

@@ -7,6 +7,7 @@ import InfiniteScrollObserver from "../../../../../modules/observer/InfiniteScro
 import ReverseScrollObserver from "../../../../../modules/observer/ReverseScrollObserver";
 import ResizableTh from "../../../../../modules/table/ResizableTh";
 import { TableBox, TableWrapper } from "../styles/EditErpItemsModal.styled";
+import EditChannelOrderDateModalComponent from "./EditChannelOrderDateModal.component";
 import EditOptionCodeModalComponent from "./EditOptionCodeModal.component";
 
 const TABLE_DATA_VIEW_SIZE = 40;
@@ -21,6 +22,8 @@ export default function DataTableFragment({
     onChangeReleaseOptionCodeAll,
     onChangeOptionCode,
     onChangeReleaseOptionCode,
+    onChangeChannelOrderDate,
+    onChangeChannelOrderDateAll,
     onSelectClearErpItem
 }) {
     const [prevViewSize, setPrevViewSize] = useState(0);
@@ -29,6 +32,8 @@ export default function DataTableFragment({
     const [editAllReleaseOptionCodeModalOpen, setEditAllReleaseOptionCodeModalOpen] = useState(false);
     const [editOptionCodeModalOpen, setEditOptionCodeModalOpen] = useState(false);
     const [editReleaseOptionCodeModalOpen, setEditReleaseOptionCodeModalOpen] = useState(false);
+    const [editChannelOrderDateModalOpen, setEditChannelOrderDateModalOpen] = useState(false);
+    const [editAllChannelOrderDateModalOpen, setEditAllChannelOrderDateModalOpen] = useState(false);
     const [targetErpItemId, setTargetErpItemId] = useState(null);
 
     useEffect(() => {
@@ -85,6 +90,19 @@ export default function DataTableFragment({
         setEditAllReleaseOptionCodeModalOpen(false);
     }
 
+    const toggleEditChannelOrderDateModalOpen = (setOpen, erpItemId) => {
+        if (setOpen) {
+            setTargetErpItemId(erpItemId);
+        } else {
+            setTargetErpItemId(null);
+        }
+        setEditChannelOrderDateModalOpen(setOpen);
+    }
+
+    const toggleEditAllChannelOrderDateModalOpen = (setOpen) => {
+        setEditAllChannelOrderDateModalOpen(setOpen);
+    }
+
     const handleChangeOptionCodeAll = (optionCode) => {
         onChangeOptionCodeAll(optionCode);
         handleCloseEditAllOptionCodeModal();
@@ -138,6 +156,16 @@ export default function DataTableFragment({
     const handleChangeReleaseOptionCode = (optionCode) => {
         onChangeReleaseOptionCode(targetErpItemId, optionCode);
         handleCloseEditReleaseOptionCodeModal();
+    }
+
+    const handleChangeChannelOrderDate = (value) => {
+        onChangeChannelOrderDate(targetErpItemId, value);
+        toggleEditChannelOrderDateModalOpen(false);
+    }
+
+    const handleChangeChannelOrderDateAll = (value) => {
+        onChangeChannelOrderDateAll(value);
+        toggleEditAllChannelOrderDateModalOpen(false);
     }
 
     return (
@@ -222,6 +250,38 @@ export default function DataTableFragment({
                                                         type='button'
                                                         className='control-button-item'
                                                         onClick={() => handleOpenEditAllReleaseOptionCodeModal()}
+                                                    >
+                                                        <div className='icon-figure'>
+                                                            <CustomImage
+                                                                src={'/images/icon/edit_note_808080.svg'}
+                                                            />
+                                                        </div>
+                                                    </SingleBlockButton>
+                                                </div>
+                                            </ResizableTh>
+                                        )
+                                    }
+
+                                    if (r.name === 'channelOrderDate') {
+                                        return (
+                                            <ResizableTh
+                                                key={r.name}
+                                                className="fixed-header"
+                                                scope="col"
+                                                width={r.defaultWidth}
+                                                style={{
+                                                    zIndex: '10'
+                                                }}
+                                            >
+                                                <div className='mgl-flex mgl-flex-justifyContent-center mgl-flex-alignItems-center'>
+                                                    {r.required &&
+                                                        <span className='required-tag'></span>
+                                                    }
+                                                    {r.headerName}
+                                                    <SingleBlockButton
+                                                        type='button'
+                                                        className='control-button-item'
+                                                        onClick={() => toggleEditAllChannelOrderDateModalOpen(true)}
                                                     >
                                                         <div className='icon-figure'>
                                                             <CustomImage
@@ -399,6 +459,23 @@ export default function DataTableFragment({
 
                                                 );
                                             }
+
+                                            if (header.name === 'channelOrderDate') {
+                                                return (
+                                                    <td
+                                                        key={header.name}
+                                                    >
+                                                        <SingleBlockButton
+                                                            type='button'
+                                                            className='button-item'
+                                                            onClick={() => toggleEditChannelOrderDateModalOpen(true, erpItem.id)}
+                                                        >
+                                                            {erpItem[header.name]}
+                                                        </SingleBlockButton>
+                                                    </td>
+                                                );
+                                            }
+
                                             return (
                                                 <td key={header.name}>
                                                     <input
@@ -483,6 +560,24 @@ export default function DataTableFragment({
                         onConfirm={handleChangeReleaseOptionCode}
                     />
                 </CommonModalComponent>
+            }
+
+            {editChannelOrderDateModalOpen &&
+                <EditChannelOrderDateModalComponent
+                    open={editChannelOrderDateModalOpen}
+                    channelOrderDate={editErpItems.find(r => r.id === targetErpItemId)?.channelOrderDate}
+                    onClose={() => toggleEditChannelOrderDateModalOpen(false)}
+                    onConfirm={(value) => handleChangeChannelOrderDate(value)}
+                />
+            }
+
+            {editAllChannelOrderDateModalOpen &&
+                <EditChannelOrderDateModalComponent
+                    open={editAllChannelOrderDateModalOpen}
+                    channelOrderDate={new Date()}
+                    onClose={() => toggleEditAllChannelOrderDateModalOpen(false)}
+                    onConfirm={(value) => handleChangeChannelOrderDateAll(value)}
+                />
             }
         </>
     );

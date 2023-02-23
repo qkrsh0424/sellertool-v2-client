@@ -130,6 +130,15 @@ export default function useEditErpItemsHook(selectedErpItems) {
         }))
     }
 
+    const onChangeChannelOrderDateAll = (channelOrderDate) => {
+        setEditErpItems(editErpItems?.map(r => {
+            return {
+                ...r,
+                channelOrderDate: channelOrderDate
+            }
+        }))
+    }
+
     const getSubmitForm = () => {
         return editErpItems.map(r => {
             return {
@@ -288,6 +297,7 @@ export default function useEditErpItemsHook(selectedErpItems) {
         onChangeOptionCode,
         onChangeReleaseOptionCode,
         onChangeChannelOrderDate,
+        onChangeChannelOrderDateAll,
         getSubmitForm,
         checkSubmitFormatValid
     }

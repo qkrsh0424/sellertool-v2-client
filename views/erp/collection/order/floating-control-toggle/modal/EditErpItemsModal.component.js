@@ -24,6 +24,7 @@ export default function EditErpItemModalComponent({
         onChangeOptionCode,
         onChangeReleaseOptionCode,
         onChangeChannelOrderDate,
+        onChangeChannelOrderDateAll,
         getSubmitForm,
         checkSubmitFormatValid
     } = useEditErpItemsHook(selectedErpItems);
@@ -98,6 +99,7 @@ export default function EditErpItemModalComponent({
                         onChangeOptionCode={onChangeOptionCode}
                         onChangeReleaseOptionCode={onChangeReleaseOptionCode}
                         onChangeChannelOrderDate={onChangeChannelOrderDate}
+                        onChangeChannelOrderDateAll={onChangeChannelOrderDateAll}
                         onSelectClearErpItem={onSelectClearErpItem}
                     />
 

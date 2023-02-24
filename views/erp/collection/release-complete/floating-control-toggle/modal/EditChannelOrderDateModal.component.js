@@ -151,7 +151,7 @@ export default function EditChannelOrderDateModalComponent({
                 </HmsWrapper>
             </ContentContainer>
             <CustomDialog.FooterButtonGroup isFlex>
-                <CustomDialog.FooterButton backgroundColor={'var(--defaultModalCloseColor)'} fontColor={'#fff'} width={'40%'}>취소</CustomDialog.FooterButton>
+                <CustomDialog.FooterButton backgroundColor={'var(--defaultModalCloseColor)'} fontColor={'#fff'} width={'40%'} onClick={() => onClose()}>취소</CustomDialog.FooterButton>
                 <CustomDialog.FooterButton backgroundColor={'var(--mainColor)'} fontColor={'#fff'} flex={1} onClick={() => handleConfirm()}>적용</CustomDialog.FooterButton>
             </CustomDialog.FooterButtonGroup>
         </CustomDialog>

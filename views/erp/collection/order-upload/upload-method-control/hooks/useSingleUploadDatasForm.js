@@ -41,6 +41,29 @@ export default function useSingleUploadDatasForm(props) {
         }))
     }
 
+    const onChangeChannelOrderDate = (value, reqIndex) => {
+
+        setSingleUploadDatasForm(singleUploadDatasForm?.map((r, index) => {
+            if (reqIndex === index) {
+                return {
+                    ...r,
+                    channelOrderDate: value
+                }
+            } else {
+                return { ...r }
+            }
+        }))
+    }
+
+    const onChangeChannelOrderDateAll = (value) => {
+        setSingleUploadDatasForm(singleUploadDatasForm?.map((r, index) => {
+            return {
+                ...r,
+                channelOrderDate: value
+            }
+        }))
+    }
+
     const onChangeNumberValueOfName = (e, reqIndex) => {
         let name = e.target.name;
         let value = e.target.value;
@@ -94,6 +117,8 @@ export default function useSingleUploadDatasForm(props) {
         onDeleteSingleUploadData,
         onCopySingleUploadData,
         onChangeOptionValueOfName,
+        onChangeChannelOrderDate,
+        onChangeChannelOrderDateAll,
         onChangeNumberValueOfName,
         checkSubmitFormatValid,
     }

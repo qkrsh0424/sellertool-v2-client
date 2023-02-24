@@ -11,19 +11,38 @@ function getRemainingDateCount(closingDate) {
 }
 
 function getStartDate(date) {
+    // Prev version
+    // let cdate = new Date(date);
+    // cdate.setHours(0);
+    // cdate.setMinutes(1);
+    // cdate.setSeconds(0);
+    // cdate.setMilliseconds(0);
+    // return cdate;
+
+    // New version
     let cdate = new Date(date);
     cdate.setHours(0);
-    cdate.setMinutes(1);
+    cdate.setMinutes(0);
     cdate.setSeconds(0);
     cdate.setMilliseconds(0);
     return cdate;
 }
 
+// TODO
 function getEndDate(date) {
+    // Prev version
+    // let cdate = new Date(date);
+    // cdate.setHours(23);
+    // cdate.setMinutes(58);
+    // cdate.setSeconds(59);
+    // cdate.setMilliseconds(0);
+    // return cdate
+
+    // New version
     let cdate = new Date(date);
-    cdate.setHours(23);
-    cdate.setMinutes(58);
-    cdate.setSeconds(59);
+    cdate.setHours(0);
+    cdate.setMinutes(0);
+    cdate.setSeconds(0);
     cdate.setMilliseconds(0);
     return cdate
 }

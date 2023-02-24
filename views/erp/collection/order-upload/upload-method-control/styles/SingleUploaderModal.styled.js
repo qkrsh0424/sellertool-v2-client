@@ -161,6 +161,20 @@ export const TableBox = styled.div`
         white-space:nowrap;
         font-size: 12px;
         
+        .control-button-item{
+            width:20px;
+            height: 20px;
+            margin:0;
+            padding:0;
+            margin-left: 3px;
+            background: none;
+            border-radius: 50%;
+            border: none;
+            .icon-figure{
+                width:80%;
+                height: 80%;
+            }
+        }
     }
 
     table tbody tr{
@@ -211,6 +225,26 @@ export const TableBox = styled.div`
                 background: var(--defaultBlueColorOpacity100);
                 cursor: text;
             }
+        }
+
+        .button-item{
+            margin:0;
+            background: none;
+            text-align: center;
+            padding: 0 10px;
+            box-sizing: border-box;
+            width: 100%;
+            height: 44px;
+            border: none;
+            outline:none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 12px;
+
+            word-break: keep-all;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
         }
     }
 

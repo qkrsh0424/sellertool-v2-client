@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { dateToYYYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
 import { numberFormatUtils } from "../../../../../../utils/numberFormatUtils";
 import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
@@ -6,6 +6,7 @@ import CustomImage from "../../../../../modules/image/CustomImage";
 import ResizableTh from "../../../../../modules/table/ResizableTh";
 import useSingleUploadDatasForm from "../hooks/useSingleUploadDatasForm";
 import { AddButtonBox, Container, CountBox, ControlTd, SubmitButtonContainer, TableBox, TableWrapper } from "../styles/SingleUploaderModal.styled";
+import EditChannelOrderDateModalComponent from "./EditChannelOrderDateModal.component";
 
 export default function SingleUploaderModalComponent({
     onClose,
@@ -17,9 +18,15 @@ export default function SingleUploaderModalComponent({
         onDeleteSingleUploadData,
         onCopySingleUploadData,
         onChangeOptionValueOfName,
+        onChangeChannelOrderDate,
+        onChangeChannelOrderDateAll,
         onChangeNumberValueOfName,
         checkSubmitFormatValid
     } = useSingleUploadDatasForm();
+
+    const [targetIndex, setTargetIndex] = useState(null);
+    const [editChannelOrderDateModalOpen, setEditChannelOrderDateModalOpen] = useState(false);
+    const [editAllChannelOrderDateModalOpen, setEditAllChannelOrderDateModalOpen] = useState(false);
 
     useEffect(() => {
         onAddSingleUploadData(getInitialSingleUploadData());
@@ -43,6 +50,29 @@ export default function SingleUploaderModalComponent({
         }
         onConfirm(singleUploadDatasForm);
         onClose();
+    }
+
+    const toggleEditChannelOrderDateModalOpen = (setOpen, idx) => {
+        if (setOpen) {
+            setTargetIndex(idx);
+        } else {
+            setTargetIndex(null);
+        }
+        setEditChannelOrderDateModalOpen(setOpen);
+    }
+
+    const toggleEditAllChannelOrderDateModalOpen = (setOpen) => {
+        setEditAllChannelOrderDateModalOpen(setOpen);
+    }
+
+    const handleChangeChannelOrderDate = (value) => {
+        onChangeChannelOrderDate(value, targetIndex);
+        toggleEditChannelOrderDateModalOpen(false);
+    }
+
+    const handleChangeChannelOrderDateAll = (value) => {
+        onChangeChannelOrderDateAll(value);
+        toggleEditAllChannelOrderDateModalOpen(false);
     }
 
     return (
@@ -89,6 +119,8 @@ export default function SingleUploaderModalComponent({
                         onActionCopyUploadData={onCopySingleUploadData}
                         onChangeOptionValueOfName={onChangeOptionValueOfName}
                         onChangeNumberValueOfName={onChangeNumberValueOfName}
+                        toggleEditChannelOrderDateModalOpen={toggleEditChannelOrderDateModalOpen}
+                        toggleEditAllChannelOrderDateModalOpen={toggleEditAllChannelOrderDateModalOpen}
                     />
                     <SubmitButtonContainer>
                         <SingleBlockButton
@@ -115,6 +147,24 @@ export default function SingleUploaderModalComponent({
                     </SubmitButtonContainer>
                 </form>
             </Container>
+
+            {editChannelOrderDateModalOpen &&
+                <EditChannelOrderDateModalComponent
+                    open={editChannelOrderDateModalOpen}
+                    channelOrderDate={singleUploadDatasForm[targetIndex]?.channelOrderDate}
+                    onClose={() => toggleEditChannelOrderDateModalOpen(false)}
+                    onConfirm={(value) => handleChangeChannelOrderDate(value)}
+                />
+            }
+
+            {editAllChannelOrderDateModalOpen &&
+                <EditChannelOrderDateModalComponent
+                    open={editAllChannelOrderDateModalOpen}
+                    channelOrderDate={null}
+                    onClose={() => toggleEditAllChannelOrderDateModalOpen(false)}
+                    onConfirm={(value) => handleChangeChannelOrderDateAll(value)}
+                />
+            }
         </>
     );
 }
@@ -124,7 +174,9 @@ function Table({
     onActionDeleteUploadData,
     onActionCopyUploadData,
     onChangeOptionValueOfName,
-    onChangeNumberValueOfName
+    onChangeNumberValueOfName,
+    toggleEditChannelOrderDateModalOpen,
+    toggleEditAllChannelOrderDateModalOpen
 }) {
     return (
         <TableWrapper>
@@ -132,7 +184,9 @@ function Table({
                 <table
                     cellSpacing={0}
                 >
-                    <TableHead />
+                    <TableHead
+                        toggleEditAllChannelOrderDateModalOpen={toggleEditAllChannelOrderDateModalOpen}
+                    />
                     <tbody>
                         {uploadDatas?.map((data, index) => {
                             return (
@@ -182,6 +236,22 @@ function Table({
                                             );
                                         }
 
+                                        if (header.fieldName === 'channelOrderDate') {
+                                            return (
+                                                <td
+                                                    key={header.fieldName}
+                                                >
+                                                    <SingleBlockButton
+                                                        type='button'
+                                                        className='button-item'
+                                                        onClick={() => toggleEditChannelOrderDateModalOpen(true, index)}
+                                                    >
+                                                        {data[header.fieldName] ? dateToYYYYMMDDhhmmss(data[header.fieldName]) : ''}
+                                                    </SingleBlockButton>
+                                                </td>
+                                            );
+                                        }
+
                                         return (
                                             <td
                                                 key={header.fieldName}
@@ -207,7 +277,9 @@ function Table({
     );
 }
 
-function TableHead(props) {
+function TableHead({
+    toggleEditAllChannelOrderDateModalOpen
+}) {
     return (
         <thead>
             <tr>
@@ -242,6 +314,38 @@ function TableHead(props) {
                     복사
                 </th>
                 {HEADERS?.map((r, index) => {
+                    if (r.fieldName === 'channelOrderDate') {
+                        return (
+                            <ResizableTh
+                                key={index}
+                                className="fixed-header"
+                                scope="col"
+                                width={r.defaultWidth}
+                                style={{
+                                    zIndex: '10',
+                                    color: r.requiredFlag ? 'var(--defaultRedColor)' : ''
+                                }}
+                            >
+                                <div className='mgl-flex mgl-flex-justifyContent-center mgl-flex-alignItems-center'>
+                                    {r.required &&
+                                        <span className='required-tag'></span>
+                                    }
+                                    {r.headerName}
+                                    <SingleBlockButton
+                                        type='button'
+                                        className='control-button-item'
+                                        onClick={() => toggleEditAllChannelOrderDateModalOpen(true)}
+                                    >
+                                        <div className='icon-figure'>
+                                            <CustomImage
+                                                src={'/images/icon/edit_note_808080.svg'}
+                                            />
+                                        </div>
+                                    </SingleBlockButton>
+                                </div>
+                            </ResizableTh>
+                        )
+                    }
                     return (
                         <ResizableTh
                             key={index}

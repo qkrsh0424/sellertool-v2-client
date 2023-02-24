@@ -25,7 +25,6 @@ export default function useRegisteredStocksHook(props) {
             endDateTime: getEndDate(endDateTime || new Date())
         }
 
-        console.log(body);
         await inventoryDataConnect().searchRegisteredStocks(body)
             .then(res => {
                 if (res.status === 200) {

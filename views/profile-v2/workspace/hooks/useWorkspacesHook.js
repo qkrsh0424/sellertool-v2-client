@@ -16,8 +16,7 @@ export default function useWorkspacesHook(props) {
                 }
             })
             .catch(err => {
-                let res = err.response;
-                console.log(res);
+                console.log(err, err.response);
             })
     }
 

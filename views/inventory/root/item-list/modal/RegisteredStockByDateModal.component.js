@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { dateToYYMMDDhhmmss, getEndDate, getStartDate } from "../../../../../utils/dateFormatUtils";
+import { dateToYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../modules/image/CustomImage";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
@@ -24,15 +24,15 @@ export default function RegisteredStockByDateModalComponent({
         reqChangeInventoryReleaseMemo
     } = useRegisteredStocksHook();
 
-    const [startDateTime, setStartDateTime] = useState(getStartDate(new Date()));
-    const [endDateTime, setEndDateTime] = useState(getEndDate(new Date()));
+    const [startDateTime, setStartDateTime] = useState(new Date());
+    const [endDateTime, setEndDateTime] = useState(new Date());
     const [editMemoModalOpen, setEditMemoModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
 
 
     const handleChangeDateTime = (value) => {
-        setStartDateTime(getStartDate(value || new Date()));
-        setEndDateTime(getEndDate(value || new Date()));
+        setStartDateTime(new Date(value));
+        setEndDateTime(new Date(value));
     }
 
     const handleSubmitSearch = () => {

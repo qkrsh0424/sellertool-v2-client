@@ -1,13 +1,12 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getEndDate, getStartDate } from "../../../../../../utils/dateFormatUtils";
 
 export default function usePeriodSearchConditionFormHook(props) {
     const router = useRouter();
     const [periodSearchYn, setPeriodSearchYn] = useState('n');
     const [periodSearchCondition, setPeriodSearchCondition] = useState('');
-    const [startDateTime, setStartDateTime] = useState(getStartDate(new Date()));
-    const [endDateTime, setEndDateTime] = useState(getEndDate(new Date()));
+    const [startDateTime, setStartDateTime] = useState(new Date());
+    const [endDateTime, setEndDateTime] = useState(new Date());
 
     useEffect(() => {
         if (!router?.query?.periodSearchCondition) {
@@ -20,20 +19,18 @@ export default function usePeriodSearchConditionFormHook(props) {
 
     useEffect(() => {
         if (!router?.query?.startDateTime) {
-            setStartDateTime(getStartDate(new Date()));
             return;
         }
 
-        setStartDateTime(getStartDate(router?.query?.startDateTime));
+        setStartDateTime(new Date(router?.query?.startDateTime));
     }, [router?.query?.startDateTime]);
 
     useEffect(() => {
         if (!router?.query?.endDateTime) {
-            setEndDateTime(getEndDate(new Date()));
             return;
         }
 
-        setEndDateTime(getEndDate(router?.query?.endDateTime));
+        setEndDateTime(new Date(router?.query?.endDateTime));
     }, [router?.query?.endDateTime])
 
     useEffect(() => {
@@ -51,13 +48,13 @@ export default function usePeriodSearchConditionFormHook(props) {
     }
 
     const onChangeStartDateTime = (value) => {
-        setStartDateTime(getStartDate(value || new Date()));
+        setStartDateTime(new Date(value));
     }
 
     const onChangeEndDateTime = (value) => {
-        setEndDateTime(getEndDate(value || new Date()));
+        setEndDateTime(new Date(value));
     }
-    
+
     const onChangePeriod = (value) => {
         setStartDateTime(value.startDateTime);
         setEndDateTime(value.endDateTime);

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { getEndDate, getStartDate } from '../../../../utils/dateFormatUtils';
 import CustomBlockButton from '../../block-button/v1/CustomBlockButton';
 
 const ButtonItem = styled(CustomBlockButton)`
@@ -22,8 +21,8 @@ export default function Days90Button({
         let DATE = currDateTime.getDate();
 
         let result = {
-            startDateTime: getStartDate(new Date(YEAR, MONTH, DATE - 89)),
-            endDateTime: getEndDate(currDateTime)
+            startDateTime: new Date(YEAR, MONTH, DATE - 89),
+            endDateTime: currDateTime
         }
         callback(result);
     }

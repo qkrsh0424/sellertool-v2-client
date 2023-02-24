@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { getEndDate, getStartDate } from '../../../../utils/dateFormatUtils';
 import CustomBlockButton from '../../block-button/v1/CustomBlockButton';
 
 const ButtonItem = styled(CustomBlockButton)`
@@ -19,8 +18,8 @@ export default function TodayButton({
         let currDateTime = new Date();
 
         let result = {
-            startDateTime: getStartDate(currDateTime),
-            endDateTime: getEndDate(currDateTime)
+            startDateTime: currDateTime,
+            endDateTime: currDateTime
         }
         callback(result);
     }

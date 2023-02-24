@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { getEndDate, getStartDate } from '../../../../utils/dateFormatUtils';
 import CustomBlockButton from '../../block-button/v1/CustomBlockButton';
 
 const ButtonItem = styled(CustomBlockButton)`
@@ -19,11 +18,10 @@ export default function LastMonthButton({
         let currDateTime = new Date();
         let YEAR = currDateTime.getFullYear();
         let MONTH = currDateTime.getMonth();
-        let DATE = currDateTime.getDate();
 
         let result = {
-            startDateTime: getStartDate(new Date(YEAR, MONTH - 1, 1)),
-            endDateTime: getEndDate(new Date(YEAR, MONTH, 0))
+            startDateTime: new Date(YEAR, MONTH - 1, 1),
+            endDateTime: new Date(YEAR, MONTH, 0)
         }
         callback(result);
     }

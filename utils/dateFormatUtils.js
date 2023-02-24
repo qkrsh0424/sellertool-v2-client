@@ -10,6 +10,7 @@ function getRemainingDateCount(closingDate) {
     return diffDays;
 }
 
+// For API Fetch
 function getStartDate(date) {
     // Prev version
     // let cdate = new Date(date);
@@ -28,7 +29,7 @@ function getStartDate(date) {
     return cdate;
 }
 
-// TODO
+// For API Fetch
 function getEndDate(date) {
     // Prev version
     // let cdate = new Date(date);
@@ -40,6 +41,7 @@ function getEndDate(date) {
 
     // New version
     let cdate = new Date(date);
+    cdate.setDate(cdate.getDate() + 1);
     cdate.setHours(0);
     cdate.setMinutes(0);
     cdate.setSeconds(0);

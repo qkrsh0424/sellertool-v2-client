@@ -10,8 +10,8 @@ export default function useInventoryStockRegisterStatusesHook({
     selectedProductOption
 }) {
     const [inventoryStockRegisterStatuses, setInventoryStockRegisterStatuses] = useState(null);
-    const [startDateTime, setStartDateTime] = useState(getStartDate(new Date()));
-    const [endDateTime, setEndDateTime] = useState(getEndDate(new Date()));
+    const [startDateTime, setStartDateTime] = useState(new Date());
+    const [endDateTime, setEndDateTime] = useState(new Date());
 
     useEffect(() => {
         if (!selectedProductOption) {
@@ -24,8 +24,8 @@ export default function useInventoryStockRegisterStatusesHook({
     const reqFetchInventoryStockRegisterStatuses = async () => {
         let params = {
             productOptionId: selectedProductOption.id,
-            startDateTime: startDateTime,
-            endDateTime: endDateTime
+            startDateTime: getStartDate(startDateTime || new Date()),
+            endDateTime: getEndDate(endDateTime || new Date())
         }
 
         await inventoryDataConnect().searchInventoryStockRegisterStatuses(params)
@@ -96,11 +96,11 @@ export default function useInventoryStockRegisterStatusesHook({
     }
 
     const onChangeStartDateTime = (value) => {
-        setStartDateTime(getStartDate(value || new Date()));
+        setStartDateTime(new Date(value));
     }
 
     const onChangeEndDateTime = (value) => {
-        setEndDateTime(getEndDate(value || new Date()))
+        setEndDateTime(new Date(value));
     }
 
     return {

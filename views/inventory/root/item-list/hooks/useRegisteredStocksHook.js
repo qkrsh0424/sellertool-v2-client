@@ -21,10 +21,11 @@ export default function useRegisteredStocksHook(props) {
     const reqFetchRegisteredStocks = async (startDateTime, endDateTime) => {
         let body = {
             workspaceId: workspaceRedux?.workspaceInfo?.id,
-            startDateTime: startDateTime || getStartDate(new Date()),
-            endDateTime: endDateTime || getEndDate(new Date())
+            startDateTime: getStartDate(startDateTime || new Date()),
+            endDateTime: getEndDate(endDateTime || new Date())
         }
 
+        console.log(body);
         await inventoryDataConnect().searchRegisteredStocks(body)
             .then(res => {
                 if (res.status === 200) {

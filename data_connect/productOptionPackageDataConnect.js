@@ -15,7 +15,6 @@ const productOptionPackageDataConnect = () => {
             })
         },
         updateAll: async function (body) {
-            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/product-option-packages/all`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -23,7 +22,6 @@ const productOptionPackageDataConnect = () => {
             })
         },
         searchProductInfoListByProductOptionIds: async function (body) {
-            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/product-option-packages/search/product-infos`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',

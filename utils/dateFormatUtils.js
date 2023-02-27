@@ -71,6 +71,14 @@ function getDiffDate(startDate, endDate) {
     return Math.floor(diffDay) <= 0 ? 1 : Math.floor(diffDay);
 }
 
+function dateToHHmm(idate) {
+    var date = new Date(idate);
+    return moment(date).format("HH:mm");
+}
+
+function getDiffHourWithUTC() {
+    return Math.abs(new Date().getTimezoneOffset() / 60);
+}
 
 export {
     getStartDate,
@@ -81,5 +89,7 @@ export {
     dateToYYMMDDhhmmss,
     dateToYYYYMMDDhhmmssFile,
     getRemainingDateCount,
-    getDiffDate
+    getDiffDate,
+    dateToHHmm,
+    getDiffHourWithUTC
 }

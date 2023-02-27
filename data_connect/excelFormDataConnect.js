@@ -11,7 +11,6 @@ const excelFormDataConnect = () => {
          * @param {object} formData
          */
         checkValid: async function (formData) {
-            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-forms/action:check-valid`, formData, {
                 headers: {
                     "content-types": "multipart/form-data"
@@ -22,7 +21,6 @@ const excelFormDataConnect = () => {
             })
         },
         downloadSampleExcelForErpCollectionOrderUpload: async function () {
-            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-forms/download-sample-excel/erp-collection-order-upload`, null, {
                 responseType: 'blob',
                 withCredentials: true,
@@ -31,7 +29,6 @@ const excelFormDataConnect = () => {
             })
         },
         downloadSampleExcelForWaybillRegistration: async function(){
-            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-forms/download-sample-excel/waybill-registration`, null, {
                 responseType: 'blob',
                 withCredentials: true,

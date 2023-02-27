@@ -57,7 +57,6 @@ const ProfileWorkspaceMainComponent = (props) => {
                     })
             },
             acceptWorkspace: async (inviteMemberId) => {
-                await csrfDataConnect().getApiCsrf();
                 await inviteMemberDataConnect().actionAccept({ inviteMemberId })
                     .catch(err => {
                         let res = err?.response;
@@ -76,7 +75,6 @@ const ProfileWorkspaceMainComponent = (props) => {
                     })
             },
             rejectWorkspace: async (inviteMemberId) => {
-                await csrfDataConnect().getApiCsrf();
                 await inviteMemberDataConnect().actionReject({ inviteMemberId })
                     .catch(err => {
                         let res = err?.response;

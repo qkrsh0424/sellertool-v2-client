@@ -85,7 +85,7 @@ const erpItemDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-            await csrfDataConnect().getApiCsrf();
+            
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/search/ids`, body, {
                 headers: headers,
                 withCredentials: true,
@@ -126,7 +126,7 @@ const erpItemDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-            await csrfDataConnect().getApiCsrf();
+            
             return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/erp-items/${body.id}/target:optionCode`, body, {
                 headers: headers,
                 withCredentials: true,
@@ -146,7 +146,7 @@ const erpItemDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-            await csrfDataConnect().getApiCsrf();
+            
             return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/erp-items/${body.id}/target:releaseOptionCode`, body, {
                 headers: headers,
                 withCredentials: true,
@@ -162,7 +162,6 @@ const erpItemDataConnect = () => {
          * @returns 
          */
         updateAll: async function (body, headers) {
-            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/erp-items`, body, {
                 headers: headers,
                 withCredentials: true,
@@ -181,7 +180,7 @@ const erpItemDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-            await csrfDataConnect().getApiCsrf();
+            
             return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/erp-items/ids`, {
                 headers: headers,
                 data: body,
@@ -202,7 +201,7 @@ const erpItemDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-            await csrfDataConnect().getApiCsrf();
+            
             return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/erp-items/target:status/action:sales`, body, {
                 headers: headers,
                 withCredentials: true,
@@ -222,7 +221,8 @@ const erpItemDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-            await csrfDataConnect().getApiCsrf();
+            
+
             return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/erp-items/target:status/action:release`, body, {
                 headers: headers,
                 withCredentials: true,
@@ -242,7 +242,7 @@ const erpItemDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-            await csrfDataConnect().getApiCsrf();
+            
             return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/erp-items/target:status/action:order`, body, {
                 headers: headers,
                 withCredentials: true,
@@ -258,7 +258,7 @@ const erpItemDataConnect = () => {
          * @returns 
          */
         uploadWithExcel: async function (formData, headers) {
-            await csrfDataConnect().getApiCsrf();
+            
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/upload/excel`, formData, {
                 headers: headers,
                 withCredentials: true,
@@ -277,7 +277,7 @@ const erpItemDataConnect = () => {
             let headers = {
                 wsId: formData.workspaceId
             }
-            await csrfDataConnect().getApiCsrf();
+            
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items`, formData, {
                 headers: headers,
                 withCredentials: true,
@@ -296,7 +296,7 @@ const erpItemDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-            await csrfDataConnect().getApiCsrf();
+            
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/copy-create`, body, {
                 headers: headers,
                 withCredentials: true,
@@ -315,7 +315,7 @@ const erpItemDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-            await csrfDataConnect().getApiCsrf();
+            
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/release-list/download/excel`, body, {
                 headers: headers,
                 responseType: 'blob',
@@ -332,8 +332,39 @@ const erpItemDataConnect = () => {
          * @returns 
          */
         uploadWaybillForm: async function (formData, headers) {
-            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/waybill/upload`, formData, {
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * @param {object} headers,
+         * @param {string} headers.wsId
+         * @param {object} params
+         * @param {date} params.startDateTime
+         * @param {date} params.endDateTime
+         */
+        countOrderManagement: async function (headers, params) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/erp-items/count/order-management`, {
+                params: params,
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * @param {object} headers,
+         * @param {string} headers.wsId
+         * @param {object} params
+         * @param {date} params.startDateTime
+         * @param {date} params.endDateTime
+         */
+        countOrderWith24H: async function (headers, params) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/erp-items/count/order-with-24h`, {
+                params: params,
                 headers: headers,
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',

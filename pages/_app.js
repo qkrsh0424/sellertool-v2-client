@@ -24,6 +24,7 @@ const theme = createTheme();
 // == NProgress Module START ==
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
+import CsrfComponent from '../redux/dispatch_component/CsrfComponent';
 
 
 Router.onRouteChangeStart = () => {
@@ -50,6 +51,7 @@ function MyApp({ Component, pageProps }) {
 			</Head>
 			<UserPermissionComponent />
 			<WorkspacePermissionComponent />
+			<CsrfComponent />
 			<ThemeProvider theme={theme}>
 				<Component {...pageProps} />
 			</ThemeProvider>

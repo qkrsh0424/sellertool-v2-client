@@ -1,17 +1,7 @@
-import {
-    Chart as ChartJs,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    PointElement,
-    LineElement,
-    ArcElement,
-    Title as ChartTitle,
-    Tooltip,
-    Legend
-} from "chart.js";
 import { useRouter } from "next/router";
-
+import {
+    Chart as ChartJS
+} from "chart.js/auto";
 import {
     Chart
 } from "react-chartjs-2";
@@ -20,18 +10,6 @@ import useOrderCountsWith24hHook from "./hooks/useOrderCountsWith24hHook";
 import useOrderManagementCountHook from "./hooks/useOrderManagementCountHook";
 
 import { ChartWrapper, ChartWrapper2, Container } from "./styles/NumberOfOrderChart.styled";
-
-ChartJs.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    PointElement,
-    LineElement,
-    ArcElement,
-    ChartTitle,
-    Tooltip,
-    Legend
-);
 
 const getRandomColor = () => {
     return `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;

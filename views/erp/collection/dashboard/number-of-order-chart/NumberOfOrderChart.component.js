@@ -62,6 +62,22 @@ function OrderManagementChart({
                     // display: true,
                     text: '금일 발주건수',
                 },
+                tooltip: {
+                    // enabled: true,
+                    callbacks: {
+                        label: (context) => {
+                            let label = context.dataset.label || '';
+
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y;
+                            }
+                            return label + ' 건';
+                        }
+                    }
+                },
             },
             onClick: (e, item) => {
                 if (item?.length <= 0) {
@@ -121,10 +137,9 @@ function OrderManagementChart({
                         },
                     },
                     min: 0,
-                    // max: Math.max(...fetchedDatas.map(r => r.count)) + 20
                     grid: {
                         offset: false,
-                    }
+                    },
                 },
                 y: {
                     display: true,
@@ -135,12 +150,15 @@ function OrderManagementChart({
                             size: 11,
                             weight: 600,
                         },
-                        // color: 'red'
                     },
-                    min: 0,
-                    // max: Math.max(...fetchedDatas.map(r => r.count)) + 20
                     grid: {
                         offset: false,
+                    },
+                    min: 0,
+                    ticks: {
+                        callback: function (value, index, ticks) {
+                            return value % 1 === 0 ? `${value} 건` : null;
+                        }
                     }
                 }
             }
@@ -195,6 +213,22 @@ function OrderCountsWithTime({
                         }
                     }
                 },
+                tooltip: {
+                    // enabled: true,
+                    callbacks: {
+                        label: (context) => {
+                            let label = context.dataset.label || '';
+
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.x !== null) {
+                                label += context.parsed.x;
+                            }
+                            return label + ' 건';
+                        }
+                    }
+                },
                 title: {
                     // display: true,
                     text: '금일 발주건수',
@@ -216,9 +250,13 @@ function OrderCountsWithTime({
                         },
                     },
                     min: 0,
-                    // max: Math.max(...fetchedDatas.map(r => r.count)) + 20
                     grid: {
-                        offset: true,
+                        offset: false,
+                    },
+                    ticks: {
+                        callback: function (value, index, ticks) {
+                            return value % 1 === 0 ? `${value} 건` : null;
+                        }
                     }
                 },
                 y: {
@@ -230,13 +268,11 @@ function OrderCountsWithTime({
                             size: 11,
                             weight: 600,
                         },
-                        // color: 'red'
                     },
                     min: 0,
-                    // max: Math.max(...fetchedDatas.map(r => r.count)) + 20
                     grid: {
                         offset: false,
-                    }
+                    },
                 }
             }
         },

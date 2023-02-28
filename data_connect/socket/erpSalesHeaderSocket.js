@@ -5,11 +5,13 @@ const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.developm
 const erpSalesHeaderSocket = () => {
     return {
         createOne: async function (params) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.post(`${API_ADDRESS}/ws/v1/erp-sales-headers`, params, {
                 withCredentials: true
             })
         },
         updateOne: async function (params) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.put(`${API_ADDRESS}/ws/v1/erp-sales-headers`, params, {
                 withCredentials: true
             })

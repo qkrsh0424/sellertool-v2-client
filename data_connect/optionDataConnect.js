@@ -23,6 +23,7 @@ const optionDataConnect = () => {
             })
         },
         createOne: async function (workspaceId, productId, body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/options/products/${productId}`, body, {
                 params: {
                     workspaceId: workspaceId
@@ -33,6 +34,7 @@ const optionDataConnect = () => {
             })
         },
         updateOne: async function (workspaceId, body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/options/${body.id}`, body, {
                 params: {
                     workspaceId: workspaceId
@@ -43,6 +45,7 @@ const optionDataConnect = () => {
             })
         },
         deleteOne: async function (workspaceId, optionId) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/options/${optionId}`, {
                 params: {
                     workspaceId: workspaceId

@@ -9,6 +9,7 @@ const SCP_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.deve
 const inventoryDataConnect = () => {
     return {
         searchList: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/search/stocks`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -24,6 +25,7 @@ const inventoryDataConnect = () => {
             })
         },
         searchRegisteredStocks: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/search/registeredStocks`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -31,6 +33,7 @@ const inventoryDataConnect = () => {
             })
         },
         createReleaseByErpItems: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/create/release/by-erp`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -38,6 +41,7 @@ const inventoryDataConnect = () => {
             })
         },
         cancelReleaseByErpItems: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/cancel/release/by-erp`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',

@@ -17,21 +17,25 @@ const erpOrderHeaderDataConnect = () => {
             })
         },
         createOne: async function (params) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.post(`${API_ADDRESS}/api/v1/erp-order-headers`, params, {
                 withCredentials: true
             })
         },
         createOneSocket: async function (params) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.post(`${API_ADDRESS}/ws/v1/erp-order-headers`, params, {
                 withCredentials: true
             })
         },
         updateOne: async function (params) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.put(`${API_ADDRESS}/api/v1/erp-order-headers`, params, {
                 withCredentials: true
             })
         },
         updateOneSocket: async function (params) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.put(`${API_ADDRESS}/ws/v1/erp-order-headers`, params, {
                 withCredentials: true
             })

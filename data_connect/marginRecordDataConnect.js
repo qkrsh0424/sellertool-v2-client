@@ -51,6 +51,7 @@ const marginRecordDataConnect = () => {
             })
         },
         createMarginRecord: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/margin-records`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -64,6 +65,7 @@ const marginRecordDataConnect = () => {
          * @returns 
          */
         updateMarginRecord: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/margin-records/${body.id}`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -77,6 +79,7 @@ const marginRecordDataConnect = () => {
          * @returns 
          */
         deleteMarginRecord: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/margin-records/${body.marginRecordId}`, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',

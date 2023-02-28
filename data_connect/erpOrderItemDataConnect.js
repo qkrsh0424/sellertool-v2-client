@@ -5,6 +5,7 @@ const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.developm
 const erpOrderItemDataConnect = () => {
     return {
         uploadExcelFile: async function (formData) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.post(`${API_ADDRESS}/api/v1/erp-order-items/excel/upload`, formData, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -20,6 +21,7 @@ const erpOrderItemDataConnect = () => {
             })
         },
         refreshList: async function (params) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.post(`${API_ADDRESS}/api/v1/erp-order-items/action-refresh`, params, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -35,6 +37,7 @@ const erpOrderItemDataConnect = () => {
             })
         },
         createList: async function (params) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.post(`${API_ADDRESS}/api/v1/erp-order-items/batch`, params, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -42,6 +45,7 @@ const erpOrderItemDataConnect = () => {
             })
         },
         updateOne: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.put(`${API_ADDRESS}/api/v1/erp-order-items`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -49,6 +53,7 @@ const erpOrderItemDataConnect = () => {
             })
         },
         changeSalesYnForListInSales: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.patch(`${API_ADDRESS}/api/v1/erp-order-items/batch/sales-yn`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -56,6 +61,7 @@ const erpOrderItemDataConnect = () => {
             })
         },
         changeReleaseYnForList: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.patch(`${API_ADDRESS}/api/v1/erp-order-items/batch/release-yn`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -63,6 +69,7 @@ const erpOrderItemDataConnect = () => {
             })
         },
         changeOptionCodeForListInBatch: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.patch(`${API_ADDRESS}/api/v1/erp-order-items/batch/option-code/all`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -70,6 +77,7 @@ const erpOrderItemDataConnect = () => {
             })
         },
         changeReleaseOptionCodeForListInBatch: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.patch(`${API_ADDRESS}/api/v1/erp-order-items/batch/release-option-code`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -77,6 +85,7 @@ const erpOrderItemDataConnect = () => {
             })
         },
         deleteList: async function (params) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.post(`${API_ADDRESS}/api/v1/erp-order-items/batch-delete`, params, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -84,6 +93,7 @@ const erpOrderItemDataConnect = () => {
             })
         },
         fetchFirstMerge: async function (firstMergeHeaderId, body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.post(`${API_ADDRESS}/api/v1/erp-order-items/erp-first-merge-headers/${firstMergeHeaderId}/action-merge`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -91,6 +101,7 @@ const erpOrderItemDataConnect = () => {
             })
         },
         fetchSecondMerge: async function (secondMergeHeaderId, body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.post(`${API_ADDRESS}/api/v1/erp-order-items/erp-second-merge-headers/${secondMergeHeaderId}/action-merge`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -98,6 +109,7 @@ const erpOrderItemDataConnect = () => {
             })
         },
         changeWaybillForList: async function (formData) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.patch(`${API_ADDRESS}/api/v1/erp-order-items/batch/waybill`, formData, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',

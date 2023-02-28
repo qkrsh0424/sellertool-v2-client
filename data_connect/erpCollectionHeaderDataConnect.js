@@ -49,6 +49,7 @@ const erpCollectionHeaderDataConnect = () => {
                 wsId: body.workspaceId
             }
 
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-collection-headers`, body, {
                 headers: headers,
                 withCredentials: true,
@@ -70,7 +71,7 @@ const erpCollectionHeaderDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/erp-collection-headers/${body.id}`, body, {
                 headers: headers,
                 withCredentials: true,
@@ -89,7 +90,7 @@ const erpCollectionHeaderDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/erp-collection-headers/${body.id}`, {
                 headers: headers,
                 withCredentials: true,

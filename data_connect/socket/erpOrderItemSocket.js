@@ -5,6 +5,7 @@ const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.developm
 const erpOrderItemSocket = () => {
     return {
         createList: async function (workspaceId, body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.post(`${API_ADDRESS}/ws/v1/erp-order-items/batch`, body, {
                 params: {
                     workspaceId: workspaceId
@@ -15,6 +16,7 @@ const erpOrderItemSocket = () => {
             })
         },
         updateOne: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.put(`${API_ADDRESS}/ws/v1/erp-order-items`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -22,6 +24,7 @@ const erpOrderItemSocket = () => {
             })
         },
         changeOptionCodeForListInBatch: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.patch(`${API_ADDRESS}/ws/v1/erp-order-items/batch/option-code/all`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -29,6 +32,7 @@ const erpOrderItemSocket = () => {
             })
         },
         changeReleaseOptionCodeForListInBatch: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.patch(`${API_ADDRESS}/ws/v1/erp-order-items/batch/release-option-code`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -36,6 +40,7 @@ const erpOrderItemSocket = () => {
             })
         },
         changeSalesYnForListInSales: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.patch(`${API_ADDRESS}/ws/v1/erp-order-items/batch/sales-yn`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -43,6 +48,7 @@ const erpOrderItemSocket = () => {
             })
         },
         changeReleaseYnForList: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.patch(`${API_ADDRESS}/ws/v1/erp-order-items/batch/release-yn`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -50,6 +56,7 @@ const erpOrderItemSocket = () => {
             })
         },
         changeWaybillForList: async function (formData) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.patch(`${API_ADDRESS}/ws/v1/erp-order-items/batch/waybill`, formData, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -57,6 +64,7 @@ const erpOrderItemSocket = () => {
             })
         },
         deleteList: async function (params) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.post(`${API_ADDRESS}/ws/v1/erp-order-items/batch-delete`, params, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -64,6 +72,7 @@ const erpOrderItemSocket = () => {
             })
         },
         actionReflectStock: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.patch(`${API_ADDRESS}/ws/v1/erp-order-items/batch/stock/action-reflect`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -71,6 +80,7 @@ const erpOrderItemSocket = () => {
             })
         },
         actionCancelStock: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axios.patch(`${API_ADDRESS}/ws/v1/erp-order-items/batch/stock/action-cancel`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',

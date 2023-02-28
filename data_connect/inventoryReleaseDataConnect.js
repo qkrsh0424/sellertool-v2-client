@@ -9,6 +9,7 @@ const SCP_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.deve
 const inventoryReleaseDataConnect = () => {
     return {
         createAll: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory-releases/all`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -23,6 +24,7 @@ const inventoryReleaseDataConnect = () => {
          * @param {string} body.workspaceId
          */
         changeMemo: async function (body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/inventory-releases/target:memo`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',

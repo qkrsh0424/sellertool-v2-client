@@ -13,6 +13,7 @@ const erpOrderHeaderSocket = () => {
          * @returns 
          */
         createOne: async function (params, body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/ws/v1/erp-order-headers`, body, {
                 params: params,
                 withCredentials: true,
@@ -28,6 +29,7 @@ const erpOrderHeaderSocket = () => {
          * @returns 
          */
         updateOne: async function (params, body) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.put(`${API_ADDRESS}/ws/v1/erp-order-headers`, body, {
                 params: params,
                 withCredentials: true,

@@ -6,6 +6,7 @@ import UserPermissionComponent from '../redux/dispatch_component/UserPermissionC
 import WorkspacePermissionComponent from '../redux/dispatch_component/WorkspacePermissionComponent';
 import Router, { useRouter } from 'next/router';
 
+
 const theme = createTheme();
 
 /**
@@ -51,7 +52,6 @@ function MyApp({ Component, pageProps }) {
 			</Head>
 			<UserPermissionComponent />
 			<WorkspacePermissionComponent />
-			<CsrfComponent />
 			<ThemeProvider theme={theme}>
 				<Component {...pageProps} />
 			</ThemeProvider>

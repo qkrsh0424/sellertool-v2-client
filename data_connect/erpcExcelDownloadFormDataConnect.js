@@ -51,6 +51,7 @@ const erpcExcelDownloadFormDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erpc-excel-download-forms`, body, {
                 headers: headers,
                 withCredentials: true,
@@ -72,7 +73,7 @@ const erpcExcelDownloadFormDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/erpc-excel-download-forms/${body.id}`, body, {
                 headers: headers,
                 withCredentials: true,
@@ -90,7 +91,7 @@ const erpcExcelDownloadFormDataConnect = () => {
             let headers = {
                 wsId: body.workspaceId
             }
-
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/erpc-excel-download-forms/${body.id}`, {
                 headers: headers,
                 withCredentials: true,
@@ -107,6 +108,7 @@ const erpcExcelDownloadFormDataConnect = () => {
          * @returns 
          */
         actionExcelDownload: async function (erpcExcelDownloadFormId, downloadItems, headers) {
+            await csrfDataConnect().getApiCsrf();
             return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erpc-excel-download-forms/${erpcExcelDownloadFormId}/action:download`, downloadItems, {
                 headers: headers,
                 responseType: 'blob',

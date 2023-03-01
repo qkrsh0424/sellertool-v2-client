@@ -1,7 +1,9 @@
 import { csrfDataConnect } from "../data_connect/csrfDataConnect";
+import { getCookieExpiration, isValidCookieDuration } from "./cookieCheckUtils";
 
 let IS_CSRF_REFRESHING = false;
 let CALLBACK_SUBSCRIBERS = [];
+const API_CSRF_EXPIRED_AT = 'api_csrf_expired_at';
 
 const onRefreshedTokens = () => {
     CALLBACK_SUBSCRIBERS.map((callback) => callback());
@@ -21,7 +23,9 @@ export default async function withMainApiCsrfWrapper(callback) {
 
     if (!IS_CSRF_REFRESHING) {
         IS_CSRF_REFRESHING = true;
-        await csrfDataConnect().getApiCsrf();
+        if (!isValidCookieDuration(getCookieExpiration(API_CSRF_EXPIRED_AT))) {
+            await csrfDataConnect().getApiCsrf();
+        }
         onRefreshedTokens();
         IS_CSRF_REFRESHING = false;
     }

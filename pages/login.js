@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import FooterMain from "../views/footer/FooterMain";
 import MainComponent from "../views/login-v2";
 import PrimaryNavbarMainComponent from "../views/navbar/primary-navbar";
-import { isAnonymous } from "../utils/cookieCheckUtils";
 
 const LoginPage = () => {
     const userRedux = useSelector(state => state.userRedux);

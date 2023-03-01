@@ -25,7 +25,6 @@ const theme = createTheme();
 // == NProgress Module START ==
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import CsrfComponent from '../redux/dispatch_component/CsrfComponent';
 
 
 Router.onRouteChangeStart = () => {

@@ -2,6 +2,7 @@ import axios from "axios"
 import { axiosAuthInterceptor } from "./axiosInterceptors"
 import { csrfDataConnect } from "./csrfDataConnect"
 import qs from 'qs';
+import withMainApiCsrfWrapper from "../utils/withMainApiCsrfWrapper";
 
 const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress
 const SCP_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.scpApiAddress : process.env.production.scpApiAddress
@@ -9,12 +10,13 @@ const SCP_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.deve
 const inventoryDataConnect = () => {
     return {
         searchList: async function (body) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/search/stocks`, body, {
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/search/stocks`, body, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         searchInventoryStockRegisterStatuses: async function (params) {
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/inventory/search/stockRegisterStatus`, {
@@ -25,28 +27,31 @@ const inventoryDataConnect = () => {
             })
         },
         searchRegisteredStocks: async function (body) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/search/registeredStocks`, body, {
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/search/registeredStocks`, body, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         createReleaseByErpItems: async function (body) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/create/release/by-erp`, body, {
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/create/release/by-erp`, body, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         cancelReleaseByErpItems: async function (body) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/cancel/release/by-erp`, body, {
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/cancel/release/by-erp`, body, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         }
     }
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function useDisabledBtn(props) {
+export default function useDisabledBtn(duration) {
     const [disabledBtn, setDisabledBtn] = useState(false);
 
     useEffect(() => {
@@ -10,7 +10,7 @@ export default function useDisabledBtn(props) {
 
         let timeout = setTimeout(() => {
             setDisabledBtn(false);
-        }, 1000)
+        }, duration ?? 1000)
 
         return () => clearTimeout(timeout);
 

@@ -1,3 +1,4 @@
+import withMainApiCsrfWrapper from "../utils/withMainApiCsrfWrapper"
 import { axiosAuthInterceptor } from "./axiosInterceptors"
 import { csrfDataConnect } from "./csrfDataConnect"
 
@@ -27,12 +28,13 @@ const excelTranslatorHeaderDataConnect = () => {
          * @returns 
          */
         createOne: async function (body) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers`, body, {
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers`, body, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         /**
          * 
@@ -43,12 +45,13 @@ const excelTranslatorHeaderDataConnect = () => {
          * @param {number} body.rowStartNumber
          */
         changeTitle: async function (body) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.id}/target:title`, body, {
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.id}/target:title`, body, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         /**
          * @param {object} body
@@ -56,12 +59,13 @@ const excelTranslatorHeaderDataConnect = () => {
          * @param {string} body.uploadHeaderDetail
          */
         changeUploadHeaderDetail: async function (body) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.id}/target:uploadHeaderDetail`, body, {
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.id}/target:uploadHeaderDetail`, body, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         /**
          * @param {object} body
@@ -69,24 +73,26 @@ const excelTranslatorHeaderDataConnect = () => {
          * @param {string} body.downloadHeaderDetail
          */
         changeDownloadHeaderDetail: async function (body) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.id}/target:downloadHeaderDetail`, body, {
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.id}/target:downloadHeaderDetail`, body, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         /**
          * @param {object} body
          * @param {string} body.id
          */
         delete: async function (body) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.id}`, {
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.id}`, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         /**
          * 
@@ -97,12 +103,13 @@ const excelTranslatorHeaderDataConnect = () => {
          * @returns 
          */
         uploadSampleExcelForUploadHeaderDetail: async function (formData) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/target:uploadHeaderDetail/action:upload-sample`, formData, {
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/target:uploadHeaderDetail/action:upload-sample`, formData, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         /**
          * 
@@ -113,12 +120,13 @@ const excelTranslatorHeaderDataConnect = () => {
          * @returns 
          */
         uploadSampleExcelForDownloadHeaderDetail: async function (formData) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/target:downloadHeaderDetail/action:upload-sample`, formData, {
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/target:downloadHeaderDetail/action:upload-sample`, formData, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         /**
          * 
@@ -130,12 +138,13 @@ const excelTranslatorHeaderDataConnect = () => {
          * @returns 
          */
         uploadData: async function (excelTranslatorHeaderId, formData) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/${excelTranslatorHeaderId}/action:upload-data`, formData, {
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/${excelTranslatorHeaderId}/action:upload-data`, formData, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         /**
          * 
@@ -144,13 +153,14 @@ const excelTranslatorHeaderDataConnect = () => {
          * @returns 
          */
         downloadData: async function (excelTranslatorHeaderId, body) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/${excelTranslatorHeaderId}/action:download-data`, body, {
-                responseType: 'blob',
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/${excelTranslatorHeaderId}/action:download-data`, body, {
+                    responseType: 'blob',
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         /**
          * 
@@ -159,13 +169,14 @@ const excelTranslatorHeaderDataConnect = () => {
          * @returns 
          */
         downloadSampleExcelForUploadHeader: async function (body) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.excelTranslatorHeaderId}/target:uploadHeader/action:download-sample`, null, {
-                responseType: 'blob',
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.excelTranslatorHeaderId}/target:uploadHeader/action:download-sample`, null, {
+                    responseType: 'blob',
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         /**
          * 
@@ -174,13 +185,14 @@ const excelTranslatorHeaderDataConnect = () => {
          * @returns 
          */
         downloadSampleExcelForDownloadHeader: async function (body) {
-            await csrfDataConnect().getApiCsrf();
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.excelTranslatorHeaderId}/target:downloadHeader/action:download-sample`, null, {
-                responseType: 'blob',
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.excelTranslatorHeaderId}/target:downloadHeader/action:download-sample`, null, {
+                    responseType: 'blob',
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         }
     }
 }

@@ -10,12 +10,20 @@
     justify-content: space-between;
 }
 
+.mgl-flex-justifyContent-spaceAround{
+    justify-content: space-around;
+}
+
 .mgl-flex-justifyContent-center{
     justify-content: center;
 }
 
 .mgl-flex-justifyContent-flexEnd{
     justify-content: flex-end;
+}
+
+.mgl-flex-alignItems-flexStart{
+    align-items: flex-start;
 }
 
 .mgl-flex-alignItems-center{

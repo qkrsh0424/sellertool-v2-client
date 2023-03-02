@@ -33,7 +33,6 @@ const useImageUploaderHooks = ({
             formData.append('files', files[i]);
         }
 
-        await csrfDataConnect().getApiCsrf();
         return await uploadDataConnect().uploadImagesToS3(formData)
             .then(res => {
                 if (res.status === 200) {

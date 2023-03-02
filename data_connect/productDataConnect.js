@@ -1,5 +1,8 @@
 import axios from "axios"
 import { axiosAuthInterceptor } from "./axiosInterceptors"
+import { csrfDataConnect } from "./csrfDataConnect"
+import qs from 'qs';
+import withMainApiCsrfWrapper from "../utils/withMainApiCsrfWrapper";
 
 const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress
 const SCP_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.scpApiAddress : process.env.production.scpApiAddress
@@ -8,49 +11,129 @@ const productDataConnect = () => {
     return {
         /**
          * 
-         * @param {uuid} workspaceId required
-         * @param {uuid} categoryId required
+         * @param {*} params 
+         * @param {*} headers 
+         * @returns 
+         * @deprecated
+         */
+        searchList: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/products`, {
+                params: params,
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        searchPage: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/products/page/related:productCategoryAndProductSubCategory`, {
+                params: params,
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN',
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                }
+            })
+        },
+        searchPageForInventory: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/products/page/related:productCategoryAndProductSubCategoryAndProductOptions`, {
+                params: params,
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN',
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                }
+            })
+        },
+        /**
+         * 
+         * @param {object} params 
+         * @param {string} params.productId
+         * @param {object} headers 
+         * @param {string} headers.wsId 
          * @returns 
          */
-        searchListByCategoryId: async function (workspaceId, categoryId) {
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/products/categories/${categoryId}`, {
-                params: {
-                    workspaceId: workspaceId
-                },
+        searchForUpdate: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/products/${params?.productId}`, {
+                headers: headers,
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
-        createOne: async function (workspaceId, categoryId, body) {
-            return await axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/products/categories/${categoryId}`, body, {
-                params: {
-                    workspaceId: workspaceId
-                },
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+        /**
+         * 
+         * @param {object} body
+         * @param {any} body.productFields
+         * @param {array} body.productOptions
+         * @param {string} body.productSubCategoryId
+         * @param {string} body.workspaceId
+         * @returns 
+         */
+        createOne: async function (body) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/products`, body, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
-        deleteOne: async function (workspaceId, productId) {
-            return await axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/products/${productId}`, {
-                params: {
-                    workspaceId: workspaceId
-                },
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+        /**
+         * 
+         * @param {object} body
+         * @param {any} body.productFields
+         * @param {array} body.productOptions
+         * @param {string} body.productSubCategoryId
+         * @param {string} body.workspaceId
+         * @returns 
+         */
+        update: async function (body) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/products/${body.id}`, body, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
-        updateOne: async function (workspaceId, body) {
-            return await axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/products/${body.id}`, body, {
-                params: {
-                    workspaceId: workspaceId
-                },
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+        /**
+         * 
+         * @param {object} body 
+         * @param {string} body.productId
+         * @param {string} body.workspaceId
+         * @param {string} body.stockManagementYn
+         */
+        changeStockManagement: async function (body) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/products/${body.productId}/target:stockManagementYn`, body, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
+        /**
+         * 
+         * @param {object} body 
+         * @param {string} body.productId
+         * @param {object} headers 
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        delete: async function (body, headers) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/products/${body.productId}`, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         }
     }
 }

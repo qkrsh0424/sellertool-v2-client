@@ -3,7 +3,7 @@ import axios from "axios";
 const AUTH_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.authApiAddress : process.env.production.authApiAddress
 
 const axiosAuthInterceptor = axios.create({
-    timeout: 5000
+    timeout: 30000
 });
 
 let isCsrfRefreshing = false;

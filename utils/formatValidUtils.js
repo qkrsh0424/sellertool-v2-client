@@ -70,6 +70,15 @@ const formatValidUtils = {
         }
         return true;
     },
+    hasSpaceInFrontAndBack: (name) => {
+        let spaceSearchRegex = /^(\s)|(\s)$/;
+
+        if (name.search(spaceSearchRegex) !== -1) {
+            return true;
+        }
+
+        return false;
+    },
     checkPhoneNumberFormatValid: (phoneNumber) => {
         let regex = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
 

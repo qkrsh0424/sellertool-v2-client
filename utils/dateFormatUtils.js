@@ -10,19 +10,30 @@ function getRemainingDateCount(closingDate) {
     return diffDays;
 }
 
+// For API Fetch
 function getStartDate(date) {
+    // Prev version
+    // let cdate = new Date(date);
+    // cdate.setHours(0);
+    // cdate.setMinutes(1);
+    // cdate.setSeconds(0);
+    // cdate.setMilliseconds(0);
+    // return cdate;
+
+    // New version
     let cdate = new Date(date);
     cdate.setHours(0);
-    cdate.setMinutes(1);
+    cdate.setMinutes(0);
     cdate.setSeconds(0);
     cdate.setMilliseconds(0);
     return cdate;
 }
 
+// For API Fetch
 function getEndDate(date) {
     let cdate = new Date(date);
     cdate.setHours(23);
-    cdate.setMinutes(58);
+    cdate.setMinutes(59);
     cdate.setSeconds(59);
     cdate.setMilliseconds(0);
     return cdate
@@ -53,6 +64,22 @@ function dateToYYYYMMDDhhmmssFile(idate) {
     return moment(date).format("YYYYMMDDHHmmss");
 }
 
+function getDiffDate(startDate, endDate) {
+    let diffTime = new Date(endDate) - new Date(startDate);
+    let diffDay = diffTime / (1000 * 60 * 60 * 24);
+
+    return Math.floor(diffDay) <= 0 ? 1 : Math.floor(diffDay);
+}
+
+function dateToHHmm(idate) {
+    var date = new Date(idate);
+    return moment(date).format("HH:mm");
+}
+
+function getDiffHourWithUTC() {
+    return Math.abs(new Date().getTimezoneOffset() / 60);
+}
+
 export {
     getStartDate,
     getEndDate,
@@ -61,5 +88,8 @@ export {
     dateToYYYYMMDDhhmmss,
     dateToYYMMDDhhmmss,
     dateToYYYYMMDDhhmmssFile,
-    getRemainingDateCount
+    getRemainingDateCount,
+    getDiffDate,
+    dateToHHmm,
+    getDiffHourWithUTC
 }

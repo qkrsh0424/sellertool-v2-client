@@ -84,7 +84,7 @@ const ServiceListComponent = () => {
                     </CardContainer>
                     <CardContainer>
                         <Link
-                            href={`${SALES_ANALISIS_CLIENT_ORIGIN}/sales-analysis/dashboard/?workspaceId=${workspaceRedux?.workspaceInfo?.id}`}
+                            href={`${SALES_ANALISIS_CLIENT_ORIGIN}/sales-analysis/dashboard?workspaceId=${workspaceRedux?.workspaceInfo?.id}`}
                             passHref
                         >
                             <CardWrapper>

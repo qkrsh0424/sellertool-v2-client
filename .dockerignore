@@ -3,7 +3,7 @@ out
 .next
 .serverless
 .serverless_nextjs
-.serverless.yml
+serverless.yml
 
 .git
 .gitignore
@@ -11,4 +11,4 @@ out
 Dockerfile
 .dockerignore
 
-.package-lock.json
+package-lock.json

@@ -2,7 +2,7 @@ import Link from "next/link";
 import SingleBlockButton from "../../modules/button/SingleBlockButton";
 import CustomImage from "../../modules/image/CustomImage";
 import useLoginFormHook from "../hooks/useLoginFormHook";
-import { Container, FormGroup, InputBox, Wrapper } from "./FormField.styled";
+import { Container, FormGroup, InputBox, LogoBox, Wrapper } from "./FormField.styled";
 
 export default function FormFieldComponent(props) {
     const {
@@ -22,9 +22,13 @@ export default function FormFieldComponent(props) {
     return (
         <>
             <Container>
-                <div style={{ width: '40px', height: '40px' }}>
-                    <CustomImage src='/images/logo/logo1.png' />
-                </div>
+                <LogoBox>
+                    <Link href='/' passHref>
+                        <a>
+                            <CustomImage src='/images/logo/logo1.png' priority={true} loading='eager'/>
+                        </a>
+                    </Link>
+                </LogoBox>
                 <Wrapper>
                     <div
                         style={{

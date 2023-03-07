@@ -3,6 +3,8 @@ import Image from "next/image";
 export default function CustomImage({
     src,
     className,
+    loading = 'lazy',
+    priority = false,
     ...props
 }) {
     return (
@@ -14,7 +16,8 @@ export default function CustomImage({
             height={1}
             objectFit={'cover'}
             alt='image'
-            loading='lazy'
+            loading={loading}
+            priority={priority}
             className={className}
             {...props}
         ></Image>

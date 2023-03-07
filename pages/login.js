@@ -27,7 +27,6 @@ const LoginPage = () => {
             </Head>
             {(userRedux.isLoading === false && !userRedux.userInfo) &&
                 <>
-                    {/* <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent> */}
                     <MainComponent></MainComponent>
                     <FooterMain></FooterMain>
                 </>

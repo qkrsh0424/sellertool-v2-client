@@ -42,7 +42,7 @@ export const InputBox = styled.div`
 
     .send-button{
         border-radius: 5px;
-        width: 120px;
+        width: 100px;
         margin-left: 10px;
     }
 
@@ -73,6 +73,10 @@ export const OtherModeButton = styled(CustomBlockButton)`
     margin-top: 40px;
     border-radius: 5px;
     text-align: left;
+
+    &:hover{
+        box-shadow: var(--defaultBoxShadow);
+    }
 `;
 
 export const Others = styled.div`

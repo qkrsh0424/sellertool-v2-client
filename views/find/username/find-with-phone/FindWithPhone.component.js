@@ -151,7 +151,7 @@ export default function FindWithPhoneComponent({
                     type='button'
                     onClick={() => toggleModeType('email')}
                 >
-                    등록된 이메일로 찾기
+                    등록된 <span style={{ color: 'var(--mainColor)', fontWeight: '600' }}>이메일</span>로 찾기
                 </OtherModeButton>
                 <Others>
                     <Link

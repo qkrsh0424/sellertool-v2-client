@@ -38,6 +38,10 @@ export const ItemBox = styled(CustomBlockButton)`
     margin-top: 20px;
     border-radius: 5px;
     text-align: left;
+
+    &:hover{
+        box-shadow: var(--defaultBoxShadow);
+    }
 `;
 
 export const Others = styled.div`

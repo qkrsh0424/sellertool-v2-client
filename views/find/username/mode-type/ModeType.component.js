@@ -13,13 +13,13 @@ export default function ModeTypeComponent({
                         type='button'
                         onClick={() => toggleModeType('phone')}
                     >
-                        등록된 휴대전화로 찾기
+                        등록된 <span style={{color: 'var(--mainColor)', fontWeight:'600'}}>휴대전화</span>로 찾기
                     </ItemBox>
                     <ItemBox
                         type='button'
                         onClick={() => toggleModeType('email')}
                     >
-                        등록된 이메일로 찾기
+                        등록된 <span style={{color: 'var(--mainColor)', fontWeight:'600'}}>이메일</span>로 찾기
                     </ItemBox>
                     <Others>
                         <Link

@@ -12,9 +12,12 @@ export default function useModifyEmailHook(props) {
         email,
         successCallback
     }) => {
-        let validationType = 'forModify';
+        let body = {
+            email: email,
+            validationType:'forModify'
+        }
 
-        await validationDataConnect().sendEmailValidationCode({ email, validationType })
+        await validationDataConnect().sendEmailValidationCode(body)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

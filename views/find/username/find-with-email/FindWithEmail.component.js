@@ -74,8 +74,7 @@ export default function FindWithEmailComponent({
                 }
 
                 alert(res.data.memo);
-            })
-        setValidationCodeInputOpen(true);
+            });
     }
 
     const handleSubmitNext = (e) => {

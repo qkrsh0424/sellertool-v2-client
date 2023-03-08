@@ -159,6 +159,36 @@ const userDataConnect = () => {
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
+        /**
+         * 
+         * @param {object} body 
+         * @param {string} body.username
+         * @param {string} body.phoneNumber
+         * @param {string} body.phoneNumberValidationCode
+         */
+        findPasswordByPhoneNumberValidation: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
+            return await axios.post(`${AUTH_API_ADDRESS}/auth/v1/users/find/password/validation:phoneNumber`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * 
+         * @param {object} body 
+         * @param {string} body.username
+         * @param {string} body.email
+         * @param {string} body.emailValidationCode
+         */
+        findPasswordByEmailValidation: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
+            return await axios.post(`${AUTH_API_ADDRESS}/auth/v1/users/find/password/validation:email`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        }
     }
 }
 

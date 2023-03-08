@@ -5,7 +5,8 @@ import CustomInput from "../../../../../components/input/default/v1/CustomInput"
 import { validationDataConnect } from "../../../../../data_connect/validationDataConnect";
 import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
 import formatValidUtils from "../../../../../utils/formatValidUtils";
-import { Container, InputBox, NextButton, OtherModeButton, Others, RetryButton, Wrapper } from "./styles/FindWithEmail.styled";
+import CustomImage from "../../../../modules/image/CustomImage";
+import { Container, InputBox, LogoBox, NextButton, OtherModeButton, Others, RetryButton, Wrapper } from "./styles/FindWithEmail.styled";
 
 export default function FindWithEmailComponent({
     toggleChangeModeType,
@@ -117,6 +118,13 @@ export default function FindWithEmailComponent({
 
     return (
         <Container>
+            <LogoBox>
+                <Link href='/' passHref>
+                    <a>
+                        <CustomImage src='/images/logo/logo1.png' priority={true} loading='eager' />
+                    </a>
+                </Link>
+            </LogoBox>
             <Wrapper>
                 <h2 className='title'>이메일로 비밀번호 찾기</h2>
                 {!validationCodeInputOpen &&

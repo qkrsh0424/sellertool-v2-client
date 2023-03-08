@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { useState } from "react";
 import CustomInput from "../../../../../components/input/default/v1/CustomInput";
 import formatValidUtils from "../../../../../utils/formatValidUtils";
-import { Container, InputBox, SubmitButton, Wrapper } from "./styles/FormField.styled";
+import CustomImage from "../../../../modules/image/CustomImage";
+import { Container, InputBox, LogoBox, SubmitButton, Wrapper } from "./styles/FormField.styled";
 
 export default function FormFieldComponent({
     onSubmitResetPassword
@@ -48,6 +50,13 @@ export default function FormFieldComponent({
     return (
         <>
             <Container>
+                <LogoBox>
+                    <Link href='/' passHref>
+                        <a>
+                            <CustomImage src='/images/logo/logo1.png' priority={true} loading='eager' />
+                        </a>
+                    </Link>
+                </LogoBox>
                 <Wrapper>
                     <form onSubmit={(e) => handleSubmit(e)}>
                         <h2 className='title'>비밀번호 재설정</h2>

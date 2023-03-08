@@ -2,11 +2,17 @@ import styled from 'styled-components';
 import CustomBlockButton from '../../../../../components/buttons/block-button/v1/CustomBlockButton';
 
 export const Container = styled.div`
-    padding: 100px 20px;
+    overflow: hidden;
+`;
 
-    @media all and (max-width: 992px){
-        padding: 100px 10px;
-    }
+export const LogoBox = styled.div`
+    width: 50px;
+    height: 50px;
+    margin-top: 80px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+    overflow: hidden;
 `;
 
 export const Wrapper = styled.div`
@@ -17,10 +23,12 @@ export const Wrapper = styled.div`
     width: 600px;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 30px;
+    margin-bottom: 50px;
     padding: 20px;
 
     @media all and (max-width: 992px){
-        width: 100%;
+        width: 90%;
     }
 
     .title{

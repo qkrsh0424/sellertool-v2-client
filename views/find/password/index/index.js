@@ -6,6 +6,7 @@ import FindWithEmailComponent from './find-with-email/FindWithEmail.component';
 import FindWithPhoneComponent from './find-with-phone/FindWithPhone.component';
 import ModeTypeComponent from './mode-type/ModeType.component';
 const Container = styled.div`
+    min-height: 100vh;
     background:var(--defaultBackground);
 `;
 

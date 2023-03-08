@@ -7,6 +7,7 @@ import ModeTypeComponent from './mode-type/ModeType.component';
 import ResultFieldComponent from './result-field/ResultField.component';
 
 const Container = styled.div`
+    min-height: 100vh;
     background:var(--defaultBackground);
 `;
 

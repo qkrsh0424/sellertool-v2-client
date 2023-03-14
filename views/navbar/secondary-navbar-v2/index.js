@@ -1,39 +1,55 @@
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import SingleBlockButton from '../../modules/button/SingleBlockButton';
-import { Container, SelectorBtn, SelectorBtnBox, Wrapper } from './index.styled';
+import CustomBlockButton from '../../../components/buttons/block-button/v1/CustomBlockButton';
+import CustomImage from '../../modules/image/CustomImage';
+import { Container, MenuButton, SelectorBtnBox, Wrapper } from './index.styled';
+import MenuListComponent from './menu/MenuList.component';
 
 const SecondaryNavbarMainComponent = (props) => {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
+    const [menuListOpen, setMenuListOpen] = useState(false);
 
-    const __handle = {
-        action: {
-            routeToSelect: () => {
-                router.push({
-                    pathname: '/workspace/select'
-                })
-            }
-        }
+    const handleRouteToSelect = () => {
+        router.push({
+            pathname: '/workspace/select'
+        })
     }
+
+    const toggleMenuListOpen = (open) => {
+        setMenuListOpen(open);
+    }
+
     return (
         <>
-            {workspaceRedux.workspaceInfo &&
-                <Container>
-                    <Wrapper>
+            <Container>
+                <Wrapper>
+                    <MenuButton
+                        type='button'
+                        onClick={() => toggleMenuListOpen(!menuListOpen)}
+                    >
+                        <div style={{ width: 24, height: 24, marginRight: '10px' }}><CustomImage src='/images/icon/menu_hamburg_808080.svg' priority={true} loading='eager' /></div>
+                        <div style={{ flex: 1 }}>전체 서비스</div>
+                    </MenuButton>
+                    {workspaceRedux?.workspaceInfo &&
                         <SelectorBtnBox>
-                            <SingleBlockButton
+                            <CustomBlockButton
                                 type='button'
                                 className='button-el'
-                                onClick={() => __handle.action.routeToSelect()}
+                                onClick={() => handleRouteToSelect()}
                             >
                                 {workspaceRedux.workspaceInfo.name}
-                            </SingleBlockButton>
+                            </CustomBlockButton>
                         </SelectorBtnBox>
-                    </Wrapper>
-                </Container>
-            }
-
+                    }
+                </Wrapper>
+                {menuListOpen &&
+                    <MenuListComponent
+                        onCloseMenuList={() => toggleMenuListOpen(false)}
+                    />
+                }
+            </Container>
         </>
     );
 }

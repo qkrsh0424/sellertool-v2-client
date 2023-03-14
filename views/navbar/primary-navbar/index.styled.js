@@ -25,7 +25,12 @@ const Wrapper = styled.div`
     }
 `;
 
+const AuthContainer = styled.div`
+    
+`;
+
 export {
     Container,
-    Wrapper
+    Wrapper,
+    AuthContainer
 }

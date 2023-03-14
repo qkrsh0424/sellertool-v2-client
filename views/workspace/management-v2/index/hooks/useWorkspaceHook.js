@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { workspaceDataConnect } from "../../../../data_connect/workspaceDataConnect";
+import { workspaceDataConnect } from "../../../../../data_connect/workspaceDataConnect";
 
 export default function useWorkspaceHook(props) {
     const router = useRouter();

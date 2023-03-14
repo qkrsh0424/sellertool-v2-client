@@ -1,6 +1,6 @@
 import Image from "next/image";
-import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
-import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
+import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
+import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
 import { PermissionSettingModalWrapper } from "../styles/PermissionSettingModal.styled";
 
 export default function PermissionSettingModalComponent({

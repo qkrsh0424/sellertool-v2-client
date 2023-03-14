@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { Container, SelectorBtnBox, Wrapper } from './styles/WorkspaceSelector.styled';
-import SingleBlockButton from '../../../modules/button/SingleBlockButton';
+import SingleBlockButton from '../../../../modules/button/SingleBlockButton';
 
 const WorkspaceSelectorComponent = (props) => {
     const router = useRouter();

@@ -3,13 +3,9 @@ import WorkspaceNameFieldComponent from "./workspace-name-field/WorkspaceNameFie
 import { useRouter } from 'next/router';
 import WorkspaceSelectorComponent from "./workspace-selector/WorkspaceSelector.component";
 import styled from 'styled-components';
-import useWorkspaceMembersHook from "./hooks/useWorkspaceMembersHook";
 import useWorkspaceHook from "./hooks/useWorkspaceHook";
 import LayoutComponent from "./layout/Layout.component";
-import useInviteMembersHook from "./hooks/useInviteMembersHook";
 import InviteMemberComponent from "./invite-member/InviteMember.component";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import useIsWorkspaceMasterHook from "./hooks/useIsWorkspaceMasterHook";
 
 const Container = styled.div`

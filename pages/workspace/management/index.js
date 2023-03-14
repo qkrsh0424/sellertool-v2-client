@@ -2,12 +2,11 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import FooterMain from "../../views/footer/FooterMain";
-import PrimaryNavbarMainComponent from "../../views/navbar/primary-navbar";
-import SecondaryNavbarMainComponent from "../../views/navbar/secondary-navbar-v2";
-import MainComponent from "../../views/workspace/select";
+import FooterMain from "../../../views/footer/FooterMain";
+import PrimaryNavbarMainComponent from "../../../views/navbar/primary-navbar";
+import WorkspaceManagementMainComponent from "../../../views/workspace/management-v2/index";
 
-export default function WorkspaceSelectPage(props) {
+const WorkspaceManagementPage = (props) => {
     const userRedux = useSelector(state => state.userRedux);
     const router = useRouter();
 
@@ -24,12 +23,12 @@ export default function WorkspaceSelectPage(props) {
     return (
         <>
             <Head>
-                <title>셀러툴 홈</title>
+                <title>워크스페이스 관리</title>
             </Head>
-            <PrimaryNavbarMainComponent />
-            <SecondaryNavbarMainComponent />
-            <MainComponent />
-            <FooterMain />
+            <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
+            <WorkspaceManagementMainComponent></WorkspaceManagementMainComponent>
+            <FooterMain></FooterMain>
         </>
     );
 }
+export default WorkspaceManagementPage;

@@ -1,13 +1,18 @@
 import Image from "next/image";
-import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
-import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
-import { RemoveMemberModalWrapper } from "../styles/RemoveMemberModal.styled";
+import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
+import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
+import useInviteMemberFormHook from "../../hooks/useInviteMemberFormHook";
+import { Container } from "../styles/InviteMemberModal.styled";
 
-export default function RemoveMemberModalComponent({
-    removeTargetMember,
+export default function InviteMemberModalComponent({
     onClose,
     onConfirm
 }) {
+    const {
+        inviteMemberForm,
+        onChangeInviteMemberFormValueOfName
+    } = useInviteMemberFormHook();
+
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
 
     const __handle = {
@@ -15,13 +20,15 @@ export default function RemoveMemberModalComponent({
             confirm: (e) => {
                 e.preventDefault();
                 setDisabledBtn(true);
-                onConfirm();
+                onConfirm({
+                    inviteMemberForm: inviteMemberForm
+                });
             }
         }
     }
     return (
         <>
-            <RemoveMemberModalWrapper>
+            <Container>
                 <div className='header-close-button-box'>
                     <button
                         type='button'
@@ -45,31 +52,20 @@ export default function RemoveMemberModalComponent({
                     className='title-box'
                 >
                     <div className='title'>
-                        <span className='accent-text'>멤버제명</span>
+                        <span className='accent-text'>멤버를 초대하고</span> 워크스페이스를 공유해 보세요.
                     </div>
                 </div>
                 <form onSubmit={(e) => __handle.submit.confirm(e)}>
                     <div className='content-group'>
-                        <div className='content-box mgl-flex mgl-flex-justifyContent-center mgl-flex-alignItems-center'>
-                            <div className='profile-figure'>
-                                <Image
-                                    loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src={removeTargetMember?.user?.profileImageUri || '/images/icon/person_default_808080.svg'}
-                                    layout='responsive'
-                                    width={1}
-                                    height={1}
-                                    alt="close icon"
-                                    loading="lazy"
-                                ></Image>
-                            </div>
-                            <div className='username-text'>
-                                {removeTargetMember?.user?.nickname}
-                            </div>
-                        </div>
                         <div className='content-box'>
-                            <div className='description-text'>
-                                해당 멤버를 정말로 제명 하시겠습니까?
-                            </div>
+                            <input
+                                type='text'
+                                className='input-item'
+                                name='username'
+                                value={inviteMemberForm.username || ''}
+                                onChange={(e) => onChangeInviteMemberFormValueOfName(e)}
+                                placeholder={'유저 아이디를 입력해주세요.'}
+                            ></input>
                         </div>
                     </div>
                     <div className='button-group'>
@@ -88,7 +84,7 @@ export default function RemoveMemberModalComponent({
                             type='submit'
                             className='button-el'
                             style={{
-                                background: 'var(--defaultRedColor)',
+                                background: 'var(--mainColor)',
                                 width: '60%'
                             }}
                             disabled={disabledBtn}
@@ -97,7 +93,7 @@ export default function RemoveMemberModalComponent({
                         </SingleBlockButton>
                     </div>
                 </form>
-            </RemoveMemberModalWrapper>
+            </Container>
         </>
     );
 }

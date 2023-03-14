@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { workspaceMemberDataConnect } from "../../../../data_connect/workspaceMemberDataConnect";
+import { workspaceMemberDataConnect } from "../../../../../data_connect/workspaceMemberDataConnect";
 
 export default function useWorkspaceMembersHook({
     workspace

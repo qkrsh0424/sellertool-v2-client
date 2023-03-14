@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import SingleBlockButton from "../../../modules/button/SingleBlockButton";
-import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
+import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
+import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import usePermissionTargetMemberHook from "../hooks/usePermissionTargetMemberHook";
 import useRemoveTargetMember from "../hooks/useRemoveTargetMemberHook";
 import { Container, MemberListWrapper, TitleFieldWrapper } from "./styles/MemberList.styled";

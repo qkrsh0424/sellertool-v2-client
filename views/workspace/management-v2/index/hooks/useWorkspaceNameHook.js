@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { useState } from "react";
-import formatValidUtils from "../../../../utils/formatValidUtils";
+import formatValidUtils from "../../../../../utils/formatValidUtils";
 
 export default function useWorkspaceNameHook(props) {
     const [workspaceName, setWorkspaceName] = useState(null);

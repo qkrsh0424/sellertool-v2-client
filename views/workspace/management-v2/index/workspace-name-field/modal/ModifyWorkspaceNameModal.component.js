@@ -1,34 +1,58 @@
+import _ from "lodash";
 import Image from "next/image";
-import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
-import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
-import useInviteMemberFormHook from "../../hooks/useInviteMemberFormHook";
-import { Container } from "../styles/InviteMemberModal.styled";
+import { useEffect, useState } from "react";
+import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
+import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
+import useWorkspaceNameHook from "../../hooks/useWorkspaceNameHook";
+import { Wrapper } from "../styles/ModifyWorkspaceNameModal.styled";
 
-export default function InviteMemberModalComponent({
+export default function ModifyWorkspaceNameModalComponent({
+    workspace,
     onClose,
     onConfirm
 }) {
-    const {
-        inviteMemberForm,
-        onChangeInviteMemberFormValueOfName
-    } = useInviteMemberFormHook();
-
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+    const {
+        workspaceName,
+        onSetWorkspaceName,
+        onCheckWorkspaceNameFormatValid
+    } = useWorkspaceNameHook(null);
+
+    useEffect(() => {
+        if (workspace) {
+            onSetWorkspaceName(_.cloneDeep(workspace.name));
+            return;
+        }
+    }, [workspace])
+
 
     const __handle = {
+        change: {
+            workspaceName: (e) => {
+                let value = e.target.value;
+
+                onSetWorkspaceName(value);
+            }
+        },
         submit: {
             confirm: (e) => {
                 e.preventDefault();
                 setDisabledBtn(true);
-                onConfirm({
-                    inviteMemberForm: inviteMemberForm
-                });
+
+                try {
+                    onCheckWorkspaceNameFormatValid()
+                    onConfirm(workspaceName);
+                } catch (err) {
+                    alert(err.message);
+                    return;
+                }
             }
         }
     }
+
     return (
         <>
-            <Container>
+            <Wrapper>
                 <div className='header-close-button-box'>
                     <button
                         type='button'
@@ -48,24 +72,25 @@ export default function InviteMemberModalComponent({
                         </div>
                     </button>
                 </div>
-                <div
-                    className='title-box'
-                >
+                <div className='title-box'>
                     <div className='title'>
-                        <span className='accent-text'>멤버를 초대하고</span> 워크스페이스를 공유해 보세요.
+                        변경할 <span style={{ color: 'var(--mainColor)' }}>워크스페이스 이름</span>을 지정해 주세요.
                     </div>
                 </div>
                 <form onSubmit={(e) => __handle.submit.confirm(e)}>
                     <div className='content-group'>
                         <div className='content-box'>
-                            <input
-                                type='text'
-                                className='input-item'
-                                name='username'
-                                value={inviteMemberForm.username || ''}
-                                onChange={(e) => onChangeInviteMemberFormValueOfName(e)}
-                                placeholder={'유저 아이디를 입력해주세요.'}
-                            ></input>
+                            <div className='input-box'>
+                                <input
+                                    type='text'
+                                    className='input-el'
+                                    value={workspaceName || ''}
+                                    placeholder="워크스페이스 이름 2-30자"
+                                    onChange={(e) => __handle.change.workspaceName(e)}
+                                    maxLength={30}
+                                    required
+                                ></input>
+                            </div>
                         </div>
                     </div>
                     <div className='button-group'>
@@ -76,7 +101,7 @@ export default function InviteMemberModalComponent({
                                 background: '#959eae',
                                 flex: 1
                             }}
-                            onClick={() => onClose()}
+                            onClick={onClose}
                         >
                             취소
                         </SingleBlockButton>
@@ -89,11 +114,11 @@ export default function InviteMemberModalComponent({
                             }}
                             disabled={disabledBtn}
                         >
-                            확인
+                            완료
                         </SingleBlockButton>
                     </div>
                 </form>
-            </Container>
+            </Wrapper>
         </>
     );
 }

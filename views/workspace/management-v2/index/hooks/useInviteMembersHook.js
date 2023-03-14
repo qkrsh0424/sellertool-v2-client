@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { inviteMemberDataConnect } from "../../../../data_connect/inviteMemberDataConnect";
+import { inviteMemberDataConnect } from "../../../../../data_connect/inviteMemberDataConnect";
 
 export default function useInviteMembersHook({
     workspace

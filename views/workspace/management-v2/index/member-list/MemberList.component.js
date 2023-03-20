@@ -38,10 +38,6 @@ const MemberListComponent = ({
     const [permissionSettingModalOpen, setPermissionSettingModalOpen] = useState(false);
     const [removeMemberModalOpen, setRemoveMemberModalOpen] = useState(false);
 
-    if (!workspaceMembers) {
-        return null;
-    }
-
     const __handle = {
         action: {
             openPermissionSettingModal: (workspaceMember) => {
@@ -132,7 +128,7 @@ const MemberListComponent = ({
                     </div>
                 </TitleFieldWrapper>
                 <MemberListWrapper>
-                    {workspaceMembers.map((r, index) => {
+                    {workspaceMembers?.map((r, index) => {
                         return (
                             <div
                                 key={r.id}

@@ -7,6 +7,7 @@ import useWorkspaceHook from "./hooks/useWorkspaceHook";
 import LayoutComponent from "./layout/Layout.component";
 import InviteMemberComponent from "./invite-member/InviteMember.component";
 import useIsWorkspaceMasterHook from "./hooks/useIsWorkspaceMasterHook";
+import AuthTemplateListComponent from "./auth-template-list/AuthTemplateList.component";
 
 const Container = styled.div`
     background-color: var(--defaultBackground);
@@ -14,6 +15,7 @@ const Container = styled.div`
 
 const WorkspaceManagementMainComponent = (props) => {
     const router = useRouter();
+    const viewType = router?.query?.view;
 
     const {
         workspace,
@@ -50,11 +52,14 @@ const WorkspaceManagementMainComponent = (props) => {
                     <WorkspaceNameFieldComponent
                         workspace={workspace}
                         isWorkspaceMaster={isWorkspaceMaster}
-                        
+
                         onSubmitModifyWorkspaceName={__handle.submit.modifyWorkspaceName}
                     />
-                    <LayoutComponent>
-                        {(!router.query?.settings || router.query?.settings === 'member-list') &&
+                    <LayoutComponent
+                        isWorkspaceMaster={isWorkspaceMaster}
+                    >
+                        {
+                            (!viewType || viewType === 'MEMBER_LIST') &&
                             (
                                 <MemberListComponent
                                     workspace={workspace}
@@ -62,9 +67,19 @@ const WorkspaceManagementMainComponent = (props) => {
                                 />
                             )
                         }
-                        {(router.query?.settings && router.query?.settings === 'invite-member') &&
+                        {
+                            (isWorkspaceMaster && viewType && viewType === 'INVITE_MEMBER') &&
                             (
                                 <InviteMemberComponent
+                                    workspace={workspace}
+                                    isWorkspaceMaster={isWorkspaceMaster}
+                                />
+                            )
+                        }
+                        {
+                            (isWorkspaceMaster && viewType && viewType === 'AUTH_TEMPLATE') &&
+                            (
+                                <AuthTemplateListComponent
                                     workspace={workspace}
                                     isWorkspaceMaster={isWorkspaceMaster}
                                 />

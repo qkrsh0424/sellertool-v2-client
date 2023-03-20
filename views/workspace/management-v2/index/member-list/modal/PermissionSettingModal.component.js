@@ -21,6 +21,8 @@ export default function PermissionSettingModalComponent({
         }
     }
 
+    console.log(permissionTargetMember);
+
     return (
         <PermissionSettingModalWrapper>
             <div className='header-close-button-box'>

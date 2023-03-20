@@ -22,14 +22,18 @@ const ContentWrapper = styled.div`
     flex:1;
 `;
 
-export default function LayoutComponent(props) {
+
+export default function LayoutComponent({
+    isWorkspaceMaster,
+    children
+}) {
     return (
         <>
             <Container>
-                <NavbarComponent />
+                <NavbarComponent isWorkspaceMaster={isWorkspaceMaster} />
                 <Block />
                 <ContentWrapper>
-                    {props.children}
+                    {children}
                 </ContentWrapper>
             </Container>
         </>

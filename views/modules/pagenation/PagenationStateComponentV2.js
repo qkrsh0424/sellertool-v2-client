@@ -198,7 +198,6 @@ const PagenationComponentStateV2 = ({
     onChangeSize,
     ...props
 }) => {
-    const router = useRouter();
     const pageInputRef = useRef();
     const {
         popperAnchorEl: pageInputPopperAnchorEl,
@@ -251,7 +250,7 @@ const PagenationComponentStateV2 = ({
 
     return (
         <>
-            <Container>
+            <Container {...props}>
                 <Wrapper
                     align={align}
                     isFirst={isFirst}
@@ -331,7 +330,7 @@ const PagenationComponentStateV2 = ({
                                                 type='number'
                                                 className='input-item'
                                                 defaultValue={pageIndex + 1}
-                                                max={props?.totalPages}
+                                                max={totalPages}
                                                 min={1}
                                                 required
                                             ></input>

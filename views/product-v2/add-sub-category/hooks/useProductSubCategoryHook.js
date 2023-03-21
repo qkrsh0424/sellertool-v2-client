@@ -1,11 +1,18 @@
+import { useSelector } from "react-redux";
 import { productSubCategoryDataConnect } from "../../../../data_connect/productSubCategoryDataConnect";
 
 export default function useProductSubCategoryHook(props) {
+    const workspaceRedux = useSelector(state => state?.workspaceRedux);
+
     const reqCreateProductSubCategory = async ({
         body,
         successCallback
     }) => {
-        await productSubCategoryDataConnect().create(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await productSubCategoryDataConnect().create(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

@@ -10,6 +10,7 @@ export const Container = styled.div`
     min-height: 500px;
 
     @media all and (max-width:992px){
+        width: 100%;
         min-height: 0;
     }
 `;

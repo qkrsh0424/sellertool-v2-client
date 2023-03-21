@@ -5,9 +5,9 @@ import CommonModalComponent from "../../../../modules/modal/CommonModalComponent
 import usePermissionTargetMemberHook from "../hooks/usePermissionTargetMemberHook";
 import useRemoveTargetMember from "../hooks/useRemoveTargetMemberHook";
 import { Container, MemberListWrapper, TitleFieldWrapper } from "./styles/MemberList.styled";
-import PermissionSettingModalComponent from "./modal/PermissionSettingModal.component";
 import RemoveMemberModalComponent from "./modal/RemoveMemberModal.component";
 import useWorkspaceMembersHook from "../hooks/useWorkspaceMembersHook";
+import PermissionSettingModalV2Component from "./modal/PermissionSettingModalV2.component";
 
 
 const MemberListComponent = ({
@@ -17,7 +17,7 @@ const MemberListComponent = ({
     const {
         workspaceMembers,
         reqFetchWorkspaceMembers,
-        reqChangePermissions,
+        reqChangeWorkspaceAuthTemplate,
         reqDeleteMember
     } = useWorkspaceMembersHook({
         workspace: workspace
@@ -26,8 +26,6 @@ const MemberListComponent = ({
     const {
         permissionTargetMember,
         onSetPermissionTargetMember,
-        onActionChangePermissionOfName,
-        onCheckPermissionsFormatValid
     } = usePermissionTargetMemberHook();
 
     const {
@@ -61,27 +59,13 @@ const MemberListComponent = ({
             fetchWorkspaceMembers: async () => {
                 await reqFetchWorkspaceMembers();
             },
-            changePermissions: async () => {
-                try {
-                    onCheckPermissionsFormatValid();
-                    let body = {
-                        workspaceId: permissionTargetMember.workspaceId,
-                        workspaceMemberId: permissionTargetMember.id,
-                        readPermissionYn: permissionTargetMember.readPermissionYn,
-                        writePermissionYn: permissionTargetMember.writePermissionYn,
-                        updatePermissionYn: permissionTargetMember.updatePermissionYn,
-                        deletePermissionYn: permissionTargetMember.deletePermissionYn
+            changeWorkspaceAuthTemplate: async (body) => {
+                await reqChangeWorkspaceAuthTemplate(
+                    body,
+                    () => {
+                        __handle.action.closePermissionSettingModal();
                     }
-                    await reqChangePermissions({
-                        body: body,
-                        successCallback: () => {
-                            __handle.action.closePermissionSettingModal();
-                        }
-                    });
-                } catch (err) {
-                    alert(err.message);
-                    return;
-                }
+                );
             },
             removeMember: async () => {
                 let body = {
@@ -105,58 +89,113 @@ const MemberListComponent = ({
                 <TitleFieldWrapper>
                     <div className='mgl-flex mgl-flex-alignItems-center'>
                         <div>
-                            멤버목록
+                            관리자
                         </div>
-                        <SingleBlockButton
-                            type='button'
-                            className='refresh-button-el'
-                            onClick={() => __handle.submit.fetchWorkspaceMembers()}
-                        >
-                            <div className='refresh-button-icon-figure'>
-                                <Image
-                                    loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                    src={'/images/icon/refresh_default_808080.svg'}
-                                    layout='responsive'
-                                    width={1}
-                                    height={1}
-                                    objectFit={'cover'}
-                                    alt='image'
-                                    loading='lazy'
-                                ></Image>
-                            </div>
-                        </SingleBlockButton>
                     </div>
                 </TitleFieldWrapper>
                 <MemberListWrapper>
-                    {workspaceMembers?.map((r, index) => {
+                    {workspaceMembers?.filter(r => r.masterFlag)?.map((r, index) => {
                         return (
-                            <div
-                                key={r.id}
-                                className='item-group mgl-flex mgl-flex-alignItems-center'
-                            >
+                            <div key={r.id} className='item-group'>
                                 <div
-                                    className='content-group mgl-flex mgl-flex-justifyContent-spaceBetween mgl-flex-alignItems-center'
-                                >
-                                    <div className='profile-image-figure'>
-                                        <Image
-                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                            src={r?.user?.profileImageUri || '/images/icon/person_default_808080.svg'}
-                                            layout='responsive'
-                                            width={1}
-                                            height={1}
-                                            objectFit={'cover'}
-                                            alt='image'
-                                            loading='lazy'
-                                        ></Image>
-                                    </div>
 
-                                    <div className='info-items mgl-flex'>
-                                        <div className='tag-items'>
-                                            <div className='grade-tag'>{returnConvertedGrade(r.grade)}</div>
+                                    className='mgl-flex mgl-flex-alignItems-center'
+                                >
+                                    <div
+                                        className='content-group mgl-flex mgl-flex-alignItems-center'
+                                    >
+                                        <div className='profile-image-figure'>
+                                            <Image
+                                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                                src={r?.profileImageUri || '/images/icon/person_default_808080.svg'}
+                                                layout='responsive'
+                                                width={1}
+                                                height={1}
+                                                objectFit={'cover'}
+                                                alt='image'
+                                                loading='lazy'
+                                            ></Image>
                                         </div>
-                                        <div className='user-items'>
-                                            <div className='user-item mgl-font-color-primary'>{r.user.nickname}</div>
-                                            <div className='user-item'>{r.user.email}</div>
+                                        <div>
+                                            <p><span className='nickName'>{r?.nickname || '닉네임 미지정'}</span> <span className='memberType'>{r.masterFlag ? '관리자' : '매니저'}</span></p>
+                                            <div className='info-group'>
+                                                <div className='info-left'>Email.</div>
+                                                <div>{r?.email || '이메일 미지정'}</div>
+                                            </div>
+                                            <div className='info-group'>
+                                                <div className='info-left'>Phone.</div>
+                                                <div>{r?.phoneNumber || '휴대전화 미지정'}</div>
+                                            </div>
+                                            <div className='info-group'>
+                                                <div className='info-left'>권한 템플릿</div>
+                                                <div style={{ color: !r?.workspaceAuthTemplateName ? 'var(--defaultRedColor)' : '' }}>{r?.workspaceAuthTemplateName || '권한 템플릿 미지정'}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {isWorkspaceMaster &&
+                                    (
+                                        <div className='control-items mgl-flex mgl-flex-alignItems-center'>
+                                            <SingleBlockButton
+                                                type='button'
+                                                className='control-item setting-button-el'
+                                                onClick={() => __handle.action.openPermissionSettingModal(r)}
+                                            >
+                                                권한설정
+                                            </SingleBlockButton>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                        )
+                    })}
+                </MemberListWrapper>
+            </Container>
+            <Container>
+                <TitleFieldWrapper>
+                    <div className='mgl-flex mgl-flex-alignItems-center'>
+                        <div>
+                            멤버목록
+                        </div>
+                    </div>
+                </TitleFieldWrapper>
+                <MemberListWrapper>
+                    {workspaceMembers?.filter(r => !r.masterFlag)?.map((r, index) => {
+                        return (
+                            <div key={r.id} className='item-group'>
+                                <div
+
+                                    className='mgl-flex mgl-flex-alignItems-center'
+                                >
+                                    <div
+                                        className='content-group mgl-flex mgl-flex-alignItems-center'
+                                    >
+                                        <div className='profile-image-figure'>
+                                            <Image
+                                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                                src={r?.profileImageUri || '/images/icon/person_default_808080.svg'}
+                                                layout='responsive'
+                                                width={1}
+                                                height={1}
+                                                objectFit={'cover'}
+                                                alt='image'
+                                                loading='lazy'
+                                            ></Image>
+                                        </div>
+                                        <div>
+                                            <p><span className='nickName'>{r?.nickname || '닉네임 미지정'}</span> <span className='memberType'>{r.masterFlag ? '관리자' : '매니저'}</span></p>
+                                            <div className='info-group'>
+                                                <div className='info-left'>Email.</div>
+                                                <div>{r?.email || '이메일 미지정'}</div>
+                                            </div>
+                                            <div className='info-group'>
+                                                <div className='info-left'>Phone.</div>
+                                                <div>{r?.phoneNumber || '휴대전화 미지정'}</div>
+                                            </div>
+                                            <div className='info-group'>
+                                                <div className='info-left'>권한 템플릿</div>
+                                                <div style={{ color: !r?.workspaceAuthTemplateName ? 'var(--defaultRedColor)' : '' }}>{r?.workspaceAuthTemplateName || '권한 템플릿 미지정'}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -175,7 +214,7 @@ const MemberListComponent = ({
                                                 className='control-item remove-button-el'
                                                 onClick={() => __handle.action.openRemoveMemberModal(r)}
                                             >
-                                                멤버제명
+                                                삭제
                                             </SingleBlockButton>
                                         </div>
                                     )
@@ -187,18 +226,13 @@ const MemberListComponent = ({
             </Container>
 
             {(permissionSettingModalOpen && permissionTargetMember) &&
-                <CommonModalComponent
+                <PermissionSettingModalV2Component
+                    targetMember={permissionTargetMember}
                     open={permissionSettingModalOpen}
 
                     onClose={__handle.action.closePermissionSettingModal}
-                >
-                    <PermissionSettingModalComponent
-                        permissionTargetMember={permissionTargetMember}
-                        onActionChangePermissionOfName={onActionChangePermissionOfName}
-                        onClose={__handle.action.closePermissionSettingModal}
-                        onConfirm={__handle.submit.changePermissions}
-                    />
-                </CommonModalComponent>
+                    onSubmit={__handle.submit.changeWorkspaceAuthTemplate}
+                />
             }
 
             {(removeMemberModalOpen && removeTargetMember) &&
@@ -220,11 +254,3 @@ const MemberListComponent = ({
     );
 }
 export default MemberListComponent;
-
-function returnConvertedGrade(grade) {
-    switch (grade) {
-        case 'host':
-            return '관리자'
-        default: return '멤버'
-    }
-}

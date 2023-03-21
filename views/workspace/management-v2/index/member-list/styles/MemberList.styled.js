@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+    margin-bottom: 30px;
     @media all and (max-width:992px){
         margin-top: 30px;
     }
@@ -69,16 +70,6 @@ export const MemberListWrapper = styled.div`
                 }
             }
 
-            .info-items{
-                flex:1;
-                align-items: center;
-
-                @media all and (max-width:992px){
-                    flex-direction: column;
-                    width:100%;
-                }
-            }
-
             .tag-items{
                 margin: 0 20px 0 0;
 
@@ -100,56 +91,66 @@ export const MemberListWrapper = styled.div`
                 }
             }
 
+            .info-group{
+                display: flex;
+                font-size: 12px;
+                color: #606060;
+                font-weight: 500;
+                margin-top: 3px;
+            }
 
-            .user-items{
-                width:100%;
+            .nickName{
+                color: var(--mainColor);
+                font-size: 16px;
+                font-weight: 700;
+            }
 
-                .user-item{
-                    word-break: break-all;
-                }
+            .memberType{
+                font-size: 12px;
+                font-weight: 500;
+                color: #606060;
+            }
+            .info-left{
+                width: 80px;
             }
         }
 
         .control-items{
+            margin-top: 10px;
+            justify-content: flex-end;
             @media all and (max-width:992px){
                 width:100%;
-                margin-top: 20px;
                 flex:1;
-                justify-content: flex-end;
             }
             
             .control-item{
                 padding: 0;
                 margin: 0 10px 0 0;
-                width: 80px;
+                width: 70px;
                 height: 30px;
                 font-size: 12px;
-                background: #f0f0f0;
-                border: 1px solid #f0f0f0;
-                border-radius: 10px;
-                color: #404040;
+                font-weight: 700;
+                border: none;
+                border-radius: 5px;
+                color: #fff;
 
                 &:last-child{
                     margin:0;
+                }
+
+                &:hover{
+                    transform: scale(1.02);
                 }
             }
 
             .setting-button-el{
                 box-shadow: var(--defaultBoxShadow);
-                &:hover{
-                    background:var(--mainColor);
-                    border: 1px solid var(--mainColor);
-                    color:white;
-                }
+                background: #222;
             }
 
             .remove-button-el{
                 box-shadow: var(--defaultBoxShadow);
-                &:hover{
-                    background:var(--defaultRedColor);
-                    border: 1px solid var(--defaultRedColor);
-                    color:white;
-                }
+                background: var(--defaultRedColor);
             }
         }
     }

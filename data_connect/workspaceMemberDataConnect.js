@@ -23,20 +23,18 @@ const workspaceMemberDataConnect = () => {
             })
         },
         /**
-        * 워크스페이스 멤버의 권한을 업데이트 한다.
+        * 워크스페이스 멤버의 권한 템플릿을 업데이트 한다.
         * @param {object} body
         * @param {string} body.workspaceMemberId
-        * @param {string} body.readPermissionYn
-        * @param {string} body.writePermissionYn
-        * @param {string} body.updatePermissionYn
-        * @param {string} body.deletePermissionYn
+        * @param {string} body.workspaceAuthTemplateId
+        * @param {object} headers
+        * @param {string} headers.wsId
         * 
         */
-        changePermissions: async function ({
-            body
-        }) {
+        changeWorkspaceAuthTemplate: async function (body, headers) {
             await csrfDataConnect().getAuthCsrf();
-            return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/workspace-members/${body.workspaceMemberId}/target:permissions`, body, {
+            return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/workspace-members/target:workspaceAuthTemplate`, body, {
+                headers:headers,
                 withCredentials: true,
                 xsrfCookieName: 'x_auth_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'

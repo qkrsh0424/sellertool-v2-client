@@ -29,11 +29,15 @@ export default function useWorkspaceMembersHook({
             ;
     }
 
-    const reqChangePermissions = async ({
+    const reqChangeWorkspaceAuthTemplate = async (
         body,
         successCallback
-    }) => {
-        await workspaceMemberDataConnect().changePermissions({ body })
+    ) => {
+        const headers = {
+            wsId: workspace?.id
+        }
+
+        await workspaceMemberDataConnect().changeWorkspaceAuthTemplate(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchWorkspaceMembers();
@@ -88,7 +92,7 @@ export default function useWorkspaceMembersHook({
     return {
         workspaceMembers,
         reqFetchWorkspaceMembers,
-        reqChangePermissions,
+        reqChangeWorkspaceAuthTemplate,
         reqDeleteMember
     }
 }

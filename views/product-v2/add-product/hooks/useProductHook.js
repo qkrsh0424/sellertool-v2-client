@@ -1,9 +1,12 @@
 import _ from "lodash";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { productDataConnect } from "../../../../data_connect/productDataConnect";
 import formatValidUtils from "../../../../utils/formatValidUtils";
 
 export default function useProductHook(props) {
+    const workspaceRedux = useSelector(state => state?.workspaceRedux);
+
     const [product, setProduct] = useState({
         name: '', // 입력 필수
         productTag: '', // 입력
@@ -16,7 +19,10 @@ export default function useProductHook(props) {
         body,
         successCallback
     }) => {
-        await productDataConnect().createOne(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        await productDataConnect().createOne(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

@@ -56,8 +56,10 @@ export default function useProductsHook(props) {
         body,
         successCallback
     }) => {
-
-        await productDataConnect().changeStockManagement(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        await productDataConnect().changeStockManagement(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

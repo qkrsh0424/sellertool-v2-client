@@ -15,6 +15,15 @@ const productOptionPackageDataConnect = () => {
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
+        searchProductInfoListByProductOptionIds: async function (body) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/product-option-packages/search/product-infos`, body, {
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
         updateAll: async function (body) {
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/product-option-packages/all`, body, {
@@ -24,15 +33,6 @@ const productOptionPackageDataConnect = () => {
                 })
             )
         },
-        searchProductInfoListByProductOptionIds: async function (body) {
-            return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/product-option-packages/search/product-infos`, body, {
-                    withCredentials: true,
-                    xsrfCookieName: 'x_api_csrf_token',
-                    xsrfHeaderName: 'X-XSRF-TOKEN'
-                })
-            )
-        }
     }
 }
 

@@ -246,7 +246,6 @@ export default function FloatingControlToggle({
         handleToggleBackdropOpen(true);
         let body = {
             erpItemIds: selectedErpItems?.map(r => r.id),
-            workspaceId: workspaceRedux?.workspaceInfo?.id,
             memo: memo
         }
 
@@ -262,7 +261,6 @@ export default function FloatingControlToggle({
         handleToggleBackdropOpen(true);
         let body = {
             erpItemIds: selectedErpItems?.map(r => r.id),
-            workspaceId: workspaceRedux?.workspaceInfo?.id,
         }
 
         onSubmitCancelStockRelease(body, () => {

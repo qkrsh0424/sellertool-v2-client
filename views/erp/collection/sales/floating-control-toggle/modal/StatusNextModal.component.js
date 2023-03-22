@@ -285,11 +285,15 @@ function Content({
     }
 
     const fetchInventoryStocksByProductOptionIds = async (productOptionIds) => {
-        let body = [
-            ...productOptionIds
-        ]
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
 
-        return await inventoryDataConnect().searchList(body)
+        const body = {
+            productOptionIds:productOptionIds
+        }
+
+        return await inventoryDataConnect().searchList(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     return res.data.data;

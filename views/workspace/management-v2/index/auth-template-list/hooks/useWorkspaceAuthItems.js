@@ -46,8 +46,49 @@ export default function useWorkspaceAuthItems(refWorkspaceAuthItems) {
         )
     }
 
+    const onSelectAll = () => {
+        setWorkspaceAuthItems(
+            workspaceAuthItems.map(r => {
+                return {
+                    ...r,
+                    essentialYn: 'y'
+                }
+            })
+        );
+    }
+
+    const onSelectClearAll = () => {
+        setWorkspaceAuthItems(
+            workspaceAuthItems.map(r => {
+                return {
+                    ...r,
+                    essentialYn: 'n'
+                }
+            })
+        );
+    }
+
+    const onSelectAllForOMSAdmin = () => {
+        setWorkspaceAuthItems(
+            workspaceAuthItems.map(r => {
+                if (OMS_ADMIN_CODES.includes(r.code)) {
+                    return {
+                        ...r,
+                        essentialYn: 'y'
+                    }
+                } else {
+                    return { ...r }
+                }
+            })
+        );
+    }
     return {
         workspaceAuthItems,
-        toggleEssentialYn
+        toggleEssentialYn,
+        onSelectAll,
+        onSelectClearAll,
+        onSelectAllForOMSAdmin
     }
 }
+
+const OMS_ADMIN_CODES = ['OMS_SEARCH', 'OMS_CREATE', 'OMS_UPDATE', 'OMS_DELETE', 'PRODUCT_MANAGE_SEARCH', 'INVENTORY_MANAGE_SEARCH', 'EXCEL_TRANS_SEARCH']

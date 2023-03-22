@@ -26,6 +26,32 @@ const InputBox = styled.div`
     }
 `;
 
+const BatchSelectButtonGroup = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+`;
+
+const BatchSelectButton = styled(CustomBlockButton)`
+    width: auto;
+    height: 30px;
+    padding: 0 10px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid #f0f0f0;
+    background: #f0f0f0;
+    color: #666;
+    border-radius: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    &:last-child{
+        margin-right: 0;
+    }
+`;
+
+const AuthItems = styled.div`
+
+`;
+
 const AuthItemBox = styled.div`
     margin-top: 30px;
     border: none;
@@ -33,6 +59,10 @@ const AuthItemBox = styled.div`
     border-radius: 10px;
     overflow: hidden;
     box-shadow: var(--defaultBoxShadow);
+
+    &:first-child{
+        margin-top: 0;
+    }
 
     .name{
         padding: 10px 20px;
@@ -164,6 +194,43 @@ export default function EditModalComponent({
         )
     }
 
+    const onSelectAll = () => {
+        setWorkspaceAuthItems(
+            workspaceAuthItems.map(r => {
+                return {
+                    ...r,
+                    essentialYn: 'y'
+                }
+            })
+        );
+    }
+
+    const onSelectClearAll = () => {
+        setWorkspaceAuthItems(
+            workspaceAuthItems.map(r => {
+                return {
+                    ...r,
+                    essentialYn: 'n'
+                }
+            })
+        );
+    }
+
+    const onSelectAllForOMSAdmin = () => {
+        setWorkspaceAuthItems(
+            workspaceAuthItems.map(r => {
+                if (OMS_ADMIN_CODES.includes(r.code)) {
+                    return {
+                        ...r,
+                        essentialYn: 'y'
+                    }
+                } else {
+                    return { ...r }
+                }
+            })
+        );
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         setDisabledBtn(true);
@@ -221,34 +288,56 @@ export default function EditModalComponent({
                             </CustomRadioGroup>
                         </InputBox>
                         <LineBreakerBottom gapTop={30} gapBottom={30} />
-                        {refWorkspaceAuthItems?.map(refWorkspaceAuthItems => {
-                            return (
-                                <AuthItemBox key={refWorkspaceAuthItems.serviceType}>
-                                    <div className='name'>{refWorkspaceAuthItems?.serviceName}</div>
-                                    <div className='auth-items'>
-                                        {refWorkspaceAuthItems?.authItems?.map(refAuthItem => {
-                                            let authItem = workspaceAuthItems?.find(r => r.code === refAuthItem.code);
+                        <BatchSelectButtonGroup>
+                            <BatchSelectButton
+                                type='button'
+                                onClick={() => onSelectAll()}
+                            >
+                                전체선택
+                            </BatchSelectButton>
+                            <BatchSelectButton
+                                type='button'
+                                onClick={() => onSelectClearAll()}
+                            >
+                                전체해제
+                            </BatchSelectButton>
+                            <BatchSelectButton
+                                type='button'
+                                onClick={() => onSelectAllForOMSAdmin()}
+                            >
+                                발주 관리자 모두선택
+                            </BatchSelectButton>
+                        </BatchSelectButtonGroup>
+                        <AuthItems>
+                            {refWorkspaceAuthItems?.map(refWorkspaceAuthItems => {
+                                return (
+                                    <AuthItemBox key={refWorkspaceAuthItems.serviceType}>
+                                        <div className='name'>{refWorkspaceAuthItems?.serviceName}</div>
+                                        <div className='auth-items'>
+                                            {refWorkspaceAuthItems?.authItems?.map(refAuthItem => {
+                                                let authItem = workspaceAuthItems?.find(r => r.code === refAuthItem.code);
 
-                                            return (
-                                                <CustomBlockButton
-                                                    key={refAuthItem.code}
-                                                    type='button'
-                                                    className='permission-button-el'
-                                                    onClick={() => toggleEssentialYn(refAuthItem.code)}
-                                                >
-                                                    {refAuthItem?.authName}
-                                                    {(authItem && authItem?.essentialYn === 'y') ?
-                                                        <span className='permission-button-bulb permission-button-bulb-on'></span>
-                                                        :
-                                                        <span className='permission-button-bulb permission-button-bulb-off'></span>
-                                                    }
-                                                </CustomBlockButton>
-                                            );
-                                        })}
-                                    </div>
-                                </AuthItemBox>
-                            );
-                        })}
+                                                return (
+                                                    <CustomBlockButton
+                                                        key={refAuthItem.code}
+                                                        type='button'
+                                                        className='permission-button-el'
+                                                        onClick={() => toggleEssentialYn(refAuthItem.code)}
+                                                    >
+                                                        {refAuthItem?.authName}
+                                                        {(authItem && authItem?.essentialYn === 'y') ?
+                                                            <span className='permission-button-bulb permission-button-bulb-on'></span>
+                                                            :
+                                                            <span className='permission-button-bulb permission-button-bulb-off'></span>
+                                                        }
+                                                    </CustomBlockButton>
+                                                );
+                                            })}
+                                        </div>
+                                    </AuthItemBox>
+                                );
+                            })}
+                        </AuthItems>
                     </ContentContainer>
                     <CustomDialog.FooterButtonGroup isFlex style={{ marginTop: '30px' }}>
                         <CustomDialog.FooterButton type='button' style={{ background: 'var(--defaultModalCloseColor)', color: '#fff', width: '40%' }} onClick={() => onClose()}>취소</CustomDialog.FooterButton>
@@ -259,3 +348,5 @@ export default function EditModalComponent({
         </>
     );
 }
+
+const OMS_ADMIN_CODES = ['OMS_SEARCH', 'OMS_CREATE', 'OMS_UPDATE', 'OMS_DELETE', 'PRODUCT_MANAGE_SEARCH', 'INVENTORY_MANAGE_SEARCH', 'EXCEL_TRANS_SEARCH']

@@ -30,9 +30,10 @@ export default function useInventoryStocksHook(erpItems) {
         }
 
         const body = {
-            productOptionIds: productOptionIds
+            productOptionIds: [...productOptionIds]
         }
 
+        console.log(body);
         await inventoryDataConnect().searchList(body, headers)
             .then(res => {
                 if (res.status === 200) {

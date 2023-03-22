@@ -16,7 +16,7 @@ export default function UserPermissionComponent(props) {
             await __handle.req.fetchUserInfo();
         }
         userFetchInit();
-    }, [router]);
+    }, [router?.pathname]);
 
     const __handle = {
         req: {

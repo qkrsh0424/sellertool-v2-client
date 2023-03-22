@@ -12,11 +12,11 @@ export default function useMarginRecordsHook(props) {
     }, [])
 
     const reqFetchMarginRecords = async () => {
-        let params = {
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await marginRecordDataConnect().searchList(params)
+        await marginRecordDataConnect().searchList(headers)
             .then(res => {
                 if (res.status === 200) {
                     setMarginRecords(res.data.data)
@@ -31,7 +31,11 @@ export default function useMarginRecordsHook(props) {
         body,
         successCallback
     }) => {
-        await marginRecordDataConnect().deleteMarginRecord(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await marginRecordDataConnect().deleteMarginRecord(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

@@ -32,7 +32,7 @@ export default function useInventoryStocksHook(erpItems) {
         }
 
         const body = {
-            productOptionIds: productOptionIds
+            productOptionIds: [...productOptionIds]
         }
 
         await inventoryDataConnect().searchList(body, headers)

@@ -81,7 +81,6 @@ export default function HeaderSelectorComponent({
 
                 let body = {
                     ...form,
-                    workspaceId: workspaceRedux?.workspaceInfo?.id
                 }
 
                 onSubmitCreateExcelTranslatorHeader({

@@ -17,11 +17,11 @@ export default function useExcelTranslatorHeadersHook(props) {
     }, [workspaceRedux?.workspaceInfo?.id]);
 
     const reqFetchExcelTranslatorHeaders = async () => {
-        let params = {
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await excelTranslatorHeaderDataConnect().searchListByWorkspaceId(params)
+        await excelTranslatorHeaderDataConnect().searchList(headers)
             .then(res => {
                 if (res.status === 200) {
                     setExcelTranslatorHeaders(res.data.data);
@@ -36,7 +36,10 @@ export default function useExcelTranslatorHeadersHook(props) {
         body,
         successCallback
     }) => {
-        await excelTranslatorHeaderDataConnect().downloadSampleExcelForUploadHeader(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        await excelTranslatorHeaderDataConnect().downloadSampleExcelForUploadHeader(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();
@@ -73,7 +76,11 @@ export default function useExcelTranslatorHeadersHook(props) {
         body,
         successCallback
     }) => {
-        await excelTranslatorHeaderDataConnect().downloadSampleExcelForDownloadHeader(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await excelTranslatorHeaderDataConnect().downloadSampleExcelForDownloadHeader(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

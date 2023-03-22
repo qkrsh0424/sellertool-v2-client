@@ -2,7 +2,6 @@ import _ from "lodash";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { excelTranslatorHeaderDataConnect } from "../../../data_connect/excelTranslatorHeaderDataConnect"
-import { useLocalStorageHook } from "../../../hooks/local_storage/useLocalStorageHook";
 import { dateToYYYYMMDDhhmmssFile } from "../../../utils/dateFormatUtils";
 
 export default function useExcelTranslatorHeaderHook(props) {
@@ -18,11 +17,11 @@ export default function useExcelTranslatorHeaderHook(props) {
     }, [workspaceRedux?.workspaceInfo?.id]);
 
     const reqFetchExcelTranslatorHeaders = async () => {
-        let params = {
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await excelTranslatorHeaderDataConnect().searchListByWorkspaceId(params)
+        await excelTranslatorHeaderDataConnect().searchList(headers)
             .then(res => {
                 if (res.status === 200) {
                     setExcelTranslatorHeaders(res.data.data);
@@ -37,7 +36,11 @@ export default function useExcelTranslatorHeaderHook(props) {
         body,
         successCallback
     }) => {
-        await excelTranslatorHeaderDataConnect().createOne(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await excelTranslatorHeaderDataConnect().createOne(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchExcelTranslatorHeaders();
@@ -65,7 +68,11 @@ export default function useExcelTranslatorHeaderHook(props) {
         body,
         successCallback
     }) => {
-        await excelTranslatorHeaderDataConnect().changeTitle(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await excelTranslatorHeaderDataConnect().changeTitle(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchExcelTranslatorHeaders();
@@ -93,7 +100,10 @@ export default function useExcelTranslatorHeaderHook(props) {
         body,
         successCallback
     }) => {
-        await excelTranslatorHeaderDataConnect().delete(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        await excelTranslatorHeaderDataConnect().delete(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchExcelTranslatorHeaders();
@@ -121,7 +131,11 @@ export default function useExcelTranslatorHeaderHook(props) {
         body,
         successCallback
     }) => {
-        await excelTranslatorHeaderDataConnect().changeUploadHeaderDetail(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await excelTranslatorHeaderDataConnect().changeUploadHeaderDetail(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchExcelTranslatorHeaders();
@@ -149,7 +163,11 @@ export default function useExcelTranslatorHeaderHook(props) {
         body,
         successCallback
     }) => {
-        await excelTranslatorHeaderDataConnect().changeDownloadHeaderDetail(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await excelTranslatorHeaderDataConnect().changeDownloadHeaderDetail(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchExcelTranslatorHeaders();
@@ -177,7 +195,10 @@ export default function useExcelTranslatorHeaderHook(props) {
         body,
         successCallback
     }) => {
-        await excelTranslatorHeaderDataConnect().downloadSampleExcelForUploadHeader(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        await excelTranslatorHeaderDataConnect().downloadSampleExcelForUploadHeader(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();
@@ -214,7 +235,11 @@ export default function useExcelTranslatorHeaderHook(props) {
         body,
         successCallback
     }) => {
-        await excelTranslatorHeaderDataConnect().downloadSampleExcelForDownloadHeader(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await excelTranslatorHeaderDataConnect().downloadSampleExcelForDownloadHeader(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

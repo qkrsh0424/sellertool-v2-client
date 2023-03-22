@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { inventoryReleaseDataConnect } from "../../../../../data_connect/inventoryReleaseDataConnect";
 import { getRemovedPrefixZero } from "../../../../../utils/numberFormatUtils";
 
 export default function useInventoryReleasesFormHook({
     selectedProductOptions
 }) {
+    const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const [inventoryReleasesForm, setInventoryReleasesForm] = useState(null);
 
     useEffect(() => {
@@ -20,7 +22,11 @@ export default function useInventoryReleasesFormHook({
         body,
         successCallback
     }) => {
-        await inventoryReleaseDataConnect().createAll(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await inventoryReleaseDataConnect().createAll(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

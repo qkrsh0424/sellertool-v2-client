@@ -1,17 +1,22 @@
-import axios from "axios"
 import { axiosAuthInterceptor } from "./axiosInterceptors"
-import { csrfDataConnect } from "./csrfDataConnect"
-import qs from 'qs';
 import withMainApiCsrfWrapper from "../utils/withMainApiCsrfWrapper";
 
-const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress
-const SCP_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.scpApiAddress : process.env.production.scpApiAddress
+const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress;
 
 const inventoryReleaseDataConnect = () => {
     return {
-        createAll: async function (body) {
+        /**
+         * 
+         * @param {object} body 
+         * @param {object[]} body.inventoryReleases [...moreItems]
+         * @param {object} headers 
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        createAll: async function (body, headers) {
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory-releases/all`, body, {
+                    headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
                     xsrfHeaderName: 'X-XSRF-TOKEN'
@@ -23,11 +28,13 @@ const inventoryReleaseDataConnect = () => {
          * @param {object} body 
          * @param {string} body.id
          * @param {string} body.memo
-         * @param {string} body.workspaceId
+         * @param {object} headers 
+         * @param {string} headers.wsId
          */
-        changeMemo: async function (body) {
+        changeMemo: async function (body, headers) {
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/inventory-releases/target:memo`, body, {
+                    headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
                     xsrfHeaderName: 'X-XSRF-TOKEN'

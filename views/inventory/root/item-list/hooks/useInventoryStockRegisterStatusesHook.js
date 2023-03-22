@@ -49,7 +49,11 @@ export default function useInventoryStockRegisterStatusesHook({
         body,
         successCallback
     }) => {
-        await inventoryReceiveDataConnect().changeMemo(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await inventoryReceiveDataConnect().changeMemo(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();
@@ -77,7 +81,11 @@ export default function useInventoryStockRegisterStatusesHook({
         body,
         successCallback
     }) => {
-        await inventoryReleaseDataConnect().changeMemo(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await inventoryReleaseDataConnect().changeMemo(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

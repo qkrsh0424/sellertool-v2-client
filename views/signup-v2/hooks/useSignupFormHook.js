@@ -54,9 +54,12 @@ export default function useSignupFormHook() {
         email,
         successCallback
     }) => {
-        let validationType = 'forSignup';
+        let body = {
+            email: email,
+            validationType: 'forSignup'
+        }
 
-        await validationDataConnect().sendEmailValidationCode({ email, validationType })
+        await validationDataConnect().sendEmailValidationCode(body)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();
@@ -83,9 +86,11 @@ export default function useSignupFormHook() {
         phoneNumber,
         successCallback
     }) => {
-        let validationType = 'forSignup';
-
-        await validationDataConnect().sendPhoneNumberValidationCode({ phoneNumber, validationType })
+        let body = {
+            phoneNumber: phoneNumber,
+            validationType: 'forSignup'
+        }
+        await validationDataConnect().sendPhoneNumberValidationCode(body)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

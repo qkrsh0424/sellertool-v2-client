@@ -9,7 +9,6 @@ const SignupPage = () => {
             <Head>
                 <title>회원가입 | 셀러툴</title>
             </Head>
-            <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <MainComponent></MainComponent>
             <FooterMain></FooterMain>
         </>

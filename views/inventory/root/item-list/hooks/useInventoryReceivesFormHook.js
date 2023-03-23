@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { inventoryReceiveDataConnect } from "../../../../../data_connect/inventoryReceiveDataConnect";
 import { getRemovedPrefixZero } from "../../../../../utils/numberFormatUtils";
 
 export default function useInventoryReceivesFormHook({
     selectedProductOptions
 }) {
+    const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const [inventoryReceivesForm, setInventoryReceivesForm] = useState(null);
 
     useEffect(() => {
@@ -20,7 +22,10 @@ export default function useInventoryReceivesFormHook({
         body,
         successCallback
     }) => {
-        await inventoryReceiveDataConnect().createAll(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        await inventoryReceiveDataConnect().createAll(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

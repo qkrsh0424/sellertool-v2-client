@@ -79,11 +79,28 @@ const formatValidUtils = {
 
         return false;
     },
+    checkUsernameFormatValid: (username) => {
+        if (!formatValidUtils.isUsernameFormatValid(username)) {
+            throw new Error('아이디 형식이 정확하지 않습니다.');
+        }
+    },
     checkPhoneNumberFormatValid: (phoneNumber) => {
         let regex = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
 
         if (!regex.test(phoneNumber)) {
             throw new Error('전화번호 형식이 정확하지 않습니다.');
+        }
+    },
+    checkEmailFormatValid: (email) => {
+        if (!formatValidUtils.isEmailFormatValid(email)) {
+            throw new Error('이메일 형식이 정확하지 않습니다.');
+        }
+    },
+    checkValidationCodeFormatValid: (number) => {
+        let regex = /^[0-9]{6}$/
+
+        if (!regex.test(number)) {
+            throw new Error('인증번호를 다시 확인해 주세요.');
         }
     },
     isValidationCodeFormatValid: (number) => {

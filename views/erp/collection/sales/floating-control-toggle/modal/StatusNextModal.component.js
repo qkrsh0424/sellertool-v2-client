@@ -251,12 +251,15 @@ function Content({
     }
 
     const fetchPackageChildItems = async () => {
-        let body = {
-            productOptionIds: packageParentItems?.map(r => r.productOptionId),
-            workspaceId: workspaceRedux?.workspaceInfo?.id
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        let fetchedData = await productOptionPackageDataConnect().searchProductInfoListByProductOptionIds(body)
+        const body = {
+            productOptionIds: packageParentItems?.map(r => r.productOptionId)
+        }
+
+        let fetchedData = await productOptionPackageDataConnect().searchProductInfoListByProductOptionIds(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     return res.data.data;
@@ -285,11 +288,15 @@ function Content({
     }
 
     const fetchInventoryStocksByProductOptionIds = async (productOptionIds) => {
-        let body = [
-            ...productOptionIds
-        ]
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
 
-        return await inventoryDataConnect().searchList(body)
+        const body = {
+            productOptionIds: productOptionIds
+        }
+
+        return await inventoryDataConnect().searchList(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     return res.data.data;

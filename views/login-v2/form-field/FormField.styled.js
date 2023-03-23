@@ -4,11 +4,21 @@ const Container = styled.div`
     overflow: hidden;
 `;
 
+const LogoBox = styled.div`
+    width: 50px;
+    height: 50px;
+    margin-top: 80px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+    overflow: hidden;
+`;
+
 const Wrapper = styled.div`
     overflow: hidden;
     width: 600px;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 30px;
     margin-bottom: 50px;
 
     border-radius: 15px;
@@ -164,6 +174,7 @@ const InputBox = styled.div`
 
 export {
     Container,
+    LogoBox,
     Wrapper,
     FormGroup,
     InputBox

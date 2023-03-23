@@ -1,7 +1,8 @@
 import Link from "next/link";
 import SingleBlockButton from "../../modules/button/SingleBlockButton";
 import CustomCheckboxV2 from "../../modules/checkbox/CustomCheckboxV2";
-import { Container, FormGroup, HeaderWrapper, InputBox, Wrapper } from "./ConsentField.styled";
+import CustomImage from "../../modules/image/CustomImage";
+import { Container, FormGroup, HeaderWrapper, InputBox, LogoBox, Wrapper } from "./ConsentField.styled";
 
 export default function ConsentFieldComponent(props) {
 
@@ -9,6 +10,13 @@ export default function ConsentFieldComponent(props) {
     return (
         <>
             <Container>
+                <LogoBox>
+                    <Link href='/' passHref>
+                        <a>
+                            <CustomImage src='/images/logo/logo1.png' priority={true} loading='eager'/>
+                        </a>
+                    </Link>
+                </LogoBox>
                 <Wrapper>
                     <HeaderWrapper>
                         <div className='head-box'>

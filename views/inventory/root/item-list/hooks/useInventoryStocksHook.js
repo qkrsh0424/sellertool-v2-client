@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { inventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
 
 export default function useInventoryStocksHook({
     productOptions
 }) {
+    const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const [inventoryStocks, setInventoryStocks] = useState(null);
 
     useEffect(() => {
@@ -15,9 +17,16 @@ export default function useInventoryStocksHook({
     }, [productOptions]);
 
     const reqFetchInventoryStocks = async () => {
-        let body = productOptions.map(r => r.id);
+        let productOptionIds = productOptions.map(r => r.id);
 
-        await inventoryDataConnect().searchList(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        const body = {
+            productOptionIds: productOptionIds
+        }
+
+        await inventoryDataConnect().searchList(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     setInventoryStocks(res.data.data);

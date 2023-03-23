@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { inventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
 
 export default function useInventoryStocksHook(erpItems) {
+    const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const [inventoryStocks, setInventoryStocks] = useState(null);
 
     useEffect(() => {
@@ -15,17 +17,23 @@ export default function useInventoryStocksHook(erpItems) {
     }, [erpItems]);
 
     const reqFetchInventoryStocks = async () => {
-        let body = new Set();
+        let productOptionIds = new Set();
 
         erpItems?.forEach(r => {
             if (r.productOptionId) {
-                body.add(r.productOptionId);
+                productOptionIds.add(r.productOptionId);
             }
         })
 
-        body = [...body];
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
 
-        await inventoryDataConnect().searchList(body)
+        const body = {
+            productOptionIds: [...productOptionIds]
+        }
+
+        await inventoryDataConnect().searchList(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     setInventoryStocks(res.data.data);
@@ -37,7 +45,11 @@ export default function useInventoryStocksHook(erpItems) {
     }
 
     const reqStockRelease = async (body, successCallback) => {
-        await inventoryDataConnect().createReleaseByErpItems(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await inventoryDataConnect().createReleaseByErpItems(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();
@@ -60,7 +72,11 @@ export default function useInventoryStocksHook(erpItems) {
     }
 
     const reqCancelStockRelease = async (body, successCallback) => {
-        await inventoryDataConnect().cancelReleaseByErpItems(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await inventoryDataConnect().cancelReleaseByErpItems(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

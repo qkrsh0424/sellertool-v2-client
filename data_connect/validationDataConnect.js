@@ -1,32 +1,42 @@
 import axios from "axios"
 import { csrfDataConnect } from "./csrfDataConnect";
 
-const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress
-const SCP_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.scpApiAddress : process.env.production.scpApiAddress
 const AUTH_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.authApiAddress : process.env.production.authApiAddress
 
 const validationDataConnect = () => {
     return {
-        sendPhoneNumberValidationCode: async ({ phoneNumber, validationType }) => {
+        /**
+         * 
+         * @param {object} body
+         * @param {string} body.validationType Required
+         * @param {string} body.phoneNumber Required
+         * @param {string} body.username Option
+         * @returns 
+         */
+        sendPhoneNumberValidationCode: async (body) => {
             await csrfDataConnect().getAuthCsrf();
-            return await axios.post(`${AUTH_API_ADDRESS}/auth/v1/validations/phone/validation-code/action:send`, {
-                phoneNumber: phoneNumber
-            }, {
+            return await axios.post(`${AUTH_API_ADDRESS}/auth/v1/validations/phone/validation-code/action:send`, body, {
                 params: {
-                    validationType: validationType || null
+                    validationType: body?.validationType || null
                 },
                 withCredentials: true,
                 xsrfCookieName: 'x_auth_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
-        sendEmailValidationCode: async ({ email, validationType }) => {
+        /**
+         * 
+         * @param {object} body
+         * @param {string} body.validationType Required
+         * @param {string} body.email Required
+         * @param {string} body.username Option
+         * @returns 
+         */
+        sendEmailValidationCode: async (body) => {
             await csrfDataConnect().getAuthCsrf();
-            return await axios.post(`${AUTH_API_ADDRESS}/auth/v1/validations/email/validation-code/action:send`, {
-                email: email
-            }, {
+            return await axios.post(`${AUTH_API_ADDRESS}/auth/v1/validations/email/validation-code/action:send`, body, {
                 params: {
-                    validationType: validationType || null
+                    validationType: body?.validationType || null
                 },
                 withCredentials: true,
                 xsrfCookieName: 'x_auth_csrf_token',

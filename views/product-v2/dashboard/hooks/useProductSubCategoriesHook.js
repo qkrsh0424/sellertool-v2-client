@@ -65,7 +65,11 @@ export default function useProductSubCategoriesHook({
         body,
         successCallback
     }) => {
-        await productSubCategoryDataConnect().changeName(body)
+        let headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await productSubCategoryDataConnect().changeName(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchProductSubCategories();
@@ -93,7 +97,11 @@ export default function useProductSubCategoriesHook({
         body,
         successCallback
     }) => {
-        await productSubCategoryDataConnect().delete(body)
+        let headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await productSubCategoryDataConnect().delete(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchProductSubCategories();

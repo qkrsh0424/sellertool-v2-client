@@ -28,11 +28,14 @@ const productSubCategoryDataConnect = () => {
          * @param {object} body 
          * @param {string} body.productCategoryId,
          * @param {string} body.name
+         * @param {object} headers
+         * @param {string} headers.wsId
          * @returns 
          */
-        create: async function (body) {
+        create: async function (body, headers) {
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/product-sub-categories/product-categories/${body.productCategoryId}`, body, {
+                    headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
                     xsrfHeaderName: 'X-XSRF-TOKEN'
@@ -44,11 +47,14 @@ const productSubCategoryDataConnect = () => {
          * @param {object} body 
          * @param {string} body.productSubCategoryId
          * @param {string} body.name
+         * @param {object} headers
+         * @param {string} headers.wsId
          * @returns 
          */
-        changeName: async function (body) {
+        changeName: async function (body, headers) {
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/product-sub-categories/${body.productSubCategoryId}/target:name`, body, {
+                    headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
                     xsrfHeaderName: 'X-XSRF-TOKEN'
@@ -58,11 +64,14 @@ const productSubCategoryDataConnect = () => {
         /**
          * 
          * @param {object} body 
-         * @param {string} productSubCategoryId
+         * @param {string} body.productSubCategoryId
+         * @param {object} headers
+         * @param {string} headers.wsId
          */
-        delete: async function (body) {
+        delete: async function (body, headers) {
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/product-sub-categories/${body.productSubCategoryId}`, {
+                    headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
                     xsrfHeaderName: 'X-XSRF-TOKEN'

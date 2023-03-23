@@ -49,7 +49,7 @@ const PrimaryNavbarMainComponent = (props) => {
         <>
             <Container>
                 <Wrapper>
-                    <LogoFieldComponent></LogoFieldComponent>
+                    <LogoFieldComponent />
                     <InfoFieldComponent
                         onLogout={__handle.action.logout}
                     />

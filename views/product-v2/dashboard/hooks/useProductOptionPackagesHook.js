@@ -36,7 +36,10 @@ export default function useProductOptionPackagesHook({
     };
 
     const reqUpdateProductOptionPackages = async ({ body, successCallback }) => {
-        await productOptionPackageDataConnect().updateAll(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        await productOptionPackageDataConnect().updateAll(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     alert('패키지를 등록했습니다.');

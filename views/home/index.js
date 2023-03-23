@@ -4,11 +4,12 @@ import styled from "styled-components";
 import CommonModalComponent from "../modules/modal/CommonModalComponent";
 import ServiceListComponent from "./service-list/ServiceList.component";
 import WorkspaceNoticeModalComponent from "./modal/WorkspaceNoticeModal.component";
+import BannerComponent from "./banner/Banner.component";
+import Section1Component from "./section1/Section1.component";
 
 const Container = styled.div`
     background: var(--defaultBackground);
     overflow: hidden;
-    padding-bottom: 150px;
 `;
 
 const HomeMain = () => {
@@ -40,7 +41,9 @@ const HomeMain = () => {
     return (
         <>
             <Container>
-                <ServiceListComponent></ServiceListComponent>
+                {/* <ServiceListComponent></ServiceListComponent> */}
+                <BannerComponent />
+                <Section1Component />
             </Container>
 
             <CommonModalComponent

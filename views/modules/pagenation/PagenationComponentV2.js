@@ -235,6 +235,7 @@ const PagenationComponentV2 = ({
 
         let newPage = pageIndex + 2;
 
+        console.log(newPage);
         router.replace({
             pathname: router.pathname,
             query: {
@@ -278,7 +279,7 @@ const PagenationComponentV2 = ({
 
     return (
         <>
-            <Container>
+            <Container {...props}>
                 <Wrapper
                     align={align}
                     isFirst={isFirst}
@@ -356,7 +357,7 @@ const PagenationComponentV2 = ({
                                         type='number'
                                         className='input-item'
                                         defaultValue={pageIndex + 1}
-                                        max={props?.totalPages}
+                                        max={totalPages}
                                         min={1}
                                         required
                                     ></input>

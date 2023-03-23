@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { excelTranslatorHeaderDataConnect } from "../../../data_connect/excelTranslatorHeaderDataConnect";
 import { dateToYYYYMMDDhhmmssFile } from "../../../utils/dateFormatUtils";
 
 export default function useExcelTranslatorDatasHook({
     excelTranslatorHeader
 }) {
+    const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const [excelTranslatorDatas, setExcelTranslatorDatas] = useState(null);
 
     useEffect(() => {
@@ -21,8 +23,11 @@ export default function useExcelTranslatorDatasHook({
     }) => {
         if (!excelTranslatorHeader) return;
 
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
         let excelTranslatorHeaderId = excelTranslatorHeader.id;
-        await excelTranslatorHeaderDataConnect().uploadData(excelTranslatorHeaderId, formData)
+        await excelTranslatorHeaderDataConnect().uploadData(excelTranslatorHeaderId, formData, headers)
             .then(res => {
                 if (res.status === 200) {
                     setExcelTranslatorDatas(res.data.data);
@@ -53,8 +58,12 @@ export default function useExcelTranslatorDatasHook({
     }) => {
         if (!excelTranslatorHeader) return;
 
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
         let excelTranslatorHeaderId = excelTranslatorHeader.id;
-        await excelTranslatorHeaderDataConnect().downloadData(excelTranslatorHeaderId, body.excelTranslatorDatas)
+        await excelTranslatorHeaderDataConnect().downloadData(excelTranslatorHeaderId, body.excelTranslatorDatas, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

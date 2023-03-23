@@ -1,11 +1,13 @@
 import _ from "lodash";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { productDataConnect } from "../../../../data_connect/productDataConnect";
 import formatValidUtils from "../../../../utils/formatValidUtils";
 
 export default function useProductHook({
     originProduct
 }) {
+    const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const [product, setProduct] = useState(null);
 
     useEffect(() => {
@@ -30,7 +32,10 @@ export default function useProductHook({
         body,
         successCallback
     }) => {
-        await productDataConnect().update(body)
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        await productDataConnect().update(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

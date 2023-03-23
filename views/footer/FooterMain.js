@@ -104,7 +104,7 @@ const FooterMain = () => {
                             <div className="item-el">개인정보관리책임자: 박세훈</div>
                         </ComponyInfoBox>
                         <Copyright>
-                            Copyright ⓒ 2021 All rights reserved by Sammai Co.
+                            Copyright ⓒ 2023 All rights reserved by Piaar Co.
                         </Copyright>
                     </div>
                 </Wrapper>

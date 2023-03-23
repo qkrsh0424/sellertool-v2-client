@@ -37,7 +37,7 @@ export default function useProductOptionsHook(props) {
             productSubCategoryId: router?.query?.productSubCategoryId,
             searchCondition: router?.query?.searchCondition,
             searchQuery: router?.query?.searchQuery,
-            sort: router?.query?.sort || 'product.cid_asc',
+            sort: router?.query?.sort || 'product.createdAt_asc',
             page: router?.query?.page || 1,
             size: router?.query?.size || 50,
         }

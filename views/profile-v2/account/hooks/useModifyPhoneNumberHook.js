@@ -13,9 +13,12 @@ export default function useModifyPhoneNumberHook(props) {
         phoneNumber,
         successCallback
     }) => {
-        let validationType = 'forModify';
+        let body = {
+            phoneNumber: phoneNumber,
+            validationType: 'forModify'
+        }
 
-        await validationDataConnect().sendPhoneNumberValidationCode({ phoneNumber, validationType })
+        await validationDataConnect().sendPhoneNumberValidationCode(body)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();
@@ -48,10 +51,10 @@ export default function useModifyPhoneNumberHook(props) {
         })
     }
 
-    const onClearPhoneNumberValidationCode = () =>{
+    const onClearPhoneNumberValidationCode = () => {
         setModifyPhoneNumberForm({
             ...modifyPhoneNumberForm,
-            phoneNumberValidationCode:''
+            phoneNumberValidationCode: ''
         })
     }
 

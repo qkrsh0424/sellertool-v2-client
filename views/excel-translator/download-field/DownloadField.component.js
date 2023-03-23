@@ -54,31 +54,40 @@ export default function DownloadFieldComponent({
             setDownloadExcelDatas: () => {
                 let datas = [];
 
-                for (let i = 0; i < excelTranslatorDatas.length; i++) {
-                    let detailDatas = [];
-                    for (let j = 0; j < excelTranslatorHeader?.downloadHeaderDetail?.details.length; j++) {
-                        if (excelTranslatorHeader?.downloadHeaderDetail?.details[j].targetCellNumber == '-1') {
-                            let detailData = {
-                                id: uuidv4(),
-                                colData: excelTranslatorHeader?.downloadHeaderDetail?.details[j].fixedValue,
-                                cellType: 'String'
-                            }
+                try{
+                    for (let i = 0; i < excelTranslatorDatas.length; i++) {
+                        let detailDatas = [];
+                        for (let j = 0; j < excelTranslatorHeader?.downloadHeaderDetail?.details.length; j++) {
+                            if (excelTranslatorHeader?.downloadHeaderDetail?.details[j].targetCellNumber == '-1') {
+                                let detailData = {
+                                    id: uuidv4(),
+                                    colData: excelTranslatorHeader?.downloadHeaderDetail?.details[j].fixedValue,
+                                    cellType: 'String'
+                                }
+    
+                                detailDatas.push(detailData);
+                            } else {
+                                if(!excelTranslatorDatas[i].details[excelTranslatorHeader?.downloadHeaderDetail?.details[j].targetCellNumber]){
+                                    throw new Error('업로드 엑셀 데이터 중 다운로드 형식에서 매핑될 수 없는 필드값이 있습니다.\n업로드 양식 및 다운로드 형식을 재설정 해주세요.');
+                                }
 
-                            detailDatas.push(detailData);
-                        } else {
-                            let detailData = {
-                                id: uuidv4(),
-                                colData: excelTranslatorDatas[i].details[excelTranslatorHeader?.downloadHeaderDetail?.details[j].targetCellNumber].colData,
-                                cellType: excelTranslatorDatas[i].details[excelTranslatorHeader?.downloadHeaderDetail?.details[j].targetCellNumber].cellType
+                                let detailData = {
+                                    id: uuidv4(),
+                                    colData: excelTranslatorDatas[i].details[excelTranslatorHeader?.downloadHeaderDetail?.details[j].targetCellNumber].colData,
+                                    cellType: excelTranslatorDatas[i].details[excelTranslatorHeader?.downloadHeaderDetail?.details[j].targetCellNumber].cellType
+                                }
+                                detailDatas.push(detailData);
                             }
-                            detailDatas.push(detailData);
                         }
+    
+                        datas.push({
+                            id: uuidv4(),
+                            details: detailDatas
+                        });
                     }
-
-                    datas.push({
-                        id: uuidv4(),
-                        details: detailDatas
-                    });
+                } catch(error){
+                    alert(error.message);
+                    return;
                 }
 
                 setDownloadExcelDatas(datas);

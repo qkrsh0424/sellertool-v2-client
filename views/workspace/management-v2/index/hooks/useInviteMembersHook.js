@@ -18,8 +18,10 @@ export default function useInviteMembersHook({
     }, []);
 
     const reqFetchInviteMembers = async () => {
-        let workspaceId = workspace?.id;
-        await inviteMemberDataConnect().searchListByWorkspaceId({ workspaceId })
+        const headers = {
+            wsId: workspace?.id
+        }
+        await inviteMemberDataConnect().searchListByWorkspaceId(headers)
             .then(res => {
                 if (res.status === 200) {
                     setInviteMembers(res.data.data);
@@ -34,7 +36,10 @@ export default function useInviteMembersHook({
         body,
         successCallback
     }) => {
-        await inviteMemberDataConnect().createOne({ body })
+        const headers = {
+            wsId: workspace?.id
+        }
+        await inviteMemberDataConnect().createOne(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchInviteMembers();

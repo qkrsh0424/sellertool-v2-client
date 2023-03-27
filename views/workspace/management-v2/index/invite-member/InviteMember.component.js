@@ -39,7 +39,6 @@ export default function InviteMemberComponent({
             },
             inviteMember: async ({ inviteMemberForm }) => {
                 let body = {
-                    workspaceId: workspace?.id,
                     username: inviteMemberForm?.username
                 }
 

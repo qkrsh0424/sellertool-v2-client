@@ -57,11 +57,12 @@ function Info({ publicYn, selectedPublicYn, title, description, serviceDescripti
     );
 }
 
-function Item({ publicYn, selectedPublicYn, avatarSrc, title, description, serviceDescription, onClick }) {
+function Item({ publicYn, selectedPublicYn, avatarSrc, title, description, serviceDescription, onClick, ...props }) {
     return (
         <div
             className={`item-box ${publicYn === selectedPublicYn ? 'item-box-active' : ''}`}
             onClick={onClick}
+            {...props}
         >
             <Checkbox
                 publicYn={publicYn}
@@ -87,15 +88,6 @@ export default function ItemListFieldView(props) {
         <ItemListFieldWrapper>
             <div className='item-list-box'>
                 <Item
-                    publicYn={'y'}
-                    selectedPublicYn={props.workspaceCreateForm.publicYn}
-                    avatarSrc={'/images/icon/groups_default_505050.svg'}
-                    title={'팀용'}
-                    description={'팀원들과 셀러툴의 기능들을 함께 사용해 보세요.'}
-                    serviceDescription={'무료 서비스 체험하기'}
-                    onClick={props.onActionSelectPublic}
-                />
-                <Item
                     publicYn={'n'}
                     selectedPublicYn={props.workspaceCreateForm.publicYn}
                     avatarSrc={'/images/icon/person_default_505050.svg'}
@@ -103,6 +95,20 @@ export default function ItemListFieldView(props) {
                     description={'사용 목적에 맞게 더욱 체계적으로 관리해 보세요.'}
                     serviceDescription={'개인 사용자에게 무료 제공'}
                     onClick={props.onActionSelectPrivate}
+                />
+                <Item
+                    publicYn={'y'}
+                    selectedPublicYn={props.workspaceCreateForm.publicYn}
+                    avatarSrc={'/images/icon/groups_default_505050.svg'}
+                    title={'단체용'}
+                    description={'팀원들과 셀러툴의 기능들을 함께 사용해 보세요.'}
+                    serviceDescription={'서비스 준비중 입니다.'}
+                    onClick={() => { }}
+                    style={{
+                        opacity:'0.7'
+                    }}
+                // serviceDescription={'무료 서비스 체험하기'}
+                // onClick={props.onActionSelectPublic}
                 />
             </div>
         </ItemListFieldWrapper>

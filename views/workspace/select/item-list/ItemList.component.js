@@ -48,14 +48,14 @@ export default function ItemListComponent(props) {
     return (
         <>
             <Container>
-                <Wrapper>
-                    <Title>
-                        개인 워크스페이스
-                    </Title>
-                    <ItemListWrapper>
-                        {privateWorkspaces &&
-                            (
-                                <>
+                {!valueUtils.isEmptyValues(privateWorkspaces) &&
+                    (
+                        <>
+                            <Wrapper>
+                                <Title>
+                                    개인 워크스페이스
+                                </Title>
+                                <ItemListWrapper>
                                     {privateWorkspaces?.map(r => {
                                         return (
                                             <div
@@ -96,19 +96,20 @@ export default function ItemListComponent(props) {
                                             </div>
                                         )
                                     }
-                                </>
-                            )
-                        }
-                    </ItemListWrapper>
-                </Wrapper>
-                <Wrapper>
-                    <Title>
-                        공유 워크스페이스
-                    </Title>
-                    <ItemListWrapper>
-                        {publicWorkspaces &&
-                            (
-                                <>
+                                </ItemListWrapper>
+                            </Wrapper>
+                        </>
+                    )
+                }
+
+                {!valueUtils.isEmptyValues(publicWorkspaces) &&
+                    (
+                        <>
+                            <Wrapper>
+                                <Title>
+                                    공유 워크스페이스
+                                </Title>
+                                <ItemListWrapper>
                                     {publicWorkspaces?.map(r => {
                                         return (
                                             <div
@@ -149,11 +150,11 @@ export default function ItemListComponent(props) {
                                             </div>
                                         )
                                     }
-                                </>
-                            )
-                        }
-                    </ItemListWrapper>
-                </Wrapper>
+                                </ItemListWrapper>
+                            </Wrapper>
+                        </>
+                    )
+                }
                 <CreateButtonWrapper>
                     <Link
                         href='/workspace/create'

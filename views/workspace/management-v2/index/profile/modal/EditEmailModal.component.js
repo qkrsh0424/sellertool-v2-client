@@ -17,7 +17,8 @@ export default function EditEmailModalComponent({
     open,
     onClose,
     email,
-    onSubmit
+    onSubmit,
+    onOpenBackdrop
 }) {
     const [editEmail, setEditEmail] = useState(email);
 
@@ -29,6 +30,7 @@ export default function EditEmailModalComponent({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        onOpenBackdrop();
         let value = _.cloneDeep(editEmail);
 
         value = value.trim();
@@ -67,7 +69,7 @@ export default function EditEmailModalComponent({
                                 color: '#fff',
                                 width: '40%'
                             }}
-                            onClose={() => onClose()}
+                            onClick={() => onClose()}
                         >취소</CustomDialog.FooterButton>
                         <CustomDialog.FooterButton
                             type='submit'

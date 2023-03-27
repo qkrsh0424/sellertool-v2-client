@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import styled from 'styled-components';
 import CustomBlockButton from '../../../../../../components/buttons/block-button/v1/CustomBlockButton';
 import { CustomDialog } from '../../../../../../components/dialog/v1/CustomDialog';
+import useDisabledBtn from '../../../../../../hooks/button/useDisabledBtn';
 import useImageUploaderHooks from '../../../../../../hooks/uploader/useImageUploaderHooks';
 
 const ContentContainer = styled.div`
@@ -27,9 +28,11 @@ const ContentContainer = styled.div`
 export default function EditProfileImageUriModalComponent({
     open,
     onClose,
-    profileImageUri,
-    onSubmit
+    onSubmit,
+    onOpenBackdrop,
+    onCloseBackdrop
 }) {
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
     const imageUploaderRef = useRef();
     const { uploadImages } = useImageUploaderHooks({
         MAX_FILE_SIZE: 10485760
@@ -40,15 +43,19 @@ export default function EditProfileImageUriModalComponent({
     }
 
     const handleSubmitChangeToSelect = async (e) => {
+        onOpenBackdrop();
+        setDisabledBtn(true);
         let files = e.target.files;
         if (!files || files?.length <= 0) {
             alert('이미지를 선택해 주세요.');
+            onCloseBackdrop();
             return;
         }
 
         let images = await uploadImages(files);
 
         if (!images) {
+            onCloseBackdrop();
             return;
         }
 
@@ -56,6 +63,8 @@ export default function EditProfileImageUriModalComponent({
     }
 
     const handleSubmitChangeToDefault = () => {
+        onOpenBackdrop();
+        setDisabledBtn(true);
         onSubmit(null);
     }
 
@@ -72,11 +81,13 @@ export default function EditProfileImageUriModalComponent({
                         type='button'
                         className='image-button image-selector'
                         onClick={() => handleOpenImageUploader()}
+                        disabled={disabledBtn}
                     >이미지 선택</CustomBlockButton>
                     <CustomBlockButton
                         type='button'
                         className='image-button default-image'
                         onClick={() => handleSubmitChangeToDefault()}
+                        disabled={disabledBtn}
                     >기본 이미지로 설정</CustomBlockButton>
                 </ContentContainer>
             </CustomDialog>
@@ -86,6 +97,7 @@ export default function EditProfileImageUriModalComponent({
                 accept="image/*"
                 onClick={(e) => e.target.value = ''}
                 onChange={(e) => handleSubmitChangeToSelect(e)}
+                disabled={disabledBtn}
                 hidden
             ></input>
         </>

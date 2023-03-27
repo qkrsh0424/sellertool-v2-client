@@ -16,7 +16,8 @@ export default function EditNicknameModalComponent({
     open,
     onClose,
     nickname,
-    onSubmit
+    onSubmit,
+    onOpenBackdrop
 }) {
     const [editNickname, setEditNickname] = useState(nickname);
 
@@ -28,6 +29,7 @@ export default function EditNicknameModalComponent({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        onOpenBackdrop();
         let value = _.cloneDeep(editNickname);
 
         value = value.trim();
@@ -68,7 +70,7 @@ export default function EditNicknameModalComponent({
                                 color: '#fff',
                                 width: '40%'
                             }}
-                            onClose={() => onClose()}
+                            onClick={() => onClose()}
                         >취소</CustomDialog.FooterButton>
                         <CustomDialog.FooterButton
                             type='submit'

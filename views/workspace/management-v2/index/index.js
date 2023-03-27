@@ -64,6 +64,7 @@ const WorkspaceManagementMainComponent = (props) => {
                             (
                                 <ProfileComponent
                                     workspace={workspace}
+                                    isWorkspaceMaster={isWorkspaceMaster}
                                 />
                             )
                         }

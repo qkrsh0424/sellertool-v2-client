@@ -17,7 +17,8 @@ export default function EditPhoneNumberModalComponent({
     open,
     onClose,
     phoneNumber,
-    onSubmit
+    onSubmit,
+    onOpenBackdrop
 }) {
     const [editPhoneNumber, setEditPhoneNumber] = useState(phoneNumber);
 
@@ -32,6 +33,7 @@ export default function EditPhoneNumberModalComponent({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        onOpenBackdrop();
         let value = _.cloneDeep(editPhoneNumber);
 
         value = value.trim();
@@ -72,7 +74,7 @@ export default function EditPhoneNumberModalComponent({
                                 color: '#fff',
                                 width: '40%'
                             }}
-                            onClose={() => onClose()}
+                            onClick={() => onClose()}
                         >취소</CustomDialog.FooterButton>
                         <CustomDialog.FooterButton
                             type='submit'

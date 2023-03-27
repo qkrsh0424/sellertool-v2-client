@@ -22,7 +22,7 @@ export default function Title({
     ...props
 }) {
     return (
-        <Container>
+        <Container {...props}>
             <div className='title'>
                 {children}
             </div>

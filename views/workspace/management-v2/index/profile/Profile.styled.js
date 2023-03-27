@@ -134,3 +134,17 @@ export const ProfileWrapper = styled.div`
         }
     }
 `;
+
+export const DropWorkspaceButtonBox = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    .button{
+        width: 110px;
+        font-size:12px;
+        height: 30px;
+        border:1px solid var(--defaultRedColor);
+        border-radius: 5px;
+        color: var(--defaultRedColor);
+    }
+`;

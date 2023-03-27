@@ -109,6 +109,19 @@ const workspaceMemberDataConnect = () => {
                 xsrfCookieName: 'x_auth_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
+        },
+        /**
+         * 
+         * @param {object} body
+         * @param {string} body.workspaceMemberId
+         */
+        leaveWorkspace: async function (body){
+            await csrfDataConnect().getAuthCsrf();
+            return await axiosAuthInterceptor.post(`${AUTH_API_ADDRESS}/auth/v1/workspace-members/leave`, body,{
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         }
     }
 }

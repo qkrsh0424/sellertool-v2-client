@@ -61,7 +61,7 @@ export default function AuthTemplateListComponent({
             alert('접근 권한이 없습니다.');
             return;
         }
-        body.workspaceAuthItems[0].essentialYn = 't';
+        
         await reqCreate(body, () => toggleRegisterModalOpen(false));
     }
 

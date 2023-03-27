@@ -32,9 +32,14 @@ export default function useWorkspaceHook(props) {
         body,
         successCallback
     }) => {
-        await workspaceDataConnect().patchWorkspaceName({
-            body: body
-        })
+        const headers = {
+            wsId: body.id
+        }
+
+        await workspaceDataConnect().patchWorkspaceName(
+            body,
+            headers
+        )
             .then(res => {
                 if (res.status === 200) {
                     reqFetchWorkspace();

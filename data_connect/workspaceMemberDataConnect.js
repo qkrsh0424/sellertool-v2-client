@@ -5,6 +5,14 @@ const AUTH_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.dev
 
 const workspaceMemberDataConnect = () => {
     return {
+        searchMe: async function (headers) {
+            return await axiosAuthInterceptor.get(`${AUTH_API_ADDRESS}/auth/v1/workspace-members/me`, {
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
         /**
          * 
          * @param {*} param0 
@@ -31,7 +39,59 @@ const workspaceMemberDataConnect = () => {
         changeWorkspaceAuthTemplate: async function (body, headers) {
             await csrfDataConnect().getAuthCsrf();
             return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/workspace-members/target:workspaceAuthTemplate`, body, {
-                headers:headers,
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * @param {object} body
+         * @param {string} body.workspaceMemberId
+         * @param {string} body.profileImageUri
+         */
+        changeProfileImageUri: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
+            return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/workspace-members/target:profileImageUri`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * @param {object} body
+         * @param {string} body.workspaceMemberId
+         * @param {string} body.nickname
+         */
+        changeNickname: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
+            return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/workspace-members/target:nickname`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * @param {object} body
+         * @param {string} body.workspaceMemberId
+         * @param {string} body.phoneNumber
+         */
+        changePhoneNumber: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
+            return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/workspace-members/target:phoneNumber`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * @param {object} body
+         * @param {string} body.workspaceMemberId
+         * @param {string} body.email
+         */
+        changeEmail: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
+            return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/workspace-members/target:email`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_auth_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'

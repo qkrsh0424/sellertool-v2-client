@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
 import { inviteMemberDataConnect } from "../../../../../data_connect/inviteMemberDataConnect";
@@ -5,6 +6,7 @@ import { inviteMemberDataConnect } from "../../../../../data_connect/inviteMembe
 export default function useInviteMembersHook({
     workspace
 }) {
+    const router = useRouter();
     const [inviteMembers, setInviteMembers] = useState(null);
 
     useEffect(() => {

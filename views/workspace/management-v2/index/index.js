@@ -8,6 +8,7 @@ import LayoutComponent from "./layout/Layout.component";
 import InviteMemberComponent from "./invite-member/InviteMember.component";
 import useIsWorkspaceMasterHook from "./hooks/useIsWorkspaceMasterHook";
 import AuthTemplateListComponent from "./auth-template-list/AuthTemplateList.component";
+import ProfileComponent from "./profile/Profile.component";
 
 const Container = styled.div`
     background-color: var(--defaultBackground);
@@ -59,7 +60,15 @@ const WorkspaceManagementMainComponent = (props) => {
                         isWorkspaceMaster={isWorkspaceMaster}
                     >
                         {
-                            (!viewType || viewType === 'MEMBER_LIST') &&
+                            (!viewType || viewType === 'PROFILE') &&
+                            (
+                                <ProfileComponent
+                                    workspace={workspace}
+                                />
+                            )
+                        }
+                        {
+                            (viewType === 'MEMBER_LIST') &&
                             (
                                 <MemberListComponent
                                     workspace={workspace}

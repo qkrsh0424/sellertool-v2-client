@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { productCategoryDataConnect } from "../../../../data_connect/productCategoryDataConnect";
@@ -7,6 +8,7 @@ import { productCategoryDataConnect } from "../../../../data_connect/productCate
 export default function useProductCategoriesHook(props) {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
+    const { enqueueSnackbar } = useSnackbar();
 
     const [productCategories, setProductCategories] = useState(null);
     const [productCategory, setProductCategory] = useState(null);
@@ -41,7 +43,9 @@ export default function useProductCategoriesHook(props) {
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
+                const res = err.response;
+                console.log(res);
+                enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate: true });
             })
     }
 
@@ -86,7 +90,7 @@ export default function useProductCategoriesHook(props) {
             ...body,
             workspaceId: workspaceRedux?.workspaceInfo?.id
         }
-        
+
         await productCategoryDataConnect().delete(body)
             .then(res => {
                 if (res.status === 200) {
@@ -111,7 +115,7 @@ export default function useProductCategoriesHook(props) {
             })
     }
 
-    const onChangeProductCategory = (productCategoryId) =>{
+    const onChangeProductCategory = (productCategoryId) => {
         let data = productCategories?.find(r => r.id === productCategoryId);
         setProductCategory(_.cloneDeep(data));
     }

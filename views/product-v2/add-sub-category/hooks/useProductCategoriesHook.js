@@ -1,3 +1,4 @@
+import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { productCategoryDataConnect } from "../../../../data_connect/productCategoryDataConnect";
@@ -5,6 +6,7 @@ import { productCategoryDataConnect } from "../../../../data_connect/productCate
 export default function useProductCategoriesHook(props) {
     const [productCategories, setProductCategories] = useState(null);
     const workspaceRedux = useSelector(state => state.workspaceRedux);
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         if (!workspaceRedux?.workspaceInfo?.id) {
@@ -27,7 +29,9 @@ export default function useProductCategoriesHook(props) {
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
+                const res = err.response;
+                console.log(res);
+                enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate: true });
             })
     }
 

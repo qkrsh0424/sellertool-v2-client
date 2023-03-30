@@ -1,3 +1,4 @@
+import { useSnackbar } from "notistack";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -7,6 +8,7 @@ export default function useProductCategoriesHook(props) {
     const workspaceRedux = useSelector(state => state.workspaceRedux)
     const [productCategories, setProductCategories] = useState(null);
     const [productCategoryId, setProductCategoryId] = useState(null);
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         setProductCategoryId(null);
@@ -30,7 +32,9 @@ export default function useProductCategoriesHook(props) {
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
+                const res = err.response;
+                console.log(res);
+                enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate: true });
             })
     }
 

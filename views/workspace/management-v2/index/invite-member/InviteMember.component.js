@@ -8,10 +8,8 @@ import InviteMemberModalComponent from "./modal/InviteMemberModal.component";
 import { Container, ListWrapper, TitleFieldWrapper } from "./styles/InviteMember.styled";
 
 export default function InviteMemberComponent({
-    workspace,
-    isWorkspaceMaster
+    workspace
 }) {
-    const userRedux = useSelector(state => state.userRedux);
     const {
         inviteMembers,
         reqFetchInviteMembers,
@@ -103,7 +101,7 @@ export default function InviteMemberComponent({
                             </div>
                         </SingleBlockButton>
                     </div>
-                    {isWorkspaceMaster &&
+                    {workspace?.masterFlag &&
                         (
                             <SingleBlockButton
                                 type='button'
@@ -125,19 +123,6 @@ export default function InviteMemberComponent({
                                 <div
                                     className='content-group mgl-flex mgl-flex-justifyContent-spaceBetween mgl-flex-alignItems-center'
                                 >
-                                    <div className='profile-image-figure'>
-                                        <Image
-                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                            src={r?.user?.profileImageUri || '/images/icon/person_default_808080.svg'}
-                                            layout='responsive'
-                                            width={1}
-                                            height={1}
-                                            objectFit={'cover'}
-                                            alt='image'
-                                            loading='lazy'
-                                        ></Image>
-                                    </div>
-
                                     <div className='info-items mgl-flex'>
                                         <div className='tag-items'>
                                             <div
@@ -151,12 +136,16 @@ export default function InviteMemberComponent({
                                             </div>
                                         </div>
                                         <div className='user-items'>
-                                            <div className='user-item mgl-font-color-primary'>{r.user.username}</div>
-                                            <div className='user-item'>{r.user.nickname}</div>
+                                            <div className='user-item mgl-font-color-primary' style={{fontSize:'16px', marginBottom:'5px', fontWeight:'600'}}>
+                                                <div>{r.user.username}</div>
+                                            </div>
+                                            <div className='user-item' style={{fontSize:'13px', color:'#666'}}>
+                                                닉네임 {r.user.nickname}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                {isWorkspaceMaster &&
+                                {workspace?.masterFlag &&
                                     (
                                         <div className='control-items mgl-flex mgl-flex-alignItems-center'>
                                             {r.status === 'rejected' &&

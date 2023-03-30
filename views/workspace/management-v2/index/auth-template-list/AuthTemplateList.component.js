@@ -11,13 +11,8 @@ import RegisterModalComponent from "./modal/RegisterModal.component";
 import { Container, ListWrapper, RegisterButton, RegisterButtonBox, TitleFieldWrapper } from "./styles/AuthTemplateList.styled";
 
 export default function AuthTemplateListComponent({
-    workspace,
-    isWorkspaceMaster
+    workspace
 }) {
-    const router = useRouter();
-    const page = Number(router?.query?.page || 1);
-    const size = Number(router?.query?.size || 20);
-
     const {
         workspaceAuthTemplatePage,
         reqCreate,
@@ -57,16 +52,16 @@ export default function AuthTemplateListComponent({
     }
 
     const handleSubmitCreate = async (body) => {
-        if (!isWorkspaceMaster) {
+        if (!workspace?.masterFlag) {
             alert('접근 권한이 없습니다.');
             return;
         }
-        
+
         await reqCreate(body, () => toggleRegisterModalOpen(false));
     }
 
     const handleSubmitUpdate = async (body) => {
-        if (!isWorkspaceMaster) {
+        if (!workspace?.masterFlag) {
             alert('접근 권한이 없습니다.');
             return;
         }
@@ -75,7 +70,7 @@ export default function AuthTemplateListComponent({
     }
 
     const handleSubmitDelete = async () => {
-        if (!isWorkspaceMaster) {
+        if (!workspace?.masterFlag) {
             alert('접근 권한이 없습니다.');
             return;
         }
@@ -162,7 +157,7 @@ export default function AuthTemplateListComponent({
                     totalElements={workspaceAuthTemplatePage?.totalElements}
                     totalPages={workspaceAuthTemplatePage?.totalPages}
                     sizeElements={[20, 50]}
-                    style={{marginTop:'20px'}}
+                    style={{ marginTop: '20px' }}
                 />
             </Container>
 

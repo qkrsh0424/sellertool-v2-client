@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { ItemListFieldWrapper } from "./PageContent.styled";
 
-function Checkbox({ publicYn, selectedPublicYn }) {
-    if (selectedPublicYn === publicYn) {
+function Checkbox({ subscriptionPlan, selectedSubscriptionPlan }) {
+    if (selectedSubscriptionPlan === subscriptionPlan) {
         return (
             <div className='check-box'>
-                <div className={`icon-figure ${publicYn === selectedPublicYn ? 'icon-figure-active' : ''}`}>
+                <div className={`icon-figure ${subscriptionPlan === selectedSubscriptionPlan ? 'icon-figure-active' : ''}`}>
                     <Image
                         loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
                         src='/images/icon/check_default_ffffff.svg'
@@ -41,7 +41,7 @@ function Avatar({ src }) {
     );
 }
 
-function Info({ publicYn, selectedPublicYn, title, description, serviceDescription }) {
+function Info({ subscriptionPlan, selectedSubscriptionPlan, title, description, serviceDescription }) {
     return (
         <div className='info-box'>
             <div className='title-el'>
@@ -50,30 +50,30 @@ function Info({ publicYn, selectedPublicYn, title, description, serviceDescripti
             <div className='description-el'>
                 {description}
             </div>
-            <div className={`service-description-el ${selectedPublicYn === publicYn ? 'service-description-el-active' : ''}`}>
+            <div className={`service-description-el ${subscriptionPlan === selectedSubscriptionPlan ? 'service-description-el-active' : ''}`}>
                 {serviceDescription}
             </div>
         </div>
     );
 }
 
-function Item({ publicYn, selectedPublicYn, avatarSrc, title, description, serviceDescription, onClick, ...props }) {
+function Item({ subscriptionPlan, selectedSubscriptionPlan, avatarSrc, title, description, serviceDescription, onClick, ...props }) {
     return (
         <div
-            className={`item-box ${publicYn === selectedPublicYn ? 'item-box-active' : ''}`}
+            className={`item-box ${subscriptionPlan === selectedSubscriptionPlan ? 'item-box-active' : ''}`}
             onClick={onClick}
             {...props}
         >
             <Checkbox
-                publicYn={publicYn}
-                selectedPublicYn={selectedPublicYn}
+                subscriptionPlan={subscriptionPlan}
+                selectedSubscriptionPlan={selectedSubscriptionPlan}
             />
             <Avatar
                 src={avatarSrc}
             />
             <Info
-                publicYn={publicYn}
-                selectedPublicYn={selectedPublicYn}
+                subscriptionPlan={subscriptionPlan}
+                selectedSubscriptionPlan={selectedSubscriptionPlan}
                 title={title}
                 description={description}
                 serviceDescription={serviceDescription}
@@ -83,32 +83,36 @@ function Item({ publicYn, selectedPublicYn, avatarSrc, title, description, servi
     );
 }
 
-export default function ItemListFieldView(props) {
+export default function ItemListFieldView({
+    workspaceCreateForm,
+    onActionSelectPublic,
+    onActionSelectPrivate
+}) {
     return (
         <ItemListFieldWrapper>
             <div className='item-list-box'>
                 <Item
-                    publicYn={'n'}
-                    selectedPublicYn={props.workspaceCreateForm.publicYn}
+                    subscriptionPlan="NONE"
+                    selectedSubscriptionPlan={workspaceCreateForm?.subscriptionPlan}
                     avatarSrc={'/images/icon/person_default_505050.svg'}
                     title={'개인용'}
                     description={'사용 목적에 맞게 더욱 체계적으로 관리해 보세요.'}
                     serviceDescription={'개인 사용자에게 무료 제공'}
-                    onClick={props.onActionSelectPrivate}
+                    onClick={onActionSelectPrivate}
                 />
                 <Item
-                    publicYn={'y'}
-                    selectedPublicYn={props.workspaceCreateForm.publicYn}
+                    subscriptionPlan="PUBLIC"
+                    selectedSubscriptionPlan={workspaceCreateForm?.subscriptionPlan}
                     avatarSrc={'/images/icon/groups_default_505050.svg'}
                     title={'단체용'}
                     description={'팀원들과 셀러툴의 기능들을 함께 사용해 보세요.'}
                     serviceDescription={'서비스 준비중 입니다.'}
                     onClick={() => { }}
                     style={{
-                        opacity:'0.7'
+                        opacity: '0.7'
                     }}
-                // serviceDescription={'무료 서비스 체험하기'}
-                // onClick={props.onActionSelectPublic}
+                    // serviceDescription={'무료 서비스 체험하기'}
+                    // onClick={onActionSelectPublic}
                 />
             </div>
         </ItemListFieldWrapper>

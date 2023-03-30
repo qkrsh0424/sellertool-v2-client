@@ -11,8 +11,7 @@ import EditProfileImageUriModalComponent from "./modal/EditProfileImageUriModal.
 import { Container, DropWorkspaceButtonBox, ProfileWrapper, TitleFieldWrapper } from "./Profile.styled";
 
 export default function ProfileComponent({
-    workspace,
-    isWorkspaceMaster
+    workspace
 }) {
     const {
         workspaceMember,
@@ -196,7 +195,7 @@ export default function ProfileComponent({
                         </div>
                     </div>
                 </ProfileWrapper>
-                {!isWorkspaceMaster &&
+                {!workspace?.masterFlag &&
                     <DropWorkspaceButtonBox>
                         <CustomBlockButton
                             type='button'

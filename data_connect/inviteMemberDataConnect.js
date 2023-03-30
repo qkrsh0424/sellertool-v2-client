@@ -51,11 +51,14 @@ const inviteMemberDataConnect = () => {
          * 
          * @param {object} body
          * @param {string} body.inviteMemberId
+         * @param {object} headers
+         * @param {string} headers.wsId
          * @returns 
          */
-        deleteOne: async function ({ body }) {
+        deleteOne: async function (body, headers) {
             await csrfDataConnect().getAuthCsrf();
             return await axiosAuthInterceptor.delete(`${AUTH_API_ADDRESS}/auth/v1/invite-members/${body.inviteMemberId}`, {
+                headers: headers,
                 withCredentials: true,
                 xsrfCookieName: 'x_auth_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
@@ -65,10 +68,13 @@ const inviteMemberDataConnect = () => {
          * 
          * @param {object} body
          * @param {string} body.inviteMemberId
+         * @param {object} headers
+         * @param {string} headers.wsId
          */
-        retryInviteMember: async function ({ body }) {
+        retryInviteMember: async function (body, headers) {
             await csrfDataConnect().getAuthCsrf();
             return await axiosAuthInterceptor.post(`${AUTH_API_ADDRESS}/auth/v1/invite-members/${body.inviteMemberId}/action:retry`, null, {
+                headers: headers,
                 withCredentials: true,
                 xsrfCookieName: 'x_auth_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'

@@ -29,9 +29,9 @@ const WorkspaceCreateMainComponent = (props) => {
                 body,
                 successCallback
             }) => {
-                let publicYn = body.publicYn;
+                let subscriptionPlan = body.subscriptionPlan;
 
-                if (publicYn === 'n') {
+                if (subscriptionPlan === 'NONE') {
                     await reqCreateWorkspacePrivate({
                         body: body,
                         successCallback: () => {

@@ -7,7 +7,6 @@ import ModifyWorkspaceNameModalComponent from "./modal/ModifyWorkspaceNameModal.
 
 const WorkspaceNameFieldComponent = ({
     workspace,
-    isWorkspaceMaster,
     onSubmitModifyWorkspaceName
 }) => {
     const [modifyWorkspaceNameModalOpen, setModifyWorkspaceNameModalOpen] = useState(false);
@@ -46,7 +45,7 @@ const WorkspaceNameFieldComponent = ({
                     <div className='title-box'>
                         {workspace?.name}
                     </div>
-                    {isWorkspaceMaster &&
+                    {workspace?.masterFlag &&
                         (
                             <div className='button-box'>
                                 <button

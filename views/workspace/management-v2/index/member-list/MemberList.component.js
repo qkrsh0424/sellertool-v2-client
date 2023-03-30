@@ -11,8 +11,7 @@ import PermissionSettingModalV2Component from "./modal/PermissionSettingModalV2.
 
 
 const MemberListComponent = ({
-    workspace,
-    isWorkspaceMaster
+    workspace
 }) => {
     const {
         workspaceMembers,
@@ -133,7 +132,7 @@ const MemberListComponent = ({
                                         </div>
                                     </div>
                                 </div>
-                                {isWorkspaceMaster &&
+                                {workspace?.masterFlag &&
                                     (
                                         <div className='control-items mgl-flex mgl-flex-alignItems-center'>
                                             <SingleBlockButton
@@ -199,7 +198,7 @@ const MemberListComponent = ({
                                         </div>
                                     </div>
                                 </div>
-                                {isWorkspaceMaster &&
+                                {workspace?.masterFlag &&
                                     (
                                         <div className='control-items mgl-flex mgl-flex-alignItems-center'>
                                             <SingleBlockButton

@@ -3,25 +3,10 @@ import { workspaceDataConnect } from "../../../../data_connect/workspaceDataConn
 
 export default function useWorkspacesHook(props) {
     const [workspaces, setWorkspaces] = useState(null);
-    const [privateWorkspaces, setPrivateWorkspaces] = useState(null);
-    const [publicWorkspaces, setPublicWorkspaces] = useState(null);
 
     useEffect(() => {
         reqFetchWorkspaces();
     }, []);
-
-    useEffect(() => {
-        if (!workspaces) {
-            return;
-        }
-
-        let privateItems = workspaces.filter(r => r.publicYn === 'n');
-        let publicItems = workspaces.filter(r => r.publicYn === 'y');
-
-        onSetPrivateWorkspaces(privateItems);
-        onSetPublicWorkspaces(publicItems);
-
-    }, [workspaces]);
 
     const reqFetchWorkspaces = async () => {
         await workspaceDataConnect().getWorkspaces()
@@ -36,17 +21,7 @@ export default function useWorkspacesHook(props) {
             ;
     }
 
-    const onSetPrivateWorkspaces = (items) => {
-        setPrivateWorkspaces([...items]);
-    }
-
-    const onSetPublicWorkspaces = (items) => {
-        setPublicWorkspaces([...items])
-    }
-
     return {
-        workspaces,
-        privateWorkspaces,
-        publicWorkspaces
+        workspaces
     }
 }

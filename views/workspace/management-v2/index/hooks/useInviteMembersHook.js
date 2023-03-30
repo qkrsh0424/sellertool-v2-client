@@ -67,9 +67,11 @@ export default function useInviteMembersHook({
         body,
         successCallback
     }) => {
-        await inviteMemberDataConnect().deleteOne({
-            body
-        })
+        const headers = {
+            wsId: workspace?.id
+        }
+
+        await inviteMemberDataConnect().deleteOne(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchInviteMembers();
@@ -97,9 +99,11 @@ export default function useInviteMembersHook({
         body,
         successCallback
     }) => {
-        await inviteMemberDataConnect().retryInviteMember({
-            body
-        })
+        const headers = {
+            wsId: workspace?.id
+        }
+
+        await inviteMemberDataConnect().retryInviteMember(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchInviteMembers();

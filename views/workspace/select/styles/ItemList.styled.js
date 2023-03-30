@@ -54,11 +54,40 @@ export const ItemListWrapper = styled.div`
         flex:1;
         font-size: 16px;
         color:#303030;
-        padding: 20px;
+        padding: 15px 20px;
+        
 
         &:hover{
             background: #f0f0f040;
         }
+    }
+
+    .workspaceName{
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+
+    .subscriptionPlan-tag{
+        display: inline-block;
+        font-size: 10px;
+        border:0.9px solid var(--defaultPurpleColor);
+        color: var(--defaultPurpleColor);
+        font-weight: 700;
+        padding:2px 7px;
+        border-radius: 20px;
+        vertical-align: middle;
+    }
+
+    .disabledWorkspaceTag{
+        display: inline-block;
+        font-size: 10px;
+        border:0.9px solid #808080;
+        color: #808080;
+        font-weight: 700;
+        padding:2px 7px;
+        border-radius: 20px;
+        vertical-align: middle;
     }
 
     .item-box-active{

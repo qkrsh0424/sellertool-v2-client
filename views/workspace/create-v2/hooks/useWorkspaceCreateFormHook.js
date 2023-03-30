@@ -3,20 +3,20 @@ import { useState } from "react";
 export default function useWorkspaceCreateFormHook(props) {
     const [workspaceCreateForm, setWorkspaceCreateForm] = useState({
         name: '',
-        publicYn: 'n'
+        subscriptionPlan: 'NONE'
     })
 
     const onActionSelectPublic = () => {
         setWorkspaceCreateForm({
             ...workspaceCreateForm,
-            publicYn: 'y'
+            subscriptionPlan: 'PUBLIC'
         })
     }
 
     const onActionSelectPrivate = () => {
         setWorkspaceCreateForm({
             ...workspaceCreateForm,
-            publicYn: 'n'
+            subscriptionPlan: 'NONE'
         })
     }
 

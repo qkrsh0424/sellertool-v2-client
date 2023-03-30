@@ -32,7 +32,11 @@ export default function useWorkspaceMemberHook(workspace) {
     }
 
     const reqChangeProfileImageUri = async (body, successCallback) => {
-        await workspaceMemberDataConnect().changeProfileImageUri(body)
+        const headers = {
+            wsId: workspace?.id
+        }
+
+        await workspaceMemberDataConnect().changeProfileImageUri(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetch();
@@ -58,7 +62,11 @@ export default function useWorkspaceMemberHook(workspace) {
     }
 
     const reqChangeNickname = async (body, successCallback) => {
-        await workspaceMemberDataConnect().changeNickname(body)
+        const headers = {
+            wsId: workspace?.id
+        }
+
+        await workspaceMemberDataConnect().changeNickname(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetch();
@@ -83,7 +91,10 @@ export default function useWorkspaceMemberHook(workspace) {
     }
 
     const reqChangePhoneNumber = async (body, successCallback) => {
-        await workspaceMemberDataConnect().changePhoneNumber(body)
+        const headers = {
+            wsId: workspace?.id
+        }
+        await workspaceMemberDataConnect().changePhoneNumber(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetch();
@@ -108,7 +119,10 @@ export default function useWorkspaceMemberHook(workspace) {
     }
 
     const reqChangeEmail = async (body, successCallback) => {
-        await workspaceMemberDataConnect().changeEmail(body)
+        const headers = {
+            wsId: workspace?.id
+        }
+        await workspaceMemberDataConnect().changeEmail(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetch();

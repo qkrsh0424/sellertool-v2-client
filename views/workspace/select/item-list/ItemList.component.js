@@ -14,8 +14,6 @@ export default function ItemListComponent(props) {
 
     const {
         workspaces,
-        privateWorkspaces,
-        publicWorkspaces
     } = useWorkspacesHook();
 
     const __handle = {
@@ -48,113 +46,89 @@ export default function ItemListComponent(props) {
     return (
         <>
             <Container>
-                {!valueUtils.isEmptyValues(privateWorkspaces) &&
-                    (
-                        <>
-                            <Wrapper>
-                                <Title>
-                                    개인 워크스페이스
-                                </Title>
-                                <ItemListWrapper>
-                                    {privateWorkspaces?.map(r => {
-                                        return (
-                                            <div
-                                                key={r.id}
-                                                className='item-group'
-                                            >
-                                                <div
-                                                    className={`item-box ${workspaceRedux?.workspaceInfo?.id === r.id ? 'item-box-active' : ''}`}
-                                                    onClick={() => __handle.action.selectWorkspace(r)}
-                                                >
-                                                    {r.name}
-                                                </div>
-                                                <SingleBlockButton
-                                                    type='button'
-                                                    className='manage-button-el'
-                                                    onClick={() => __handle.action.routeToPath(`/workspace/management`, { wsId: r.id })}
-                                                >
-                                                    <div className='manage-button-icon-figure'>
-                                                        <Image
-                                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                            src={`/images/icon/settings_default_808080.svg`}
-                                                            className='icon-el'
-                                                            layout="responsive"
-                                                            width={1}
-                                                            height={1}
-                                                            alt={'add icon'}
-                                                        />
-                                                    </div>
-                                                </SingleBlockButton>
+                <Wrapper>
+                    <Title>
+                        워크스페이스
+                    </Title>
+                    <ItemListWrapper>
+                        {workspaces?.map(r => {
+                            const disabledWorkspace = r.subscriptionPlan === 'NONE' && !r.masterFlag;
+                            if (disabledWorkspace) {
+                                return (
+                                    <div
+                                        key={r.id}
+                                        className='item-group'
+                                        style={{ background: '#f0f0f060' }}
+                                    >
+                                        <div
+                                            className={`item-box ${workspaceRedux?.workspaceInfo?.id === r.id ? 'item-box-active' : ''}`}
+                                            style={{color: '#808080'}}
+                                        >
+                                            <span className='workspaceName'>{r.name}</span>
+                                            <span className='disabledWorkspaceTag'>구독플랜 필요</span>
+                                        </div>
+                                        <SingleBlockButton
+                                            type='button'
+                                            className='manage-button-el'
+                                            onClick={() => __handle.action.routeToPath(`/workspace/management`, { wsId: r.id })}
+                                        >
+                                            <div className='manage-button-icon-figure'>
+                                                <Image
+                                                    loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                                    src={`/images/icon/settings_default_808080.svg`}
+                                                    className='icon-el'
+                                                    layout="responsive"
+                                                    width={1}
+                                                    height={1}
+                                                    alt={'add icon'}
+                                                />
                                             </div>
-                                        );
-                                    })}
+                                        </SingleBlockButton>
+                                    </div>
+                                );
+                            }
+                            return (
+                                <div
+                                    key={r.id}
+                                    className='item-group'
+                                >
+                                    <div
+                                        className={`item-box ${workspaceRedux?.workspaceInfo?.id === r.id ? 'item-box-active' : ''}`}
+                                        onClick={() => __handle.action.selectWorkspace(r)}
+                                    >
+                                        <span className='workspaceName'>{r.name}</span>
+                                        {r?.subscriptionPlan === 'PUBLIC' && <span className='subscriptionPlan-tag'>퍼블릭</span>}
+                                    </div>
+                                    <SingleBlockButton
+                                        type='button'
+                                        className='manage-button-el'
+                                        onClick={() => __handle.action.routeToPath(`/workspace/management`, { wsId: r.id })}
+                                    >
+                                        <div className='manage-button-icon-figure'>
+                                            <Image
+                                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                                                src={`/images/icon/settings_default_808080.svg`}
+                                                className='icon-el'
+                                                layout="responsive"
+                                                width={1}
+                                                height={1}
+                                                alt={'add icon'}
+                                            />
+                                        </div>
+                                    </SingleBlockButton>
+                                </div>
+                            );
+                        })}
 
-                                    {valueUtils.isEmptyValues(privateWorkspaces) &&
-                                        (
-                                            <div className='empty-item'>
-                                                워크스페이스가 비었습니다.
-                                            </div>
-                                        )
-                                    }
-                                </ItemListWrapper>
-                            </Wrapper>
-                        </>
-                    )
-                }
-
-                {!valueUtils.isEmptyValues(publicWorkspaces) &&
-                    (
-                        <>
-                            <Wrapper>
-                                <Title>
-                                    공유 워크스페이스
-                                </Title>
-                                <ItemListWrapper>
-                                    {publicWorkspaces?.map(r => {
-                                        return (
-                                            <div
-                                                key={r.id}
-                                                className='item-group'
-                                            >
-                                                <div
-                                                    className={`item-box ${workspaceRedux?.workspaceInfo?.id === r.id ? 'item-box-active' : ''}`}
-                                                    onClick={() => __handle.action.selectWorkspace(r)}
-                                                >
-                                                    {r.name}
-                                                </div>
-                                                <SingleBlockButton
-                                                    type='button'
-                                                    className='manage-button-el'
-                                                    onClick={() => __handle.action.routeToPath(`/workspace/management`, { wsId: r.id })}
-                                                >
-                                                    <div className='manage-button-icon-figure'>
-                                                        <Image
-                                                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                            src={`/images/icon/settings_default_808080.svg`}
-                                                            className='icon-el'
-                                                            layout="responsive"
-                                                            width={1}
-                                                            height={1}
-                                                            alt={'add icon'}
-                                                        />
-                                                    </div>
-                                                </SingleBlockButton>
-                                            </div>
-                                        );
-                                    })}
-
-                                    {valueUtils.isEmptyValues(publicWorkspaces) &&
-                                        (
-                                            <div className='empty-item'>
-                                                워크스페이스가 비었습니다.
-                                            </div>
-                                        )
-                                    }
-                                </ItemListWrapper>
-                            </Wrapper>
-                        </>
-                    )
-                }
+                        {valueUtils.isEmptyValues(workspaces) &&
+                            (
+                                <div className='empty-item'>
+                                    워크스페이스가 비었습니다.
+                                </div>
+                            )
+                        }
+                    </ItemListWrapper>
+                </Wrapper>
                 <CreateButtonWrapper>
                     <Link
                         href='/workspace/create'

@@ -1,9 +1,11 @@
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { marginRecordDataConnect } from "../../../../data_connect/marginRecordDataConnect";
 
 export default function useMarginRecordsHook(props) {
+    const { enqueueSnackbar } = useSnackbar();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const [marginRecords, setMarginRecords] = useState(null);
 
@@ -23,7 +25,11 @@ export default function useMarginRecordsHook(props) {
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
+                const res = err.response;
+                console.log(res);
+                if (res?.status === 403) {
+                    enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate:true })
+                }
             })
     }
 

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import CommonModalComponent from "../modules/modal/CommonModalComponent";
-import ServiceListComponent from "./service-list/ServiceList.component";
 import WorkspaceNoticeModalComponent from "./modal/WorkspaceNoticeModal.component";
 import BannerComponent from "./banner/Banner.component";
 import Section1Component from "./section1/Section1.component";
@@ -41,7 +40,6 @@ const HomeMain = () => {
     return (
         <>
             <Container>
-                {/* <ServiceListComponent></ServiceListComponent> */}
                 <BannerComponent />
                 <Section1Component />
             </Container>

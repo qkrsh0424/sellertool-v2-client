@@ -116,7 +116,7 @@ const MemberListComponent = ({
                                             ></Image>
                                         </div>
                                         <div>
-                                            <p><span className='nickName'>{r?.nickname || '닉네임 미지정'}</span> <span className='memberType'>{r.masterFlag ? '관리자' : '매니저'}</span></p>
+                                            <p style={{ marginTop: '0' }}><span className='nickName'>{r?.nickname || '닉네임 미지정'}</span> <span className='memberType'>{r.masterFlag ? '관리자' : '매니저'}</span></p>
                                             <div className='info-group'>
                                                 <div className='info-left'>Email.</div>
                                                 <div>{r?.email || '이메일 미지정'}</div>
@@ -182,7 +182,7 @@ const MemberListComponent = ({
                                             ></Image>
                                         </div>
                                         <div>
-                                            <p><span className='nickName'>{r?.nickname || '닉네임 미지정'}</span> <span className='memberType'>{r.masterFlag ? '관리자' : '매니저'}</span></p>
+                                            <p style={{ marginTop: '0' }}><span className='nickName'>{r?.nickname || '닉네임 미지정'}</span> <span className='memberType'>{r.masterFlag ? '관리자' : '매니저'}</span></p>
                                             <div className='info-group'>
                                                 <div className='info-left'>Email.</div>
                                                 <div>{r?.email || '이메일 미지정'}</div>

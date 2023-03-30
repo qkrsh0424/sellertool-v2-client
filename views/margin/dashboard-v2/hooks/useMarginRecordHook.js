@@ -1,10 +1,12 @@
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { marginRecordDataConnect } from "../../../../data_connect/marginRecordDataConnect";
 
 export default function useMarginRecordHook(props) {
+    const { enqueueSnackbar } = useSnackbar();
     const router = useRouter();
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const [marginRecord, setMarginRecord] = useState(null);
@@ -33,12 +35,10 @@ export default function useMarginRecordHook(props) {
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
-                let res = err.response;
-
-                if (res?.status === 403 && res?.data?.message === 'access_denied') {
-                    alert('접근 권한이 없습니다.');
-                    return;
+                const res = err.response;
+                console.log(res);
+                if (res?.status === 403) {
+                    enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate: true })
                 }
             })
     }

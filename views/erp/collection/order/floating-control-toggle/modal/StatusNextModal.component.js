@@ -152,7 +152,7 @@ export default function StatusNextModalComponent({
                     maxWidth={'xl'}
                 >
                     <CustomDialog.CloseButton onClose={() => onClose()} />
-                    <CustomDialog.Title>판매전환 확인메세지</CustomDialog.Title>
+                    <CustomDialog.Title>주문확정 확인메세지</CustomDialog.Title>
                     <Content
                         selectedErpItems={selectedErpItems}
                     />
@@ -372,7 +372,7 @@ function Content({
                     </ItemList>
                 </ItemWrapper>
             </ItemGroup>
-            <MessageBox>{selectedErpItems?.length} 건의 데이터를 판매전환 하시겠습니까?</MessageBox>
+            <MessageBox>{selectedErpItems?.length} 건의 데이터를 주문확정 하시겠습니까?</MessageBox>
         </ContentContainer>
     );
 }

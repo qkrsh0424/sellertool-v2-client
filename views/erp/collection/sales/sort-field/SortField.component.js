@@ -25,7 +25,7 @@ export default function SortFieldComponent(props) {
                     className='button-item'
                     onClick={() => handleOpenSortModal()}
                 >
-                    <div>{FLATTEN_SORT_LIST?.find(r => r.sort === router?.query?.sort)?.name || '[M] 판매등록일'} | <span className='bold'>{FLATTEN_SORT_LIST?.find(r => r.sort === router?.query?.sort)?.direction || '오름차순'}</span></div>
+                    <div>{FLATTEN_SORT_LIST?.find(r => r.sort === router?.query?.sort)?.name || '[M] 주문확정일시'} | <span className='bold'>{FLATTEN_SORT_LIST?.find(r => r.sort === router?.query?.sort)?.direction || '오름차순'}</span></div>
                 </SingleBlockButton>
             </Container>
             {sortModalOpen &&
@@ -45,7 +45,7 @@ export default function SortFieldComponent(props) {
 
 const SORT_TYPES = [
     {
-        name: '[M] 주문등록일',
+        name: '[M] 주문수집일시',
         sortList: [
             {
                 sort: ['createdAt_asc'],
@@ -71,7 +71,7 @@ const SORT_TYPES = [
         ]
     },
     {
-        name: '[M] 판매등록일',
+        name: '[M] 주문확정일시',
         sortList: [
             {
                 sort: ['salesAt_asc'],
@@ -84,7 +84,7 @@ const SORT_TYPES = [
         ]
     },
     {
-        name: '[M] 출고등록일',
+        name: '[M] 출고완료일시',
         sortList: [
             {
                 sort: ['releaseAt_asc'],

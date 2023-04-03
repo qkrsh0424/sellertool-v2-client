@@ -155,14 +155,14 @@ export default function FloatingControlBarModalComponent({
                                 className='button-item'
                                 onClick={() => onActionOpenChangeStatusToReleaseModal()}
                             >
-                                출고전환
+                                출고완료
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
                                 onClick={() => onActionOpenChangeStatusToOrderModal()}
                             >
-                                판매취소
+                                주문확정 취소
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'

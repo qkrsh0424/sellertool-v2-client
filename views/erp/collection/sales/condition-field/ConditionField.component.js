@@ -421,7 +421,7 @@ const PERIOD_TYPES = [
     },
     {
         value: 'createdAt',
-        name: '주문등록일'
+        name: '주문수집일시'
     },
     {
         value: 'channelOrderDate',
@@ -429,7 +429,7 @@ const PERIOD_TYPES = [
     },
     {
         value: 'salesAt',
-        name: '판매등록일'
+        name: '주문확정일시'
     }
 ]
 

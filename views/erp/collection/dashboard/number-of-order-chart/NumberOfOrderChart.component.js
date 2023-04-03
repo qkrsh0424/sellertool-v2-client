@@ -164,7 +164,7 @@ function OrderManagementChart({
             }
         },
         data: {
-            labels: ['주문건수', '판매건수', '출고건수'],
+            labels: ['주문확인', '주문확정', '출고완료'],
             datasets: [
                 {
                     type: 'bar',
@@ -298,7 +298,7 @@ function OrderCountsWithTime({
 
     return (
         <ChartWrapper2>
-            <div className='title'>금일 주문등록시간별 건수</div>
+            <div className='title'>금일 주문수집 시간별 건수</div>
             <div
                 className='chart-box'
             >

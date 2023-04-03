@@ -230,8 +230,8 @@ export default function FloatingControlToggle({
                 open={changeStatusToOrderModalOpen}
                 onClose={() => handleToggleChangeStatusToOrderModalOpen(false)}
                 onConfirm={handleSubmitChangeStatusToOrder}
-                title={'판매취소 확인메세지'}
-                message={'선택된 데이터를 판매취소 합니다.'}
+                title={'주문확정 취소 확인메세지'}
+                message={'선택된 데이터의 주문확정을 취소합니다.'}
             />
 
             <CommonModalComponent

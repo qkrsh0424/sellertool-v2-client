@@ -67,7 +67,7 @@ export default function FloatingControlBarModalComponent({
 
     onClose,
     onActionOpenEditErpItemsModal,
-    onActionOpenChangeStatusToSalesModal,
+    onActionOpenChangeStatusHoldToOrderModal,
     onActionOpenDeleteErpItemsConfirmModal,
     onActionOpenExcelDownloadModal,
     onActionOpenCopyCreateErpItemModal,
@@ -140,9 +140,9 @@ export default function FloatingControlBarModalComponent({
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => onActionOpenChangeStatusToSalesModal()}
+                                onClick={() => onActionOpenChangeStatusHoldToOrderModal()}
                             >
-                                주문확정
+                                주문확인으로 전환
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'

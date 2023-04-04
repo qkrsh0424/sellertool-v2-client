@@ -30,7 +30,7 @@ export default function MainComponent(props) {
         reqChangeReleaseOptionCode,
         reqUpdateErpItems,
         reqDeleteErpItems,
-        reqChangeStatusToSales,
+        reqChangeStatusHoldToOrder,
         reqCopyCreateErpItems
     } = useErpItemPageHook();
 
@@ -113,7 +113,7 @@ export default function MainComponent(props) {
                     onSubmitUpdateErpItems={reqUpdateErpItems}
                     onSubmitFetchSelectedErpItems={reqFetchSelectedErpItems}
                     onSubmitDeleteErpItems={reqDeleteErpItems}
-                    onSubmitChangeStatusToSales={reqChangeStatusToSales}
+                    onSubmitChangeStatusHoldToOrder={reqChangeStatusHoldToOrder}
                     onSubmitCopyCreateErpItems={reqCopyCreateErpItems}
                 />
             }

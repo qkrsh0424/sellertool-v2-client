@@ -262,13 +262,13 @@ export default function useErpItemPageHook(props) {
             })
     }
 
-    const reqChangeStatusToSales = async (body, successCallback) => {
+    const reqChangeStatusHoldToOrder = async (body, successCallback) => {
         body = {
             ...body,
             workspaceId: workspaceRedux?.workspaceInfo?.id,
         }
 
-        await erpItemDataConnect().changeStatusToSales(body)
+        await erpItemDataConnect().changeStatusHoldToOrder(body)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchErpItemPage();
@@ -337,7 +337,7 @@ export default function useErpItemPageHook(props) {
         reqChangeReleaseOptionCode,
         reqUpdateErpItems,
         reqDeleteErpItems,
-        reqChangeStatusToSales,
+        reqChangeStatusHoldToOrder,
         reqCopyCreateErpItems
     }
 }

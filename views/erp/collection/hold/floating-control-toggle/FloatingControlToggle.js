@@ -20,13 +20,13 @@ export default function FloatingControlToggle({
 
     onSubmitUpdateErpItems,
     onSubmitDeleteErpItems,
-    onSubmitChangeStatusToSales,
+    onSubmitChangeStatusHoldToOrder,
     onSubmitCopyCreateErpItems,
 }) {
     const [controlDrawerOpen, setControlDrawerOpen] = useState(false);
     const [editErpItemsModalOpen, setEditErpItemsModalOpen] = useState(false);
     const [deleteErpItemsConfirmModalOpen, setDeleteErpItemsConfirmModalOpen] = useState(false);
-    const [changeStatusToSalesModalOpen, setChangeStatusToSalesModalOpen] = useState(false);
+    const [changeStatusHoldToOrderModalOpen, setChangeStatusHoldToOrderModalOpen] = useState(false);
     const [excelDownloadModalOpen, setExcelDownloadModalOpen] = useState(false);
     const [copyCreateErpItemsModalOpen, setCopyCreateErpItemsModalOpen] = useState(false);
     const [viewSelectedModalOpen, setViewSelectedModalOpen] = useState(false);
@@ -37,7 +37,7 @@ export default function FloatingControlToggle({
             setControlDrawerOpen(false);
             setEditErpItemsModalOpen(false);
             setDeleteErpItemsConfirmModalOpen(false);
-            setChangeStatusToSalesModalOpen(false);
+            setChangeStatusHoldToOrderModalOpen(false);
             setExcelDownloadModalOpen(false);
             setBackdropOpen(false);
         };
@@ -55,8 +55,8 @@ export default function FloatingControlToggle({
         setDeleteErpItemsConfirmModalOpen(setOpen);
     }
 
-    const handleToggleChangeStatusToSalesModalOpen = (setOpen) => {
-        setChangeStatusToSalesModalOpen(setOpen);
+    const handleToggleChangeStatusHoldToOrderModalOpen = (setOpen) => {
+        setChangeStatusHoldToOrderModalOpen(setOpen);
     }
 
     const handleToggleExcelDownloadModalOpen = (setOpen) => {
@@ -107,14 +107,14 @@ export default function FloatingControlToggle({
         handleToggleBackdropOpen(false);
     }
 
-    const handleSubmitChangeStatusToSales = async () => {
+    const handleSubmitChangeStatusToOrder = async () => {
         handleToggleBackdropOpen(true)
         let body = {
             ids: selectedErpItems?.map(r => r.id),
             initializeFlag: true
         }
-        await onSubmitChangeStatusToSales(body, () => {
-            handleToggleChangeStatusToSalesModalOpen(false);
+        await onSubmitChangeStatusHoldToOrder(body, () => {
+            handleToggleChangeStatusHoldToOrderModalOpen(false);
             handleToggleControlDrawerOpen(false);
             onActionClearAllSelectedItems();
         })
@@ -162,7 +162,7 @@ export default function FloatingControlToggle({
                 onClose={() => handleToggleControlDrawerOpen(false)}
 
                 onActionOpenEditErpItemsModal={() => handleToggleEditErpItemModalOpen(true)}
-                onActionOpenChangeStatusToSalesModal={() => handleToggleChangeStatusToSalesModalOpen(true)}
+                onActionOpenChangeStatusHoldToOrderModal={() => handleToggleChangeStatusHoldToOrderModalOpen(true)}
                 onActionOpenDeleteErpItemsConfirmModal={() => handleToggleDeleteErpItemsConfirmModalOpen(true)}
                 onActionOpenExcelDownloadModal={() => handleToggleExcelDownloadModalOpen(true)}
                 onActionOpenCopyCreateErpItemModal={() => handleToggleCopyCreateErpItemsModalOpen(true)}
@@ -185,6 +185,17 @@ export default function FloatingControlToggle({
             </CommonModalComponent>
 
             <ConfirmModalComponentV2
+                open={changeStatusHoldToOrderModalOpen}
+                onClose={() => handleToggleChangeStatusHoldToOrderModalOpen(false)}
+                onConfirm={handleSubmitChangeStatusToOrder}
+                title={'주문확인 전환'}
+                message={<><div>선택된 데이터를 주문확인으로 전환 합니다.</div><div>주문수집일시가 초기화 됩니다.</div></>}
+                confirmBtnStyle={{
+                    background: 'var(--mainColor)'
+                }}
+            />
+
+            <ConfirmModalComponentV2
                 open={deleteErpItemsConfirmModalOpen}
                 onClose={() => handleToggleDeleteErpItemsConfirmModalOpen(false)}
                 onConfirm={handleSubmitDeleteErpItems}
@@ -193,14 +204,6 @@ export default function FloatingControlToggle({
                 confirmBtnStyle={{
                     background: 'var(--defaultRedColor)'
                 }}
-            />
-
-
-            <StatusNextModalComponent
-                open={changeStatusToSalesModalOpen}
-                onClose={() => handleToggleChangeStatusToSalesModalOpen(false)}
-                selectedErpItems={selectedErpItems}
-                onConfirm={handleSubmitChangeStatusToSales}
             />
 
             <CommonModalComponent

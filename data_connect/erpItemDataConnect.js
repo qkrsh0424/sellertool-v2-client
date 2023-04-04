@@ -290,6 +290,28 @@ const erpItemDataConnect = () => {
         },
         /**
          * 
+         * @param {object} body 
+         * @param {string} body.workspaceId
+         * @param {string[]} body.ids
+         * @param {boolean} body.initializeFlag
+         * @returns 
+         */
+        changeStatusHoldToOrder: async function (body) {
+            let headers = {
+                wsId: body.workspaceId
+            }
+
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/erp-items/target:status/action:holdToOrder`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
+        /**
+         * 
          * @param {FormData} formData 
          * @param {object} headers
          * @param {string} headers.wsId

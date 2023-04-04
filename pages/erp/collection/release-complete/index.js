@@ -8,7 +8,7 @@ export default function ErpCollectionReleaseCompletePage(props) {
     return (
         <>
             <Head>
-                <title>출고상태관리 | 셀러툴</title>
+                <title>출고완료 | 셀러툴</title>
             </Head>
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />

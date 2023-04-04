@@ -130,9 +130,9 @@ function TableField({
     return (
         <TableFieldWrapper>
             <div className='mgl-flex'>
-                <div className={`title ${tabType === 'order' ? 'title-active' : ''}`} onClick={() => onChangeTabType('order')}>주문관리</div>
-                <div className={`title ${tabType === 'sales' ? 'title-active' : ''}`} onClick={() => onChangeTabType('sales')}>판매관리</div>
-                <div className={`title ${tabType === 'release' ? 'title-active' : ''}`} onClick={() => onChangeTabType('release')}>출고관리</div>
+                <div className={`title ${tabType === 'order' ? 'title-active' : ''}`} onClick={() => onChangeTabType('order')}>주문확인</div>
+                <div className={`title ${tabType === 'sales' ? 'title-active' : ''}`} onClick={() => onChangeTabType('sales')}>주문확정</div>
+                <div className={`title ${tabType === 'release' ? 'title-active' : ''}`} onClick={() => onChangeTabType('release')}>출고완료</div>
             </div>
             <div style={{ position: 'relative' }}>
                 <div

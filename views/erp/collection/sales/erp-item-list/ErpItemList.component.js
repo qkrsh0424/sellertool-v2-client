@@ -425,7 +425,7 @@ function Td({
     onActionOpenItemsForSameReceiverModal
 }) {
     switch (matchedFieldName) {
-        case 'createdAt': case 'salesAt': case 'releaseAt': case 'channelOrderDate':
+        case 'createdAt': case 'salesAt': case 'releaseAt': case 'holdAt': case 'channelOrderDate':
             return (
                 <td>{erpItem[matchedFieldName] ? dateToYYYYMMDDhhmmss(erpItem[matchedFieldName]) : ""}</td>
             );

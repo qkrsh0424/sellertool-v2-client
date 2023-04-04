@@ -84,7 +84,7 @@ export default function ErpItemListComponent({
 
     const handleOpenEditReleaseOptionCodeModal = (e, erpItem) => {
         e.stopPropagation();
-        if(erpItem.stockReflectYn === 'y'){
+        if (erpItem.stockReflectYn === 'y') {
             alert('이미 재고에 반영된 데이터는 [M] 출고옵션코드를 변경할 수 없습니다.\n재고반영을 취소 후 변경해 주세요.');
             return;
         }
@@ -470,7 +470,7 @@ function Td({
     onActionOpenItemsForSameReceiverModal
 }) {
     switch (matchedFieldName) {
-        case 'createdAt': case 'salesAt': case 'releaseAt': case 'channelOrderDate':
+        case 'createdAt': case 'salesAt': case 'releaseAt': case 'holdAt': case 'channelOrderDate':
             return (
                 <td>{erpItem[matchedFieldName] ? dateToYYYYMMDDhhmmss(erpItem[matchedFieldName]) : ""}</td>
             );

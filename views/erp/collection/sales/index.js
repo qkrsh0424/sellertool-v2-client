@@ -14,7 +14,7 @@ import { Container } from "./index.styled";
 import SortFieldComponent from "./sort-field/SortField.component";
 
 export default function MainComponent(props) {
-    const [selectedErpCollectionHeaderIds, setSelectedErpCollectionHeaderIds] = useLocalStorageHook('erp_collection_headers', { orderHeaderId: null, salesHeaderId: null, releaseCompleteHeaderId: null });
+    const [selectedErpCollectionHeaderIds, setSelectedErpCollectionHeaderIds] = useLocalStorageHook('erp_collection_headers', { orderHeaderId: null, salesHeaderId: null, releaseCompleteHeaderId: null, holdHeaderId: null });
 
     const {
         erpCollectionHeader
@@ -33,6 +33,7 @@ export default function MainComponent(props) {
         reqChangeStatusToSales,
         reqChangeStatusToRelease,
         reqChangeStatusToOrder,
+        reqChangeStatusToHold,
         reqCopyCreateErpItems
     } = useErpItemPageHook();
 
@@ -117,6 +118,7 @@ export default function MainComponent(props) {
                     onSubmitDeleteErpItems={reqDeleteErpItems}
                     onSubmitChangeStatusToRelease={reqChangeStatusToRelease}
                     onSubmitChangeStatusToOrder={reqChangeStatusToOrder}
+                    onSubmitChangeStatusToHold={reqChangeStatusToHold}
                     onSubmitCopyCreateErpItems={reqCopyCreateErpItems}
                 />
             }

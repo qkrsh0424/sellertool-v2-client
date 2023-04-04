@@ -113,6 +113,14 @@ function OrderManagementChart({
                             endDateTime: date
                         }
                         break;
+                    case 3:
+                        pathname = '/erp/collection/hold';
+                        query = {
+                            periodSearchCondition: 'holdAt',
+                            startDateTime: date,
+                            endDateTime: date
+                        }
+                        break;
                 }
                 router.push({
                     pathname: pathname,
@@ -164,12 +172,12 @@ function OrderManagementChart({
             }
         },
         data: {
-            labels: ['주문확인', '주문확정', '출고완료'],
+            labels: ['주문확인', '주문확정', '출고완료', '보류 데이터'],
             datasets: [
                 {
                     type: 'bar',
                     label: '건수',
-                    data: [orderManagementCount?.ordersCount ?? 0, orderManagementCount?.salesCount ?? 0, orderManagementCount?.releasesCount ?? 0],
+                    data: [orderManagementCount?.ordersCount ?? 0, orderManagementCount?.salesCount ?? 0, orderManagementCount?.releasesCount ?? 0, orderManagementCount?.holdCount ?? 0],
                     borderColor: CHART_COLOR,
                     backgroundColor: CHART_COLOR + '70',
                     borderWidth: 1,

@@ -22,6 +22,7 @@ export default function FloatingControlToggle({
     onSubmitDeleteErpItems,
     onSubmitChangeStatusToRelease,
     onSubmitChangeStatusToOrder,
+    onSubmitChangeStatusToHold,
     onSubmitCopyCreateErpItems,
 }) {
     const [controlDrawerOpen, setControlDrawerOpen] = useState(false);
@@ -29,6 +30,7 @@ export default function FloatingControlToggle({
     const [deleteErpItemsConfirmModalOpen, setDeleteErpItemsConfirmModalOpen] = useState(false);
     const [changeStatusToReleaseModalOpen, setChangeStatusToReleaseModalOpen] = useState(false);
     const [changeStatusToOrderModalOpen, setChangeStatusToOrderModalOpen] = useState(false);
+    const [changeStatusToHoldModalOpen, setChangeStatusToHoldModalOpen] = useState(false);
     const [excelDownloadModalOpen, setExcelDownloadModalOpen] = useState(false);
     const [copyCreateErpItemsModalOpen, setCopyCreateErpItemsModalOpen] = useState(false);
     const [viewSelectedModalOpen, setViewSelectedModalOpen] = useState(false);
@@ -67,6 +69,10 @@ export default function FloatingControlToggle({
 
     const handleToggleChangeStatusToOrderModalOpen = (setOpen) => {
         setChangeStatusToOrderModalOpen(setOpen);
+    }
+
+    const handleToggleChangeStatusToHoldModalOpen = (setOpen) => {
+        setChangeStatusToHoldModalOpen(setOpen);
     }
 
     const handleToggleExcelDownloadModalOpen = (setOpen) => {
@@ -144,6 +150,20 @@ export default function FloatingControlToggle({
         handleToggleBackdropOpen(false);
     }
 
+    const handleSubmitChangeStatusToHold = async () => {
+        handleToggleBackdropOpen(true)
+        let body = {
+            ids: selectedErpItems?.map(r => r.id),
+            initializeFlag: true
+        }
+        await onSubmitChangeStatusToHold(body, () => {
+            handleToggleChangeStatusToHoldModalOpen(false);
+            handleToggleControlDrawerOpen(false);
+            onActionClearAllSelectedItems();
+        })
+        handleToggleBackdropOpen(false);
+    }
+
     const handleSubmitCopyCreateErpItems = async () => {
         handleToggleBackdropOpen(true)
         let body = {
@@ -187,6 +207,7 @@ export default function FloatingControlToggle({
                 onActionOpenEditErpItemsModal={() => handleToggleEditErpItemModalOpen(true)}
                 onActionOpenChangeStatusToReleaseModal={() => handleToggleChangeStatusToReleaseModalOpen(true)}
                 onActionOpenChangeStatusToOrderModal={() => handleToggleChangeStatusToOrderModalOpen(true)}
+                onActionOpenChangeStatusToHoldModal={() => handleToggleChangeStatusToHoldModalOpen(true)}
                 onActionOpenDeleteErpItemsConfirmModal={() => handleToggleDeleteErpItemsConfirmModalOpen(true)}
                 onActionOpenExcelDownloadModal={() => handleToggleExcelDownloadModalOpen(true)}
                 onActionOpenCopyCreateErpItemModal={() => handleToggleCopyCreateErpItemsModalOpen(true)}
@@ -232,6 +253,17 @@ export default function FloatingControlToggle({
                 onConfirm={handleSubmitChangeStatusToOrder}
                 title={'주문확정 취소 확인메세지'}
                 message={'선택된 데이터의 주문확정을 취소합니다.'}
+            />
+
+            <ConfirmModalComponentV2
+                open={changeStatusToHoldModalOpen}
+                onClose={() => handleToggleChangeStatusToHoldModalOpen(false)}
+                onConfirm={handleSubmitChangeStatusToHold}
+                title={'보류 데이터 전환'}
+                message={'선택된 데이터를 보류 데이터로 전환합니다.'}
+                confirmBtnStyle={{
+                    background: 'var(--mainColor)'
+                }}
             />
 
             <CommonModalComponent

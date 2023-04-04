@@ -1,5 +1,4 @@
 import _ from "lodash";
-import { useEffect, useState } from "react";
 import { useLocalStorageHook } from "../../../hooks/local_storage/useLocalStorageHook";
 
 export default function useViewExcelTranslatorHeaderIdsHook() {

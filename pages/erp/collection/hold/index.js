@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import MainComponent from '../../../../views/erp/collection/order';
+import MainComponent from '../../../../views/erp/collection/hold';
 import FooterMain from '../../../../views/footer/FooterMain';
 import PrimaryNavbarMainComponent from '../../../../views/navbar/primary-navbar';
 import SecondaryNavbarMainComponent from '../../../../views/navbar/secondary-navbar-v2';

@@ -61,8 +61,8 @@ const NAV_LIST = [
     },
     {
         name: '보류 데이터',
-        pathname: '/erp/collection/holds',
-        asPath: `/erp/collection/holds/?periodSearchCondition=releaseAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
+        pathname: '/erp/collection/hold',
+        asPath: `/erp/collection/hold/?periodSearchCondition=holdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
     },
     {
         name: '설정',

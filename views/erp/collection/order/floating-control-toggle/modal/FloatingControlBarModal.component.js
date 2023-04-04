@@ -68,6 +68,7 @@ export default function FloatingControlBarModalComponent({
     onClose,
     onActionOpenEditErpItemsModal,
     onActionOpenChangeStatusToSalesModal,
+    onActionOpenChangeStatusToHoldModal,
     onActionOpenDeleteErpItemsConfirmModal,
     onActionOpenExcelDownloadModal,
     onActionOpenCopyCreateErpItemModal,
@@ -118,23 +119,6 @@ export default function FloatingControlBarModalComponent({
                                 복사 생성
                             </SingleBlockButton>
                         </ContentGroup>
-                        {/* <ContentGroup>
-                            <div className='title'>재고 관리</div>
-                            <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenEditErpItemsModal()}
-                            >
-                                재고반영
-                            </SingleBlockButton>
-                            <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenEditErpItemsModal()}
-                            >
-                                재고반영 취소
-                            </SingleBlockButton>
-                        </ContentGroup> */}
                         <ContentGroup>
                             <div className='title'>상태 관리</div>
                             <SingleBlockButton
@@ -143,6 +127,13 @@ export default function FloatingControlBarModalComponent({
                                 onClick={() => onActionOpenChangeStatusToSalesModal()}
                             >
                                 주문확정
+                            </SingleBlockButton>
+                            <SingleBlockButton
+                                type='button'
+                                className='button-item'
+                                onClick={() => onActionOpenChangeStatusToHoldModal()}
+                            >
+                                보류전환
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'

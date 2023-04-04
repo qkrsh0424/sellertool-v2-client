@@ -25,7 +25,7 @@ export default function SortFieldComponent(props) {
                     className='button-item'
                     onClick={() => handleOpenSortModal()}
                 >
-                    <div>{FLATTEN_SORT_LIST?.find(r => r.sort === router?.query?.sort)?.name || '[M] 주문수집일시'} | <span className='bold'>{FLATTEN_SORT_LIST?.find(r => r.sort === router?.query?.sort)?.direction || '오름차순'}</span></div>
+                    <div>{FLATTEN_SORT_LIST?.find(r => r.sort === router?.query?.sort)?.name || '[M] 보류일시'} | <span className='bold'>{FLATTEN_SORT_LIST?.find(r => r.sort === router?.query?.sort)?.direction || '오름차순'}</span></div>
                 </SingleBlockButton>
             </Container>
             {sortModalOpen &&
@@ -92,6 +92,19 @@ const SORT_TYPES = [
             },
             {
                 sort: ['releaseAt_desc'],
+                direction: '내림차순'
+            }
+        ]
+    },
+    {
+        name: '[M] 보류일시',
+        sortList: [
+            {
+                sort: ['holdAt_asc'],
+                direction: '오름차순'
+            },
+            {
+                sort: ['holdAt_desc'],
                 direction: '내림차순'
             }
         ]

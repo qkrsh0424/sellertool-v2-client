@@ -228,7 +228,7 @@ export default function ConditionFieldComponent({
                                     </LocalizationProvider>
                                 </div>
                             </PeriodWrapper>
-                            <CustomDatePeriodButtonGroup style={{marginTop:'15px'}}>
+                            <CustomDatePeriodButtonGroup style={{ marginTop: '15px' }}>
                                 <CustomDatePeriodButtonGroup.TodayButton
                                     callback={(result) => onChangePeriod(result)}
                                 />
@@ -510,6 +510,10 @@ const DELIVERY_INFO_TYPES = [
     {
         value: 'waybillNumber',
         name: '운송장번호'
+    },
+    {
+        value: 'releaseLocation',
+        name: '출고지'
     },
 ]
 

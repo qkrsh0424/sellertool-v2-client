@@ -131,7 +131,7 @@ export default function FloatingControlToggle({
                 if (r.stockReflectYn === 'y') {
                     stockReflectedItems.push(r);
                 }
-
+                
                 if (!r.releaseOptionCode) {
                     notSetReleaseOptionCodeItems.push(r);
                 }
@@ -143,7 +143,7 @@ export default function FloatingControlToggle({
             }
 
             if (notSetReleaseOptionCodeItems?.length >= 1) {
-                alert(`[M] 출고옵션코드가 지정되지 않은 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
+                alert(`[M] 출고옵션코드가 지정되지 않은 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${notSetReleaseOptionCodeItems?.map(r => r.uniqueCode)?.join()}`);
                 return;
             }
         }

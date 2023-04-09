@@ -515,6 +515,10 @@ const DELIVERY_INFO_TYPES = [
         value: 'waybillNumber',
         name: '운송장번호'
     },
+    {
+        value: 'releaseLocation',
+        name: '출고지'
+    },
 ]
 
 const MATCHED_CODE_TYPES = [

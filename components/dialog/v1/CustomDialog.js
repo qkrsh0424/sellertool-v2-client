@@ -36,11 +36,12 @@ const Container = styled.div`
 
 /**
  * 
- * @param {boolean} open
- * @param {string} fullWidth
- * @param {string} maxWidth
- * @param {function} onClose
- * @param {string} backdropColor
+ * @param {object} props
+ * @param {boolean} props.open
+ * @param {string} props.fullWidth
+ * @param {string} props.maxWidth
+ * @param {function} props.onClose
+ * @param {string} props.backdropColor
  * @returns 
  */
 function DialogMain({

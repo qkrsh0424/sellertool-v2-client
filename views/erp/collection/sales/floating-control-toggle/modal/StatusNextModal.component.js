@@ -152,7 +152,7 @@ export default function StatusNextModalComponent({
                     maxWidth={'xl'}
                 >
                     <CustomDialog.CloseButton onClose={() => onClose()} />
-                    <CustomDialog.Title>출고전환 확인메세지</CustomDialog.Title>
+                    <CustomDialog.Title>출고완료 확인메세지</CustomDialog.Title>
                     <Content
                         selectedErpItems={selectedErpItems}
                     />
@@ -374,7 +374,7 @@ function Content({
                     </ItemList>
                 </ItemWrapper>
             </ItemGroup>
-            <MessageBox>{selectedErpItems?.length} 건의 데이터를 출고전환 하시겠습니까?</MessageBox>
+            <MessageBox>{selectedErpItems?.length} 건의 데이터를 출고완료 하시겠습니까?</MessageBox>
         </ContentContainer>
     );
 }

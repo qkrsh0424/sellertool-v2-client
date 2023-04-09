@@ -100,7 +100,7 @@ export default function EditChannelOrderDateModalComponent({
                     adapterLocale={'ko-KR'}
                 >
                     <MobileDatePicker
-                        label="판매채널 주문날짜"
+                        label="판매채널 주문일시"
                         inputFormat="YYYY.MM.DD"
                         mask={'____.__.__'}
                         toolbarFormat="YY.MM.DD dd"

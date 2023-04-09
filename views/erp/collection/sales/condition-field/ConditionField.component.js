@@ -228,7 +228,7 @@ export default function ConditionFieldComponent({
                                     </LocalizationProvider>
                                 </div>
                             </PeriodWrapper>
-                            <CustomDatePeriodButtonGroup style={{marginTop:'15px'}}>
+                            <CustomDatePeriodButtonGroup style={{ marginTop: '15px' }}>
                                 <CustomDatePeriodButtonGroup.TodayButton
                                     callback={(result) => onChangePeriod(result)}
                                 />
@@ -421,7 +421,7 @@ const PERIOD_TYPES = [
     },
     {
         value: 'createdAt',
-        name: '주문등록일'
+        name: '주문수집일시'
     },
     {
         value: 'channelOrderDate',
@@ -429,7 +429,7 @@ const PERIOD_TYPES = [
     },
     {
         value: 'salesAt',
-        name: '판매등록일'
+        name: '주문확정일시'
     }
 ]
 
@@ -510,6 +510,10 @@ const DELIVERY_INFO_TYPES = [
     {
         value: 'waybillNumber',
         name: '운송장번호'
+    },
+    {
+        value: 'releaseLocation',
+        name: '출고지'
     },
 ]
 

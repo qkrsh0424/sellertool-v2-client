@@ -25,6 +25,7 @@ const theme = createTheme();
 // == NProgress Module START ==
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
+import { SnackbarProvider } from 'notistack';
 
 
 Router.onRouteChangeStart = () => {
@@ -52,7 +53,9 @@ function MyApp({ Component, pageProps }) {
 			<UserPermissionComponent />
 			<WorkspacePermissionComponent />
 			<ThemeProvider theme={theme}>
-				<Component {...pageProps} />
+				<SnackbarProvider maxSnack={3}>
+					<Component {...pageProps} />
+				</SnackbarProvider>
 			</ThemeProvider>
 		</>
 	)

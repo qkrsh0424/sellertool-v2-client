@@ -15,7 +15,7 @@ import { Container } from "./index.styled";
 import SortFieldComponent from "./sort-field/SortField.component";
 
 export default function MainComponent(props) {
-    const [selectedErpCollectionHeaderIds, setSelectedErpCollectionHeaderIds] = useLocalStorageHook('erp_collection_headers', { orderHeaderId: null, salesHeaderId: null, releaseCompleteHeaderId: null });
+    const [selectedErpCollectionHeaderIds, setSelectedErpCollectionHeaderIds] = useLocalStorageHook('erp_collection_headers', { orderHeaderId: null, salesHeaderId: null, releaseCompleteHeaderId: null, holdHeaderId: null });
 
     const {
         erpCollectionHeader
@@ -35,6 +35,7 @@ export default function MainComponent(props) {
         reqChangeStatusToSales,
         reqChangeStatusToRelease,
         reqChangeStatusToOrder,
+        reqChangeStatusToHold,
         reqCopyCreateErpItems,
         reqUploadWaybillForm
     } = useErpItemPageHook();
@@ -101,8 +102,8 @@ export default function MainComponent(props) {
         <>
             <Container>
                 <Layout
-                    sidebarName={'발주관리'}
-                    headerName={'출고관리'}
+                    sidebarName={'통합 발주 관리'}
+                    headerName={'출고완료'}
                     sidebarColor={'#ffffff'}
                 >
                     <>
@@ -153,6 +154,7 @@ export default function MainComponent(props) {
                     onSubmitChangeStatusToSales={reqChangeStatusToSales}
                     onSubmitChangeStatusToRelease={reqChangeStatusToRelease}
                     onSubmitChangeStatusToOrder={reqChangeStatusToOrder}
+                    onSubmitChangeStatusToHold={reqChangeStatusToHold}
                     onSubmitCopyCreateErpItems={reqCopyCreateErpItems}
                     onSubmitStockRelease={handleSubmitStockRelease}
                     onSubmitCancelStockRelease={handleSubmitCancelStockRelease}

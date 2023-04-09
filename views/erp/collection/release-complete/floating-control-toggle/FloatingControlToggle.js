@@ -24,6 +24,7 @@ export default function FloatingControlToggle({
     onSubmitUpdateErpItems,
     onSubmitDeleteErpItems,
     onSubmitChangeStatusToSales,
+    onSubmitChangeStatusToHold,
     onSubmitCopyCreateErpItems,
     onSubmitStockRelease,
     onSubmitCancelStockRelease,
@@ -35,6 +36,7 @@ export default function FloatingControlToggle({
     const [editErpItemsModalOpen, setEditErpItemsModalOpen] = useState(false);
     const [deleteErpItemsConfirmModalOpen, setDeleteErpItemsConfirmModalOpen] = useState(false);
     const [changeStatusToSalesModalOpen, setChangeStatusToSalesModalOpen] = useState(false);
+    const [changeStatusToHoldModalOpen, setChangeStatusToHoldModalOpen] = useState(false);
     const [excelDownloadModalOpen, setExcelDownloadModalOpen] = useState(false);
     const [copyCreateErpItemsModalOpen, setCopyCreateErpItemsModalOpen] = useState(false);
     const [viewSelectedModalOpen, setViewSelectedModalOpen] = useState(false);
@@ -104,6 +106,10 @@ export default function FloatingControlToggle({
         setChangeStatusToSalesModalOpen(setOpen);
     }
 
+    const handleToggleChangeStatusToHoldModalOpen = (setOpen) => {
+        setChangeStatusToHoldModalOpen(setOpen);
+    }
+
     const handleToggleExcelDownloadModalOpen = (setOpen) => {
         setExcelDownloadModalOpen(setOpen);
     }
@@ -125,7 +131,7 @@ export default function FloatingControlToggle({
                 if (r.stockReflectYn === 'y') {
                     stockReflectedItems.push(r);
                 }
-
+                
                 if (!r.releaseOptionCode) {
                     notSetReleaseOptionCodeItems.push(r);
                 }
@@ -137,7 +143,7 @@ export default function FloatingControlToggle({
             }
 
             if (notSetReleaseOptionCodeItems?.length >= 1) {
-                alert(`[M] 출고옵션코드가 지정되지 않은 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
+                alert(`[M] 출고옵션코드가 지정되지 않은 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${notSetReleaseOptionCodeItems?.map(r => r.uniqueCode)?.join()}`);
                 return;
             }
         }
@@ -214,6 +220,20 @@ export default function FloatingControlToggle({
         }
         await onSubmitChangeStatusToSales(body, () => {
             handleToggleChangeStatusToSalesModalOpen(false);
+            handleToggleControlDrawerOpen(false);
+            onActionClearAllSelectedItems();
+        })
+        handleToggleBackdropOpen(false);
+    }
+
+    const handleSubmitChangeStatusToHold = async () => {
+        handleToggleBackdropOpen(true)
+        let body = {
+            ids: selectedErpItems?.map(r => r.id),
+            initializeFlag: true
+        }
+        await onSubmitChangeStatusToHold(body, () => {
+            handleToggleChangeStatusToHoldModalOpen(false);
             handleToggleControlDrawerOpen(false);
             onActionClearAllSelectedItems();
         })
@@ -313,8 +333,7 @@ export default function FloatingControlToggle({
 
                 onActionOpenEditErpItemsModal={() => handleToggleEditErpItemModalOpen(true)}
                 onActionOpenChangeStatusToSalesModal={() => handleToggleChangeStatusToSalesModalOpen(true)}
-                onActionOpenChangeStatusToReleaseModal={() => handleToggleChangeStatusToReleaseModalOpen(true)}
-                onActionOpenChangeStatusToOrderModal={() => handleToggleChangeStatusToOrderModalOpen(true)}
+                onActionOpenChangeStatusToHoldModal={() => handleToggleChangeStatusToHoldModalOpen(true)}
                 onActionOpenDeleteErpItemsConfirmModal={() => handleToggleDeleteErpItemsConfirmModalOpen(true)}
                 onActionOpenExcelDownloadModal={() => handleToggleExcelDownloadModalOpen(true)}
                 onActionOpenCopyCreateErpItemModal={() => handleToggleCopyCreateErpItemsModalOpen(true)}
@@ -359,6 +378,17 @@ export default function FloatingControlToggle({
                 message={'선택된 데이터를 출고취소 합니다.'}
             />
 
+            <ConfirmModalComponentV2
+                open={changeStatusToHoldModalOpen}
+                onClose={() => handleToggleChangeStatusToHoldModalOpen(false)}
+                onConfirm={handleSubmitChangeStatusToHold}
+                title={'보류 데이터 전환'}
+                message={'선택된 데이터를 보류 데이터로 전환합니다.'}
+                confirmBtnStyle={{
+                    background: 'var(--mainColor)'
+                }}
+            />
+            
             <CommonModalComponent
                 open={excelDownloadModalOpen}
                 onClose={() => handleToggleExcelDownloadModalOpen(false)}

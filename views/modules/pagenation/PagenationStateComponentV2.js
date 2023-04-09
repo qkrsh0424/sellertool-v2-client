@@ -192,10 +192,10 @@ const PagenationComponentStateV2 = ({
     isLast = true,
     totalElements = 0,
     sizeElements = [],
-    size,
+    size = 0,
     viewTotal = false,
-    onChangePage,
-    onChangeSize,
+    onChangePage = () => { },
+    onChangeSize = () => { },
     ...props
 }) => {
     const pageInputRef = useRef();

@@ -9,7 +9,8 @@ export default function UserPermissionComponent(props) {
 
     useEffect(() => {
         async function userFetchInit() {
-            if (!router.isReady) {
+            
+            if (!router.pathname) {
                 return;
             }
 

@@ -1,12 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
 import SingleBlockButton from '../../../modules/button/SingleBlockButton';
-import FieldLoading from '../../../modules/loading/FieldLoading';
-import useWorkspacesHook from '../hooks/useWorkspacesHook';
 import { Container, ListFieldWrapper, TitleFieldWrapper } from './styles/WorkspaceList.styled';
+
+const returnSubscriptionPlans = (subscriptionPlan) => {
+    return subscriptionPlan?.split('.');
+}
 
 const WorkspaceListComponent = ({
     workspaces,
@@ -50,6 +49,7 @@ const WorkspaceListComponent = ({
                 </TitleFieldWrapper>
                 <ListFieldWrapper>
                     {workspaces?.map(r => {
+                        let isPublicWorkspace = returnSubscriptionPlans(r?.subscriptionPlan)?.includes('PUBLIC');
                         return (
                             <div
                                 key={r.id}
@@ -59,7 +59,7 @@ const WorkspaceListComponent = ({
                                     className='content-group mgl-flex mgl-flex-justifyContent-spaceBetween mgl-flex-alignItems-center'
                                 >
                                     <div className='profile-image-figure'>
-                                        {r.publicYn === 'y' &&
+                                        {isPublicWorkspace &&
                                             <Image
                                                 className='item-icon-el'
                                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
@@ -69,7 +69,7 @@ const WorkspaceListComponent = ({
                                                 loading='lazy'
                                             ></Image>
                                         }
-                                        {r.publicYn === 'n' &&
+                                        {!isPublicWorkspace &&
                                             <Image
                                                 className='item-icon-el'
                                                 loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
@@ -84,10 +84,10 @@ const WorkspaceListComponent = ({
                                     <div className='info-items mgl-flex'>
                                         <div className='tag-items'>
                                             <div className='grade-tag'>
-                                                {r.publicYn === 'n' &&
+                                                {!isPublicWorkspace &&
                                                     '개인용'
                                                 }
-                                                {r.publicYn === 'y' &&
+                                                {isPublicWorkspace &&
                                                     '단체용'
                                                 }
                                             </div>

@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { productDataConnect } from "../../../../data_connect/productDataConnect";
@@ -6,6 +7,7 @@ import { productDataConnect } from "../../../../data_connect/productDataConnect"
 export default function useProductsHook(props) {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
+    const { enqueueSnackbar } = useSnackbar();
     const [products, setProducts] = useState(null);
 
     useEffect(() => {
@@ -48,7 +50,9 @@ export default function useProductsHook(props) {
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
+                const res = err.response;
+                console.log(res);
+                enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate: true });
             })
     }
 

@@ -15,9 +15,11 @@ export default function useWorkspaceMembersHook({
     }, []);
 
     const reqFetchWorkspaceMembers = async () => {
-        await workspaceMemberDataConnect().searchListByWorkspaceId({
-            workspaceId: workspace.id
-        })
+        const headers = {
+            wsId: workspace.id
+        }
+
+        await workspaceMemberDataConnect().searchListByWorkspaceId(headers)
             .then(res => {
                 if (res.status === 200) {
                     setWorkspaceMembers(res.data.data);
@@ -65,7 +67,11 @@ export default function useWorkspaceMembersHook({
         body,
         successCallback
     }) => {
-        await workspaceMemberDataConnect().deleteOne({ body })
+        const headers = {
+            wsId: workspace?.id
+        }
+
+        await workspaceMemberDataConnect().deleteOne(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchWorkspaceMembers();

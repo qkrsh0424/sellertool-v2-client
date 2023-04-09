@@ -230,6 +230,28 @@ const erpItemDataConnect = () => {
          * @param {boolean} body.initializeFlag
          * @returns 
          */
+        changeStatusToHold: async function (body) {
+            let headers = {
+                wsId: body.workspaceId
+            }
+
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/erp-items/target:status/action:hold`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
+        /**
+         * 
+         * @param {object} body 
+         * @param {string} body.workspaceId
+         * @param {string[]} body.ids
+         * @param {boolean} body.initializeFlag
+         * @returns 
+         */
         changeStatusToRelease: async function (body) {
             let headers = {
                 wsId: body.workspaceId
@@ -259,6 +281,28 @@ const erpItemDataConnect = () => {
 
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/erp-items/target:status/action:order`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
+        /**
+         * 
+         * @param {object} body 
+         * @param {string} body.workspaceId
+         * @param {string[]} body.ids
+         * @param {boolean} body.initializeFlag
+         * @returns 
+         */
+        changeStatusHoldToOrder: async function (body) {
+            let headers = {
+                wsId: body.workspaceId
+            }
+
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/erp-items/target:status/action:holdToOrder`, body, {
                     headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',

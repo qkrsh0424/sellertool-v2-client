@@ -1,5 +1,6 @@
 import withMainApiCsrfWrapper from "../utils/withMainApiCsrfWrapper";
 import { axiosAuthInterceptor } from "./axiosInterceptors";
+import qs from 'qs';
 
 const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress;
 
@@ -17,6 +18,27 @@ const marginRecordDataConnect = () => {
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * 
+         * @param {object} params
+         * @param {number} params.size
+         * @param {number} params.page
+         * @param {object} headers 
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        searchPage: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/margin-records/page`, {
+                headers: headers,
+                params: params,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN',
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                }
             })
         },
         /**

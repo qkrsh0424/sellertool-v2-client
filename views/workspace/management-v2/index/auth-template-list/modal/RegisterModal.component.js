@@ -148,7 +148,6 @@ export default function RegisterModalComponent({ open, refWorkspaceAuthItems, on
             ...formValue,
             workspaceAuthItems: workspaceAuthItems
         }
-
         onSubmit(body);
     }
     return (

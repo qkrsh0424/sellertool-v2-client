@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
 import { dateToYYYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../modules/image/CustomImage";
@@ -16,9 +17,11 @@ export default function UploadDataListFieldComponent({
     onActionDeleteUploadDataAll,
     onSubmitSaveUploadDatas
 }) {
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+
     const handleSubmitSaveDatas = (e) => {
         e.preventDefault();
-
+        setDisabledBtn(true);
         onSubmitSaveUploadDatas(uploadDatas);
     }
 
@@ -31,6 +34,7 @@ export default function UploadDataListFieldComponent({
                         type='button'
                         className='button-item'
                         onClick={(e) => handleSubmitSaveDatas(e)}
+                        disabled={disabledBtn}
                     >
                         데이터 저장
                     </SingleBlockButton>

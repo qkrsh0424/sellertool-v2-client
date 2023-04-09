@@ -8,7 +8,7 @@ export default function ErpCollectionOrderPage(props) {
     return (
         <>
             <Head>
-                <title>주문수집관리 | 셀러툴</title>
+                <title>주문확인 | 셀러툴</title>
             </Head>
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />

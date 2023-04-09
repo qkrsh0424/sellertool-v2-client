@@ -4,10 +4,17 @@ import { Container, LinkButton } from "./styles/Navbar.styled";
 // TODO
 const VIEW_TYPES = [
     {
+        type: 'PROFILE',
+        title: '프로필',
+        iconSrc: '/images/icon/profile_default_808080.svg',
+        default: true,
+        masterOnly: false,
+    },
+    {
         type: 'MEMBER_LIST',
         title: '멤버 목록',
         iconSrc: '/images/icon/groups_default_808080.svg',
-        default: true,
+        default: false,
         masterOnly: false,
     },
     {

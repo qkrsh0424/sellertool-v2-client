@@ -67,6 +67,7 @@ export default function FloatingControlBarModalComponent({
     onActionOpenEditErpItemsModal,
     onActionOpenChangeStatusToReleaseModal,
     onActionOpenChangeStatusToOrderModal,
+    onActionOpenChangeStatusToHoldModal,
     onActionOpenDeleteErpItemsConfirmModal,
     onActionOpenExcelDownloadModal,
     onActionOpenCopyCreateErpItemModal,
@@ -116,38 +117,7 @@ export default function FloatingControlBarModalComponent({
                             >
                                 복사 생성
                             </SingleBlockButton>
-                            {/* <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenEditErpItemsModal()}
-                            >
-                                운송장 등록
-                            </SingleBlockButton>
-                            <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenEditErpItemsModal()}
-                            >
-                                출고리스트
-                            </SingleBlockButton> */}
                         </ContentGroup>
-                        {/* <ContentGroup>
-                            <div className='title'>재고 관리</div>
-                            <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenEditErpItemsModal()}
-                            >
-                                재고반영
-                            </SingleBlockButton>
-                            <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenEditErpItemsModal()}
-                            >
-                                재고반영 취소
-                            </SingleBlockButton>
-                        </ContentGroup> */}
                         <ContentGroup>
                             <div className='title'>상태 관리</div>
                             <SingleBlockButton
@@ -155,14 +125,21 @@ export default function FloatingControlBarModalComponent({
                                 className='button-item'
                                 onClick={() => onActionOpenChangeStatusToReleaseModal()}
                             >
-                                출고전환
+                                출고완료
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
                                 onClick={() => onActionOpenChangeStatusToOrderModal()}
                             >
-                                판매취소
+                                주문확정 취소
+                            </SingleBlockButton>
+                            <SingleBlockButton
+                                type='button'
+                                className='button-item'
+                                onClick={() => onActionOpenChangeStatusToHoldModal()}
+                            >
+                                보류전환
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'

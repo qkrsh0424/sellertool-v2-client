@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { productOptionDataConnect } from "../../../../data_connect/productOptionDataConnect";
@@ -11,6 +12,7 @@ export default function useProdutOptionPageHook(props) {
     const [productOptionPage, setProductOptionPage] = useState(null);
     const [mergeSearchConditionFlag, setIsMergeSearchCondition] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         if (!workspaceRedux?.workspaceInfo?.id) {
@@ -32,7 +34,7 @@ export default function useProdutOptionPageHook(props) {
 
     const reqFetchProductOptionPage = useCallback(async (reqPage, reqSize) => {
         let params = {
-            searchType:'ALL',
+            searchType: 'ALL',
             page: reqPage ? reqPage : DEFAULT_PAGE,
             size: reqSize ? reqSize : DEFAULT_SIZE,
             mergeSearchConditionFlag: mergeSearchConditionFlag,
@@ -52,7 +54,9 @@ export default function useProdutOptionPageHook(props) {
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
+                const res = err.response;
+                console.log(res);
+                enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate: true });
             })
     }, [workspaceRedux?.workspaceInfo?.id, mergeSearchConditionFlag, searchQuery]);
 

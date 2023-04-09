@@ -11,7 +11,7 @@ export default function MainComponent(props) {
         <>
             <Container>
                 <Layout
-                    sidebarName={'발주관리'}
+                    sidebarName={'통합 발주 관리'}
                     headerName={'대시보드'}
                     sidebarColor={'#ffffff'}
                 >

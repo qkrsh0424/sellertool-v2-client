@@ -59,8 +59,8 @@ export default function MainComponent(props) {
         <>
             <Container>
                 <Layout
-                    sidebarName={'발주관리'}
-                    headerName={'발주업로드'}
+                    sidebarName={'통합 발주 관리'}
+                    headerName={'주문수집'}
                     sidebarColor={'#ffffff'}
                 >
                     <>

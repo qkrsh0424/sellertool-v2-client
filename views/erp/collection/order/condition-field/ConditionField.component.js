@@ -422,7 +422,7 @@ const PERIOD_TYPES = [
     },
     {
         value: 'createdAt',
-        name: '주문등록일'
+        name: '주문수집일시'
     },
     {
         value: 'channelOrderDate',
@@ -507,6 +507,10 @@ const DELIVERY_INFO_TYPES = [
     {
         value: 'waybillNumber',
         name: '운송장번호'
+    },
+    {
+        value: 'releaseLocation',
+        name: '출고지'
     },
 ]
 

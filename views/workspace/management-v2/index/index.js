@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import useWorkspaceHook from "./hooks/useWorkspaceHook";
 import LayoutComponent from "./layout/Layout.component";
 import InviteMemberComponent from "./invite-member/InviteMember.component";
-import useIsWorkspaceMasterHook from "./hooks/useIsWorkspaceMasterHook";
 import AuthTemplateListComponent from "./auth-template-list/AuthTemplateList.component";
+import ProfileComponent from "./profile/Profile.component";
 
 const Container = styled.div`
     background-color: var(--defaultBackground);
@@ -21,12 +21,6 @@ const WorkspaceManagementMainComponent = (props) => {
         workspace,
         reqChangeWorkspaceName
     } = useWorkspaceHook();
-
-    const {
-        isWorkspaceMaster
-    } = useIsWorkspaceMasterHook({
-        workspace: workspace
-    })
 
     const __handle = {
         submit: {
@@ -51,37 +45,41 @@ const WorkspaceManagementMainComponent = (props) => {
                 <>
                     <WorkspaceNameFieldComponent
                         workspace={workspace}
-                        isWorkspaceMaster={isWorkspaceMaster}
 
                         onSubmitModifyWorkspaceName={__handle.submit.modifyWorkspaceName}
                     />
                     <LayoutComponent
-                        isWorkspaceMaster={isWorkspaceMaster}
+                        isWorkspaceMaster={workspace?.masterFlag}
                     >
                         {
-                            (!viewType || viewType === 'MEMBER_LIST') &&
+                            (!viewType || viewType === 'PROFILE') &&
+                            (
+                                <ProfileComponent
+                                    workspace={workspace}
+                                />
+                            )
+                        }
+                        {
+                            (viewType === 'MEMBER_LIST') &&
                             (
                                 <MemberListComponent
                                     workspace={workspace}
-                                    isWorkspaceMaster={isWorkspaceMaster}
                                 />
                             )
                         }
                         {
-                            (isWorkspaceMaster && viewType && viewType === 'INVITE_MEMBER') &&
+                            (workspace?.masterFlag && viewType && viewType === 'INVITE_MEMBER') &&
                             (
                                 <InviteMemberComponent
                                     workspace={workspace}
-                                    isWorkspaceMaster={isWorkspaceMaster}
                                 />
                             )
                         }
                         {
-                            (isWorkspaceMaster && viewType && viewType === 'AUTH_TEMPLATE') &&
+                            (workspace?.masterFlag && viewType && viewType === 'AUTH_TEMPLATE') &&
                             (
                                 <AuthTemplateListComponent
                                     workspace={workspace}
-                                    isWorkspaceMaster={isWorkspaceMaster}
                                 />
                             )
                         }

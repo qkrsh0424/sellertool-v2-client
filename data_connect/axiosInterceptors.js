@@ -1,6 +1,4 @@
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { userDataConnect } from "./userDataConnect";
 
 const AUTH_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.authApiAddress : process.env.production.authApiAddress
 

@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
 import { inviteMemberDataConnect } from "../../../../../data_connect/inviteMemberDataConnect";
@@ -5,6 +6,7 @@ import { inviteMemberDataConnect } from "../../../../../data_connect/inviteMembe
 export default function useInviteMembersHook({
     workspace
 }) {
+    const router = useRouter();
     const [inviteMembers, setInviteMembers] = useState(null);
 
     useEffect(() => {
@@ -16,8 +18,10 @@ export default function useInviteMembersHook({
     }, []);
 
     const reqFetchInviteMembers = async () => {
-        let workspaceId = workspace?.id;
-        await inviteMemberDataConnect().searchListByWorkspaceId({ workspaceId })
+        const headers = {
+            wsId: workspace?.id
+        }
+        await inviteMemberDataConnect().searchListByWorkspaceId(headers)
             .then(res => {
                 if (res.status === 200) {
                     setInviteMembers(res.data.data);
@@ -32,7 +36,10 @@ export default function useInviteMembersHook({
         body,
         successCallback
     }) => {
-        await inviteMemberDataConnect().createOne({ body })
+        const headers = {
+            wsId: workspace?.id
+        }
+        await inviteMemberDataConnect().createOne(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchInviteMembers();
@@ -60,9 +67,11 @@ export default function useInviteMembersHook({
         body,
         successCallback
     }) => {
-        await inviteMemberDataConnect().deleteOne({
-            body
-        })
+        const headers = {
+            wsId: workspace?.id
+        }
+
+        await inviteMemberDataConnect().deleteOne(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchInviteMembers();
@@ -90,9 +99,11 @@ export default function useInviteMembersHook({
         body,
         successCallback
     }) => {
-        await inviteMemberDataConnect().retryInviteMember({
-            body
-        })
+        const headers = {
+            wsId: workspace?.id
+        }
+
+        await inviteMemberDataConnect().retryInviteMember(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     reqFetchInviteMembers();

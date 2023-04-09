@@ -40,24 +40,29 @@ const NAV_LIST = [
         asPath: '/erp/collection/dashboard'
     },
     {
-        name: '발주업로드',
+        name: '주문수집',
         pathname: '/erp/collection/order-upload',
         asPath: '/erp/collection/order-upload'
     },
     {
-        name: '주문관리',
+        name: '주문확인',
         pathname: `/erp/collection/order`,
         asPath: `/erp/collection/order/?periodSearchCondition=createdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
     },
     {
-        name: '판매관리',
+        name: '주문확정',
         pathname: '/erp/collection/sales',
         asPath: `/erp/collection/sales/?periodSearchCondition=salesAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
     },
     {
-        name: '출고관리',
+        name: '출고완료',
         pathname: '/erp/collection/release-complete',
         asPath: `/erp/collection/release-complete/?periodSearchCondition=releaseAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
+    },
+    {
+        name: '보류 데이터',
+        pathname: '/erp/collection/hold',
+        asPath: `/erp/collection/hold/?periodSearchCondition=holdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
     },
     {
         name: '설정',

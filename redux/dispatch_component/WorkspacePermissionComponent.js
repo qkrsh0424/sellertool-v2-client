@@ -1,19 +1,13 @@
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { workspaceDataConnect } from "../../data_connect/workspaceDataConnect";
 
 export default function WorkspacePermissionComponent(props) {
     const reduxDispatch = useDispatch();
-    const router = useRouter();
     const userRedux = useSelector(state => state.userRedux);
 
     useEffect(() => {
         async function fetchInit() {
-            if (!router.isReady) {
-                return;
-            }
-
             if (userRedux?.userInfo?.id) {
                 let workspaceId = localStorage.getItem('sellertool-wsId');
                 await __handle.req.dispatchWorkspaceRedux(workspaceId);

@@ -11,8 +11,8 @@ module.exports = {
       socketAddress: 'http://localhost:8081/wsc'
     },
     production: {
-      clientAddress: 'https://www.sellertool.io',
-      salesAnalisisClientAddress: 'http://sales-analysis.sellertool.io',
+      clientAddress: 'https://www.sellertl.com',
+      salesAnalisisClientAddress: 'http://sales-analysis.sellertl.com',
       apiAddress: 'https://api.sellertl.com',
       scpApiAddress: 'https://scp.sellertl.com',
       authApiAddress: 'https://auth.sellertl.com',

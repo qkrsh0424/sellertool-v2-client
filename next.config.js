@@ -12,7 +12,7 @@ module.exports = {
     },
     production: {
       // clientAddress: 'https://www.sellertool.io',
-      // salesAnalisisClientAddress: 'http://sales-analisis.sellertool.io',
+      // salesAnalisisClientAddress: 'http://sales-analysis.sellertool.io',
       // apiAddress: 'https://api.sellertl.com',
       // scpApiAddress: 'https://scp.sellertl.com',
       // authApiAddress: 'https://auth.sellertl.com',

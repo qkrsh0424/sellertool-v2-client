@@ -48,7 +48,8 @@ export default function useErpItemPageHook(props) {
         router?.query?.diSearchCondition,
         router?.query?.diSearchQuery,
         router?.query?.size,
-        router?.query?.matchedCode
+        router?.query?.matchedCode,
+        router?.query?.stockReflectYn
     ]);
 
     const reqFetchCountErpItems = async () => {
@@ -71,7 +72,8 @@ export default function useErpItemPageHook(props) {
             riSearchQuery: router?.query?.riSearchQuery,
             diSearchCondition: router?.query?.diSearchCondition,
             diSearchQuery: router?.query?.diSearchQuery,
-            matchedCode: router?.query?.matchedCode || 'releaseOptionCode'
+            matchedCode: router?.query?.matchedCode || 'releaseOptionCode',
+            stockReflectYn: router?.query?.stockReflectYn || null,
         }
 
         let size = router?.query?.size || 50;
@@ -121,7 +123,8 @@ export default function useErpItemPageHook(props) {
             page: router?.query?.page || 1,
             size: router?.query?.size || 50,
             sort: router?.query?.sort?.split(',') || 'releaseAt_asc',
-            matchedCode: router?.query?.matchedCode || 'releaseOptionCode'
+            matchedCode: router?.query?.matchedCode || 'releaseOptionCode',
+            stockReflectYn: router?.query?.stockReflectYn || null
         }
 
         await erpItemDataConnect().searchSlice(params, headers)

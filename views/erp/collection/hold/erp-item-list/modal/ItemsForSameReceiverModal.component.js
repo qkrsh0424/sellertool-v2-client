@@ -17,6 +17,8 @@ function salesYnForTabType(tabType) {
             return 'y';
         case 'release':
             return 'y';
+        case 'hold':
+            return 'n';
         default: return 'n';
     }
 }
@@ -29,11 +31,26 @@ function releaseYnForTabType(tabType) {
             return 'n';
         case 'release':
             return 'y';
+        case 'hold':
+            return 'n';
         default: return 'n';
     }
 }
 
-const INIT_TAB_TYPE = 'order';
+function holdYnForTabType(tabType) {
+    switch (tabType) {
+        case 'order':
+            return 'n';
+        case 'sales':
+            return 'n';
+        case 'release':
+            return 'n';
+        case 'hold':
+            return 'y';
+        default: return 'n';
+    }
+}
+const INIT_TAB_TYPE = 'hold';
 
 export default function ItemsForSameReceiverModalComponent({
     targetSameReceiverHint,
@@ -126,6 +143,7 @@ function TableField({
 }) {
     const salesYn = salesYnForTabType(tabType);
     const releaseYn = releaseYnForTabType(tabType);
+    const holdYn = holdYnForTabType(tabType);
 
     return (
         <TableFieldWrapper>
@@ -133,6 +151,7 @@ function TableField({
                 <div className={`title ${tabType === 'order' ? 'title-active' : ''}`} onClick={() => onChangeTabType('order')}>주문확인</div>
                 <div className={`title ${tabType === 'sales' ? 'title-active' : ''}`} onClick={() => onChangeTabType('sales')}>주문확정</div>
                 <div className={`title ${tabType === 'release' ? 'title-active' : ''}`} onClick={() => onChangeTabType('release')}>출고완료</div>
+                <div className={`title ${tabType === 'hold' ? 'title-active' : ''}`} onClick={() => onChangeTabType('hold')}>보류데이터</div>
             </div>
             <div style={{ position: 'relative' }}>
                 <div
@@ -179,7 +198,7 @@ function TableField({
                             </tr>
                         </thead>
                         <tbody>
-                            {erpItems?.filter(r => r.salesYn === salesYn && r.releaseYn === releaseYn)?.map((r1, rowIndex) => {
+                            {erpItems?.filter(r => r.salesYn === salesYn && r.releaseYn === releaseYn && r.holdYn === holdYn)?.map((r1, rowIndex) => {
                                 const isSelected = selectedErpItems?.find(r => r.id === r1.id);
                                 let inventoryStock = inventoryStocks?.find(r => r.productOptionId === r1.productOptionId);
                                 let isOutOfStock = inventoryStock && inventoryStock?.stockUnit <= 0;

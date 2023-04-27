@@ -10,11 +10,24 @@ export const Wrapper = styled.div`
     height: 250px;
 `;
 
+export const TranslatorSelectorWrapper = styled.div`
+    display: flex;
+
+    .setting-button{
+        width:48px;
+        height: 48px;
+        border-radius: 5px;
+        margin-left:5px;
+        padding: 8px;
+    }
+`;
+
 export const SelectBox = styled.div`
     width: 300px;
     
     @media all and (max-width: 992px){
         width: 100%;
+        flex:1;
     }
 
     .select-item{

@@ -9,7 +9,7 @@ import { useLocalStorageHook } from "../../../../../hooks/local_storage/useLocal
 export default function ViewHeaderComponent(props) {
     const router = useRouter();
     const [favoriteViewHeaderIds, setFavoriteViewHeaderIds] = useLocalStorageHook('erpc-favorite-viewHeader-ids-v1', []);
-    const [favoriteListOpen, setFavoriteListOpen] = useState(false);
+    const [favoriteListOpen, setFavoriteListOpen] = useState(true);
     const [itemListOpen, setItemListOpen] = useState(true);
     let vhF = router?.query?.vhF === 'unfold' ? 'unfold' : 'fold';
 
@@ -91,7 +91,8 @@ export default function ViewHeaderComponent(props) {
                                         <div className='isEmpty-notice'>등록된 즐겨찾기가 없습니다.</div>
                                         :
                                         <>
-                                            {erpCollectionHeaders?.filter(r => favoriteViewHeaderIds?.includes(r?.id))?.map(erpCollectionHeader => {
+                                            {favoriteViewHeaderIds?.map(favoriteViewHeaderId => {
+                                                const erpCollectionHeader = erpCollectionHeaders?.find(r => r.id === favoriteViewHeaderId);
                                                 return (
                                                     <ItemBox
                                                         key={erpCollectionHeader?.id}
@@ -104,10 +105,22 @@ export default function ViewHeaderComponent(props) {
                                                             <SingleBlockButton
                                                                 type='button'
                                                                 className='icon-button-item'
-                                                                onClick={() => handleSelectFavoriteViewHeaderId(erpCollectionHeader?.id)}
+                                                                onClick={() => handleSelectFavoriteViewHeaderId(erpCollectionHeader.id)}
+                                                                style={{
+                                                                    marginRight: '10px'
+                                                                }}
                                                             >
                                                                 <CustomImage
                                                                     src='/images/icon/star_default_ffdf00.svg'
+                                                                />
+                                                            </SingleBlockButton>
+                                                            <SingleBlockButton
+                                                                type='button'
+                                                                className='icon-button-item'
+                                                                onClick={() => handleRouteToPath(`/erp/collection/edit/view-header`, { erpCollectionHeaderId: erpCollectionHeader?.id })}
+                                                            >
+                                                                <CustomImage
+                                                                    src='/images/icon/settings_default_808080.svg'
                                                                 />
                                                             </SingleBlockButton>
                                                         </div>
@@ -127,7 +140,7 @@ export default function ViewHeaderComponent(props) {
                                     {(!erpCollectionHeaders || erpCollectionHeaders?.length < 1) &&
                                         <div className='isEmpty-notice'>생성된 뷰헤더가 없습니다.</div>
                                     }
-                                    {erpCollectionHeaders?.map(erpCollectionHeader => {
+                                    {erpCollectionHeaders?.filter(r => !favoriteViewHeaderIds?.includes(r?.id))?.map(erpCollectionHeader => {
                                         return (
                                             <ItemBox
                                                 key={erpCollectionHeader?.id}
@@ -145,15 +158,9 @@ export default function ViewHeaderComponent(props) {
                                                             marginRight: '10px'
                                                         }}
                                                     >
-                                                        {favoriteViewHeaderIds?.includes(erpCollectionHeader.id) ?
-                                                            <CustomImage
-                                                                src='/images/icon/star_default_ffdf00.svg'
-                                                            />
-                                                            :
-                                                            <CustomImage
-                                                                src='/images/icon/star_border_808080.svg'
-                                                            />
-                                                        }
+                                                        <CustomImage
+                                                            src='/images/icon/star_border_808080.svg'
+                                                        />
                                                     </SingleBlockButton>
                                                     <SingleBlockButton
                                                         type='button'
@@ -170,7 +177,6 @@ export default function ViewHeaderComponent(props) {
                                     })}
                                 </ItemListWrapper>
                             }
-
                         </ItemListContainer>
                     }
                 </Wrapper>

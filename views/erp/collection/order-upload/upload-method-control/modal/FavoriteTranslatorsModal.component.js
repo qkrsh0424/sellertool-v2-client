@@ -8,13 +8,13 @@ const ContentContainer = styled.div`
 
 const ItemBox = styled.div`
     border: 1px solid #f0f0f0;
-    padding: 0 10px;
-    height: 48px;
+    padding: 10px 10px;
     margin-bottom: 5px;
     background: #fff;
     display: flex;
     align-items:center;
     border-radius: 5px;
+    overflow: hidden;
 
     .star-button{
         user-select:none;
@@ -32,6 +32,8 @@ const ItemBox = styled.div`
         margin-left: 10px;
         font-weight: 600;
         font-size: 14px;
+        flex:1;
+        word-break: break-all;
     }
 `;
 

@@ -5,6 +5,10 @@ export const PinButtonBox = styled.div`
     display: flex;
     justify-content: flex-start;
     
+    @media all and (max-width: 992px){
+        padding: 0 10px;
+    }
+    
     .button-item{
         width: 70px;
         height: 30px;

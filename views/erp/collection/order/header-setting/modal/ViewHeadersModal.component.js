@@ -4,6 +4,7 @@ import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../../modules/image/CustomImage";
 import useErpCollectionHeaders from "../hooks/useErpCollectionHeaders";
 import { Container, ContentContainer, ItemBox } from "../styles/ViewHeadersModal.styled";
+import { useLocalStorageHook } from "../../../../../../hooks/local_storage/useLocalStorageHook";
 
 export default function ViewHeadersModalComponent({
     erpCollectionHeader,
@@ -11,6 +12,7 @@ export default function ViewHeadersModalComponent({
     onActionSelectOrderHeaderId
 }) {
     const router = useRouter();
+    const [favoriteViewHeaderIds] = useLocalStorageHook('erpc-favorite-viewHeader-ids-v1', []);
     const {
         erpCollectionHeaders
     } = useErpCollectionHeaders();
@@ -60,7 +62,36 @@ export default function ViewHeadersModalComponent({
                     </div>
                 </div>
                 <ContentContainer>
-                    {erpCollectionHeaders?.map(r => {
+                    <h4>즐겨찾기</h4>
+                    {erpCollectionHeaders?.filter(r => favoriteViewHeaderIds?.includes(r?.id))?.map(r => {
+                        return (
+                            <ItemBox
+                                key={r.id}
+                                onClick={() => handleSelectHeader(r.id)}
+                                style={{
+                                    border: erpCollectionHeader?.id === r.id ? '1px solid var(--mainColor)' : ''
+                                }}
+                            >
+                                <div>
+                                    <div className='name'>{r.name}</div>
+                                    <div className='description'>{r.description || '지정된 설명이 없습니다.'}</div>
+                                </div>
+                                <div className='mgl-flex'>
+                                    <SingleBlockButton
+                                        type='button'
+                                        className='icon-button-item'
+                                        onClick={(e) => handleClickSettingButton(e, r.id)}
+                                    >
+                                        <CustomImage
+                                            src='/images/icon/settings_default_808080.svg'
+                                        />
+                                    </SingleBlockButton>
+                                </div>
+                            </ItemBox>
+                        );
+                    })}
+                    <h4>목록</h4>
+                    {erpCollectionHeaders?.filter(r => !favoriteViewHeaderIds?.includes(r?.id))?.map(r => {
                         return (
                             <ItemBox
                                 key={r.id}

@@ -33,7 +33,7 @@ const ExcelDownloadModalComponent = ({
     ...props
 }) => {
     const router = useRouter();
-    const [favoriteDownloadFormIds] = useLocalStorageHook('erpc-downloadForm-ids-v1', []);
+    const [favoriteDownloadFormIds] = useLocalStorageHook('erpc-favorite-downloadForm-ids-v1', []);
     const [downloadOrderItemList, dispatchDownloadOrderItemList] = useReducer(downloadOrderItemListReducer, initialDownloadOrderItemList);
     const [checkedItemList, dispatchCheckedItemList] = useReducer(checkedItemListReducer, initialCheckedItemList);
     const [selectedExcelHeader, dispatchSelectedExcelHeader] = useReducer(selectedExcelHeaderReducer, initialSelectedExcelHeader);

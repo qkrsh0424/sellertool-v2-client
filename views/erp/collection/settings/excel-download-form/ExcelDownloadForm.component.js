@@ -8,7 +8,7 @@ import { useLocalStorageHook } from "../../../../../hooks/local_storage/useLocal
 
 export default function ExcelDownloadForm(props) {
     const router = useRouter();
-    const [favoriteDownloadFormIds, setFavoriteDownloadFormIds] = useLocalStorageHook('erpc-downloadForm-ids-v1', []);
+    const [favoriteDownloadFormIds, setFavoriteDownloadFormIds] = useLocalStorageHook('erpc-favorite-downloadForm-ids-v1', []);
     const [favoriteListOpen, setFavoriteListOpen] = useState(false);
     const [itemListOpen, setItemListOpen] = useState(true);
     let edF = router?.query?.edF === 'unfold' ? 'unfold' : 'fold';

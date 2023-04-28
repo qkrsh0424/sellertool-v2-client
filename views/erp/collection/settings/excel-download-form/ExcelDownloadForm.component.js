@@ -93,6 +93,10 @@ export default function ExcelDownloadForm(props) {
                                         <>
                                             {favoriteDownloadFormIds?.map(favoriteDownloadFormId => {
                                                 const erpcExcelDownloadForm = erpcExcelDownloadForms?.find(r => r.id === favoriteDownloadFormId);
+                                                if(!erpcExcelDownloadForm){
+                                                    return null;
+                                                }
+                                                
                                                 return (
                                                     <ItemBox
                                                         key={erpcExcelDownloadForm?.id}

@@ -63,24 +63,29 @@ export default function ViewHeadersModalComponent({
                 </div>
                 <ContentContainer>
                     <h4>즐겨찾기</h4>
-                    {erpCollectionHeaders?.filter(r => favoriteViewHeaderIds?.includes(r?.id))?.map(r => {
+                    {favoriteViewHeaderIds?.map(favoriteViewHeaderId => {
+                        const currErpCollectionHeader = erpCollectionHeaders?.find(r => r?.id === favoriteViewHeaderId);
+                        if (!currErpCollectionHeader) {
+                            return null;
+                        }
+
                         return (
                             <ItemBox
-                                key={r.id}
-                                onClick={() => handleSelectHeader(r.id)}
+                                key={currErpCollectionHeader.id}
+                                onClick={() => handleSelectHeader(currErpCollectionHeader.id)}
                                 style={{
-                                    border: erpCollectionHeader?.id === r.id ? '1px solid var(--mainColor)' : ''
+                                    border: erpCollectionHeader?.id === currErpCollectionHeader.id ? '1px solid var(--mainColor)' : ''
                                 }}
                             >
                                 <div>
-                                    <div className='name'>{r.name}</div>
-                                    <div className='description'>{r.description || '지정된 설명이 없습니다.'}</div>
+                                    <div className='name'>{currErpCollectionHeader.name}</div>
+                                    <div className='description'>{currErpCollectionHeader.description || '지정된 설명이 없습니다.'}</div>
                                 </div>
                                 <div className='mgl-flex'>
                                     <SingleBlockButton
                                         type='button'
                                         className='icon-button-item'
-                                        onClick={(e) => handleClickSettingButton(e, r.id)}
+                                        onClick={(e) => handleClickSettingButton(e, currErpCollectionHeader.id)}
                                     >
                                         <CustomImage
                                             src='/images/icon/settings_default_808080.svg'

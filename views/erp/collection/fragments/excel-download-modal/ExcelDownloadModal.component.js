@@ -514,12 +514,17 @@ function ExcelDownloadFormSelectorField({
                     >
                         <option value=''>선택</option>
                         <option value='' disabled>--- 즐겨찾기 ---</option>
-                        {erpcExcelDownloadForms?.filter(r => favoriteDownloadFormIds?.includes(r.id))?.map(excelDownloadForm => {
+                        {favoriteDownloadFormIds?.map(favoriteDownloadFormId => {
+                            const erpcExcelDownloadForm = erpcExcelDownloadForms?.find(r => r.id === favoriteDownloadFormId);
+                            if(!erpcExcelDownloadForm){
+                                return null;
+                            }
+
                             return (
                                 <option
-                                    key={excelDownloadForm?.id}
-                                    value={excelDownloadForm?.id}
-                                >{excelDownloadForm?.name}</option>
+                                    key={erpcExcelDownloadForm?.id}
+                                    value={erpcExcelDownloadForm?.id}
+                                >{erpcExcelDownloadForm?.name}</option>
                             );
                         })}
                         <option value='' disabled>--- 목록 ---</option>

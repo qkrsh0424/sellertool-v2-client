@@ -93,6 +93,10 @@ export default function ViewHeaderComponent(props) {
                                         <>
                                             {favoriteViewHeaderIds?.map(favoriteViewHeaderId => {
                                                 const erpCollectionHeader = erpCollectionHeaders?.find(r => r.id === favoriteViewHeaderId);
+                                                if(!erpCollectionHeader){
+                                                    return null;
+                                                }
+                                                
                                                 return (
                                                     <ItemBox
                                                         key={erpCollectionHeader?.id}

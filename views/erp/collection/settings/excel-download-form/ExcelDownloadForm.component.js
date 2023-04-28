@@ -9,7 +9,7 @@ import { useLocalStorageHook } from "../../../../../hooks/local_storage/useLocal
 export default function ExcelDownloadForm(props) {
     const router = useRouter();
     const [favoriteDownloadFormIds, setFavoriteDownloadFormIds] = useLocalStorageHook('erpc-favorite-downloadForm-ids-v1', []);
-    const [favoriteListOpen, setFavoriteListOpen] = useState(false);
+    const [favoriteListOpen, setFavoriteListOpen] = useState(true);
     const [itemListOpen, setItemListOpen] = useState(true);
     let edF = router?.query?.edF === 'unfold' ? 'unfold' : 'fold';
 
@@ -91,23 +91,36 @@ export default function ExcelDownloadForm(props) {
                                         <div className='isEmpty-notice'>등록된 즐겨찾기가 없습니다.</div>
                                         :
                                         <>
-                                            {erpcExcelDownloadForms?.filter(r => favoriteDownloadFormIds?.includes(r?.id))?.map(erpcExcelDownloadForm => {
+                                            {favoriteDownloadFormIds?.map(favoriteDownloadFormId => {
+                                                const erpcExcelDownloadForm = erpcExcelDownloadForms?.find(r => r.id === favoriteDownloadFormId);
                                                 return (
                                                     <ItemBox
-                                                        key={erpcExcelDownloadForm.id}
+                                                        key={erpcExcelDownloadForm?.id}
                                                     >
                                                         <div>
-                                                            <div className='name'>{erpcExcelDownloadForm.name}</div>
-                                                            <div className='description'>{erpcExcelDownloadForm.description || '지정된 설명이 없습니다.'}</div>
+                                                            <div className='name'>{erpcExcelDownloadForm?.name}</div>
+                                                            <div className='description'>{erpcExcelDownloadForm?.description || '지정된 설명이 없습니다.'}</div>
                                                         </div>
                                                         <div className='mgl-flex'>
                                                             <SingleBlockButton
                                                                 type='button'
                                                                 className='icon-button-item'
-                                                                onClick={() => handleSelectFavoriteDownloadFormId(erpcExcelDownloadForm.id)}
+                                                                onClick={() => handleSelectFavoriteDownloadFormId(erpcExcelDownloadForm?.id)}
+                                                                style={{
+                                                                    marginRight: '10px'
+                                                                }}
                                                             >
                                                                 <CustomImage
                                                                     src='/images/icon/star_default_ffdf00.svg'
+                                                                />
+                                                            </SingleBlockButton>
+                                                            <SingleBlockButton
+                                                                type='button'
+                                                                className='icon-button-item'
+                                                                onClick={() => handleRouteToPath(`/erp/collection/edit/excel-download-form`, { erpcExcelDownloadFormId: erpcExcelDownloadForm?.id })}
+                                                            >
+                                                                <CustomImage
+                                                                    src='/images/icon/settings_default_808080.svg'
                                                                 />
                                                             </SingleBlockButton>
                                                         </div>
@@ -128,38 +141,32 @@ export default function ExcelDownloadForm(props) {
                                         <div className='isEmpty-notice'>생성된 다운로드 폼이 없습니다.</div>
                                         :
                                         <>
-                                            {erpcExcelDownloadForms?.map(erpcExcelDownloadForm => {
+                                            {erpcExcelDownloadForms?.filter(r => !favoriteDownloadFormIds?.includes(r?.id))?.map(erpcExcelDownloadForm => {
                                                 return (
                                                     <ItemBox
-                                                        key={erpcExcelDownloadForm.id}
+                                                        key={erpcExcelDownloadForm?.id}
                                                     >
                                                         <div>
-                                                            <div className='name'>{erpcExcelDownloadForm.name}</div>
-                                                            <div className='description'>{erpcExcelDownloadForm.description || '지정된 설명이 없습니다.'}</div>
+                                                            <div className='name'>{erpcExcelDownloadForm?.name}</div>
+                                                            <div className='description'>{erpcExcelDownloadForm?.description || '지정된 설명이 없습니다.'}</div>
                                                         </div>
                                                         <div className='mgl-flex'>
                                                             <SingleBlockButton
                                                                 type='button'
                                                                 className='icon-button-item'
-                                                                onClick={() => handleSelectFavoriteDownloadFormId(erpcExcelDownloadForm.id)}
+                                                                onClick={() => handleSelectFavoriteDownloadFormId(erpcExcelDownloadForm?.id)}
                                                                 style={{
                                                                     marginRight: '10px'
                                                                 }}
                                                             >
-                                                                {favoriteDownloadFormIds?.includes(erpcExcelDownloadForm.id) ?
-                                                                    <CustomImage
-                                                                        src='/images/icon/star_default_ffdf00.svg'
-                                                                    />
-                                                                    :
-                                                                    <CustomImage
-                                                                        src='/images/icon/star_border_808080.svg'
-                                                                    />
-                                                                }
+                                                                <CustomImage
+                                                                    src='/images/icon/star_border_808080.svg'
+                                                                />
                                                             </SingleBlockButton>
                                                             <SingleBlockButton
                                                                 type='button'
                                                                 className='icon-button-item'
-                                                                onClick={() => handleRouteToPath(`/erp/collection/edit/excel-download-form`, { erpcExcelDownloadFormId: erpcExcelDownloadForm.id })}
+                                                                onClick={() => handleRouteToPath(`/erp/collection/edit/excel-download-form`, { erpcExcelDownloadFormId: erpcExcelDownloadForm?.id })}
                                                             >
                                                                 <CustomImage
                                                                     src='/images/icon/settings_default_808080.svg'

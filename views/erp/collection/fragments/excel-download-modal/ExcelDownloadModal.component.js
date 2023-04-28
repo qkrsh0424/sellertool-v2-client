@@ -12,6 +12,7 @@ import InputFieldView from "./InputField.view";
 import ExcelDownloadFormTableComponent from "./ExcelDownloadFormTable.component";
 import { checkFileNameFormat } from "../../../../../utils/regexUtils";
 import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
+import { useLocalStorageHook } from "../../../../../hooks/local_storage/useLocalStorageHook";
 
 // collections를 가지고 downloadOrderItem 폼으로 변환, collection = [...orderItem]
 const getDownloadOrderItem = (collections) => {
@@ -32,6 +33,7 @@ const ExcelDownloadModalComponent = ({
     ...props
 }) => {
     const router = useRouter();
+    const [favoriteDownloadFormIds] = useLocalStorageHook('erpc-downloadForm-ids-v1', []);
     const [downloadOrderItemList, dispatchDownloadOrderItemList] = useReducer(downloadOrderItemListReducer, initialDownloadOrderItemList);
     const [checkedItemList, dispatchCheckedItemList] = useReducer(checkedItemListReducer, initialCheckedItemList);
     const [selectedExcelHeader, dispatchSelectedExcelHeader] = useReducer(selectedExcelHeaderReducer, initialSelectedExcelHeader);
@@ -48,12 +50,12 @@ const ExcelDownloadModalComponent = ({
         inventoryStocks
     } = useInventoryStocksHook(selectedErpItems);
 
-    
+
     useEffect(() => {
         if (!selectedErpItems || selectedErpItems?.length <= 0 || !inventoryStocks) {
             return;
         }
-        
+
         // downloadOrderItem 폼으로 List 변환
         let dataList = selectedErpItems.map(r => {
             let stockUnit = inventoryStocks?.find(inventoryStock => inventoryStock.productOptionId === r.productOptionId)?.stockUnit ?? 0;
@@ -265,6 +267,7 @@ const ExcelDownloadModalComponent = ({
                 />
                 <ExcelDownloadFormSelectorField
                     erpcExcelDownloadForms={erpcExcelDownloadForms}
+                    favoriteDownloadFormIds={favoriteDownloadFormIds}
                     selectedExcelHeader={selectedExcelHeader}
 
                     onActionSelectExcelDownloadForm={handleSelectExcelDownloadForm}
@@ -495,6 +498,7 @@ function PreviewTableField({
 
 function ExcelDownloadFormSelectorField({
     erpcExcelDownloadForms,
+    favoriteDownloadFormIds,
     selectedExcelHeader,
     onActionSelectExcelDownloadForm
 }) {
@@ -509,7 +513,17 @@ function ExcelDownloadFormSelectorField({
                         onChange={(e) => onActionSelectExcelDownloadForm(e)}
                     >
                         <option value=''>선택</option>
-                        {erpcExcelDownloadForms?.map(excelDownloadForm => {
+                        <option value='' disabled>--- 즐겨찾기 ---</option>
+                        {erpcExcelDownloadForms?.filter(r => favoriteDownloadFormIds?.includes(r.id))?.map(excelDownloadForm => {
+                            return (
+                                <option
+                                    key={excelDownloadForm?.id}
+                                    value={excelDownloadForm?.id}
+                                >{excelDownloadForm?.name}</option>
+                            );
+                        })}
+                        <option value='' disabled>--- 목록 ---</option>
+                        {erpcExcelDownloadForms?.filter(r => !favoriteDownloadFormIds?.includes(r.id))?.map(excelDownloadForm => {
                             return (
                                 <option
                                     key={excelDownloadForm?.id}

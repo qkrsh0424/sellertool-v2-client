@@ -105,9 +105,14 @@ export default function ExcelUploaderControlComponent({
                             onChange={(e) => handleChangeExcelTranslatorHeader(e)}
                         >
                             <option value=''>기준양식</option>
-                            {excelTranslatorHeaders?.filter(r => favoriteTranslatorIds?.includes(r.id))?.map(excelTranslatorHeader => {
+                            {favoriteTranslatorIds?.map(favoriteTranslatorId => {
+                                const currExcelTranslatorHeader = excelTranslatorHeaders?.find(r => r?.id === favoriteTranslatorId);
+                                if (!currExcelTranslatorHeader) {
+                                    return null;
+                                }
+
                                 return (
-                                    <option key={excelTranslatorHeader?.id} value={excelTranslatorHeader?.id}>{excelTranslatorHeader?.uploadHeaderTitle} &gt; {excelTranslatorHeader?.downloadHeaderTitle}</option>
+                                    <option key={currExcelTranslatorHeader?.id} value={currExcelTranslatorHeader?.id}>{currExcelTranslatorHeader?.uploadHeaderTitle} &gt; {currExcelTranslatorHeader?.downloadHeaderTitle}</option>
                                 );
                             })}
                         </CustomSelect>

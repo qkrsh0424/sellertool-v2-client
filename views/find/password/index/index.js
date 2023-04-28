@@ -33,7 +33,6 @@ export default function MainComponent(props) {
                             resetToken: res?.data?.data?.resetPasswordToken
                         }
                     })
-                    console.log(res);
                 }
             })
             .catch(err => {
@@ -64,7 +63,6 @@ export default function MainComponent(props) {
                             resetToken: res?.data?.data?.resetPasswordToken
                         }
                     })
-                    console.log(res);
                 }
             })
             .catch(err => {

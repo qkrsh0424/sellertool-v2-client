@@ -56,7 +56,6 @@ export default function useErpItemPageHook(props) {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        console.log(router?.query?.periodSearchCondition)
         let params = {
             salesYn:'n',
             releaseYn:'n',

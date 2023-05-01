@@ -66,6 +66,20 @@ export default function FloatingControlToggle({
     }
 
     const handleToggleEditErpItemModalOpen = (setOpen) => {
+        if (setOpen) {
+            let stockReflectedItems = [];
+
+            selectedErpItems?.forEach(r => {
+                if (r.stockReflectYn === 'y') {
+                    stockReflectedItems.push(r);
+                }
+            });
+
+            if (stockReflectedItems?.length >= 1) {
+                alert(`이미 재고반영 처리된 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
+                return;
+            }
+        }
         setEditErpItemsModalOpen(setOpen)
     }
 

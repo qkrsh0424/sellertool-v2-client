@@ -1,8 +1,7 @@
 import { useState } from "react";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
-import CustomImage from "../../../../modules/image/CustomImage";
 import useEditErpItemsHook from "./hooks/useEditErpItemsHook";
-import { Container, NavigationContainer, SubmitButtonContainer, TableBox, TableWrapper } from "./styles/EditErpItemsModal.styled";
+import { NavigationContainer } from "./styles/EditErpItemsModal.styled";
 import staticValues from "./staticValues";
 import { CustomDialog } from "../../../../../components/dialog/v1/CustomDialog";
 import DataTableComponent from "./DataTable.component";

@@ -5,13 +5,13 @@ import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadin
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
 import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
-import EditErpItemModalComponent from "./modal/EditErpItemsModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
 import ReleaseListModalComponent from "./modal/ReleaseListModal.component";
 import StockReleaseModalComponent from "./modal/StockReleaseModal.component";
 import ViewSelectedModalComponent from "./modal/ViewSelectedModal.component";
 import WaybillRegistrationModalComponent from "./modal/WaybillRegistrationModal.component";
 import { Container } from "./styles/FloatingControlBar.styled";
+import EditErpItemsModalComponent from "../../fragments/edit-erp-items-modal/EditErpItemsModal.component";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -131,7 +131,7 @@ export default function FloatingControlToggle({
                 if (r.stockReflectYn === 'y') {
                     stockReflectedItems.push(r);
                 }
-                
+
                 if (!r.releaseOptionCode) {
                     notSetReleaseOptionCodeItems.push(r);
                 }
@@ -346,18 +346,16 @@ export default function FloatingControlToggle({
                 onActionClearAllSelectedItems={handleClearAllSelectedItems}
             />
 
-            <CommonModalComponent
-                open={editErpItemsModalOpen}
-                onClose={() => handleToggleEditErpItemModalOpen(false)}
-                maxWidth={'xl'}
-            >
-                <EditErpItemModalComponent
-                    selectedErpItems={selectedErpItems}
+            {editErpItemsModalOpen &&
+                <EditErpItemsModalComponent
+                    open={editErpItemsModalOpen}
                     onClose={() => handleToggleEditErpItemModalOpen(false)}
+                    maxWidth={'xl'}
+                    selectedErpItems={selectedErpItems}
                     onSelectClearErpItem={handleClearSelectedItem}
                     onSubmitUpdateErpItems={handleSubmitUpdateErpItems}
                 />
-            </CommonModalComponent>
+            }
 
             <ConfirmModalComponentV2
                 open={deleteErpItemsConfirmModalOpen}
@@ -388,7 +386,7 @@ export default function FloatingControlToggle({
                     background: 'var(--mainColor)'
                 }}
             />
-            
+
             <CommonModalComponent
                 open={excelDownloadModalOpen}
                 onClose={() => handleToggleExcelDownloadModalOpen(false)}

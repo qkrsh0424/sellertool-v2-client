@@ -214,13 +214,14 @@ export default function FloatingControlToggle({
                 }}
             />
 
-
-            <StatusNextModalComponent
-                open={changeStatusToSalesModalOpen}
-                onClose={() => handleToggleChangeStatusToSalesModalOpen(false)}
-                selectedErpItems={selectedErpItems}
-                onConfirm={handleSubmitChangeStatusToSales}
-            />
+            {changeStatusToSalesModalOpen &&
+                <StatusNextModalComponent
+                    open={changeStatusToSalesModalOpen}
+                    onClose={() => handleToggleChangeStatusToSalesModalOpen(false)}
+                    selectedErpItems={selectedErpItems}
+                    onConfirm={handleSubmitChangeStatusToSales}
+                />
+            }
 
             <ConfirmModalComponentV2
                 open={changeStatusToHoldModalOpen}

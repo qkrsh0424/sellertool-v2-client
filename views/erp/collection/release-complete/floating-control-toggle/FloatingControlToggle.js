@@ -437,23 +437,27 @@ export default function FloatingControlToggle({
                 />
             </CommonModalComponent>
 
-            <CommonModalComponent
-                open={releaseListModalOpen}
-                onClose={() => handleToggleReleaseListModalOpen(false)}
-                maxWidth={'xs'}
-            >
-                <ReleaseListModalComponent
-                    erpCollectionHeader={erpCollectionHeader}
-                    selectedErpItems={selectedErpItems}
+            {releaseListModalOpen &&
+                <CommonModalComponent
+                    open={releaseListModalOpen}
                     onClose={() => handleToggleReleaseListModalOpen(false)}
-                />
-            </CommonModalComponent>
+                    maxWidth={'xs'}
+                >
+                    <ReleaseListModalComponent
+                        erpCollectionHeader={erpCollectionHeader}
+                        selectedErpItems={selectedErpItems}
+                        onClose={() => handleToggleReleaseListModalOpen(false)}
+                    />
+                </CommonModalComponent>
+            }
 
-            <StockReleaseModalComponent
-                open={stockReleaseModalOpen}
-                onClose={() => handleToggleStockReleaseModalOpen(false)}
-                onConfirm={handleSubmitStockRelease}
-            />
+            {stockReleaseModalOpen &&
+                <StockReleaseModalComponent
+                    open={stockReleaseModalOpen}
+                    onClose={() => handleToggleStockReleaseModalOpen(false)}
+                    onConfirm={handleSubmitStockRelease}
+                />
+            }
 
             <ConfirmModalComponentV2
                 open={cancelStockReleaseModalOpen}

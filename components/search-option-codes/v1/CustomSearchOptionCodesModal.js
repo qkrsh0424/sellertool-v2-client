@@ -1,14 +1,15 @@
-import { useCallback, useEffect } from "react";
-import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
-import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
-import CustomImage from "../../../../../modules/image/CustomImage";
-import PagenationComponentStateV2 from "../../../../../modules/pagenation/PagenationStateComponentV2";
-import useProdutOptionPageHook from "../hooks/useProductOptionPageHook";
-import { ButtonContainer, Container, ContentContainer, ContentWrapper, TargetOption } from "../styles/EditOptionCodeModal.styled";
+import useDisabledBtn from "../../../hooks/button/useDisabledBtn";
+import useProdutOptionPageHook from "./useProductOptionPageHook";
+import { ButtonContainer, Container, ContentContainer, ContentWrapper, TargetOption } from "./EditOptionCodeModal.styled";
+import CustomBlockButton from "../../buttons/block-button/v1/CustomBlockButton";
+import CustomImage from "../../../views/modules/image/CustomImage";
+import PagenationComponentStateV2 from "../../../views/modules/pagenation/PagenationStateComponentV2";
+import { CustomDialog } from "../../dialog/v1/CustomDialog";
 
-export default function EditOptionCodeModalComponent({
-    onConfirm,
+export default function CustomSearchOptionCodesModal({
+    open,
     onClose,
+    onSelect,
 }) {
     const {
         productOptionPage,
@@ -36,18 +37,11 @@ export default function EditOptionCodeModalComponent({
 
     return (
         <>
-            <Container>
-                <div className='header-close-button-box'>
-                    <button
-                        type='button'
-                        className='header-close-button-el'
-                        onClick={() => onClose()}
-                    >
-                        <CustomImage
-                            src='/images/icon/close_default_959eae.svg'
-                        />
-                    </button>
-                </div>
+            <CustomDialog
+                open={open}
+                onClose={() => onClose()}
+            >
+                <CustomDialog.CloseButton onClose={() => onClose()} />
                 <ContentContainer>
                     <ContentWrapper>
                         <form onSubmit={(e) => handleSubmitFetchProductOptionPage(e)}>
@@ -59,13 +53,13 @@ export default function EditOptionCodeModalComponent({
                                     value={searchQuery || ''}
                                     onChange={(e) => onChangeSearchQuery(e)}
                                 ></input>
-                                <SingleBlockButton
+                                <CustomBlockButton
                                     type='submit'
                                     className='search-button-item'
                                     disabled={disabledBtn}
                                 >
                                     조회
-                                </SingleBlockButton>
+                                </CustomBlockButton>
                             </div>
                         </form>
                         <div className='item-list-wrapper'>
@@ -75,7 +69,7 @@ export default function EditOptionCodeModalComponent({
                                         <div
                                             key={productOption.id}
                                             className='item-box'
-                                            onClick={() => onConfirm(productOption.code)}
+                                            onClick={() => onSelect(productOption.code)}
                                         >
                                             <div className='option-info'>
                                                 {productOption.code} / {productOption.name}
@@ -104,20 +98,20 @@ export default function EditOptionCodeModalComponent({
                         </div>
                     </ContentWrapper>
                 </ContentContainer>
-                <ButtonContainer>
-                    <SingleBlockButton
+                <CustomDialog.FooterButtonGroup>
+                    <CustomDialog.FooterButton
                         type='button'
-                        className='button-el'
                         style={{
                             background: '#959eae',
+                            color:'#fff',
                             flex: 1
                         }}
                         onClick={() => onClose()}
                     >
                         닫기
-                    </SingleBlockButton>
-                </ButtonContainer>
-            </Container>
+                    </CustomDialog.FooterButton>
+                </CustomDialog.FooterButtonGroup>
+            </CustomDialog>
         </>
     );
 }

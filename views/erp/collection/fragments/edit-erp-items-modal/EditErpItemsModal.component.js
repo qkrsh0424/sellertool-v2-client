@@ -1,17 +1,22 @@
 import { useState } from "react";
-import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
-import CustomImage from "../../../../../modules/image/CustomImage";
-import useEditErpItemsHook from "../hooks/useEditErpItemsHook";
-import { Container, NavigationContainer, SubmitButtonContainer, TableBox, TableWrapper } from "../styles/EditErpItemsModal.styled";
-import staticValues from "../utils/staticValues";
-import DataTableFragment from "./DataTable.fragment";
+import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
+import CustomImage from "../../../../modules/image/CustomImage";
+import useEditErpItemsHook from "./hooks/useEditErpItemsHook";
+import { Container, NavigationContainer, SubmitButtonContainer, TableBox, TableWrapper } from "./styles/EditErpItemsModal.styled";
+import staticValues from "./staticValues";
+import { CustomDialog } from "../../../../../components/dialog/v1/CustomDialog";
+import DataTableComponent from "./DataTable.component";
+import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
 
-export default function EditErpItemModalComponent({
+export default function EditErpItemsModalComponent({
+    open = false,
+    onClose = () => { },
+    maxWidth = 'xl',
     selectedErpItems,
-    onClose,
     onSelectClearErpItem,
     onSubmitUpdateErpItems
 }) {
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
     const [tableView, setTableView] = useState('orderInfo');
     const [tableHeaders, setTableHeaders] = useState(staticValues.ORDER_INFO_HEADERS);
 
@@ -43,6 +48,7 @@ export default function EditErpItemModalComponent({
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setDisabledBtn(true);
         let body = getSubmitForm();
         try {
             checkSubmitFormatValid(body)
@@ -56,18 +62,12 @@ export default function EditErpItemModalComponent({
 
     return (
         <>
-            <Container>
-                <div className='header-close-button-box'>
-                    <button
-                        type='button'
-                        className='header-close-button-el'
-                        onClick={() => onClose()}
-                    >
-                        <CustomImage
-                            src='/images/icon/close_default_959eae.svg'
-                        />
-                    </button>
-                </div>
+            <CustomDialog
+                open={open}
+                onClose={() => onClose()}
+                maxWidth={maxWidth}
+            >
+                <CustomDialog.CloseButton onClose={() => onClose()} />
                 <NavigationContainer>
                     <div className='wrapper'>
                         {TABLE_VIEW_TYPES?.map(r => {
@@ -89,7 +89,7 @@ export default function EditErpItemModalComponent({
                     </div>
                 </NavigationContainer>
                 <form onSubmit={(e) => handleSubmit(e)}>
-                    <DataTableFragment
+                    <DataTableComponent
                         tableHeaders={tableHeaders}
                         editErpItems={editErpItems}
                         onChangeValueOfName={onChangeValueOfName}
@@ -102,32 +102,33 @@ export default function EditErpItemModalComponent({
                         onChangeChannelOrderDateAll={onChangeChannelOrderDateAll}
                         onSelectClearErpItem={onSelectClearErpItem}
                     />
-
-                    <SubmitButtonContainer>
-                        <SingleBlockButton
+                    <CustomDialog.FooterButtonGroup isFlex>
+                        <CustomDialog.FooterButton
                             type='button'
-                            className='button-item'
                             style={{
                                 width: '40%',
+                                color: '#fff',
                                 background: 'var(--defaultModalCloseColor)'
                             }}
                             onClick={() => onClose()}
                         >
                             취소
-                        </SingleBlockButton>
-                        <SingleBlockButton
+                        </CustomDialog.FooterButton>
+                        <CustomDialog.FooterButton
                             type='submit'
                             className='button-item'
                             style={{
                                 flex: 1,
+                                color: '#fff',
                                 background: 'var(--mainColor)'
                             }}
+                            disabled={disabledBtn}
                         >
                             수정
-                        </SingleBlockButton>
-                    </SubmitButtonContainer>
+                        </CustomDialog.FooterButton>
+                    </CustomDialog.FooterButtonGroup>
                 </form>
-            </Container>
+            </CustomDialog>
         </>
     );
 }

@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
-import { dateToYYYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
-import { numberFormatUtils } from "../../../../../../utils/numberFormatUtils";
-import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
-import CustomImage from "../../../../../modules/image/CustomImage";
-import CommonModalComponent from "../../../../../modules/modal/CommonModalComponent";
-import InfiniteScrollObserver from "../../../../../modules/observer/InfiniteScrollObserver";
-import ReverseScrollObserver from "../../../../../modules/observer/ReverseScrollObserver";
-import ResizableTh from "../../../../../modules/table/ResizableTh";
-import { TableBox, TableWrapper } from "../styles/EditErpItemsModal.styled";
-import EditChannelOrderDateModalComponent from "./EditChannelOrderDateModal.component";
-import EditOptionCodeModalComponent from "./EditOptionCodeModal.component";
+import { dateToYYYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
+import { numberFormatUtils } from "../../../../../utils/numberFormatUtils";
+import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
+import CustomImage from "../../../../modules/image/CustomImage";
+import InfiniteScrollObserver from "../../../../modules/observer/InfiniteScrollObserver";
+import ReverseScrollObserver from "../../../../modules/observer/ReverseScrollObserver";
+import ResizableTh from "../../../../modules/table/ResizableTh";
+import { TableBox, TableWrapper } from "./styles/EditErpItemsModal.styled";
+import CustomDateTimeSelector from "../../../../../components/date-time-selector/v1/CustomDateTimeSelector";
+import CustomSearchOptionCodesModal from "../../../../../components/search-option-codes/v1/CustomSearchOptionCodesModal";
 
 const TABLE_DATA_VIEW_SIZE = 40;
 const TABLE_DATA_INC_DEC_SIZE = 20;
 
-export default function DataTableFragment({
+export default function DataTableComponent({
     tableHeaders,
     editErpItems,
     onChangeValueOfName,
@@ -472,68 +471,54 @@ export default function DataTableFragment({
             </TableWrapper>
 
             {editAllOptionCodeModalOpen &&
-                <CommonModalComponent
+                <CustomSearchOptionCodesModal
                     open={editAllOptionCodeModalOpen}
                     onClose={handleCloseEditAllOptionCodeModal}
-                >
-                    <EditOptionCodeModalComponent
-                        onClose={handleCloseEditAllOptionCodeModal}
-                        onConfirm={handleChangeOptionCodeAll}
-                    />
-                </CommonModalComponent>
+                    onSelect={(result) => handleChangeOptionCodeAll(result)}
+                />
             }
 
             {editAllReleaseOptionCodeModalOpen &&
-                <CommonModalComponent
+                <CustomSearchOptionCodesModal
                     open={editAllReleaseOptionCodeModalOpen}
                     onClose={handleCloseEditAllReleaseOptionCodeModal}
-                >
-                    <EditOptionCodeModalComponent
-                        onClose={handleCloseEditAllReleaseOptionCodeModal}
-                        onConfirm={handleChangeReleaseOptionCodeAll}
-                    />
-                </CommonModalComponent>
+                    onSelect={(result) => handleChangeReleaseOptionCodeAll(result)}
+                />
             }
 
             {editOptionCodeModalOpen &&
-                <CommonModalComponent
+                <CustomSearchOptionCodesModal
                     open={editOptionCodeModalOpen}
                     onClose={handleCloseEditOptionCodeModal}
-                >
-                    <EditOptionCodeModalComponent
-                        onClose={handleCloseEditOptionCodeModal}
-                        onConfirm={handleChangeOptionCode}
-                    />
-                </CommonModalComponent>
+                    onSelect={(result) => handleChangeOptionCode(result)}
+                />
             }
 
             {editReleaseOptionCodeModalOpen &&
-                <CommonModalComponent
+                <CustomSearchOptionCodesModal
                     open={editReleaseOptionCodeModalOpen}
                     onClose={handleCloseEditReleaseOptionCodeModal}
-                >
-                    <EditOptionCodeModalComponent
-                        onClose={handleCloseEditReleaseOptionCodeModal}
-                        onConfirm={handleChangeReleaseOptionCode}
-                    />
-                </CommonModalComponent>
+                    onSelect={(result) => handleChangeReleaseOptionCode(result)}
+                />
             }
 
             {editChannelOrderDateModalOpen &&
-                <EditChannelOrderDateModalComponent
+                <CustomDateTimeSelector
                     open={editChannelOrderDateModalOpen}
-                    channelOrderDate={editErpItems.find(r => r.id === targetErpItemId)?.channelOrderDate}
                     onClose={() => toggleEditChannelOrderDateModalOpen(false)}
                     onConfirm={(value) => handleChangeChannelOrderDate(value)}
+                    initialDateTime={editErpItems.find(r => r.id === targetErpItemId)?.channelOrderDate}
+                    label="판매채널 주문일시"
                 />
             }
 
             {editAllChannelOrderDateModalOpen &&
-                <EditChannelOrderDateModalComponent
+                <CustomDateTimeSelector
                     open={editAllChannelOrderDateModalOpen}
-                    channelOrderDate={new Date()}
                     onClose={() => toggleEditAllChannelOrderDateModalOpen(false)}
                     onConfirm={(value) => handleChangeChannelOrderDateAll(value)}
+                    initialDateTime={new Date()}
+                    label="판매채널 주문일시"
                 />
             }
         </>

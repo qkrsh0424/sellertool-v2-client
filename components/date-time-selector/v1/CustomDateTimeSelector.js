@@ -2,11 +2,11 @@ import { TextField } from "@mui/material";
 import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { CustomDialog } from "../../../../../../components/dialog/v1/CustomDialog";
+import { CustomDialog } from "../../../components/dialog/v1/CustomDialog";
 import styled from 'styled-components';
-import { dateToYYYYMMDD } from "../../../../../../utils/dateFormatUtils";
-import { useEffect, useRef, useState } from "react";
-import CustomSelect from "../../../../../../components/select/default/v1/CustomSelect";
+import { dateToYYYYMMDD } from "../../../utils/dateFormatUtils";
+import { useState } from "react";
+import CustomSelect from "../../select/default/v1/CustomSelect";
 
 const ContentContainer = styled.div`
     padding: 20px;
@@ -36,36 +36,32 @@ const HmsWrapper = styled.div`
     }
 `;
 
-export default function EditChannelOrderDateModalComponent({
-    open,
-    channelOrderDate,
-    onClose,
-    onConfirm
-}) {
-    const [parseDateTime, setParseDateTime] = useState(null);
+const initialize = (initialDateTime) => {
+    let date = Date.parse(initialDateTime);
+    let parsedDate = isNaN(date) ? new Date() : new Date(date);
+    let originYmd = dateToYYYYMMDD(parsedDate);
+    let originHours = parsedDate.getHours();
+    let originMinutes = parsedDate.getMinutes();
+    let originSeconds = parsedDate.getSeconds();
 
-    useEffect(() => {
-        initialize();
-
-    }, [channelOrderDate]);
-
-    const initialize = () => {
-        let date = Date.parse(channelOrderDate);
-        let parsedDate = isNaN(date) ? new Date() : new Date(date);
-        let originYmd = dateToYYYYMMDD(parsedDate);
-        let originHours = parsedDate.getHours();
-        let originMinutes = parsedDate.getMinutes();
-        let originSeconds = parsedDate.getSeconds();
-
-        let result = {
-            ymd: originYmd,
-            hours: originHours < 10 ? `0${originHours}` : `${originHours}`,
-            minutes: originMinutes < 10 ? `0${originMinutes}` : `${originMinutes}`,
-            seconds: originSeconds < 10 ? `0${originSeconds}` : `${originSeconds}`
-        }
-
-        setParseDateTime(result);
+    let result = {
+        ymd: originYmd,
+        hours: originHours < 10 ? `0${originHours}` : `${originHours}`,
+        minutes: originMinutes < 10 ? `0${originMinutes}` : `${originMinutes}`,
+        seconds: originSeconds < 10 ? `0${originSeconds}` : `${originSeconds}`
     }
+
+    return result;
+}
+
+export default function CustomDateTimeSelector({
+    open,
+    onClose,
+    onConfirm,
+    initialDateTime = new Date(),
+    label = '날짜선택'
+}) {
+    const [parseDateTime, setParseDateTime] = useState(initialize(initialDateTime));
 
     const handleChangeYmd = (value) => {
         setParseDateTime({
@@ -100,7 +96,7 @@ export default function EditChannelOrderDateModalComponent({
                     adapterLocale={'ko-KR'}
                 >
                     <MobileDatePicker
-                        label="판매채널 주문일시"
+                        label={label}
                         inputFormat="YYYY.MM.DD"
                         mask={'____.__.__'}
                         toolbarFormat="YY.MM.DD dd"

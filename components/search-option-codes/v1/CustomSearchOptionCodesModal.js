@@ -1,8 +1,7 @@
 import useDisabledBtn from "../../../hooks/button/useDisabledBtn";
 import useProdutOptionPageHook from "./useProductOptionPageHook";
-import { ButtonContainer, Container, ContentContainer, ContentWrapper, TargetOption } from "./EditOptionCodeModal.styled";
+import { ContentContainer, ContentWrapper } from "./EditOptionCodeModal.styled";
 import CustomBlockButton from "../../buttons/block-button/v1/CustomBlockButton";
-import CustomImage from "../../../views/modules/image/CustomImage";
 import PagenationComponentStateV2 from "../../../views/modules/pagenation/PagenationStateComponentV2";
 import { CustomDialog } from "../../dialog/v1/CustomDialog";
 
@@ -103,7 +102,7 @@ export default function CustomSearchOptionCodesModal({
                         type='button'
                         style={{
                             background: '#959eae',
-                            color:'#fff',
+                            color: '#fff',
                             flex: 1
                         }}
                         onClick={() => onClose()}

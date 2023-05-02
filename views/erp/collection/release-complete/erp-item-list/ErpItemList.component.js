@@ -4,16 +4,15 @@ import React, { createRef, useEffect, useRef, useState } from "react";
 import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { dateToYYYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import { numberWithCommas } from "../../../../../utils/numberFormatUtils";
-import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../modules/image/CustomImage";
 import FieldLoadingV2 from "../../../../modules/loading/FieldLoadingV2";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import InfiniteScrollObserver from "../../../../modules/observer/InfiniteScrollObserver";
 import ReverseScrollObserver from "../../../../modules/observer/ReverseScrollObserver";
 import ResizableTh from "../../../../modules/table/ResizableTh";
-import EditOptionCodeModalComponent from "./modal/EditOptionCodeModal.component";
 import ItemsForSameReceiverModalComponent from "./modal/ItemsForSameReceiverModal.component";
 import { PinButtonBox, TableFieldWrapper } from "./styles/ErpItemList.styled";
+import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
 
 const TABLE_DATA_VIEW_SIZE = 50;
 const TABLE_DATA_INC_DEC_SIZE = 30;
@@ -36,10 +35,10 @@ export default function ErpItemListComponent({
 }) {
     const router = useRouter();
     const tableScrollRef = useRef();
+    const editOptionCodeModalControl = useSearchOptionCodesModalControl();
+    const editReleaseOptionCodeModalControl = useSearchOptionCodesModalControl();
     const [prevViewSize, setPrevViewSize] = useState(0);
     const [viewSize, setViewSize] = useState(TABLE_DATA_VIEW_SIZE);
-    const [editOptionCodeModalOpen, setEditOptionCodeModalOpen] = useState(false);
-    const [editReleaseOptionCodeModalOpen, setEditReleaseOptionCodeModalOpen] = useState(false);
     const [targetErpItem, setTargetErpItem] = useState(null);
     const [statusPin, setStatusPin] = useState(false);
 
@@ -74,11 +73,11 @@ export default function ErpItemListComponent({
     const handleOpenEditOptionCodeModal = (e, erpItem) => {
         e.stopPropagation();
         setTargetErpItem(_.cloneDeep(erpItem));
-        setEditOptionCodeModalOpen(true);
+        editOptionCodeModalControl.toggleOpen(true);
     }
 
     const handleCloseEditOptionCodeModal = () => {
-        setEditOptionCodeModalOpen(false);
+        editOptionCodeModalControl.toggleOpen(false);
         setTargetErpItem(null);
     }
 
@@ -89,12 +88,12 @@ export default function ErpItemListComponent({
             return;
         }
         setTargetErpItem(_.cloneDeep(erpItem));
-        setEditReleaseOptionCodeModalOpen(true);
+        editReleaseOptionCodeModalControl.toggleOpen(true);
 
     }
 
     const handleCloseEditReleaseOptionCodeModal = () => {
-        setEditReleaseOptionCodeModalOpen(false);
+        editReleaseOptionCodeModalControl.toggleOpen(false);
         setTargetErpItem(null);
     }
 
@@ -403,28 +402,20 @@ export default function ErpItemListComponent({
                 </div>
             </TableFieldWrapper>
 
-            {editOptionCodeModalOpen &&
-                <CommonModalComponent
-                    open={editOptionCodeModalOpen}
+            {editOptionCodeModalControl.open &&
+                <CustomSearchOptionCodesModal
+                    open={editOptionCodeModalControl.open}
                     onClose={handleCloseEditOptionCodeModal}
-                >
-                    <EditOptionCodeModalComponent
-                        onClose={handleCloseEditOptionCodeModal}
-                        onConfirm={handleSubmitEditOptionCode}
-                    />
-                </CommonModalComponent>
+                    onSelect={(result) => handleSubmitEditOptionCode(result)}
+                />
             }
 
-            {editReleaseOptionCodeModalOpen &&
-                <CommonModalComponent
-                    open={editReleaseOptionCodeModalOpen}
+            {editReleaseOptionCodeModalControl.open &&
+                <CustomSearchOptionCodesModal
+                    open={editReleaseOptionCodeModalControl.open}
                     onClose={handleCloseEditReleaseOptionCodeModal}
-                >
-                    <EditOptionCodeModalComponent
-                        onClose={handleCloseEditReleaseOptionCodeModal}
-                        onConfirm={handleSubmitEditReleaseOptionCode}
-                    />
-                </CommonModalComponent>
+                    onSelect={(result) => handleSubmitEditReleaseOptionCode(result)}
+                />
             }
 
             {itemsForSameReceiverModalOpen &&

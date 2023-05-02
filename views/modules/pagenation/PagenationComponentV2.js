@@ -235,7 +235,6 @@ const PagenationComponentV2 = ({
 
         let newPage = pageIndex + 2;
 
-        console.log(newPage);
         router.replace({
             pathname: router.pathname,
             query: {

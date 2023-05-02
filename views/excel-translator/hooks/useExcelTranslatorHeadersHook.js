@@ -1,13 +1,12 @@
 import _ from "lodash";
-import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { excelTranslatorHeaderDataConnect } from "../../../data_connect/excelTranslatorHeaderDataConnect"
 import { dateToYYYYMMDDhhmmssFile } from "../../../utils/dateFormatUtils";
+import { customToast, defaultOptions } from "../../../components/toast/custom-react-toastify/v1";
 
 export default function useExcelTranslatorHeaderHook(props) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
-    const { enqueueSnackbar } = useSnackbar();
     const [excelTranslatorHeaders, setExcelTranslatorHeaders] = useState(null);
 
     useEffect(() => {
@@ -33,7 +32,10 @@ export default function useExcelTranslatorHeaderHook(props) {
                 const res = err.response;
                 console.log(res);
                 if (res?.status === 403) {
-                    enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate: true })
+                    customToast.error(res?.data?.memo, {
+                        ...defaultOptions,
+                        toastId: res?.data?.memo
+                    })
                 }
             })
     }

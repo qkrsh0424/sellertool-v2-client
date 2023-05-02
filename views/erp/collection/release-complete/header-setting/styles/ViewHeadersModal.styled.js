@@ -45,7 +45,7 @@ export const Container = styled.div`
 `;
 
 export const ContentContainer = styled.div`
-    padding: 0 20px;
+    padding: 0 20px 20px 20px;
 `;
 
 export const ItemWrapper = styled.div`

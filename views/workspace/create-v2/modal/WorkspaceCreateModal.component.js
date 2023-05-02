@@ -2,17 +2,20 @@ import Image from "next/image";
 import { useState } from "react";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import { Container } from "../styles/WorkspaceCreateModal.styled";
+import useDisabledBtn from "../../../../hooks/button/useDisabledBtn";
 
 export default function WorkspaceCreateModalComponent({
     onClose,
     onConfirm
 }) {
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
     const [workspaceName, setWorkspaceName] = useState('');
 
     const __handle = {
         submit: {
             confirm: (e) => {
                 e.preventDefault();
+                setDisabledBtn(true);
                 onConfirm(workspaceName);
             }
         },
@@ -84,7 +87,7 @@ export default function WorkspaceCreateModalComponent({
                                 background: 'var(--mainColor)',
                                 width: '60%'
                             }}
-                        // disabled={disabledBtn}
+                            disabled={disabledBtn}
                         >
                             생성
                         </SingleBlockButton>

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import CustomBlockButton from '../../../../../../components/buttons/block-button/v1/CustomBlockButton';
 
 export const Container = styled.div`
     padding: 20px;
@@ -36,7 +37,7 @@ export const TitleContainer = styled.div`
 `;
 
 export const ItemListContainer = styled.div`
-    padding: 0 20px;
+    
     max-height: 400px;
     overflow-y: scroll;
 
@@ -58,6 +59,10 @@ export const ItemListContainer = styled.div`
         padding: 20px 0;
         font-size: 14px;
     }
+`;
+
+export const ItemListWrapper = styled.div`
+    padding: 0 20px;
 `;
 
 export const ItemBox = styled.div`
@@ -90,4 +95,15 @@ export const ItemBox = styled.div`
         border:none;
         background: none;
     }
+`;
+
+export const ListTitle = styled(CustomBlockButton)`
+    background: #fafafa;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    text-align: left;
+    color: #444;
+    border-bottom: 1px solid #f0f0f0;
 `;

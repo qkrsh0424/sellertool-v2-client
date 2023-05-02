@@ -191,7 +191,7 @@ const excelTranslatorHeaderDataConnect = () => {
         downloadSampleExcelForUploadHeader: async function (body, headers) {
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.excelTranslatorHeaderId}/target:uploadHeader/action:download-sample`, null, {
-                    headers:headers,
+                    headers: headers,
                     responseType: 'blob',
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
@@ -210,7 +210,7 @@ const excelTranslatorHeaderDataConnect = () => {
         downloadSampleExcelForDownloadHeader: async function (body, headers) {
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/excel-translator-headers/${body.excelTranslatorHeaderId}/target:downloadHeader/action:download-sample`, null, {
-                    headers:headers,
+                    headers: headers,
                     responseType: 'blob',
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',

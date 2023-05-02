@@ -15,6 +15,7 @@ import useMpSearchConditionFormHook from "./hooks/useMpSearchConditionFormHook";
 import useOiSearchConditionFormHook from "./hooks/useOiSearchConditionFormHook";
 import usePeriodSearchConditionFormHook from "./hooks/usePeriodSearchConditionFormHook";
 import useRiSearchConditionFormHook from "./hooks/useRiSearchConditionFormHook";
+import useStockReflectYnFormHook from "./hooks/useStockReflectYnFormHook";
 import { ConditionContainer, ConditionWrapper, Container, FlexGroup, PeriodWrapper, RadioContainer, RadioWrapper, SubmitButtonContainer, Wrapper } from "./styles/ConditionField.styled";
 
 export default function ConditionFieldComponent({
@@ -70,6 +71,11 @@ export default function ConditionFieldComponent({
         onChangeMatchedCode
     } = useMatchedCodeFormHook();
 
+    const {
+        stockReflectYn,
+        onChangeStockReflectYn
+    } = useStockReflectYnFormHook();
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -124,12 +130,19 @@ export default function ConditionFieldComponent({
             delete params.diSearchQuery;
         }
 
-        let currMatchedCode = MATCHED_CODE_TYPES?.find(r => r.value === matchedCode)?.value;
+        const currMatchedCode = MATCHED_CODE_TYPES?.find(r => r.value === matchedCode)?.value;
+        const currStockReflectYn = STOCK_REFLECT_YN_TYPES?.find(r => r.value === stockReflectYn)?.value;
 
         if (currMatchedCode) {
             params.matchedCode = currMatchedCode;
         } else {
             delete params.matchedCode;
+        }
+
+        if(currStockReflectYn){
+            params.stockReflectYn = currStockReflectYn;
+        }else {
+            delete params.stockReflectYn
         }
 
         router.replace({
@@ -389,6 +402,27 @@ export default function ConditionFieldComponent({
                                 })}
                             </FlexGroup>
                         </RadioContainer>
+                        <RadioContainer>
+                            <div className='title'>재고반영 여부</div>
+                            <FlexGroup style={{ marginTop: '10px' }}>
+                                {STOCK_REFLECT_YN_TYPES?.map(r => {
+                                    return (
+                                        <label className='wrapper' key={r.value}>
+                                            <input
+                                                type='radio'
+                                                className='radio-item'
+                                                value={r.value}
+                                                onChange={(e) => onChangeStockReflectYn(e)}
+                                                checked={r.value === stockReflectYn}
+                                            ></input>
+                                            <span className='label'>
+                                                {r.name}
+                                            </span>
+                                        </label>
+                                    );
+                                })}
+                            </FlexGroup>
+                        </RadioContainer>
                         <SubmitButtonContainer>
                             <SingleBlockButton
                                 type='button'
@@ -530,4 +564,19 @@ const MATCHED_CODE_TYPES = [
         value: 'releaseOptionCode',
         name: '[M] 출고옵션코드'
     }
+]
+
+const STOCK_REFLECT_YN_TYPES = [
+    {
+        value: '',
+        name: '전체'
+    },
+    {
+        value: 'y',
+        name: '반영'
+    },
+    {
+        value: 'n',
+        name: '미반영'
+    },
 ]

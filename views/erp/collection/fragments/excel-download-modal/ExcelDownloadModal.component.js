@@ -6,12 +6,13 @@ import CustomImage from "../../../../modules/image/CustomImage";
 import CustomSelect from "../../../../modules/select/CustomSelect";
 import useErpcExcelDownloadFormsHook from "../hooks/useErpcExcelDownloadFormsHook";
 import useRefErpCollectionHeadersHook from "../hooks/useRefErpCollectionHeadersHook";
-import DownloadButtonFieldView from "./DownloadButtonField.view";
 import { Container, ExcelDownloadFormSelectorFieldWrapper, OperatorsFieldWrapper, PreviewTableFieldWrapper, TableBox, TipFieldWrapper } from "./ExcelDownloadModal.styled";
 import InputFieldView from "./InputField.view";
 import ExcelDownloadFormTableComponent from "./ExcelDownloadFormTable.component";
 import { checkFileNameFormat } from "../../../../../utils/regexUtils";
 import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
+import { useLocalStorageHook } from "../../../../../hooks/local_storage/useLocalStorageHook";
+import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadingComponent";
 
 // collections를 가지고 downloadOrderItem 폼으로 변환, collection = [...orderItem]
 const getDownloadOrderItem = (collections) => {
@@ -32,6 +33,7 @@ const ExcelDownloadModalComponent = ({
     ...props
 }) => {
     const router = useRouter();
+    const [favoriteDownloadFormIds] = useLocalStorageHook('erpc-favorite-downloadForm-ids-v1', []);
     const [downloadOrderItemList, dispatchDownloadOrderItemList] = useReducer(downloadOrderItemListReducer, initialDownloadOrderItemList);
     const [checkedItemList, dispatchCheckedItemList] = useReducer(checkedItemListReducer, initialCheckedItemList);
     const [selectedExcelHeader, dispatchSelectedExcelHeader] = useReducer(selectedExcelHeaderReducer, initialSelectedExcelHeader);
@@ -39,6 +41,7 @@ const ExcelDownloadModalComponent = ({
     const {
         refErpCollectionHeaders
     } = useRefErpCollectionHeadersHook();
+
     const {
         erpcExcelDownloadForms,
         reqDownloadForm
@@ -48,12 +51,13 @@ const ExcelDownloadModalComponent = ({
         inventoryStocks
     } = useInventoryStocksHook(selectedErpItems);
 
-    
+    const [backdropOpen, setBackdropOpen] = useState(false);
+
     useEffect(() => {
         if (!selectedErpItems || selectedErpItems?.length <= 0 || !inventoryStocks) {
             return;
         }
-        
+
         // downloadOrderItem 폼으로 List 변환
         let dataList = selectedErpItems.map(r => {
             let stockUnit = inventoryStocks?.find(inventoryStock => inventoryStock.productOptionId === r.productOptionId)?.stockUnit ?? 0;
@@ -93,6 +97,10 @@ const ExcelDownloadModalComponent = ({
             type: 'SET_DATA',
             payload: data
         })
+    }
+
+    const toggleBackdropOpen = (setOpen) => {
+        setBackdropOpen(setOpen);
     }
 
     // 전체 주문건 합치기
@@ -225,13 +233,14 @@ const ExcelDownloadModalComponent = ({
         })
     }
 
-    const onActionDownloadExcel = () => {
+    const onActionDownloadExcel = async () => {
         if (!checkFileNameFormat(downloadExcelFileName)) {
             alert('파일명에 허용되지 않은 특수문자가 포함되어 있습니다. \n제거해야 할 특수문자 : \/:*?%."<>|');
             return;
         }
-
-        reqDownloadForm(selectedExcelHeader?.id, downloadOrderItemList, downloadExcelFileName)
+        toggleBackdropOpen(true);
+        await reqDownloadForm(selectedExcelHeader?.id, downloadOrderItemList, downloadExcelFileName)
+        toggleBackdropOpen(false);
     }
 
     const onChangeDownloadExcelFileName = (e) => {
@@ -265,6 +274,7 @@ const ExcelDownloadModalComponent = ({
                 />
                 <ExcelDownloadFormSelectorField
                     erpcExcelDownloadForms={erpcExcelDownloadForms}
+                    favoriteDownloadFormIds={favoriteDownloadFormIds}
                     selectedExcelHeader={selectedExcelHeader}
 
                     onActionSelectExcelDownloadForm={handleSelectExcelDownloadForm}
@@ -283,6 +293,9 @@ const ExcelDownloadModalComponent = ({
                     </>
                 }
             </Container>
+            <BackdropLoadingComponent
+                open={backdropOpen}
+            />
         </>
     );
 }
@@ -495,6 +508,7 @@ function PreviewTableField({
 
 function ExcelDownloadFormSelectorField({
     erpcExcelDownloadForms,
+    favoriteDownloadFormIds,
     selectedExcelHeader,
     onActionSelectExcelDownloadForm
 }) {
@@ -509,7 +523,22 @@ function ExcelDownloadFormSelectorField({
                         onChange={(e) => onActionSelectExcelDownloadForm(e)}
                     >
                         <option value=''>선택</option>
-                        {erpcExcelDownloadForms?.map(excelDownloadForm => {
+                        <option value='' disabled>--- 즐겨찾기 ---</option>
+                        {favoriteDownloadFormIds?.map(favoriteDownloadFormId => {
+                            const erpcExcelDownloadForm = erpcExcelDownloadForms?.find(r => r.id === favoriteDownloadFormId);
+                            if (!erpcExcelDownloadForm) {
+                                return null;
+                            }
+
+                            return (
+                                <option
+                                    key={erpcExcelDownloadForm?.id}
+                                    value={erpcExcelDownloadForm?.id}
+                                >{erpcExcelDownloadForm?.name}</option>
+                            );
+                        })}
+                        <option value='' disabled>--- 목록 ---</option>
+                        {erpcExcelDownloadForms?.filter(r => !favoriteDownloadFormIds?.includes(r.id))?.map(excelDownloadForm => {
                             return (
                                 <option
                                     key={excelDownloadForm?.id}

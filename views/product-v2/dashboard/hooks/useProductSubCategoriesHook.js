@@ -1,9 +1,9 @@
 import _ from "lodash";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { productSubCategoryDataConnect } from "../../../../data_connect/productSubCategoryDataConnect";
+import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
 
 export default function useProductSubCategoriesHook({
     productCategory
@@ -13,7 +13,6 @@ export default function useProductSubCategoriesHook({
     const [productSubCategories, setProductSubCategories] = useState(null);
     const [productSubCategory, setProductSubCategory] = useState(null);
     const [productSubCategoryId, setProductSubCategoryId] = useState(null);
-    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         if (!workspaceRedux?.workspaceInfo?.id || !productCategory?.id) {
@@ -61,7 +60,10 @@ export default function useProductSubCategoriesHook({
             .catch(err => {
                 const res = err.response;
                 console.log(res);
-                enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate: true });
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
             })
     }
 

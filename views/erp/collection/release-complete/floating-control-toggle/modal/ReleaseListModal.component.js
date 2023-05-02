@@ -9,6 +9,8 @@ import CommonModalComponent from "../../../../../modules/modal/CommonModalCompon
 import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
 import { Container, ExcelDownloadButton, ReleaseList } from "../styles/ReleaseListModal.styled";
 import ReleaseListDetailModal from "./ReleaseListDetailModal";
+import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
+import BackdropLoadingComponent from "../../../../../modules/loading/BackdropLoadingComponent";
 
 export default function ReleaseListModalComponent({
     erpCollectionHeader,
@@ -17,9 +19,11 @@ export default function ReleaseListModalComponent({
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
 
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
     const [releaseList, setReleaseList] = useState(null);
     const [selectedReleaseItem, setSelectedReleaseItem] = useState(null);
     const [releaseListDetailModalOpen, setReleaseListDetailModalOpen] = useState(false);
+    const [backdropOpen, setBackdropOpen] = useState(false);
     const {
         inventoryStocks
     } = useInventoryStocksHook(selectedErpItems);
@@ -80,6 +84,10 @@ export default function ReleaseListModalComponent({
         setReleaseList(datas);
     }
 
+    const toggleBackdropOpen = (setOpen) => {
+        setBackdropOpen(setOpen);
+    }
+
     const toggleReleaseListDetailModalOpen = (setOpen, target) => {
         if (setOpen) {
             setReleaseListDetailModalOpen(true);
@@ -92,6 +100,8 @@ export default function ReleaseListModalComponent({
     }
 
     const handleDownloadExcel = async () => {
+        setDisabledBtn(true);
+        toggleBackdropOpen(true);
         let datas = releaseList?.map(r => {
             if (!r.productOptionId) {
                 return {
@@ -142,7 +152,8 @@ export default function ReleaseListModalComponent({
                 }
 
                 alert(res?.data.memo);
-            })
+            });
+        toggleBackdropOpen(false);
     }
 
     return (
@@ -164,6 +175,7 @@ export default function ReleaseListModalComponent({
                         type='button'
                         className='button-item'
                         onClick={() => handleDownloadExcel()}
+                        disabled={disabledBtn}
                     >
                         엑셀 다운로드
                     </SingleBlockButton>
@@ -248,6 +260,10 @@ export default function ReleaseListModalComponent({
                     onClose={() => toggleReleaseListDetailModalOpen(false)}
                 />
             </CommonModalComponent>
+
+            <BackdropLoadingComponent
+                open={backdropOpen}
+            />
         </>
     );
 }

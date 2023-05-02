@@ -24,7 +24,7 @@ export default function WorkspaceSelectPage(props) {
     return (
         <>
             <Head>
-                <title>셀러툴 홈</title>
+                <title>워크스페이스 선택 | 셀러툴</title>
             </Head>
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />

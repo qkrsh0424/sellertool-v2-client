@@ -1,10 +1,14 @@
 import { useState } from "react";
+import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
+import { useLocalStorageHook } from "../../../../../hooks/local_storage/useLocalStorageHook";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
+import CustomImage from "../../../../modules/image/CustomImage";
 import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadingComponent";
 import CustomSelect from "../../../../modules/select/CustomSelect";
 import CustomExcelFileUploader from "../../../../modules/uploader/CustomExcelFileUploader";
 import useExcelFormApiHook from "./hooks/useExcelFormApiHook";
-import { ButtonGroup, SelectBox, UploadButtonBox, Wrapper } from "./styles/ExcelUploaderControl.styled";
+import FavoriteTranslatorsModalComponent from "./modal/FavoriteTranslatorsModal.component";
+import { ButtonGroup, SelectBox, TranslatorSelectorWrapper, UploadButtonBox, Wrapper } from "./styles/ExcelUploaderControl.styled";
 
 export default function ExcelUploaderControlComponent({
     excelTranslatorHeaders,
@@ -13,7 +17,9 @@ export default function ExcelUploaderControlComponent({
     onSubmitUploadWithExcel,
     onSubmitDownloadSampleExcelForUploadHeader,
 }) {
+    const [favoriteTranslatorIds, setFavoriteTranslatorIds] = useLocalStorageHook('erpc-upload-favorite-translator-ids-v1', []);
     const [excelFileUploaderOpen, setExcelFileUploaderOpen] = useState(false);
+    const [favoriteTranslatorsModalOpen, setFavoriteTranslatorsModalOpen] = useState(false);
     const [backdropOpen, setBackdropOpen] = useState(false);
 
     const {
@@ -72,23 +78,55 @@ export default function ExcelUploaderControlComponent({
         setBackdropOpen(false);
     }
 
+    const toggleFavoriteTranslatorsModalOpen = (setOpen) => {
+        setFavoriteTranslatorsModalOpen(setOpen);
+    }
+
+    const handleSelectFavoriteTranslator = (id) => {
+        let currFavoriteTranslatorIds = new Set([...favoriteTranslatorIds]);
+        if (currFavoriteTranslatorIds.has(id)) {
+            currFavoriteTranslatorIds.delete(id);
+        } else {
+            currFavoriteTranslatorIds.add(id);
+        }
+
+        setFavoriteTranslatorIds([...currFavoriteTranslatorIds]);
+        onActionChangeExcelTranslatorHeader(null);
+    }
+
     return (
         <>
             <Wrapper>
-                <SelectBox>
-                    <CustomSelect
-                        className='select-item'
-                        value={excelTranslatorHeader?.id || ''}
-                        onChange={(e) => handleChangeExcelTranslatorHeader(e)}
+                <TranslatorSelectorWrapper>
+                    <SelectBox>
+                        <CustomSelect
+                            className='select-item'
+                            value={excelTranslatorHeader?.id || ''}
+                            onChange={(e) => handleChangeExcelTranslatorHeader(e)}
+                        >
+                            <option value=''>기준양식</option>
+                            {favoriteTranslatorIds?.map(favoriteTranslatorId => {
+                                const currExcelTranslatorHeader = excelTranslatorHeaders?.find(r => r?.id === favoriteTranslatorId);
+                                if (!currExcelTranslatorHeader) {
+                                    return null;
+                                }
+
+                                return (
+                                    <option key={currExcelTranslatorHeader?.id} value={currExcelTranslatorHeader?.id}>{currExcelTranslatorHeader?.uploadHeaderTitle} &gt; {currExcelTranslatorHeader?.downloadHeaderTitle}</option>
+                                );
+                            })}
+                        </CustomSelect>
+                    </SelectBox>
+                    <CustomBlockButton
+                        type='button'
+                        className='setting-button'
+                        onClick={() => toggleFavoriteTranslatorsModalOpen(true)}
                     >
-                        <option value=''>기준양식</option>
-                        {excelTranslatorHeaders?.map(r => {
-                            return (
-                                <option key={r?.id} value={r?.id}>{r?.uploadHeaderTitle} &gt; {r?.downloadHeaderTitle}</option>
-                            );
-                        })}
-                    </CustomSelect>
-                </SelectBox>
+                        <CustomImage
+                            src='/images/icon/settings_default_808080.svg'
+                        />
+                    </CustomBlockButton>
+                </TranslatorSelectorWrapper>
                 <ButtonGroup>
                     <SingleBlockButton
                         type='button'
@@ -114,6 +152,16 @@ export default function ExcelUploaderControlComponent({
                     open={excelFileUploaderOpen}
                     onClose={handleCloseExcelFileUploader}
                     onConfirm={handleSubmitExcelUpload}
+                />
+            }
+
+            {favoriteTranslatorsModalOpen &&
+                <FavoriteTranslatorsModalComponent
+                    open={favoriteTranslatorsModalOpen}
+                    onClose={() => toggleFavoriteTranslatorsModalOpen(false)}
+                    excelTranslatorHeaders={excelTranslatorHeaders}
+                    favoriteTranslatorIds={favoriteTranslatorIds}
+                    onSelectFavoriteTranslator={handleSelectFavoriteTranslator}
                 />
             }
 

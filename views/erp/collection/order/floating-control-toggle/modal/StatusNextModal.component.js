@@ -6,6 +6,7 @@ import { inventoryDataConnect } from "../../../../../../data_connect/inventoryDa
 import { useSelector } from "react-redux";
 import CustomBlockButton from "../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import _ from "lodash";
+import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
 
 const ContentContainer = styled.div`
     padding: 20px;
@@ -142,37 +143,42 @@ export default function StatusNextModalComponent({
     onClose,
     onConfirm,
 }) {
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+
+    const handleSubmit = () => {
+        setDisabledBtn(true);
+        onConfirm();
+    }
 
     return (
         <>
-            {open &&
-                <CustomDialog
-                    open={open}
-                    onClose={onClose}
-                    maxWidth={'xl'}
-                >
-                    <CustomDialog.CloseButton onClose={() => onClose()} />
-                    <CustomDialog.Title>주문확정 확인메세지</CustomDialog.Title>
-                    <Content
-                        selectedErpItems={selectedErpItems}
-                    />
+            <CustomDialog
+                open={open}
+                onClose={onClose}
+                maxWidth={'xl'}
+            >
+                <CustomDialog.CloseButton onClose={() => onClose()} />
+                <CustomDialog.Title>주문확정 확인메세지</CustomDialog.Title>
+                <Content
+                    selectedErpItems={selectedErpItems}
+                />
 
-                    <CustomDialog.FooterButtonGroup isFlex style={{ position: 'sticky', bottom: '0', }}>
-                        <CustomDialog.FooterButton
-                            backgroundColor={'var(--defaultModalCloseColor)'}
-                            fontColor={'#fff'}
-                            width={'40%'}
-                            onClick={() => onClose()}
-                        >취소</CustomDialog.FooterButton>
-                        <CustomDialog.FooterButton
-                            flex={1}
-                            backgroundColor={'var(--mainColor)'}
-                            fontColor={'#fff'}
-                            onClick={() => onConfirm()}
-                        >확인</CustomDialog.FooterButton>
-                    </CustomDialog.FooterButtonGroup>
-                </CustomDialog>
-            }
+                <CustomDialog.FooterButtonGroup isFlex style={{ position: 'sticky', bottom: '0', }}>
+                    <CustomDialog.FooterButton
+                        backgroundColor={'var(--defaultModalCloseColor)'}
+                        fontColor={'#fff'}
+                        width={'40%'}
+                        onClick={() => onClose()}
+                    >취소</CustomDialog.FooterButton>
+                    <CustomDialog.FooterButton
+                        flex={1}
+                        backgroundColor={'var(--mainColor)'}
+                        fontColor={'#fff'}
+                        onClick={() => handleSubmit()}
+                        disabled={disabledBtn}
+                    >확인</CustomDialog.FooterButton>
+                </CustomDialog.FooterButtonGroup>
+            </CustomDialog>
         </>
     );
 }

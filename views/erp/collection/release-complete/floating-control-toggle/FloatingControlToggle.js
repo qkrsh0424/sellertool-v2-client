@@ -5,13 +5,13 @@ import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadin
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
 import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
-import EditErpItemModalComponent from "./modal/EditErpItemsModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
 import ReleaseListModalComponent from "./modal/ReleaseListModal.component";
 import StockReleaseModalComponent from "./modal/StockReleaseModal.component";
 import ViewSelectedModalComponent from "./modal/ViewSelectedModal.component";
 import WaybillRegistrationModalComponent from "./modal/WaybillRegistrationModal.component";
 import { Container } from "./styles/FloatingControlBar.styled";
+import EditErpItemsModalComponent from "../../fragments/edit-erp-items-modal/EditErpItemsModal.component";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -66,6 +66,20 @@ export default function FloatingControlToggle({
     }
 
     const handleToggleEditErpItemModalOpen = (setOpen) => {
+        if (setOpen) {
+            let stockReflectedItems = [];
+
+            selectedErpItems?.forEach(r => {
+                if (r.stockReflectYn === 'y') {
+                    stockReflectedItems.push(r);
+                }
+            });
+
+            if (stockReflectedItems?.length >= 1) {
+                alert(`이미 재고반영 처리된 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
+                return;
+            }
+        }
         setEditErpItemsModalOpen(setOpen)
     }
 
@@ -131,7 +145,7 @@ export default function FloatingControlToggle({
                 if (r.stockReflectYn === 'y') {
                     stockReflectedItems.push(r);
                 }
-                
+
                 if (!r.releaseOptionCode) {
                     notSetReleaseOptionCodeItems.push(r);
                 }
@@ -346,18 +360,16 @@ export default function FloatingControlToggle({
                 onActionClearAllSelectedItems={handleClearAllSelectedItems}
             />
 
-            <CommonModalComponent
-                open={editErpItemsModalOpen}
-                onClose={() => handleToggleEditErpItemModalOpen(false)}
-                maxWidth={'xl'}
-            >
-                <EditErpItemModalComponent
-                    selectedErpItems={selectedErpItems}
+            {editErpItemsModalOpen &&
+                <EditErpItemsModalComponent
+                    open={editErpItemsModalOpen}
                     onClose={() => handleToggleEditErpItemModalOpen(false)}
+                    maxWidth={'xl'}
+                    selectedErpItems={selectedErpItems}
                     onSelectClearErpItem={handleClearSelectedItem}
                     onSubmitUpdateErpItems={handleSubmitUpdateErpItems}
                 />
-            </CommonModalComponent>
+            }
 
             <ConfirmModalComponentV2
                 open={deleteErpItemsConfirmModalOpen}
@@ -388,7 +400,7 @@ export default function FloatingControlToggle({
                     background: 'var(--mainColor)'
                 }}
             />
-            
+
             <CommonModalComponent
                 open={excelDownloadModalOpen}
                 onClose={() => handleToggleExcelDownloadModalOpen(false)}
@@ -425,23 +437,27 @@ export default function FloatingControlToggle({
                 />
             </CommonModalComponent>
 
-            <CommonModalComponent
-                open={releaseListModalOpen}
-                onClose={() => handleToggleReleaseListModalOpen(false)}
-                maxWidth={'xs'}
-            >
-                <ReleaseListModalComponent
-                    erpCollectionHeader={erpCollectionHeader}
-                    selectedErpItems={selectedErpItems}
+            {releaseListModalOpen &&
+                <CommonModalComponent
+                    open={releaseListModalOpen}
                     onClose={() => handleToggleReleaseListModalOpen(false)}
-                />
-            </CommonModalComponent>
+                    maxWidth={'xs'}
+                >
+                    <ReleaseListModalComponent
+                        erpCollectionHeader={erpCollectionHeader}
+                        selectedErpItems={selectedErpItems}
+                        onClose={() => handleToggleReleaseListModalOpen(false)}
+                    />
+                </CommonModalComponent>
+            }
 
-            <StockReleaseModalComponent
-                open={stockReleaseModalOpen}
-                onClose={() => handleToggleStockReleaseModalOpen(false)}
-                onConfirm={handleSubmitStockRelease}
-            />
+            {stockReleaseModalOpen &&
+                <StockReleaseModalComponent
+                    open={stockReleaseModalOpen}
+                    onClose={() => handleToggleStockReleaseModalOpen(false)}
+                    onConfirm={handleSubmitStockRelease}
+                />
+            }
 
             <ConfirmModalComponentV2
                 open={cancelStockReleaseModalOpen}

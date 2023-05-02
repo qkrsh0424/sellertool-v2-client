@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { erpcExcelDownloadFormDataConnect } from "../../../../../data_connect/erpcExcelDownloadFormDataConnect";
+import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 
 export default function useErpcExcelDownloadFormsHook(props) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
@@ -25,7 +26,12 @@ export default function useErpcExcelDownloadFormsHook(props) {
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
             })
     }
 

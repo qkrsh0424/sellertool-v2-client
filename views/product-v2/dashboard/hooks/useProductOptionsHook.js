@@ -1,13 +1,12 @@
-import { useSnackbar } from "notistack";
 import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { productOptionDataConnect } from "../../../../data_connect/productOptionDataConnect";
+import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
 
 export default function useProductOptionsHook({
     product
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
-    const { enqueueSnackbar } = useSnackbar();
     const [productOptions, setProductOptions] = useState(null);
 
     const reqFetchProductOptions = useCallback(async () => {
@@ -33,7 +32,10 @@ export default function useProductOptionsHook({
             .catch(err => {
                 const res = err.response;
                 console.log(res);
-                enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate: true });
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
             })
     }, []);
 

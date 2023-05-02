@@ -2,12 +2,14 @@ import { useState } from "react";
 import { CustomDialog } from "../../../../../../components/dialog/v1/CustomDialog";
 import CustomInput from "../../../../../modules/input/CustomInput";
 import { CancelButton, Container, InputBox, SubmitButton } from "../styles/StockReleaseModal.styled";
+import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
 
 export default function StockReleaseModalComponent({
     open,
     onClose,
     onConfirm
 }) {
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
     const [memo, setMemo] = useState('');
 
     if (!open) {
@@ -22,6 +24,7 @@ export default function StockReleaseModalComponent({
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setDisabledBtn(true);
 
         if (!memo) {
             alert('출고 메모를 작성해 주세요.');
@@ -57,6 +60,7 @@ export default function StockReleaseModalComponent({
                         </CancelButton>
                         <SubmitButton
                             type='submit'
+                            disabled={disabledBtn}
                         >
                             확인
                         </SubmitButton>

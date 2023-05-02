@@ -95,7 +95,7 @@ const FooterMain = () => {
                         </MenuItemsBox>
                         <ComponyInfoBox>
                             <div className="item-el">상호명: 피아르 첫째</div>
-                            <div className="item-el">주소: 서울특별시 마포구 와우산로 11길 25, 3층</div>
+                            <div className="item-el">주소: 서울특별시 영등포구 양산로 91 리드원센터 1305호</div>
                             <div className="item-el">사업자등록번호: 262-17-01212</div>
                             <div className="item-el">통신판매업 신고: 제2020-인천서구-0154호</div>
                             <div className="item-el">고객센터: 02-338-9464</div>

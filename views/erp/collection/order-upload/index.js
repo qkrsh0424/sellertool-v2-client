@@ -14,6 +14,7 @@ export default function MainComponent(props) {
         uploadDatas,
         reqUploadWithExcel,
         reqSaveUploadDatas,
+        onFillEmptyChannerOrderDate,
         onSubmitUploadWithSingle,
         onDeleteUploadData,
         onDeleteUploadDataAll
@@ -72,6 +73,7 @@ export default function MainComponent(props) {
                         />
                         <UploadDataListFieldComponent
                             uploadDatas={uploadDatas}
+                            onActionFillEmptyChannerOrderDate={onFillEmptyChannerOrderDate}
                             onActionDeleteUploadData={onDeleteUploadData}
                             onActionDeleteUploadDataAll={onDeleteUploadDataAll}
                             onSubmitSaveUploadDatas={handleSubmitSaveUploadDatas}

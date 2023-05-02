@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { erpItemDataConnect } from "../../../../../../data_connect/erpItemDataConnect";
 import { getEndDate, getStartDate } from "../../../../../../utils/dateFormatUtils";
+import { customToast, defaultOptions } from "../../../../../../components/toast/custom-react-toastify/v1";
 
 export default function useOrderCountsWith24hHook(props) {
     const [orderCountsWith24h, setOrderCountsWith24h] = useState(null);
@@ -30,7 +31,12 @@ export default function useOrderCountsWith24hHook(props) {
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
             })
             ;
     }

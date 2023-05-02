@@ -7,12 +7,14 @@ import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalCompo
 import InfiniteScrollObserver from "../../../../modules/observer/InfiniteScrollObserver";
 import ResizableTh from "../../../../modules/table/ResizableTh";
 import { Container, ControlWrapper, CountBox, DeleteTd, TableBox, TableWrapper } from "./styles/UploadDataListField.styled";
+import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
 
 const TABLE_DATA_VIEW_SIZE = 50;
 const TABLE_DATA_INC_DEC_SIZE = 30;
 
 export default function UploadDataListFieldComponent({
     uploadDatas,
+    onActionFillEmptyChannerOrderDate,
     onActionDeleteUploadData,
     onActionDeleteUploadDataAll,
     onSubmitSaveUploadDatas
@@ -41,6 +43,7 @@ export default function UploadDataListFieldComponent({
                 </ControlWrapper>
                 <Table
                     uploadDatas={uploadDatas}
+                    onActionFillEmptyChannerOrderDate={onActionFillEmptyChannerOrderDate}
                     onActionDeleteUploadData={onActionDeleteUploadData}
                     onActionDeleteUploadDataAll={onActionDeleteUploadDataAll}
                 />
@@ -51,6 +54,7 @@ export default function UploadDataListFieldComponent({
 
 function Table({
     uploadDatas,
+    onActionFillEmptyChannerOrderDate,
     onActionDeleteUploadData,
     onActionDeleteUploadDataAll
 }) {
@@ -111,6 +115,23 @@ function Table({
                                             }}
                                         >
                                             {r.headerName}
+                                            {r.fieldName === 'channelOrderDate' &&
+                                                <CustomBlockButton
+                                                    type='button'
+                                                    style={{
+                                                        fontSize: '11px',
+                                                        height: '20px',
+                                                        padding: '0',
+                                                        width: '90%',
+                                                        marginLeft: 'auto',
+                                                        marginRight: 'auto',
+                                                        borderRadius: '5px',
+                                                        marginTop: '3px',
+                                                        color: '#444'
+                                                    }}
+                                                    onClick={() => onActionFillEmptyChannerOrderDate()}
+                                                >빈값 현재시간으로 채우기</CustomBlockButton>
+                                            }
                                         </ResizableTh>
                                     )
                                 })}
@@ -137,7 +158,7 @@ function Table({
                                             if (header.fieldName === 'channelOrderDate') {
                                                 return (
                                                     <td key={header.fieldName}>
-                                                        {dateToYYYYMMDDhhmmss(data[header.fieldName])}
+                                                        {data[header.fieldName] ? dateToYYYYMMDDhhmmss(data[header.fieldName]) : ''}
                                                     </td>
                                                 );
                                             }

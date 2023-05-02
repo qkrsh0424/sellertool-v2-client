@@ -54,6 +54,11 @@ function dateToYYYYMMDDhhmmss(idate) {
     return moment(date).format("YYYY-MM-DD HH:mm:ss");
 }
 
+function dateToYYYYMMDDhhmmssWithT(idate) {
+    var date = new Date(idate);
+    return moment(date).format("YYYY-MM-DDTHH:mm:ss");
+}
+
 function dateToYYMMDDhhmmss(idate) {
     var date = new Date(idate);
     return moment(date).format("YY/MM/DD HH:mm:ss");
@@ -86,6 +91,7 @@ export {
     dateToYYMMDD,
     dateToYYYYMMDD,
     dateToYYYYMMDDhhmmss,
+    dateToYYYYMMDDhhmmssWithT,
     dateToYYMMDDhhmmss,
     dateToYYYYMMDDhhmmssFile,
     getRemainingDateCount,

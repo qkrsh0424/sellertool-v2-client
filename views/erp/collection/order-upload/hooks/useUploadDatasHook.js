@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { erpItemDataConnect } from "../../../../../data_connect/erpItemDataConnect";
+import { dateToYYYYMMDDhhmmssWithT } from "../../../../../utils/dateFormatUtils";
 
 export default function useUploadDatasHook(props) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
@@ -66,6 +67,22 @@ export default function useUploadDatasHook(props) {
             ;
     }
 
+    const onFillEmptyChannerOrderDate = () => {
+        if (uploadDatas?.length > 0) {
+            setUploadDatas(uploadDatas?.map(r => {
+                if (!r.channelOrderDate) {
+                    return {
+                        ...r,
+                        channelOrderDate: dateToYYYYMMDDhhmmssWithT(new Date())
+                    }
+                }
+                return {
+                    ...r
+                }
+            }))
+        }
+    }
+
     const onSubmitUploadWithSingle = (form) => {
         setUploadDatas([...uploadDatas.concat(form)]);
     }
@@ -82,6 +99,7 @@ export default function useUploadDatasHook(props) {
         uploadDatas,
         reqUploadWithExcel,
         reqSaveUploadDatas,
+        onFillEmptyChannerOrderDate,
         onSubmitUploadWithSingle,
         onDeleteUploadData,
         onDeleteUploadDataAll

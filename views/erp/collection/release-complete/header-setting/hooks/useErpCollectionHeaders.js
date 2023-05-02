@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux";
 import { erpCollectionHeaderDataConnect } from "../../../../../../data_connect/erpCollectionHeaderDataConnect";
+import { customToast, defaultOptions } from "../../../../../../components/toast/custom-react-toastify/v1";
 
 export default function useErpCollectionHeaders(props) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
@@ -25,7 +26,12 @@ export default function useErpCollectionHeaders(props) {
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
             })
     }
 

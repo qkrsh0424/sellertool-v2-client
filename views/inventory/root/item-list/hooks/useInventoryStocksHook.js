@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { inventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
+import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 
 export default function useInventoryStocksHook({
     productOptions
@@ -33,7 +34,12 @@ export default function useInventoryStocksHook({
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
             })
     }
 

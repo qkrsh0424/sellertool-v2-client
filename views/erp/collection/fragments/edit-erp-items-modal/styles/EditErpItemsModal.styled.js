@@ -86,6 +86,7 @@ export const NavigationContainer = styled.div`
 
 export const TableWrapper = styled.div`
     margin-top: 10px;
+    margin-bottom: 30px;
     padding: 0 20px;
     .empty-box{
         padding: 50px 0;

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { erpItemDataConnect } from "../../../../../data_connect/erpItemDataConnect";
 import { getEndDate, getStartDate } from "../../../../../utils/dateFormatUtils";
+import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 
 export default function useErpItemPageHook(props) {
     const router = useRouter();
@@ -95,7 +96,12 @@ export default function useErpItemPageHook(props) {
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
             })
     }
 
@@ -134,7 +140,12 @@ export default function useErpItemPageHook(props) {
                 }
             })
             .catch(err => {
-                console.log(err, err.response);
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
             })
             .finally(() => {
                 onSetErpItemPagePending(false);

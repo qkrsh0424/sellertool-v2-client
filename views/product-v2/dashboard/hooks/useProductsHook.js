@@ -1,13 +1,12 @@
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { productDataConnect } from "../../../../data_connect/productDataConnect";
+import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
 
 export default function useProductsHook(props) {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
-    const { enqueueSnackbar } = useSnackbar();
     const [products, setProducts] = useState(null);
 
     useEffect(() => {
@@ -52,7 +51,10 @@ export default function useProductsHook(props) {
             .catch(err => {
                 const res = err.response;
                 console.log(res);
-                enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate: true });
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
             })
     }
 

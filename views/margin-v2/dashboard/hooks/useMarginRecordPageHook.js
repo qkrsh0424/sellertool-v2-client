@@ -1,10 +1,9 @@
-import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { marginRecordDataConnect } from "../../../../data_connect/marginRecordDataConnect";
+import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
 
 export default function useMarginRecordPageHook(props) {
-    const { enqueueSnackbar } = useSnackbar();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const [marginRecordPage, setMarginRecordPage] = useState(null);
     const [page, setPage] = useState(1);
@@ -38,7 +37,10 @@ export default function useMarginRecordPageHook(props) {
                 const res = err.response;
                 console.log(res);
                 if (res?.status === 403) {
-                    enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate: true })
+                    customToast.error(res?.data?.memo, {
+                        ...defaultOptions,
+                        toastId: res?.data?.memo
+                    });
                 }
             })
     }

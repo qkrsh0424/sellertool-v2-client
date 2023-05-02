@@ -1,8 +1,7 @@
-import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { productOptionDataConnect } from "../../../../data_connect/productOptionDataConnect";
+import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_SIZE = 20;
@@ -12,7 +11,6 @@ export default function useProdutOptionPageHook(props) {
     const [productOptionPage, setProductOptionPage] = useState(null);
     const [mergeSearchConditionFlag, setIsMergeSearchCondition] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         if (!workspaceRedux?.workspaceInfo?.id) {
@@ -56,7 +54,10 @@ export default function useProdutOptionPageHook(props) {
             .catch(err => {
                 const res = err.response;
                 console.log(res);
-                enqueueSnackbar(res?.data?.memo, { variant: 'error', autoHideDuration: 3000, preventDuplicate: true });
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
             })
     }, [workspaceRedux?.workspaceInfo?.id, mergeSearchConditionFlag, searchQuery]);
 

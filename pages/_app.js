@@ -4,10 +4,7 @@ import wrapper from '../redux/reducers/configureStore';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import UserPermissionComponent from '../redux/dispatch_component/UserPermissionComponent';
 import WorkspacePermissionComponent from '../redux/dispatch_component/WorkspacePermissionComponent';
-import Router, { useRouter } from 'next/router';
-
-
-const theme = createTheme();
+import Router from 'next/router';
 
 /**
  * 메인 컬러 : #344b98;
@@ -25,8 +22,9 @@ const theme = createTheme();
 // == NProgress Module START ==
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import { SnackbarProvider } from 'notistack';
+import { CustomToastContainer } from '../components/toast/custom-react-toastify/v1';
 
+const theme = createTheme();
 
 Router.onRouteChangeStart = () => {
 	NProgress.start();
@@ -52,10 +50,9 @@ function MyApp({ Component, pageProps }) {
 			</Head>
 			<UserPermissionComponent />
 			<WorkspacePermissionComponent />
+			<CustomToastContainer />
 			<ThemeProvider theme={theme}>
-				<SnackbarProvider maxSnack={3}>
-					<Component {...pageProps} />
-				</SnackbarProvider>
+				<Component {...pageProps} />
 			</ThemeProvider>
 		</>
 	)

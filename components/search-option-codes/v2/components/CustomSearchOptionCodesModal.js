@@ -1,11 +1,11 @@
 import useDisabledBtn from "../../../../hooks/button/useDisabledBtn";
-import useProdutOptionPageHook from "../useProductOptionPageHook";
-import { ContentContainer, ContentWrapper } from "../EditOptionCodeModal.styled";
+import { useProdutOptionPageHook } from "../hooks";
+import { ContentContainer, ContentWrapper } from "../styles";
 import CustomBlockButton from "../../../buttons/block-button/v1/CustomBlockButton";
 import PagenationComponentStateV2 from "../../../../views/modules/pagenation/PagenationStateComponentV2";
 import { CustomDialog } from "../../../dialog/v1/CustomDialog";
 
-export default function CustomSearchOptionCodesModal({
+export function CustomSearchOptionCodesModal({
     open,
     onClose,
     onSelect,

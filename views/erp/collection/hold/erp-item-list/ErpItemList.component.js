@@ -12,7 +12,7 @@ import ReverseScrollObserver from "../../../../modules/observer/ReverseScrollObs
 import ResizableTh from "../../../../modules/table/ResizableTh";
 import ItemsForSameReceiverModalComponent from "./modal/ItemsForSameReceiverModal.component";
 import { PinButtonBox, TableFieldWrapper } from "./styles/ErpItemList.styled";
-import CustomSearchOptionCodesModal from "../../../../../components/search-option-codes/v1/CustomSearchOptionCodesModal";
+import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
 
 const TABLE_DATA_VIEW_SIZE = 50;
 const TABLE_DATA_INC_DEC_SIZE = 30;
@@ -35,10 +35,10 @@ export default function ErpItemListComponent({
 }) {
     const router = useRouter();
     const tableScrollRef = useRef();
+    const editOptionCodeModalControl = useSearchOptionCodesModalControl();
+    const editReleaseOptionCodeModalControl = useSearchOptionCodesModalControl();
     const [prevViewSize, setPrevViewSize] = useState(0);
     const [viewSize, setViewSize] = useState(TABLE_DATA_VIEW_SIZE);
-    const [editOptionCodeModalOpen, setEditOptionCodeModalOpen] = useState(false);
-    const [editReleaseOptionCodeModalOpen, setEditReleaseOptionCodeModalOpen] = useState(false);
     const [targetErpItem, setTargetErpItem] = useState(null);
     const [statusPin, setStatusPin] = useState(false);
 
@@ -73,23 +73,23 @@ export default function ErpItemListComponent({
     const handleOpenEditOptionCodeModal = (e, erpItem) => {
         e.stopPropagation();
         setTargetErpItem(_.cloneDeep(erpItem));
-        setEditOptionCodeModalOpen(true);
+        editOptionCodeModalControl.toggleOpen(true);
     }
 
     const handleCloseEditOptionCodeModal = () => {
-        setEditOptionCodeModalOpen(false);
+        editOptionCodeModalControl.toggleOpen(false);
         setTargetErpItem(null);
     }
 
     const handleOpenEditReleaseOptionCodeModal = (e, erpItem) => {
         e.stopPropagation();
         setTargetErpItem(_.cloneDeep(erpItem));
-        setEditReleaseOptionCodeModalOpen(true);
+        editReleaseOptionCodeModalControl.toggleOpen(true);
 
     }
 
     const handleCloseEditReleaseOptionCodeModal = () => {
-        setEditReleaseOptionCodeModalOpen(false);
+        editReleaseOptionCodeModalControl.toggleOpen(false);
         setTargetErpItem(null);
     }
 
@@ -361,17 +361,17 @@ export default function ErpItemListComponent({
                 </div>
             </TableFieldWrapper>
 
-            {editOptionCodeModalOpen &&
+            {editOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
-                    open={editOptionCodeModalOpen}
+                    open={editOptionCodeModalControl.open}
                     onClose={handleCloseEditOptionCodeModal}
                     onSelect={(result) => handleSubmitEditOptionCode(result)}
                 />
             }
 
-            {editReleaseOptionCodeModalOpen &&
+            {editReleaseOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
-                    open={editReleaseOptionCodeModalOpen}
+                    open={editReleaseOptionCodeModalControl.open}
                     onClose={handleCloseEditReleaseOptionCodeModal}
                     onSelect={(result) => handleSubmitEditReleaseOptionCode(result)}
                 />

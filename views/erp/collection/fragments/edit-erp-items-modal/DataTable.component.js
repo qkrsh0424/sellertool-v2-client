@@ -8,7 +8,7 @@ import ReverseScrollObserver from "../../../../modules/observer/ReverseScrollObs
 import ResizableTh from "../../../../modules/table/ResizableTh";
 import { TableBox, TableWrapper } from "./styles/EditErpItemsModal.styled";
 import CustomDateTimeSelector from "../../../../../components/date-time-selector/v1/CustomDateTimeSelector";
-import CustomSearchOptionCodesModal from "../../../../../components/search-option-codes/v1/CustomSearchOptionCodesModal";
+import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
 
 const TABLE_DATA_VIEW_SIZE = 40;
 const TABLE_DATA_INC_DEC_SIZE = 20;
@@ -26,12 +26,13 @@ export default function DataTableComponent({
     onChangeChannelOrderDateAll,
     onSelectClearErpItem
 }) {
+    const editAllOptionCodeModalControl = useSearchOptionCodesModalControl();
+    const editAllReleaseOptionCodeModalControl = useSearchOptionCodesModalControl();
+    const editOptionCodeModalControl = useSearchOptionCodesModalControl();
+    const editReleaseOptionCodeModalControl = useSearchOptionCodesModalControl();
+
     const [prevViewSize, setPrevViewSize] = useState(0);
     const [viewSize, setViewSize] = useState(TABLE_DATA_VIEW_SIZE);
-    const [editAllOptionCodeModalOpen, setEditAllOptionCodeModalOpen] = useState(false);
-    const [editAllReleaseOptionCodeModalOpen, setEditAllReleaseOptionCodeModalOpen] = useState(false);
-    const [editOptionCodeModalOpen, setEditOptionCodeModalOpen] = useState(false);
-    const [editReleaseOptionCodeModalOpen, setEditReleaseOptionCodeModalOpen] = useState(false);
     const [editChannelOrderDateModalOpen, setEditChannelOrderDateModalOpen] = useState(false);
     const [editAllChannelOrderDateModalOpen, setEditAllChannelOrderDateModalOpen] = useState(false);
     const [targetErpItemId, setTargetErpItemId] = useState(null);
@@ -62,50 +63,24 @@ export default function DataTableComponent({
         }
     }
 
-    const handleOpenEditAllOptionCodeModal = () => {
-        setEditAllOptionCodeModalOpen(true);
+    const toggleEditOptionCodeModalOpen = (erpItemId) => {
+        if (erpItemId) {
+            setTargetErpItemId(erpItemId);
+            editOptionCodeModalControl.toggleOpen(true);
+        } else {
+            editOptionCodeModalControl.toggleOpen(false);
+            setTargetErpItemId(null);
+        }
     }
 
-    const handleCloseEditAllOptionCodeModal = () => {
-        setEditAllOptionCodeModalOpen(false);
-    }
-
-    const handleOpenEditAllReleaseOptionCodeModal = () => {
-        setEditAllReleaseOptionCodeModalOpen(true);
-    }
-
-    const handleCloseEditAllReleaseOptionCodeModal = () => {
-        setEditAllReleaseOptionCodeModalOpen(false);
-    }
-
-    const handleChangeOptionCodeAll = (optionCode) => {
-        onChangeOptionCodeAll(optionCode);
-        handleCloseEditAllOptionCodeModal();
-    }
-
-    const handleChangeReleaseOptionCodeAll = (optionCode) => {
-        onChangeReleaseOptionCodeAll(optionCode)
-        handleCloseEditAllReleaseOptionCodeModal();
-    }
-
-    const handleOpenEditOptionCodeModal = (erpItemId) => {
-        setTargetErpItemId(erpItemId);
-        setEditOptionCodeModalOpen(true);
-    }
-
-    const handleCloseEditOptionCodeModal = () => {
-        setEditOptionCodeModalOpen(false);
-        setTargetErpItemId(null);
-    }
-
-    const handleOpenEditReleaseOptionCodeModal = (erpItemId) => {
-        setTargetErpItemId(erpItemId);
-        setEditReleaseOptionCodeModalOpen(true);
-    }
-
-    const handleCloseEditReleaseOptionCodeModal = () => {
-        setEditReleaseOptionCodeModalOpen(false);
-        setTargetErpItemId(null);
+    const toggleEditReleaseOptionCodeModalOpen = (erpItemId) => {
+        if (erpItemId) {
+            setTargetErpItemId(erpItemId);
+            editReleaseOptionCodeModalControl.toggleOpen(true);
+        } else {
+            editReleaseOptionCodeModalControl.toggleOpen(false);
+            setTargetErpItemId(null);
+        }
     }
 
     const toggleEditChannelOrderDateModalOpen = (setOpen, erpItemId) => {
@@ -121,14 +96,24 @@ export default function DataTableComponent({
         setEditAllChannelOrderDateModalOpen(setOpen);
     }
 
+    const handleChangeOptionCodeAll = (optionCode) => {
+        onChangeOptionCodeAll(optionCode);
+        editAllOptionCodeModalControl.toggleOpen(false);
+    }
+
+    const handleChangeReleaseOptionCodeAll = (optionCode) => {
+        onChangeReleaseOptionCodeAll(optionCode)
+        editAllReleaseOptionCodeModalControl.toggleOpen(false);
+    }
+
     const handleChangeOptionCode = (optionCode) => {
         onChangeOptionCode(targetErpItemId, optionCode);
-        handleCloseEditOptionCodeModal();
+        toggleEditOptionCodeModalOpen(null);
     }
 
     const handleChangeReleaseOptionCode = (optionCode) => {
         onChangeReleaseOptionCode(targetErpItemId, optionCode);
-        handleCloseEditReleaseOptionCodeModal();
+        toggleEditReleaseOptionCodeModalOpen(null);
     }
 
     const handleChangeChannelOrderDate = (value) => {
@@ -190,7 +175,7 @@ export default function DataTableComponent({
                                                     <SingleBlockButton
                                                         type='button'
                                                         className='control-button-item'
-                                                        onClick={() => handleOpenEditAllOptionCodeModal()}
+                                                        onClick={() => editAllOptionCodeModalControl.toggleOpen(true)}
                                                     >
                                                         <div className='icon-figure'>
                                                             <CustomImage
@@ -222,7 +207,7 @@ export default function DataTableComponent({
                                                     <SingleBlockButton
                                                         type='button'
                                                         className='control-button-item'
-                                                        onClick={() => handleOpenEditAllReleaseOptionCodeModal()}
+                                                        onClick={() => editAllReleaseOptionCodeModalControl.toggleOpen(true)}
                                                     >
                                                         <div className='icon-figure'>
                                                             <CustomImage
@@ -376,7 +361,7 @@ export default function DataTableComponent({
                                                         <SingleBlockButton
                                                             type='button'
                                                             className='button-item'
-                                                            onClick={() => handleOpenEditOptionCodeModal(erpItem.id)}
+                                                            onClick={() => toggleEditOptionCodeModalOpen(erpItem.id)}
                                                         >
                                                             {erpItem[header.name]}
                                                         </SingleBlockButton>
@@ -393,7 +378,7 @@ export default function DataTableComponent({
                                                         <SingleBlockButton
                                                             type='button'
                                                             className='button-item'
-                                                            onClick={() => handleOpenEditReleaseOptionCodeModal(erpItem.id)}
+                                                            onClick={() => toggleEditReleaseOptionCodeModalOpen(erpItem.id)}
                                                         >
                                                             {erpItem[header.name]}
                                                         </SingleBlockButton>
@@ -470,34 +455,34 @@ export default function DataTableComponent({
                 </TableBox>
             </TableWrapper>
 
-            {editAllOptionCodeModalOpen &&
+            {editAllOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
-                    open={editAllOptionCodeModalOpen}
-                    onClose={handleCloseEditAllOptionCodeModal}
+                    open={editAllOptionCodeModalControl.open}
+                    onClose={() => editAllOptionCodeModalControl.toggleOpen(false)}
                     onSelect={(result) => handleChangeOptionCodeAll(result)}
                 />
             }
 
-            {editAllReleaseOptionCodeModalOpen &&
+            {editAllReleaseOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
-                    open={editAllReleaseOptionCodeModalOpen}
-                    onClose={handleCloseEditAllReleaseOptionCodeModal}
+                    open={editAllReleaseOptionCodeModalControl.open}
+                    onClose={() => editAllReleaseOptionCodeModalControl.toggleOpen(false)}
                     onSelect={(result) => handleChangeReleaseOptionCodeAll(result)}
                 />
             }
 
-            {editOptionCodeModalOpen &&
+            {editOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
-                    open={editOptionCodeModalOpen}
-                    onClose={handleCloseEditOptionCodeModal}
+                    open={editOptionCodeModalControl.open}
+                    onClose={() => toggleEditOptionCodeModalOpen(null)}
                     onSelect={(result) => handleChangeOptionCode(result)}
                 />
             }
 
-            {editReleaseOptionCodeModalOpen &&
+            {editReleaseOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
-                    open={editReleaseOptionCodeModalOpen}
-                    onClose={handleCloseEditReleaseOptionCodeModal}
+                    open={editReleaseOptionCodeModalControl.open}
+                    onClose={() => toggleEditReleaseOptionCodeModalOpen(null)}
                     onSelect={(result) => handleChangeReleaseOptionCode(result)}
                 />
             }

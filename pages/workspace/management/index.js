@@ -23,7 +23,7 @@ const WorkspaceManagementPage = (props) => {
     return (
         <>
             <Head>
-                <title>워크스페이스 관리</title>
+                <title>워크스페이스 관리 | 셀러툴</title>
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <WorkspaceManagementMainComponent></WorkspaceManagementMainComponent>

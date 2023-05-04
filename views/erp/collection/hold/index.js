@@ -1,4 +1,3 @@
-import { useLocalStorageHook } from "../../../../hooks/local_storage/useLocalStorageHook";
 import Layout from "../layout/Layout";
 import ConditionFieldComponent from "./condition-field/ConditionField.component";
 import ErpItemListComponent from "./erp-item-list/ErpItemList.component";
@@ -12,13 +11,15 @@ import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
 import useSelectedErpItemsHook from "./hooks/useSelectedErpItemsHook";
 import { Container } from "./index.styled";
 import SortFieldComponent from "./sort-field/SortField.component";
+import { useSellertoolDatas } from "../../../../hooks/sellertool-datas";
 
 export default function MainComponent(props) {
-    const [selectedErpCollectionHeaderIds, setSelectedErpCollectionHeaderIds] = useLocalStorageHook('erp_collection_headers', { orderHeaderId: null, salesHeaderId: null, releaseCompleteHeaderId: null, holdHeaderId: null });
+    const sellertoolDatas = useSellertoolDatas();
+    const erpcHoldHeaderId = sellertoolDatas?.holdHeaderIdForErpc;
 
     const {
         erpCollectionHeader
-    } = useErpCollectionHeaderHook(selectedErpCollectionHeaderIds?.holdHeaderId);
+    } = useErpCollectionHeaderHook(erpcHoldHeaderId);
 
     const {
         erpItemPage,
@@ -52,14 +53,6 @@ export default function MainComponent(props) {
         reqFetchSelectedErpItems,
     } = useSelectedErpItemsHook();
 
-
-    const handleSelectHeaderId = (erpCollectionHeaderId) => {
-        setSelectedErpCollectionHeaderIds({
-            ...selectedErpCollectionHeaderIds,
-            holdHeaderId: erpCollectionHeaderId
-        })
-    }
-
     return (
         <>
             <Container>
@@ -71,7 +64,8 @@ export default function MainComponent(props) {
                     <>
                         <HeaderSettingComponent
                             erpCollectionHeader={erpCollectionHeader}
-                            onActionSelectHeaderId={handleSelectHeaderId}
+                            favoriteViewHeaderIdsForErpc={sellertoolDatas?.favoriteViewHeaderIdsForErpc}
+                            onActionSelectHeaderId={(headerId) => sellertoolDatas?._onSetHoldHeaderIdForErpc(headerId)}
                         />
                         <ConditionFieldComponent />
                         <SortFieldComponent />

@@ -4,6 +4,8 @@ import NumberOfOrderCharComponent from "./number-of-order-chart/NumberOfOrderCha
 
 export const Container = styled.div`
     background:var(--defaultBackground);
+    min-height: 800px;
+    /* padding-bottom: 150px; */
 `;
 
 export default function MainComponent(props) {

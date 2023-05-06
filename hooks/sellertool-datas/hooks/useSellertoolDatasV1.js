@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { useLocalStorageHook } from "../../local_storage/useLocalStorageHook";
+import _ from "lodash";
 
 export function useSellertoolDatasV1() {
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
@@ -14,6 +15,12 @@ export function useSellertoolDatasV1() {
     const salesHeaderIdForErpc = sellertoolData?.salesHeaderIdForErpc ?? null;
     const releaseCompleteHeaderIdForErpc = sellertoolData?.releaseCompleteHeaderIdForErpc ?? null;
     const holdHeaderIdForErpc = sellertoolData?.holdHeaderIdForErpc ?? null;
+
+    const _onResetDatas = (workspaces) => {
+        if (workspaces && workspaces?.length > 0) {
+            setSellertoolDatas(sellertoolDatas?.filter(r => workspaces?.some(r2 => r2?.id === r.wsId)));
+        }
+    }
 
     const _onSetExcelTranslatorHeaderIds = (array) => {
         if (!sellertoolData) {
@@ -201,6 +208,7 @@ export function useSellertoolDatasV1() {
         releaseCompleteHeaderIdForErpc,
         holdHeaderIdForErpc,
 
+        _onResetDatas,
         _onSetExcelTranslatorHeaderIds,
         _onSetFavoriteExcelTranslatorHeaderIdsForErpcUpload,
         _onSetFavoriteViewHeaderIds,

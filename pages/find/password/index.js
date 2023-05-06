@@ -5,7 +5,7 @@ export default function FindPasswordPage(props) {
     return (
         <>
             <MainComponent />
-            <FooterMain />
+            {/* <FooterMain /> */}
         </>
     );
 }

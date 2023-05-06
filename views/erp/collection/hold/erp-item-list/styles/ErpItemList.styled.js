@@ -27,6 +27,7 @@ export const PinButtonBox = styled.div`
 export const TableFieldWrapper = styled.div`
     padding: 0 20px;
     position:relative;
+    margin-bottom: 100px;
     
     @media all and (max-width: 992px){
         padding: 0 10px;

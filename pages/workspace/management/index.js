@@ -27,7 +27,7 @@ const WorkspaceManagementPage = (props) => {
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <WorkspaceManagementMainComponent></WorkspaceManagementMainComponent>
-            <FooterMain></FooterMain>
+            {/* <FooterMain></FooterMain> */}
         </>
     );
 }

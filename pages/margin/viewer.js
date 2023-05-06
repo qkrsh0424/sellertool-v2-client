@@ -13,7 +13,7 @@ const MarginViewerPage = () => {
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <SecondaryNavbarMainComponent></SecondaryNavbarMainComponent>
             <MainComponent></MainComponent>
-            <FooterMain></FooterMain>
+            {/* <FooterMain></FooterMain> */}
         </>
     );
 }

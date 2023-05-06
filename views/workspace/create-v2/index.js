@@ -14,6 +14,7 @@ const Container = styled.div`
     padding-bottom: 100px;
     overflow: hidden;
     background:var(--defaultBackground);
+    min-height: 800px;
 `;
 
 const WorkspaceCreateMainComponent = (props) => {

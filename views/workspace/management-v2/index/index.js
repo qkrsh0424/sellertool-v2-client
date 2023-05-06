@@ -11,6 +11,7 @@ import ProfileComponent from "./profile/Profile.component";
 
 const Container = styled.div`
     background-color: var(--defaultBackground);
+    min-height: 800px;
 `;
 
 const WorkspaceManagementMainComponent = (props) => {

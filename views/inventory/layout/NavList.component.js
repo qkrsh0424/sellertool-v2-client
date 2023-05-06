@@ -37,8 +37,8 @@ const NAV_LIST = [
         name: '재고조회 / 입출고 관리',
         pathname: '/inventory'
     },
-    {
-        name: '재고주기',
-        pathname: '/inventory/주기'
-    }
+    // {
+    //     name: '재고주기',
+    //     pathname: '/inventory/주기'
+    // }
 ]

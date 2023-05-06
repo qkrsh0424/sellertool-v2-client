@@ -1,0 +1,1 @@
+export { ClickableWrapper } from './components';

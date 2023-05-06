@@ -34,7 +34,7 @@ export default function ErpCollectionEditExcelDownloadFormPage(props) {
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />
             <MainComponent />
-            <FooterMain />
+            {/* <FooterMain /> */}
         </>
     );
 }

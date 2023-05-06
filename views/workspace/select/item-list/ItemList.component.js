@@ -6,15 +6,26 @@ import valueUtils from "../../../../utils/valueUtils";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import useWorkspacesHook from "../hooks/useWorkspacesHook";
 import { Container, CreateButtonWrapper, ItemListWrapper, Title, Wrapper } from "../styles/ItemList.styled";
+import { useSellertoolDatas } from "../../../../hooks/sellertool-datas";
+import { useEffect } from "react";
 
 export default function ItemListComponent(props) {
     const router = useRouter();
     const reduxDispatch = useDispatch();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
+    const sellertoolDatas = useSellertoolDatas();
 
     const {
         workspaces,
     } = useWorkspacesHook();
+
+    useEffect(() => {
+        if (!workspaces || workspaces?.length <= 0) {
+            return;
+        }
+
+        sellertoolDatas._onResetDatas(workspaces);
+    }, [workspaces]);
 
     const __handle = {
         action: {
@@ -62,7 +73,7 @@ export default function ItemListComponent(props) {
                                     >
                                         <div
                                             className={`item-box ${workspaceRedux?.workspaceInfo?.id === r.id ? 'item-box-active' : ''}`}
-                                            style={{color: '#808080'}}
+                                            style={{ color: '#808080' }}
                                         >
                                             <span className='workspaceName'>{r.name}</span>
                                             <span className='disabledWorkspaceTag'>구독플랜 필요</span>

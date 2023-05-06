@@ -5,6 +5,7 @@ import CustomBlockButton from '../../../components/buttons/block-button/v1/Custo
 import CustomImage from '../../modules/image/CustomImage';
 import { Container, MenuButton, SelectorBtnBox, Wrapper } from './index.styled';
 import MenuListComponent from './menu/MenuList.component';
+import { ClickableWrapper } from '../../../components/clickable-wrapper/v1';
 
 const SecondaryNavbarMainComponent = (props) => {
     const router = useRouter();
@@ -23,33 +24,37 @@ const SecondaryNavbarMainComponent = (props) => {
 
     return (
         <>
-            <Container>
-                <Wrapper>
-                    <MenuButton
-                        type='button'
-                        onClick={() => toggleMenuListOpen(!menuListOpen)}
-                    >
-                        <div style={{ width: 24, height: 24, marginRight: '10px' }}><CustomImage src='/images/icon/menu_hamburg_808080.svg' priority={true} loading='eager' /></div>
-                        <div style={{ flex: 1 }}>전체 서비스</div>
-                    </MenuButton>
-                    {workspaceRedux?.workspaceInfo &&
-                        <SelectorBtnBox>
-                            <CustomBlockButton
-                                type='button'
-                                className='button-el'
-                                onClick={() => handleRouteToSelect()}
-                            >
-                                {workspaceRedux.workspaceInfo.name}
-                            </CustomBlockButton>
-                        </SelectorBtnBox>
+            <ClickableWrapper
+                onClickOutside={() => toggleMenuListOpen(false)}
+            >
+                <Container>
+                    <Wrapper>
+                        <MenuButton
+                            type='button'
+                            onClick={() => toggleMenuListOpen(!menuListOpen)}
+                        >
+                            <div style={{ width: 24, height: 24, marginRight: '10px' }}><CustomImage src='/images/icon/menu_hamburg_808080.svg' priority={true} loading='eager' /></div>
+                            <div style={{ flex: 1 }}>전체 서비스</div>
+                        </MenuButton>
+                        {workspaceRedux?.workspaceInfo &&
+                            <SelectorBtnBox>
+                                <CustomBlockButton
+                                    type='button'
+                                    className='button-el'
+                                    onClick={() => handleRouteToSelect()}
+                                >
+                                    {workspaceRedux.workspaceInfo.name}
+                                </CustomBlockButton>
+                            </SelectorBtnBox>
+                        }
+                    </Wrapper>
+                    {menuListOpen &&
+                        <MenuListComponent
+                            onCloseMenuList={() => toggleMenuListOpen(false)}
+                        />
                     }
-                </Wrapper>
-                {menuListOpen &&
-                    <MenuListComponent
-                        onCloseMenuList={() => toggleMenuListOpen(false)}
-                    />
-                }
-            </Container>
+                </Container>
+            </ClickableWrapper>
         </>
     );
 }

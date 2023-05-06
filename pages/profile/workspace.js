@@ -27,7 +27,7 @@ const ProfileWorkspacePage = (props) => {
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <ProfileWorkspaceMainComponent></ProfileWorkspaceMainComponent>
-            <FooterMain></FooterMain>
+            {/* <FooterMain></FooterMain> */}
         </>
     );
 }

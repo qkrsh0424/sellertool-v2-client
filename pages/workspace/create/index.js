@@ -27,7 +27,7 @@ const WorkspaceCreatePage = () => {
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <WorkspaceCreateMainComponent></WorkspaceCreateMainComponent>
-            <FooterMain></FooterMain>
+            {/* <FooterMain></FooterMain> */}
         </>
     );
 }

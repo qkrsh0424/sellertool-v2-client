@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import SingleBlockButton from '../../modules/button/SingleBlockButton';
 import CustomImage from '../../modules/image/CustomImage';
 import NavListComponent from './NavList.component';
+import { ClickableWrapper } from '../../../components/clickable-wrapper/v1';
 
 const Container = styled.div`
     position: relative;
@@ -128,33 +129,39 @@ const Layout = ({
     return (
         <>
             <Container>
+
                 <SidebarContainer
                     desktopWidth={desktopWidth ?? 240}
                     mobileWidth={mobileWidth ?? 240}
                     toggleOpen={sidebarOpen}
                     sidebarColor={sidebarColor ?? '#3d4858'}
                 >
-                    <div className='sidebar-header'>
-                        {sidebarName ?
-                            <div className='header-name'>{sidebarName}</div>
-                            :
-                            <div></div>
-                        }
-                        <div>
-                            <SingleBlockButton
-                                type='button'
-                                className='icon-button'
-                                onClick={() => handleCloseSidebar()}
-                            >
-                                <CustomImage
-                                    src='/images/icon/close_default_959eae.svg'
-                                />
-                            </SingleBlockButton>
+                    <ClickableWrapper
+                        isActive={isDesktop ? false : true}
+                        onClickOutside={() => handleClickLink()}
+                    >
+                        <div className='sidebar-header'>
+                            {sidebarName ?
+                                <div className='header-name'>{sidebarName}</div>
+                                :
+                                <div></div>
+                            }
+                            <div>
+                                <SingleBlockButton
+                                    type='button'
+                                    className='icon-button'
+                                    onClick={() => handleCloseSidebar()}
+                                >
+                                    <CustomImage
+                                        src='/images/icon/close_default_959eae.svg'
+                                    />
+                                </SingleBlockButton>
+                            </div>
                         </div>
-                    </div>
-                    <NavListComponent
-                        onActionClickLink={handleClickLink}
-                    />
+                        <NavListComponent
+                            onActionClickLink={handleClickLink}
+                        />
+                    </ClickableWrapper>
                 </SidebarContainer>
                 <MainContainer>
                     <HeaerWrapper>
@@ -192,7 +199,7 @@ const Layout = ({
                         {props.children}
                     </ContentWrapper>
                 </MainContainer>
-            </Container>
+            </Container >
         </>
     );
 }

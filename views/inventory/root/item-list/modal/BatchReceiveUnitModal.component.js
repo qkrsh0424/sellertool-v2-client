@@ -24,7 +24,7 @@ export default function BatchReceiveUnitModalComponent({
         value = value.replaceAll(',', '');
         value = getRemovedPrefixZero(value);
 
-        if (value.match(/^[0-9]{0,3}$/)) {
+        if (value.match(/^[0-9]{0,5}$/)) {
             setInputValue(value);
         }
     }
@@ -33,8 +33,8 @@ export default function BatchReceiveUnitModalComponent({
         e.preventDefault();
         setDisabledBtn(true);
 
-        if (!inputValue || inputValue < 1 || inputValue > 999) {
-            alert('입고수량은 1-999 이내의 숫자만 입력 가능합니다.');
+        if (!inputValue || inputValue < 1 || inputValue > 99999) {
+            alert('입고수량은 1-99999 이내의 숫자만 입력 가능합니다.');
             return;
         }
 

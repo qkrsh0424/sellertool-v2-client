@@ -96,7 +96,7 @@ export default function useInventoryReceivesFormHook({
         value = value.replaceAll(',', '');
         value = getRemovedPrefixZero(value);
 
-        if (value.match(/^[0-9]{0,3}$/)) {
+        if (value.match(/^[0-9]{0,5}$/)) {
             setInventoryReceivesForm(inventoryReceivesForm?.map((r, index) => {
                 if (reqIndex === index) {
                     return {
@@ -131,8 +131,8 @@ export default function useInventoryReceivesFormHook({
 
     const checkUnitFormatValid = () => {
         inventoryReceivesForm.forEach((r, index) => {
-            if (r.unit < 1 || r.unit > 999) {
-                throw new Error(`${index + 1}행, ${r.productCategoryName} / ${r.productSubCategoryName} / ${r.productName} / ${r.productOptionName}\n수량을 정확히 입력해 주세요.\n허용 범위 [1-999]`);
+            if (r.unit < 1 || r.unit > 99999) {
+                throw new Error(`${index + 1}행, ${r.productCategoryName} / ${r.productSubCategoryName} / ${r.productName} / ${r.productOptionName}\n수량을 정확히 입력해 주세요.\n허용 범위 [1-99999]`);
             }
         })
     }

@@ -1,6 +1,4 @@
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import { Container, FlexBlock } from './styles/index.styled';
+import { Container } from './styles/index.styled';
 import Layout from './layout/Layout';
 import SearchFieldComponent from './search-field/SearchField.component';
 import AddFloatButtonComponent from './add-float-button/AddFloatButton.component';
@@ -12,7 +10,7 @@ const ProductDashboardMainComponent = (props) => {
             <Container>
                 <Layout
                     sidebar={
-                        <SearchFieldComponent />
+                        ({ handleCloseSidebar }) => <SearchFieldComponent onCloseSidebar={handleCloseSidebar} />
                     }
                     sidebarName='상품조회'
                     sidebarColor={'#fff'}

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SingleBlockButton from '../../../modules/button/SingleBlockButton';
 import CustomImage from '../../../modules/image/CustomImage';
+import { ClickableWrapper } from '../../../../components/clickable-wrapper/v1';
 
 const Container = styled.div`
     position: relative;
@@ -99,6 +100,7 @@ const Layout = ({
     headerName,
     desktopWidth,
     mobileWidth,
+    children,
 
     ...props
 }) => {
@@ -147,7 +149,7 @@ const Layout = ({
                             </SingleBlockButton>
                         </div>
                     </div>
-                    {sidebar}
+                    {sidebar({ handleCloseSidebar })}
                 </SidebarContainer>
                 <MainContainer>
                     <HeaerWrapper>
@@ -182,10 +184,10 @@ const Layout = ({
                         </div>
                     </HeaerWrapper>
                     <ContentWrapper>
-                        {props.children}
+                        {children}
                     </ContentWrapper>
                 </MainContainer>
-            </Container>
+            </Container >
         </>
     );
 }

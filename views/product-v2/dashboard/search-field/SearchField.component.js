@@ -16,11 +16,13 @@ import SelectSubCategoryModalComponent from "./modal/SelectSubCategoryModal.comp
 import SettingCategoryModalComponent from "./modal/SettingCategoryModal.component";
 import SettingSubCategoryModalComponent from "./modal/SettingSubCategoryModal.component";
 import { CategoryWrapper, Container, ContentWrapper, LinkButton, SearchButtonWrapper, SearchConsoleWrapper } from "./styles/SearchField.styled";
+import { useMediaQuery } from "@mui/material";
 
 export default function SearchFieldComponent({
-
+    onCloseSidebar
 }) {
     const router = useRouter();
+    const isMobile = useMediaQuery(`(max-width: 992px)`);
 
     const [selectCategoryModalOpen, setSelectCategoryModalOpen] = useState(false);
     const [settingCategoryModalOpen, setSettingCategoryModalOpen] = useState(false);
@@ -251,12 +253,19 @@ export default function SearchFieldComponent({
                         ...newQuery,
                         page: 1
                     }
-                })
+                });
+
+                if (isMobile) {
+                    onCloseSidebar();
+                }
             },
             clearSearchConditions: () => {
                 router.replace({
                     pathname: router.pathname
-                })
+                });
+                if (isMobile) {
+                    onCloseSidebar();
+                }
             }
         }
     }

@@ -140,7 +140,7 @@ export default function MainComponent(props) {
                 })
             },
             downloadSampleExcelForUploadHeader: async () => {
-                if(!excelTranslatorHeader?.uploadHeaderDetail?.details){
+                if (!excelTranslatorHeader?.uploadHeaderDetail?.details) {
                     alert('업로드 엑셀 양식을 먼저 설정해 주세요.');
                     return;
                 }
@@ -155,7 +155,7 @@ export default function MainComponent(props) {
                 })
             },
             downloadSampleExcelForDownloadHeader: async () => {
-                if(!excelTranslatorHeader?.downloadHeaderDetail?.details){
+                if (!excelTranslatorHeader?.downloadHeaderDetail?.details) {
                     alert('다운로드 엑셀 양식을 먼저 설정해 주세요.');
                     return;
                 }

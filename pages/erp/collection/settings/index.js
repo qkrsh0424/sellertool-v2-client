@@ -34,7 +34,7 @@ export default function ErpCollectionSettingsPage(props) {
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />
             <MainComponent />
-            <FooterMain />
+            {/* <FooterMain /> */}
         </>
     );
 }

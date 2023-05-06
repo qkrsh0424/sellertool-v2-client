@@ -9,6 +9,7 @@ import MarketingComponent from './marketing/Marketing.component';
 const Container = styled.div`
     overflow: hidden;
     background-color: var(--defaultBackground);
+    min-height: 800px;
 `;
 
 const ProfileAccountMainComponent = (props) => {

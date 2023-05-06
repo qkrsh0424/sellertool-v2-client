@@ -28,7 +28,7 @@ const LoginPage = () => {
             {(userRedux.isLoading === false && !userRedux.userInfo) &&
                 <>
                     <MainComponent></MainComponent>
-                    <FooterMain></FooterMain>
+                    {/* <FooterMain></FooterMain> */}
                 </>
             }
         </>

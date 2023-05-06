@@ -34,7 +34,7 @@ export default function ExcelTranslatorPage(props) {
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />
             <MainComponent />
-            <FooterMain />
+            {/* <FooterMain /> */}
         </>
     );
 }

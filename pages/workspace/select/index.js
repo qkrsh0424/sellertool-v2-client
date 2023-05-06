@@ -29,7 +29,7 @@ export default function WorkspaceSelectPage(props) {
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />
             <MainComponent />
-            <FooterMain />
+            {/* <FooterMain /> */}
         </>
     );
 }

@@ -10,7 +10,7 @@ const SignupPage = () => {
                 <title>회원가입 | 셀러툴</title>
             </Head>
             <MainComponent></MainComponent>
-            <FooterMain></FooterMain>
+            {/* <FooterMain></FooterMain> */}
         </>
     );
 }

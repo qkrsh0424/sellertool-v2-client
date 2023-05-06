@@ -14,6 +14,7 @@ import WorkspaceListComponent from './workspace-list/WorkspaceList.component';
 const Container = styled.div`
     overflow: hidden;
     background-color: var(--defaultBackground);
+    min-height: 800px;
 `;
 
 const ProfileWorkspaceMainComponent = (props) => {

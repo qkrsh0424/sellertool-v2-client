@@ -34,7 +34,7 @@ export default function ProductDashboardPage(props) {
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <SecondaryNavbarMainComponent></SecondaryNavbarMainComponent>
             <ProductDashboardMainComponent></ProductDashboardMainComponent>
-            <FooterMain></FooterMain>
+            {/* <FooterMain></FooterMain> */}
         </>
     );
 }

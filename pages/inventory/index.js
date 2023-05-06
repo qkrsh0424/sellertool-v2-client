@@ -34,7 +34,7 @@ export default function InventoryPage(props) {
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />
             <MainComponent />
-            <FooterMain />
+            {/* <FooterMain /> */}
         </>
     );
 }

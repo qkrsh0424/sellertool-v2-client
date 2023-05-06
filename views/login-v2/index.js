@@ -8,6 +8,7 @@ const Container = styled.div`
     padding-bottom: 150px;
     background:var(--defaultBackground);
     overflow: hidden;
+    min-height: 800px;
 `;
 
 export default function MainComponent(props) {

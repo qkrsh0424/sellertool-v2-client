@@ -27,7 +27,7 @@ const ProfileAccountPage = (props) => {
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <ProfileAccountMainComponent></ProfileAccountMainComponent>
-            <FooterMain></FooterMain>
+            {/* <FooterMain></FooterMain> */}
         </>
     );
 }

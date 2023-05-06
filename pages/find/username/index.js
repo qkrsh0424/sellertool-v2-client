@@ -5,7 +5,7 @@ export default function FindUsernamePage(props){
     return (
         <>
             <MainComponent />
-            <FooterMain />
+            {/* <FooterMain /> */}
         </>
     );
 }

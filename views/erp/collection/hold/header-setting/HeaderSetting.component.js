@@ -6,6 +6,7 @@ import { Container, Wrapper } from "./styles/HeaderSetting.styled";
 
 export default function HeaderSettingComponent({
     erpCollectionHeader,
+    favoriteViewHeaderIdsForErpc,
     onActionSelectHeaderId
 }) {
     const [viewHeadersModalOpen, setViewHeadersModalOpen] = useState(false);
@@ -39,6 +40,7 @@ export default function HeaderSettingComponent({
                 >
                     <ViewHeadersModalComponent
                         erpCollectionHeader={erpCollectionHeader}
+                        favoriteViewHeaderIdsForErpc={favoriteViewHeaderIdsForErpc}
                         onClose={handleCloseViewHeadersModal}
                         onActionSelectHeaderId={onActionSelectHeaderId}
                     />

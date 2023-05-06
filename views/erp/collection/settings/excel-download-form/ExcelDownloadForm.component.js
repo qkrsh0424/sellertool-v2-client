@@ -5,10 +5,13 @@ import CustomImage from "../../../../modules/image/CustomImage";
 import useErpcExcelDownloadFormsHook from "./hooks/useErpcExcelDownloadFormsHook";
 import { Container, ItemBox, ItemListContainer, ItemListWrapper, ListTitle, TitleContainer, Wrapper } from "./styles/ExcelDownloadForm.styled";
 import { useLocalStorageHook } from "../../../../../hooks/local_storage/useLocalStorageHook";
+import { useSelector } from "react-redux";
 
-export default function ExcelDownloadForm(props) {
+export default function ExcelDownloadForm({
+    erpcFavoriteDownloadFormIds,
+    onActionSetFavoriteDownloadFormIds
+}) {
     const router = useRouter();
-    const [favoriteDownloadFormIds, setFavoriteDownloadFormIds] = useLocalStorageHook('erpc-favorite-downloadForm-ids-v1', []);
     const [favoriteListOpen, setFavoriteListOpen] = useState(true);
     const [itemListOpen, setItemListOpen] = useState(true);
     let edF = router?.query?.edF === 'unfold' ? 'unfold' : 'fold';
@@ -43,7 +46,7 @@ export default function ExcelDownloadForm(props) {
     }
 
     const handleSelectFavoriteDownloadFormId = (id) => {
-        let currFavoriteDownloadFormIds = new Set([...favoriteDownloadFormIds]);
+        let currFavoriteDownloadFormIds = new Set([...erpcFavoriteDownloadFormIds]);
         if (currFavoriteDownloadFormIds.has(id)) {
             currFavoriteDownloadFormIds.delete(id);
         } else {
@@ -51,7 +54,7 @@ export default function ExcelDownloadForm(props) {
         }
 
         currFavoriteDownloadFormIds = [...currFavoriteDownloadFormIds].filter(r => erpcExcelDownloadForms?.some(r2 => r2.id === r));
-        setFavoriteDownloadFormIds(currFavoriteDownloadFormIds);
+        onActionSetFavoriteDownloadFormIds(currFavoriteDownloadFormIds);
     }
 
     return (
@@ -87,16 +90,16 @@ export default function ExcelDownloadForm(props) {
                             >즐겨찾기</ListTitle>
                             {favoriteListOpen &&
                                 <ItemListWrapper>
-                                    {(!favoriteDownloadFormIds || favoriteDownloadFormIds?.length < 1) ?
+                                    {(!erpcFavoriteDownloadFormIds || erpcFavoriteDownloadFormIds?.length < 1) ?
                                         <div className='isEmpty-notice'>등록된 즐겨찾기가 없습니다.</div>
                                         :
                                         <>
-                                            {favoriteDownloadFormIds?.map(favoriteDownloadFormId => {
+                                            {erpcFavoriteDownloadFormIds?.map(favoriteDownloadFormId => {
                                                 const erpcExcelDownloadForm = erpcExcelDownloadForms?.find(r => r.id === favoriteDownloadFormId);
-                                                if(!erpcExcelDownloadForm){
+                                                if (!erpcExcelDownloadForm) {
                                                     return null;
                                                 }
-                                                
+
                                                 return (
                                                     <ItemBox
                                                         key={erpcExcelDownloadForm?.id}
@@ -145,7 +148,7 @@ export default function ExcelDownloadForm(props) {
                                         <div className='isEmpty-notice'>생성된 다운로드 폼이 없습니다.</div>
                                         :
                                         <>
-                                            {erpcExcelDownloadForms?.filter(r => !favoriteDownloadFormIds?.includes(r?.id))?.map(erpcExcelDownloadForm => {
+                                            {erpcExcelDownloadForms?.filter(r => !erpcFavoriteDownloadFormIds?.includes(r?.id))?.map(erpcExcelDownloadForm => {
                                                 return (
                                                     <ItemBox
                                                         key={erpcExcelDownloadForm?.id}

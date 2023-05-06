@@ -4,15 +4,14 @@ import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../../modules/image/CustomImage";
 import useErpCollectionHeaders from "../hooks/useErpCollectionHeaders";
 import { Container, ContentContainer, ItemBox } from "../styles/ViewHeadersModal.styled";
-import { useLocalStorageHook } from "../../../../../../hooks/local_storage/useLocalStorageHook";
 
 export default function ViewHeadersModalComponent({
     erpCollectionHeader,
+    favoriteViewHeaderIdsForErpc,
     onClose,
     onActionSelectHeaderId
 }) {
     const router = useRouter();
-    const [favoriteViewHeaderIds] = useLocalStorageHook('erpc-favorite-viewHeader-ids-v1', []);
     const {
         erpCollectionHeaders
     } = useErpCollectionHeaders();
@@ -63,7 +62,7 @@ export default function ViewHeadersModalComponent({
                 </div>
                 <ContentContainer>
                     <h4>즐겨찾기</h4>
-                    {favoriteViewHeaderIds?.map(favoriteViewHeaderId => {
+                    {favoriteViewHeaderIdsForErpc?.map(favoriteViewHeaderId => {
                         const currErpCollectionHeader = erpCollectionHeaders?.find(r => r?.id === favoriteViewHeaderId);
                         if (!currErpCollectionHeader) {
                             return null;
@@ -96,7 +95,7 @@ export default function ViewHeadersModalComponent({
                         );
                     })}
                     <h4>목록</h4>
-                    {erpCollectionHeaders?.filter(r => !favoriteViewHeaderIds?.includes(r?.id))?.map(r => {
+                    {erpCollectionHeaders?.filter(r => !favoriteViewHeaderIdsForErpc?.includes(r?.id))?.map(r => {
                         return (
                             <ItemBox
                                 key={r.id}

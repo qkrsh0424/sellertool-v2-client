@@ -1,19 +1,18 @@
 import _ from "lodash";
-import { useLocalStorageHook } from "../../../hooks/local_storage/useLocalStorageHook";
+import { useSellertoolDatas } from "../../../hooks/sellertool-datas";
 
 export default function useViewExcelTranslatorHeaderIdsHook() {
-    const [viewExcelTranslatorHeaderIds, setViewExcelTranslatorHeaderIds] = useLocalStorageHook('view-excel-translator-header-ids-v1', []);
-
+    const sellertoolDatas = useSellertoolDatas();
     const onSetViewExcelTranslatorHeaderIds = ({
         body,
         successCallback
     }) => {
-        setViewExcelTranslatorHeaderIds(body);
+        sellertoolDatas._onSetExcelTranslatorHeaderIds(body);
         successCallback();
     }
 
     return {
-        viewExcelTranslatorHeaderIds,
+        viewExcelTranslatorHeaderIds: sellertoolDatas?.excelTranslatorHeaderIds,
         onSetViewExcelTranslatorHeaderIds
     }
 }

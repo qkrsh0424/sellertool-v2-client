@@ -1,4 +1,3 @@
-import { useLocalStorageHook } from "../../../../hooks/local_storage/useLocalStorageHook";
 import Layout from "../layout/Layout";
 import ConditionFieldComponent from "./condition-field/ConditionField.component";
 import ErpItemListComponent from "./erp-item-list/ErpItemList.component";
@@ -13,13 +12,15 @@ import useSelectedErpItemsHook from "./hooks/useSelectedErpItemsHook";
 import useWaybillRegistrationHook from "./hooks/useWaybillRegistrationHook";
 import { Container } from "./index.styled";
 import SortFieldComponent from "./sort-field/SortField.component";
+import { useSellertoolDatas } from "../../../../hooks/sellertool-datas";
 
 export default function MainComponent(props) {
-    const [selectedErpCollectionHeaderIds, setSelectedErpCollectionHeaderIds] = useLocalStorageHook('erp_collection_headers', { orderHeaderId: null, salesHeaderId: null, releaseCompleteHeaderId: null, holdHeaderId: null });
+    const sellertoolDatas = useSellertoolDatas();
+    const erpcReleaseCompleteHeaderId = sellertoolDatas?.releaseCompleteHeaderIdForErpc;
 
     const {
         erpCollectionHeader
-    } = useErpCollectionHeaderHook(selectedErpCollectionHeaderIds?.releaseCompleteHeaderId);
+    } = useErpCollectionHeaderHook(erpcReleaseCompleteHeaderId);
 
     const {
         erpItemPage,
@@ -64,13 +65,6 @@ export default function MainComponent(props) {
         downloadSampleExcelForWaybillRegistration
     } = useWaybillRegistrationHook();
 
-    const handleSelectOrderHeaderId = (erpCollectionHeaderId) => {
-        setSelectedErpCollectionHeaderIds({
-            ...selectedErpCollectionHeaderIds,
-            releaseCompleteHeaderId: erpCollectionHeaderId
-        })
-    }
-
     const handleSubmitStockRelease = async (body, successCallback) => {
         await reqStockRelease(body, () => {
             alert('정상적으로 재고가 반영되었습니다.');
@@ -109,7 +103,8 @@ export default function MainComponent(props) {
                     <>
                         <HeaderSettingComponent
                             erpCollectionHeader={erpCollectionHeader}
-                            onActionSelectOrderHeaderId={handleSelectOrderHeaderId}
+                            favoriteViewHeaderIdsForErpc={sellertoolDatas?.favoriteViewHeaderIdsForErpc}
+                            onActionSelectOrderHeaderId={(headerId) => sellertoolDatas._onSetReleaseCompleteHeaderIdForErpc(headerId)}
                         />
                         <ConditionFieldComponent />
                         <SortFieldComponent />

@@ -9,6 +9,8 @@ import CustomExcelFileUploader from "../../../../modules/uploader/CustomExcelFil
 import useExcelFormApiHook from "./hooks/useExcelFormApiHook";
 import FavoriteTranslatorsModalComponent from "./modal/FavoriteTranslatorsModal.component";
 import { ButtonGroup, SelectBox, TranslatorSelectorWrapper, UploadButtonBox, Wrapper } from "./styles/ExcelUploaderControl.styled";
+import { useSelector } from "react-redux";
+import { useSellertoolDatas } from "../../../../../hooks/sellertool-datas";
 
 export default function ExcelUploaderControlComponent({
     excelTranslatorHeaders,
@@ -17,7 +19,7 @@ export default function ExcelUploaderControlComponent({
     onSubmitUploadWithExcel,
     onSubmitDownloadSampleExcelForUploadHeader,
 }) {
-    const [favoriteTranslatorIds, setFavoriteTranslatorIds] = useLocalStorageHook('erpc-upload-favorite-translator-ids-v1', []);
+    const sellertoolDatas = useSellertoolDatas();
     const [excelFileUploaderOpen, setExcelFileUploaderOpen] = useState(false);
     const [favoriteTranslatorsModalOpen, setFavoriteTranslatorsModalOpen] = useState(false);
     const [backdropOpen, setBackdropOpen] = useState(false);
@@ -83,14 +85,13 @@ export default function ExcelUploaderControlComponent({
     }
 
     const handleSelectFavoriteTranslator = (id) => {
-        let currFavoriteTranslatorIds = new Set([...favoriteTranslatorIds]);
+        let currFavoriteTranslatorIds = new Set([...sellertoolDatas?.favoriteExcelTranslatorHeaderIdsForErpcUpload]);
         if (currFavoriteTranslatorIds.has(id)) {
             currFavoriteTranslatorIds.delete(id);
         } else {
             currFavoriteTranslatorIds.add(id);
         }
-
-        setFavoriteTranslatorIds([...currFavoriteTranslatorIds]);
+        sellertoolDatas._onSetFavoriteExcelTranslatorHeaderIdsForErpcUpload(currFavoriteTranslatorIds);
         onActionChangeExcelTranslatorHeader(null);
     }
 
@@ -105,7 +106,7 @@ export default function ExcelUploaderControlComponent({
                             onChange={(e) => handleChangeExcelTranslatorHeader(e)}
                         >
                             <option value=''>기준양식</option>
-                            {favoriteTranslatorIds?.map(favoriteTranslatorId => {
+                            {sellertoolDatas?.favoriteExcelTranslatorHeaderIdsForErpcUpload?.map(favoriteTranslatorId => {
                                 const currExcelTranslatorHeader = excelTranslatorHeaders?.find(r => r?.id === favoriteTranslatorId);
                                 if (!currExcelTranslatorHeader) {
                                     return null;
@@ -160,7 +161,7 @@ export default function ExcelUploaderControlComponent({
                     open={favoriteTranslatorsModalOpen}
                     onClose={() => toggleFavoriteTranslatorsModalOpen(false)}
                     excelTranslatorHeaders={excelTranslatorHeaders}
-                    favoriteTranslatorIds={favoriteTranslatorIds}
+                    favoriteTranslatorIds={sellertoolDatas?.favoriteExcelTranslatorHeaderIdsForErpcUpload}
                     onSelectFavoriteTranslator={handleSelectFavoriteTranslator}
                 />
             }

@@ -5,10 +5,13 @@ import CustomImage from "../../../../modules/image/CustomImage";
 import useErpCollectionHeadersHook from "./hooks/useErpCollectionHeadersHook";
 import { Container, ItemBox, ItemListContainer, ItemListWrapper, ListTitle, TitleContainer, Wrapper } from "./styles/ViewHeader.styled";
 import { useLocalStorageHook } from "../../../../../hooks/local_storage/useLocalStorageHook";
+import { useSelector } from "react-redux";
 
-export default function ViewHeaderComponent(props) {
+export default function ViewHeaderComponent({
+    erpcFavoriteViewHeaderIds,
+    onActionSetFavoriteViewHeaderIds
+}) {
     const router = useRouter();
-    const [favoriteViewHeaderIds, setFavoriteViewHeaderIds] = useLocalStorageHook('erpc-favorite-viewHeader-ids-v1', []);
     const [favoriteListOpen, setFavoriteListOpen] = useState(true);
     const [itemListOpen, setItemListOpen] = useState(true);
     let vhF = router?.query?.vhF === 'unfold' ? 'unfold' : 'fold';
@@ -43,7 +46,7 @@ export default function ViewHeaderComponent(props) {
     }
 
     const handleSelectFavoriteViewHeaderId = (id) => {
-        let currFavoriteViewHeaderIds = new Set([...favoriteViewHeaderIds]);
+        let currFavoriteViewHeaderIds = new Set([...erpcFavoriteViewHeaderIds]);
         if (currFavoriteViewHeaderIds.has(id)) {
             currFavoriteViewHeaderIds.delete(id);
         } else {
@@ -51,7 +54,7 @@ export default function ViewHeaderComponent(props) {
         }
 
         currFavoriteViewHeaderIds = [...currFavoriteViewHeaderIds].filter(r => erpCollectionHeaders?.some(r2 => r2.id === r));
-        setFavoriteViewHeaderIds(currFavoriteViewHeaderIds);
+        onActionSetFavoriteViewHeaderIds(currFavoriteViewHeaderIds);
     }
 
     return (
@@ -87,16 +90,16 @@ export default function ViewHeaderComponent(props) {
                             >즐겨찾기</ListTitle>
                             {favoriteListOpen &&
                                 <ItemListWrapper>
-                                    {(!favoriteViewHeaderIds || favoriteViewHeaderIds?.length < 1) ?
+                                    {(!erpcFavoriteViewHeaderIds || erpcFavoriteViewHeaderIds?.length < 1) ?
                                         <div className='isEmpty-notice'>등록된 즐겨찾기가 없습니다.</div>
                                         :
                                         <>
-                                            {favoriteViewHeaderIds?.map(favoriteViewHeaderId => {
+                                            {erpcFavoriteViewHeaderIds?.map(favoriteViewHeaderId => {
                                                 const erpCollectionHeader = erpCollectionHeaders?.find(r => r.id === favoriteViewHeaderId);
-                                                if(!erpCollectionHeader){
+                                                if (!erpCollectionHeader) {
                                                     return null;
                                                 }
-                                                
+
                                                 return (
                                                     <ItemBox
                                                         key={erpCollectionHeader?.id}
@@ -144,7 +147,7 @@ export default function ViewHeaderComponent(props) {
                                     {(!erpCollectionHeaders || erpCollectionHeaders?.length < 1) &&
                                         <div className='isEmpty-notice'>생성된 뷰헤더가 없습니다.</div>
                                     }
-                                    {erpCollectionHeaders?.filter(r => !favoriteViewHeaderIds?.includes(r?.id))?.map(erpCollectionHeader => {
+                                    {erpCollectionHeaders?.filter(r => !erpcFavoriteViewHeaderIds?.includes(r?.id))?.map(erpCollectionHeader => {
                                         return (
                                             <ItemBox
                                                 key={erpCollectionHeader?.id}

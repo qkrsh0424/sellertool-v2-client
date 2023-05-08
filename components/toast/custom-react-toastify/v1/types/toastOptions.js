@@ -7,7 +7,7 @@ export const defaultOptions = {
     hideProgressBar: false,
     closeOnClick: true,
     rtl: false,
-    pauseOnFocusLoss: true,
+    pauseOnFocusLoss: false,
     draggable: true,
     pauseOnHover: true,
     theme: 'light',

@@ -1,6 +1,6 @@
 import Head from "next/head";
 import FooterMain from "../../views/footer/FooterMain";
-import MainComponent from "../../views/margin/viewer";
+import MainComponent from "../../views/margin-v2/viewer";
 import PrimaryNavbarMainComponent from "../../views/navbar/primary-navbar";
 import SecondaryNavbarMainComponent from "../../views/navbar/secondary-navbar-v2";
 

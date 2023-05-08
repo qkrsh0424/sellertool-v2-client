@@ -2,6 +2,7 @@ import styled from "styled-components";
 import HeadComponent from "./head/Head.component";
 import useMarginRecordHook from "./hooks/useMarginRecordHook";
 import ContentFieldComponent from './content-field/ContentField.component';
+import NameFieldComponent from "./name-field/NameField.component";
 
 const Container = styled.div`
     overflow: hidden;
@@ -18,6 +19,9 @@ const MainComponent = () => {
         <>
             <Container>
                 <HeadComponent />
+                <NameFieldComponent
+                    marginRecord={marginRecord}
+                />
                 <ContentFieldComponent
                     marginRecord={marginRecord}
                 />

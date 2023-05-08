@@ -6,10 +6,15 @@ export const Container = styled.div`
     margin-right: auto;
     padding: 0 10px;
     margin-top: 20px;
+`;
 
-    @media all and (max-width:992px){
-        padding: 10px;
-    }
+export const Wrapper = styled.div`
+    background: #fff;
+    background: #fff;
+    box-shadow: var(--defaultBoxShadow);
+    padding: 0 20px;
+    border-radius: 5px;
+    overflow: hidden;
 `;
 
 export const ProductName = styled.div`
@@ -27,7 +32,7 @@ export const GridWrapper = styled.div`
     display: flex;
     border-radius: 5px;
     transition: all .5s;
-    margin-top: 40px;
+    margin-top: 20px;
 
     .flex-block{
         padding:20px;
@@ -66,8 +71,6 @@ export const InputWrapper = styled.div`
 export const InputBox = styled.div`
     background: #fff;
     flex:1;
-    border: 1px solid #f0f0f0;
-    box-shadow: var(--defaultBoxShadow);
     border-radius: 10px;
     overflow: hidden;
 
@@ -75,14 +78,14 @@ export const InputBox = styled.div`
         display: flex;
         justify-content: space-between;
         color:#303030;
-        font-weight: 600;
-        font-size: 14px;
-        padding:10px 20px;
-        background:#eef2f9;
+        font-weight: 700;
+        font-size: 16px;
+        margin-top: 10px;
     }
     
     .input-group{
-        padding:20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 
     .input-flex-box{
@@ -103,7 +106,7 @@ export const InputBox = styled.div`
 
     input{
         flex:1;
-        padding: 10px;
+        padding: 13px;
         outline: none;
         border: none;
 
@@ -112,7 +115,6 @@ export const InputBox = styled.div`
         font-size: 16px;
         color: #444;
     }
-
 `;
 
 export const CommonWrapper = styled.div`
@@ -200,7 +202,7 @@ export const ResultBox = styled.div`
     margin-bottom: 20px;
     background: white;
     border:1px solid #f0f0f0;
-    border-radius: 15px;
+    border-radius: 5px;
     box-shadow: var(--defaultBoxShadow);
     color: #404040;
 

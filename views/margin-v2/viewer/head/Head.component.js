@@ -5,7 +5,7 @@ export default function HeadComponent(props){
         <>
             <Container>
                 <div className='title'>
-                    마진율 계산기 뷰어
+                    마진율 계산기
                 </div>
             </Container>
         </>

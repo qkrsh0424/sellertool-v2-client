@@ -8,6 +8,7 @@ import LayoutComponent from "./layout/Layout.component";
 import InviteMemberComponent from "./invite-member/InviteMember.component";
 import AuthTemplateListComponent from "./auth-template-list/AuthTemplateList.component";
 import ProfileComponent from "./profile/Profile.component";
+import SettingsComponent from "./settings/Settings.component";
 
 const Container = styled.div`
     background-color: var(--defaultBackground);
@@ -20,23 +21,26 @@ const WorkspaceManagementMainComponent = (props) => {
 
     const {
         workspace,
-        reqChangeWorkspaceName
+        reqChangeWorkspaceName,
+        reqDeleteWorkspace
     } = useWorkspaceHook();
 
-    const __handle = {
-        submit: {
-            modifyWorkspaceName: async ({
-                body,
-                successCallback
-            }) => {
-                await reqChangeWorkspaceName({
-                    body: body,
-                    successCallback: () => {
-                        successCallback();
-                    }
-                })
+    const handleSubmitModifyWorkspaceName = async ({
+        body,
+        successCallback
+    }) => {
+        await reqChangeWorkspaceName({
+            body: body,
+            successCallback: () => {
+                successCallback();
             }
-        }
+        })
+    }
+
+    const handleSubmitDeleteWorkspace = async () => {
+        await reqDeleteWorkspace(null, () => {
+            window.location.replace('/');
+        })
     }
 
     return (
@@ -47,7 +51,7 @@ const WorkspaceManagementMainComponent = (props) => {
                     <WorkspaceNameFieldComponent
                         workspace={workspace}
 
-                        onSubmitModifyWorkspaceName={__handle.submit.modifyWorkspaceName}
+                        onSubmitModifyWorkspaceName={handleSubmitModifyWorkspaceName}
                     />
                     <LayoutComponent
                         isWorkspaceMaster={workspace?.masterFlag}
@@ -81,6 +85,15 @@ const WorkspaceManagementMainComponent = (props) => {
                             (
                                 <AuthTemplateListComponent
                                     workspace={workspace}
+                                />
+                            )
+                        }
+                        {
+                            (workspace?.masterFlag && viewType && viewType === 'SETTINGS') &&
+                            (
+                                <SettingsComponent
+                                    workspace={workspace}
+                                    onSubmitDeleteWorkspace={handleSubmitDeleteWorkspace}
                                 />
                             )
                         }

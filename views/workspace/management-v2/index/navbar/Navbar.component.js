@@ -31,7 +31,13 @@ const VIEW_TYPES = [
         default: false,
         masterOnly: true,
     },
-
+    {
+        type: 'SETTINGS',
+        title: '설정',
+        iconSrc: '/images/icon/settings_default_808080.svg',
+        default: false,
+        masterOnly: true,
+    },
 ]
 
 export default function NavbarComponent({ isWorkspaceMaster }) {

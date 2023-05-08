@@ -8,6 +8,8 @@ import useMarginRecordFormHook from '../hooks/useMarginRecordFormHook';
 import CreateMarginRecordModalComponent from './modal/CreateMarginRecordModal.component';
 import UpdateMarginRecordModalComponent from './modal/UpdateMarginRecordModal.component';
 import ButtonGroupsView from './ButtonGroups.view';
+import { toast } from 'react-toastify';
+import { customToast, defaultOptions } from '../../../../components/toast/custom-react-toastify/v1';
 
 const ContentFieldComponent = ({
     marginRecord,
@@ -68,7 +70,12 @@ const ContentFieldComponent = ({
     const handleCopyViewerUrl = async () => {
         let url = `${location.origin}/margin/viewer/?marginRecordId=${marginRecord?.id}&openKey=${marginRecord?.openKey}`;
         await navigator.clipboard.writeText(url);
-        alert('뷰어 주소가 복사되었습니다.');
+
+        const content = '뷰어 주소가 복사되었습니다.'
+        customToast.info(content, {
+            ...defaultOptions,
+            toastId: content
+        });
     }
 
     const handleSubmitCalculateMargin = async (e) => {

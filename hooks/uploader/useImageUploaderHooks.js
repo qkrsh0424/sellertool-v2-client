@@ -1,4 +1,3 @@
-import { csrfDataConnect } from "../../data_connect/csrfDataConnect";
 import { uploadDataConnect } from "../../data_connect/uploadDataConnect";
 
 /**

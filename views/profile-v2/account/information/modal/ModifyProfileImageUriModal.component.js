@@ -1,82 +1,108 @@
-import Image from "next/image";
 import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
-import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
-import { Container } from "../styles/ModifyProfileImageUriModal.styled";
+import styled from 'styled-components';
+import { CustomDialog } from "../../../../../components/dialog/v1/CustomDialog";
+import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
+import { useRef } from "react";
+import useImageUploaderHooks from "../../../../../hooks/uploader/useImageUploaderHooks";
+import { customBackdropController } from "../../../../../components/backdrop/default/v1";
 
-export default function ModifyProfileImageUriModalComponent({
-    onClose,
-    onConfirm
-}) {
-    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+const ContentContainer = styled.div`
+    padding: 40px 20px;
 
-    const __handle = {
-        submit: {
-            confirm: (e) => {
-                e.preventDefault();
-                setDisabledBtn(true);
-                try {
-                    onConfirm();
-                } catch (err) {
-                    alert(err.message);
-                    return;
-                }
-            }
+    .image-button{
+        border-radius: 5px;
+        &:last-child{
+            margin-top: 10px;
         }
     }
+
+    .image-selector{
+        border:1px solid var(--mainColor);
+        color: var(--mainColor);
+    }
+
+    .default-image{
+        color: #666;
+    }
+`;
+
+
+export default function ModifyProfileImageUriModalComponent({
+    open,
+    onClose,
+    onSubmit
+}) {
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+    const imageUploaderRef = useRef();
+    const { uploadImages } = useImageUploaderHooks({
+        MAX_FILE_SIZE: 10485760
+    });
+    const customBackdrop = customBackdropController();
+
+    const handleOpenImageUploader = () => {
+        imageUploaderRef.current.click();
+    }
+
+    const handleSubmitChangeToSelect = async (e) => {
+        setDisabledBtn(true);
+        customBackdrop.showBackdrop();
+        let files = e.target.files;
+        if (!files || files?.length <= 0) {
+            alert('이미지를 선택해 주세요.');
+            customBackdrop.hideBackdrop();
+            return;
+        }
+
+        let images = await uploadImages(files);
+
+        if (!images) {
+            customBackdrop.hideBackdrop();
+            return;
+        }
+
+        await onSubmit(images[0]?.fileStorageUri);
+        customBackdrop.hideBackdrop();
+    }
+
+    const handleSubmitChangeToDefault = async () => {
+        setDisabledBtn(true);
+        customBackdrop.showBackdrop();
+        await onSubmit(null);
+        customBackdrop.hideBackdrop();
+    }
+
     return (
         <>
-            <Container>
-                <div className='header-close-button-box'>
-                    <button
+            <CustomDialog
+                open={open}
+                onClose={() => onClose()}
+            >
+                <CustomDialog.CloseButton onClose={() => onClose()} />
+                <CustomDialog.Title>수정하실 회원님의 <span className='accent-text'>프로필 이미지</span>를 선택해 주세요.</CustomDialog.Title>
+                <ContentContainer>
+                    <CustomBlockButton
                         type='button'
-                        onClick={() => onClose()}
-                        className='header-close-button-el'
-                    >
-                        <div className='header-close-button-icon'>
-                            <Image
-                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                src='/images/icon/close_default_959eae.svg'
-                                layout='responsive'
-                                width={1}
-                                height={1}
-                                alt="close icon"
-                                loading="lazy"
-                            ></Image>
-                        </div>
-                    </button>
-                </div>
-                <div
-                    className='title-box'
-                >
-                    <div className='title'>
-                        수정하실 회원님의 <span className='accent-text'>프로필 이미지</span>를 선택해 주세요.
-                    </div>
-                </div>
-                {/* <div className='content-group'>
-                    <div className='content-box'>
-                        <input
-                            type='text'
-                            className='input-item'
-                            placeholder="이름"
-                            value={modifyName || ''}
-                            onChange={(e) => onChangeModifyName(e)}
-                        ></input>
-                    </div>
-                </div> */}
-                <div className='button-group'>
-                    <SingleBlockButton
+                        className='image-button image-selector'
+                        onClick={() => handleOpenImageUploader()}
+                        disabled={disabledBtn}
+                    >이미지 선택</CustomBlockButton>
+                    <CustomBlockButton
                         type='button'
-                        className='button-el'
-                        style={{
-                            background: '#959eae',
-                            flex: 1
-                        }}
-                        onClick={() => onClose()}
-                    >
-                        취소
-                    </SingleBlockButton>
-                </div>
-            </Container>
+                        className='image-button default-image'
+                        onClick={() => handleSubmitChangeToDefault()}
+                        disabled={disabledBtn}
+                    >기본 이미지로 설정</CustomBlockButton>
+                </ContentContainer>
+            </CustomDialog>
+            <input
+                ref={imageUploaderRef}
+                type='file'
+                accept="image/*"
+                onClick={(e) => e.target.value = ''}
+                onChange={(e) => handleSubmitChangeToSelect(e)}
+                disabled={disabledBtn}
+                hidden
+            ></input>
         </>
     );
 }

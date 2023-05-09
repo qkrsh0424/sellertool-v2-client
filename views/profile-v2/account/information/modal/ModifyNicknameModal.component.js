@@ -3,6 +3,7 @@ import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import useModifyNicknameHook from "../../hooks/useModifyNicknameHook";
 import { Container } from "../styles/ModifyNicknameModal.styled";
+import { customBackdrop } from "../../../../../components/backdrop/default/v1";
 
 export default function ModifyNicknameModalComponent({
     onClose,
@@ -18,12 +19,12 @@ export default function ModifyNicknameModalComponent({
 
     const __handle = {
         submit: {
-            confirm: (e) => {
+            confirm: async (e) => {
                 e.preventDefault();
                 setDisabledBtn(true);
                 try {
                     checkNicknameFormatValid(modifyNickname);
-                    onConfirm({ nickname: modifyNickname });
+                    await onConfirm({ nickname: modifyNickname });
                 } catch (err) {
                     alert(err.message);
                     return;

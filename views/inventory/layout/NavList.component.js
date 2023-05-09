@@ -2,6 +2,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Container, LinkItem } from "./styles/NavList.styled";
 
+const SALES_ANALYSIS_CLIENT_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.salesAnalisisClientAddress : process.env.production.salesAnalisisClientAddress;
+
 export default function NavListComponent({
     onActionClickLink
 }) {
@@ -37,8 +39,8 @@ const NAV_LIST = [
         name: '재고조회 / 입출고 관리',
         pathname: '/inventory'
     },
-    // {
-    //     name: '재고주기',
-    //     pathname: '/inventory/주기'
-    // }
+    {
+        name: '재고자산',
+        pathname: `${SALES_ANALYSIS_CLIENT_ADDRESS}/inventory/property`
+    }
 ]

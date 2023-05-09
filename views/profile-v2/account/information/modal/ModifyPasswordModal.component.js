@@ -3,6 +3,7 @@ import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import useModifyPasswordHook from "../../hooks/useModifyPasswordHook";
 import { Container } from "../styles/ModifyPasswordModal.styled";
+import { customBackdropController } from "../../../../../components/backdrop/default/v1";
 
 export default function ModifyPasswordModalComponent({
     onClose,
@@ -16,23 +17,26 @@ export default function ModifyPasswordModalComponent({
     } = useModifyPasswordHook();
 
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+    const customBackdrop = customBackdropController();
 
     const __handle = {
         submit: {
-            confirm: (e) => {
+            confirm: async (e) => {
                 e.preventDefault();
                 setDisabledBtn(true);
+                customBackdrop.showBackdrop()
                 try {
                     checkPasswordFormatValid(modifyPasswordForm.newPassword);
                     checkComparePasswordFormatValid(modifyPasswordForm.newPassword, modifyPasswordForm.newPasswordChecker);
 
-                    onConfirm({
+                    await onConfirm({
                         ...modifyPasswordForm
                     })
                 } catch (err) {
                     alert(err.message);
                     return;
                 }
+                customBackdrop.hideBackdrop()
             }
         }
     }

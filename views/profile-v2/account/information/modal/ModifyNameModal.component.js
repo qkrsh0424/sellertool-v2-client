@@ -3,6 +3,7 @@ import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import useModifyNameHook from "../../hooks/useModifyNameHook";
 import { Container } from "../styles/ModifyNameModal.styled";
+import { customBackdropController } from "../../../../../components/backdrop/default/v1";
 
 export default function ModifyNameModalComponent({
     onClose,
@@ -15,19 +16,22 @@ export default function ModifyNameModalComponent({
     } = useModifyNameHook();
 
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+    const customBackdrop = customBackdropController();
 
     const __handle = {
         submit: {
-            confirm: (e) => {
+            confirm: async (e) => {
                 e.preventDefault();
                 setDisabledBtn(true);
+                customBackdrop.showBackdrop();
                 try {
                     checkNameFormatValid(modifyName);
-                    onConfirm({ name: modifyName });
+                    await onConfirm({ name: modifyName });
                 } catch (err) {
                     alert(err.message);
                     return;
                 }
+                customBackdrop.hideBackdrop();
             }
         }
     }

@@ -5,6 +5,7 @@ import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import useModifyEmailHook from "../../hooks/useModifyEmailHook";
 import { Container } from "../styles/ModifyEmailModal.styled";
+import { customBackdropController } from "../../../../../components/backdrop/default/v1";
 
 export default function ModifyEmailModalComponent({
     onClose,
@@ -24,6 +25,7 @@ export default function ModifyEmailModalComponent({
 
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
     const [emailValidationCodeInputModeOpen, setEmailValidationCodeInputModeOpen] = useState(false);
+    const customBackdrop = customBackdropController();
 
     const __handle = {
         action: {
@@ -36,14 +38,15 @@ export default function ModifyEmailModalComponent({
             }
         },
         submit: {
-            confirm: (e) => {
+            confirm: async (e) => {
                 e.preventDefault();
                 setDisabledBtn(true);
+                customBackdrop.showBackdrop();
                 try {
                     checkEmailFormatValid(modifyEmailForm.email);
                     checkValidationCodeFormatValid(modifyEmailForm.emailValidationCode);
 
-                    onConfirm({
+                    await onConfirm({
                         email: modifyEmailForm.email,
                         emailValidationCode: modifyEmailForm.emailValidationCode
                     })
@@ -51,10 +54,11 @@ export default function ModifyEmailModalComponent({
                     alert(err.message);
                     return;
                 }
+                customBackdrop.hideBackdrop();
             },
             sendEmailValidationCode: async () => {
                 setDisabledBtn(true);
-
+                customBackdrop.showBackdrop();
                 try {
                     checkEmailFormatValid(modifyEmailForm.email);
                     await reqSendEmailValidationCode({
@@ -65,6 +69,7 @@ export default function ModifyEmailModalComponent({
                     alert(err.message);
                     return;
                 }
+                customBackdrop.hideBackdrop();
             },
         }
     }

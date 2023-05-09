@@ -5,6 +5,7 @@ import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import useModifyPhoneNumberHook from "../../hooks/useModifyPhoneNumberHook";
 import { Container } from "../styles/ModifyPhoneNumberModal.styled";
+import { customBackdropController } from "../../../../../components/backdrop/default/v1";
 
 export default function ModifyPhoneNumberModalComponent({
     onClose,
@@ -24,6 +25,7 @@ export default function ModifyPhoneNumberModalComponent({
 
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
     const [phoneNumberValidationCodeInputModeOpen, setPhoneNumberValidationCodeInputModeOpen] = useState(false);
+    const customBackdrop = customBackdropController();
 
     const __handle = {
         action: {
@@ -36,13 +38,14 @@ export default function ModifyPhoneNumberModalComponent({
             }
         },
         submit: {
-            confirm: (e) => {
+            confirm: async (e) => {
                 e.preventDefault();
                 setDisabledBtn(true);
+                customBackdrop.showBackdrop();
                 try {
                     checkPhoneNumberFormatValid(modifyPhoneNumberForm.phoneNumber);
                     checkValidationCodeFormatValid(modifyPhoneNumberForm.phoneNumberValidationCode);
-                    onConfirm({
+                    await onConfirm({
                         phoneNumber: modifyPhoneNumberForm.phoneNumber,
                         phoneNumberValidationCode: modifyPhoneNumberForm.phoneNumberValidationCode
                     });
@@ -50,10 +53,11 @@ export default function ModifyPhoneNumberModalComponent({
                     alert(err.message);
                     return;
                 }
+                customBackdrop.hideBackdrop();
             },
             sendPhoneNumberValidationCode: async () => {
                 setDisabledBtn(true);
-
+                customBackdrop.showBackdrop();
                 try {
                     checkPhoneNumberFormatValid(modifyPhoneNumberForm.phoneNumber);
                     await reqSendPhoneNumberValidationCode({
@@ -64,6 +68,7 @@ export default function ModifyPhoneNumberModalComponent({
                     alert(err.message);
                     return;
                 }
+                customBackdrop.hideBackdrop();
             },
         }
     }

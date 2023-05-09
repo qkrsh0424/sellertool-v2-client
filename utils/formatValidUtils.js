@@ -99,6 +99,7 @@ const formatValidUtils = {
     checkValidationCodeFormatValid: (number) => {
         let regex = /^[0-9]{6}$/
 
+        console.log(number);
         if (!regex.test(number)) {
             throw new Error('인증번호를 다시 확인해 주세요.');
         }

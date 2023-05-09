@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
@@ -22,6 +22,7 @@ export default function InformationComponent(props) {
     const [modifyPasswordModalOpen, setModifyPasswordModalOpen] = useState(false);
 
     const {
+        reqChangeProfileImageUri,
         reqChangeNickname,
         reqChangeName,
         reqChangePhoneNumber,
@@ -70,7 +71,13 @@ export default function InformationComponent(props) {
         },
         submit: {
             changeProfileImageUri: async (imageUri) => {
-                console.log(imageUri);
+                let body = {
+                    profileImageUri: imageUri
+                }
+
+                await reqChangeProfileImageUri(body, () => {
+                    __handle.action.closeModifyProfileImageUriModal();
+                });
             },
             changeNickname: async ({ nickname }) => {
                 let body = {

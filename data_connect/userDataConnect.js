@@ -57,6 +57,20 @@ const userDataConnect = () => {
         },
         /**
          * 
+         * @param {object} body 
+         * @param {string} body.profileImageUri
+         * @returns 
+         */
+        changeProfileImageUri: async function (body) {
+            await csrfDataConnect().getAuthCsrf();
+            return await axiosAuthInterceptor.patch(`${AUTH_API_ADDRESS}/auth/v1/users/profileImageUri`, body, {
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+        /**
+         * 
          * @param {object} body
          * @param {string} body.nickname
          * @returns 

@@ -67,7 +67,7 @@ export default function ModifyProfileImageUriModalComponent({
     const handleSubmitChangeToDefault = async () => {
         setDisabledBtn(true);
         customBackdrop.showBackdrop();
-        await onSubmit(null);
+        await onSubmit('');
         customBackdrop.hideBackdrop();
     }
 

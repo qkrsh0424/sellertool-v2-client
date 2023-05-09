@@ -100,7 +100,6 @@ const WorkspaceManagementMainComponent = (props) => {
                     </LayoutComponent>
                 </>
             }
-
         </Container>
     );
 }

@@ -23,6 +23,7 @@ import Router from 'next/router';
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { CustomToastContainer } from '../components/toast/custom-react-toastify/v1';
+import { CustomDefaultBackdrop } from '../components/backdrop/default/v1/components';
 
 const theme = createTheme();
 
@@ -51,6 +52,7 @@ function MyApp({ Component, pageProps }) {
 			<UserPermissionComponent />
 			<WorkspacePermissionComponent />
 			<CustomToastContainer />
+			<CustomDefaultBackdrop />
 			<ThemeProvider theme={theme}>
 				<Component {...pageProps} />
 			</ThemeProvider>

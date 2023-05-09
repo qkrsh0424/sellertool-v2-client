@@ -69,11 +69,13 @@ export default function InformationComponent(props) {
             }
         },
         submit: {
+            changeProfileImageUri: async (imageUri) => {
+                console.log(imageUri);
+            },
             changeNickname: async ({ nickname }) => {
                 let body = {
                     nickname: nickname
                 }
-
                 await reqChangeNickname({
                     body: body,
                     successCallback: () => {
@@ -309,18 +311,11 @@ export default function InformationComponent(props) {
             </Container>
 
             {modifyProfileImageUriModalOpen &&
-                (
-                    <CommonModalComponent
-                        open={modifyProfileImageUriModalOpen}
-
-                        onClose={__handle.action.closeModifyProfileImageUriModal}
-                    >
-                        <ModifyProfileImageUriModalComponent
-                            onClose={__handle.action.closeModifyProfileImageUriModal}
-                            onConfirm={() => { }}
-                        />
-                    </CommonModalComponent>
-                )
+                <ModifyProfileImageUriModalComponent
+                    open={modifyProfileImageUriModalOpen}
+                    onClose={__handle.action.closeModifyProfileImageUriModal}
+                    onSubmit={__handle.submit.changeProfileImageUri}
+                />
             }
 
             {modifyNicknameModalOpen &&

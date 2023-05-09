@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import CommonModalComponent from "../../../modules/modal/CommonModalComponent";

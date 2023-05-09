@@ -109,7 +109,7 @@ export default function FindWithPhoneComponent({
         try {
             formatValidUtils.checkUsernameFormatValid(validationForm?.username);
             formatValidUtils.checkPhoneNumberFormatValid(validationForm?.phoneNumber);
-            formatValidUtils.checkValidationCodeFormatValid(validationForm?.emailValidationCode);
+            formatValidUtils.checkValidationCodeFormatValid(validationForm?.phoneNumberValidationCode);
         } catch (err) {
             alert(err.message);
             return;

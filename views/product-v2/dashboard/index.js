@@ -21,7 +21,6 @@ const ProductDashboardMainComponent = (props) => {
                     <ProductListFieldComponent />
                 </Layout>
             </Container>
-
             <AddFloatButtonComponent />
         </>
     );

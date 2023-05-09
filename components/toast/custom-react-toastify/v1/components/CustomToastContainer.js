@@ -7,7 +7,7 @@ const Container = styled(ToastContainer)`
     font-size: 14px;
     border-radius: 10px;
     white-space: pre-line;
-	word-break: keep-all;
+	  word-break: keep-all;
     font-weight: 600;
     color: #000;
   }

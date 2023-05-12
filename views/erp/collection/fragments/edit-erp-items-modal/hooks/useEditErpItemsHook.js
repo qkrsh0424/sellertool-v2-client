@@ -204,17 +204,17 @@ export default function useEditErpItemsHook(selectedErpItems) {
             if (r?.salesChannel?.length > 40) {
                 throw new Error(`${index + 1}행 : 판매채널은 40자 이내로 입력해 주세요.`);
             }
-            if (r?.orderNumber1?.length > 30) {
-                throw new Error(`${index + 1}행 : 주문번호1은 30자 이내로 입력해 주세요.`);
+            if (r?.orderNumber1?.length > 36) {
+                throw new Error(`${index + 1}행 : 주문번호1은 36자 이내로 입력해 주세요.`);
             }
-            if (r?.orderNumber2?.length > 30) {
-                throw new Error(`${index + 1}행 : 주문번호2는 30자 이내로 입력해 주세요.`);
+            if (r?.orderNumber2?.length > 36) {
+                throw new Error(`${index + 1}행 : 주문번호2는 36자 이내로 입력해 주세요.`);
             }
-            if (r?.channelProdCode?.length > 30) {
-                throw new Error(`${index + 1}행 : 상품코드는 30자 이내로 입력해 주세요.`);
+            if (r?.channelProdCode?.length > 36) {
+                throw new Error(`${index + 1}행 : 상품코드는 36자 이내로 입력해 주세요.`);
             }
-            if (r?.channelOptionCode?.length > 30) {
-                throw new Error(`${index + 1}행 : 옵션코드는 30자 이내로 입력해 주세요.`);
+            if (r?.channelOptionCode?.length > 36) {
+                throw new Error(`${index + 1}행 : 옵션코드는 36자 이내로 입력해 주세요.`);
             }
             if (r?.price < 0 || r?.price > 999999999) {
                 throw new Error(`${index + 1}행 : 가격은 0-999999999 이내로 입력해 주세요.`);

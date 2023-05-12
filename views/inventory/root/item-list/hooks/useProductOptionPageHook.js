@@ -32,12 +32,10 @@ export default function useProductOptionsHook(props) {
 
     const reqFetchProductOptionPage = async () => {
         let params = {
-            searchType: 'CONDITION',
-            mergeSearchConditionFlag: false,
+            searchCondition:router?.query?.searchCondition,
+            searchQuery:router?.query?.searchQuery,
             productCategoryId: router?.query?.productCategoryId,
             productSubCategoryId: router?.query?.productSubCategoryId,
-            searchCondition: router?.query?.searchCondition,
-            searchQuery: router?.query?.searchQuery,
             sort: router?.query?.sort || 'product.createdAt_asc',
             page: router?.query?.page || 1,
             size: router?.query?.size || 50,
@@ -47,7 +45,7 @@ export default function useProductOptionsHook(props) {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await productOptionDataConnect().searchPagePositionInventory(params, headers)
+        await productOptionDataConnect().searchPage(params, headers)
             .then(res => {
                 if (res.status === 200) {
                     setProductOptionPage(res.data.data);

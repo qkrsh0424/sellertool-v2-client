@@ -362,11 +362,11 @@ const TABLE_HEADER = [
 
 const SORTED_BY = [
     {
-        sort: 'product.cid_asc',
+        sort: 'product.createdAt_asc',
         name: '상품등록 오래된순'
     },
     {
-        sort: 'product.cid_desc',
+        sort: 'product.createdAt_desc',
         name: '상품등록 최신순'
     },
     {

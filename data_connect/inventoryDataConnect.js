@@ -63,6 +63,28 @@ const inventoryDataConnect = () => {
         },
         /**
          * 
+         * @param {object} params 
+         * @param {number} params.size
+         * @param {number} params.page
+         * @param {string} params.assetType required [PROPERTY_PRICE, ESTIMATE_SALES_PRICE, STOCK_UNIT]
+         * @param {string} params.orderType required [ASC, DESC]
+         * @param {object} headers 
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        searchStockAssetsSlice: async function (params, headers) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/inventory/search/stockAssets/slice`, {
+                    headers: headers,
+                    params: params,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
+        /**
+         * 
          * @param {object} body
          * @param {string[]} body.erpItemIds
          * @param {string} body.memo

@@ -175,35 +175,35 @@ export default function SearchConsoleComponent() {
 
 const SEARCH_CONDITIONS = [
     {
-        fieldName: 'product.name',
+        fieldName: 'PRODUCT_NAME',
         name: '상품명',
     },
     {
-        fieldName: 'product.code',
+        fieldName: 'PRODUCT_CODE',
         name: '상품코드',
     },
     {
-        fieldName: 'product.productTag',
+        fieldName: 'PRODUCT_TAG',
         name: '상품태그',
     },
     {
-        fieldName: 'productOption.name',
+        fieldName: 'PRODUCT_OPTION_NAME',
         name: '옵션명',
     },
     {
-        fieldName: 'productOption.code',
+        fieldName: 'PRODUCT_OPTION_CODE',
         name: '옵션코드',
     },
     {
-        fieldName: 'productOption.optionTag',
+        fieldName: 'PRODUCT_OPTION_TAG',
         name: '옵션태그',
     },
     {
-        fieldName: 'productOption.status',
+        fieldName: 'PRODUCT_OPTION_STATUS',
         name: '옵션상태',
     },
     {
-        fieldName: 'productOption.releaseLocation',
+        fieldName: 'PRODUCT_OPTION_RELEASE_LOCATION',
         name: '출고지',
     }
 ]

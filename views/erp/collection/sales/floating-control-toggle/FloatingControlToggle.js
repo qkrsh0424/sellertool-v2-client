@@ -9,6 +9,7 @@ import StatusNextModalComponent from "./modal/StatusNextModal.component";
 import ViewSelectedModalComponent from "./modal/ViewSelectedModal.component";
 import { Container } from "./styles/FloatingControlBar.styled";
 import EditErpItemsModalComponent from "../../fragments/edit-erp-items-modal/EditErpItemsModal.component";
+import { ProductListModalComponent } from "../../fragments/product-list-modal";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -34,20 +35,22 @@ export default function FloatingControlToggle({
     const [excelDownloadModalOpen, setExcelDownloadModalOpen] = useState(false);
     const [copyCreateErpItemsModalOpen, setCopyCreateErpItemsModalOpen] = useState(false);
     const [viewSelectedModalOpen, setViewSelectedModalOpen] = useState(false);
+    const [productListModalOpen, setProductListModalOpen] = useState(false);
     const [backdropOpen, setBackdropOpen] = useState(false);
 
     useEffect(() => {
         return () => {
             handleToggleControlDrawerOpen(false);
             handleToggleEditErpItemModalOpen(false);
-            handleToggleDeleteErpItemsConfirmModalOpen(false);
             handleToggleChangeStatusToReleaseModalOpen(false);
             handleToggleChangeStatusToOrderModalOpen(false);
+            handleToggleChangeStatusToHoldModalOpen(false);
+            handleToggleDeleteErpItemsConfirmModalOpen(false);
             handleToggleExcelDownloadModalOpen(false);
-            handleToggleBackdropOpen(false);
             handleToggleCopyCreateErpItemsModalOpen(false);
             handleToggleViewSelectedModalOpen(false);
-            setBackdropOpen(false);
+            handleToggleProductListModalOpen(false);
+            handleToggleBackdropOpen(false);
         };
     }, []);
 
@@ -77,6 +80,10 @@ export default function FloatingControlToggle({
 
     const handleToggleExcelDownloadModalOpen = (setOpen) => {
         setExcelDownloadModalOpen(setOpen);
+    }
+
+    const handleToggleProductListModalOpen = (setOpen) => {
+        setProductListModalOpen(setOpen);
     }
 
     const handleToggleBackdropOpen = (setOpen) => {
@@ -212,6 +219,7 @@ export default function FloatingControlToggle({
                 onActionOpenExcelDownloadModal={() => handleToggleExcelDownloadModalOpen(true)}
                 onActionOpenCopyCreateErpItemModal={() => handleToggleCopyCreateErpItemsModalOpen(true)}
                 onActionOpenViewSelectedModal={() => handleToggleViewSelectedModalOpen(true)}
+                onActionOpenProductListModal={() => handleToggleProductListModalOpen(true)}
 
                 onActionClearAllSelectedItems={handleClearAllSelectedItems}
             />
@@ -301,6 +309,20 @@ export default function FloatingControlToggle({
                     onActionClearSelectedItem={handleClearSelectedItem}
                 />
             </CommonModalComponent>
+
+            {productListModalOpen &&
+                <CommonModalComponent
+                    open={productListModalOpen}
+                    onClose={() => handleToggleProductListModalOpen(false)}
+                    maxWidth={'xs'}
+                >
+                    <ProductListModalComponent
+                        erpCollectionHeader={erpCollectionHeader}
+                        selectedErpItems={selectedErpItems}
+                        onClose={() => handleToggleProductListModalOpen(false)}
+                    />
+                </CommonModalComponent>
+            }
 
             <BackdropLoadingComponent
                 open={backdropOpen}

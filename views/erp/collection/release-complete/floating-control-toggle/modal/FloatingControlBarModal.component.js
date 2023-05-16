@@ -74,7 +74,7 @@ export default function FloatingControlBarModalComponent({
     onActionOpenCopyCreateErpItemModal,
     onActionClearAllSelectedItems,
     onActionOpenViewSelectedModal,
-    onActionOpenReleaseListModal,
+    onActionOpenProductListModal,
     onActionOpenStockReleaseModal,
     onActionOpenCancelStockReleaseModal,
     onActionOpenWaybillRegistrationModal,
@@ -183,9 +183,9 @@ export default function FloatingControlBarModalComponent({
                             <SingleBlockButton
                                 type='button'
                                 className='button-item'
-                                onClick={() => onActionOpenReleaseListModal()}
+                                onClick={() => onActionOpenProductListModal()}
                             >
-                                출고리스트
+                                상품리스트
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'

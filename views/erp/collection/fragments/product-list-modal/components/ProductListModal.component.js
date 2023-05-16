@@ -6,13 +6,13 @@ import { dateToYYYYMMDDhhmmssFile } from "../../../../../../utils/dateFormatUtil
 import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../../modules/image/CustomImage";
 import CommonModalComponent from "../../../../../modules/modal/CommonModalComponent";
-import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
-import { Container, ExcelDownloadButton, ReleaseList } from "../styles/ReleaseListModal.styled";
-import ReleaseListDetailModal from "./ReleaseListDetailModal";
+import { Container, ExcelDownloadButton, ReleaseList } from "../styles/ProductListModal.styled";
+import ProductListDetailModal from "./ProductListDetailModal";
 import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
 import BackdropLoadingComponent from "../../../../../modules/loading/BackdropLoadingComponent";
+import useInventoryStocksHook from "../../hooks/useInventoryStocksHook";
 
-export default function ReleaseListModalComponent({
+export function ProductListModalComponent({
     erpCollectionHeader,
     selectedErpItems,
     onClose
@@ -246,13 +246,12 @@ export default function ReleaseListModalComponent({
                     })}
                 </ReleaseList>
             </Container>
-
             <CommonModalComponent
                 open={releaseListDetailModalOpen}
                 onClose={() => toggleReleaseListDetailModalOpen(false)}
                 maxWidth={'xl'}
             >
-                <ReleaseListDetailModal
+                <ProductListDetailModal
                     erpCollectionHeader={erpCollectionHeader}
                     selectedErpItems={selectedErpItems}
                     selectedReleaseItem={selectedReleaseItem}

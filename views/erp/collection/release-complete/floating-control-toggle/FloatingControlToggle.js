@@ -6,12 +6,12 @@ import CommonModalComponent from "../../../../modules/modal/CommonModalComponent
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
 import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
-import ReleaseListModalComponent from "./modal/ReleaseListModal.component";
 import StockReleaseModalComponent from "./modal/StockReleaseModal.component";
 import ViewSelectedModalComponent from "./modal/ViewSelectedModal.component";
 import WaybillRegistrationModalComponent from "./modal/WaybillRegistrationModal.component";
 import { Container } from "./styles/FloatingControlBar.styled";
 import EditErpItemsModalComponent from "../../fragments/edit-erp-items-modal/EditErpItemsModal.component";
+import { ProductListModalComponent } from "../../fragments/product-list-modal";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -40,7 +40,7 @@ export default function FloatingControlToggle({
     const [excelDownloadModalOpen, setExcelDownloadModalOpen] = useState(false);
     const [copyCreateErpItemsModalOpen, setCopyCreateErpItemsModalOpen] = useState(false);
     const [viewSelectedModalOpen, setViewSelectedModalOpen] = useState(false);
-    const [releaseListModalOpen, setReleaseListModalOpen] = useState(false);
+    const [productListModalOpen, setProductListModalOpen] = useState(false);
     const [stockReleaseModalOpen, setStockReleaseModalOpen] = useState(false);
     const [cancelStockReleaseModalOpen, setCancelStockReleaseModalOpen] = useState(false);
     const [waybillRegistrationModalOpen, setWaybillRegistrationModalOpen] = useState(false);
@@ -128,8 +128,8 @@ export default function FloatingControlToggle({
         setExcelDownloadModalOpen(setOpen);
     }
 
-    const handleToggleReleaseListModalOpen = (setOpen) => {
-        setReleaseListModalOpen(setOpen);
+    const handleToggleProductListModalOpen = (setOpen) => {
+        setProductListModalOpen(setOpen);
     }
 
     const handleToggleBackdropOpen = (setOpen) => {
@@ -352,7 +352,7 @@ export default function FloatingControlToggle({
                 onActionOpenExcelDownloadModal={() => handleToggleExcelDownloadModalOpen(true)}
                 onActionOpenCopyCreateErpItemModal={() => handleToggleCopyCreateErpItemsModalOpen(true)}
                 onActionOpenViewSelectedModal={() => handleToggleViewSelectedModalOpen(true)}
-                onActionOpenReleaseListModal={() => handleToggleReleaseListModalOpen(true)}
+                onActionOpenProductListModal={() => handleToggleProductListModalOpen(true)}
                 onActionOpenStockReleaseModal={() => handleToggleStockReleaseModalOpen(true)}
                 onActionOpenCancelStockReleaseModal={() => handleToggleCancelStockReleaseModalOpen(true)}
                 onActionOpenWaybillRegistrationModal={() => handleToggleWaybillRegistrationModalOpen(true)}
@@ -437,16 +437,16 @@ export default function FloatingControlToggle({
                 />
             </CommonModalComponent>
 
-            {releaseListModalOpen &&
+            {productListModalOpen &&
                 <CommonModalComponent
-                    open={releaseListModalOpen}
-                    onClose={() => handleToggleReleaseListModalOpen(false)}
+                    open={productListModalOpen}
+                    onClose={() => handleToggleProductListModalOpen(false)}
                     maxWidth={'xs'}
                 >
-                    <ReleaseListModalComponent
+                    <ProductListModalComponent
                         erpCollectionHeader={erpCollectionHeader}
                         selectedErpItems={selectedErpItems}
-                        onClose={() => handleToggleReleaseListModalOpen(false)}
+                        onClose={() => handleToggleProductListModalOpen(false)}
                     />
                 </CommonModalComponent>
             }

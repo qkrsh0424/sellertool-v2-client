@@ -6,8 +6,21 @@ import ResizableTh from "../../../modules/table/ResizableTh";
 import { Container, ControlFieldContainer, PagenationContainer, SortControlContainer, TableBox, TableWrapper } from "./styles/ItemList.styled";
 import useInventoryStockCyclePageHook from "./hooks/useInventoryStockCyclePageHook";
 
+function returnRecommendPurchaseUnits(
+    releaseUnitPerPeriod,
+    stockUnit,
+    leadTime,
+    averageReleaseUnitPerDay,
+    safetyIndexVariable
+) {
+    const value = Math.ceil((releaseUnitPerPeriod - stockUnit + (leadTime * averageReleaseUnitPerDay)) * safetyIndexVariable);
+    return value <= 0 ? 0 : value;
+}
+
 export default function ItemListComponent(props) {
     const router = useRouter();
+    const leadTime = router?.query?.leadTime;
+
     const {
         inventoryStockCyclePage
     } = useInventoryStockCyclePageHook();
@@ -25,7 +38,7 @@ export default function ItemListComponent(props) {
         }, undefined, { scroll: false })
     }
 
-    if(!inventoryStockCyclePage){
+    if (!inventoryStockCyclePage) {
         return null;
     }
 
@@ -50,6 +63,7 @@ export default function ItemListComponent(props) {
                 </ControlFieldContainer>
                 <Table
                     inventoryStockCycles={inventoryStockCyclePage?.content}
+                    leadTime={leadTime}
                 />
 
             </Container>
@@ -72,7 +86,8 @@ export default function ItemListComponent(props) {
 }
 
 function Table({
-    inventoryStockCycles
+    inventoryStockCycles,
+    leadTime
 }) {
     return (
         <TableWrapper>
@@ -144,18 +159,54 @@ function Table({
                                     </td>
                                     <td>
                                         <div className='content-box'>
-                                            <div style={{ color: '#444', fontWeight:'500' }}>{inventoryStockCycle?.stockUnit} 개</div>
+                                            <div style={{ fontWeight: '600' }}>{inventoryStockCycle?.productOptionCode}</div>
                                         </div>
                                     </td>
                                     <td>
                                         <div className='content-box'>
-                                            <div style={{ color: '#444', fontWeight:'500' }}>{inventoryStockCycle?.averageReleaseUnitPerDay} 개</div>
+                                            <div style={{ color: '#444', fontWeight: '500' }}>{inventoryStockCycle?.stockUnit} 개</div>
                                         </div>
                                     </td>
                                     <td>
                                         <div className='content-box'>
-                                            <div style={{ color: 'var(--mainColor)', fontWeight:'700' }}>{inventoryStockCycle?.stockCyclePerDay} 일</div>
+                                            <div style={{ color: '#444', fontWeight: '500' }}>{inventoryStockCycle?.releaseUnitPerPeriod} 개</div>
                                         </div>
+                                    </td>
+                                    <td>
+                                        <div className='content-box'>
+                                            <div style={{ color: '#444', fontWeight: '500' }}>{inventoryStockCycle?.averageReleaseUnitPerDay} 개</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className='content-box'>
+                                            <div style={{ color: 'var(--mainColor)', fontWeight: '700' }}>{inventoryStockCycle?.stockCyclePerDay} 일</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {leadTime &&
+                                            <div className='content-box'>
+                                                {inventoryStockCycle?.stockCyclePerDay <= leadTime &&
+                                                    <div style={{ color: 'var(--defaultRedColor)', fontWeight: '700' }}>재고 위험성 높음</div>
+                                                }
+                                            </div>
+                                        }
+                                    </td>
+                                    <td>
+                                        {leadTime &&
+                                            <div className='content-box'>
+                                                <div style={{ color: 'var(--defaultGreenColor)', fontWeight: '700' }}>
+                                                    {
+                                                        returnRecommendPurchaseUnits(
+                                                            inventoryStockCycle?.releaseUnitPerPeriod,
+                                                            inventoryStockCycle?.stockUnit,
+                                                            leadTime,
+                                                            inventoryStockCycle?.averageReleaseUnitPerDay,
+                                                            1
+                                                        )
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
                                     </td>
                                 </tr>
                             );
@@ -178,18 +229,30 @@ const TABLE_HEADER = [
         resizable: true,
         name: 'productInfo',
         headerName: '상품정보',
-        defaultWidth: 300
+        defaultWidth: 250
     },
     {
         resizable: true,
-        name: 'optionName',
+        name: 'productOptionCode',
         headerName: '옵션명',
-        defaultWidth: 300
+        defaultWidth: 250
+    },
+    {
+        resizable: true,
+        name: 'productOptionCode',
+        headerName: '옵션코드',
+        defaultWidth: 150
     },
     {
         resizable: true,
         name: 'stockUnit',
         headerName: '재고수량',
+        defaultWidth: 120
+    },
+    {
+        resizable: true,
+        name: 'releaseUnitPerPeriod',
+        headerName: '기간내 출고량',
         defaultWidth: 120
     },
     {
@@ -202,6 +265,18 @@ const TABLE_HEADER = [
         resizable: true,
         name: 'stockCyclePerDay',
         headerName: '출고가능 일수',
+        defaultWidth: 120
+    },
+    {
+        resizable: true,
+        name: 'warning',
+        headerName: '경보',
+        defaultWidth: 120
+    },
+    {
+        resizable: true,
+        name: 'recommendPurchaseUnit',
+        headerName: '추천 구매 수량',
         defaultWidth: 120
     },
 ]

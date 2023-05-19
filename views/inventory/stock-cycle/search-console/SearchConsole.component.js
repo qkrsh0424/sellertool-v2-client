@@ -51,11 +51,11 @@ export default function SearchConsoleComponent() {
 
     const {
         days,
-        availableSalesDays,
-        usingAvailableSalesDays,
+        leadTime,
+        loeLeadTimeOnlyYn,
         onChangeDays,
-        onChangeAvailableSalesDays,
-        onToggleUsingAvailableSalesDays
+        onChangeLeadTime,
+        onToggleLoeLoadTimeOnlyYn,
     } = useAnalysisValuesHook();
 
     const [fieldViewOpen, setFieldViewOpen] = useState(true);
@@ -84,21 +84,36 @@ export default function SearchConsoleComponent() {
             return;
         }
 
-        if (days < 10 || days > 90) {
-            customToast.warning("분석값은 10 이상 90 이하의 숫자만 입력가능합니다.", {
+        if (days < 1 || days > 90) {
+            customToast.warning("분석기간은 1 이상 90 이하의 숫자만 입력가능합니다.", {
                 ...defaultOptions,
-                toastId: "분석값은 10 이상 90 이하의 숫자만 입력가능합니다."
+                toastId: "분석기간은 1 이상 90 이하의 숫자만 입력가능합니다."
             });
             return;
         }
 
-        if (usingAvailableSalesDays && (availableSalesDays < 7 || availableSalesDays > 90)) {
-            customToast.warning("재고순환값은 10 이상 90 이하의 숫자만 입력가능합니다.", {
+        if (leadTime > 90) {
+            customToast.warning("리드타임은 90 이하의 숫자만 입력가능합니다.", {
                 ...defaultOptions,
-                toastId: "재고순환값은 10 이상 90 이하의 숫자만 입력가능합니다."
+                toastId: "리드타임은 90 이하의 숫자만 입력가능합니다."
             });
             return;
         }
+
+        if (loeLeadTimeOnlyYn === 'y' && (leadTime < 1 || leadTime > 90)) {
+            customToast.warning("[(출고가능 일수 ≤ 리드타임) 만 조회] 를 위해 리드타임 값을 1 이상 90 이하로 입력해 주세요.", {
+                ...defaultOptions,
+                toastId: "[(출고가능 일수 ≤ 리드타임) 만 조회] 를 위해 리드타임 값을 1 이상 90 이하로 입력해 주세요."
+            });
+            return;
+        }
+        // if (usingAvailableSalesDays && (availableSalesDays < 7 || availableSalesDays > 90)) {
+        //     customToast.warning("재고순환값은 10 이상 90 이하의 숫자만 입력가능합니다.", {
+        //         ...defaultOptions,
+        //         toastId: "재고순환값은 10 이상 90 이하의 숫자만 입력가능합니다."
+        //     });
+        //     return;
+        // }
 
         router.replace({
             pathname: router.pathname,
@@ -109,7 +124,9 @@ export default function SearchConsoleComponent() {
                 searchCondition: searchCondition,
                 searchQuery: searchQuery,
                 days: days || '10',
-                availableSalesDays: (usingAvailableSalesDays && availableSalesDays) ? availableSalesDays : null,
+                leadTime: leadTime,
+                loeLeadTimeOnlyYn: loeLeadTimeOnlyYn,
+                // availableSalesDays: (usingAvailableSalesDays && availableSalesDays) ? availableSalesDays : null,
                 page: 1
             }
         }, undefined, { scroll: false })
@@ -182,8 +199,8 @@ export default function SearchConsoleComponent() {
                                         </div>
                                     </SearchConditionContainer>
                                     <DaysConditionContainer>
-                                        <div className='label'>분석값 세팅 (필수)</div>
                                         <div className='control-group'>
+                                            <div className='label'>분석기간 (일) - 필수</div>
                                             <div className='control-box'>
                                                 <CustomInput
                                                     type='text'
@@ -197,12 +214,32 @@ export default function SearchConsoleComponent() {
                                                 <span style={{ color: 'var(--defaultBlueColor)', fontWeight: '700' }}>{days || 'NaN'}</span> 일 동안의 출고 내역을 분석합니다.
                                             </div>
                                         </div>
+                                        <div className='control-group'>
+                                            <div className='label'>리드타임 (일)</div>
+                                            <div className='control-box'>
+                                                <CustomInput
+                                                    type='text'
+                                                    className='input-item'
+                                                    placeholder='1 ~ 90 숫자 입력'
+                                                    value={leadTime || ''}
+                                                    onChange={(e) => onChangeLeadTime(e)}
+                                                ></CustomInput>
+                                            </div>
+                                            <div className='control-box'>
+                                                <CustomCheckboxV2
+                                                    className="description"
+                                                    label="(출고가능 일수 ≤ 리드타임) 만 조회"
+                                                    checked={loeLeadTimeOnlyYn === 'y' ? true : false}
+                                                    onChange={() => onToggleLoeLoadTimeOnlyYn()}
+                                                />
+                                            </div>
+                                        </div>
                                     </DaysConditionContainer>
-                                    <DaysConditionContainer>
+                                    {/* <DaysConditionContainer>
                                         <div className='control-group'>
                                             <CustomCheckboxV2
                                                 className="label"
-                                                label="재고순환값 설정"
+                                                label="리드타임 (일)"
                                                 checked={usingAvailableSalesDays}
                                                 onChange={() => onToggleUsingAvailableSalesDays()}
                                             />
@@ -223,7 +260,7 @@ export default function SearchConsoleComponent() {
                                                 </>
                                             }
                                         </div>
-                                    </DaysConditionContainer>
+                                    </DaysConditionContainer> */}
                                     <SubmitButtonContainer>
                                         <div className='button-group'>
                                             <SingleBlockButton

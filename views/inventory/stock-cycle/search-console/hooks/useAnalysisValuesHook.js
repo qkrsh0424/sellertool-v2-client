@@ -4,25 +4,32 @@ import { useCallback, useEffect, useState } from "react";
 export default function useAnalysisValuesHook(props) {
     const router = useRouter();
     const [days, setDays] = useState(null);
-    const [usingAvailableSalesDays, setUsingAvailableSalesDays] = useState(false);
-    const [availableSalesDays, setAvailableSalesDays] = useState(null);
+    const [leadTime, setLeadTime] = useState(null);
+    const [loeLeadTimeOnlyYn, setLoeLeadTimeOnlyYn] = useState('n');
 
     useEffect(() => {
         onInitDays();
-        onInitAvailableSalesDays();
+        onInitLeadTime();
+        onInitLoeLeadTimeOnlyYn();
     }, [router?.query]);
 
     const onInitDays = useCallback(() => {
-        let value = router?.query?.days || '10';
+        let value = router?.query?.days || '30';
 
         setDays(value);
     }, [router?.query?.days]);
 
-    const onInitAvailableSalesDays = useCallback(() => {
-        let value = router?.query?.availableSalesDays || null;
-        setUsingAvailableSalesDays(value ? true : false);
-        setAvailableSalesDays(value);
-    }, [router?.query?.availableSalesDays]);
+    const onInitLeadTime = useCallback(() => {
+        let value = router?.query?.leadTime || null;
+
+        setLeadTime(value);
+    }, [router?.query?.leadTime]);
+
+    const onInitLoeLeadTimeOnlyYn = useCallback(() => {
+        let value = router?.query?.loeLeadTimeOnlyYn || 'n';
+
+        setLoeLeadTimeOnlyYn(value);
+    }, [router?.query?.loeLeadTimeOnlyYn]);
 
     const onChangeDays = (e) => {
         const value = e.target.value;
@@ -34,32 +41,26 @@ export default function useAnalysisValuesHook(props) {
         }
     }
 
-    const onChangeAvailableSalesDays = (e) => {
+    const onChangeLeadTime = (e) => {
         const value = e.target.value;
         let regex = /^[0-9]{0,2}$/
 
-        if (regex.test(value) && value <= 90) {
-            setAvailableSalesDays(value);
-        }
 
+        if (regex.test(value) && value <= 90) {
+            setLeadTime(value);
+        }
     }
 
-    const onToggleUsingAvailableSalesDays = () => {
-        if (usingAvailableSalesDays) {
-            setUsingAvailableSalesDays(false);
-            setAvailableSalesDays(null);
-        } else {
-            setUsingAvailableSalesDays(true);
-            setAvailableSalesDays('7');
-        }
+    const onToggleLoeLoadTimeOnlyYn = () => {
+        setLoeLeadTimeOnlyYn(loeLeadTimeOnlyYn === 'y' ? 'n' : 'y')
     }
 
     return {
         days,
-        availableSalesDays,
-        usingAvailableSalesDays,
+        leadTime,
+        loeLeadTimeOnlyYn,
         onChangeDays,
-        onChangeAvailableSalesDays,
-        onToggleUsingAvailableSalesDays
+        onChangeLeadTime,
+        onToggleLoeLoadTimeOnlyYn,
     }
 }

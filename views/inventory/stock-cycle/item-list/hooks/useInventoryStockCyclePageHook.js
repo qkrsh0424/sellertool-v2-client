@@ -16,7 +16,8 @@ export default function useInventoryStockCyclePageHook(props) {
     const page = router?.query?.page;
     const size = router?.query?.size;
     const days = router?.query?.days;
-    const availableSalesDays = router?.query?.availableSalesDays;
+    const leadTime = router?.query?.leadTime;
+    const loeLeadTimeOnlyYn = router?.query?.loeLeadTimeOnlyYn;
 
     const [inventoryStockCyclePage, setInventoryStockCyclePage] = useState(null);
 
@@ -37,7 +38,8 @@ export default function useInventoryStockCyclePageHook(props) {
         page,
         size,
         days,
-        availableSalesDays,
+        leadTime,
+        loeLeadTimeOnlyYn
     ]);
 
     const reqFetchInventoryStockCyclePage = async () => {
@@ -49,8 +51,9 @@ export default function useInventoryStockCyclePageHook(props) {
             sort: sort || 'product.name_asc',
             page: page || 1,
             size: size || 20,
-            days: days || 10,
-            availableSalesDays: availableSalesDays,
+            days: days || 30,
+            leadTime: leadTime,
+            loeLeadTimeOnlyYn: loeLeadTimeOnlyYn,
             utcHourDiff: 9
         }
 

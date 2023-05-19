@@ -95,7 +95,13 @@ export const SearchConditionContainer = styled.div`
 
 export const DaysConditionContainer = styled.div`
     padding: 30px 20px 0 20px;
+    display: flex;
+    flex-direction: row;
 
+    @media all and (max-width: 992px){
+        flex-direction: column;
+    }
+    
     .label{
         font-size: 13px;
         color: #404040;
@@ -103,9 +109,26 @@ export const DaysConditionContainer = styled.div`
     }
 
     .control-group{
+        &:first-child{
+            margin-right: 20px;
+        }
+
+        @media all and (max-width:992px){
+            width: 100%;
+
+            &:first-child{
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+        }
+        
+
         .control-box{
-            width:150px;
+            width:250px;
             margin-bottom: 10px;
+            @media all and (max-width:992px){
+                width: 100%;
+            }
 
             .select-item{
                 border-radius: 5px;
@@ -120,7 +143,7 @@ export const DaysConditionContainer = styled.div`
         }
 
         .description{
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             color: #606060;
         }

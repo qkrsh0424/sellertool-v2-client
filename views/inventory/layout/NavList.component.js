@@ -42,5 +42,9 @@ const NAV_LIST = [
     {
         name: '재고자산',
         pathname: `${SALES_ANALYSIS_CLIENT_ADDRESS}/inventory/property`
+    },
+    {
+        name: '재고주기 분석',
+        pathname: '/inventory/stock-cycle'
     }
 ]

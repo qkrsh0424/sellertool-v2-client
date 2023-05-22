@@ -62,19 +62,27 @@ export const TableBox = styled.div`
         font-size: 12px;
         
         .control-button-item{
-            width:20px;
-            height: 20px;
+            width:40px;
+            height: 25px;
             margin:0;
             padding:0;
             margin-left: 3px;
-            background: none;
-            border-radius: 50%;
-            border: none;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            font-size: 11px;
+            color: #444;
+            font-weight: 600;
+
             .icon-figure{
                 width:80%;
                 height: 80%;
             }
         }
+    }
+
+    table tbody .tr-highlight{
+        background: var(--defaultRedColorOpacity30) !important;
     }
 
     table tbody tr{

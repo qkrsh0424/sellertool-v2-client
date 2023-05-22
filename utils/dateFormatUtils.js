@@ -70,10 +70,18 @@ function dateToYYYYMMDDhhmmssFile(idate) {
 }
 
 function getDiffDate(startDate, endDate) {
-    let diffTime = new Date(endDate) - new Date(startDate);
-    let diffDay = diffTime / (1000 * 60 * 60 * 24);
+    const day = 24 * 60 * 60 * 1000;
 
-    return Math.floor(diffDay) <= 0 ? 1 : Math.floor(diffDay);
+    const fDateTime = new Date(startDate);
+    const sDateTime = new Date(endDate);
+
+    fDateTime.setHours(0, 0, 0, 0);
+    sDateTime.setHours(0, 0, 0, 0);
+
+    const diffMilli = Math.abs(sDateTime - fDateTime);
+    const diffDays = Math.round(diffMilli / day);
+
+    return diffDays + 1;
 }
 
 function dateToHHmm(idate) {

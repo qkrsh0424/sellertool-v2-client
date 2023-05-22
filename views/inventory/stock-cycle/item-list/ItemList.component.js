@@ -5,21 +5,30 @@ import CustomSelect from "../../../modules/select/CustomSelect";
 import ResizableTh from "../../../modules/table/ResizableTh";
 import { Container, ControlFieldContainer, PagenationContainer, SortControlContainer, TableBox, TableWrapper } from "./styles/ItemList.styled";
 import useInventoryStockCyclePageHook from "./hooks/useInventoryStockCyclePageHook";
+import { useState } from "react";
+import CustomBlockButton from "../../../../components/buttons/block-button/v1/CustomBlockButton";
+import SafetyIndexVariableModalComponent from "./modal/SafetyIndexVariableModal.component";
+import { getDiffDate } from "../../../../utils/dateFormatUtils";
 
 function returnRecommendPurchaseUnits(
     releaseUnitPerPeriod,
     stockUnit,
     leadTime,
     averageReleaseUnitPerDay,
-    safetyIndexVariable
+    safetyIndexVariableForTotal,
+    safetyIndexVariableForLeadTime
 ) {
-    const value = Math.ceil((releaseUnitPerPeriod - stockUnit + (leadTime * averageReleaseUnitPerDay)) * safetyIndexVariable);
+    const value = Math.ceil((releaseUnitPerPeriod - stockUnit + (leadTime * safetyIndexVariableForLeadTime * averageReleaseUnitPerDay)) * safetyIndexVariableForTotal);
     return value <= 0 ? 0 : value;
 }
 
 export default function ItemListComponent(props) {
     const router = useRouter();
+    const days = router?.query?.days;
     const leadTime = router?.query?.leadTime;
+    const [safetyIndexVariableForTotal, setSafetyIndexVariableForTotal] = useState(1);
+    const [safetyIndexVariableForLeadTime, setSafetyIndexVariableForLeadTime] = useState(1);
+    const [safetyIndexVariableModalOpen, setSafetyIndexVariableModalOpen] = useState(false);
 
     const {
         inventoryStockCyclePage
@@ -36,6 +45,16 @@ export default function ItemListComponent(props) {
                 page: 1
             }
         }, undefined, { scroll: false })
+    }
+
+    const toggleSafetyIndexVariableModalOpen = (setOpen) => {
+        setSafetyIndexVariableModalOpen(setOpen);
+    }
+
+    const handleSetSafetyIndexVariables = (forTotal, forLeadTime) => {
+        setSafetyIndexVariableForTotal(forTotal);
+        setSafetyIndexVariableForLeadTime(forLeadTime);
+        toggleSafetyIndexVariableModalOpen(false);
     }
 
     if (!inventoryStockCyclePage) {
@@ -63,7 +82,11 @@ export default function ItemListComponent(props) {
                 </ControlFieldContainer>
                 <Table
                     inventoryStockCycles={inventoryStockCyclePage?.content}
+                    days={days}
                     leadTime={leadTime}
+                    safetyIndexVariableForTotal={safetyIndexVariableForTotal}
+                    safetyIndexVariableForLeadTime={safetyIndexVariableForLeadTime}
+                    onOpenSafetyIndexVariableModal={() => toggleSafetyIndexVariableModalOpen(true)}
                 />
 
             </Container>
@@ -80,6 +103,15 @@ export default function ItemListComponent(props) {
                     popperDisablePortal={true}
                 />
             </PagenationContainer>
+            {safetyIndexVariableModalOpen &&
+                <SafetyIndexVariableModalComponent
+                    open={safetyIndexVariableModalOpen}
+                    onClose={() => toggleSafetyIndexVariableModalOpen(false)}
+                    onSubmit={(forTotal, forLeadTime) => handleSetSafetyIndexVariables(forTotal, forLeadTime)}
+                    safetyIndexVariableForTotal={safetyIndexVariableForTotal}
+                    safetyIndexVariableForLeadTime={safetyIndexVariableForLeadTime}
+                />
+            }
         </>
     );
 
@@ -87,7 +119,11 @@ export default function ItemListComponent(props) {
 
 function Table({
     inventoryStockCycles,
-    leadTime
+    days,
+    leadTime,
+    safetyIndexVariableForTotal,
+    safetyIndexVariableForLeadTime,
+    onOpenSafetyIndexVariableModal
 }) {
     return (
         <TableWrapper>
@@ -99,6 +135,35 @@ function Table({
                         <tr>
                             {TABLE_HEADER?.map(r => {
                                 if (r.resizable) {
+                                    if (r.name === 'recommendPurchaseUnit') {
+                                        return (
+                                            <ResizableTh
+                                                key={r.name}
+                                                className="fixed-header"
+                                                scope="col"
+                                                width={r.defaultWidth}
+                                                style={{
+                                                    zIndex: '10'
+                                                }}
+                                            >
+                                                <div className='mgl-flex mgl-flex-justifyContent-center mgl-flex-alignItems-center'>
+                                                    <div>
+                                                        {r.headerName}
+                                                    </div>
+                                                    <div>
+                                                        <CustomBlockButton
+                                                            type='button'
+                                                            className='control-button-item'
+                                                            onClick={() => onOpenSafetyIndexVariableModal()}
+                                                        >
+                                                            세팅값
+                                                        </CustomBlockButton>
+                                                    </div>
+                                                </div>
+                                            </ResizableTh>
+                                        );
+                                    }
+
                                     return (
                                         <ResizableTh
                                             key={r.name}
@@ -132,10 +197,12 @@ function Table({
                     </thead>
                     <tbody>
                         {inventoryStockCycles?.map((inventoryStockCycle) => {
+                            const isStockRisk = leadTime && inventoryStockCycle?.stockCyclePerDay > 0 && inventoryStockCycle?.stockCyclePerDay <= leadTime;
 
                             return (
                                 <tr
                                     key={inventoryStockCycle?.productOptionId}
+                                    className={`${(isStockRisk) ? 'tr-highlight' : ''}`}
                                 >
                                     <td>
                                         <div className='content-box'>
@@ -164,6 +231,16 @@ function Table({
                                     </td>
                                     <td>
                                         <div className='content-box'>
+                                            {isStockRisk &&
+                                                <div style={{ color: 'var(--defaultRedColor)', fontWeight: '700' }}>재고 위험성 높음</div>
+                                            }
+                                            {(!inventoryStockCycle.firstReleaseDateTime || getDiffDate(inventoryStockCycle.firstReleaseDateTime, new Date()) < days) &&
+                                                <div style={{ color: 'var(--defaultYellowColor)', fontWeight: '700' }}>분석기간내 샘플 데이터 부족</div>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className='content-box'>
                                             <div style={{ color: '#444', fontWeight: '500' }}>{inventoryStockCycle?.stockUnit} 개</div>
                                         </div>
                                     </td>
@@ -180,16 +257,8 @@ function Table({
                                     <td>
                                         <div className='content-box'>
                                             <div style={{ color: 'var(--mainColor)', fontWeight: '700' }}>{inventoryStockCycle?.stockCyclePerDay} 일</div>
+                                            <div style={{ color: '#444', fontWeight: '600' }}>{(inventoryStockCycle?.stockCyclePerDay / 7).toFixed(1)} 주</div>
                                         </div>
-                                    </td>
-                                    <td>
-                                        {leadTime &&
-                                            <div className='content-box'>
-                                                {inventoryStockCycle?.stockCyclePerDay <= leadTime &&
-                                                    <div style={{ color: 'var(--defaultRedColor)', fontWeight: '700' }}>재고 위험성 높음</div>
-                                                }
-                                            </div>
-                                        }
                                     </td>
                                     <td>
                                         {leadTime &&
@@ -201,7 +270,8 @@ function Table({
                                                             inventoryStockCycle?.stockUnit,
                                                             leadTime,
                                                             inventoryStockCycle?.averageReleaseUnitPerDay,
-                                                            1
+                                                            safetyIndexVariableForTotal,
+                                                            safetyIndexVariableForLeadTime
                                                         )
                                                     }
                                                 </div>
@@ -245,39 +315,39 @@ const TABLE_HEADER = [
     },
     {
         resizable: true,
+        name: 'warning',
+        headerName: '경보',
+        defaultWidth: 150
+    },
+    {
+        resizable: true,
         name: 'stockUnit',
         headerName: '재고수량',
-        defaultWidth: 120
+        defaultWidth: 100
     },
     {
         resizable: true,
         name: 'releaseUnitPerPeriod',
         headerName: '기간내 출고량',
-        defaultWidth: 120
+        defaultWidth: 100
     },
     {
         resizable: true,
         name: 'averageReleaseUnitPerDay',
         headerName: '일평균 출고량',
-        defaultWidth: 120
+        defaultWidth: 100
     },
     {
         resizable: true,
         name: 'stockCyclePerDay',
-        headerName: '출고가능 일수',
-        defaultWidth: 120
-    },
-    {
-        resizable: true,
-        name: 'warning',
-        headerName: '경보',
-        defaultWidth: 120
+        headerName: '출고가능 기간 (일별 / 주별)',
+        defaultWidth: 150
     },
     {
         resizable: true,
         name: 'recommendPurchaseUnit',
         headerName: '추천 구매 수량',
-        defaultWidth: 120
+        defaultWidth: 150
     },
 ]
 

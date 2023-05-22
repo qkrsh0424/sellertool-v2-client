@@ -93,6 +93,14 @@ function getDiffHourWithUTC() {
     return Math.abs(new Date().getTimezoneOffset() / 60);
 }
 
+function setPlusDate(idate, prevYear, prevMonth, prevDay) {
+    var date = new Date(idate);
+    date.setFullYear(date.getFullYear() + prevYear)
+    date.setMonth(date.getMonth() + prevMonth);
+    date.setDate(date.getDate() + prevDay);
+    return new Date(moment(date));
+}
+
 export {
     getStartDate,
     getEndDate,
@@ -105,5 +113,6 @@ export {
     getRemainingDateCount,
     getDiffDate,
     dateToHHmm,
-    getDiffHourWithUTC
+    getDiffHourWithUTC,
+    setPlusDate
 }

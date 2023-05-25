@@ -123,7 +123,7 @@ export default function ProductListFieldComponent(props) {
                         <CustomSelect
                             className='select-item'
                             onChange={(e) => __handle.action.changeSort(e)}
-                            value={router?.query?.sort || ''}
+                            value={router?.query?.sort || 'cid_desc'}
                         >
                             {SORTED_BY?.map((r, index) => {
                                 return (

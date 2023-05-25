@@ -127,6 +127,7 @@ export default function ItemListComponent(props) {
                     <StockRegisterStatusModalComponent
                         selectedProductOption={selectedProductOption}
                         onClose={handleCloseStockRegisterStatusModal}
+                        onReqFetchInventoryStocks={reqFetchInventoryStocks}
                     />
                 </CommonModalComponent>
             }

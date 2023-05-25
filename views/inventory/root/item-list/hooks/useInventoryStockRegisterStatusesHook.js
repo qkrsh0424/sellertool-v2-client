@@ -115,6 +115,61 @@ export default function useInventoryStockRegisterStatusesHook({
             ;
     }
 
+    const reqDeleteInventoryReceive = async (body, successCallback) => {
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        await inventoryReceiveDataConnect().delete(body, headers)
+            .then(async res => {
+                if (res.status === 200) {
+                    await successCallback();
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (!res) {
+                    alert('네트워크 연결이 원활하지 않습니다.');
+                    return;
+                }
+
+                if (res.status === 500) {
+                    alert('undefined error. 관리자에 문의해 주세요.');
+                    return;
+                }
+
+                alert(res.data.memo);
+            });
+    }
+
+    const reqDeleteInventoryRelease = async (body, successCallback) => {
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        await inventoryReleaseDataConnect().delete(body, headers)
+            .then(async res => {
+                if (res.status === 200) {
+                    await successCallback();
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (!res) {
+                    alert('네트워크 연결이 원활하지 않습니다.');
+                    return;
+                }
+
+                if (res.status === 500) {
+                    alert('undefined error. 관리자에 문의해 주세요.');
+                    return;
+                }
+
+                alert(res.data.memo);
+            });
+    }
+
     const onChangeStartDateTime = (value) => {
         setStartDateTime(new Date(value));
     }
@@ -131,6 +186,8 @@ export default function useInventoryStockRegisterStatusesHook({
         onChangeEndDateTime,
         reqFetchInventoryStockRegisterStatuses,
         reqChangeInventoryReceiveMemo,
-        reqChangeInventoryReleaseMemo
+        reqChangeInventoryReleaseMemo,
+        reqDeleteInventoryReceive,
+        reqDeleteInventoryRelease
     }
 }

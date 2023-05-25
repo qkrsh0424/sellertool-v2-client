@@ -40,6 +40,24 @@ const inventoryReleaseDataConnect = () => {
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
             )
+        },
+        /**
+         * 
+         * @param {object} body 
+         * @param {string} body.id
+         * @param {object} headers
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        delete: async function (body, headers) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/inventory-releases/${body.id}`, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         }
     }
 }

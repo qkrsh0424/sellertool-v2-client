@@ -38,13 +38,12 @@ export default function useProductOptionsHook(props) {
     const reqFetchProductOptionPage = async () => {
         toggleIsLoading(true);
         let params = {
-            searchType: 'CONDITION',
             productCategoryId: router?.query?.productCategoryId,
             productSubCategoryId: router?.query?.productSubCategoryId,
             stockManagementYn: 'y',
             searchCondition: router?.query?.searchCondition,
             searchQuery: router?.query?.searchQuery,
-            sort: router?.query?.sort || 'product.createdAt_asc',
+            sort: router?.query?.sort || 'product.cid_asc',
             page: router?.query?.page || 1,
             size: router?.query?.size || 50,
         }

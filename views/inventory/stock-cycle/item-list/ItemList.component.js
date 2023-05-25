@@ -303,7 +303,7 @@ const TABLE_HEADER = [
     },
     {
         resizable: true,
-        name: 'productOptionCode',
+        name: 'productOptionName',
         headerName: '옵션명',
         defaultWidth: 250
     },

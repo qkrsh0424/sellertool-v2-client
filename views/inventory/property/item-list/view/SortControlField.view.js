@@ -26,11 +26,11 @@ export default function SortControlFieldView({
 
 const SORTED_BY = [
     {
-        sort: 'product.createdAt_asc',
+        sort: 'product.cid_asc',
         name: '상품등록 오래된순'
     },
     {
-        sort: 'product.createdAt_desc',
+        sort: 'product.cid_desc',
         name: '상품등록 최신순'
     },
     {

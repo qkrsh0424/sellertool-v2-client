@@ -470,6 +470,14 @@ const ORDER_INFO_TYPES = [
         value: 'salesChannel',
         name: '판매채널'
     },
+    {
+        value: 'orderNumber1',
+        name: '주문번호1'
+    },
+    {
+        value: 'orderNumber2',
+        name: '주문번호2'
+    },
 ]
 
 const RECEIVER_INFO_TYPES = [

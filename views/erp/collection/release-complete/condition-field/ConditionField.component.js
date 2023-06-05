@@ -477,12 +477,20 @@ const MANAGEMENT_PRODUCT_TYPES = [
         name: '전체'
     },
     {
+        value: 'productCode',
+        name: '[M] 상품코드'
+    },
+    {
         value: 'productName',
         name: '[M] 상품명'
     },
     {
         value: 'productTag',
         name: '[M] 상품태그'
+    },
+    {
+        value: 'productOptionCode',
+        name: '[M] 옵션코드'
     },
     {
         value: 'productOptionName',

@@ -11,14 +11,13 @@ import SafetyIndexVariableModalComponent from "./modal/SafetyIndexVariableModal.
 import { getDiffDate } from "../../../../utils/dateFormatUtils";
 
 function returnRecommendPurchaseUnits(
-    releaseUnitPerPeriod,
     stockUnit,
     leadTime,
     averageReleaseUnitPerDay,
+    safetyIndexVariableForOutOfStockPeriod,
     safetyIndexVariableForTotal,
-    safetyIndexVariableForLeadTime
 ) {
-    const value = Math.ceil((releaseUnitPerPeriod - stockUnit + (leadTime * safetyIndexVariableForLeadTime * averageReleaseUnitPerDay)) * safetyIndexVariableForTotal);
+    const value = Math.ceil(((safetyIndexVariableForOutOfStockPeriod * averageReleaseUnitPerDay) - stockUnit + (leadTime * averageReleaseUnitPerDay)) * safetyIndexVariableForTotal);
     return value <= 0 ? 0 : value;
 }
 
@@ -26,8 +25,9 @@ export default function ItemListComponent(props) {
     const router = useRouter();
     const days = router?.query?.days;
     const leadTime = router?.query?.leadTime;
+
+    const [safetyIndexVariableForOutOfStockPeriod, setSafetyIndexVariableForOutOfStockPeriod] = useState(30);
     const [safetyIndexVariableForTotal, setSafetyIndexVariableForTotal] = useState(1);
-    const [safetyIndexVariableForLeadTime, setSafetyIndexVariableForLeadTime] = useState(1);
     const [safetyIndexVariableModalOpen, setSafetyIndexVariableModalOpen] = useState(false);
 
     const {
@@ -51,9 +51,9 @@ export default function ItemListComponent(props) {
         setSafetyIndexVariableModalOpen(setOpen);
     }
 
-    const handleSetSafetyIndexVariables = (forTotal, forLeadTime) => {
+    const handleSetSafetyIndexVariables = (forOutOfStockPeriod, forTotal) => {
+        setSafetyIndexVariableForOutOfStockPeriod(forOutOfStockPeriod);
         setSafetyIndexVariableForTotal(forTotal);
-        setSafetyIndexVariableForLeadTime(forLeadTime);
         toggleSafetyIndexVariableModalOpen(false);
     }
 
@@ -84,8 +84,8 @@ export default function ItemListComponent(props) {
                     inventoryStockCycles={inventoryStockCyclePage?.content}
                     days={days}
                     leadTime={leadTime}
+                    safetyIndexVariableForOutOfStockPeriod={safetyIndexVariableForOutOfStockPeriod}
                     safetyIndexVariableForTotal={safetyIndexVariableForTotal}
-                    safetyIndexVariableForLeadTime={safetyIndexVariableForLeadTime}
                     onOpenSafetyIndexVariableModal={() => toggleSafetyIndexVariableModalOpen(true)}
                 />
 
@@ -107,9 +107,9 @@ export default function ItemListComponent(props) {
                 <SafetyIndexVariableModalComponent
                     open={safetyIndexVariableModalOpen}
                     onClose={() => toggleSafetyIndexVariableModalOpen(false)}
-                    onSubmit={(forTotal, forLeadTime) => handleSetSafetyIndexVariables(forTotal, forLeadTime)}
+                    onSubmit={(forOutOfStockPeriod, forTotal) => handleSetSafetyIndexVariables(forOutOfStockPeriod, forTotal)}
+                    safetyIndexVariableForOutOfStockPeriod={safetyIndexVariableForOutOfStockPeriod}
                     safetyIndexVariableForTotal={safetyIndexVariableForTotal}
-                    safetyIndexVariableForLeadTime={safetyIndexVariableForLeadTime}
                 />
             }
         </>
@@ -121,8 +121,8 @@ function Table({
     inventoryStockCycles,
     days,
     leadTime,
+    safetyIndexVariableForOutOfStockPeriod,
     safetyIndexVariableForTotal,
-    safetyIndexVariableForLeadTime,
     onOpenSafetyIndexVariableModal
 }) {
     return (
@@ -261,22 +261,21 @@ function Table({
                                         </div>
                                     </td>
                                     <td>
-                                        {leadTime &&
-                                            <div className='content-box'>
+                                        <div className='content-box'>
+                                            {leadTime &&
                                                 <div style={{ color: 'var(--defaultGreenColor)', fontWeight: '700' }}>
                                                     {
                                                         returnRecommendPurchaseUnits(
-                                                            inventoryStockCycle?.releaseUnitPerPeriod,
                                                             inventoryStockCycle?.stockUnit,
                                                             leadTime,
                                                             inventoryStockCycle?.averageReleaseUnitPerDay,
-                                                            safetyIndexVariableForTotal,
-                                                            safetyIndexVariableForLeadTime
+                                                            safetyIndexVariableForOutOfStockPeriod,
+                                                            safetyIndexVariableForTotal
                                                         )
                                                     }
                                                 </div>
-                                            </div>
-                                        }
+                                            }
+                                        </div>
                                     </td>
                                 </tr>
                             );

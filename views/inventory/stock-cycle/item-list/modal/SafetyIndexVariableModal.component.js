@@ -21,11 +21,17 @@ export default function SafetyIndexVariableModalComponent({
     open = false,
     onClose = () => { },
     onSubmit = () => { },
-    safetyIndexVariableForTotal,
-    safetyIndexVariableForLeadTime
+    safetyIndexVariableForOutOfStockPeriod,
+    safetyIndexVariableForTotal
 }) {
+    const [editSafetyIndexVariableForOutOfStockPeriod, setEditSafetyIndexVariableForOutOfStockPeriod] = useState(_.cloneDeep(safetyIndexVariableForOutOfStockPeriod));
     const [editSafetyIndexVariableForTotal, setEditSafetyIndexVariableForTotal] = useState(_.cloneDeep(safetyIndexVariableForTotal));
-    const [editSafetyIndexVariableForLeadTime, setEditSafetyIndexVariableForLeadTime] = useState(_.cloneDeep(safetyIndexVariableForLeadTime));
+
+    const handleChangeEditSafetyIndexVariableForOutOfStockPeriod = (e) => {
+        const value = e.target.value;
+
+        setEditSafetyIndexVariableForOutOfStockPeriod(value);
+    }
 
     const handleChangeEditSafetyIndexVariableForTotal = (e) => {
         const value = e.target.value;
@@ -33,20 +39,19 @@ export default function SafetyIndexVariableModalComponent({
         setEditSafetyIndexVariableForTotal(value);
     }
 
-    const handleChangeEditSafetyIndexVariableForLeadTime = (e) => {
-        const value = e.target.value;
-
-        setEditSafetyIndexVariableForLeadTime(value);
-    }
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (editSafetyIndexVariableForTotal < 0.1 || editSafetyIndexVariableForTotal > 5 || editSafetyIndexVariableForLeadTime < 0.1 || editSafetyIndexVariableForLeadTime > 5) {
+        if (editSafetyIndexVariableForOutOfStockPeriod < 1 || safetyIndexVariableForOutOfStockPeriod > 1000) {
+            alert('목표 재고 소진 기간을 1 ~ 1000 로 입력해 주세요.');
+            return;
+        }
+
+        if (editSafetyIndexVariableForTotal < 0.1 || editSafetyIndexVariableForTotal > 5) {
             alert('안전지수를 0.1 ~ 5 로 입력해 주세요.');
             return;
         }
-        onSubmit(editSafetyIndexVariableForTotal, editSafetyIndexVariableForLeadTime);
+        onSubmit(editSafetyIndexVariableForOutOfStockPeriod, editSafetyIndexVariableForTotal);
     }
     return (
         <>
@@ -55,20 +60,20 @@ export default function SafetyIndexVariableModalComponent({
                 <form onSubmit={(e) => handleSubmit(e)}>
                     <ContentContainer>
                         <div className='input-box'>
+                            <div className='label'>목표 재고 소진 기간 (기본값:30, [1 ~ 1000])</div>
+                            <CustomInput
+                                type='number'
+                                value={editSafetyIndexVariableForOutOfStockPeriod || ''}
+                                onChange={(e) => handleChangeEditSafetyIndexVariableForOutOfStockPeriod(e)}
+                                step={1}
+                            />
+                        </div>
+                        <div className='input-box'>
                             <div className='label'>기본 안전지수 (기본값:1, [0.1 ~ 5])</div>
                             <CustomInput
                                 type='number'
                                 value={editSafetyIndexVariableForTotal || ''}
                                 onChange={(e) => handleChangeEditSafetyIndexVariableForTotal(e)}
-                                step={0.1}
-                            />
-                        </div>
-                        <div className='input-box'>
-                            <div className='label'>리드타임 안전지수 (기본값:1, [0.1 ~ 5])</div>
-                            <CustomInput
-                                type='number'
-                                value={editSafetyIndexVariableForLeadTime || ''}
-                                onChange={(e) => handleChangeEditSafetyIndexVariableForLeadTime(e)}
                                 step={0.1}
                             />
                         </div>

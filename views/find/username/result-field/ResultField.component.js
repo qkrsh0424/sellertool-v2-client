@@ -11,13 +11,23 @@ export default function ResultFieldComponent({
         <Container>
             <Wrapper>
                 <h2 className='title'>아이디 찾기</h2>
-                <div className='username'>
-                    <div>회원님의 아이디는</div>
-                    <div><span style={{ fontWeight: '700' }}>{info?.username}</span> 입니다.</div>
-                </div>
-                <div className='created'>
-                    가입일자 : {dateToYYYYMMDD(info?.createdAt)}
-                </div>
+                <div>총 {info?.length} 개의 아이디를 찾았습니다.</div>
+                {info?.map((r, index) => {
+                    return (
+                        <div key={r.username} className='info-wrapper'>
+                            <div className='counting'>{index + 1}.</div>
+                            <div className='info-box'>
+                                <div className='username'>
+                                    <div> <span style={{ fontWeight: '700' }}>{r?.username}</span></div>
+                                </div>
+                                <div className='created'>
+                                    가입일자 : {dateToYYYYMMDD(r?.createdAt)}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
+
                 <ButtonGroup>
                     <Link href='/login' passHref>
                         <a>

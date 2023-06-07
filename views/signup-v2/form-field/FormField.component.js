@@ -11,7 +11,6 @@ import { Container, FormGroup, HeaderWrapper, InputBox, LogoBox, Wrapper } from 
 export default function FormFieldComponent(props) {
     const [usernameDuplicatedNoticeOpen, setUsernameDuplicatedNoticeOpen] = useState(false);
     const [usernamePassNoticeOpen, setUsernamePassNoticeOpen] = useState(false);
-    const [emailValidationCodeInputModeOpen, setEmailValidationCodeInputModeOpen] = useState(false);
     const [phoneNumberValidationCodeInputModeOpen, setPhoneNumberValidationCodeInputModeOpen] = useState(false);
 
     const {
@@ -31,8 +30,6 @@ export default function FormFieldComponent(props) {
         returnPasswordValid,
         returnPasswordCheckerValid,
         returnNicknameValid,
-        returnEmailValid,
-        returnEmailValidationCodeValid,
         returnPhoneNumberValid,
         returnPhoneNumberValidationCodeValid,
         onSetSignupValid
@@ -45,8 +42,6 @@ export default function FormFieldComponent(props) {
         let passwordValid = returnPasswordValid(signupForm.password);
         let passwordCheckerValid = returnPasswordCheckerValid(signupForm.password, signupForm.passwordChecker);
         let nicknameValid = returnNicknameValid(signupForm.nickname);
-        let emailValid = returnEmailValid(signupForm.email);
-        let emailValidationCodeValid = returnEmailValidationCodeValid(signupForm.emailValidationCode);
         let phoneNumberValid = returnPhoneNumberValid(signupForm.phoneNumber);
         let phoneNumberValidationCodeValid = returnPhoneNumberValidationCodeValid(signupForm.phoneNumberValidationCode);
 
@@ -56,8 +51,6 @@ export default function FormFieldComponent(props) {
             password: passwordValid,
             passwordChecker: passwordCheckerValid,
             nickname: nicknameValid,
-            email: emailValid,
-            emailValidationCode: emailValidationCodeValid,
             phoneNumber: phoneNumberValid,
             phoneNumberValidationCode: phoneNumberValidationCodeValid
         })
@@ -66,21 +59,12 @@ export default function FormFieldComponent(props) {
         signupForm.password,
         signupForm.passwordChecker,
         signupForm.nickname,
-        signupForm.email,
-        signupForm.emailValidationCode,
         signupForm.phoneNumber,
         signupForm.phoneNumberValidationCode
     ]);
 
     const __handle = {
         action: {
-            openEmailValidationCodeInputMode: () => {
-                setEmailValidationCodeInputModeOpen(true);
-            },
-            closeEmailValidationCodeInputMode: () => {
-                setEmailValidationCodeInputModeOpen(false);
-                onClearEmailValidationCode();
-            },
             openPhoneNumberValidationCodeInputMode: () => {
                 setPhoneNumberValidationCodeInputModeOpen(true);
             },
@@ -119,18 +103,6 @@ export default function FormFieldComponent(props) {
                     })
                 }
 
-            },
-            sendEmailValidationCode: async () => {
-                if (!returnEmailValid(signupForm.email)) {
-                    alert('이메일 형식을 확인해 주세요.');
-                    return;
-                }
-                setDisabledBtn(true);
-
-                reqSendEmailValidationCode({
-                    email: signupForm.email,
-                    successCallback: () => __handle.action.openEmailValidationCodeInputMode()
-                })
             },
             sendPhoneNumberValidationCode: async () => {
                 if (!returnPhoneNumberValid(signupForm.phoneNumber)) {
@@ -313,83 +285,6 @@ export default function FormFieldComponent(props) {
                                 maxLength={15}
                                 required
                             ></input>
-                        </InputBox>
-                        <InputBox>
-                            <div
-                                className='input-label'
-                            >
-                                <div
-                                    style={{
-                                        marginRight: '10px'
-                                    }}
-                                >이메일</div>
-                                <div>
-                                    <ValidTag
-                                        isValid={signupValid.email}
-                                    >형식 체크</ValidTag>
-                                </div>
-                            </div>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center'
-                                }}
-                            >
-                                <input
-                                    type='email'
-                                    className={`input-item`}
-                                    name='email'
-                                    value={signupForm.email || ''}
-                                    onChange={(e) => onChangeValueOfNameForSignupForm(e)}
-                                    placeholder={'example@example.com'}
-                                    required
-                                    disabled={emailValidationCodeInputModeOpen ? true : false}
-                                ></input>
-                                {emailValidationCodeInputModeOpen ?
-                                    <SingleBlockButton
-                                        type='button'
-                                        className='validation-button-el'
-                                        onClick={__handle.action.closeEmailValidationCodeInputMode}
-                                        disabled={disabledBtn}
-                                    >
-                                        재시도
-                                    </SingleBlockButton>
-                                    :
-                                    <SingleBlockButton
-                                        type='button'
-                                        className='validation-button-el'
-                                        onClick={__handle.submit.sendEmailValidationCode}
-                                        disabled={!returnEmailValid(signupForm.email) || disabledBtn}
-                                    >
-                                        인증번호 발송
-                                    </SingleBlockButton>
-                                }
-                            </div>
-                            {emailValidationCodeInputModeOpen &&
-                                <div
-                                    style={{
-                                        marginTop: '10px'
-                                    }}
-                                >
-                                    <input
-                                        type='text'
-                                        className={`input-item`}
-                                        name='emailValidationCode'
-                                        value={signupForm.emailValidationCode || ''}
-                                        placeholder="인증번호를 입력하세요."
-                                        onChange={(e) => onChangeValueOfNameForSignupForm(e)}
-                                        minLength={6}
-                                        maxLength={6}
-                                        required
-                                    ></input>
-                                    <div style={{ marginTop: '10px' }}>
-                                        <div className='input-notice'>해당 이메일로 인증번호를 발송했습니다.(유효시간 30분)</div>
-                                        <div className='input-notice'>인증번호가 오지 않으면 입력하신 정보가 정확한지 확인하여 주세요.</div>
-                                        <div className='input-notice' style={{ color: '#e56767' }}>이미 가입된 이메일은 인증번호를 받을 수 없습니다.</div>
-                                        <div className='input-notice' style={{ color: '#e56767' }}>인증번호를 여전히 받지 못한 경우 스팸 메일함을 확인하여 주세요.</div>
-                                    </div>
-                                </div>
-                            }
                         </InputBox>
                         <InputBox>
                             <div

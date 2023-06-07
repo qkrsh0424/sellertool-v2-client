@@ -5,7 +5,7 @@ export const Container = styled.div`
 `;
 
 export const LinkItem = styled.div`
-    padding: 5px;
+    padding: 15px 10px;
     font-size: 18px;
     color: ${props => props.active ? 'var(--mainColor)' : '#999999'};
     -webkit-tap-highlight-color: #00000000;

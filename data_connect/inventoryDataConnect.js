@@ -73,15 +73,22 @@ const inventoryDataConnect = () => {
          * @returns 
          */
         searchStockAssetsSlice: async function (params, headers) {
-            return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/inventory/search/stockAssets/slice`, {
-                    headers: headers,
-                    params: params,
-                    withCredentials: true,
-                    xsrfCookieName: 'x_api_csrf_token',
-                    xsrfHeaderName: 'X-XSRF-TOKEN'
-                })
-            )
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/inventory/search/stockAssets/slice`, {
+                headers: headers,
+                params: params,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            });
+        },
+        inventoryStockCyclePage: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/inventory/search/stockCycle/page`, {
+                headers: headers,
+                params: params,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            });
         },
         /**
          * 
@@ -119,6 +126,25 @@ const inventoryDataConnect = () => {
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
             )
+        },
+        /**
+         * 
+         * @param {object} params
+         * @param {int} params.page
+         * @param {string} params.assetType
+         * @param {string} params.orderType
+         * @param {object} headers
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        searchRankedInventory: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/inventory/search/stockAssets/slice`, {
+                params,
+                headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         }
     }
 }

@@ -27,19 +27,35 @@ export const Wrapper = styled.div`
         color: #404040;
     }
 
+    .counting{
+        font-size: 20px;
+        margin-right: 20px;
+    }
+
+    .info-wrapper{
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .info-box{
+        /* display: flex; */
+    }
+
     .username{
-        margin-top: 40px;
-        font-size: 23px;
+        /* margin-top: 40px; */
+        font-size: 20px;
         line-height: 1.5;
         font-weight: 500;
         color:#404040;
-        text-align: center;
+        /* text-align: center; */
     }
 
     .created{
-        margin-top: 40px;
-        font-size: 20px;
-        text-align: center;
+        /* margin-top: 40px; */
+        font-size: 16px;
+        color: #404040;
+        /* text-align: center; */
     }
 `;
 

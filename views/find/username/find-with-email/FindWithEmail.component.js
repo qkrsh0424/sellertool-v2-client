@@ -137,7 +137,7 @@ export default function FindWithEmailComponent({
                             <div style={{ marginTop: '10px' }}>
                                 <div className="input-notice">해당 번호로 인증번호를 발송했습니다.(유효시간 30분)</div>
                                 <div className="input-notice">인증번호가 오지 않으면 입력하신 정보가 정확한지 확인하여 주세요.</div>
-                                <div className="input-notice" style={{ color: 'var(--defaultRedColor)' }}>가입되어 있지 않은 이메일은 인증번호를 받을 수 없습니다.</div>
+                                <div className="input-notice" style={{ color: 'var(--defaultRedColor)' }}>등록되어 있지 않은 이메일은 인증번호를 받을 수 없습니다.</div>
                                 <div className="input-notice" style={{ color: 'var(--defaultRedColor)' }}>인증번호를 여전히 받지 못한 경우 스팸 메일함을 확인하여 주세요.</div>
                             </div>
                         </InputBox>

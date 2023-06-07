@@ -30,9 +30,28 @@ const numberFormatUtils = {
     }
 }
 
+function toPriceUnitFormat(price) {
+    let priceSize = price?.toString().length;
+
+    if (priceSize > 8) {
+        return parseFloat((price / (10 ** 8)).toFixed(2)) + ' 억원';
+    } else if (priceSize > 7) {
+        return parseFloat((price / (10 ** 7)).toFixed(2)) + ' 천만원';
+    } else if (priceSize > 6) {
+        return parseFloat((price / (10 ** 6)).toFixed(2)) + ' 백만원';
+    } else if (priceSize > 4) {
+        return parseFloat((price / (10 ** 4)).toFixed(2)) + ' 만원';
+    } else if (priceSize > 3) {
+        return parseFloat((price / (10 ** 3)).toFixed(2)) + ' 천원';
+    } else {
+        return price + ' 원';
+    }
+}
+
 export {
     numberFormatUtils,
     numberWithCommas,
     getRemovedPrefixZero,
-    roundToTwo
+    roundToTwo,
+    toPriceUnitFormat
 }

@@ -103,6 +103,7 @@ export default function ErpItemListComponent({
             optionCode: selectedOptionCode
         }
 
+        onSelectClearAllErpItems();
         onSubmitChangeOptionCode(body, () => {
             handleCloseEditOptionCodeModal();
         })
@@ -113,7 +114,8 @@ export default function ErpItemListComponent({
             id: targetErpItem.id,
             releaseOptionCode: selectedOptionCode
         }
-
+        
+        onSelectClearAllErpItems();
         onSubmitChangeReleaseOptionCode(body, () => {
             handleCloseEditReleaseOptionCodeModal();
         })

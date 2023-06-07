@@ -5,10 +5,31 @@ import CommonModalComponent from "../modules/modal/CommonModalComponent";
 import WorkspaceNoticeModalComponent from "./modal/WorkspaceNoticeModal.component";
 import BannerComponent from "./banner/Banner.component";
 import Section1Component from "./section1/Section1.component";
+import Link from "next/link";
 
 const Container = styled.div`
     background: var(--defaultBackground);
     overflow: hidden;
+
+    .link-box{
+        padding: 5px 10px;
+        text-align: right;
+
+        .link{
+            border: 1px solid #00000000;
+            font-size: 13px;
+            color: #444;
+            padding: 10px;
+            display: inline-block;
+            border-radius: 5px;
+            font-weight: 500;
+
+            &:hover{
+                border: 1px solid var(--mainColor);
+                color: var(--mainColor);
+            }
+        }
+    }
 `;
 
 const HomeMain = () => {
@@ -40,6 +61,13 @@ const HomeMain = () => {
     return (
         <>
             <Container>
+                <div className='link-box'>
+                    <Link
+                        href='https://www.sellertool.io'
+                    >
+                        <a className='link'>구버전으로 이동</a>
+                    </Link>
+                </div>
                 <BannerComponent />
                 <Section1Component />
             </Container>

@@ -73,7 +73,8 @@ export default function FloatingControlBarModalComponent({
     onActionOpenExcelDownloadModal,
     onActionOpenCopyCreateErpItemModal,
     onActionClearAllSelectedItems,
-    onActionOpenViewSelectedModal
+    onActionOpenViewSelectedModal,
+    onActionOpenProductListModal
 }) {
     return (
         <div>
@@ -151,6 +152,13 @@ export default function FloatingControlBarModalComponent({
                                 onClick={() => onActionOpenViewSelectedModal()}
                             >
                                 선택 데이터 보기
+                            </SingleBlockButton>
+                            <SingleBlockButton
+                                type='button'
+                                className='button-item'
+                                onClick={() => onActionOpenProductListModal()}
+                            >
+                                상품리스트
                             </SingleBlockButton>
                             <SingleBlockButton
                                 type='button'

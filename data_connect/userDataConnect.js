@@ -10,7 +10,7 @@ const userDataConnect = () => {
     return {
         signup: async ({ body }) => {
             await csrfDataConnect().getAuthCsrf();
-            return await axios.post(`${AUTH_API_ADDRESS}/auth/v1/users/signup/local`, body, {
+            return await axios.post(`${AUTH_API_ADDRESS}/auth/v1/users/signup/local-v2`, body, {
                 withCredentials: true,
                 xsrfCookieName: 'x_auth_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'

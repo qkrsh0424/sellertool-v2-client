@@ -35,7 +35,7 @@ export function useProdutOptionPageHook(props) {
             size: reqSize ? reqSize : DEFAULT_SIZE,
             searchCondition: 'ALL',
             searchQuery: searchQuery,
-            sort: 'product.createdAt_asc'
+            sort: 'product.cid_asc'
         }
 
         let headers = {

@@ -8,8 +8,6 @@ export default function useSignupValidHook() {
         password: false,
         passwordChecker: false,
         nickname: false,
-        email: false,
-        emailValidationCode: false,
         phoneNumber: false,
         phoneNumberValidationCode: false
     });
@@ -22,8 +20,6 @@ export default function useSignupValidHook() {
             && signupValid.password
             && signupValid.passwordChecker
             && signupValid.nickname
-            && signupValid.email
-            && signupValid.emailValidationCode
             && signupValid.phoneNumber
             && signupValid.phoneNumberValidationCode
         ) {
@@ -58,14 +54,6 @@ export default function useSignupValidHook() {
         return formatValidUtils.isNicknameFormatValid(nickname);
     }
 
-    const returnEmailValid = (email) => {
-        return formatValidUtils.isEmailFormatValid(email);
-    }
-
-    const returnEmailValidationCodeValid = (emailValidationCode) => {
-        return formatValidUtils.isValidationCodeFormatValid(emailValidationCode);
-    }
-
     const returnPhoneNumberValid = (phoneNumber) => {
         return formatValidUtils.isPhoneNumberFormatValid(phoneNumber);
     }
@@ -85,8 +73,6 @@ export default function useSignupValidHook() {
         returnPasswordValid,
         returnPasswordCheckerValid,
         returnNicknameValid,
-        returnEmailValid,
-        returnEmailValidationCodeValid,
         returnPhoneNumberValid,
         returnPhoneNumberValidationCodeValid,
         onSetSignupValid

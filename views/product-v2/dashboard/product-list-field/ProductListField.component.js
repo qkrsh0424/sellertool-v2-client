@@ -123,7 +123,7 @@ export default function ProductListFieldComponent(props) {
                         <CustomSelect
                             className='select-item'
                             onChange={(e) => __handle.action.changeSort(e)}
-                            value={router?.query?.sort || ''}
+                            value={router?.query?.sort || 'cid_desc'}
                         >
                             {SORTED_BY?.map((r, index) => {
                                 return (
@@ -167,11 +167,11 @@ export default function ProductListFieldComponent(props) {
 
 const SORTED_BY = [
     {
-        sort: 'createdAt_asc',
+        sort: 'cid_asc',
         name: '등록일 오름차순'
     },
     {
-        sort: 'createdAt_desc',
+        sort: 'cid_desc',
         name: '등록일 내림차순'
     },
     {

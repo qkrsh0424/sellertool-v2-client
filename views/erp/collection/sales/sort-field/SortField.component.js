@@ -252,6 +252,19 @@ const SORT_TYPES = [
             }
         ]
     },
+    {
+        name: '운송장번호',
+        sortList: [
+            {
+                sort: ['waybillNumber_asc'],
+                direction: '오름차순'
+            },
+            {
+                sort: ['waybillNumber_desc'],
+                direction: '내림차순'
+            }
+        ]
+    },
 ]
 
 const FLATTEN_SORT_LIST = [];

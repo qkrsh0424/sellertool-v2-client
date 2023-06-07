@@ -3,6 +3,7 @@ import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import SingleUploaderModalComponent from "./modal/SingleUploaderModal.component";
 import { ContentBox, Wrapper } from "./styles/SingleUploaderControl.styled";
+import { CustomDialog } from "../../../../../components/dialog/v1/CustomDialog";
 
 export default function SingleUploaderControlComponent({
     onSubmitUploadWithSingle
@@ -35,16 +36,11 @@ export default function SingleUploaderControlComponent({
             </Wrapper>
 
             {uploaderModalOpen &&
-                <CommonModalComponent
+                <SingleUploaderModalComponent
                     open={uploaderModalOpen}
                     onClose={handleCloseUploaderModal}
-                    maxWidth={'lg'}
-                >
-                    <SingleUploaderModalComponent
-                        onClose={handleCloseUploaderModal}
-                        onConfirm={handleSubmitUploadWithSingle}
-                    />
-                </CommonModalComponent>
+                    onConfirm={handleSubmitUploadWithSingle}
+                />
             }
         </>
     );

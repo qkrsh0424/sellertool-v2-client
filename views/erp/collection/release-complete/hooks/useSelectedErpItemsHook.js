@@ -37,8 +37,8 @@ export default function useSelectedErpItemsHook(props) {
             setSelectedErpItems(selectedErpItems?.filter(r => r.id !== data.id));
         } else {
             try {
-                if (selectedErpItems?.length >= 500) {
-                    throw new Error('최대 선택 가능한 개수는 500개 입니다.');
+                if (selectedErpItems?.length >= 1000) {
+                    throw new Error('최대 선택 가능한 개수는 1000개 입니다.');
                 }
             } catch (err) {
                 alert(err.message);
@@ -59,8 +59,8 @@ export default function useSelectedErpItemsHook(props) {
                 if (originIds?.includes(erpItem.id)) {
                     return;
                 }
-                if (newItems?.length >= 500) {
-                    throw new Error('최대 선택 가능한 개수는 500개 입니다.');
+                if (newItems?.length >= 1000) {
+                    throw new Error('최대 선택 가능한 개수는 1000개 입니다.');
                 }
                 newItems.push(erpItem);
             });

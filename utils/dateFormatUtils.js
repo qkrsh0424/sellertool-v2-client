@@ -70,10 +70,18 @@ function dateToYYYYMMDDhhmmssFile(idate) {
 }
 
 function getDiffDate(startDate, endDate) {
-    let diffTime = new Date(endDate) - new Date(startDate);
-    let diffDay = diffTime / (1000 * 60 * 60 * 24);
+    const day = 24 * 60 * 60 * 1000;
 
-    return Math.floor(diffDay) <= 0 ? 1 : Math.floor(diffDay);
+    const fDateTime = new Date(startDate);
+    const sDateTime = new Date(endDate);
+
+    fDateTime.setHours(0, 0, 0, 0);
+    sDateTime.setHours(0, 0, 0, 0);
+
+    const diffMilli = Math.abs(sDateTime - fDateTime);
+    const diffDays = Math.round(diffMilli / day);
+
+    return diffDays + 1;
 }
 
 function dateToHHmm(idate) {
@@ -83,6 +91,14 @@ function dateToHHmm(idate) {
 
 function getDiffHourWithUTC() {
     return Math.abs(new Date().getTimezoneOffset() / 60);
+}
+
+function setPlusDate(idate, prevYear, prevMonth, prevDay) {
+    var date = new Date(idate);
+    date.setFullYear(date.getFullYear() + prevYear)
+    date.setMonth(date.getMonth() + prevMonth);
+    date.setDate(date.getDate() + prevDay);
+    return new Date(moment(date));
 }
 
 export {
@@ -97,5 +113,6 @@ export {
     getRemainingDateCount,
     getDiffDate,
     dateToHHmm,
-    getDiffHourWithUTC
+    getDiffHourWithUTC,
+    setPlusDate
 }

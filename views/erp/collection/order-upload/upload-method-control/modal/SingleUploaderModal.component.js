@@ -7,9 +7,11 @@ import ResizableTh from "../../../../../modules/table/ResizableTh";
 import useSingleUploadDatasForm from "../hooks/useSingleUploadDatasForm";
 import { AddButtonBox, Container, CountBox, ControlTd, SubmitButtonContainer, TableBox, TableWrapper } from "../styles/SingleUploaderModal.styled";
 import EditChannelOrderDateModalComponent from "./EditChannelOrderDateModal.component";
+import { CustomDialog } from "../../../../../../components/dialog/v1/CustomDialog";
 
 export default function SingleUploaderModalComponent({
-    onClose,
+    open = false,
+    onClose = () => { },
     onConfirm
 }) {
     const {
@@ -77,76 +79,65 @@ export default function SingleUploaderModalComponent({
 
     return (
         <>
-            <Container>
-                <div className='header-close-button-box'>
-                    <button
-                        type='button'
-                        className='header-close-button-el'
-                        onClick={() => onClose()}
-                    >
-                        <CustomImage
-                            src='/images/icon/close_default_959eae.svg'
-                        />
-                    </button>
-                </div>
-                <div
-                    className='title-box'
-                >
-                    <div className='title'>
-                        발주단건등록
-                    </div>
-                </div>
-                <AddButtonBox>
-                    <CountBox>
-                        <span className='accent'>{singleUploadDatasForm?.length}</span> 건
-                    </CountBox>
-                    <SingleBlockButton
-                        type='button'
-                        className='button-item'
-                        onClick={() => handleAddSingleUploadData()}
-                    >
-                        <div className='button-icon-figure'>
-                            <CustomImage
-                                src='/images/icon/add_default_ffffff.svg'
-                            />
-                        </div>
-                    </SingleBlockButton>
-                </AddButtonBox>
-                <form onSubmit={(e) => handleSubmitConfirm(e)}>
-                    <Table
-                        uploadDatas={singleUploadDatasForm}
-                        onActionDeleteUploadData={handleDeleteSingleUploadData}
-                        onActionCopyUploadData={onCopySingleUploadData}
-                        onChangeOptionValueOfName={onChangeOptionValueOfName}
-                        onChangeNumberValueOfName={onChangeNumberValueOfName}
-                        toggleEditChannelOrderDateModalOpen={toggleEditChannelOrderDateModalOpen}
-                        toggleEditAllChannelOrderDateModalOpen={toggleEditAllChannelOrderDateModalOpen}
-                    />
-                    <SubmitButtonContainer>
+            <CustomDialog
+                open={open}
+                maxWidth="lg"
+            >
+                <CustomDialog.CloseButton onClose={() => onClose()} />
+                <CustomDialog.Title>발주단건등록</CustomDialog.Title>
+                <Container>
+                    <AddButtonBox>
+                        <CountBox>
+                            <span className='accent'>{singleUploadDatasForm?.length}</span> 건
+                        </CountBox>
                         <SingleBlockButton
                             type='button'
                             className='button-item'
-                            style={{
-                                width: '40%',
-                                background: 'var(--defaultModalCloseColor)'
-                            }}
-                            onClick={() => onClose()}
+                            onClick={() => handleAddSingleUploadData()}
                         >
-                            취소
+                            <div className='button-icon-figure'>
+                                <CustomImage
+                                    src='/images/icon/add_default_ffffff.svg'
+                                />
+                            </div>
                         </SingleBlockButton>
-                        <SingleBlockButton
-                            type='submit'
-                            className='button-item'
-                            style={{
-                                flex: 1,
-                                background: 'var(--mainColor)'
-                            }}
-                        >
-                            확인
-                        </SingleBlockButton>
-                    </SubmitButtonContainer>
-                </form>
-            </Container>
+                    </AddButtonBox>
+                    <form onSubmit={(e) => handleSubmitConfirm(e)}>
+                        <Table
+                            uploadDatas={singleUploadDatasForm}
+                            onActionDeleteUploadData={handleDeleteSingleUploadData}
+                            onActionCopyUploadData={onCopySingleUploadData}
+                            onChangeOptionValueOfName={onChangeOptionValueOfName}
+                            onChangeNumberValueOfName={onChangeNumberValueOfName}
+                            toggleEditChannelOrderDateModalOpen={toggleEditChannelOrderDateModalOpen}
+                            toggleEditAllChannelOrderDateModalOpen={toggleEditAllChannelOrderDateModalOpen}
+                        />
+                        <SubmitButtonContainer>
+                            <SingleBlockButton
+                                type='button'
+                                className='button-item'
+                                style={{
+                                    width: '40%',
+                                    background: 'var(--defaultModalCloseColor)'
+                                }}
+                                onClick={() => onClose()}
+                            >
+                                취소
+                            </SingleBlockButton>
+                            <SingleBlockButton
+                                type='submit'
+                                className='button-item'
+                                style={{
+                                    flex: 1,
+                                    background: 'var(--mainColor)'
+                                }}
+                            >
+                                확인
+                            </SingleBlockButton>
+                        </SubmitButtonContainer>
+                    </form>
+                </Container>
+            </CustomDialog>
 
             {editChannelOrderDateModalOpen &&
                 <EditChannelOrderDateModalComponent

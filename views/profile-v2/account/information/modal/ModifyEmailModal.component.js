@@ -175,7 +175,6 @@ export default function ModifyEmailModalComponent({
                                     <div className='content-box'>
                                         <div className='input-notice'>해당 이메일로 인증번호를 발송했습니다.(유효시간 30분)</div>
                                         <div className='input-notice'>인증번호가 오지 않으면 입력하신 정보가 정확한지 확인하여 주세요.</div>
-                                        <div className='input-notice' style={{ color: '#e56767' }}>이미 사용중인 이메일은 인증번호를 받을 수 없습니다.</div>
                                         <div className='input-notice' style={{ color: '#e56767' }}>인증번호를 여전히 받지 못한 경우 스팸 메세지함을 확인하여 주세요.</div>
                                     </div>
                                 </>

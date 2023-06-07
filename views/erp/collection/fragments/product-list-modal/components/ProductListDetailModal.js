@@ -1,7 +1,6 @@
-import useProductOptionHook from "../hooks/useProductOptionHook";
+import useProductOptionHook from "../../hooks/useProductOptionHook";
 import styled from 'styled-components';
 import CustomImage from "../../../../../modules/image/CustomImage";
-import { useEffect, useState } from "react";
 import ResizableTh from "../../../../../modules/table/ResizableTh";
 import { numberFormatUtils } from "../../../../../../utils/numberFormatUtils";
 import { dateToYYYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
@@ -318,7 +317,7 @@ export const TableBox = styled.div`
     }
 `;
 
-export default function ReleaseListDetailModal({
+export default function ProductListDetailModal({
     erpCollectionHeader,
     selectedErpItems,
     selectedReleaseItem,

@@ -101,21 +101,22 @@ const erpItemDataConnect = () => {
         },
         /**
          * 
-         * @param {object} params 
-         * @param {string} params.sameReceiverHint
-         * @param {string} params.matchedCode
+         * @param {object} body 
+         * @param {string} body.sameReceiverHint
+         * @param {string} body.matchedCode
          * @param {object} headers
          * @param {string} headers.wsId
          * @returns 
          */
-        searchListBySameReceiverHint: async function (params, headers) {
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/erp-items/same-receiver`, {
-                headers: headers,
-                params: params,
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
+        searchListBySameReceiverHint: async function (body, headers) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/same-receiver`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         },
         /**
          * 

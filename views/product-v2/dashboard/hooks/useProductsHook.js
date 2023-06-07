@@ -33,7 +33,7 @@ export default function useProductsHook(props) {
             productSubCategoryId: router?.query?.productSubCategoryId,
             searchCondition: router?.query?.searchCondition,
             searchQuery: router?.query?.searchQuery,
-            sort: router?.query?.sort || 'createdAt_asc',
+            sort: router?.query?.sort || 'cid_desc',
             page: router?.query?.page || 1,
             size: router?.query?.size || 10
         }

@@ -144,11 +144,21 @@ export const ItemCardBox = styled.div`
     border-radius: 10px;
     box-shadow: var(--defaultBoxShadow);
     margin-top: 5px;
+    display: flex;
+    align-items: center;
 
     &:hover{
         .edit-button-item{
             display: block;
         }
+    }
+
+    .left-group{
+        margin-right: 10px;
+    }
+
+    .right-group{
+        flex:1;
     }
 
     .status-box{
@@ -209,6 +219,12 @@ export const ItemCardBox = styled.div`
         &:hover{
             background: none;
         }
+    }
+
+    .delete-button{
+        width:24px;
+        height: 24px;
+        border: none;
     }
 `;
 

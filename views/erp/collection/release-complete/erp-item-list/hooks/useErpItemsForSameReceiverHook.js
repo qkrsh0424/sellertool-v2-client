@@ -22,12 +22,12 @@ export default function useErpItemsFormSameReceiverHook(targetSameReceiverHint) 
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        let params = {
+        let body = {
             sameReceiverHint: targetSameReceiverHint,
             matchedCode: router?.query?.matchedCode || 'releaseOptionCode'
         }
 
-        await erpItemDataConnect().searchListBySameReceiverHint(params, headers)
+        await erpItemDataConnect().searchListBySameReceiverHint(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     setErpItems(res.data.data);

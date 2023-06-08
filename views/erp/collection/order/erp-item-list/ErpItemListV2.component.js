@@ -127,10 +127,10 @@ export default function ErpItemListComponent({
                         <CustomTableVirtuoso
                             height={500}
                             rows={erpItemPage?.content}
-                            columns={erpCollectionHeader}
                             totalCount={erpItemPage?.content?.length}
                             headerField={
                                 <TableHeaderRow
+                                    header={erpCollectionHeader}
                                     erpItems={erpItemPage?.content}
                                     selectedErpItems={selectedErpItems}
                                     onSelectClearAllErpItemsInPage={onSelectClearAllErpItemsInPage}
@@ -142,6 +142,7 @@ export default function ErpItemListComponent({
                             bodyField={
                                 <TableBodyRow
                                     selectedErpItems={selectedErpItems}
+                                    header={erpCollectionHeader}
                                     onSelectErpItem={onSelectErpItem}
                                     inventoryStocks={inventoryStocks}
                                     statusPin={statusPin}

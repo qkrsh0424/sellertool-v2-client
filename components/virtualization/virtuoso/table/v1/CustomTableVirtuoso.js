@@ -81,13 +81,23 @@ const TableWrapper = styled.div`
     }
 `;
 
+/**
+ * 
+ * @param {number} height
+ * @param {array} rows
+ * @param {int} totalCount
+ * @param {object} headerField
+ * @param {object} bodyField
+ * @param {string} className
+ * @param {object} props
+ * @returns 
+ */
 export default function CustomTableVirtuoso({
     height = 300,
     rows = [],
-    columns = [],
     totalCount = 0,
-    headerField = {},
-    bodyField = {},
+    headerField,
+    bodyField,
     className = '',
     ...props
 }) {
@@ -102,16 +112,15 @@ export default function CustomTableVirtuoso({
                 cellSpacing="0"
             >
                 <thead>
-                    {{...headerField,
-                        props: {
-                            ...headerField.props,
-                            header: columns
-                        }
-                    }}
+                    {headerField}
                 </thead>
 
                 <tbody ref={ref}>
-                    {children}
+                    {bodyField &&
+                        <>
+                            {children}
+                        </>
+                    }
                 </tbody>
             </table>
         )
@@ -119,7 +128,7 @@ export default function CustomTableVirtuoso({
 
     const Item = (params) => {
         if(!(params && rows.length > 0)) return;
-        
+
         let index = params["data-index"];
         let data = rows[index];
 
@@ -129,8 +138,7 @@ export default function CustomTableVirtuoso({
                 ...bodyField.props,
                 rowIndex: index,
                 rowData: data,
-                rowConfig: params,
-                header: columns
+                rowConfig: params
             }
         };
     }

@@ -43,11 +43,11 @@ export default function ViewSelectedModalComponent({
                             className={'table-box'}
                             height={300}
                             rows={selectedErpItems}
-                            columns={erpCollectionHeader}
                             totalCount={selectedErpItems?.length}
-                            headerField={<TableHeaderRow />}
+                            headerField={<TableHeaderRow header={erpCollectionHeader} />}
                             bodyField={
                                 <TableBodyRow
+                                    header={erpCollectionHeader}
                                     inventoryStocks={inventoryStocks}
                                     onActionClearSelectedItem={onActionClearSelectedItem}
                                 />

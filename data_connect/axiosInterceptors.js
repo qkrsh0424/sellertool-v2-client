@@ -64,7 +64,9 @@ axiosAuthInterceptor.interceptors.response.use(
                         return Promise.reject(error);
                     })
                     .finally(() => {
-                        onTokenRefreshed();
+                        setTimeout(() => {
+                            onTokenRefreshed();
+                        }, [500]);
                     })
             }
 

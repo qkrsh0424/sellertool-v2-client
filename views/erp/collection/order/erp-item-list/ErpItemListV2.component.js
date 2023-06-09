@@ -12,6 +12,7 @@ import ItemsForSameReceiverModalComponent from "./modal/ItemsForSameReceiverModa
 import { PinButtonBox, TableFieldWrapper } from "./styles/ErpItemListV2.styled";
 import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
 import CustomTableVirtuoso from "../../../../../components/virtualization/virtuoso/table/v1/CustomTableVirtuoso";
+import { CustomVirtualTable } from "../../../../../components/table/virtual-table/v1";
 
 export default function ErpItemListComponent({
     erpCollectionHeader,
@@ -30,7 +31,7 @@ export default function ErpItemListComponent({
     const router = useRouter();
     const editOptionCodeModalControl = useSearchOptionCodesModalControl();
     const editReleaseOptionCodeModalControl = useSearchOptionCodesModalControl();
-    
+
     const [targetErpItem, setTargetErpItem] = useState(null);
     const [statusPin, setStatusPin] = useState(false);
 
@@ -62,7 +63,7 @@ export default function ErpItemListComponent({
 
     const handleSubmitEditOptionCode = (selectedOptionCode) => {
         let body = {
-            id: targetErpItem.id,
+            id: targetErpItem?.id,
             optionCode: selectedOptionCode
         }
 
@@ -73,7 +74,7 @@ export default function ErpItemListComponent({
 
     const handleSubmitEditReleaseOptionCode = (selectedOptionCode) => {
         let body = {
-            id: targetErpItem.id,
+            id: targetErpItem?.id,
             releaseOptionCode: selectedOptionCode
         }
 
@@ -124,7 +125,40 @@ export default function ErpItemListComponent({
                     }
 
                     <div className='table-box'>
-                        <CustomTableVirtuoso
+                        <CustomVirtualTable
+                            height={500}
+                            data={erpItemPage?.content}
+                            // rows={erpItemPage?.content}
+                            // totalCount={erpItemPage?.content?.length}
+                            headerField={
+                                <TableHeaderRow
+                                    header={erpCollectionHeader}
+                                    erpItems={erpItemPage?.content}
+                                    selectedErpItems={selectedErpItems}
+                                    onSelectClearAllErpItemsInPage={onSelectClearAllErpItemsInPage}
+                                    onSelectAllErpItems={onSelectAllErpItems}
+                                    statusPin={statusPin}
+                                    matchedCode={router?.query?.matchedCode}
+                                />
+                            }
+                            bodyField={(virtuosoData) =>
+                                <TableBodyRow
+                                    virtuosoData={virtuosoData}
+
+                                    selectedErpItems={selectedErpItems}
+                                    header={erpCollectionHeader}
+                                    onSelectErpItem={onSelectErpItem}
+                                    inventoryStocks={inventoryStocks}
+                                    statusPin={statusPin}
+                                    erpItemSameReceiverHints={erpItemSameReceiverHints}
+                                    handleOpenEditOptionCodeModal={handleOpenEditOptionCodeModal}
+                                    handleOpenEditReleaseOptionCodeModal={handleOpenEditReleaseOptionCodeModal}
+                                    handleOpenItemsForSameReceiverModal={handleOpenItemsForSameReceiverModal}
+
+                                />
+                            }
+                        />
+                        {/* <CustomTableVirtuoso
                             height={500}
                             rows={erpItemPage?.content}
                             totalCount={erpItemPage?.content?.length}
@@ -152,7 +186,7 @@ export default function ErpItemListComponent({
                                     handleOpenItemsForSameReceiverModal={handleOpenItemsForSameReceiverModal}
                                 />
                             }
-                        />
+                        /> */}
                     </div>
                 </div>
             </TableFieldWrapper>
@@ -203,7 +237,7 @@ const HIGHLIGHT_FIELDS = [
     'optionStockUnit'
 ];
 
-function TableHeaderRow({ 
+function TableHeaderRow({
     header,
     erpItems,
     selectedErpItems,
@@ -282,9 +316,7 @@ function TableHeaderRow({
 }
 
 function TableBodyRow({
-    rowIndex,
-    rowData,
-    rowConfig,
+    virtuosoData,
     selectedErpItems,
     header,
     inventoryStocks,
@@ -293,30 +325,34 @@ function TableBodyRow({
     erpItemSameReceiverHints,
     handleOpenEditOptionCodeModal,
     handleOpenEditReleaseOptionCodeModal,
-    handleOpenItemsForSameReceiverModal
+    handleOpenItemsForSameReceiverModal,
 }) {
-    const isSelected = selectedErpItems?.find(r => r.id === rowData.id);
-    let inventoryStock = inventoryStocks?.find(r => r.productOptionId === rowData.productOptionId);
-    let isOutOfStock = inventoryStock && inventoryStock?.stockUnit <= 0;
-    let isPackaged = rowData.packageYn === 'y' ? true : false;
+    if (!virtuosoData || !virtuosoData?.item) {
+        return null;
+    }
     
+    const item = virtuosoData?.item;
+    const isSelected = selectedErpItems?.find(r => r.id === item?.id);
+    let inventoryStock = inventoryStocks?.find(r => r.productOptionId === item?.productOptionId);
+    let isOutOfStock = inventoryStock && inventoryStock?.stockUnit <= 0;
+    let isPackaged = item?.packageYn === 'y' ? true : false;
+
     return (
         <tr
-            {...rowConfig}
-            key={rowData.id}
+            {...virtuosoData}
             className={`${isSelected ? 'tr-active' : ''} ${(isOutOfStock && !isPackaged) ? 'tr-highlight' : ''}`}
             style={{
                 position: 'relative',
-                background: !rowData.productOptionId ? 'var(--defaultYellowColorOpacity30)' : ''
+                background: !item?.productOptionId ? 'var(--defaultYellowColorOpacity30)' : ''
             }}
-            onClick={(e) => { e.stopPropagation(); onSelectErpItem(rowData); }}
+            onClick={(e) => { e.stopPropagation(); onSelectErpItem(item); }}
         >
-            <td>{rowIndex + 1}</td>
+            <td>{virtuosoData['data-index'] + 1}</td>
             <td>
                 <input
                     type='checkbox'
                     checked={isSelected || false}
-                    onChange={() => onSelectErpItem(rowData)}
+                    onChange={() => onSelectErpItem(item)}
                     onClick={(e) => e.stopPropagation()}
                     style={{ cursor: 'pointer' }}
                 ></input>
@@ -327,7 +363,7 @@ function TableBodyRow({
                 return (
                     <Td
                         key={`col-${matchedFieldName}`}
-                        erpItem={rowData}
+                        erpItem={item}
                         matchedFieldName={matchedFieldName}
                         isOutOfStock={isOutOfStock}
                         isPackaged={isPackaged}
@@ -410,7 +446,7 @@ function Td({
             }
 
         case 'receiver':
-            let sameReceiverHint = `${erpItem.receiver}${erpItem.receiverContact1}${erpItem.destination}${erpItem.destinationDetail}`;
+            let sameReceiverHint = `${erpItem?.receiver}${erpItem?.receiverContact1}${erpItem?.destination}${erpItem?.destinationDetail}`;
             let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
             return (
                 <td

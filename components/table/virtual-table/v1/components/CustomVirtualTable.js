@@ -1,5 +1,5 @@
 import React from "react";
-import { Virtuoso } from "react-virtuoso";
+import { Virtuoso, TableVirtuoso } from "react-virtuoso";
 import styled from "styled-components";
 
 const TableWrapper = styled.div`
@@ -81,27 +81,14 @@ const TableWrapper = styled.div`
     }
 `;
 
-/**
- * 
- * @param {number} height
- * @param {array} rows
- * @param {int} totalCount
- * @param {object} headerField
- * @param {object} bodyField
- * @param {string} className
- * @param {object} props
- * @returns 
- */
-export default function CustomTableVirtuoso({
+export function CustomVirtualTable({
     height = 300,
-    rows = [],
-    totalCount = 0,
+    data,
     headerField,
     bodyField,
     className = '',
-    ...props
 }) {
-    const List = React.forwardRef(({ children, style }, ref) => {
+    const TableBox = React.forwardRef(({ children, style }, ref) => {
         return (
             <table
                 className={className}
@@ -123,36 +110,24 @@ export default function CustomTableVirtuoso({
                     }
                 </tbody>
             </table>
-        )
+        );
     })
 
-    List.displayName = "List";
-
-    const Item = (params) => {
-        if(!(params && rows.length > 0)) return;
-
-        let index = params["data-index"];
-        let data = rows[index];
-
-        return {
-            ...bodyField,
-            props: {
-                ...bodyField.props,
-                rowIndex: index,
-                rowData: data,
-                rowConfig: params
-            }
-        };
-    }
+    TableBox.displayName = "TableBox"
 
     return (
         <TableWrapper>
             <Virtuoso
                 style={{ height }}
-                totalCount={totalCount}
-                components={{ List, Item }}
-                {...props}
+                data={data}
+                components={{
+                    List: TableBox,
+                    Item: (props) => {
+                        // if (!props || data?.length <= 0) return;
+                        return bodyField(props);
+                    }
+                }}
             />
         </TableWrapper>
-    )
+    );
 }

@@ -1,6 +1,6 @@
 import Layout from "../layout/Layout";
 import ConditionFieldComponent from "./condition-field/ConditionField.component";
-import ErpItemListComponent from "./erp-item-list/ErpItemListV2.component";
+import ErpItemListComponent from "./erp-item-list/ErpItemList.component";
 import FloatingControlToggle from "./floating-control-toggle/FloatingControlToggle";
 import FloatingPagenationComponent from "./floating-pagenation/FloatingPagenation.component";
 import HeaderSettingComponent from "./header-setting/HeaderSetting.component";

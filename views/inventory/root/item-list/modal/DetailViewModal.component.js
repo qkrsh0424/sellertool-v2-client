@@ -1,7 +1,7 @@
 import Image from "next/image";
 import CustomImage from "../../../../modules/image/CustomImage";
-import ResizableTh from "../../../../modules/table/ResizableTh";
 import { Container, TableBox, TableWrapper } from "../styles/DetailViewModal.styled";
+import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 
 export default function DetailViewModalComponent({
     selectedProductOptions,

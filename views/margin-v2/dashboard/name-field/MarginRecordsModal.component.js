@@ -1,10 +1,10 @@
 import React from 'react';
 import { CustomDialog } from '../../../../components/dialog/v1/CustomDialog';
-import ResizableTh from '../../../modules/table/ResizableTh';
 import { roundToTwo, numberFormatUtils } from "../../../../utils/numberFormatUtils";
 import { Container, ContentContainer, ContentWrapper, DeleteBtnBox, FlexWrapper, ItemBox, TableFieldWrapper, Title, TitleWrapper } from './MarginRecordsModal.styled';
 import { useRouter } from 'next/router';
 import PagenationComponentStateV2 from '../../../modules/pagenation/PagenationStateComponentV2';
+import ResizableTh from '../../../../components/table/th/v1/ResizableTh';
 
 const returnMarginInfo = (marginRecord) => {
     const salesPrice = parseFloat(marginRecord.salePrice); // 판매가격

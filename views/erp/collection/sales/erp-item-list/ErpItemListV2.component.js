@@ -23,12 +23,14 @@ export default function ErpItemListComponent({
     onSelectErpItem,
     onSelectAllErpItems,
     onSelectClearAllErpItemsInPage,
+    onSelectClearAllErpItems,
     erpItemPagePending,
     onSubmitChangeOptionCode,
     onSubmitChangeReleaseOptionCode,
 }) {
     const router = useRouter();
     const virtuosoScrollRef = useRef();
+
     const editOptionCodeModalControl = useSearchOptionCodesModalControl();
     const editReleaseOptionCodeModalControl = useSearchOptionCodesModalControl();
 
@@ -69,10 +71,11 @@ export default function ErpItemListComponent({
 
     const handleSubmitEditOptionCode = (selectedOptionCode) => {
         let body = {
-            id: targetErpItem?.id,
+            id: targetErpItem.id,
             optionCode: selectedOptionCode
         }
 
+        onSelectClearAllErpItems();
         onSubmitChangeOptionCode(body, () => {
             handleCloseEditOptionCodeModal();
         })
@@ -80,10 +83,11 @@ export default function ErpItemListComponent({
 
     const handleSubmitEditReleaseOptionCode = (selectedOptionCode) => {
         let body = {
-            id: targetErpItem?.id,
+            id: targetErpItem.id,
             releaseOptionCode: selectedOptionCode
         }
 
+        onSelectClearAllErpItems();
         onSubmitChangeReleaseOptionCode(body, () => {
             handleCloseEditReleaseOptionCodeModal();
         })
@@ -180,10 +184,9 @@ export default function ErpItemListComponent({
                         />
                     </div>
                 </div>
-            </TableFieldWrapper>
+            </TableFieldWrapper >
 
-            {
-                editOptionCodeModalControl.open &&
+            {editOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
                     open={editOptionCodeModalControl.open}
                     onClose={handleCloseEditOptionCodeModal}
@@ -191,8 +194,7 @@ export default function ErpItemListComponent({
                 />
             }
 
-            {
-                editReleaseOptionCodeModalControl.open &&
+            {editReleaseOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
                     open={editReleaseOptionCodeModalControl.open}
                     onClose={handleCloseEditReleaseOptionCodeModal}
@@ -200,8 +202,7 @@ export default function ErpItemListComponent({
                 />
             }
 
-            {
-                itemsForSameReceiverModalOpen &&
+            {itemsForSameReceiverModalOpen &&
                 <CommonModalComponent
                     open={itemsForSameReceiverModalOpen}
                     onClose={handleCloseItemsForSameReceiverModal}
@@ -403,6 +404,7 @@ function Td({
     isPackaged,
     inventoryStock,
     erpItemSameReceiverHints,
+
     onActionOpenEditOptionCodeModal,
     onActionOpenEditReleaseOptionCodeModal,
     onActionOpenItemsForSameReceiverModal
@@ -436,7 +438,7 @@ function Td({
             }
 
         case 'receiver':
-            let sameReceiverHint = `${erpItem?.receiver}${erpItem?.receiverContact1}${erpItem?.destination}${erpItem?.destinationDetail}`;
+            let sameReceiverHint = `${erpItem.receiver}${erpItem.receiverContact1}${erpItem.destination}${erpItem.destinationDetail}`;
             let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
             return (
                 <td

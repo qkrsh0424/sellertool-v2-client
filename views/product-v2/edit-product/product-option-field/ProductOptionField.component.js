@@ -4,7 +4,6 @@ import valueUtils from "../../../../utils/valueUtils";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../modules/image/CustomImage";
 import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
-import ResizableTh from "../../../modules/table/ResizableTh";
 import useOptionGeneratorFormHook from "../hooks/useOptionGeneratorFormHook";
 import EditMemosModalComponent from "./modal/EditMemosModal.component";
 import EditOptionTagsModalComponent from "./modal/EditOptionTagsModal.component";
@@ -13,6 +12,7 @@ import EditSalesPricesModalComponent from "./modal/EditSalesPricesModal.componen
 import EditStatusesModalComponent from "./modal/EditStatusesModal.component";
 import EditTotalPurchasePricesModalComponent from "./modal/EditTotalPurchasePricesModal.component";
 import { Container, FormWrapper, HeadWrapper, OptionGeneratorWrapper, TableBox, TableWrapper, Wrapper } from "./styles/ProductOptionField.styled";
+import ResizableTh from "../../../../components/table/th/v1/ResizableTh";
 
 export default function ProductOptionFieldComponent({
     productOptions,

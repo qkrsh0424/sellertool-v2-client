@@ -2,13 +2,13 @@ import { useRouter } from "next/router";
 import CustomImage from "../../../modules/image/CustomImage";
 import PagenationComponentV2 from "../../../modules/pagenation/PagenationComponentV2";
 import CustomSelect from "../../../modules/select/CustomSelect";
-import ResizableTh from "../../../modules/table/ResizableTh";
 import { Container, ControlFieldContainer, PagenationContainer, SortControlContainer, TableBox, TableWrapper } from "./styles/ItemList.styled";
 import useInventoryStockCyclePageHook from "./hooks/useInventoryStockCyclePageHook";
 import { useState } from "react";
 import CustomBlockButton from "../../../../components/buttons/block-button/v1/CustomBlockButton";
 import SafetyIndexVariableModalComponent from "./modal/SafetyIndexVariableModal.component";
 import { getDiffDate } from "../../../../utils/dateFormatUtils";
+import ResizableTh from "../../../../components/table/th/v1/ResizableTh";
 
 function returnRecommendPurchaseUnits(
     stockUnit,

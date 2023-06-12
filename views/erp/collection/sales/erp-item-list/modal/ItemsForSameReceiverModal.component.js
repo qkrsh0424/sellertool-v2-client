@@ -4,10 +4,10 @@ import { dateToYYYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
 import { numberWithCommas } from "../../../../../../utils/numberFormatUtils";
 import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../../modules/image/CustomImage";
-import ResizableTh from "../../../../../modules/table/ResizableTh";
 import useInventoryStocksHook from "../../hooks/useInventoryStocksHook";
 import useErpItemsFormSameReceiverHook from "../hooks/useErpItemsForSameReceiverHook";
 import { Container, SubmitButtonContainer, TableFieldWrapper } from "../styles/ItemsForSameReceiverModal.styled";
+import ResizableTh from "../../../../../../components/table/th/v1/ResizableTh";
 
 function salesYnForTabType(tabType) {
     switch (tabType) {

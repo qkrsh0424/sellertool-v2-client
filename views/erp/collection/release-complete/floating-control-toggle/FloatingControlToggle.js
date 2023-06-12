@@ -7,7 +7,7 @@ import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalCompo
 import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
 import StockReleaseModalComponent from "./modal/StockReleaseModal.component";
-import ViewSelectedModalComponent from "./modal/ViewSelectedModal.component";
+import ViewSelectedModalComponent from "./modal/ViewSelectedModalV2.component";
 import WaybillRegistrationModalComponent from "./modal/WaybillRegistrationModal.component";
 import { Container } from "./styles/FloatingControlBar.styled";
 import EditErpItemsModalComponent from "../../fragments/edit-erp-items-modal/EditErpItemsModal.component";

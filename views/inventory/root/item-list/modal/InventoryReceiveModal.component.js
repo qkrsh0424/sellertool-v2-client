@@ -6,11 +6,11 @@ import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../modules/image/CustomImage";
 import CustomInput from "../../../../modules/input/CustomInput";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
-import ResizableTh from "../../../../modules/table/ResizableTh";
 import useInventoryReceivesFormHook from "../hooks/useInventoryReceivesFormHook";
 import { Container, ContentContainer, SubmitButtonContainer, TableBox, TableWrapper } from "../styles/InventoryReceiveModal.styled";
 import BatchReceiveMemoModalComponent from "./BatchReceiveMemoModal.component";
 import BatchReceiveUnitModalComponent from "./BatchReceiveUnitModal.component";
+import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 
 export default function InventoryReceiveModalComponent({
     selectedProductOptions,

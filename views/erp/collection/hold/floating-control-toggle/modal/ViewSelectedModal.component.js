@@ -6,9 +6,9 @@ import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../../modules/image/CustomImage";
 import InfiniteScrollObserver from "../../../../../modules/observer/InfiniteScrollObserver";
 import ReverseScrollObserver from "../../../../../modules/observer/ReverseScrollObserver";
-import ResizableTh from "../../../../../modules/table/ResizableTh";
 import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
 import { Container, TableBox, TableWrapper, TipFieldWrapper } from "../styles/ViewSelectedModal.styled";
+import ResizableTh from "../../../../../../components/table/th/v1/ResizableTh";
 
 const TABLE_DATA_VIEW_SIZE = 40;
 const TABLE_DATA_INC_DEC_SIZE = 20;

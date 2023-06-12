@@ -5,10 +5,10 @@ import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../modules/image/CustomImage";
 import InfiniteScrollObserver from "../../../../modules/observer/InfiniteScrollObserver";
 import ReverseScrollObserver from "../../../../modules/observer/ReverseScrollObserver";
-import ResizableTh from "../../../../modules/table/ResizableTh";
 import { TableBox, TableWrapper } from "./styles/EditErpItemsModal.styled";
 import CustomDateTimeSelector from "../../../../../components/date-time-selector/v1/CustomDateTimeSelector";
 import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
+import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 
 const TABLE_DATA_VIEW_SIZE = 40;
 const TABLE_DATA_INC_DEC_SIZE = 20;

@@ -6,11 +6,11 @@ import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../modules/image/CustomImage";
 import CustomInput from "../../../../modules/input/CustomInput";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
-import ResizableTh from "../../../../modules/table/ResizableTh";
 import useInventoryReleasesFormHook from "../hooks/useInventoryReleasesFormHook";
 import { Container, ContentContainer, SubmitButtonContainer, TableBox, TableWrapper } from "../styles/InventoryReleaseModal.styled";
 import BatchReleaseMemoModalComponent from "./BatchReleaseMemoModal.component";
 import BatchReleaseUnitModalComponent from "./BatchReleaseUnitModal.component";
+import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 
 export default function InventoryReleaseModalComponent({
     selectedProductOptions,

@@ -5,9 +5,9 @@ import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../modules/image/CustomImage";
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
 import InfiniteScrollObserver from "../../../../modules/observer/InfiniteScrollObserver";
-import ResizableTh from "../../../../modules/table/ResizableTh";
 import { Container, ControlWrapper, CountBox, DeleteTd, TableBox, TableWrapper } from "./styles/UploadDataListField.styled";
 import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
+import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 
 const TABLE_DATA_VIEW_SIZE = 50;
 const TABLE_DATA_INC_DEC_SIZE = 30;

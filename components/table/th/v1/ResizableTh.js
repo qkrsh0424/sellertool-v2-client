@@ -67,6 +67,24 @@ export default function ResizableTh({
             {...props}
         >
             <Resizer
+                onTouchStart={e => {
+                    const startSize = colWidth;
+                    const pageX = e.changedTouches[0].pageX;
+                    
+                    function onTouchMove(touchMoveEvent) {
+                        
+                        let currentWidth = startSize - pageX + touchMoveEvent.changedTouches[0].pageX;
+
+                        setColWidth(currentWidth < colMinWidth ? colMinWidth : currentWidth > colMaxWidth ? colMaxWidth : currentWidth);
+                    }
+
+                    function onTouchEnd() {
+                        document.body.removeEventListener("touchmove", onTouchMove)
+                    }
+
+                    document.body.addEventListener("touchmove", onTouchMove);
+                    document.body.addEventListener("touchend", onTouchEnd, { once: true });
+                }}
                 onMouseDown={e => {
                     const startSize = colWidth;
                     const pageX = e.pageX;

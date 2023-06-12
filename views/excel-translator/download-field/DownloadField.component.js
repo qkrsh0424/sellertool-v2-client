@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import valueUtils from "../../../utils/valueUtils";
 import SingleBlockButton from "../../modules/button/SingleBlockButton";
 import CommonModalComponent from "../../modules/modal/CommonModalComponent";
-import ResizableTh from "../../modules/table/ResizableTh";
 import ModifyDownloadHeaderDetailsModalComponent from "./modal/ModifyDownloadHeaderDetailsModal.component";
 import { ButtonGroup, Container, TableBox, TableWrapper, Title, Wrapper } from "./styles/DownloadField.styled";
 import { v4 as uuidv4 } from 'uuid';
@@ -11,6 +10,7 @@ import _ from "lodash";
 import useDisabledBtn from "../../../hooks/button/useDisabledBtn";
 import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
 import LoadExistingModalComponent from "./modal/LoadExistingModal.component";
+import ResizableTh from "../../../components/table/th/v1/ResizableTh";
 
 export default function DownloadFieldComponent({
     excelTranslatorHeaders,

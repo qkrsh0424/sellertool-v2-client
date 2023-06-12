@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { dateToYYYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import { numberWithCommas } from "../../../../../utils/numberFormatUtils";
@@ -23,6 +23,7 @@ export default function ErpItemListComponent({
     onSelectErpItem,
     onSelectAllErpItems,
     onSelectClearAllErpItemsInPage,
+    onSelectClearAllErpItems,
     erpItemPagePending,
     onSubmitChangeOptionCode,
     onSubmitChangeReleaseOptionCode,
@@ -57,6 +58,10 @@ export default function ErpItemListComponent({
 
     const handleOpenEditReleaseOptionCodeModal = (e, erpItem) => {
         e.stopPropagation();
+        if (erpItem.stockReflectYn === 'y') {
+            alert('이미 재고에 반영된 데이터는 [M] 출고옵션코드를 변경할 수 없습니다.\n재고반영을 취소 후 변경해 주세요.');
+            return;
+        }
         setTargetErpItem(_.cloneDeep(erpItem));
         editReleaseOptionCodeModalControl.toggleOpen(true);
 
@@ -69,10 +74,11 @@ export default function ErpItemListComponent({
 
     const handleSubmitEditOptionCode = (selectedOptionCode) => {
         let body = {
-            id: targetErpItem?.id,
+            id: targetErpItem.id,
             optionCode: selectedOptionCode
         }
 
+        onSelectClearAllErpItems();
         onSubmitChangeOptionCode(body, () => {
             handleCloseEditOptionCodeModal();
         })
@@ -80,10 +86,11 @@ export default function ErpItemListComponent({
 
     const handleSubmitEditReleaseOptionCode = (selectedOptionCode) => {
         let body = {
-            id: targetErpItem?.id,
+            id: targetErpItem.id,
             releaseOptionCode: selectedOptionCode
         }
 
+        onSelectClearAllErpItems();
         onSubmitChangeReleaseOptionCode(body, () => {
             handleCloseEditReleaseOptionCodeModal();
         })
@@ -104,7 +111,6 @@ export default function ErpItemListComponent({
     const handleToggleStatusPin = (pin) => {
         setStatusPin(pin)
     }
-
     if (!erpCollectionHeader) {
         return (
             <ViewHeaderSelectNotice>
@@ -182,8 +188,7 @@ export default function ErpItemListComponent({
                 </div>
             </TableFieldWrapper>
 
-            {
-                editOptionCodeModalControl.open &&
+            {editOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
                     open={editOptionCodeModalControl.open}
                     onClose={handleCloseEditOptionCodeModal}
@@ -191,8 +196,7 @@ export default function ErpItemListComponent({
                 />
             }
 
-            {
-                editReleaseOptionCodeModalControl.open &&
+            {editReleaseOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
                     open={editReleaseOptionCodeModalControl.open}
                     onClose={handleCloseEditReleaseOptionCodeModal}
@@ -200,8 +204,7 @@ export default function ErpItemListComponent({
                 />
             }
 
-            {
-                itemsForSameReceiverModalOpen &&
+            {itemsForSameReceiverModalOpen &&
                 <CommonModalComponent
                     open={itemsForSameReceiverModalOpen}
                     onClose={handleCloseItemsForSameReceiverModal}
@@ -296,9 +299,23 @@ function TableHeaderRow({
                         width={45}
                         style={{
                             zIndex: '11',
+                            right: 45,
+                            borderLeft: '1px dashed #c0c0c0',
                             padding: 0,
-                            fontSize: '10px',
-                            borderLeft: '1px dashed #c0c0c0'
+                            fontSize: '10px'
+                        }}
+                    >
+                        <div className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-center'>
+                            재고반영
+                        </div>
+                    </th>
+                    <th
+                        className={`fixed-header fixed-col-right`}
+                        width={45}
+                        style={{
+                            zIndex: '11',
+                            padding: 0,
+                            fontSize: '10px'
                         }}
                     >
                         패키지
@@ -371,10 +388,34 @@ function TableBodyRow({
                     <td
                         className={`fixed-col-right`}
                         style={{
-                            zIndex: '0',
                             background: '#fff',
-                            padding: 0,
-                            borderLeft: '1px dashed #c0c0c0'
+                            right: 45,
+                            borderLeft: '1px dashed #c0c0c0',
+                            padding: 0
+                        }}
+                    >
+                        <div
+                            style={{
+                                width: 20,
+                                margin: '0 auto'
+                            }}
+                        >
+                            {item?.stockReflectYn === 'y' ?
+                                <CustomImage
+                                    src='/images/icon/check_default_5fcf80.svg'
+                                />
+                                :
+                                <CustomImage
+                                    src='/images/icon/close_default_e56767.svg'
+                                />
+                            }
+                        </div>
+                    </td>
+                    <td
+                        className={`fixed-col-right`}
+                        style={{
+                            background: '#fff',
+                            padding: 0
                         }}
                     >
                         {isPackaged &&
@@ -403,6 +444,7 @@ function Td({
     isPackaged,
     inventoryStock,
     erpItemSameReceiverHints,
+
     onActionOpenEditOptionCodeModal,
     onActionOpenEditReleaseOptionCodeModal,
     onActionOpenItemsForSameReceiverModal
@@ -436,7 +478,7 @@ function Td({
             }
 
         case 'receiver':
-            let sameReceiverHint = `${erpItem?.receiver}${erpItem?.receiverContact1}${erpItem?.destination}${erpItem?.destinationDetail}`;
+            let sameReceiverHint = `${erpItem.receiver}${erpItem.receiverContact1}${erpItem.destination}${erpItem.destinationDetail}`;
             let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
             return (
                 <td
@@ -464,5 +506,4 @@ function Td({
                 </td>
             )
     }
-
 }

@@ -7,11 +7,11 @@ import { numberWithCommas } from "../../../../../utils/numberFormatUtils";
 import CustomImage from "../../../../modules/image/CustomImage";
 import FieldLoadingV2 from "../../../../modules/loading/FieldLoadingV2";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
+import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 import ItemsForSameReceiverModalComponent from "./modal/ItemsForSameReceiverModal.component";
 import { PinButtonBox, TableFieldWrapper, ViewHeaderSelectNotice } from "./styles/ErpItemListV2.styled";
 import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
 import { CustomVirtualTable } from "../../../../../components/table/virtual-table/v1";
-import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 
 export default function ErpItemListComponent({
     erpCollectionHeader,
@@ -23,6 +23,7 @@ export default function ErpItemListComponent({
     onSelectErpItem,
     onSelectAllErpItems,
     onSelectClearAllErpItemsInPage,
+    onSelectClearAllErpItems,
     erpItemPagePending,
     onSubmitChangeOptionCode,
     onSubmitChangeReleaseOptionCode,
@@ -69,10 +70,11 @@ export default function ErpItemListComponent({
 
     const handleSubmitEditOptionCode = (selectedOptionCode) => {
         let body = {
-            id: targetErpItem?.id,
+            id: targetErpItem.id,
             optionCode: selectedOptionCode
         }
 
+        onSelectClearAllErpItems();
         onSubmitChangeOptionCode(body, () => {
             handleCloseEditOptionCodeModal();
         })
@@ -80,10 +82,11 @@ export default function ErpItemListComponent({
 
     const handleSubmitEditReleaseOptionCode = (selectedOptionCode) => {
         let body = {
-            id: targetErpItem?.id,
+            id: targetErpItem.id,
             releaseOptionCode: selectedOptionCode
         }
 
+        onSelectClearAllErpItems();
         onSubmitChangeReleaseOptionCode(body, () => {
             handleCloseEditReleaseOptionCodeModal();
         })
@@ -182,8 +185,7 @@ export default function ErpItemListComponent({
                 </div>
             </TableFieldWrapper>
 
-            {
-                editOptionCodeModalControl.open &&
+            {editOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
                     open={editOptionCodeModalControl.open}
                     onClose={handleCloseEditOptionCodeModal}
@@ -191,8 +193,7 @@ export default function ErpItemListComponent({
                 />
             }
 
-            {
-                editReleaseOptionCodeModalControl.open &&
+            {editReleaseOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
                     open={editReleaseOptionCodeModalControl.open}
                     onClose={handleCloseEditReleaseOptionCodeModal}
@@ -200,8 +201,7 @@ export default function ErpItemListComponent({
                 />
             }
 
-            {
-                itemsForSameReceiverModalOpen &&
+            {itemsForSameReceiverModalOpen &&
                 <CommonModalComponent
                     open={itemsForSameReceiverModalOpen}
                     onClose={handleCloseItemsForSameReceiverModal}
@@ -403,6 +403,7 @@ function Td({
     isPackaged,
     inventoryStock,
     erpItemSameReceiverHints,
+
     onActionOpenEditOptionCodeModal,
     onActionOpenEditReleaseOptionCodeModal,
     onActionOpenItemsForSameReceiverModal
@@ -436,7 +437,7 @@ function Td({
             }
 
         case 'receiver':
-            let sameReceiverHint = `${erpItem?.receiver}${erpItem?.receiverContact1}${erpItem?.destination}${erpItem?.destinationDetail}`;
+            let sameReceiverHint = `${erpItem.receiver}${erpItem.receiverContact1}${erpItem.destination}${erpItem.destinationDetail}`;
             let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
             return (
                 <td

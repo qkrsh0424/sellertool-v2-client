@@ -3,11 +3,11 @@ import { dateToYYYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
 import { numberFormatUtils } from "../../../../../../utils/numberFormatUtils";
 import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../../modules/image/CustomImage";
-import ResizableTh from "../../../../../modules/table/ResizableTh";
 import useSingleUploadDatasForm from "../hooks/useSingleUploadDatasForm";
 import { AddButtonBox, Container, CountBox, ControlTd, SubmitButtonContainer, TableBox, TableWrapper } from "../styles/SingleUploaderModal.styled";
 import EditChannelOrderDateModalComponent from "./EditChannelOrderDateModal.component";
 import { CustomDialog } from "../../../../../../components/dialog/v1/CustomDialog";
+import ResizableTh from "../../../../../../components/table/th/v1/ResizableTh";
 
 export default function SingleUploaderModalComponent({
     open = false,

@@ -1,9 +1,9 @@
 import useProductOptionHook from "../../hooks/useProductOptionHook";
 import styled from 'styled-components';
 import CustomImage from "../../../../../modules/image/CustomImage";
-import ResizableTh from "../../../../../modules/table/ResizableTh";
 import { numberFormatUtils } from "../../../../../../utils/numberFormatUtils";
 import { dateToYYYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
+import ResizableTh from "../../../../../../components/table/th/v1/ResizableTh";
 
 const Container = styled.div`
     background: var(--defaultBackground);

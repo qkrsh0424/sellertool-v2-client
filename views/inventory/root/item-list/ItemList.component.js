@@ -7,7 +7,6 @@ import CustomImage from "../../../modules/image/CustomImage";
 import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
 import PagenationComponentV2 from "../../../modules/pagenation/PagenationComponentV2";
 import CustomSelect from "../../../modules/select/CustomSelect";
-import ResizableTh from "../../../modules/table/ResizableTh";
 import FloatingControlBarComponent from "./FloatingControlBar.component";
 import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
 import useProductOptionsHook from "./hooks/useProductOptionPageHook";
@@ -15,6 +14,7 @@ import useSelectedProductOptions from "./hooks/useSelectedProductOptionsHook";
 import StockRegisterStatusModalComponent from "./modal/StockRegisterStatusModal.component";
 import RegisteredStockByDateComponent from "./RegisteredStockByDate.component";
 import { Container, ControlFieldContainer, PagenationContainer, RegisteredStockByDateContainer, SortControlContainer, TableBox, TableWrapper } from "./styles/ItemList.styled";
+import ResizableTh from "../../../../components/table/th/v1/ResizableTh";
 
 export default function ItemListComponent(props) {
     const router = useRouter();

@@ -8,10 +8,10 @@ import CustomImage from "../../../modules/image/CustomImage";
 import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../modules/modal/ConfirmModalComponentV2";
 import MouseOverPopover from "../../../modules/popover/MouseOverPopover";
-import ResizableTh from "../../../modules/table/ResizableTh";
 import useProductOptionsHook from "../hooks/useProductOptionsHook";
 import ProductOptionPackageModalComponent from "./modal/ProductOptionPackageModal.component";
 import { Container, ContentWrapper, OptionsWrapper, ProductDetailWrapper, ProductWrapper, TableBox, TableWrapper, ThumbnailWrapper } from "./styles/ProductCard.styled";
+import ResizableTh from "../../../../components/table/th/v1/ResizableTh";
 
 export default function ProductCardComponent({
     product,

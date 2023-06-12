@@ -5,10 +5,10 @@ import { dateToYYMMDDhhmmss } from "../../../utils/dateFormatUtils";
 import valueUtils from "../../../utils/valueUtils";
 import SingleBlockButton from "../../modules/button/SingleBlockButton";
 import CommonModalComponent from "../../modules/modal/CommonModalComponent";
-import ResizableTh from "../../modules/table/ResizableTh";
 import CustomExcelFileUploader from "../../modules/uploader/CustomExcelFileUploader";
 import ModifyUploadHeaderDetailsModalComponent from "./modal/ModifyUploadHeaderDetailsModal.component";
 import { ButtonGroup, Container, TableBox, TableWrapper, Title, Wrapper } from "./styles/UploadField.styled";
+import ResizableTh from "../../../components/table/th/v1/ResizableTh";
 
 export default function UploadFieldComponent({
     excelTranslatorHeaders,

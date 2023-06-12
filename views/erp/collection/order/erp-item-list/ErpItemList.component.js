@@ -9,10 +9,10 @@ import FieldLoadingV2 from "../../../../modules/loading/FieldLoadingV2";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import InfiniteScrollObserver from "../../../../modules/observer/InfiniteScrollObserver";
 import ReverseScrollObserver from "../../../../modules/observer/ReverseScrollObserver";
-import ResizableTh from "../../../../modules/table/ResizableTh";
 import ItemsForSameReceiverModalComponent from "./modal/ItemsForSameReceiverModal.component";
 import { PinButtonBox, TableFieldWrapper } from "./styles/ErpItemList.styled";
 import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
+import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 
 const TABLE_DATA_VIEW_SIZE = 50;
 const TABLE_DATA_INC_DEC_SIZE = 30;

@@ -61,7 +61,7 @@ export default function ConsentFieldComponent(props) {
                                     <div
                                         className='label-el'
                                     >
-                                        서비스 <Link href='/consent/service-terms' passHref target="_blank" rel="noopener noreferrer"><span className='label-link'>이용약관</span></Link> 동의 (필수)
+                                        서비스 <a href='https://assets.sellertool.io/consent_form/service_terms_v1.html' target="_blank" rel="noopener noreferrer"><span className='label-link'>이용약관</span></a> 동의 (필수)
                                     </div>
                                 }
                             />
@@ -76,7 +76,7 @@ export default function ConsentFieldComponent(props) {
                                     <div
                                         className='label-el'
                                     >
-                                        서비스 <Link className='label-link' href='/consent/privacy-policy' passHref target="_blank" rel="noopener noreferrer"><span className='label-link'>개인정보취급방침</span></Link> 동의 (필수)
+                                        서비스 <a className='label-link' href='https://assets.sellertool.io/consent_form/privacy_policy_v1.html' target="_blank" rel="noopener noreferrer"><span className='label-link'>개인정보처리방침</span></a> 동의 (필수)
                                     </div>
                                 }
                             />

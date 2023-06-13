@@ -77,6 +77,23 @@ export const ItemInfoWrapper = styled.div`
         font-size: 14px;
         color: #404040;
     }
+
+    .totalUnit-wrapper{
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+
+        .item-group{
+            .item{
+                font-size: 13px;
+                font-weight: 500;
+
+                &:last-child{
+                    margin-top: 5px;
+                }
+            }
+        }
+    }
 `;
 
 export const SearchConsoleContainer = styled.div`

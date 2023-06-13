@@ -8,7 +8,7 @@ export default function CustomDoubleTouch({
 }) {
     let firstPress = true;
     let lastTime = new Date().getTime();
-    let timer = false;
+    let timer = null;
     let delay = 300;
 
     const doubleTouch = (e) => {
@@ -17,7 +17,6 @@ export default function CustomDoubleTouch({
             firstPress = false;
             timer = setTimeout(() => {
                 firstPress = true;
-                timer = false;
             }, delay);
             lastTime = now;
         } else {

@@ -26,6 +26,7 @@ const Th = styled.th`
     text-overflow:ellipsis;
     white-space:nowrap;
     height: 43px;
+    position:relative;
 
     &:hover{
         ${Resizer} {

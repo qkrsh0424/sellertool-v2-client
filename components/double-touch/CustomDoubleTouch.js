@@ -2,7 +2,7 @@ import React from "react";
 
 export default function CustomDoubleTouch({
     type,
-    onDoubleTouch,
+    onDoubleTouch = () => { },
     children,
     ...props
 }) {
@@ -33,7 +33,7 @@ export default function CustomDoubleTouch({
     return React.createElement(
         type,
         {
-            onClick: (e) => doubleTouch(e),
+            onTouchStart: (e) => doubleTouch(e),
             ...props
         },
         children

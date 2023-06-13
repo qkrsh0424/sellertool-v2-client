@@ -10,8 +10,9 @@ import CommonModalComponent from "../../../../modules/modal/CommonModalComponent
 import ItemsForSameReceiverModalComponent from "./modal/ItemsForSameReceiverModal.component";
 import { PinButtonBox, TableFieldWrapper, ViewHeaderSelectNotice } from "./styles/ErpItemListV2.styled";
 import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
-import { CustomVirtualTable } from "../../../../../components/table/virtual-table/v1";
+import { CustomVirtualTable } from "../../../../../components/table/virtual-table/v2";
 import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
+import CustomDoubleTouch from "../../../../../components/double-touch/CustomDoubleTouch";
 
 export default function ErpItemListComponent({
     erpCollectionHeader,
@@ -345,14 +346,16 @@ function TableBodyRow({
     let isPackaged = item?.packageYn === 'y' ? true : false;
 
     return (
-        <tr
+        <CustomDoubleTouch
+            type='tr'
             {...virtuosoData}
             className={`${isSelected ? 'tr-active' : ''} ${(isOutOfStock && !isPackaged) ? 'tr-highlight' : ''}`}
             style={{
                 position: 'relative',
                 background: !item?.productOptionId ? 'var(--defaultYellowColorOpacity30)' : ''
             }}
-            onClick={(e) => { e.stopPropagation(); onSelectErpItem(item); }}
+            onDoubleClick={(e) => { e.stopPropagation(); onSelectErpItem(item); }}
+            onDoubleTouch={(e) => { e.stopPropagation(); onSelectErpItem(item); }}
         >
             <td>{virtuosoData['data-index'] + 1}</td>
             <td>
@@ -433,7 +436,7 @@ function TableBodyRow({
                     </td>
                 </>
             }
-        </tr>
+        </CustomDoubleTouch>
     )
 }
 

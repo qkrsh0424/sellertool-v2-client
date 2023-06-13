@@ -64,8 +64,8 @@ export default function StockRegisterStatusModalComponent({
     const handleSubmitSearch = async (e) => {
         e.preventDefault();
         let diffDate = getDiffDate(startDateTime, endDateTime);
-        if (diffDate > 30 || diffDate < 1) {
-            alert('최대 30일 범위 이내로만 조회 가능합니다.');
+        if (diffDate > 365 || diffDate < 1) {
+            alert('최대 365일 범위 이내로만 조회 가능합니다.');
             return;
         }
         reqFetchInventoryStockRegisterStatuses();

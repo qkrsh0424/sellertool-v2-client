@@ -12,8 +12,8 @@ export default function useSelectedProductOptionsAndInventoryHook() {
             setSelectedProductOptionsAndInventory(selectedProductOptionsAndInventory?.filter(r => r.id !== data.id));
         } else {
             try {
-                if (selectedProductOptionsAndInventory?.length >= 400) {
-                    throw new Error('한번에 선택 가능한 최대 옵션의 개수는 400개 입니다.');
+                if (selectedProductOptionsAndInventory?.length >= 2000) {
+                    throw new Error('한번에 선택 가능한 최대 옵션의 개수는 2000개 입니다.');
                 }
             } catch (err) {
                 customToast.error(err.message, {
@@ -40,8 +40,8 @@ export default function useSelectedProductOptionsAndInventoryHook() {
                 if (originIds?.includes(option.id)) {
                     return;
                 }
-                if (newProductOptions?.length >= 400) {
-                    throw new Error('한번에 선택 가능한 최대 옵션의 개수는 400개 입니다.');
+                if (newProductOptions?.length >= 2000) {
+                    throw new Error('한번에 선택 가능한 최대 옵션의 개수는 2000개 입니다.');
                 }
 
                 let inventory = inventories.filter(r => r.productOptionId === option.id)[0];

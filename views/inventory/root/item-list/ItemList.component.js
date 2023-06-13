@@ -1,7 +1,5 @@
 import { useRouter } from "next/router";
-import { useRef } from "react";
 import { useState } from "react";
-import { useEffect } from "react";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../modules/image/CustomImage";
 import CommonModalComponent from "../../../modules/modal/CommonModalComponent";

@@ -38,7 +38,7 @@ export default function useProductOptionsHook({
         let data = names.map(name => {
             return {
                 id: uuidv4(),
-                code:'',
+                code: '',
                 name: name,
                 optionTag: '',
                 salesPrice: '0',
@@ -94,6 +94,21 @@ export default function useProductOptionsHook({
         }
 
         value = value.replaceAll(',', '');
+
+        if (value === '0') {
+            setProductOptions(productOptions?.map(r => {
+                if (r.id === id) {
+                    return {
+                        ...r,
+                        [name]: value
+                    }
+                } else {
+                    return { ...r }
+                }
+            }));
+            return;
+        }
+
         value = getRemovedPrefixZero(value);
 
         if (value.match(/^[0-9]{0,9}$/)) {

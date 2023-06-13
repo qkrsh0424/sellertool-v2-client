@@ -82,6 +82,20 @@ export default function useProductOptionsHook(props) {
         }
 
         value = value.replaceAll(',', '');
+        if (value === '0') {
+            setProductOptions(productOptions?.map(r => {
+                if (r.id === id) {
+                    return {
+                        ...r,
+                        [name]: value
+                    }
+                } else {
+                    return { ...r }
+                }
+            }));
+            return;
+        }
+
         value = getRemovedPrefixZero(value);
 
         if (value.match(/^[0-9]{0,9}$/)) {

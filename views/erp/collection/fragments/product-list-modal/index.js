@@ -1,0 +1,1 @@
+export { ProductListModalComponent } from './components';

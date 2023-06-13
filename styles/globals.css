@@ -1,9 +1,51 @@
+@import url(./mgl.flex.css);
+@import url(./mgl.font.css);
+:root {
+    --mainColor: #344b98;
+    --mainColorHover: #344b98f0;
+    --mainColorOpacity500: #344b9880;
+    --mainColorOpacity30: #344b9830;
+    --mainColorOpacity100: #344b9810;
+    --mainColorSelected1: #344b9820;
+    --defaultBackground: #f9fbfc;
+    --defaultBoxShadow: 1px 1px 10px 0 rgb(72 75 108 / 8%);
+    --defaultBlueColor: #418cff;
+    --defaultBlueColorOpacity100: #418cff10;
+    --defaultBlueColorOpacity200: #418cff20;
+    --defaultRedColor: #e56767;
+    --defaultRedColorOpacity500: #e5676780;
+    --defaultRedColorOpacity30: #e5676730;
+    --defaultYellowColor:#eed202;
+    --defaultYellowColorOpacity30:#eed20230;
+    --defaultGreenColor: #5fcf80;
+    --defaultGreenColorOpacity40: #5fcf8040;
+    --defaultGrayColor: #f1f3f9;
+    --defaultPurpleColor: #8250df;
+    --defaultModalCloseColor: #959eae;
+    --contentHeadBackground: #eef2f9;
+}
+
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    padding: 0;
+    margin: 0;
+    /* font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif; */
+    font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕",
+        helvetica, "Apple SD Gothic Neo", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body::-webkit-scrollbar {
+    width: 7px;
+}
+body::-webkit-scrollbar-thumb {
+    background-color: #00000025;
+    border-radius: 10px;
+}
+body::-webkit-scrollbar-track {
+    background-color: white;
 }
 
 body::-webkit-scrollbar {
@@ -18,10 +60,10 @@ body::-webkit-scrollbar-track {
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }

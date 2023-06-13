@@ -1,9 +1,10 @@
 import axios from "axios";
-import { hasCsrfToken } from "../utils/cookieCheckUtils";
 
 const AUTH_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.authApiAddress : process.env.production.authApiAddress
 
-const axiosAuthInterceptor = axios.create();
+const axiosAuthInterceptor = axios.create({
+    timeout: 30000
+});
 
 let isCsrfRefreshing = false;
 let isAuthTokenRefreshing = true;
@@ -50,9 +51,9 @@ axiosAuthInterceptor.interceptors.response.use(
 
             if (!isAuthTokenRefreshing) {
                 isAuthTokenRefreshing = true;
-                await axios.post(`${AUTH_API_ADDRESS}/auth/v1/refresh`, {}, {
+                await axios.post(`${AUTH_API_ADDRESS}/auth/v1/users/reissue/access-token`, {}, {
                     withCredentials: true,
-                    xsrfCookieName: 'auth_csrf',
+                    xsrfCookieName: 'x_auth_csrf_token',
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
                     .catch(err => {
@@ -63,32 +64,13 @@ axiosAuthInterceptor.interceptors.response.use(
                         return Promise.reject(error);
                     })
                     .finally(() => {
-                        onTokenRefreshed();
+                        setTimeout(() => {
+                            onTokenRefreshed();
+                        }, 1000)
                     })
             }
 
             return retryOriginalRequest;
-
-            // 액세스 토큰 재발급, 성공적으로 발급되면 다시한번 원래 요청을 보내고, 에러가 난다면 기존의 에러를 반환 한다.
-            // return await axios.post(`${AUTH_API_ADDRESS}/auth/v1/refresh`, {}, {
-            //     withCredentials: true,
-            //     xsrfCookieName: 'auth_csrf',
-            //     xsrfHeaderName: 'X-XSRF-TOKEN'
-            // })
-            //     .then(async res => {
-            //         if (res.status === 200 && res.data.message === 'success') {
-            //             // 기존 요청 재요청
-            //             error.config.__isRetryRequest = true;
-            //             return await axios(originalReq);
-            //         }
-            //     })
-            //     .catch(err => {
-            //         console.log(err.response)
-            //         // 기존 에러 내보내기
-            //         return Promise.reject(error);
-            //     })
-
-
         }
         return Promise.reject(error);
     }

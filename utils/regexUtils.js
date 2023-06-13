@@ -47,13 +47,20 @@ const checkPassword = (password) => {
 }
 
 const checkPhoneNumberFormat = (phoneNumber) => {
-    let regex = /^01([0|1|6|7|8|9])[-.]?([0-9]{3,4})[-.]?([0-9]{4})$/;
+    // let regex = /^01([0|1|6|7|8|9])[-.]?([0-9]{3,4})[-.]?([0-9]{4})$/;
+    let regex = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
     return regex.test(phoneNumber);
 }
 
 const checkEmailFormat = (email) => {
     let regex = /^([\w\.\_\-])*[a-zA-Z0-9]+([\w\.\_\-])*([a-zA-Z0-9])+([\w\.\_\-])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$/;
     return regex.test(email);
+}
+
+
+function checkFileNameFormat(fileName) {
+    let notAllowCharIdx = fileName.search(/[\\\/:*?%."<>\|]/gi);
+    return notAllowCharIdx < 0;
 }
 
 export {
@@ -63,5 +70,6 @@ export {
     comparePassword,
     checkPassword,
     checkPhoneNumberFormat,
-    checkEmailFormat
+    checkEmailFormat,
+    checkFileNameFormat
 }

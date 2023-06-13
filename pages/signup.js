@@ -1,7 +1,7 @@
 import Head from "next/head";
-import FooterMain from "../component/footer/FooterMain";
-import MainComponent from "../component/signup/MainComponent";
-import PrimaryNavbarMainComponent from "../component/navbar/primary-navbar";
+import FooterMain from "../views/footer/FooterMain";
+import MainComponent from "../views/signup-v2/index";
+import PrimaryNavbarMainComponent from "../views/navbar/primary-navbar";
 
 const SignupPage = () => {
     return (
@@ -9,9 +9,8 @@ const SignupPage = () => {
             <Head>
                 <title>회원가입 | 셀러툴</title>
             </Head>
-            <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <MainComponent></MainComponent>
-            <FooterMain></FooterMain>
+            {/* <FooterMain></FooterMain> */}
         </>
     );
 }

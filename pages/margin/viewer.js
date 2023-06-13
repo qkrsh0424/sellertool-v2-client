@@ -1,8 +1,8 @@
 import Head from "next/head";
-import FooterMain from "../../component/footer/FooterMain";
-import MainComponent from "../../component/margin/viewer/MainComponent";
-import PrimaryNavbarMainComponent from "../../component/navbar/primary-navbar";
-import SecondaryNavbarMainComponent from "../../component/navbar/secondary-navbar";
+import FooterMain from "../../views/footer/FooterMain";
+import MainComponent from "../../views/margin-v2/viewer";
+import PrimaryNavbarMainComponent from "../../views/navbar/primary-navbar";
+import SecondaryNavbarMainComponent from "../../views/navbar/secondary-navbar-v2";
 
 const MarginViewerPage = () => {
     return (
@@ -13,7 +13,7 @@ const MarginViewerPage = () => {
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <SecondaryNavbarMainComponent></SecondaryNavbarMainComponent>
             <MainComponent></MainComponent>
-            <FooterMain></FooterMain>
+            {/* <FooterMain></FooterMain> */}
         </>
     );
 }

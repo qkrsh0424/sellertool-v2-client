@@ -2,6 +2,7 @@ import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheets } from '@mui/styles';
 import { ServerStyleSheet } from 'styled-components';
+import { CustomDefaultBackdrop } from '../components/backdrop/default/v1/components';
 
 class MyDocument extends Document {
 

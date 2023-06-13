@@ -121,6 +121,7 @@ export default function ItemListComponent(props) {
                 <CommonModalComponent
                     open={stockRegisterStatusModalOpen}
                     onClose={handleCloseStockRegisterStatusModal}
+                    maxWidth="md"
                 >
                     <StockRegisterStatusModalComponent
                         selectedProductOption={selectedProductOption}

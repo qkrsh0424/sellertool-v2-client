@@ -179,7 +179,7 @@ export const CustomVirtualTable = React.forwardRef(({
                 )
             }
         )
-        , [data]
+        , []
     )
 
     return (

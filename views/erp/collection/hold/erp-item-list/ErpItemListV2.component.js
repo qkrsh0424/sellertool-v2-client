@@ -442,23 +442,18 @@ function Td({
             let sameReceiverHint = `${erpItem.receiver}${erpItem.receiverContact1}${erpItem.destination}${erpItem.destinationDetail}`;
             let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
             return (
-                <td
+                <TextDragableDancer
+                    type='td'
                     className={`${matchedFieldName}`}
                     style={{
-                        color: hasSameReceiver ? 'var(--defaultRedColor)' : ''
+                        color: hasSameReceiver ? 'var(--defaultRedColor)' : '',
+                        background: hasSameReceiver ? '#2c73d224' : '',
+                        cursor: hasSameReceiver ? 'pointer' : ''
                     }}
+                    onTapInRange={hasSameReceiver ? (e) => onActionOpenItemsForSameReceiverModal(e, sameReceiverHint) : () => { }}
                 >
                     {erpItem[matchedFieldName]}
-                    {hasSameReceiver &&
-                        <button
-                            type='button'
-                            className='view-sameReceiver-button-item'
-                            onClick={(e) => onActionOpenItemsForSameReceiverModal(e, sameReceiverHint)}
-                        >
-                            보기
-                        </button>
-                    }
-                </td>
+                </TextDragableDancer>
             );
         default:
             return (

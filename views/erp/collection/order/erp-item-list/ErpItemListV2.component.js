@@ -10,8 +10,9 @@ import CommonModalComponent from "../../../../modules/modal/CommonModalComponent
 import ItemsForSameReceiverModalComponent from "./modal/ItemsForSameReceiverModal.component";
 import { PinButtonBox, TableFieldWrapper, ViewHeaderSelectNotice } from "./styles/ErpItemListV2.styled";
 import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
-import { CustomVirtualTable } from "../../../../../components/table/virtual-table/v1";
+import { CustomVirtualTable } from "../../../../../components/table/virtual-table/v2";
 import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
+import CustomDragAndTouch from "../../../../../components/drag-and-touch/CustomDragAndTouch";
 
 export default function ErpItemListComponent({
     erpCollectionHeader,
@@ -328,7 +329,8 @@ function TableBodyRow({
     let isPackaged = item?.packageYn === 'y' ? true : false;
 
     return (
-        <tr
+        <CustomDragAndTouch
+            type='tr'
             {...virtuosoData}
             className={`${isSelected ? 'tr-active' : ''} ${(isOutOfStock && !isPackaged) ? 'tr-highlight' : ''}`}
             style={{
@@ -392,7 +394,7 @@ function TableBodyRow({
                     </td>
                 </>
             }
-        </tr>
+        </CustomDragAndTouch>
     )
 }
 
@@ -418,11 +420,11 @@ function Td({
             );
         case 'optionCode':
             return (
-                <td className='td-highlight' onClick={(e) => onActionOpenEditOptionCodeModal(e, erpItem)}>{erpItem[matchedFieldName]}</td>
+                <CustomDragAndTouch type='td' className='td-highlight' onClick={(e) => onActionOpenEditOptionCodeModal(e, erpItem)}>{erpItem[matchedFieldName]}</CustomDragAndTouch>
             )
         case 'releaseOptionCode':
             return (
-                <td className='td-highlight' onClick={(e) => onActionOpenEditReleaseOptionCodeModal(e, erpItem)}>{erpItem[matchedFieldName]}</td>
+                <CustomDragAndTouch type='td' className='td-highlight' onClick={(e) => onActionOpenEditReleaseOptionCodeModal(e, erpItem)}>{erpItem[matchedFieldName]}</CustomDragAndTouch>
             )
         case 'optionStockUnit':
             if (isPackaged) {

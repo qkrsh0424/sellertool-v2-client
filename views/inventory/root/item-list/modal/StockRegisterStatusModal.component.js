@@ -19,6 +19,16 @@ import { CustomDialog } from "../../../../../components/dialog/v1/CustomDialog";
 import { customBackdropController } from "../../../../../components/backdrop/default/v1";
 // ------------ MUI DatePicker Import End
 
+function returnTotalUnitByType(inventoryStockRegisterStatuses, type) {
+    const totalUnit = inventoryStockRegisterStatuses?.reduce((accumulator, currentValue, index, src) => {
+        if (currentValue?.type === type) {
+            accumulator += currentValue?.unit
+        }
+        return accumulator;
+    }, 0);
+    return totalUnit;
+}
+
 export default function StockRegisterStatusModalComponent({
     selectedProductOption,
     onClose,
@@ -26,6 +36,7 @@ export default function StockRegisterStatusModalComponent({
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const customBackground = customBackdropController();
+
 
     const {
         inventoryStockRegisterStatuses,
@@ -46,6 +57,8 @@ export default function StockRegisterStatusModalComponent({
     const [selectedItem, setSelectedItem] = useState(null);
     const [deleteInventoryStockRecordModalOpen, setDeleteInventoryStockRecordModalOpen] = useState(false);
     const [deleteInventoryStockRecordInfoModalOpen, setDeleteInventoryStockRecordInfoModalOpen] = useState(false);
+    const totalReceiveUnit = returnTotalUnitByType(inventoryStockRegisterStatuses, 'receive');
+    const totalReleaseUnit = returnTotalUnitByType(inventoryStockRegisterStatuses, 'release');
 
     const toggleDeleteInventoryStockRecordModalOpen = (setOpen, item) => {
         if (setOpen) {
@@ -64,8 +77,8 @@ export default function StockRegisterStatusModalComponent({
     const handleSubmitSearch = async (e) => {
         e.preventDefault();
         let diffDate = getDiffDate(startDateTime, endDateTime);
-        if (diffDate > 30 || diffDate < 1) {
-            alert('최대 30일 범위 이내로만 조회 가능합니다.');
+        if (diffDate > 365 || diffDate < 1) {
+            alert('최대 365일 범위 이내로만 조회 가능합니다.');
             return;
         }
         reqFetchInventoryStockRegisterStatuses();
@@ -253,6 +266,16 @@ export default function StockRegisterStatusModalComponent({
                                 </div>
                             </div>
                         </div>
+                        <div className='totalUnit-wrapper'>
+                            <div className='item-group'>
+                                <div className='item' style={{ color: 'var(--defaultGreenColor)' }}>
+                                    기간내 총 입고 수량 : <span style={{ fontWeight: '700' }}>{totalReceiveUnit}</span> 개
+                                </div>
+                                <div className='item' style={{ color: 'var(--defaultRedColor)' }}>
+                                    기간내 총 출고 수량 : <span style={{ fontWeight: '700' }}>{totalReleaseUnit}</span> 개
+                                </div>
+                            </div>
+                        </div>
                     </ItemInfoWrapper>
                 </ItemInfoContainer>
                 <ContentContainer>
@@ -363,7 +386,7 @@ export default function StockRegisterStatusModalComponent({
                 >
                     <CustomDialog.CloseButton onClose={() => toggleDeleteInventoryStockRecordInfoModalOpen(false)} />
                     <CustomDialog.Title>입/출고 기록 삭제</CustomDialog.Title>
-                    <div style={{ padding: '60px 20px', textAlign: 'center', fontWeight: '600', wordBreak:'keep-all' }}>
+                    <div style={{ padding: '60px 20px', textAlign: 'center', fontWeight: '600', wordBreak: 'keep-all' }}>
                         해당 입/출고 기록의 삭제는 통합 발주 관리를 통해서만 가능합니다.
                     </div>
                     <CustomDialog.FooterButtonGroup>

@@ -12,7 +12,7 @@ import { PinButtonBox, TableFieldWrapper, ViewHeaderSelectNotice } from "./style
 import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
 import { CustomVirtualTable } from "../../../../../components/table/virtual-table/v2";
 import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
-import CustomDoubleTouch from "../../../../../components/double-touch/CustomDoubleTouch";
+import { TextDragableDancer } from "../../../../../components/tapdancer/v1";
 
 export default function ErpItemListComponent({
     erpCollectionHeader,
@@ -346,7 +346,7 @@ function TableBodyRow({
     let isPackaged = item?.packageYn === 'y' ? true : false;
 
     return (
-        <CustomDoubleTouch
+        <TextDragableDancer
             type='tr'
             {...virtuosoData}
             className={`${isSelected ? 'tr-active' : ''} ${(isOutOfStock && !isPackaged) ? 'tr-highlight' : ''}`}
@@ -354,8 +354,7 @@ function TableBodyRow({
                 position: 'relative',
                 background: !item?.productOptionId ? 'var(--defaultYellowColorOpacity30)' : ''
             }}
-            onDoubleClick={(e) => { e.stopPropagation(); onSelectErpItem(item); }}
-            onDoubleTouch={(e) => { e.stopPropagation(); onSelectErpItem(item); }}
+            onTapInRange={(e) => { e.stopPropagation(); onSelectErpItem(item); }}
         >
             <td>{virtuosoData['data-index'] + 1}</td>
             <td>
@@ -436,7 +435,7 @@ function TableBodyRow({
                     </td>
                 </>
             }
-        </CustomDoubleTouch>
+        </TextDragableDancer>
     )
 }
 
@@ -463,11 +462,11 @@ function Td({
             );
         case 'optionCode':
             return (
-                <td className='td-highlight' onClick={(e) => onActionOpenEditOptionCodeModal(e, erpItem)}>{erpItem[matchedFieldName]}</td>
+                <TextDragableDancer type='td' className='td-highlight' onTapInRange={(e) => onActionOpenEditOptionCodeModal(e, erpItem)}>{erpItem[matchedFieldName]}</TextDragableDancer>
             )
         case 'releaseOptionCode':
             return (
-                <td className='td-highlight' onClick={(e) => onActionOpenEditReleaseOptionCodeModal(e, erpItem)}>{erpItem[matchedFieldName]}</td>
+                <TextDragableDancer type='td' className='td-highlight' onTapInRange={(e) => onActionOpenEditReleaseOptionCodeModal(e, erpItem)}>{erpItem[matchedFieldName]}</TextDragableDancer>
             )
         case 'optionStockUnit':
             if (isPackaged) {

@@ -4,7 +4,7 @@ import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadingComponent";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
-import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
+import ExcelDownloadModalComponent from "../../fragments/excel-download-modal-v2/ExcelDownloadModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
 import StockReleaseModalComponent from "./modal/StockReleaseModal.component";
 import ViewSelectedModalComponent from "./modal/ViewSelectedModalV2.component";

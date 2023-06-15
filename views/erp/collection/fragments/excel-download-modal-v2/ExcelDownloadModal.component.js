@@ -13,6 +13,8 @@ import { checkFileNameFormat } from "../../../../../utils/regexUtils";
 import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
 import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadingComponent";
 import { useSellertoolDatas } from "../../../../../hooks/sellertool-datas";
+import { CustomVirtualTable } from "../../../../../components/table/virtual-table/v2";
+import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 
 // collections를 가지고 downloadOrderItem 폼으로 변환, collection = [...orderItem]
 const getDownloadOrderItem = (collections) => {
@@ -25,10 +27,6 @@ const getDownloadOrderItem = (collections) => {
     }
 }
 
-/**
- * @deprecated
- * excel-download-modal-v2 가 문제가 없을시 해당 버전의 파일들(excel-download-modal/*) 모두 삭제 가능. 
- */
 const ExcelDownloadModalComponent = ({
     erpCollectionHeader,
     selectedErpItems,
@@ -418,6 +416,76 @@ function TipField({ matchedCode }) {
     );
 }
 
+function TableHeadRow({
+    erpCollectionHeader,
+    matchedCode
+}) {
+    return (
+        <tr>
+            <th className="fixed-header styled-th" scope="col" width={80}>합주문 번호</th>
+            <th className="fixed-header styled-th" scope="col" width={50}>선택</th>
+            {erpCollectionHeader?.erpCollectionHeaderDetails?.map((r, index) => {
+                return (
+                    <ResizableTh
+                        key={index}
+                        className="fixed-header styled-th"
+                        scope="col"
+                        width={200}
+                    >
+                        <div>{r.customHeaderName}</div>
+                        {(HIGHLIGHT_FIELDS.includes(r.matchedFieldName) || r.matchedFieldName === matchedCode) &&
+                            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '10%', background: 'var(--mainColorOpacity500)' }}></div>
+                        }
+                    </ResizableTh>
+                )
+            })}
+        </tr>
+    );
+}
+
+function TableBodyRow({
+    virtuosoData,
+    erpCollectionHeader,
+    onActionCheckItem
+}) {
+    const item = virtuosoData?.item;
+    const parentIndex = item?.parentIndex;
+    const checked = item?.isChecked;
+
+    return (
+        <tr {...virtuosoData} style={{ background: parentIndex % 2 === 0 ? '#f0f0f0' : '#fff' }}>
+            <td
+                style={{
+                    fontSize: '13px',
+                    fontWeight: '700',
+                }}
+            >
+                {item?.parentIndex + 1}
+            </td>
+            <td>
+                <input
+                    type='checkbox'
+                    className='checkbox-item'
+                    checked={checked}
+                    onChange={() => onActionCheckItem(item)}
+                ></input>
+            </td>
+            {erpCollectionHeader?.erpCollectionHeaderDetails?.map(r3 => {
+                let matchedFieldName = r3.matchedFieldName;
+                if (matchedFieldName === 'createdAt' || matchedFieldName === 'salesAt' || matchedFieldName === 'releaseAt' || matchedFieldName === 'channelOrderDate') {
+                    return (
+                        <td key={matchedFieldName}>{item[matchedFieldName] ? dateToYYYYMMDDhhmmss(item[matchedFieldName]) : ""}</td>
+                    )
+                }
+
+                return (
+                    <td key={matchedFieldName}>{item[matchedFieldName]}</td>
+                )
+            })}
+        </tr>
+    );
+}
+
 function PreviewTableField({
     erpCollectionHeader,
     matchedCode,
@@ -429,83 +497,34 @@ function PreviewTableField({
     return (
         <PreviewTableFieldWrapper>
             <TableBox>
-                <table cellSpacing="0">
-                    <colgroup>
-                        <col width={'50px'}></col>
-                        <col width={'50px'}></col>
-                        {erpCollectionHeader?.erpCollectionHeaderDetails?.map((r, index) => {
-                            return (
-                                <col key={index} width={'200px'}></col>
-                            );
-                        })}
-
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th className="fixed-header" scope="col">#</th>
-                            <th className="fixed-header" scope="col">선택</th>
-                            {erpCollectionHeader?.erpCollectionHeaderDetails?.map((r, index) => {
-                                return (
-                                    <th key={index} className="fixed-header" scope="col">
-                                        <div>{r.customHeaderName}</div>
-                                        {(HIGHLIGHT_FIELDS.includes(r.matchedFieldName) || r.matchedFieldName === matchedCode) &&
-                                            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '10%', background: 'var(--mainColorOpacity500)' }}></div>
-                                        }
-                                    </th>
-                                )
-                            })}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {downloadOrderItemList?.map((r1, r1Index) => {
-
-                            return (
-                                <React.Fragment key={r1Index}>
-                                    <tr>
-                                        <td
-                                            rowSpan={r1.collections.length + 1}
-                                            style={{ background: '#e0e0e0', fontSize: '13px', fontWeight: '700' }}
-                                        >
-                                            {r1Index + 1}
-                                        </td>
-                                    </tr>
-                                    {r1.collections?.map((r2, r2Index) => {
-                                        let checked = isCheckedItem(r2);
-
-                                        return (
-                                            <tr
-                                                key={r2.id}
-                                            >
-                                                <td
-                                                    style={{ background: '#e0e0e0' }}
-                                                >
-                                                    <input
-                                                        type='checkbox'
-                                                        className='checkbox-item'
-                                                        checked={checked}
-                                                        onChange={() => onActionCheckItem(r2)}
-                                                    ></input>
-                                                </td>
-                                                {erpCollectionHeader?.erpCollectionHeaderDetails?.map(r3 => {
-                                                    let matchedFieldName = r3.matchedFieldName;
-                                                    if (matchedFieldName === 'createdAt' || matchedFieldName === 'salesAt' || matchedFieldName === 'releaseAt' || matchedFieldName === 'channelOrderDate') {
-                                                        return (
-                                                            <td key={matchedFieldName}>{r2[matchedFieldName] ? dateToYYYYMMDDhhmmss(r2[matchedFieldName]) : ""}</td>
-                                                        )
-                                                    }
-
-                                                    return (
-                                                        <td key={matchedFieldName}>{r2[matchedFieldName]}</td>
-                                                    )
-                                                })}
-                                            </tr>
-                                        )
-                                    })}
-                                </React.Fragment>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                <CustomVirtualTable
+                    data={
+                        downloadOrderItemList?.reduce((accelator, currentValue, index, src) => {
+                            accelator = accelator.concat(currentValue?.collections?.map(collection => {
+                                let checked = isCheckedItem(collection);
+                                return {
+                                    ...collection,
+                                    parentIndex: index,
+                                    isChecked: checked
+                                }
+                            }))
+                            return accelator;
+                        }, [])
+                    }
+                    THeadRow={() => (
+                        <TableHeadRow
+                            erpCollectionHeader={erpCollectionHeader}
+                            matchedCode={matchedCode}
+                        />
+                    )}
+                    TBodyRow={(virtuosoData) => (
+                        <TableBodyRow
+                            virtuosoData={virtuosoData}
+                            erpCollectionHeader={erpCollectionHeader}
+                            onActionCheckItem={onActionCheckItem}
+                        />
+                    )}
+                />
             </TableBox>
         </PreviewTableFieldWrapper>
     );

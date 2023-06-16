@@ -8,10 +8,9 @@ import { useSelector } from "react-redux";
 import { dateToYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../../modules/image/CustomImage";
-import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import useRegisteredStocksHook from "../hooks/useRegisteredStocksHook";
 import { Container, ItemInfoContainer, ItemInfoWrapper, SearchConsoleContainer, SearchConsoleWrapper } from "../styles/RegisteredStockByDateModal.styled";
-import EditStockMemoModalComponent from "./EditStockMemoModal.component";
+import { EditMemoModalComponent as EditInventoryStockMemoModal } from "../../../fragments/inventory-stock-list-modal/v1";
 
 export default function RegisteredStockByDateModalComponent({
     onClose
@@ -205,16 +204,14 @@ export default function RegisteredStockByDateModalComponent({
                 </ItemInfoContainer>
             </Container>
 
-            <CommonModalComponent
-                open={editMemoModalOpen}
-                onClose={handleCloseEditMemoModal}
-            >
-                <EditStockMemoModalComponent
-                    selectedItem={selectedItem}
+            {editMemoModalOpen &&
+                <EditInventoryStockMemoModal
+                    inventoryStockData={selectedItem}
+                    open={editMemoModalOpen}
                     onClose={handleCloseEditMemoModal}
                     onConfirm={handleSubmitChangeMemo}
                 />
-            </CommonModalComponent>
+            }
         </>
     );
 }

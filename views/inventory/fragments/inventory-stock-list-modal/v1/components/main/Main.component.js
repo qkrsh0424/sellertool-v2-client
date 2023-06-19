@@ -30,10 +30,15 @@ function returnTotalUnitByType(inventoryStockRegisterStatuses, type) {
 
 export function InventoryStockListModalComponent({
     readOnly = true,
-    productOption,
+    productOptionId,
+    productCategoryName,
+    productSubCategoryName,
+    productName,
+    productOptionName,
+    productThumbnailUri,
     open,
     onClose,
-    onDeleteCompleted
+    onDeleteCompleted = () => { }
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const customBackground = customBackdropController();
@@ -52,7 +57,7 @@ export function InventoryStockListModalComponent({
         reqDeleteInventoryReceive,
         reqDeleteInventoryRelease
     } = useInventoryStockRegisterStatusesHook({
-        productOption: productOption
+        productOptionId: productOptionId
     });
     const [editMemoModalOpen, setEditMemoModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -253,15 +258,15 @@ export function InventoryStockListModalComponent({
                             <div className='mgl-flex mgl-flex-alignItems-center'>
                                 <div className='thumbnail-figure'>
                                     <CustomImage
-                                        src={productOption?.product?.thumbnailUri}
+                                        src={productThumbnailUri}
                                     />
                                 </div>
                                 <div>
                                     <div className='categoryInfo'>
-                                        {productOption?.productCategory?.name} &gt; {productOption?.productSubCategory?.name}
+                                        {productCategoryName} &gt; {productSubCategoryName}
                                     </div>
                                     <div className='productInfo'>
-                                        {productOption?.product?.name} &gt; {productOption?.name}
+                                        {productName} &gt; {productOptionName}
                                     </div>
                                 </div>
                             </div>

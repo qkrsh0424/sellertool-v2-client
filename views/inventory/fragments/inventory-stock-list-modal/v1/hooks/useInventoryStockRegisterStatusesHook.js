@@ -8,7 +8,7 @@ import { getEndDate, getStartDate } from "../../../../../../utils/dateFormatUtil
 import { customToast, defaultOptions } from "../../../../../../components/toast/custom-react-toastify/v1";
 
 export default function useInventoryStockRegisterStatusesHook({
-    productOption
+    productOptionId
 }) {
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const [inventoryStockRegisterStatuses, setInventoryStockRegisterStatuses] = useState(null);
@@ -18,12 +18,12 @@ export default function useInventoryStockRegisterStatusesHook({
     const [chartEndDateTime, setChartEndDateTime] = useState(getEndDate(new Date()));
 
     useEffect(() => {
-        if (!productOption) {
+        if (!productOptionId) {
             return;
         }
 
         reqFetchInventoryStockRegisterStatuses();
-    }, [productOption]);
+    }, [productOptionId]);
 
     const reqFetchInventoryStockRegisterStatuses = async () => {
         const headers = {
@@ -31,7 +31,7 @@ export default function useInventoryStockRegisterStatusesHook({
         }
 
         let params = {
-            productOptionId: productOption?.id,
+            productOptionId: productOptionId,
             startDateTime: getStartDate(startDateTime || new Date()),
             endDateTime: getEndDate(endDateTime || new Date())
         }

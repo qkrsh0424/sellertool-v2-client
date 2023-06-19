@@ -8,6 +8,7 @@ import { Container, ControlButtonsContainer } from "./styles/FloatingControlBar.
 export default function FloatingControlBarComponent({
     selectedProductOptions,
     onSelectClearAllProductOptions,
+    onActionSelectProductOption,
     onReqFetchInventoryStocks
 }) {
     const [controlButtonsViewOpen, setControlButtonsViewOpen] = useState(false);
@@ -83,6 +84,7 @@ export default function FloatingControlBarComponent({
                 <InventoryReceiveModalComponent
                     selectedProductOptions={selectedProductOptions}
                     onClose={handleCloseInventoryReceiveModal}
+                    onActionSelectProductOption={onActionSelectProductOption}
                     onReqFetchInventoryStocks={onReqFetchInventoryStocks}
                 />
             </CommonModalComponent>
@@ -95,6 +97,7 @@ export default function FloatingControlBarComponent({
                 <InventoryReleaseModalComponent
                     selectedProductOptions={selectedProductOptions}
                     onClose={handleCloseInventoryReleaseModal}
+                    onActionSelectProductOption={onActionSelectProductOption}
                     onReqFetchInventoryStocks={onReqFetchInventoryStocks}
                 />
             </CommonModalComponent>

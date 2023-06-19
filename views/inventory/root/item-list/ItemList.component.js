@@ -112,6 +112,7 @@ export default function ItemListComponent(props) {
                 <FloatingControlBarComponent
                     selectedProductOptions={selectedProductOptions}
                     onSelectClearAllProductOptions={onSelectClearAllProductOptions}
+                    onActionSelectProductOption={onSelectProductOption}
                     onReqFetchInventoryStocks={reqFetchInventoryStocks}
                 />
             }

@@ -120,7 +120,12 @@ export default function ItemListComponent(props) {
                 <InventoryStockListModalComponent
                     open={stockRegisterStatusModalOpen}
                     readOnly={false}
-                    productOption={selectedProductOption}
+                    productOptionId={selectedProductOption?.id}
+                    productCategoryName={selectedProductOption?.productCategory?.name}
+                    productSubCategoryName={selectedProductOption?.productSubCategory?.name}
+                    productName={selectedProductOption?.product?.name}
+                    productOptionName={selectedProductOption?.name}
+                    productThumbnailUri={selectedProductOption?.product?.thumbnailUri}
                     onClose={handleCloseStockRegisterStatusModal}
                     onDeleteCompleted={() => {
                         reqFetchInventoryStocks()

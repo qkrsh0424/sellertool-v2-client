@@ -11,10 +11,13 @@ import { Container, ContentContainer, SubmitButtonContainer, TableBox, TableWrap
 import BatchReceiveMemoModalComponent from "./BatchReceiveMemoModal.component";
 import BatchReceiveUnitModalComponent from "./BatchReceiveUnitModal.component";
 import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
+import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
+import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
 
 export default function InventoryReceiveModalComponent({
     selectedProductOptions,
     onClose,
+    onActionSelectProductOption,
     onReqFetchInventoryStocks
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
@@ -30,11 +33,16 @@ export default function InventoryReceiveModalComponent({
     } = useInventoryReceivesFormHook({
         selectedProductOptions: selectedProductOptions
     });
+
+    const {
+        inventoryStocks
+    } = useInventoryStocksHook({
+        productOptions: selectedProductOptions
+    })
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
 
     const [batchReceiveUnitModalOpen, setBatchReceiveUnitModalOpen] = useState(false);
     const [batchReceiveMemoModalOpen, setBatchReceiveMemoModalOpen] = useState(false);
-
 
     const handleOpenBatchReceiveUnitModal = () => {
         setBatchReceiveUnitModalOpen(true);
@@ -109,11 +117,14 @@ export default function InventoryReceiveModalComponent({
                 <form onSubmit={(e) => handleSubmit(e)}>
                     <ContentContainer>
                         <Table
+                            selectedProductOptions={selectedProductOptions}
                             inventoryReceivesForm={inventoryReceivesForm}
+                            inventoryStocks={inventoryStocks}
                             onChangeUnit={onChangeUnit}
                             onChangeMemo={onChangeMemo}
                             onActionOpenBatchReceiveUnitModal={handleOpenBatchReceiveUnitModal}
                             onActionOpenBatchReceiveMemoModal={handleOpenBatchReceiveMemoModal}
+                            onActionSelectProductOption={onActionSelectProductOption}
                         />
                     </ContentContainer>
                     <SubmitButtonContainer>
@@ -172,11 +183,14 @@ export default function InventoryReceiveModalComponent({
 }
 
 function Table({
+    selectedProductOptions,
     inventoryReceivesForm,
+    inventoryStocks,
     onChangeUnit,
     onChangeMemo,
     onActionOpenBatchReceiveUnitModal,
-    onActionOpenBatchReceiveMemoModal
+    onActionOpenBatchReceiveMemoModal,
+    onActionSelectProductOption
 }) {
     return (
         <TableWrapper>
@@ -186,6 +200,9 @@ function Table({
                 >
                     <thead>
                         <tr>
+                            <th width={50}>
+                                취소
+                            </th>
                             {TABLE_HEADER?.map(r => {
                                 if (r.name === 'receiveUnit') {
                                     return (
@@ -279,8 +296,23 @@ function Table({
                     </thead>
                     <tbody>
                         {inventoryReceivesForm?.map((inventoryReceiveForm, index) => {
+                            const productOption = selectedProductOptions?.find(r => r.id === inventoryReceiveForm?.productOptionId);
+                            const inventoryStock = inventoryStocks?.find(r => r.productOptionId === inventoryReceiveForm?.productOptionId);
+                            const stockUnit = inventoryStock ? inventoryStock?.stockUnit : 0;
+
                             return (
                                 <tr key={index}>
+                                    <td>
+                                        <CustomBlockButton
+                                            type='button'
+                                            style={{ width: 24, height: 24, marginLeft: 'auto', marginRight: 'auto', border: 'none', background: 'none' }}
+                                            onClick={() => onActionSelectProductOption(productOption)}
+                                        >
+                                            <CustomImage
+                                                src='/images/icon/delete_default_e56767.svg'
+                                            />
+                                        </CustomBlockButton>
+                                    </td>
                                     <td>
                                         <div>{inventoryReceiveForm?.productCategoryName} / {inventoryReceiveForm?.productSubCategoryName}</div>
                                         <div>{inventoryReceiveForm?.productName}</div>
@@ -288,6 +320,11 @@ function Table({
                                     <td>
                                         <div>
                                             {inventoryReceiveForm?.productOptionName}
+                                        </div>
+                                    </td>
+                                    <td style={{ background: 'var(--mainColorOpacity100)', fontWeight: '700' }}>
+                                        <div>
+                                            {stockUnit}
                                         </div>
                                     </td>
                                     <td>
@@ -334,9 +371,15 @@ const TABLE_HEADER = [
     },
     {
         resizable: false,
+        name: 'stockUnit',
+        headerName: '재고수량',
+        defaultWidth: 80
+    },
+    {
+        resizable: false,
         name: 'receiveUnit',
         headerName: '입고수량',
-        defaultWidth: 80
+        defaultWidth: 100
     },
     {
         resizable: true,

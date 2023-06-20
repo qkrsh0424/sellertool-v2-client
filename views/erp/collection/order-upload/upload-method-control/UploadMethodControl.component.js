@@ -2,7 +2,7 @@ import { useState } from "react";
 import ExcelUploaderControlComponent from "./ExcelUploaderControl.component";
 import useExcelTranslatorHeadersHook from "./hooks/useExcelTranslatorHeadersHook";
 import SingleUploaderControlComponent from "./SingleUploaderControl.component";
-import { ButtonBox, ButtonGroup, Container, SelectBox } from "./styles/UploadMethodControl.styled";
+import { ButtonGroup, Container } from "./styles/UploadMethodControl.styled";
 
 export default function UploadMethodControlComponent({
     excelTranslatorHeader,

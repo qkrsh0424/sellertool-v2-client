@@ -73,7 +73,7 @@ export default function ItemListComponent(props) {
                         <CustomSelect
                             className='select-item'
                             onChange={(e) => handleSelectSort(e)}
-                            value={router?.query?.sort || SORTED_BY[0]}
+                            value={router?.query?.sort || 'product.cid_desc'}
                         >
                             {SORTED_BY?.map(r => {
                                 return (

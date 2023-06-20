@@ -102,7 +102,7 @@ export default function ItemListComponent(props) {
                     isFirst={productOptionPage?.first}
                     isLast={productOptionPage?.last}
                     totalElements={productOptionPage?.totalElements}
-                    sizeElements={[50, 100, 200]}
+                    sizeElements={[50, 100]}
                     autoScrollTop={false}
                     popperDisablePortal={true}
                 />

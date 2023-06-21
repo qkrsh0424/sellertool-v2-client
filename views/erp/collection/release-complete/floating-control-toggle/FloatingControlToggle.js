@@ -4,7 +4,7 @@ import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadingComponent";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
-import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
+import ExcelDownloadModalComponent from "../../fragments/excel-download-modal-v2/ExcelDownloadModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
 import StockReleaseModalComponent from "./modal/StockReleaseModal.component";
 import ViewSelectedModalComponent from "./modal/ViewSelectedModalV2.component";
@@ -67,16 +67,8 @@ export default function FloatingControlToggle({
 
     const handleToggleEditErpItemModalOpen = (setOpen) => {
         if (setOpen) {
-            let stockReflectedItems = [];
-
-            selectedErpItems?.forEach(r => {
-                if (r.stockReflectYn === 'y') {
-                    stockReflectedItems.push(r);
-                }
-            });
-
-            if (stockReflectedItems?.length >= 1) {
-                alert(`이미 재고반영 처리된 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
+            if (selectedErpItems?.length > 200) {
+                alert('일괄 수정은 한번에 최대 200개 까지만 가능합니다.');
                 return;
             }
         }
@@ -189,6 +181,19 @@ export default function FloatingControlToggle({
                 return;
             } else if (selectedErpItems?.length > 10) {
                 alert('한번에 복사 생성 가능한 최대 개수는 10개 입니다.');
+                return;
+            }
+
+            let stockReflectedItems = [];
+
+            selectedErpItems?.forEach(r => {
+                if (r.stockReflectYn === 'y') {
+                    stockReflectedItems.push(r);
+                }
+            });
+
+            if (stockReflectedItems?.length >= 1) {
+                alert(`이미 재고반영 처리된 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
                 return;
             }
         }
@@ -420,7 +425,10 @@ export default function FloatingControlToggle({
                 onClose={() => handleToggleCopyCreateErpItemsModalOpen(false)}
                 onConfirm={() => handleSubmitCopyCreateErpItems()}
                 message={
-                    <div>선택된 데이터들을 복사 생성 합니다.</div>
+                    <>
+                        <div>선택된 데이터들을 복사 생성 합니다.</div>
+                        <div>복사 생성된 데이터의 <span style={{ color: 'var(--defaultRedColor)' }}>[M] 주문수집번호, [M] 주문수집일시, [M] 주문확정일시, [M] 출고완료일시</span> 는 재설정 됩니디.</div>
+                    </>
                 }
             />
 

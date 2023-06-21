@@ -1,6 +1,7 @@
 import { CustomDialog } from "../../../../../../components/dialog/v1/CustomDialog";
 import styled from 'styled-components';
 import CustomImage from "../../../../../modules/image/CustomImage";
+import Link from "next/link";
 
 const ContentContainer = styled.div`
     padding: 20px;
@@ -37,6 +38,18 @@ const ItemBox = styled.div`
     }
 `;
 
+const DirectLink = styled.a`
+    display: inline-block;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #606060;
+
+    &:hover{
+        text-decoration: underline;
+    }
+`;
+
 export default function FavoriteTranslatorsModalComponent({
     open = false,
     onClose = () => { },
@@ -46,13 +59,17 @@ export default function FavoriteTranslatorsModalComponent({
 }) {
     return (
         <>
+            
             <CustomDialog
                 open={open}
                 onClose={() => onClose()}
             >
                 <CustomDialog.CloseButton onClose={() => onClose()} />
-                <CustomDialog.Title>즐겨찾기</CustomDialog.Title>
+                <CustomDialog.Title>엑셀변환기 즐겨찾기</CustomDialog.Title>
                 <ContentContainer>
+                    <Link href='/excel-translator' passHref>
+                        <DirectLink>엑셀변환기 생성 바로가기</DirectLink>
+                    </Link>
                     {excelTranslatorHeaders?.map(excelTranslatorHeader => {
                         return (
                             <ItemBox

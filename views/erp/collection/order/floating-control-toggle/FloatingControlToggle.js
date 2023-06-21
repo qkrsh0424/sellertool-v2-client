@@ -3,7 +3,7 @@ import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadingComponent";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
-import ExcelDownloadModalComponent from "../../fragments/excel-download-modal/ExcelDownloadModal.component";
+import ExcelDownloadModalComponent from "../../fragments/excel-download-modal-v2/ExcelDownloadModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
 import StatusNextModalComponent from "./modal/StatusNextModal.component";
 import ViewSelectedModalComponent from "./modal/ViewSelectedModalV2.component";
@@ -264,7 +264,10 @@ export default function FloatingControlToggle({
                 onClose={() => handleToggleCopyCreateErpItemsModalOpen(false)}
                 onConfirm={() => handleSubmitCopyCreateErpItems()}
                 message={
-                    <div>선택된 데이터들을 복사 생성 합니다.</div>
+                    <>
+                        <div>선택된 데이터들을 복사 생성 합니다.</div>
+                        <div>복사 생성된 데이터의 <span style={{ color: 'var(--defaultRedColor)' }}>[M] 주문수집번호, [M] 주문수집일시, [M] 주문확정일시, [M] 출고완료일시</span> 는 재설정 됩니디.</div>
+                    </>
                 }
             />
 

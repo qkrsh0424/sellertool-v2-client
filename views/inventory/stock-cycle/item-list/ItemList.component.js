@@ -9,6 +9,7 @@ import CustomBlockButton from "../../../../components/buttons/block-button/v1/Cu
 import SafetyIndexVariableModalComponent from "./modal/SafetyIndexVariableModal.component";
 import { getDiffDate } from "../../../../utils/dateFormatUtils";
 import ResizableTh from "../../../../components/table/th/v1/ResizableTh";
+import { InventoryStockListModalComponent } from "../../fragments/inventory-stock-list-modal/v1";
 
 function returnRecommendPurchaseUnits(
     stockUnit,
@@ -29,6 +30,8 @@ export default function ItemListComponent(props) {
     const [safetyIndexVariableForOutOfStockPeriod, setSafetyIndexVariableForOutOfStockPeriod] = useState(30);
     const [safetyIndexVariableForTotal, setSafetyIndexVariableForTotal] = useState(1);
     const [safetyIndexVariableModalOpen, setSafetyIndexVariableModalOpen] = useState(false);
+    const [stockRegisterStatusModalOpen, setStockRegisterStatusModalOpen] = useState(false);
+    const [selectedInventoryStockCycle, setSelectedInventoryStockCycle] = useState(null);
 
     const {
         inventoryStockCyclePage
@@ -55,6 +58,17 @@ export default function ItemListComponent(props) {
         setSafetyIndexVariableForOutOfStockPeriod(forOutOfStockPeriod);
         setSafetyIndexVariableForTotal(forTotal);
         toggleSafetyIndexVariableModalOpen(false);
+    }
+
+    const handleOpenStockRegisterStatusModal = (e, productOption) => {
+        e.stopPropagation();
+        setStockRegisterStatusModalOpen(true);
+        setSelectedInventoryStockCycle(productOption);
+    }
+
+    const handleCloseStockRegisterStatusModal = () => {
+        setStockRegisterStatusModalOpen(false);
+        setSelectedInventoryStockCycle(null);
     }
 
     if (!inventoryStockCyclePage) {
@@ -87,6 +101,7 @@ export default function ItemListComponent(props) {
                     safetyIndexVariableForOutOfStockPeriod={safetyIndexVariableForOutOfStockPeriod}
                     safetyIndexVariableForTotal={safetyIndexVariableForTotal}
                     onOpenSafetyIndexVariableModal={() => toggleSafetyIndexVariableModalOpen(true)}
+                    onActionOpenStockRegisterStatusModal={handleOpenStockRegisterStatusModal}
                 />
 
             </Container>
@@ -112,6 +127,19 @@ export default function ItemListComponent(props) {
                     safetyIndexVariableForTotal={safetyIndexVariableForTotal}
                 />
             }
+            {stockRegisterStatusModalOpen &&
+                <InventoryStockListModalComponent
+                    open={stockRegisterStatusModalOpen}
+                    readOnly={true}
+                    productOptionId={selectedInventoryStockCycle?.productOptionId}
+                    productCategoryName={selectedInventoryStockCycle?.productCategoryName}
+                    productSubCategoryName={selectedInventoryStockCycle?.productSubCategoryName}
+                    productName={selectedInventoryStockCycle?.productName}
+                    productOptionName={selectedInventoryStockCycle?.productOptionName}
+                    productThumbnailUri={selectedInventoryStockCycle?.productThumbnailUri}
+                    onClose={handleCloseStockRegisterStatusModal}
+                />
+            }
         </>
     );
 
@@ -123,7 +151,8 @@ function Table({
     leadTime,
     safetyIndexVariableForOutOfStockPeriod,
     safetyIndexVariableForTotal,
-    onOpenSafetyIndexVariableModal
+    onOpenSafetyIndexVariableModal,
+    onActionOpenStockRegisterStatusModal
 }) {
     return (
         <TableWrapper>
@@ -198,7 +227,7 @@ function Table({
                     <tbody>
                         {inventoryStockCycles?.map((inventoryStockCycle) => {
                             const isStockRisk = leadTime && inventoryStockCycle?.averageReleaseUnitPerDay > 0 && inventoryStockCycle?.stockCyclePerDay <= leadTime;
-
+                            console.log(inventoryStockCycle)
                             return (
                                 <tr
                                     key={inventoryStockCycle?.productOptionId}
@@ -237,6 +266,17 @@ function Table({
                                             {(!inventoryStockCycle.firstReleaseDateTime || getDiffDate(inventoryStockCycle.firstReleaseDateTime, new Date()) < days) &&
                                                 <div style={{ color: 'var(--defaultYellowColor)', fontWeight: '700' }}>분석기간내 샘플 데이터 부족</div>
                                             }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className='content-box'>
+                                            <CustomBlockButton
+                                                type='button'
+                                                className='stockRegisterStatusView-button-item'
+                                                onClick={(e) => onActionOpenStockRegisterStatusModal(e, inventoryStockCycle)}
+                                            >
+                                                보기
+                                            </CustomBlockButton>
                                         </div>
                                     </td>
                                     <td>
@@ -317,6 +357,12 @@ const TABLE_HEADER = [
         name: 'warning',
         headerName: '경보',
         defaultWidth: 150
+    },
+    {
+        resizable: false,
+        name: 'stockRegisterStatus',
+        headerName: '입/출고현황',
+        defaultWidth: 80
     },
     {
         resizable: true,

@@ -76,6 +76,17 @@ const ServiceListComponent = () => {
                             </CardWrapper>
                         </Link>
                     </CardContainer>
+                    <CardContainer>
+                        <Link
+                            href={`/purchasing-process/dashboard`}
+                            passHref
+                        >
+                            <CardWrapper>
+                                <CardTitle>구매 프로세스</CardTitle>
+                                <CardDescription>구매 프로세스 체험하기</CardDescription>
+                            </CardWrapper>
+                        </Link>
+                    </CardContainer>
                 </ContentWrapper>
             </ContentContainer>
         </>

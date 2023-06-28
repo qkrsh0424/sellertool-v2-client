@@ -34,6 +34,17 @@ const ServiceListComponent = () => {
                     </CardContainer>
                     <CardContainer>
                         <Link
+                            href={`/store-rank/real-time-rank`}
+                            passHref
+                        >
+                            <CardWrapper>
+                                <CardTitle>스토어 랭킹</CardTitle>
+                                <CardDescription>스토어 랭킹 체험하기</CardDescription>
+                            </CardWrapper>
+                        </Link>
+                    </CardContainer>
+                    <CardContainer>
+                        <Link
                             href={'/product/dashboard'}
                             passHref
                         >

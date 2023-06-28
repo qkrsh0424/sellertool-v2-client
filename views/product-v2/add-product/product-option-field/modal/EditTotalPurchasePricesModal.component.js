@@ -36,7 +36,7 @@ export default function EditTotalPurchasePricesModalComponent({
                 setDisabledBtn(true);
 
                 if (!inputValue || inputValue < 0 || inputValue > 999999999) {
-                    alert('총 구매가격은 0-999999999 이내의 숫자만 입력가능 합니다.');
+                    alert('매입가격은 0-999999999 이내의 숫자만 입력가능 합니다.');
                     return;
                 }
 
@@ -72,7 +72,7 @@ export default function EditTotalPurchasePricesModalComponent({
                     className='title-box'
                 >
                     <div className='title'>
-                        총 구매가격을 일괄 변경합니다.
+                        매입가격을 일괄 변경합니다.
                     </div>
                 </div>
                 <form onSubmit={(e) => __handle.submit.confirm(e)}>
@@ -81,7 +81,7 @@ export default function EditTotalPurchasePricesModalComponent({
                             <input
                                 type='text'
                                 className='input-item'
-                                placeholder="총 구매가격"
+                                placeholder="매입가격"
                                 value={numberFormatUtils.numberWithCommas(inputValue) || ''}
                                 onChange={(e) => __handle.change.inputValue(e)}
                             ></input>

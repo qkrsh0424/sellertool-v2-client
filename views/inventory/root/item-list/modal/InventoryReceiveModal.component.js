@@ -89,6 +89,7 @@ export default function InventoryReceiveModalComponent({
         });
         backdropControl.hideBackdrop();
     }
+
     return (
         <>
             <Container>

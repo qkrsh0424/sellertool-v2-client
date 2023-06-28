@@ -23,7 +23,7 @@ import Router from 'next/router';
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { CustomToastContainer } from '../components/toast/custom-react-toastify/v1';
-import { CustomDefaultBackdrop } from '../components/backdrop/default/v1/components';
+import { CustomDefaultBackdrop } from '../components/backdrop/default/v1';
 
 const theme = createTheme();
 

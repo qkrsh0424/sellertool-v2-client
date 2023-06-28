@@ -5,6 +5,7 @@ import { Container } from "./index.styled";
 import UploadDataListFieldComponent from "./upload-data-list/UploadDataListField.component";
 import UploadMethodControlComponent from "./upload-method-control/UploadMethodControl.component";
 import BackdropLoadingComponent from "../../../modules/loading/BackdropLoadingComponent";
+import TipFieldComponent from "./tip-field/TipField.component";
 
 export default function MainComponent(props) {
     const [excelTranslatorHeader, setExcelTranslatorHeader] = useState(null);
@@ -65,6 +66,7 @@ export default function MainComponent(props) {
                     sidebarColor={'#ffffff'}
                 >
                     <>
+                        <TipFieldComponent />
                         <UploadMethodControlComponent
                             excelTranslatorHeader={excelTranslatorHeader}
                             onActionChangeExcelTranslatorHeader={handleChangeExcelTranslatorHeader}

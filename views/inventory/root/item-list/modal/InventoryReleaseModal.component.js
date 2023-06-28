@@ -11,10 +11,14 @@ import { Container, ContentContainer, SubmitButtonContainer, TableBox, TableWrap
 import BatchReleaseMemoModalComponent from "./BatchReleaseMemoModal.component";
 import BatchReleaseUnitModalComponent from "./BatchReleaseUnitModal.component";
 import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
+import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
+import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
+import { customBackdropController } from "../../../../../components/backdrop/default/v1";
 
 export default function InventoryReleaseModalComponent({
     selectedProductOptions,
     onClose,
+    onActionSelectProductOption,
     onReqFetchInventoryStocks
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
@@ -30,11 +34,19 @@ export default function InventoryReleaseModalComponent({
     } = useInventoryReleasesFormHook({
         selectedProductOptions: selectedProductOptions
     });
+
+    const {
+        inventoryStocks
+    } = useInventoryStocksHook({
+        productOptions: selectedProductOptions
+    })
+
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
 
     const [batchReleaseUnitModalOpen, setBatchReleaseUnitModalOpen] = useState(false);
     const [batchReleaseMemoModalOpen, setBatchReleaseMemoModalOpen] = useState(false);
 
+    const backdropControl = customBackdropController();
 
     const handleOpenBatchReleaseUnitModal = () => {
         setBatchReleaseUnitModalOpen(true);
@@ -69,6 +81,7 @@ export default function InventoryReleaseModalComponent({
             inventoryReleases: [...inventoryReleasesForm]
         }
 
+        backdropControl.showBackdrop();
         await reqCreateInventoryReleases({
             body: body,
             successCallback: () => {
@@ -76,6 +89,7 @@ export default function InventoryReleaseModalComponent({
                 onReqFetchInventoryStocks();
             }
         });
+        backdropControl.hideBackdrop();
     }
     return (
         <>
@@ -109,11 +123,14 @@ export default function InventoryReleaseModalComponent({
                 <form onSubmit={(e) => handleSubmit(e)}>
                     <ContentContainer>
                         <Table
+                            selectedProductOptions={selectedProductOptions}
                             inventoryReleasesForm={inventoryReleasesForm}
+                            inventoryStocks={inventoryStocks}
                             onChangeUnit={onChangeUnit}
                             onChangeMemo={onChangeMemo}
                             onActionOpenBatchReleaseUnitModal={handleOpenBatchReleaseUnitModal}
                             onActionOpenBatchReleaseMemoModal={handleOpenBatchReleaseMemoModal}
+                            onActionSelectProductOption={onActionSelectProductOption}
                         />
                     </ContentContainer>
                     <SubmitButtonContainer>
@@ -172,11 +189,14 @@ export default function InventoryReleaseModalComponent({
 }
 
 function Table({
+    selectedProductOptions,
     inventoryReleasesForm,
+    inventoryStocks,
     onChangeUnit,
     onChangeMemo,
     onActionOpenBatchReleaseUnitModal,
-    onActionOpenBatchReleaseMemoModal
+    onActionOpenBatchReleaseMemoModal,
+    onActionSelectProductOption
 }) {
     return (
         <TableWrapper>
@@ -186,6 +206,9 @@ function Table({
                 >
                     <thead>
                         <tr>
+                            <th width={50}>
+                                취소
+                            </th>
                             {TABLE_HEADER?.map(r => {
                                 if (r.name === 'unit') {
                                     return (
@@ -279,8 +302,23 @@ function Table({
                     </thead>
                     <tbody>
                         {inventoryReleasesForm?.map((inventoryReleaseForm, index) => {
+                            const productOption = selectedProductOptions?.find(r => r.id === inventoryReleaseForm?.productOptionId);
+                            const inventoryStock = inventoryStocks?.find(r => r.productOptionId === inventoryReleaseForm?.productOptionId);
+                            const stockUnit = inventoryStock ? inventoryStock?.stockUnit : 0;
+
                             return (
                                 <tr key={index}>
+                                    <td>
+                                        <CustomBlockButton
+                                            type='button'
+                                            style={{ width: 24, height: 24, marginLeft: 'auto', marginRight: 'auto', border: 'none', background: 'none' }}
+                                            onClick={() => onActionSelectProductOption(productOption)}
+                                        >
+                                            <CustomImage
+                                                src='/images/icon/delete_default_e56767.svg'
+                                            />
+                                        </CustomBlockButton>
+                                    </td>
                                     <td>
                                         <div>{inventoryReleaseForm?.productCategoryName} / {inventoryReleaseForm?.productSubCategoryName}</div>
                                         <div>{inventoryReleaseForm?.productName}</div>
@@ -288,6 +326,11 @@ function Table({
                                     <td>
                                         <div>
                                             {inventoryReleaseForm?.productOptionName}
+                                        </div>
+                                    </td>
+                                    <td style={{ background: 'var(--mainColorOpacity100)', fontWeight: '700' }}>
+                                        <div>
+                                            {stockUnit}
                                         </div>
                                     </td>
                                     <td>
@@ -334,9 +377,15 @@ const TABLE_HEADER = [
     },
     {
         resizable: false,
+        name: 'stockUnit',
+        headerName: '재고수량',
+        defaultWidth: 80
+    },
+    {
+        resizable: false,
         name: 'unit',
         headerName: '출고수량',
-        defaultWidth: 80
+        defaultWidth: 100
     },
     {
         resizable: true,

@@ -36,6 +36,7 @@ export default function FormFieldComponent(props) {
     } = useSignupValidHook();
 
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+    const [isCapsLock, setIsCapsLock] = useState(false);
 
     useEffect(() => {
         let usernameValid = returnUsernameValid(signupForm.username);
@@ -125,6 +126,14 @@ export default function FormFieldComponent(props) {
                     props.onSubmitSignup({ signupForm });
                 }
             }
+        }
+    }
+
+    function checkCapsLock(event) {
+        if (event.getModifierState("CapsLock")) {
+            setIsCapsLock(true);
+        } else {
+            setIsCapsLock(false);
         }
     }
 
@@ -230,9 +239,11 @@ export default function FormFieldComponent(props) {
                                 placeholder={'영문, 숫자, 특수문자 혼합 8-50자'}
                                 minLength={8}
                                 maxLength={50}
+                                onKeyUp={(e) => checkCapsLock(e)}
                                 required
                             ></input>
                         </InputBox>
+                        {isCapsLock && <div style={{ fontSize: '12px', color: 'var(--defaultRedColor)', marginTop: '5px' }}>CapsLock 키가 활성화 되어있습니다.</div>}
                         <InputBox>
                             <div
                                 className='input-label'

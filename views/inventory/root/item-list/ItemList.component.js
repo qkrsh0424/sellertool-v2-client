@@ -1,20 +1,17 @@
 import { useRouter } from "next/router";
-import { useRef } from "react";
 import { useState } from "react";
-import { useEffect } from "react";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import CustomImage from "../../../modules/image/CustomImage";
-import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
 import PagenationComponentV2 from "../../../modules/pagenation/PagenationComponentV2";
 import CustomSelect from "../../../modules/select/CustomSelect";
 import FloatingControlBarComponent from "./FloatingControlBar.component";
 import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
 import useProductOptionsHook from "./hooks/useProductOptionPageHook";
 import useSelectedProductOptions from "./hooks/useSelectedProductOptionsHook";
-import StockRegisterStatusModalComponent from "./modal/StockRegisterStatusModal.component";
 import RegisteredStockByDateComponent from "./RegisteredStockByDate.component";
-import { Container, ControlFieldContainer, PagenationContainer, RegisteredStockByDateContainer, SortControlContainer, TableBox, TableWrapper } from "./styles/ItemList.styled";
+import { Container, ControlFieldContainer, PagenationContainer, SortControlContainer, TableBox, TableWrapper } from "./styles/ItemList.styled";
 import ResizableTh from "../../../../components/table/th/v1/ResizableTh";
+import { InventoryStockListModalComponent } from "../../fragments/inventory-stock-list-modal/v1";
 
 export default function ItemListComponent(props) {
     const router = useRouter();
@@ -76,7 +73,7 @@ export default function ItemListComponent(props) {
                         <CustomSelect
                             className='select-item'
                             onChange={(e) => handleSelectSort(e)}
-                            value={router?.query?.sort || SORTED_BY[0]}
+                            value={router?.query?.sort || 'product.cid_desc'}
                         >
                             {SORTED_BY?.map(r => {
                                 return (
@@ -105,7 +102,7 @@ export default function ItemListComponent(props) {
                     isFirst={productOptionPage?.first}
                     isLast={productOptionPage?.last}
                     totalElements={productOptionPage?.totalElements}
-                    sizeElements={[50, 100, 200]}
+                    sizeElements={[50, 100]}
                     autoScrollTop={false}
                     popperDisablePortal={true}
                 />
@@ -115,21 +112,26 @@ export default function ItemListComponent(props) {
                 <FloatingControlBarComponent
                     selectedProductOptions={selectedProductOptions}
                     onSelectClearAllProductOptions={onSelectClearAllProductOptions}
+                    onActionSelectProductOption={onSelectProductOption}
                     onReqFetchInventoryStocks={reqFetchInventoryStocks}
                 />
             }
 
             {stockRegisterStatusModalOpen &&
-                <CommonModalComponent
+                <InventoryStockListModalComponent
                     open={stockRegisterStatusModalOpen}
+                    readOnly={false}
+                    productOptionId={selectedProductOption?.id}
+                    productCategoryName={selectedProductOption?.productCategory?.name}
+                    productSubCategoryName={selectedProductOption?.productSubCategory?.name}
+                    productName={selectedProductOption?.product?.name}
+                    productOptionName={selectedProductOption?.name}
+                    productThumbnailUri={selectedProductOption?.product?.thumbnailUri}
                     onClose={handleCloseStockRegisterStatusModal}
-                >
-                    <StockRegisterStatusModalComponent
-                        selectedProductOption={selectedProductOption}
-                        onClose={handleCloseStockRegisterStatusModal}
-                        onReqFetchInventoryStocks={reqFetchInventoryStocks}
-                    />
-                </CommonModalComponent>
+                    onDeleteCompleted={() => {
+                        reqFetchInventoryStocks()
+                    }}
+                />
             }
         </>
     );

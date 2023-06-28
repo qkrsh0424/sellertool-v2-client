@@ -25,6 +25,10 @@ const getDownloadOrderItem = (collections) => {
     }
 }
 
+/**
+ * @deprecated
+ * excel-download-modal-v2 가 문제가 없을시 해당 버전의 파일들(excel-download-modal/*) 모두 삭제 가능. 
+ */
 const ExcelDownloadModalComponent = ({
     erpCollectionHeader,
     selectedErpItems,

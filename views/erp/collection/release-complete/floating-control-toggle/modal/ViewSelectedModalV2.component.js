@@ -6,7 +6,7 @@ import CustomImage from "../../../../../modules/image/CustomImage";
 import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
 import { Container, TableBox, TableWrapper, TipFieldWrapper } from "../styles/ViewSelectedModalV2.styled";
 import React from "react";
-import { CustomVirtualTable } from "../../../../../../components/table/virtual-table/v1/components/CustomVirtualTable";
+import { CustomVirtualTable } from "../../../../../../components/table/virtual-table/v2/components/CustomVirtualTable";
 import ResizableTh from "../../../../../../components/table/th/v1/ResizableTh";
 
 export default function ViewSelectedModalComponent({

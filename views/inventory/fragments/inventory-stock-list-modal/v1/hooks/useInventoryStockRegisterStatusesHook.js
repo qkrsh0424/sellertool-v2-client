@@ -1,28 +1,29 @@
-import moment from "moment";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { inventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
-import { inventoryReceiveDataConnect } from "../../../../../data_connect/inventoryReceiveDataConnect";
-import { inventoryReleaseDataConnect } from "../../../../../data_connect/inventoryReleaseDataConnect";
-import { getEndDate, getStartDate } from "../../../../../utils/dateFormatUtils";
-import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
+import { inventoryDataConnect } from "../../../../../../data_connect/inventoryDataConnect";
+import { inventoryReceiveDataConnect } from "../../../../../../data_connect/inventoryReceiveDataConnect";
+import { inventoryReleaseDataConnect } from "../../../../../../data_connect/inventoryReleaseDataConnect";
+import { getEndDate, getStartDate } from "../../../../../../utils/dateFormatUtils";
+import { customToast, defaultOptions } from "../../../../../../components/toast/custom-react-toastify/v1";
 
 export default function useInventoryStockRegisterStatusesHook({
-    selectedProductOption
+    productOptionId
 }) {
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const [inventoryStockRegisterStatuses, setInventoryStockRegisterStatuses] = useState(null);
     const [startDateTime, setStartDateTime] = useState(new Date());
     const [endDateTime, setEndDateTime] = useState(new Date());
+    const [chartStartDateTime, setChartStartDateTime] = useState(getStartDate(new Date()));
+    const [chartEndDateTime, setChartEndDateTime] = useState(getEndDate(new Date()));
 
     useEffect(() => {
-        if (!selectedProductOption) {
+        if (!productOptionId) {
             return;
         }
 
         reqFetchInventoryStockRegisterStatuses();
-    }, [selectedProductOption]);
+    }, [productOptionId]);
 
     const reqFetchInventoryStockRegisterStatuses = async () => {
         const headers = {
@@ -30,7 +31,7 @@ export default function useInventoryStockRegisterStatusesHook({
         }
 
         let params = {
-            productOptionId: selectedProductOption.id,
+            productOptionId: productOptionId,
             startDateTime: getStartDate(startDateTime || new Date()),
             endDateTime: getEndDate(endDateTime || new Date())
         }
@@ -39,6 +40,8 @@ export default function useInventoryStockRegisterStatusesHook({
             .then(res => {
                 if (res.status === 200) {
                     setInventoryStockRegisterStatuses(res.data.data);
+                    setChartStartDateTime(startDateTime);
+                    setChartEndDateTime(endDateTime);
                 }
             })
             .catch(err => {
@@ -182,6 +185,8 @@ export default function useInventoryStockRegisterStatusesHook({
         inventoryStockRegisterStatuses,
         startDateTime,
         endDateTime,
+        chartStartDateTime,
+        chartEndDateTime,
         onChangeStartDateTime,
         onChangeEndDateTime,
         reqFetchInventoryStockRegisterStatuses,

@@ -75,11 +75,46 @@ export default function DataTableComponent({
 
     const toggleEditReleaseOptionCodeModalOpen = (erpItemId) => {
         if (erpItemId) {
+            const targetErpItem = editErpItems?.find(r => r.id === erpItemId);
+            if (targetErpItem?.stockReflectYn === 'y') {
+                alert(`이미 재고반영된 데이터의 [M] 출고옵션코드는 변경이 불가능 합니다.`);
+                return;
+            }
+
             setTargetErpItemId(erpItemId);
             editReleaseOptionCodeModalControl.toggleOpen(true);
         } else {
             editReleaseOptionCodeModalControl.toggleOpen(false);
             setTargetErpItemId(null);
+        }
+    }
+
+    const toggleEditOptionCodeAllModalOpen = (setOpen) => {
+        if (setOpen) {
+            editAllOptionCodeModalControl.toggleOpen(true);
+        } else {
+            editAllOptionCodeModalControl.toggleOpen(false);
+        }
+    }
+
+    const toggleEditReleaseOptionCodeAllModalOpen = (setOpen) => {
+        if (setOpen) {
+            let stockReflectedItems = [];
+
+            editErpItems?.forEach(r => {
+                if (r.stockReflectYn === 'y') {
+                    stockReflectedItems.push(r);
+                }
+            });
+
+            if (stockReflectedItems?.length >= 1) {
+                alert(`이미 재고반영된 데이터가 있어 [M] 출고옵션코드는 변경이 불가능 합니다. 해당 데이터를 제외 후 수정해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
+                return;
+            }
+
+            editAllReleaseOptionCodeModalControl.toggleOpen(true);
+        } else {
+            editAllReleaseOptionCodeModalControl.toggleOpen(false);
         }
     }
 
@@ -98,12 +133,12 @@ export default function DataTableComponent({
 
     const handleChangeOptionCodeAll = (optionCode) => {
         onChangeOptionCodeAll(optionCode);
-        editAllOptionCodeModalControl.toggleOpen(false);
+        toggleEditOptionCodeAllModalOpen(false);
     }
 
     const handleChangeReleaseOptionCodeAll = (optionCode) => {
         onChangeReleaseOptionCodeAll(optionCode)
-        editAllReleaseOptionCodeModalControl.toggleOpen(false);
+        toggleEditReleaseOptionCodeAllModalOpen(false);
     }
 
     const handleChangeOptionCode = (optionCode) => {
@@ -143,7 +178,7 @@ export default function DataTableComponent({
                                         zIndex: '10'
                                     }}
                                 >
-                                    No.
+                                    해제
                                 </th>
                                 <th
                                     className="fixed-header"
@@ -153,7 +188,27 @@ export default function DataTableComponent({
                                         zIndex: '10'
                                     }}
                                 >
-                                    해제
+                                    No.
+                                </th>
+                                <th
+                                    className="fixed-header"
+                                    scope="col"
+                                    width={160}
+                                    style={{
+                                        zIndex: '10'
+                                    }}
+                                >
+                                    [M] 주문수집번호
+                                </th>
+                                <th
+                                    className="fixed-header"
+                                    scope="col"
+                                    width={100}
+                                    style={{
+                                        zIndex: '10'
+                                    }}
+                                >
+                                    재고반영 여부
                                 </th>
                                 {tableHeaders?.map?.((r, index) => {
                                     if (r.name === 'optionCode') {
@@ -175,7 +230,7 @@ export default function DataTableComponent({
                                                     <SingleBlockButton
                                                         type='button'
                                                         className='control-button-item'
-                                                        onClick={() => editAllOptionCodeModalControl.toggleOpen(true)}
+                                                        onClick={() => toggleEditOptionCodeAllModalOpen(true)}
                                                     >
                                                         <div className='icon-figure'>
                                                             <CustomImage
@@ -207,7 +262,7 @@ export default function DataTableComponent({
                                                     <SingleBlockButton
                                                         type='button'
                                                         className='control-button-item'
-                                                        onClick={() => editAllReleaseOptionCodeModalControl.toggleOpen(true)}
+                                                        onClick={() => toggleEditReleaseOptionCodeAllModalOpen(true)}
                                                     >
                                                         <div className='icon-figure'>
                                                             <CustomImage
@@ -336,9 +391,6 @@ export default function DataTableComponent({
                                         key={erpItem.id}
                                     >
                                         <td>
-                                            {index + 1}
-                                        </td>
-                                        <td>
                                             <SingleBlockButton
                                                 type='button'
                                                 className='delete-button-item'
@@ -350,6 +402,15 @@ export default function DataTableComponent({
                                                     />
                                                 </div>
                                             </SingleBlockButton>
+                                        </td>
+                                        <td>
+                                            {index + 1}
+                                        </td>
+                                        <td>
+                                            {erpItem?.uniqueCode}
+                                        </td>
+                                        <td>
+                                            {erpItem?.stockReflectYn === 'y' ? <span style={{ color: 'var(--defaultGreenColor)', fontWeight: '700' }}>반영됨</span> : ''}
                                         </td>
                                         {tableHeaders.map((header) => {
                                             if (header.name === 'optionCode') {
@@ -458,7 +519,7 @@ export default function DataTableComponent({
             {editAllOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
                     open={editAllOptionCodeModalControl.open}
-                    onClose={() => editAllOptionCodeModalControl.toggleOpen(false)}
+                    onClose={() => toggleEditOptionCodeAllModalOpen(false)}
                     onSelect={(result) => handleChangeOptionCodeAll(result)}
                 />
             }
@@ -466,7 +527,7 @@ export default function DataTableComponent({
             {editAllReleaseOptionCodeModalControl.open &&
                 <CustomSearchOptionCodesModal
                     open={editAllReleaseOptionCodeModalControl.open}
-                    onClose={() => editAllReleaseOptionCodeModalControl.toggleOpen(false)}
+                    onClose={() => toggleEditReleaseOptionCodeAllModalOpen(false)}
                     onSelect={(result) => handleChangeReleaseOptionCodeAll(result)}
                 />
             }

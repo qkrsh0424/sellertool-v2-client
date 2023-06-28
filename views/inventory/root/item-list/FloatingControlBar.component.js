@@ -8,6 +8,7 @@ import { Container, ControlButtonsContainer } from "./styles/FloatingControlBar.
 export default function FloatingControlBarComponent({
     selectedProductOptions,
     onSelectClearAllProductOptions,
+    onActionSelectProductOption,
     onReqFetchInventoryStocks
 }) {
     const [controlButtonsViewOpen, setControlButtonsViewOpen] = useState(false);
@@ -75,29 +76,35 @@ export default function FloatingControlBarComponent({
                 </SingleBlockButton>
             </Container>
 
-            <CommonModalComponent
-                open={inventoryReceiveModalOpen}
-                onClose={handleCloseInventoryReceiveModal}
-                maxWidth={'sm'}
-            >
-                <InventoryReceiveModalComponent
-                    selectedProductOptions={selectedProductOptions}
+            {inventoryReceiveModalOpen &&
+                <CommonModalComponent
+                    open={inventoryReceiveModalOpen}
                     onClose={handleCloseInventoryReceiveModal}
-                    onReqFetchInventoryStocks={onReqFetchInventoryStocks}
-                />
-            </CommonModalComponent>
+                    maxWidth={'sm'}
+                >
+                    <InventoryReceiveModalComponent
+                        selectedProductOptions={selectedProductOptions}
+                        onClose={handleCloseInventoryReceiveModal}
+                        onActionSelectProductOption={onActionSelectProductOption}
+                        onReqFetchInventoryStocks={onReqFetchInventoryStocks}
+                    />
+                </CommonModalComponent>
+            }
 
-            <CommonModalComponent
-                open={inventoryReleaseModalOpen}
-                onClose={handleCloseInventoryReleaseModal}
-                maxWidth={'sm'}
-            >
-                <InventoryReleaseModalComponent
-                    selectedProductOptions={selectedProductOptions}
+            {inventoryReleaseModalOpen &&
+                <CommonModalComponent
+                    open={inventoryReleaseModalOpen}
                     onClose={handleCloseInventoryReleaseModal}
-                    onReqFetchInventoryStocks={onReqFetchInventoryStocks}
-                />
-            </CommonModalComponent>
+                    maxWidth={'sm'}
+                >
+                    <InventoryReleaseModalComponent
+                        selectedProductOptions={selectedProductOptions}
+                        onClose={handleCloseInventoryReleaseModal}
+                        onActionSelectProductOption={onActionSelectProductOption}
+                        onReqFetchInventoryStocks={onReqFetchInventoryStocks}
+                    />
+                </CommonModalComponent>
+            }
         </>
     );
 }

@@ -288,7 +288,7 @@ export default function FloatingControlToggle({
             memo: memo
         }
 
-        onSubmitStockRelease(body, () => {
+        await onSubmitStockRelease(body, () => {
             handleToggleStockReleaseModalOpen(false);
             handleToggleControlDrawerOpen(false);
             onActionClearAllSelectedItems();
@@ -302,7 +302,7 @@ export default function FloatingControlToggle({
             erpItemIds: selectedErpItems?.map(r => r.id),
         }
 
-        onSubmitCancelStockRelease(body, () => {
+        await onSubmitCancelStockRelease(body, () => {
             handleToggleCancelStockReleaseModalOpen(false);
             handleToggleControlDrawerOpen(false);
             onActionClearAllSelectedItems();
@@ -467,14 +467,16 @@ export default function FloatingControlToggle({
                 />
             }
 
-            <ConfirmModalComponentV2
-                open={cancelStockReleaseModalOpen}
-                onClose={() => handleToggleCancelStockReleaseModalOpen(false)}
-                onConfirm={handleSubmitCancelStockRelease}
-                message={
-                    <div>선택된 데이터들의 재고반영을 취소 합니다.</div>
-                }
-            />
+            {cancelStockReleaseModalOpen &&
+                <ConfirmModalComponentV2
+                    open={cancelStockReleaseModalOpen}
+                    onClose={() => handleToggleCancelStockReleaseModalOpen(false)}
+                    onConfirm={handleSubmitCancelStockRelease}
+                    message={
+                        <div>선택된 데이터들의 재고반영을 취소 합니다.</div>
+                    }
+                />
+            }
 
             <WaybillRegistrationModalComponent
                 selectedErpItems={selectedErpItems}

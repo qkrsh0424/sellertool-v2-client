@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { inventoryReleaseDataConnect } from "../../../../../data_connect/inventoryReleaseDataConnect";
 import { getRemovedPrefixZero } from "../../../../../utils/numberFormatUtils";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function useInventoryReleasesFormHook({
     selectedProductOptions
@@ -54,6 +55,7 @@ export default function useInventoryReleasesFormHook({
 
         setInventoryReleasesForm(selectedProductOptions?.map(r => {
             return {
+                id: uuidv4(),
                 productCategoryName: r?.productCategory?.name,
                 productSubCategoryName: r?.productSubCategory?.name,
                 productName: r?.product?.name,

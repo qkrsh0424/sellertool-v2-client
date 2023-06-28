@@ -10,7 +10,7 @@ export default function useDisabledBtn(duration) {
 
         let timeout = setTimeout(() => {
             setDisabledBtn(false);
-        }, duration ?? 1000)
+        }, duration ?? 2000)
 
         return () => clearTimeout(timeout);
 

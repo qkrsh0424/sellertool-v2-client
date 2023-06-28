@@ -13,6 +13,7 @@ import BatchReleaseUnitModalComponent from "./BatchReleaseUnitModal.component";
 import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
 import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
+import { customBackdropController } from "../../../../../components/backdrop/default/v1";
 
 export default function InventoryReleaseModalComponent({
     selectedProductOptions,
@@ -45,6 +46,7 @@ export default function InventoryReleaseModalComponent({
     const [batchReleaseUnitModalOpen, setBatchReleaseUnitModalOpen] = useState(false);
     const [batchReleaseMemoModalOpen, setBatchReleaseMemoModalOpen] = useState(false);
 
+    const backdropControl = customBackdropController();
 
     const handleOpenBatchReleaseUnitModal = () => {
         setBatchReleaseUnitModalOpen(true);
@@ -79,6 +81,7 @@ export default function InventoryReleaseModalComponent({
             inventoryReleases: [...inventoryReleasesForm]
         }
 
+        backdropControl.showBackdrop();
         await reqCreateInventoryReleases({
             body: body,
             successCallback: () => {
@@ -86,6 +89,7 @@ export default function InventoryReleaseModalComponent({
                 onReqFetchInventoryStocks();
             }
         });
+        backdropControl.hideBackdrop();
     }
     return (
         <>

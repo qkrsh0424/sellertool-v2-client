@@ -227,7 +227,7 @@ export default function useProductOptionsHook(props) {
             }
 
             if (r.totalPurchasePrice < 0 || r.totalPurchasePrice > 999999999) {
-                throw new Error(`총 구매가격은 0-999999999 이내로 입력해주세요. (행: ${index + 1})`);
+                throw new Error(`매입가격은 0-999999999 이내로 입력해주세요. (행: ${index + 1})`);
             }
 
             if (r.releaseLocation.length > 50) {

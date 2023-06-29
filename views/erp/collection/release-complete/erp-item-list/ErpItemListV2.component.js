@@ -180,7 +180,6 @@ export default function ErpItemListComponent({
                                         handleOpenEditOptionCodeModal={handleOpenEditOptionCodeModal}
                                         handleOpenEditReleaseOptionCodeModal={handleOpenEditReleaseOptionCodeModal}
                                         handleOpenItemsForSameReceiverModal={handleOpenItemsForSameReceiverModal}
-
                                     />
                                 )
                             }

@@ -120,7 +120,7 @@ export default function InventoryReleaseModalComponent({
                         출고등록
                     </div>
                 </div>
-                <form onSubmit={(e) => handleSubmit(e)}>
+                <form onSubmit={(e) => { e.stopPropagation(); handleSubmit(e) }}>
                     <ContentContainer>
                         <Table
                             selectedProductOptions={selectedProductOptions}

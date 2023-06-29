@@ -61,7 +61,8 @@ export default function useInventoryReceivesFormHook({
                 productOptionName: r?.name,
                 productOptionId: r?.id,
                 unit: '0',
-                memo: ''
+                memo: '',
+                purchaseCost: r?.totalPurchasePrice ? r?.totalPurchasePrice : '0'
             }
         }));
     }
@@ -98,7 +99,7 @@ export default function useInventoryReceivesFormHook({
         value = value.replaceAll(',', '');
         value = getRemovedPrefixZero(value);
 
-        if (value.match(/^[0-9]{0,5}$/)) {
+        if (value.match(/^[0-9]{0,4}$/)) {
             setInventoryReceivesForm(inventoryReceivesForm?.map((r, index) => {
                 if (reqIndex === index) {
                     return {
@@ -131,10 +132,32 @@ export default function useInventoryReceivesFormHook({
         }));
     }
 
+    const onChangePurchaseCost = (e, reqIndex) => {
+        let value = e.target.value;
+
+        value = value.replaceAll(',', '');
+        value = getRemovedPrefixZero(value);
+
+        if (value.match(/^[0-9]{0,8}$/)) {
+            setInventoryReceivesForm(inventoryReceivesForm?.map((r, index) => {
+                if (reqIndex === index) {
+                    return {
+                        ...r,
+                        purchaseCost: value
+                    }
+                }
+
+                return {
+                    ...r
+                }
+            }));
+        }
+    }
+
     const checkUnitFormatValid = () => {
         inventoryReceivesForm.forEach((r, index) => {
-            if (r.unit < 1 || r.unit > 99999) {
-                throw new Error(`${index + 1}행, ${r.productCategoryName} / ${r.productSubCategoryName} / ${r.productName} / ${r.productOptionName}\n수량을 정확히 입력해 주세요.\n허용 범위 [1-99999]`);
+            if (r.unit < 1 || r.unit > 1000) {
+                throw new Error(`${index + 1}행, ${r.productCategoryName} / ${r.productSubCategoryName} / ${r.productName} / ${r.productOptionName}\n수량을 정확히 입력해 주세요.\n허용 범위 [1-1,000]`);
             }
         })
     }
@@ -147,14 +170,24 @@ export default function useInventoryReceivesFormHook({
         })
     }
 
+    const checkPurchaseCostFormatValid = () => {
+        inventoryReceivesForm.forEach((r, index) => {
+            if (r.purchaseCost < 1 || r.purchaseCost > 99999999) {
+                throw new Error(`${index + 1}행, ${r.productCategoryName} / ${r.productSubCategoryName} / ${r.productName} / ${r.productOptionName}\n매입단가를 정확히 입력해 주세요.\n허용 범위 [1-99,999,999]`);
+            }
+        })
+    }
+
     return {
         inventoryReceivesForm,
         reqCreateInventoryReceives,
         onChangeUnit,
         onChangeMemo,
+        onChangePurchaseCost,
         onActionBatchChangeUnit,
         onActionBatchChangeMemo,
         checkUnitFormatValid,
-        checkMemoFormatValid
+        checkMemoFormatValid,
+        checkPurchaseCostFormatValid
     }
 }

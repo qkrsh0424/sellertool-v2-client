@@ -14,6 +14,7 @@ import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
 import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { customBackdropController } from "../../../../../components/backdrop/default/v1";
+import { numberWithCommas } from "../../../../../utils/numberFormatUtils";
 
 export default function InventoryReceiveModalComponent({
     selectedProductOptions,
@@ -27,10 +28,12 @@ export default function InventoryReceiveModalComponent({
         reqCreateInventoryReceives,
         onChangeUnit,
         onChangeMemo,
+        onChangePurchaseCost,
         onActionBatchChangeUnit,
         onActionBatchChangeMemo,
         checkUnitFormatValid,
-        checkMemoFormatValid
+        checkMemoFormatValid,
+        checkPurchaseCostFormatValid
     } = useInventoryReceivesFormHook({
         selectedProductOptions: selectedProductOptions
     });
@@ -69,6 +72,7 @@ export default function InventoryReceiveModalComponent({
         try {
             checkUnitFormatValid();
             checkMemoFormatValid();
+            checkPurchaseCostFormatValid();
         } catch (err) {
             alert(err.message);
             return;
@@ -119,7 +123,7 @@ export default function InventoryReceiveModalComponent({
                         입고등록
                     </div>
                 </div>
-                <form onSubmit={(e) => handleSubmit(e)}>
+                <form onSubmit={(e) => { e.stopPropagation(); handleSubmit(e) }}>
                     <ContentContainer>
                         <Table
                             selectedProductOptions={selectedProductOptions}
@@ -127,6 +131,7 @@ export default function InventoryReceiveModalComponent({
                             inventoryStocks={inventoryStocks}
                             onChangeUnit={onChangeUnit}
                             onChangeMemo={onChangeMemo}
+                            onChangePurchaseCost={onChangePurchaseCost}
                             onActionOpenBatchReceiveUnitModal={handleOpenBatchReceiveUnitModal}
                             onActionOpenBatchReceiveMemoModal={handleOpenBatchReceiveMemoModal}
                             onActionSelectProductOption={onActionSelectProductOption}
@@ -193,6 +198,7 @@ function Table({
     inventoryStocks,
     onChangeUnit,
     onChangeMemo,
+    onChangePurchaseCost,
     onActionOpenBatchReceiveUnitModal,
     onActionOpenBatchReceiveMemoModal,
     onActionSelectProductOption
@@ -345,6 +351,15 @@ function Table({
                                         <CustomInput
                                             type='text'
                                             className='input-item'
+                                            placeholder='매입단가'
+                                            value={inventoryReceiveForm?.purchaseCost ? numberWithCommas(inventoryReceiveForm?.purchaseCost) : ''}
+                                            onChange={(e) => onChangePurchaseCost(e, index)}
+                                        />
+                                    </td>
+                                    <td>
+                                        <CustomInput
+                                            type='text'
+                                            className='input-item'
                                             placeholder='메모'
                                             value={inventoryReceiveForm?.memo}
                                             maxLength={50}
@@ -384,6 +399,12 @@ const TABLE_HEADER = [
         resizable: false,
         name: 'receiveUnit',
         headerName: '입고수량',
+        defaultWidth: 100
+    },
+    {
+        resizable: false,
+        name: 'purchaseCost',
+        headerName: '매입단가',
         defaultWidth: 100
     },
     {

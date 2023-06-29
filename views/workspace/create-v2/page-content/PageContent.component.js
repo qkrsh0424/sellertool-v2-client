@@ -6,6 +6,7 @@ import WorkspaceCreateModalComponent from "../modal/WorkspaceCreateModal.compone
 import ItemListFieldView from "./ItemListField.view";
 import OperationFieldView from "./OperationField.view";
 import { Container } from "./PageContent.styled";
+import { customBackdropController } from "../../../../components/backdrop/default/v1";
 
 const PageContentComponent = ({
     onSubmitCreateWorkspace
@@ -17,6 +18,7 @@ const PageContentComponent = ({
     } = useWorkspaceCreateFormHook();
 
     const [workspaceCreateModalOpen, setWorkspaceCreateModalOpen] = useState(false);
+    const customBackdropControl = customBackdropController();
 
     const __handle = {
         action: {
@@ -28,7 +30,7 @@ const PageContentComponent = ({
             }
         },
         submit: {
-            create: (workspaceName) => {
+            create: async (workspaceName) => {
                 if (!formatValidUtils.isWorkspaceNameFormatValid(workspaceName)) {
                     alert('워크스페이스 이름은 2-30자, 처음과 마지막의 공백은 허용하지 않습니다.');
                     return;
@@ -39,10 +41,12 @@ const PageContentComponent = ({
                     name: workspaceName
                 }
 
-                onSubmitCreateWorkspace({
+                customBackdropControl.showBackdrop();
+                await onSubmitCreateWorkspace({
                     body: body,
                     successCallback: () => { }
                 })
+                customBackdropControl.hideBackdrop();
             }
         }
     }

@@ -97,7 +97,7 @@ export default function ItemListFieldView({
                     avatarSrc={'/images/icon/person_default_505050.svg'}
                     title={'개인용'}
                     description={'사용 목적에 맞게 더욱 체계적으로 관리해 보세요.'}
-                    serviceDescription={'개인 사용자에게 무료 제공'}
+                    serviceDescription={'개인 사용자에게 최대 2개 무료 제공'}
                     onClick={onActionSelectPrivate}
                 />
                 <Item

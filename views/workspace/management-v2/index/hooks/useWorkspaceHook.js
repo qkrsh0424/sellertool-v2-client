@@ -90,9 +90,39 @@ export default function useWorkspaceHook(props) {
                 alert(res.data.memo);
             })
     }
+
+    const reqChangeSubscriptionPlanToPrivate = async (body, successCallback) => {
+        const headers = {
+            wsId: workspace?.id
+        }
+
+        await workspaceDataConnect().changeSubscriptionPlanToPrivate(headers)
+            .then(res => {
+                if (res.status === 200) {
+                    reqFetchWorkspace();
+                    successCallback();
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (!res) {
+                    alert('네트워크 연결이 원활하지 않습니다.');
+                    return;
+                }
+
+                if (res.status === 500) {
+                    alert('undefined error. 관리자에 문의해 주세요.');
+                    return;
+                }
+
+                alert(res.data.memo);
+            })
+    }
     return {
         workspace,
         reqChangeWorkspaceName,
-        reqDeleteWorkspace
+        reqDeleteWorkspace,
+        reqChangeSubscriptionPlanToPrivate
     }
 }

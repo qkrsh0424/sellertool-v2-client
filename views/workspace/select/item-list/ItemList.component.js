@@ -63,7 +63,7 @@ export default function ItemListComponent(props) {
                     </Title>
                     <ItemListWrapper>
                         {workspaces?.map(r => {
-                            const disabledWorkspace = r.subscriptionPlan === 'NONE' && !r.masterFlag;
+                            const disabledWorkspace = r?.subscriptionPlan === 'NONE' || (r?.subscriptionPlan === 'PRIVATE' && !r?.masterFlag);
                             if (disabledWorkspace) {
                                 return (
                                     <div

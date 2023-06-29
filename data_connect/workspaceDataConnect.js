@@ -58,6 +58,15 @@ const workspaceDataConnect = () => {
                 xsrfCookieName: 'x_auth_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
+        },
+        changeSubscriptionPlanToPrivate: async function (headers) {
+            await csrfDataConnect().getAuthCsrf();
+            return await axiosAuthInterceptor.post(`${AUTH_API_ADDRESS}/auth/v1/workspaces/change/subscription-plan/to-private`, null, {
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         }
     }
 }

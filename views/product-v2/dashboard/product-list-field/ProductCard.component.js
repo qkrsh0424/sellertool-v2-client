@@ -466,7 +466,7 @@ const OPTION_HEADER = [
     },
     {
         name: 'totalPurchasePrice',
-        headerName: '총 구매가격',
+        headerName: '매입가격',
         required: false
     },
     {

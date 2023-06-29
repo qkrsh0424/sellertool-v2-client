@@ -13,6 +13,7 @@ import BatchReceiveUnitModalComponent from "./BatchReceiveUnitModal.component";
 import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 import useInventoryStocksHook from "../hooks/useInventoryStocksHook";
 import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
+import { customBackdropController } from "../../../../../components/backdrop/default/v1";
 
 export default function InventoryReceiveModalComponent({
     selectedProductOptions,
@@ -44,6 +45,8 @@ export default function InventoryReceiveModalComponent({
     const [batchReceiveUnitModalOpen, setBatchReceiveUnitModalOpen] = useState(false);
     const [batchReceiveMemoModalOpen, setBatchReceiveMemoModalOpen] = useState(false);
 
+    const backdropControl = customBackdropController();
+
     const handleOpenBatchReceiveUnitModal = () => {
         setBatchReceiveUnitModalOpen(true);
     }
@@ -63,7 +66,6 @@ export default function InventoryReceiveModalComponent({
     const handleSubmit = async (e) => {
         e.preventDefault();
         setDisabledBtn(true);
-
         try {
             checkUnitFormatValid();
             checkMemoFormatValid();
@@ -71,6 +73,7 @@ export default function InventoryReceiveModalComponent({
             alert(err.message);
             return;
         }
+        backdropControl.showBackdrop();
 
         let body = {
             workspaceId: workspaceRedux?.workspaceInfo?.id,
@@ -84,7 +87,9 @@ export default function InventoryReceiveModalComponent({
                 onReqFetchInventoryStocks();
             }
         });
+        backdropControl.hideBackdrop();
     }
+
     return (
         <>
             <Container>

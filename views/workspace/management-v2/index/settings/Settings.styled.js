@@ -50,8 +50,19 @@ export const PaperBox = styled.div`
     .delete-btn{
         width: 100px;
         height: 30px;
+        background: var(--defaultRedColor);
         border: 1px solid var(--defaultRedColor);
-        color:var(--defaultRedColor);
+        color: #fff;
+        border-radius: 5px;
+    }
+
+    .warning-btn{
+        width: 100px;
+        height: 30px;
+        background: var(--defaultYellowColor);
+        border: 1px solid var(--defaultYellowColor);
+        color: #fff;
+        font-weight: 700;
         border-radius: 5px;
     }
 `;

@@ -23,11 +23,11 @@ const ContentContainer = styled.div`
     }
 `;
 
-export default function DeleteWorkspaceModalComponent({
+export default function ChangePrivateModalComponent({
     open = false,
     onClose = () => { },
     workspace,
-    onSubmitDeleteWorkspace
+    onSubmitChangePrivate
 }) {
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
     const inputValueRef = useRef();
@@ -36,12 +36,12 @@ export default function DeleteWorkspaceModalComponent({
         setDisabledBtn(true);
         const inputValue = inputValueRef.current.value;
 
-        if (inputValue !== '영구 삭제') {
-            toast.error('워크스페이스를 삭제하시려면 "영구 삭제"를 정확히 입력해 주세요.');
+        if (inputValue !== '확인') {
+            toast.error('워크스페이스를 개인화 모드로 전환하시려면 "확인"를 정확히 입력해 주세요.');
             return;
         }
 
-        onSubmitDeleteWorkspace();
+        onSubmitChangePrivate();
     }
 
     return (
@@ -52,19 +52,18 @@ export default function DeleteWorkspaceModalComponent({
             >
                 <CustomDialog.CloseButton onClose={() => onClose()} />
                 <CustomDialog.Title>
-                    <b>{workspace?.name}</b> 을 삭제
+                    개인 워크스페이스로 전환
                 </CustomDialog.Title>
                 <ContentContainer>
                     <div className='description'>
-                        <div>워크스페이스를 한번 삭제하시면 <b>복구가 불가능</b> 합니다.</div>
-                        <div>또한 연관된 <b>하위 데이터들도 모두 삭제됩니다.</b></div>
-                        <div>위 내용을 완전히 이해했으며 워크스페이스를 삭제하시려면 <b><i>&quot;영구 삭제&quot;</i></b> 를 입력해 주세요.</div>
+                        <div>워크스페이스를 개인화 모드로 전환하면 내부 데이터를 다른 멤버들과 공유할 수 없게됩니다.</div>
+                        <div>위 내용을 완전히 이해했으며 워크스페이스를 개인화 모드로 전환하시려면 <b><i>&quot;확인&quot;</i></b> 을 입력해 주세요.</div>
                     </div>
                     <CustomInput
                         ref={inputValueRef}
                         type='text'
                         className='input-el'
-                        placeholder='영구 삭제'
+                        placeholder='확인'
                     />
                 </ContentContainer>
                 <CustomDialog.FooterButtonGroup isFlex>
@@ -81,12 +80,12 @@ export default function DeleteWorkspaceModalComponent({
                         type='button'
                         style={{
                             flex: 1,
-                            background: 'var(--defaultRedColor)',
+                            background: 'var(--defaultYellowColor)',
                             color: '#fff'
                         }}
                         onClick={(e) => handleSubmit(e)}
                         disabled={disabledBtn}
-                    >영구 삭제</CustomDialog.FooterButton>
+                    >개인화 전환</CustomDialog.FooterButton>
                 </CustomDialog.FooterButtonGroup>
             </CustomDialog>
         </>

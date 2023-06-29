@@ -32,7 +32,7 @@ const ServiceListComponent = () => {
                             </CardWrapper>
                         </Link>
                     </CardContainer>
-                    <CardContainer>
+                    {/* <CardContainer>
                         <Link
                             href={`/store-rank/real-time-rank`}
                             passHref
@@ -42,7 +42,7 @@ const ServiceListComponent = () => {
                                 <CardDescription>스토어 랭킹 체험하기</CardDescription>
                             </CardWrapper>
                         </Link>
-                    </CardContainer>
+                    </CardContainer> */}
                     <CardContainer>
                         <Link
                             href={'/product/dashboard'}

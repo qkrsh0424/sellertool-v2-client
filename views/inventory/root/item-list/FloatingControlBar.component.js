@@ -4,6 +4,7 @@ import CommonModalComponent from "../../../modules/modal/CommonModalComponent";
 import InventoryReceiveModalComponent from "./modal/InventoryReceiveModal.component";
 import InventoryReleaseModalComponent from "./modal/InventoryReleaseModal.component";
 import { Container, ControlButtonsContainer } from "./styles/FloatingControlBar.styled";
+import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
 
 export default function FloatingControlBarComponent({
     selectedProductOptions,
@@ -24,6 +25,26 @@ export default function FloatingControlBarComponent({
     }
 
     const handleOpenInventoryReceiveModal = () => {
+        let memo = '';
+        if (selectedProductOptions?.length > 50) {
+            memo = `한번에 최대 50개의 옵션만 입고 등록이 가능합니다.\n초과되는 경우 나눠서 입고 등록을 해주시기 바랍니다.`;
+            customToast.warn(memo, {
+                ...defaultOptions,
+                toastId: memo
+            });
+            return;
+        }
+
+        const packageOptions = selectedProductOptions?.filter(r => r.packageYn === 'y');
+        if (packageOptions?.length >= 1) {
+            memo = `패키지 상품은 입고 및 출고등록이 불가능 합니다.\n선택된 패키지 상품들을 제외하고 실행해 주세요.`;
+            customToast.warn(memo, {
+                ...defaultOptions,
+                toastId: memo
+            });
+            return;
+        }
+
         setInventoryReceiveModalOpen(true);
     }
 
@@ -32,6 +53,17 @@ export default function FloatingControlBarComponent({
     }
 
     const handleOpenInventoryReleaseModal = () => {
+        let memo = '';
+        const packageOptions = selectedProductOptions?.filter(r => r.packageYn === 'y');
+        if (packageOptions?.length >= 1) {
+            memo = `패키지 상품은 입고 및 출고등록이 불가능 합니다.\n선택된 패키지 상품들을 제외하고 실행해 주세요.`;
+            customToast.warn(memo, {
+                ...defaultOptions,
+                toastId: memo
+            });
+            return;
+        }
+
         setInventoryReleaseModalOpen(true);
     }
 

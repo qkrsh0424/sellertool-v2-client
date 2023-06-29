@@ -256,7 +256,8 @@ function Table({
                                     </td>
                                     <td>
                                         <div className='content-box'>
-                                            <div style={{ color: 'var(--mainColor)' }}>{inventoryStocks?.find(r => r.productOptionId === option?.id)?.stockUnit}</div>
+                                            {option?.packageYn === 'y' && <div style={{ color: 'var(--defaultGreenColor)' }}>패키지 상품</div>}
+                                            {option?.packageYn !== 'y' && <div style={{ color: 'var(--mainColor)' }}>{inventoryStocks?.find(r => r.productOptionId === option?.id)?.stockUnit}</div>}
                                         </div>
                                     </td>
                                     <td>

@@ -163,7 +163,7 @@ export const ItemCardBox = styled.div`
     margin-top: 5px;
     display: flex;
     align-items: center;
-    cursor: pointer;
+    
     &:hover{
         background: #fafafa;
     }

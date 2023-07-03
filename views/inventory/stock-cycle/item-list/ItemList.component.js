@@ -227,7 +227,6 @@ function Table({
                     <tbody>
                         {inventoryStockCycles?.map((inventoryStockCycle) => {
                             const isStockRisk = leadTime && inventoryStockCycle?.averageReleaseUnitPerDay > 0 && inventoryStockCycle?.stockCyclePerDay <= leadTime;
-                            console.log(inventoryStockCycle)
                             return (
                                 <tr
                                     key={inventoryStockCycle?.productOptionId}

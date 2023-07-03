@@ -96,11 +96,12 @@ export function InventoryStockListModalComponent({
 
         if (setOpen && item?.type === 'receive') {
             setSelectedItem(item);
+            setInventoryReceiveSeperatedItemsModalOpen(true);
         } else {
             setSelectedItem(null);
+            setInventoryReceiveSeperatedItemsModalOpen(false);
         }
 
-        setInventoryReceiveSeperatedItemsModalOpen(setOpen);
     }
 
     const handleSubmitSearch = async (e) => {
@@ -310,7 +311,10 @@ export function InventoryStockListModalComponent({
                             return (
                                 <ItemCardBox
                                     key={r.id}
-                                    onClick={() => toggleInventoryReceiveSeperatedItemsModalOpen(true, r)}
+                                    onClick={readOnly ? () => { } : () => toggleInventoryReceiveSeperatedItemsModalOpen(true, r)}
+                                    style={{
+                                        cursor: readOnly ? 'default' : 'pointer'
+                                    }}
                                 >
                                     {!readOnly &&
 
@@ -367,7 +371,7 @@ export function InventoryStockListModalComponent({
                         })}
                     </ContentContainer>
                 </Container>
-            </CustomDialog>
+            </CustomDialog >
 
             {editMemoModalOpen &&
                 <EditMemoModalComponent
@@ -378,14 +382,16 @@ export function InventoryStockListModalComponent({
                 />
             }
 
-            {inventoryReceiveSeperatedItemsModalOpen &&
+            {
+                inventoryReceiveSeperatedItemsModalOpen &&
                 <InventoryReceiveSeperatedItemsModalComponent
                     open={inventoryReceiveSeperatedItemsModalOpen}
                     inventoryStockData={selectedItem}
                     onClose={() => toggleInventoryReceiveSeperatedItemsModalOpen(false)}
                 />
             }
-            {deleteInventoryStockRecordModalOpen &&
+            {
+                deleteInventoryStockRecordModalOpen &&
                 <CustomDialog
                     open={deleteInventoryStockRecordModalOpen}
                     onClose={() => toggleDeleteInventoryStockRecordModalOpen(false)}
@@ -417,7 +423,8 @@ export function InventoryStockListModalComponent({
                     </CustomDialog.FooterButtonGroup>
                 </CustomDialog>
             }
-            {deleteInventoryStockRecordInfoModalOpen &&
+            {
+                deleteInventoryStockRecordInfoModalOpen &&
                 <CustomDialog
                     open={deleteInventoryStockRecordInfoModalOpen}
                     onClose={() => toggleDeleteInventoryStockRecordInfoModalOpen(false)}

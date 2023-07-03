@@ -5,6 +5,14 @@ const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.developm
 
 const inventoryReceiveDataConnect = () => {
     return {
+        searchSeperatedItems: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/inventory-receives/${params?.inventoryReceiveId}/inventory-receive-seperated-items`, {
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
         /**
          * 
          * @param {object} body 
@@ -52,6 +60,16 @@ const inventoryReceiveDataConnect = () => {
         delete: async function (body, headers) {
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/inventory-receives/${body.id}`, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
+        changePurchaseCost_InventoryReceiveSeperatedItems: async function (body, headers) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/inventory-receives/${body?.inventoryReceiveId}/inventory-receive-seperated-items/target:purchaseCost`, body?.inventoryReceiveSeperatedItems, {
                     headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',

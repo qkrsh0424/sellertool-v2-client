@@ -17,6 +17,7 @@ import { customBackdropController } from "../../../../../../../components/backdr
 import { EditMemoModalComponent } from "../edit-memo-modal";
 import { StockChartComponent } from "../stock-chart";
 import useInventoryStockRegisterStatusesHook from "../../hooks/useInventoryStockRegisterStatusesHook";
+import { InventoryReceiveSeperatedItemsModalComponent } from "../inventory-receive-seperated-items-modal";
 
 function returnTotalUnitByType(inventoryStockRegisterStatuses, type) {
     const totalUnit = inventoryStockRegisterStatuses?.reduce((accumulator, currentValue, index, src) => {
@@ -60,6 +61,7 @@ export function InventoryStockListModalComponent({
         productOptionId: productOptionId
     });
     const [editMemoModalOpen, setEditMemoModalOpen] = useState(false);
+    const [inventoryReceiveSeperatedItemsModalOpen, setInventoryReceiveSeperatedItemsModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [deleteInventoryStockRecordModalOpen, setDeleteInventoryStockRecordModalOpen] = useState(false);
     const [deleteInventoryStockRecordInfoModalOpen, setDeleteInventoryStockRecordInfoModalOpen] = useState(false);
@@ -85,6 +87,20 @@ export function InventoryStockListModalComponent({
             return;
         }
         setDeleteInventoryStockRecordInfoModalOpen(setOpen)
+    }
+
+    const toggleInventoryReceiveSeperatedItemsModalOpen = (setOpen, item) => {
+        if (readOnly) {
+            return;
+        }
+
+        if (setOpen && item?.type === 'receive') {
+            setSelectedItem(item);
+        } else {
+            setSelectedItem(null);
+        }
+
+        setInventoryReceiveSeperatedItemsModalOpen(setOpen);
     }
 
     const handleSubmitSearch = async (e) => {
@@ -294,6 +310,7 @@ export function InventoryStockListModalComponent({
                             return (
                                 <ItemCardBox
                                     key={r.id}
+                                    onClick={() => toggleInventoryReceiveSeperatedItemsModalOpen(true, r)}
                                 >
                                     {!readOnly &&
 
@@ -302,7 +319,7 @@ export function InventoryStockListModalComponent({
                                                 <CustomBlockButton
                                                     type='button'
                                                     className='delete-button'
-                                                    onClick={() => toggleDeleteInventoryStockRecordInfoModalOpen(true)}
+                                                    onClick={(e) => { e.stopPropagation(); toggleDeleteInventoryStockRecordInfoModalOpen(true) }}
                                                 >
                                                     <CustomImage
                                                         src='/images/icon/info_default_808080.svg'
@@ -312,7 +329,7 @@ export function InventoryStockListModalComponent({
                                                 <CustomBlockButton
                                                     type='button'
                                                     className='delete-button'
-                                                    onClick={() => toggleDeleteInventoryStockRecordModalOpen(true, r)}
+                                                    onClick={(e) => { e.stopPropagation(); toggleDeleteInventoryStockRecordModalOpen(true, r) }}
                                                 >
                                                     <CustomImage
                                                         src='/images/icon/delete_default_e56767.svg'
@@ -335,7 +352,7 @@ export function InventoryStockListModalComponent({
                                                     <CustomBlockButton
                                                         type='button'
                                                         className='edit-button-item'
-                                                        onClick={() => handleOpenEditMemoModal(r)}
+                                                        onClick={(e) => { e.stopPropagation(); handleOpenEditMemoModal(r); }}
                                                     >
                                                         <CustomImage
                                                             src='/images/icon/rename_default_808080.svg'
@@ -358,6 +375,14 @@ export function InventoryStockListModalComponent({
                     inventoryStockData={selectedItem}
                     onClose={handleCloseEditMemoModal}
                     onConfirm={handleSubmitChangeMemo}
+                />
+            }
+
+            {inventoryReceiveSeperatedItemsModalOpen &&
+                <InventoryReceiveSeperatedItemsModalComponent
+                    open={inventoryReceiveSeperatedItemsModalOpen}
+                    inventoryStockData={selectedItem}
+                    onClose={() => toggleInventoryReceiveSeperatedItemsModalOpen(false)}
                 />
             }
             {deleteInventoryStockRecordModalOpen &&

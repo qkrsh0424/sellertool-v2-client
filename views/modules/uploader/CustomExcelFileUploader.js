@@ -6,6 +6,7 @@ import SingleBlockButton from "../button/SingleBlockButton";
 import useDisabledBtn from "../../../hooks/button/useDisabledBtn";
 import useExcelUploaderHook from "../../../hooks/uploader/useExcelUploaderHook";
 import _ from "lodash";
+import { customBackdropController } from "../../../components/backdrop/default/v1";
 
 const Container = styled.div`
     background: var(--defaultBackground);
@@ -149,6 +150,7 @@ export default function CustomExcelFileUploader({
     const [rowStartNumber, setRowStartNumber] = useState('1');
     const [passwordModeOpen, setPasswordModeOpen] = useState(false);
     const [filePassword, setFilePassword] = useState('');
+    const customBackdropControl = customBackdropController();
 
     const {
         reqCheckValid
@@ -185,9 +187,9 @@ export default function CustomExcelFileUploader({
 
                 var uploadedFormData = new FormData();
                 uploadedFormData.append('file', addFiles[0]);
-
+                customBackdropControl.showBackdrop();
                 let data = await reqCheckValid(uploadedFormData);
-
+                customBackdropControl.hideBackdrop();
                 if (!data) {
                     return;
                 }

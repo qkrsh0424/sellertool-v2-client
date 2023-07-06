@@ -23,7 +23,7 @@ export default function useCreateExcelTranslatorHeaderFormHook(props) {
             throw new Error(errorMessage);
         }
 
-        if (headerName.length < 2 || headerName.length > 15) {
+        if (headerName.length < 2 || headerName.length > 50) {
             throw new Error(errorMessage);
         }
     }

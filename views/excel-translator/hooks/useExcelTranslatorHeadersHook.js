@@ -4,10 +4,12 @@ import { useSelector } from "react-redux";
 import { excelTranslatorHeaderDataConnect } from "../../../data_connect/excelTranslatorHeaderDataConnect"
 import { dateToYYYYMMDDhhmmssFile } from "../../../utils/dateFormatUtils";
 import { customToast, defaultOptions } from "../../../components/toast/custom-react-toastify/v1";
+import { customBackdropController } from "../../../components/backdrop/default/v1";
 
 export default function useExcelTranslatorHeaderHook(props) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const [excelTranslatorHeaders, setExcelTranslatorHeaders] = useState(null);
+    const customBackdropControl = customBackdropController();
 
     useEffect(() => {
         if (!workspaceRedux?.workspaceInfo?.id) {
@@ -48,6 +50,7 @@ export default function useExcelTranslatorHeaderHook(props) {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
+        customBackdropControl.showBackdrop();
         await excelTranslatorHeaderDataConnect().createOne(body, headers)
             .then(res => {
                 if (res.status === 200) {
@@ -69,7 +72,8 @@ export default function useExcelTranslatorHeaderHook(props) {
                 }
 
                 alert(res.data.memo);
-            })
+            });
+        customBackdropControl.hideBackdrop();
     }
 
     const reqModifyExcelTranslatorHeader = async ({
@@ -80,6 +84,7 @@ export default function useExcelTranslatorHeaderHook(props) {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
+        customBackdropControl.showBackdrop();
         await excelTranslatorHeaderDataConnect().changeTitle(body, headers)
             .then(res => {
                 if (res.status === 200) {
@@ -101,7 +106,8 @@ export default function useExcelTranslatorHeaderHook(props) {
                 }
 
                 alert(res.data.memo);
-            })
+            });
+        customBackdropControl.hideBackdrop();
     }
 
     const reqDeleteExcelTranslatorHeader = async ({
@@ -111,6 +117,7 @@ export default function useExcelTranslatorHeaderHook(props) {
         const headers = {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
+        customBackdropControl.showBackdrop();
         await excelTranslatorHeaderDataConnect().delete(body, headers)
             .then(res => {
                 if (res.status === 200) {
@@ -132,7 +139,8 @@ export default function useExcelTranslatorHeaderHook(props) {
                 }
 
                 alert(res.data.memo);
-            })
+            });
+        customBackdropControl.hideBackdrop();
     }
 
     const reqChangeUploadHeaderDetail = async ({
@@ -143,6 +151,7 @@ export default function useExcelTranslatorHeaderHook(props) {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
+        customBackdropControl.showBackdrop();
         await excelTranslatorHeaderDataConnect().changeUploadHeaderDetail(body, headers)
             .then(res => {
                 if (res.status === 200) {
@@ -164,7 +173,8 @@ export default function useExcelTranslatorHeaderHook(props) {
                 }
 
                 alert(res.data.memo);
-            })
+            });
+        customBackdropControl.hideBackdrop();
     }
 
     const reqChangeDownloadHeaderDetail = async ({
@@ -175,6 +185,7 @@ export default function useExcelTranslatorHeaderHook(props) {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
+        customBackdropControl.showBackdrop();
         await excelTranslatorHeaderDataConnect().changeDownloadHeaderDetail(body, headers)
             .then(res => {
                 if (res.status === 200) {
@@ -196,7 +207,8 @@ export default function useExcelTranslatorHeaderHook(props) {
                 }
 
                 alert(res.data.memo);
-            })
+            });
+        customBackdropControl.hideBackdrop();
     }
 
     const reqDownloadSampleExcelForUploadHeader = async ({
@@ -206,6 +218,7 @@ export default function useExcelTranslatorHeaderHook(props) {
         const headers = {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
+        customBackdropControl.showBackdrop();
         await excelTranslatorHeaderDataConnect().downloadSampleExcelForUploadHeader(body, headers)
             .then(res => {
                 if (res.status === 200) {
@@ -237,6 +250,7 @@ export default function useExcelTranslatorHeaderHook(props) {
                 alert(data.memo);
             })
             ;
+        customBackdropControl.hideBackdrop();
     }
 
     const reqDownloadSampleExcelForDownloadHeader = async ({
@@ -247,6 +261,7 @@ export default function useExcelTranslatorHeaderHook(props) {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
+        customBackdropControl.showBackdrop();
         await excelTranslatorHeaderDataConnect().downloadSampleExcelForDownloadHeader(body, headers)
             .then(res => {
                 if (res.status === 200) {
@@ -278,6 +293,7 @@ export default function useExcelTranslatorHeaderHook(props) {
                 alert(data.memo);
             })
             ;
+        customBackdropControl.hideBackdrop();
     }
 
     return {

@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import styled from 'styled-components';
 import useDisabledBtn from '../../../../hooks/button/useDisabledBtn';
 import SingleBlockButton from '../../../modules/button/SingleBlockButton';
+import { customBackdropController } from '../../../../components/backdrop/default/v1';
 
 const Container = styled.div`
     position:fixed;
@@ -39,15 +40,18 @@ export default function SubmitFieldComponent({
 }) {
     const router = useRouter();
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+    const customBackdropControl = customBackdropController();
 
     const handleActionRouteToRev = useCallback(() => {
         router.back();
     }, []);
 
-    const handleSubmitConfirm = useCallback((e) => {
+    const handleSubmitConfirm = useCallback(async (e) => {
         e.preventDefault();
         setDisabledBtn(true);
-        onSubmitAdd();
+        customBackdropControl.showBackdrop();
+        await onSubmitAdd();
+        customBackdropControl.hideBackdrop();
     }, [onSubmitAdd, setDisabledBtn]);
 
     return (

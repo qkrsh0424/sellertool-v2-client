@@ -6,6 +6,7 @@ import CustomSelect from "../../../modules/select/CustomSelect";
 import useProductsHook from "../hooks/useProductsHook";
 import ProductCardComponent from "./ProductCard.component";
 import { Container, ContentWrapper, ControllerWrapper, FoldableButtonWrapper, PagenationWrapper, SortSelectorWrapper } from "./styles/ProductListField.styled";
+import { customBackdropController } from "../../../../components/backdrop/default/v1";
 
 export default function ProductListFieldComponent(props) {
     const router = useRouter();
@@ -15,6 +16,8 @@ export default function ProductListFieldComponent(props) {
         reqChangeStockManagement,
         reqDeleteProduct
     } = useProductsHook();
+
+    const customBackdropControl = customBackdropController();
 
     const __handle = {
         action: {
@@ -74,12 +77,14 @@ export default function ProductListFieldComponent(props) {
                     workspaceId: workspaceRedux?.workspaceInfo?.id
                 }
 
+                customBackdropControl.showBackdrop();
                 await reqChangeStockManagement({
                     body: body,
                     successCallback: () => {
 
                     }
-                })
+                });
+                customBackdropControl.hideBackdrop();
             },
             deleteProduct: async ({
                 productId,
@@ -89,12 +94,14 @@ export default function ProductListFieldComponent(props) {
                     productId: productId
                 }
 
+                customBackdropControl.showBackdrop();
                 await reqDeleteProduct({
                     body: body,
                     successCallback: () => {
                         successCallback();
                     }
-                })
+                });
+                customBackdropControl.hideBackdrop();
             }
         }
     }

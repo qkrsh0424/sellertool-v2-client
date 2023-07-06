@@ -32,17 +32,19 @@ const ServiceListComponent = () => {
                             </CardWrapper>
                         </Link>
                     </CardContainer>
-                    {/* <CardContainer>
+                    <CardContainer>
                         <Link
-                            href={`/store-rank/real-time-rank`}
+                            // href={`/store-rank/real-time-rank`}
+                            href={`/`}
                             passHref
+                            disabled
                         >
-                            <CardWrapper>
-                                <CardTitle>스토어 랭킹</CardTitle>
-                                <CardDescription>스토어 랭킹 체험하기</CardDescription>
+                            <CardWrapper style={{ background: '#f0f0f0', cursor: 'not-allowed' }}>
+                                <CardTitle style={{ color: '#808080' }}>스토어 랭킹</CardTitle>
+                                <CardDescription style={{ color: '#808080' }}>오픈 준비중</CardDescription>
                             </CardWrapper>
                         </Link>
-                    </CardContainer> */}
+                    </CardContainer>
                     <CardContainer>
                         <Link
                             href={'/product/dashboard'}

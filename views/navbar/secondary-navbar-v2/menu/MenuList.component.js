@@ -77,6 +77,16 @@ const MenuBox = styled.div`
 
 const SALES_ANALISIS_CLIENT_ORIGIN = process.env.NODE_ENV == 'development' ? process.env.development.salesAnalisisClientAddress : process.env.production.salesAnalisisClientAddress;
 
+const gtagClickEventHandler = (data) => {
+    if (window?.gtag) {
+        gtag('event', 'service_link_clicked', {
+            custom_source: data?.custom_source,
+            custom_link: data?.custom_link,
+            custom_name: data?.custom_name
+        })
+    }
+}
+
 const getMenuHref = (href, workspaceId) => {
     if (href === '/sales-analysis/dashboard') {
         return `${SALES_ANALISIS_CLIENT_ORIGIN}${href}?workspaceId=${workspaceId}`
@@ -114,7 +124,7 @@ export default function MenuListComponent({
                                             href={getMenuHref(subMenu?.href, workspaceId)}
                                             passHref
                                         >
-                                            <a target={subMenu?.targetBlank ? '_blank' : '_self'}>
+                                            <a target={subMenu?.targetBlank ? '_blank' : '_self'} onClick={() => gtagClickEventHandler({ custom_source: 'nav', custom_link: subMenu?.href, custom_name: subMenu?.title })}>
                                                 <CustomBlockButton
                                                     className='menu-item'
                                                     style={{ color: subMenu?.disabled ? '#a0a0a0' : '' }}

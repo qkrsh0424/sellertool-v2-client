@@ -1,24 +1,26 @@
-import { useRouter } from "next/router";
+import { useState } from "react";
 import { dateToYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import useNRankRecordListHook from "./hooks/useNRankRecordListHook";
 import { Container, LabelGroup, RecordItemBox, Wrapper } from "./styles/RecordItemList.styled";
+import { RecordDetailModalComponent } from "../record-detail-modal";
 
 export function RecordItemListComponent() {
-    const router = useRouter()
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
 
     const {
         recordList
     } = useNRankRecordListHook();
 
-    const routeToRecordDetailPage = (e, item) => {
+    const handleOpenDetailSearchModal = (e, item) => {
         e.stopPropagation();
 
-        router.push({
-            pathname: '/store-rank/real-time-rank',
-            query: {
-                recordId: item.id
-            }
-        })
+        setSelectedItem(item)
+        setDetailSearchModalOpen(true)
+    }
+
+    const handleCloseDetailSearchModal = () => {
+        setDetailSearchModalOpen(false)
     }
 
     return (
@@ -30,7 +32,7 @@ export function RecordItemListComponent() {
                         return (
                             <RecordItemBox
                                 key={'record-info-idx' + index}
-                                onClick={(e) => routeToRecordDetailPage(e, item)}
+                                onClick={(e) => handleOpenDetailSearchModal(e, item)}
                             >
                                 <LabelGroup>
                                     <span>키워드 : </span>
@@ -41,13 +43,21 @@ export function RecordItemListComponent() {
                                     <span>{item.mallName}</span>
                                 </LabelGroup>
                                 <LabelGroup>
-                                    <span>조회일 : </span>
+                                    <span>최근 검색일 : </span>
                                     <span>{dateToYYMMDDhhmmss(item.createdAt)}</span>
+                                    {/* <span>{dateToYYMMDDhhmmss(item.)}</span> */}
                                 </LabelGroup>
                             </RecordItemBox>
                         )
                     })}
                 </Wrapper>
+
+                {detailSearchModalOpen && 
+                    <RecordDetailModalComponent
+                        record={selectedItem}
+                        onClose={handleCloseDetailSearchModal}
+                    />
+                }
             </Container>
         </>
     )

@@ -40,7 +40,6 @@ export const RecordItemBox = styled.div`
 
 export const LabelGroup = styled.div`
     padding: 5px 0px;
-    width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

@@ -5,9 +5,9 @@ const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.developm
 
 const nRankRecordDetailDataConnect = () => {
     return {
-        searchList: async function (body, headers) {
+        searchList: async function (params, headers) {
             return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-record-details/nrank-records/${body.recordId}`, {
+                () => axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-record-details/nrank-records/${params.recordId}`, {
                     headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',

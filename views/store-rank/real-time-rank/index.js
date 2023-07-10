@@ -1,7 +1,6 @@
 import Layout from "../layout/Layout";
 import styled from "styled-components";
-import { InputFieldComponent, RecordDetailComponent, RecordItemListComponent } from "./components";
-import { useRouter } from "next/router";
+import { InputFieldComponent, RecordItemListComponent } from "./components";
 
 export const Container = styled.div`
     background:var(--defaultBackground);
@@ -9,8 +8,6 @@ export const Container = styled.div`
 `;
 
 export default function MainComponent(){
-    const router = useRouter();
-
     return (
         <>
             <Container>
@@ -19,16 +16,8 @@ export default function MainComponent(){
                     headerName={'실시간 랭킹'}
                     sidebarColor={'#ffffff'}
                 >
-                    {router.query.recordId ?
-                        <>
-                            <RecordDetailComponent />
-                        </>
-                        :
-                        <>
-                            <InputFieldComponent />
-                            <RecordItemListComponent />
-                        </>
-                    }
+                    <InputFieldComponent />
+                    <RecordItemListComponent />
                 </Layout>
             </Container>
         </>

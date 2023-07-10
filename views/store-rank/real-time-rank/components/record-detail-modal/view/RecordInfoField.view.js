@@ -16,8 +16,8 @@ export default function RankInfoFieldView({
                 <div>{record.mallName}</div>
             </LabelGroup>
             <LabelGroup>
-                <div>조회일 : </div>
-                <div>{dateToYYYYMMDDhhmmss(record.createdAt)}</div>
+                <div>최근 검색일 : </div>
+                {/* <div>{dateToYYYYMMDDhhmmss(record.createdAt)}</div> */}
             </LabelGroup>
         </Wrapper>
     )

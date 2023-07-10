@@ -54,9 +54,9 @@ export default function useNRankRecordDetailHook({
 
     const reqCreateNRankRecordDetail = async () => {
         let body = {
-            id: record.id,
             keyword: record.keyword,
-            mallName: record.mallName
+            mallName: record.mallName,
+            nrankRecordId: record.id
         }
 
         let headers = {

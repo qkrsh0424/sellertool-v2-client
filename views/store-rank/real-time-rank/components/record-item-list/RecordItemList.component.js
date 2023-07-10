@@ -44,7 +44,7 @@ export function RecordItemListComponent() {
                                 </LabelGroup>
                                 <LabelGroup>
                                     <span>최근 검색일 : </span>
-                                    <span>{dateToYYMMDDhhmmss(item.createdAt)}</span>
+                                    <span>{item.lastSearchedAt ? dateToYYMMDDhhmmss(item.lastSearchedAt) : "-"}</span>
                                     {/* <span>{dateToYYMMDDhhmmss(item.)}</span> */}
                                 </LabelGroup>
                             </RecordItemBox>

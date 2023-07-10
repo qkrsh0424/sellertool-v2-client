@@ -22,10 +22,11 @@ export const Wrapper = styled.div`
 `;
 
 export const RecordItemBox = styled.div`
+    width: 400px;
     padding: 20px 30px;
     background-color: white;
-    margin-right: 20px;
-    margin-bottom: 20px;
+    margin-right: 30px;
+    margin-bottom: 30px;
     border-radius: 20px;
     box-shadow: var(--defaultBoxShadow);
     transition: all 0.2s;

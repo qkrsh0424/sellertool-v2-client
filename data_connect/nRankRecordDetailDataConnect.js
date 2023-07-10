@@ -14,6 +14,16 @@ const nRankRecordDetailDataConnect = () => {
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
             )
+        },
+        createList: async function (body, headers) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-record-details`, body, {
+                    headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         }
     }
 }

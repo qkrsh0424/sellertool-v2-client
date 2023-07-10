@@ -10,19 +10,21 @@ export default function useNRankRecordListHook () {
 
     useEffect(() => {
         async function fetchInit() {
-            await reqSearchNRankRecord();
+            let headers = {
+                wsId: workspaceRedux?.workspaceInfo?.id
+            }
+
+            await reqSearchNRankRecord(headers);
         }
         
-        if (workspaceRedux?.workspaceInfo?.id) {
-            fetchInit()
+        if(!workspaceRedux?.workspaceInfo?.id){
+            return;
         }
+        
+        fetchInit()
     }, [workspaceRedux?.workspaceInfo?.id])
 
-    const reqSearchNRankRecord = async () => {
-        let headers = {
-            wsId: workspaceRedux?.workspaceInfo?.id
-        }
-
+    const reqSearchNRankRecord = async (headers) => {
         await nRankRecordDataConnect().searchRecordList(headers)
             .then(res => {
                 if(res.status === 200) {

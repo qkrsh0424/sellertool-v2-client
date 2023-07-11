@@ -1,8 +1,9 @@
 import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { CustomDialog } from "../../../../../components/dialog/v1/CustomDialog";
 import useNRankRecordDetailHook from "./hooks/useNRankRecordDetailHook";
-import { Wrapper } from "./styles/RecordDetail.styled";
-import RankInfoFieldView from "./view/RecordInfoField.view";
+import { Wrapper } from "./styles/RecordDetailModal.styled";
+import RankDetailFieldView from "./view/RankDetailField.view";
+import RecordInfoFieldView from "./view/RecordInfoField.view";
 
 export function RecordDetailModalComponent({
     record,
@@ -23,14 +24,14 @@ export function RecordDetailModalComponent({
                 <CustomDialog.CloseButton onClose={() => onClose()} />
                 <CustomDialog.Title>랭킹 조회</CustomDialog.Title>
                 <Wrapper>
-                    <RankInfoFieldView record={record} />
+                    <RecordInfoFieldView record={record} />
                     <CustomBlockButton
                         className='button-item'
                         onClick={() => reqCreateNRankRecordDetail()}
                     >
                         조회
                     </CustomBlockButton>
-                    {/* <RankRecordDetailFieldView /> */}
+                    <RankDetailFieldView recordDetails={recordDetails} />
                 </Wrapper>
             </CustomDialog>
         </>

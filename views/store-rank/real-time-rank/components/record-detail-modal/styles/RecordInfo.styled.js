@@ -6,7 +6,6 @@ export const Wrapper = styled.div`
     box-shadow: var(--defaultBoxShadow);
     padding: 20px;
     border-radius: 15px;
-    font-size: 1.2rem;
     margin-bottom: 20px;
 `;
 
@@ -18,5 +17,9 @@ export const LabelGroup = styled.div`
 
     &:last-child{
         margin-bottom: 0;
+    }
+
+    .content-value {
+        font-weight: 700;
     }
 `;

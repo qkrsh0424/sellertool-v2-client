@@ -1,7 +1,7 @@
 import { dateToYYYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
 import { LabelGroup, Wrapper } from "../styles/RecordInfo.styled";
 
-export default function RankInfoFieldView({
+export default function RecordInfoFieldView({
     record
 }) {
     return (
@@ -9,15 +9,15 @@ export default function RankInfoFieldView({
         <Wrapper>
             <LabelGroup>
                 <div>키워드 : </div>
-                <div>{record.keyword}</div>
+                <div className='content-value'>{record.keyword}</div>
             </LabelGroup>
             <LabelGroup>
                 <div>스토어명 : </div>
-                <div>{record.mallName}</div>
+                <div className='content-value'>{record.mallName}</div>
             </LabelGroup>
             <LabelGroup>
                 <div>최근 검색일 : </div>
-                {/* <div>{dateToYYYYMMDDhhmmss(record.createdAt)}</div> */}
+                <div className='content-value'>{dateToYYYYMMDDhhmmss(record.lastSearchedAt)}</div>
             </LabelGroup>
         </Wrapper>
     )

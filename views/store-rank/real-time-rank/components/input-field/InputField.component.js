@@ -3,19 +3,20 @@ import { ButtonFieldBox, Container, InputFieldBox, Wrapper } from "./styles/Inpu
 import CustomImage from "../../../../modules/image/CustomImage";
 import useNRankRecordFormHook from "./hooks/useNRankRecordFormHook";
 
-export function InputFieldComponent() {
+export function InputFieldComponent({
+    keyword,
+    mallName,
+    onChangeKeyword,
+    onChangeMallName
+}) {
     const {
-        keyword,
-        mallName,
-        onChangeKeyword,
-        onChangeMallName,
         reqCreateSearchInfo
-    } = useNRankRecordFormHook();
+    } = useNRankRecordFormHook({ keyword, mallName });
 
     return (
         <>
             <Container>
-                <form onSubmit={() => reqCreateSearchInfo()} method="post">
+                <form onSubmit={(e) => {e.preventDefault(); reqCreateSearchInfo() }} method="post">
                     <Wrapper>
                         <InputFieldBox>
                             <CustomInput

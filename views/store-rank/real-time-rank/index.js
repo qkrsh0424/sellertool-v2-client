@@ -1,6 +1,7 @@
 import Layout from "../layout/Layout";
 import styled from "styled-components";
 import { InputFieldComponent, RecordItemListComponent } from "./components";
+import useSearchInputHook from "./hooks/useSearchInputHook";
 
 export const Container = styled.div`
     background:var(--defaultBackground);
@@ -8,6 +9,13 @@ export const Container = styled.div`
 `;
 
 export default function MainComponent(){
+    const {
+        keyword,
+        mallName,
+        onChangeKeyword,
+        onChangeMallName
+    } = useSearchInputHook()
+
     return (
         <>
             <Container>
@@ -16,8 +24,16 @@ export default function MainComponent(){
                     headerName={'실시간 랭킹'}
                     sidebarColor={'#ffffff'}
                 >
-                    <InputFieldComponent />
-                    <RecordItemListComponent />
+                    <InputFieldComponent
+                        keyword={keyword}
+                        mallName={mallName}
+                        onChangeKeyword={onChangeKeyword}
+                        onChangeMallName={onChangeMallName}
+                    />
+                    <RecordItemListComponent
+                        keyword={keyword}
+                        mallName={mallName}
+                    />
                 </Layout>
             </Container>
         </>

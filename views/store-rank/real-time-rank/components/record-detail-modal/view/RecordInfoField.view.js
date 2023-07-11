@@ -17,7 +17,7 @@ export default function RecordInfoFieldView({
             </LabelGroup>
             <LabelGroup>
                 <div>최근 검색일 : </div>
-                <div className='content-value'>{dateToYYYYMMDDhhmmss(record.lastSearchedAt)}</div>
+                <div className='content-value'>{record.lastSearchedAt ? dateToYYYYMMDDhhmmss(record.lastSearchedAt) : '-'}</div>
             </LabelGroup>
         </Wrapper>
     )

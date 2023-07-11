@@ -93,11 +93,10 @@ export default function RankDetailFieldView({
                             <div className='rank-field'>
                                 <InfoGroupBox>
                                     {detail.priceComparisionYn === 'y' &&
-                                        <div style={{ color: '#000', fontWeight: '700' }}>
-                                            <span>가격 비교 </span>
-                                            <span style={{ color: 'var(--mainColor)' }}>{detail.comparisionRank}위</span>
-                                            <span> / </span>
-                                            <span>{detail.lowMallCount}</span>
+                                        <div>
+                                            <span style={{ color: '#000', fontWeight: '700' }}>가격 비교 </span>
+                                            <span style={{ color: '#000', fontWeight: '700' }}>{detail.comparisionRank}위 </span>
+                                            <span>(총 {detail.lowMallCount}개 중)</span>
                                         </div>
                                     }
                                 </InfoGroupBox>

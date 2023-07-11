@@ -1,11 +1,11 @@
-import { useState } from "react";
 import { customToast, defaultOptions } from "../../../../../../components/toast/custom-react-toastify/v1";
 import { nRankRecordDataConnect } from "../../../../../../data_connect/nRankRecordDataConnect";
 import { useSelector } from "react-redux";
 
-export default function useNRankRecordFormHook() {
-    const [keyword, setKeyword] = useState(null);
-    const [mallName, setMallName] = useState(null);
+export default function useNRankRecordFormHook({
+    keyword,
+    mallName
+}) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
 
     const reqCreateSearchInfo = async () => {
@@ -21,12 +21,6 @@ export default function useNRankRecordFormHook() {
         }
         
         await nRankRecordDataConnect().createOne(body, headers)
-            .then(res => {
-                if (res.status === 200) {
-                    setKeyword(null)
-                    setMallName(null)
-                }
-            })
             .catch(err => {
                 const res = err.response;
                 customToast.error(res?.data?.memo, {
@@ -54,21 +48,7 @@ export default function useNRankRecordFormHook() {
         }
     }
 
-    const onChangeKeyword = (e) => {
-        let value = e.target.value;
-        setKeyword(value)
-    }
-
-    const onChangeMallName = (e) => {
-        let value = e.target.value;
-        setMallName(value)
-    }
-
     return {
-        keyword,
-        mallName,
-        onChangeKeyword,
-        onChangeMallName,
         reqCreateSearchInfo
     }
 }

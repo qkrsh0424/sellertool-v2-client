@@ -3,10 +3,12 @@ import { useSelector } from "react-redux";
 import { nRankRecordDataConnect } from "../../../../../../data_connect/nRankRecordDataConnect";
 import { customToast, defaultOptions } from "../../../../../../components/toast/custom-react-toastify/v1";
 import _ from "lodash";
+import { customBackdropController } from "../../../../../../components/backdrop/default/v1";
 
 export default function useNRankRecordListHook () {
-    const [recordList, setRecordList] = useState(null);
     const workspaceRedux = useSelector(state => state.workspaceRedux);
+    const [recordList, setRecordList] = useState(null);
+    const customBackground = customBackdropController();
 
     useEffect(() => {
         async function fetchInit() {
@@ -14,7 +16,9 @@ export default function useNRankRecordListHook () {
                 wsId: workspaceRedux?.workspaceInfo?.id
             }
 
+            customBackground.showBackdrop();
             await reqSearchNRankRecord(headers);
+            customBackground.hideBackdrop();
         }
         
         if(!workspaceRedux?.workspaceInfo?.id){
@@ -28,7 +32,7 @@ export default function useNRankRecordListHook () {
         await nRankRecordDataConnect().searchRecordList(headers)
             .then(res => {
                 if(res.status === 200) {
-                    let sortedData = _.orderBy(res.data.data, 'createdAt', 'desc');
+                    let sortedData = _.orderBy(res.data.data, 'created_at', 'desc');
                     setRecordList(sortedData)
                 }
             })

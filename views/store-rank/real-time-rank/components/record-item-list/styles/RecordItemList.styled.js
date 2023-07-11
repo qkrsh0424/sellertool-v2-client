@@ -38,9 +38,17 @@ export const RecordItemBox = styled.div`
     }
 `;
 
-export const LabelGroup = styled.div`
+export const ContentGroup = styled.div`
     padding: 5px 0px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: #444;
+`;
+
+export const ContentValue = styled.div`
+    display: inline;
+    font-weight: 600;
+    color: #000;
+    font-size: 1.1rem;
 `;

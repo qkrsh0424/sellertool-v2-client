@@ -13,11 +13,11 @@ export default function RecordInfoFieldView({
             </LabelGroup>
             <LabelGroup>
                 <div>스토어명 : </div>
-                <div className='content-value'>{record.mallName}</div>
+                <div className='content-value'>{record.mall_name}</div>
             </LabelGroup>
             <LabelGroup>
-                <div>최근 검색일 : </div>
-                <div className='content-value'>{record.lastSearchedAt ? dateToYYYYMMDDhhmmss(record.lastSearchedAt) : '-'}</div>
+                <div>최근 검색일시 : </div>
+                <div className='content-value'>{record.last_searched_at ? dateToYYYYMMDDhhmmss(record.last_searched_at) : '-'}</div>
             </LabelGroup>
         </Wrapper>
     )

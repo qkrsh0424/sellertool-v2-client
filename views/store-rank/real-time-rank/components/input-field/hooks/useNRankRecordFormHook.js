@@ -13,7 +13,7 @@ export default function useNRankRecordFormHook({
 
         let body = {
             keyword,
-            mallName
+            mall_name: mallName
         }
         
         let headers = {

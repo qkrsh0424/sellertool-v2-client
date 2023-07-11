@@ -30,7 +30,7 @@ export default function useNRankRecordDetailHook({
 
     const reqSearchNRankRecordDetail = async () => {
         let params = {
-            recordId: record.id
+            record_id: record.id
         }
 
         let headers = {
@@ -55,8 +55,8 @@ export default function useNRankRecordDetailHook({
     const reqCreateNRankRecordDetail = async () => {
         let body = {
             keyword: record.keyword,
-            mallName: record.mallName,
-            nrankRecordId: record.id
+            mall_name: record.mall_name,
+            nrank_record_id: record.id
         }
 
         let headers = {

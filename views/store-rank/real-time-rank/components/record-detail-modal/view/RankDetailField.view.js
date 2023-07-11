@@ -14,7 +14,7 @@ export default function RankDetailFieldView({
                     <DetailInfoWrapper>
                         <div>
                             <CustomBoxImage
-                                src={detail.thumbnailUrl}
+                                src={detail.thumbnail_url}
                                 size='200px'
                             />
                         </div>
@@ -22,30 +22,30 @@ export default function RankDetailFieldView({
                             <div className='info-field'>
                                 <InfoGroupBox>
                                     <div className='sub-info'>
-                                        {detail.advertisingYn === 'y' &&
+                                        {detail.advertising_yn === 'y' &&
                                             <div className='sub-info-box' style={{ "--default-box-color": "#707ca0" }}>광고</div>
                                         }
-                                        {detail.priceComparisionYn === 'y' &&
+                                        {detail.priceComparision_yn === 'y' &&
                                             <div className='sub-info-box' style={{ "--default-box-color": "#9da0a9" }}>가격 비교</div>
                                         }
                                     </div>                                    
                                 </InfoGroupBox>
                                 <InfoGroupBox>
                                     <div className='hover-effet'>
-                                        <a href={NAVER_SHOPPING_PRODUCT_URL + detail.mallProductId} target="_blank" rel="noopener">
-                                            <span className='accent-text'>{detail.productTitle}</span>
+                                        <a href={NAVER_SHOPPING_PRODUCT_URL + detail.mall_product_id} target="_blank" rel="noopener">
+                                            <span className='accent-text'>{detail.product_title}</span>
                                         </a>
                                     </div>
                                 </InfoGroupBox>
                                 <InfoGroupBox>
                                     <div>
-                                        <span>{detail.category1Name}</span>
+                                        <span>{detail.category1_name}</span>
                                         <span style={{ color: '#b4b4b4'}}>{' > '}</span>
-                                        <span>{detail.category2Name}</span>
+                                        <span>{detail.category2_name}</span>
                                         <span style={{ color: '#b4b4b4'}}>{' > '}</span>
-                                        <span>{detail.category3Name}</span>
+                                        <span>{detail.category3_name}</span>
                                         <span style={{ color: '#b4b4b4'}}>{' > '}</span>                            
-                                        <span>{detail.category4Name}</span>
+                                        <span>{detail.category4_name}</span>
                                     </div>
                                 </InfoGroupBox>
                             </div>
@@ -62,41 +62,41 @@ export default function RankDetailFieldView({
                                                 size='20px'
                                             />
                                         </span>
-                                        <span>{detail.deliveryFee === 0 ? '무료' : detail.deliveryFee}</span>
+                                        <span>{detail.delivery_fee === 0 ? '무료' : detail.delivery_fee}</span>
                                     </div>
                                 </InfoGroupBox>
                                 <InfoGroupBox>
                                     <div>
                                         <span>리뷰 : </span>
-                                        <span>{detail.reviewCount}</span>
+                                        <span>{detail.review_count}</span>
                                     </div>
                                     <div>
                                         <span>평점 : </span>
-                                        <span>{detail.scoreInfo}</span>
+                                        <span>{detail.score_info}</span>
                                     </div>
                                     <div>
                                         <span>구매 : </span>
-                                        <span>{detail.purchaseCount}</span>
+                                        <span>{detail.purchase_count}</span>
                                     </div>
                                     <div>
                                         <span>찜 : </span>
-                                        <span>{detail.keepCount}</span>
+                                        <span>{detail.keep_count}</span>
                                     </div>
                                 </InfoGroupBox>
                                 <InfoGroupBox>
                                     <div>
-                                        <span>상품게시일 : </span>
-                                        <span>{dateToYYYYMMDD(detail.registrationDate)}</span>
+                                        <span>상품 게시일 : </span>
+                                        <span>{detail.registration_date ? dateToYYYYMMDD(detail.registration_date) : '-'}</span>
                                     </div>
                                 </InfoGroupBox>
                             </div>
                             <div className='rank-field'>
                                 <InfoGroupBox>
-                                    {detail.priceComparisionYn === 'y' &&
+                                    {detail.priceComparision_yn === 'y' &&
                                         <div>
                                             <span style={{ color: '#000', fontWeight: '700' }}>가격 비교 </span>
-                                            <span style={{ color: '#000', fontWeight: '700' }}>{detail.comparisionRank}위 </span>
-                                            <span>(총 {detail.lowMallCount}개 중)</span>
+                                            <span style={{ color: '#000', fontWeight: '700' }}>{detail.comparision_rank}위 </span>
+                                            <span>(총 {detail.low_mall_count}개 중)</span>
                                         </div>
                                     }
                                 </InfoGroupBox>
@@ -114,7 +114,7 @@ export default function RankDetailFieldView({
                                 <InfoGroupBox>
                                     <div>
                                         <span>광고 제거 시 </span>
-                                        <span>{detail.excludedAdRank}위</span>
+                                        <span>{detail.excluded_ad_rank}위</span>
                                     </div>
                                 </InfoGroupBox>
                             </div>
@@ -124,7 +124,7 @@ export default function RankDetailFieldView({
             })}
 
             {!(recordDetails?.length > 0) &&
-                <div>조회 내역이 존재하지 않습니다.</div>
+                <div>조회 데이터가 존재하지 않습니다.</div>
             }
         </Wrapper>
     )

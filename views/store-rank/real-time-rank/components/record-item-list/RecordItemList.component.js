@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { dateToYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import useNRankRecordListHook from "./hooks/useNRankRecordListHook";
-import { Container, LabelGroup, RecordItemBox, Wrapper } from "./styles/RecordItemList.styled";
+import { Container, ContentGroup, ContentValue, RecordItemBox, Wrapper } from "./styles/RecordItemList.styled";
 import { RecordDetailModalComponent } from "../record-detail-modal";
 import HighlightedText from "../../../../../components/text/highlight/HighlightedText";
 
@@ -34,41 +34,47 @@ export function RecordItemListComponent({
                 <Wrapper>
                     {recordList?.map((item, index) => {
                         let isKeywordAccent = keyword && (item.keyword).includes(keyword);
-                        let isMallNameAccent = mallName && (item.mallName).includes(mallName);
+                        let isMallNameAccent = mallName && (item.mall_name).includes(mallName);
 
                         return (
                             <RecordItemBox
                                 key={'record-info-idx' + index}
                                 onClick={(e) => handleOpenDetailSearchModal(e, item)}
                             >
-                                <LabelGroup>
+                                <ContentGroup>
                                     <span>키워드 : </span>
-                                    {isKeywordAccent ? 
-                                        <HighlightedText
-                                            text={item.keyword}
-                                            query={keyword}
-                                            highlightColor={'#ffcd92'}
-                                        />
-                                        :
-                                        <span>{item.keyword}</span>
-                                    }
-                                </LabelGroup>
-                                <LabelGroup>
+                                    <ContentValue>
+                                        {isKeywordAccent ?
+                                            <HighlightedText
+                                                text={item.keyword}
+                                                query={keyword}
+                                                highlightColor={'#ffcd92'}
+                                            />
+                                            :
+                                            <span>{item.keyword}</span>
+                                        }
+                                    </ContentValue>
+                                </ContentGroup>
+                                <ContentGroup>
                                     <span>스토어명 : </span>
-                                    {isMallNameAccent ? 
-                                        <HighlightedText
-                                            text={item.mallName}
-                                            query={mallName}
-                                            highlightColor={'#ffcd92'}
-                                        />
-                                        :
-                                        <span>{item.mallName}</span>
-                                    }
-                                </LabelGroup>
-                                <LabelGroup>
-                                    <span>최근 검색일 : </span>
-                                    <span>{item.lastSearchedAt ? dateToYYMMDDhhmmss(item.lastSearchedAt) : "-"}</span>
-                                </LabelGroup>
+                                    <ContentValue>
+                                        {isMallNameAccent ?
+                                            <HighlightedText
+                                                text={item.mall_name}
+                                                query={mallName}
+                                                highlightColor={'#ffcd92'}
+                                            />
+                                            :
+                                            <span>{item.mall_name}</span>
+                                        }
+                                    </ContentValue>
+                                </ContentGroup>
+                                <ContentGroup>
+                                    <span>최근 검색일시 : </span>
+                                    <ContentValue>
+                                        <span>{item.last_searched_at ? dateToYYMMDDhhmmss(item.last_searched_at) : "-"}</span>
+                                    </ContentValue>
+                                </ContentGroup>
                             </RecordItemBox>
                         )
                     })}

@@ -48,10 +48,19 @@ function toPriceUnitFormat(price) {
     }
 }
 
+function isNumericValue(value) {
+    if (/^\d+$/.test(value)) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
 export {
     numberFormatUtils,
     numberWithCommas,
     getRemovedPrefixZero,
     roundToTwo,
-    toPriceUnitFormat
+    toPriceUnitFormat,
+    isNumericValue
 }

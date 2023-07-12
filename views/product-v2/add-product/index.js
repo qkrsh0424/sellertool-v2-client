@@ -10,6 +10,10 @@ import ProductFieldComponent from './product-field/ProductField.component';
 import ProductOptionFieldComponent from './product-option-field/ProductOptionField.component';
 import SubCategoryFieldComponent from './sub-category-field/SubCategoryField.component';
 import SubmitFieldComponent from './submit-field';
+import { productDataConnect } from '../../../data_connect/productDataConnect';
+import { isNumericValue } from '../../../utils/numberFormatUtils';
+import { v4 as uuidv4 } from 'uuid';
+import { customBackdropController } from '../../../components/backdrop/default/v1';
 
 const Container = styled.div`
     padding-bottom: 150px;
@@ -50,6 +54,7 @@ export default function MainComponent(props) {
     const {
         productOptions,
         onActionPushProductOption,
+        onActionConcatProductOptions,
         onActionPushProductOptionsWithNames,
         onActionDeleteProductOption,
         onChangeOptionValueOfName,
@@ -64,6 +69,8 @@ export default function MainComponent(props) {
         getSubmitValue: getSubmitValueOfProductOptions,
         checkProductOptionsFormatValid
     } = useProductOptionsHook();
+
+    const customBackdropControl = customBackdropController();
 
     const __handle = {
         submit: {
@@ -97,6 +104,53 @@ export default function MainComponent(props) {
             }
         }
     }
+
+    const onReqProductOptionBulkCreateExcelUpload = async (formData, successCallback) => {
+        customBackdropControl.showBackdrop();
+        const headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+        await productDataConnect().productOptionBulkCreateExcelUpload(formData, headers)
+            .then(res => {
+                if (res.status === 200) {
+                    const resData = res?.data?.data;
+                    if (resData) {
+                        onActionConcatProductOptions(resData?.map(r => {
+                            return {
+                                id: uuidv4(),
+                                name: r?.name,
+                                optionTag: r?.optionTag,
+                                salesPrice: isNumericValue(r?.salesPrice) ? r?.salesPrice : '0',
+                                totalPurchasePrice: isNumericValue(r?.totalPurchasePrice) ? r?.totalPurchasePrice : '0',
+                                status: r?.status,
+                                memo: r?.memo,
+                                releaseLocation: r?.releaseLocation
+                            }
+                        }));
+                    }
+
+                    successCallback();
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (!res) {
+                    alert('네트워크 연결이 원활하지 않습니다.');
+                    return;
+                }
+
+                if (res.status === 500) {
+                    alert('undefined error. 관리자에 문의해 주세요.');
+                    return;
+                }
+
+                alert(res.data.memo);
+            });
+
+        customBackdropControl.hideBackdrop();
+    }
+
     return (
         <>
             <Container>
@@ -117,6 +171,7 @@ export default function MainComponent(props) {
                 />
                 <ProductOptionFieldComponent
                     productOptions={productOptions}
+                    onReqProductOptionBulkCreateExcelUpload={onReqProductOptionBulkCreateExcelUpload}
                     onActionPushProductOption={onActionPushProductOption}
                     onActionPushProductOptionsWithNames={onActionPushProductOptionsWithNames}
                     onActionDeleteProductOption={onActionDeleteProductOption}

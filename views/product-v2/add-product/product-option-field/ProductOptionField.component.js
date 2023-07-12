@@ -13,9 +13,13 @@ import EditStatusesModalComponent from "./modal/EditStatusesModal.component";
 import EditTotalPurchasePricesModalComponent from "./modal/EditTotalPurchasePricesModal.component";
 import { Container, FormWrapper, HeadWrapper, OptionGeneratorWrapper, TableBox, TableWrapper, Wrapper } from "./styles/ProductOptionField.styled";
 import ResizableTh from "../../../../components/table/th/v1/ResizableTh";
+import CustomBlockButton from "../../../../components/buttons/block-button/v1/CustomBlockButton";
+import CustomExcelFileUploader from "../../../modules/uploader/CustomExcelFileUploader";
+import BulkCreateOptionListModalComponent from "./modal/BulkCreateOptionListModal.component";
 
 export default function ProductOptionFieldComponent({
     productOptions,
+    onReqProductOptionBulkCreateExcelUpload,
     onActionPushProductOption,
     onActionPushProductOptionsWithNames,
     onActionDeleteProductOption,
@@ -32,6 +36,7 @@ export default function ProductOptionFieldComponent({
 }) {
     const [dropDownOpen, setDropDownOpen] = useState(true);
     const [editBatchModalOpen, setEditBatchModalOpen] = useState(null);
+    const [bulkCreateOptionListModalOpen, setBulkCreateOptionListModalOpen] = useState(false);
 
     const {
         seperator,
@@ -125,6 +130,10 @@ export default function ProductOptionFieldComponent({
                 onActionPushProductOptionsWithNames(optionNames);
             }
         }
+    }
+
+    const toggleBulkCreateOptionListModalOpen = (setOpen) => {
+        setBulkCreateOptionListModalOpen(setOpen);
     }
 
     return (
@@ -270,13 +279,22 @@ export default function ProductOptionFieldComponent({
                                         }}>
                                             <span className='required-tag'></span>옵션 목록 (총 <span style={{ color: 'var(--mainColor)' }}>{productOptions?.length}</span>개)
                                         </div>
-                                        <SingleBlockButton
-                                            type='button'
-                                            className='add-button-item'
-                                            onClick={() => onActionPushProductOption()}
-                                        >
-                                            추가
-                                        </SingleBlockButton>
+                                        <div className='mgl-flex'>
+                                            <CustomBlockButton
+                                                type='button'
+                                                className='excel-bulk-button'
+                                                onClick={() => toggleBulkCreateOptionListModalOpen(true)}
+                                            >
+                                                엑셀 일괄등록
+                                            </CustomBlockButton>
+                                            <CustomBlockButton
+                                                type='button'
+                                                className='add-button-item'
+                                                onClick={() => onActionPushProductOption()}
+                                            >
+                                                추가
+                                            </CustomBlockButton>
+                                        </div>
                                     </div>
                                     <Table
                                         productOptions={productOptions}
@@ -358,6 +376,14 @@ export default function ProductOptionFieldComponent({
                     onConfirm={onSetMemosWithInput}
                 />
             </CommonModalComponent>
+
+            {bulkCreateOptionListModalOpen &&
+                <BulkCreateOptionListModalComponent
+                    open={bulkCreateOptionListModalOpen}
+                    onClose={() => toggleBulkCreateOptionListModalOpen(false)}
+                    onReqProductOptionBulkCreateExcelUpload={onReqProductOptionBulkCreateExcelUpload}
+                />
+            }
         </>
     );
 }
@@ -466,7 +492,7 @@ function Table({
                                                 <span className='required-tag'></span>
                                             }
                                             {r.headerName}
-                                            {r.name !== 'name' &&
+                                            {!['name', 'code'].includes(r.name) &&
                                                 <SingleBlockButton
                                                     type='button'
                                                     className='control-button-item'
@@ -549,36 +575,43 @@ const OPTION_HEADER = [
     {
         name: 'name',
         headerName: '옵션명',
-        required: true
+        required: true,
+        readOnly: false
     },
     {
         name: 'optionTag',
-        headerName: '옵션 태그',
-        required: false
+        headerName: '옵션태그',
+        required: false,
+        readOnly: false
     },
     {
         name: 'salesPrice',
         headerName: '판매가격',
-        required: false
+        required: false,
+        readOnly: false
     },
     {
         name: 'totalPurchasePrice',
         headerName: '매입가격',
-        required: false
+        required: false,
+        readOnly: false
     },
     {
         name: 'releaseLocation',
         headerName: '출고지',
-        required: false
+        required: false,
+        readOnly: false
     },
     {
         name: 'status',
         headerName: '상태',
-        required: false
+        required: false,
+        readOnly: false
     },
     {
         name: 'memo',
         headerName: '메모',
-        required: false
+        required: false,
+        readOnly: false
     }
 ]

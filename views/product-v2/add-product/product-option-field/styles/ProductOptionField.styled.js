@@ -55,6 +55,17 @@ export const HeadWrapper = styled.div`
 export const FormWrapper = styled.div`
     padding: 20px 0;
     
+    .excel-bulk-button{
+        margin:0 10px 0 0;
+        padding:0;
+        width: 100px;
+        height: 35px;
+        border-radius: 5px;
+        background: #f0f0f0;
+        color:#666;
+        border:none;
+        font-weight: 700;
+    }
 
     .add-button-item{
         margin:0;
@@ -65,6 +76,7 @@ export const FormWrapper = styled.div`
         background: var(--mainColor);
         color:white;
         border:none;
+        font-weight: 700;
     }
 
     .required-tag{
@@ -300,6 +312,16 @@ export const TableBox = styled.div`
                 box-shadow: var(--defaultBoxShadow);
                 background: var(--defaultBlueColorOpacity100);
                 cursor: text;
+            }
+        }
+
+        .readOnly-item{
+            background: #f0f0f0;
+            cursor: not-allowed;
+            color:#666;
+
+            &:focus{
+                cursor: not-allowed;
             }
         }
     }

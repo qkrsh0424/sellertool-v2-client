@@ -44,6 +44,7 @@ export default function useProductHook(props) {
                 alert(res.data.memo);
             })
     }
+
     const onChangeProductValueOfName = (e) => {
         let name = e.target.name;
         let value = e.target.value;

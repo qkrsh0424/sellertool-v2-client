@@ -23,6 +23,13 @@ export default function useProductOptionsHook(props) {
         ])
     }
 
+    const onActionConcatProductOptions = (options) => {
+        setProductOptions([
+            ...productOptions,
+            ...options
+        ])
+    }
+
     const onActionPushProductOptionsWithNames = (names) => {
         let data = names.map(name => {
             return {
@@ -247,6 +254,7 @@ export default function useProductOptionsHook(props) {
     return {
         productOptions,
         onActionPushProductOption,
+        onActionConcatProductOptions,
         onActionPushProductOptionsWithNames,
         onActionDeleteProductOption,
         onChangeOptionValueOfName,

@@ -1,22 +1,18 @@
 import CustomInput from "../../../../../components/input/default/v1/CustomInput";
 import { ButtonFieldBox, Container, InputFieldBox, Wrapper } from "./styles/InputField.styled";
 import CustomImage from "../../../../modules/image/CustomImage";
-import useNRankRecordFormHook from "./hooks/useNRankRecordFormHook";
 
 export function InputFieldComponent({
     keyword,
     mallName,
     onChangeKeyword,
-    onChangeMallName
+    onChangeMallName,
+    handleActionSubmitRecordInfo
 }) {
-    const {
-        reqCreateSearchInfo
-    } = useNRankRecordFormHook({ keyword, mallName });
-
     return (
         <>
             <Container>
-                <form onSubmit={(e) => {e.preventDefault(); reqCreateSearchInfo() }} method="post">
+                <form onSubmit={(e) => handleActionSubmitRecordInfo(e)} method="post">
                     <Wrapper>
                         <InputFieldBox>
                             <CustomInput

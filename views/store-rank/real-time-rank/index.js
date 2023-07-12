@@ -2,6 +2,7 @@ import Layout from "../layout/Layout";
 import styled from "styled-components";
 import { InputFieldComponent, RecordItemListComponent } from "./components";
 import useSearchInputHook from "./hooks/useSearchInputHook";
+import useNRankRecordListHook from "./hooks/useNRankRecordListHook";
 
 export const Container = styled.div`
     background:var(--defaultBackground);
@@ -9,12 +10,28 @@ export const Container = styled.div`
 `;
 
 export default function MainComponent(){
+    
     const {
         keyword,
         mallName,
         onChangeKeyword,
-        onChangeMallName
+        onChangeMallName,
+        reqCreateSearchInfo
     } = useSearchInputHook()
+
+    const {
+        recordList,
+        reqDeleteNRankRecord,
+        reqSearchNRankRecordList
+    } = useNRankRecordListHook();
+
+    const handleActionSubmitRecordInfo = (e) => {
+        e.preventDefault();
+
+        reqCreateSearchInfo(() => {
+            reqSearchNRankRecordList()
+        })
+    }
 
     return (
         <>
@@ -29,10 +46,14 @@ export default function MainComponent(){
                         mallName={mallName}
                         onChangeKeyword={onChangeKeyword}
                         onChangeMallName={onChangeMallName}
+                        handleActionSubmitRecordInfo={handleActionSubmitRecordInfo}
                     />
                     <RecordItemListComponent
                         keyword={keyword}
                         mallName={mallName}
+                        recordList={recordList}
+                        reqDeleteNRankRecord={reqDeleteNRankRecord}
+                        reqSearchNRankRecordList={reqSearchNRankRecordList}
                     />
                 </Layout>
             </Container>

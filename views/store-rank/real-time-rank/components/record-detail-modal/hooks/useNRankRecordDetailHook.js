@@ -52,7 +52,7 @@ export default function useNRankRecordDetailHook({
             })
     }
 
-    const reqCreateNRankRecordDetail = async () => {
+    const reqCreateNRankRecordDetail = async (successCallback) => {
         let body = {
             keyword: record.keyword,
             mall_name: record.mall_name,
@@ -64,6 +64,11 @@ export default function useNRankRecordDetailHook({
         }
 
         await nRankRecordDetailDataConnect().createList(body, headers)
+            .then(res => {
+                if(res.status === 200) {
+                    successCallback()
+                }
+            })
             .catch(err => {
                 const res = err.response;
                 customToast.error(res?.data?.memo, {

@@ -11,8 +11,9 @@ export default function useNRankRecordFormHook({
     const reqCreateSearchInfo = async () => {
         checkSearchInfoForm();
 
+        // TODO :: 앞뒤 공백제거하자. server에도
         let body = {
-            keyword,
+            keyword: keyword,
             mall_name: mallName
         }
         

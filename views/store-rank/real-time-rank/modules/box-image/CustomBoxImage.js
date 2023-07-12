@@ -22,7 +22,7 @@ export function CustomBoxImage({
             <img
                 src={src || '/images/normal/image.png'}
                 width={size}
-                objectFit={'cover'}
+                // objectFit={'cover'}
                 alt='image'
                 loading='lazy'
                 className={className}

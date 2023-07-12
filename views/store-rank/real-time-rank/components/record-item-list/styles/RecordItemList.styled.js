@@ -22,6 +22,7 @@ export const Wrapper = styled.div`
 `;
 
 export const RecordItemBox = styled.div`
+    position: relative;
     width: 400px;
     padding: 20px 30px;
     background-color: white;
@@ -35,6 +36,34 @@ export const RecordItemBox = styled.div`
 
     &:hover {
         border: 1px solid var(--mainColor);
+    }
+`;
+
+export const ControlBox = styled.div`
+    opacity: 0;
+    transition: all 0.2s;
+
+    ${RecordItemBox}:hover & {
+        opacity: 1;
+    };
+
+    .delete-box {
+        position: absolute;
+        right: -3px;
+        top: -8px;
+    }
+
+    .delete-box .button-item {
+        border-radius: 50%;
+        padding: 2px;
+        border: 1px solid var(--defaultRedColor);
+        background-color: #fff;
+        cursor: pointer;
+        transition: 0.2s;
+
+        &:hover {
+            background-color: #ffe0e0;
+        }
     }
 `;
 

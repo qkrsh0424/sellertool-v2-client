@@ -15,4 +15,9 @@ export const Wrapper = styled.div`
         color: #fff;
         box-shadow: var(--defaultBoxShadow);
     }
+
+    .disabled-btn {
+        border-radius: 10px;
+
+    }
 `;

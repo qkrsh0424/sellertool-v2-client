@@ -1,8 +1,8 @@
-import CustomBlockButton from "/components/buttons/block-button/v1/CustomBlockButton";
-import { CustomDialog } from "/components/dialog/v1/CustomDialog";
+import CustomBlockButton from "../../../../../../../../components/buttons/block-button/v1/CustomBlockButton";
+import { CustomDialog } from "../../../../../../../../components/dialog/v1/CustomDialog";
 import styled from 'styled-components';
 import { OptionBulkCreateTemplate } from "/utils/excel-template";
-import CustomExcelFileUploader from "../../../../../../../modules/uploader/CustomExcelFileUploader";
+import CustomExcelFileUploader from "../../../../../../../../components/uploader/CustomExcelFileUploader";
 import { useState } from "react";
 
 const ContentContainer = styled.div`

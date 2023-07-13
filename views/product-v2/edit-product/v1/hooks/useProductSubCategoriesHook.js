@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { productSubCategoryDataConnect } from "../../../../data_connect/productSubCategoryDataConnect";
-import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
+import { productSubCategoryDataConnect } from "../../../../../data_connect/productSubCategoryDataConnect";
+import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 
 export default function useProductSubCategoriesHook({
     productCategoryId,

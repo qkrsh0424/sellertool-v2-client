@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { useState } from "react";
-import SingleBlockButton from "../../../modules/button/SingleBlockButton";
-import CustomImage from "../../../modules/image/CustomImage";
-import CustomSelect from "../../../modules/select/CustomSelect";
+import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
+import CustomImage from "../../../../modules/image/CustomImage";
+import CustomSelect from "../../../../modules/select/CustomSelect";
 import { Container, FormWrapper, HeadWrapper, Wrapper } from "./styles/SubCategoryField.styled";
 
 export default function SubCategoryFieldComponent({

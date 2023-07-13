@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { getRemovedPrefixZero } from "../../../../utils/numberFormatUtils";
+import { getRemovedPrefixZero } from "../../../../../utils/numberFormatUtils";
 
 export default function useProductOptionsHook({
     originProduct

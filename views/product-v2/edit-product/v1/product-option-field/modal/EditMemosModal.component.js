@@ -1,46 +1,30 @@
 import Image from "next/image";
-import { useRef, useState } from "react";
-import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
-import { getRemovedPrefixZero, numberFormatUtils } from "../../../../../utils/numberFormatUtils";
-import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
-import { Container } from "../styles/EditTotalPurchasePricesModal.styled";
+import { useRef } from "react";
+import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
+import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
+import { Container } from "../styles/EditMemosModal.styled";
 
-export default function EditTotalPurchasePricesModalComponent({
+export default function EditMemosModalComponent({
     onClose,
     onConfirm
 }) {
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
-    const [inputValue, setInputValue] = useState('');
+    const inputValueRef = useRef();
 
     const __handle = {
-        change: {
-            inputValue: (e) => {
-                let value = e.target.value;
-
-                if (!value) {
-                    setInputValue('');
-                    return;
-                }
-
-                value = value.replaceAll(',', '');
-                value = getRemovedPrefixZero(value);
-
-                if (value.match(/^[0-9]{0,9}$/)) {
-                    setInputValue(value);
-                }
-            }
-        },
         submit: {
             confirm: (e) => {
                 e.preventDefault();
                 setDisabledBtn(true);
 
-                if (!inputValue || inputValue < 0 || inputValue > 999999999) {
-                    alert('매입가격은 0-999999999 이내의 숫자만 입력가능 합니다.');
+                let value = inputValueRef.current.value;
+
+                if (value.length > 200) {
+                    alert('메모는 200자 이내로 입력해 주세요.');
                     return;
                 }
 
-                onConfirm(inputValue);
+                onConfirm(value);
                 onClose();
             }
         }
@@ -72,18 +56,17 @@ export default function EditTotalPurchasePricesModalComponent({
                     className='title-box'
                 >
                     <div className='title'>
-                        매입가격을 일괄 변경합니다.
+                        메모를 일괄 변경합니다.
                     </div>
                 </div>
                 <form onSubmit={(e) => __handle.submit.confirm(e)}>
                     <div className='content-group'>
                         <div className='content-box'>
                             <input
+                                ref={inputValueRef}
                                 type='text'
                                 className='input-item'
-                                placeholder="매입가격"
-                                value={numberFormatUtils.numberWithCommas(inputValue) || ''}
-                                onChange={(e) => __handle.change.inputValue(e)}
+                                placeholder="메모"
                             ></input>
                         </div>
                     </div>

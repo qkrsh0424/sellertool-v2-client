@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRef } from "react";
-import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
-import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
+import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
+import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
 import { Container } from "../styles/EditReleaseLocationsModal.styled";
 
 export default function EditReleaseLocationsModalComponent({

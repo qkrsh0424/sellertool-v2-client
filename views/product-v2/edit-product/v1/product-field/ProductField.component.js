@@ -1,11 +1,8 @@
-import { Divider } from "@mui/material";
-import Image from "next/image";
 import { useRef } from "react";
 import { useState } from "react";
-import useImageUploaderHooks from "../../../../hooks/uploader/useImageUploaderHooks";
-import SingleBlockButton from "../../../modules/button/SingleBlockButton";
-import CustomImage from "../../../modules/image/CustomImage";
-import CustomSelect from "../../../modules/select/CustomSelect";
+import useImageUploaderHooks from "../../../../../hooks/uploader/useImageUploaderHooks";
+import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
+import CustomImage from "../../../../modules/image/CustomImage";
 import { Container, FormWrapper, HeadWrapper, Wrapper } from "./styles/ProductField.styled";
 
 export default function ProductFieldComponent({

@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { productDataConnect } from "../../../../data_connect/productDataConnect";
-import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
+import { productDataConnect } from "../../../../../data_connect/productDataConnect";
+import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 
 export default function useOriginProductHook(props) {
     const router = useRouter();

@@ -1,30 +1,46 @@
 import Image from "next/image";
-import { useRef } from "react";
-import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
-import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
-import { Container } from "../styles/EditMemosModal.styled";
+import { useRef, useState } from "react";
+import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
+import { getRemovedPrefixZero, numberFormatUtils } from "../../../../../../utils/numberFormatUtils";
+import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
+import { Container } from "../styles/EditSalesPricesModal.styled";
 
-export default function EditMemosModalComponent({
+export default function EditSalesPricesModalComponent({
     onClose,
     onConfirm
 }) {
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
-    const inputValueRef = useRef();
+    const [inputValue, setInputValue] = useState('');
 
     const __handle = {
+        change: {
+            inputValue: (e) => {
+                let value = e.target.value;
+
+                if (!value) {
+                    setInputValue('');
+                    return;
+                }
+
+                value = value.replaceAll(',', '');
+                value = getRemovedPrefixZero(value);
+
+                if (value.match(/^[0-9]{0,9}$/)) {
+                    setInputValue(value);
+                }
+            }
+        },
         submit: {
             confirm: (e) => {
                 e.preventDefault();
                 setDisabledBtn(true);
 
-                let value = inputValueRef.current.value;
-
-                if (value.length > 200) {
-                    alert('메모는 200자 이내로 입력해 주세요.');
+                if (!inputValue || inputValue < 0 || inputValue > 999999999) {
+                    alert('판매가격은 0-999999999 이내의 숫자만 입력가능 합니다.');
                     return;
                 }
 
-                onConfirm(value);
+                onConfirm(inputValue);
                 onClose();
             }
         }
@@ -56,17 +72,18 @@ export default function EditMemosModalComponent({
                     className='title-box'
                 >
                     <div className='title'>
-                        메모를 일괄 변경합니다.
+                        판매가격을 일괄 변경합니다.
                     </div>
                 </div>
                 <form onSubmit={(e) => __handle.submit.confirm(e)}>
                     <div className='content-group'>
                         <div className='content-box'>
                             <input
-                                ref={inputValueRef}
                                 type='text'
                                 className='input-item'
-                                placeholder="메모"
+                                placeholder="판매가격"
+                                value={numberFormatUtils.numberWithCommas(inputValue) || ''}
+                                onChange={(e) => __handle.change.inputValue(e)}
                             ></input>
                         </div>
                     </div>

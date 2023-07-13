@@ -1,36 +1,30 @@
 import Image from "next/image";
 import { useRef } from "react";
-import useDisabledBtn from "../../../../../hooks/button/useDisabledBtn";
-import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
-import { Container } from "../styles/EditOptionTagsModal.styled";
+import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
+import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
+import { Container } from "../styles/EditStatusesModal.styled";
 
-export default function EditOptionTagsModalComponent({
+export default function EditStatusesModalComponent({
     onClose,
-    onSetOptionTagsWitchOptionNames,
-    onSetOptionTagsWithInput
+    onConfirm
 }) {
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
     const inputValueRef = useRef();
 
     const __handle = {
         submit: {
-            coverWithOptionName: () => {
-                setDisabledBtn(true);
-                onSetOptionTagsWitchOptionNames();
-                onClose();
-            },
             confirm: (e) => {
                 e.preventDefault();
                 setDisabledBtn(true);
 
                 let value = inputValueRef.current.value;
+
                 if (value.length > 50) {
-                    alert('옵션 태그를 50자 이내로 입력해 주세요.');
+                    alert('상태는 50자 이내로 입력해 주세요.');
                     return;
                 }
 
-                value = value.trim();
-                onSetOptionTagsWithInput(value);
+                onConfirm(value);
                 onClose();
             }
         }
@@ -62,28 +56,17 @@ export default function EditOptionTagsModalComponent({
                     className='title-box'
                 >
                     <div className='title'>
-                        옵션 태그를 일괄 변경합니다.
+                        상태를 일괄 변경합니다.
                     </div>
                 </div>
                 <form onSubmit={(e) => __handle.submit.confirm(e)}>
-                    <div className='content-group'>
-                        <div className='content-box'>
-                            <SingleBlockButton
-                                type='button'
-                                className='event-button-item'
-                                onClick={() => __handle.submit.coverWithOptionName()}
-                            >
-                                옵션명으로 덮어쓰기
-                            </SingleBlockButton>
-                        </div>
-                    </div>
                     <div className='content-group'>
                         <div className='content-box'>
                             <input
                                 ref={inputValueRef}
                                 type='text'
                                 className='input-item'
-                                placeholder="옵션 태그"
+                                placeholder="상태"
                             ></input>
                         </div>
                     </div>

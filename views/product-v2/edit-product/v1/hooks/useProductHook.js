@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { productDataConnect } from "../../../../data_connect/productDataConnect";
-import formatValidUtils from "../../../../utils/formatValidUtils";
+import { productDataConnect } from "../../../../../data_connect/productDataConnect";
+import formatValidUtils from "../../../../../utils/formatValidUtils";
 
 export default function useProductHook({
     originProduct

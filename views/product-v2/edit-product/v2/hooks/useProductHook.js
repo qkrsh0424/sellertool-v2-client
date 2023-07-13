@@ -12,6 +12,10 @@ export function useProductHook() {
         memo: '', // 입력
     });
 
+    const onSetProduct = (item) => {
+        setProduct(item);
+    }
+
     const onChangeProductValueOfName = (name, value) => {
         setProduct({
             ...product,
@@ -73,6 +77,7 @@ export function useProductHook() {
 
     return {
         product,
+        onSetProduct,
         onChangeProductValueOfName,
         onChangeProductThumbnailUri,
         checkProductFormatValid

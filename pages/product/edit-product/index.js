@@ -1,8 +1,7 @@
 import Head from "next/head";
-import FooterMain from "../../../views/footer/FooterMain";
 import PrimaryNavbarMainComponent from "../../../views/navbar/primary-navbar";
 import SecondaryNavbarMainComponent from "../../../views/navbar/secondary-navbar-v2";
-import MainComponent from "../../../views/product-v2/edit-product";
+import MainComponent from "../../../views/product-v2/edit-product/v2";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -22,7 +21,7 @@ export default function ProductEditProductPage(props) {
         fetchInit();
     }, [userRedux.isLoading, userRedux.userInfo]);
 
-    if(userRedux.isLoading || !userRedux.userInfo){
+    if (userRedux.isLoading || !userRedux.userInfo) {
         return null;
     }
 

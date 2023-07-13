@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { useApiConnectHook, useProductCategoriesHook, useProductHook, useProductOptionsHook, useProductSubCategoriesHook } from "./hooks";
+import { useApiHook, useProductCategoriesHook, useProductHook, useProductOptionsHook, useProductSubCategoriesHook } from "./hooks";
 import { Container } from "./index.styled";
 import { useEffect } from "react";
 import { FdCategory, FdSubCategory } from "./components";
@@ -15,50 +15,14 @@ import { v4 as uuidv4 } from 'uuid';
 export default function MainComponent(props) {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
-    let wsId = workspaceRedux?.workspaceInfo?.id;
+    const wsId = workspaceRedux?.workspaceInfo?.id;
     const customBackdropControl = customBackdropController();
-    const {
-        onReqProductOptionBulkCreateExcelUpload
-    } = useApiConnectHook();
 
-    const {
-        productCategories,
-        selectedProductCategory,
-        onReqFetchProductCategories,
-        onSetProductCategories,
-        onSetSelectedProductCategory,
-        checkProductCategoryIdFormatValid
-    } = useProductCategoriesHook();
-
-    const {
-        productSubCategories,
-        selectedProductSubCategory,
-        onReqFetchProductSubCategories,
-        onSetProductSubCategories,
-        onSetSelectedProductSubCategory,
-        checkProductSubCategoryIdFormatValid
-    } = useProductSubCategoriesHook();
-
-    const {
-        product,
-        onReqCreateProduct,
-        onChangeProductValueOfName,
-        onChangeProductThumbnailUri,
-        checkProductFormatValid
-    } = useProductHook();
-
-    const {
-        productOptions,
-        onSetProductOptions,
-        onPushNewProductOption,
-        onPushNewProductOptionsWithNames,
-        onConcatNewProductOptions,
-        onDeleteProductOption,
-        onChangeOptionValueOfName,
-        onBatchChangeOptionTagsWithOptionName,
-        onBatchChangeValueOfName,
-        checkOptionValuesForamtValid
-    } = useProductOptionsHook();
+    const { onReqFetchProductCategories, onReqFetchProductSubCategories, onReqCreateProduct, onReqProductOptionBulkCreateExcelUpload } = useApiHook();
+    const { productCategories, selectedProductCategory, onSetProductCategories, onSetSelectedProductCategory, checkProductCategoryIdFormatValid } = useProductCategoriesHook();
+    const { productSubCategories, selectedProductSubCategory, onSetProductSubCategories, onSetSelectedProductSubCategory, checkProductSubCategoryIdFormatValid } = useProductSubCategoriesHook();
+    const { product, onChangeProductValueOfName, onChangeProductThumbnailUri, checkProductFormatValid } = useProductHook();
+    const { productOptions, onPushNewProductOption, onPushNewProductOptionsWithNames, onConcatNewProductOptions, onDeleteProductOption, onChangeOptionValueOfName, onBatchChangeOptionTagsWithOptionName, onBatchChangeValueOfName, checkOptionValuesForamtValid } = useProductOptionsHook();
 
     useEffect(() => {
         if (!wsId) { return; }
@@ -108,6 +72,33 @@ export default function MainComponent(props) {
         }
     }
 
+    const handleReqProductOptionBulkCreateExcelUpload = async (formData, successCallback) => {
+        customBackdropControl.showBackdrop();
+        await onReqProductOptionBulkCreateExcelUpload({
+            formData: formData,
+            headers: { wsId: wsId }
+        },
+            (results, res) => {
+                if (results) {
+                    onConcatNewProductOptions(results?.map(r => {
+                        return {
+                            id: uuidv4(),
+                            name: r?.name,
+                            optionTag: r?.optionTag,
+                            salesPrice: isNumericValue(r?.salesPrice) ? r?.salesPrice : '0',
+                            totalPurchasePrice: isNumericValue(r?.totalPurchasePrice) ? r?.totalPurchasePrice : '0',
+                            status: r?.status,
+                            memo: r?.memo,
+                            releaseLocation: r?.releaseLocation
+                        }
+                    }));
+                }
+                successCallback();
+            }
+        )
+        customBackdropControl.hideBackdrop();
+    }
+
     const returnMergedBody = () => {
         try {
             checkProductCategoryIdFormatValid();
@@ -145,33 +136,6 @@ export default function MainComponent(props) {
             })
         }
         return body;
-    }
-
-    const handleReqProductOptionBulkCreateExcelUpload = async (formData, successCallback) => {
-        customBackdropControl.showBackdrop();
-        await onReqProductOptionBulkCreateExcelUpload({
-            formData: formData,
-            headers: { wsId: wsId }
-        },
-            (results, res) => {
-                if (results) {
-                    onConcatNewProductOptions(results?.map(r => {
-                        return {
-                            id: uuidv4(),
-                            name: r?.name,
-                            optionTag: r?.optionTag,
-                            salesPrice: isNumericValue(r?.salesPrice) ? r?.salesPrice : '0',
-                            totalPurchasePrice: isNumericValue(r?.totalPurchasePrice) ? r?.totalPurchasePrice : '0',
-                            status: r?.status,
-                            memo: r?.memo,
-                            releaseLocation: r?.releaseLocation
-                        }
-                    }));
-                }
-                successCallback();
-            }
-        )
-        customBackdropControl.hideBackdrop();
     }
 
     return (

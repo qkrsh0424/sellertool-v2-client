@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { productDataConnect } from "/data_connect/productDataConnect";
 import formatValidUtils from "/utils/formatValidUtils";
-import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
+
 export function useProductHook() {
     const [product, setProduct] = useState({
         id: uuidv4(),
@@ -12,33 +11,6 @@ export function useProductHook() {
         purchaseUri: '', // 입력
         memo: '', // 입력
     });
-
-    const onReqCreateProduct = async (options = { body: {}, params: {}, headers: {} }, callbackFn = (results, response) => { }) => {
-        await productDataConnect().createOne(options?.body, options?.headers)
-            .then(res => {
-                if (res.status === 200) {
-                    callbackFn(res?.data?.data, res);
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-                let errorMessage = 'undefined';
-                console.log(res);
-
-                if (!res) {
-                    errorMessage = '네트워크 연결이 원활하지 않습니다.';
-                } else if (res.status === 500) {
-                    errorMessage = 'undefined error. 관리자에 문의해 주세요.'
-                } else {
-                    errorMessage = res?.data?.memo;
-                }
-
-                customToast.error(errorMessage, {
-                    ...defaultOptions,
-                    toastId: errorMessage
-                });
-            })
-    }
 
     const onChangeProductValueOfName = (name, value) => {
         setProduct({
@@ -101,7 +73,6 @@ export function useProductHook() {
 
     return {
         product,
-        onReqCreateProduct,
         onChangeProductValueOfName,
         onChangeProductThumbnailUri,
         checkProductFormatValid

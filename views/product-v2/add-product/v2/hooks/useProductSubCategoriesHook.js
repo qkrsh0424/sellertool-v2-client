@@ -1,27 +1,8 @@
 import { useState } from "react";
-import { productSubCategoryDataConnect } from "../../../../../data_connect/productSubCategoryDataConnect";
-import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 
 export function useProductSubCategoriesHook(props) {
     const [productSubCategories, setProductSubCategories] = useState([]);
     const [selectedProductSubCategory, setSelectedProductSubCategory] = useState(null);
-
-    const onReqFetchProductSubCategories = async (options = { params: {}, headers: {} }, callbackFn = (results, response) => { }) => {
-        await productSubCategoryDataConnect().searchList(options?.params, options?.headers)
-            .then(res => {
-                if (res.status === 200) {
-                    callbackFn(res?.data?.data, res);
-                }
-            })
-            .catch(err => {
-                const res = err.response;
-                console.log(res);
-                customToast.error(res?.data?.memo, {
-                    ...defaultOptions,
-                    toastId: res?.data?.memo
-                });
-            })
-    }
 
     const onSetProductSubCategories = (items) => {
         setProductSubCategories(items);
@@ -45,7 +26,6 @@ export function useProductSubCategoriesHook(props) {
     return {
         productSubCategories,
         selectedProductSubCategory,
-        onReqFetchProductSubCategories,
         onSetProductSubCategories,
         onSetSelectedProductSubCategory,
         checkProductSubCategoryIdFormatValid

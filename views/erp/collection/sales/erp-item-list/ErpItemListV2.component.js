@@ -36,7 +36,7 @@ export default function ErpItemListComponent({
     const editReleaseOptionCodeModalControl = useSearchOptionCodesModalControl();
 
     const [targetErpItem, setTargetErpItem] = useState(null);
-    const [statusPin, setStatusPin] = useState(false);
+    const [statusPin, setStatusPin] = useState(true);
 
     const [itemsForSameReceiverModalOpen, setItemsFormSameReceiverModalOpen] = useState(false);
     const [targetSameReceiverHint, setTargetSameReceiverHint] = useState(null);
@@ -129,11 +129,12 @@ export default function ErpItemListComponent({
                     onClick={() => handleToggleStatusPin(!statusPin)}
                     className='button-item'
                 >
-                    <div style={statusPin ? { color: 'var(--mainColor)' } : {}}>상태창</div>
-                    <span style={{ width: 17, height: 17, display: 'inline-block', margin: 0, padding: 0, border: 'none' }}>
-                        {statusPin ? <CustomImage src={`/images/icon/pushPin_default_344b98.svg`} /> : <CustomImage src={`/images/icon/pushPin_default_a0a0a0.svg`} />}
-                    </span>
-
+                    <div style={statusPin ? { color: 'var(--mainColor)', fontWeight: '700' } : {}}>상태창</div>
+                    {statusPin &&
+                        <span style={{ width: 17, height: 17, display: 'inline-block', margin: 0, padding: 0, border: 'none' }}>
+                            <CustomImage src={`/images/icon/pushPin_default_344b98.svg`} />
+                        </span>
+                    }
                 </CustomBlockButton>
             </PinButtonBox>
             <TableFieldWrapper>

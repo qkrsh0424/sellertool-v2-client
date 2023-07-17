@@ -7,12 +7,12 @@ export function InputFieldComponent({
     mallName,
     onChangeKeyword,
     onChangeMallName,
-    handleActionSubmitRecordInfo
+    onSubmitRecordInfo
 }) {
     return (
         <>
             <Container>
-                <form onSubmit={(e) => handleActionSubmitRecordInfo(e)} method="post">
+                <form onSubmit={(e) => onSubmitRecordInfo(e)} method="post">
                     <Wrapper>
                         <InputFieldBox>
                             <CustomInput

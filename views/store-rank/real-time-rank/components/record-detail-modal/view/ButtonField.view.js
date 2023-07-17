@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import CustomBlockButton from "../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import useTargetTimeTimerHook from "../../../../../../hooks/timer/useTargetTimeTimerHook";
 import { setPlusTime } from "../../../utils/dateFormatUtils";
@@ -26,6 +26,7 @@ export default function ButtonFieldView({
         let targetTime = setPlusTime(record.last_searched_at, 1, 0, 0);
         onUpdateTargetTime(targetTime);
         onActiveTimer();
+        setDisabledBtn(false)
     }, [record])
 
     const handleSubmit = (e) => {

@@ -3,7 +3,6 @@ import useNRankRecordDetailHook from "./hooks/useNRankRecordDetailHook";
 import { DetailWrapper, Wrapper } from "./styles/RecordDetailModal.styled";
 import RankDetailFieldView from "./view/RankDetailField.view";
 import RecordInfoFieldView from "./view/RecordInfoField.view";
-import useNRankRecordHook from "./hooks/useNRankRecordHook";
 import ButtonFieldView from "./view/ButtonField.view";
 import AdRankDetailFieldView from "./view/AdRankDetailField.view";
 import { useState } from "react";
@@ -12,13 +11,10 @@ import ViewControlFieldView from "./view/ViewControlField.view";
 export function RecordDetailModalComponent({
     open,
     onClose,
-    onActionOpenSearchedRecordDetail
+    record,
+    reqSearchNRankRecordList
 }) {
     const [isAdRankView, setIsAdRankView] = useState(false);
-
-    const {
-        record
-    } = useNRankRecordHook();
 
     const {
         recordDetails,
@@ -26,18 +22,18 @@ export function RecordDetailModalComponent({
         reqCreateNRankRecordDetail
     } = useNRankRecordDetailHook({ record });
 
-    const handleActionCreateNRankRecordDetail = async () => {
-        await reqCreateNRankRecordDetail(() => {
-            onActionOpenSearchedRecordDetail();
-        })
-    }
-
     const handleChangeAdRankView = () => {
         setIsAdRankView(true);
     }
 
     const handleChangeRankView = () => {
         setIsAdRankView(false);
+    }
+
+    const handleCreateNRankRecordDetail = () => {
+        reqCreateNRankRecordDetail(() => {
+            reqSearchNRankRecordList()
+        })
     }
 
     return (
@@ -53,7 +49,7 @@ export function RecordDetailModalComponent({
                     <RecordInfoFieldView record={record} />
                     <ButtonFieldView
                         record={record}
-                        onSubmit={handleActionCreateNRankRecordDetail}
+                        onSubmit={handleCreateNRankRecordDetail}
                     />
                     <DetailWrapper>
                         <ViewControlFieldView

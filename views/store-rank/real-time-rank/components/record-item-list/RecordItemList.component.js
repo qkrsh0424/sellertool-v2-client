@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { dateToYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import { Container, ContentGroup, ContentValue, ControlBox, RecordItemBox, Wrapper } from "./styles/RecordItemList.styled";
 import { RecordDetailModalComponent } from "../record-detail-modal";
 import HighlightedText from "../../../../../components/text/highlight/HighlightedText";
-import { useRouter } from "next/router";
 import { CustomBoxImage } from "../../modules";
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
 import { useSelector } from "react-redux";
@@ -15,20 +14,30 @@ export function RecordItemListComponent({
     reqDeleteNRankRecord,
     reqSearchNRankRecordList
 }) {
-    const router = useRouter();
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
     const [recordDeleteModalOpen, setRecordDeleteModalOpen] = useState(false);
     const workspaceRedux = useSelector(state => state.workspaceRedux);
 
-    const handleOpenDetailSearchModal = (id) => {
-        router.query.recordId = id;
+    useEffect(() => {
+        if(!recordList) {
+            return;
+        }
 
-        router.replace({
-            query: {
-                ...router.query
-            }
-        })
+        if(!selectedRecord) {
+            return;
+        }
+
+        handleUpdateSelectedRecord();
+    }, [recordList, selectedRecord])
+
+    const handleUpdateSelectedRecord = () => {
+        let data = recordList.find(r => r.id === selectedRecord.id)
+        setSelectedRecord(data);
+    }
+
+    const handleOpenDetailSearchModal = (item) => {
+        setSelectedRecord(item);
         setDetailSearchModalOpen(true)
     }
 
@@ -57,16 +66,11 @@ export function RecordItemListComponent({
 
         await reqDeleteNRankRecord(params, headers, () => {
             handleCloseRecordDeleteModal();
-            setSelectedRecord(null);
         })
     }
 
     const onActionOpenSearchedRecordDetail = async () => {
-        handleCloseDetailSearchModal();
         await reqSearchNRankRecordList();
-        
-        let itemId = router.query?.recordId;
-        handleOpenDetailSearchModal(itemId);
     }
 
     return (
@@ -81,7 +85,8 @@ export function RecordItemListComponent({
                         return (
                             <RecordItemBox
                                 key={'record-info-idx' + index}
-                                onClick={() => handleOpenDetailSearchModal(item.id)}
+                                onClick={() => handleOpenDetailSearchModal(item)}
+                                isSameRecord={isKeywordAccent && isMallNameAccent}
                             >
                                 <ControlBox>
                                     <div className='delete-box'>
@@ -140,8 +145,10 @@ export function RecordItemListComponent({
                 {detailSearchModalOpen && 
                     <RecordDetailModalComponent
                         open={detailSearchModalOpen}
+                        record={selectedRecord}
                         onClose={handleCloseDetailSearchModal}
                         onActionOpenSearchedRecordDetail={onActionOpenSearchedRecordDetail}
+                        reqSearchNRankRecordList={reqSearchNRankRecordList}
                     />
                 }
 

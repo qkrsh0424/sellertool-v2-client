@@ -37,6 +37,10 @@ export const RecordItemBox = styled.div`
     &:hover {
         border: 1px solid var(--mainColor);
     }
+
+    ${props => props.isSameRecord &&
+        'border: 1px solid var(--defaultRedColor)'
+    };
 `;
 
 export const ControlBox = styled.div`

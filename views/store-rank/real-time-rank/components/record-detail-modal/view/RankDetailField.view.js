@@ -106,7 +106,7 @@ export default function RankDetailFieldView({
                                     <div>
                                         <span>({detail.page}페이지</span>
                                         <span>-</span>
-                                        <span>{detail.rank === 40 ? "40" : (detail.rank) % 40}위)</span>
+                                        <span>{detail.rank % 40 === 0 ? (detail.rank) : (detail.rank % 40)}위)</span>
                                     </div>
                                 </InfoGroupBox>
                                 <InfoGroupBox>

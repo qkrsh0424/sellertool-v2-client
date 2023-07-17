@@ -83,8 +83,8 @@ export default function AdRankDetailFieldView({
                             <div className='rank-field'>
                                 <InfoGroupBox>
                                     <div className='accent-text'>
-                                        <span>광고 </span>
-                                        <span style={{ color: 'var(--mainColor)' }}>{idx+1} 위</span>
+                                        <span>총 </span>
+                                        <span style={{ color: 'var(--mainColor)' }}>{detail.rank} 위</span>
                                     </div>
                                 </InfoGroupBox>
                             </div>

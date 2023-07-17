@@ -3,7 +3,9 @@ import { useSelector } from "react-redux";
 import { nRankRecordDataConnect } from "../../../../data_connect/nRankRecordDataConnect";
 import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
 
-export default function useSearchInputHook() {
+export default function useSearchInputHook({
+    recordList
+}) {
     const [keyword, setKeyword] = useState(null);
     const [mallName, setMallName] = useState(null);
 
@@ -20,7 +22,15 @@ export default function useSearchInputHook() {
     }
 
     const reqCreateSearchInfo = async (successCallback) => {
-        checkSearchInfoForm();
+        try {
+            checkSearchInfoForm();
+        } catch (err) {
+            customToast.error(err?.message, {
+                ...defaultOptions,
+                toastId: err?.message
+            });
+            return;
+        }
 
         let body = {
             keyword: keyword.trim(),
@@ -50,20 +60,20 @@ export default function useSearchInputHook() {
     }
 
     const checkSearchInfoForm = () => {
-        try {
-            if(!keyword || keyword === '') {
-                throw new Error("검색 키워드를 정확하게 입력해주세요.")
-            }
-
-            if(!mallName || mallName === '') {
-                throw new Error("검색 스토어명을 정확하게 입력해주세요.")
-            }
-        } catch (err) {
-            customToast.error(err?.message, {
-                ...defaultOptions,
-                toastId: err?.message
-            });
+        if(!keyword || keyword === '') {
+            throw new Error("검색 키워드를 정확하게 입력해주세요.")
         }
+
+        if(!mallName || mallName === '') {
+            throw new Error("검색 스토어명을 정확하게 입력해주세요.")
+        }
+
+        if(recordList?.length > 0) {
+            if(recordList.find(r => r.keyword === keyword && r.mall_name === mallName)) {
+                throw new Error("동일한 검색항목이 존재합니다")
+            }
+        }
+        // TODO :: mallName, keyword 글자수 제한 추가
     }
 
     return {

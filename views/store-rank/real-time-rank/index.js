@@ -10,20 +10,20 @@ export const Container = styled.div`
 `;
 
 export default function MainComponent(){
-    
-    const {
-        keyword,
-        mallName,
-        onChangeKeyword,
-        onChangeMallName,
-        reqCreateSearchInfo
-    } = useSearchInputHook()
 
     const {
         recordList,
         reqDeleteNRankRecord,
         reqSearchNRankRecordList
     } = useNRankRecordListHook();
+
+    const {
+        keyword,
+        mallName,
+        onChangeKeyword,
+        onChangeMallName,
+        reqCreateSearchInfo
+    } = useSearchInputHook({ recordList })
 
     const handleActionSubmitRecordInfo = (e) => {
         e.preventDefault();
@@ -46,7 +46,7 @@ export default function MainComponent(){
                         mallName={mallName}
                         onChangeKeyword={onChangeKeyword}
                         onChangeMallName={onChangeMallName}
-                        handleActionSubmitRecordInfo={handleActionSubmitRecordInfo}
+                        onSubmitRecordInfo={handleActionSubmitRecordInfo}
                     />
                     <RecordItemListComponent
                         keyword={keyword}

@@ -4,13 +4,12 @@ import { DetailInfoWrapper, InfoGroupBox, InfoText, Wrapper } from "../styles/Ra
 
 const NAVER_SHOPPING_PRODUCT_URL = "https://smartstore.naver.com/main/products/"
 
-export default function RankDetailFieldView({
-    record,
-    recordDetails
+export default function AdRankDetailFieldView({
+    adRecordDetails
 }) {
     return (
         <Wrapper>
-            {recordDetails?.map((detail, idx) => {
+            {adRecordDetails?.map((detail, idx) => {
                 return (
                     <DetailInfoWrapper key={'record_detail_list_idx' + idx}>
                         <div>
@@ -21,13 +20,6 @@ export default function RankDetailFieldView({
                         </div>
                         <div>
                             <div className='info-field'>
-                                <InfoGroupBox>
-                                    <div className='sub-info'>
-                                        {detail.price_comparision_yn === 'y' &&
-                                            <div className='sub-info-box' style={{ "--default-box-color": "#9da0a9" }}>가격 비교</div>
-                                        }
-                                    </div>                                    
-                                </InfoGroupBox>
                                 <InfoGroupBox>
                                     <div className='hover-effet'>
                                         <a href={NAVER_SHOPPING_PRODUCT_URL + detail.mall_product_id} target="_blank" rel="noopener">
@@ -90,29 +82,9 @@ export default function RankDetailFieldView({
                             </div>
                             <div className='rank-field'>
                                 <InfoGroupBox>
-                                    {detail.price_comparision_yn === 'y' &&
-                                        <div>
-                                            <span style={{ color: '#000', fontWeight: '700' }}>가격 비교 </span>
-                                            <span style={{ color: '#000', fontWeight: '700' }}>{detail.comparision_rank}위 </span>
-                                            <span>(총 {detail.low_mall_count}개 중)</span>
-                                        </div>
-                                    }
-                                </InfoGroupBox>
-                                <InfoGroupBox>
                                     <div className='accent-text'>
-                                        <span>총 </span>
-                                        <span style={{ color: 'var(--mainColor)' }}>{detail.rank}위 </span>
-                                    </div>
-                                    <div>
-                                        <span>({detail.page}페이지</span>
-                                        <span>-</span>
-                                        <span>{detail.rank === 40 ? "40" : (detail.rank) % 40}위)</span>
-                                    </div>
-                                </InfoGroupBox>
-                                <InfoGroupBox>
-                                    <div>
-                                        <span>광고 포함 시 </span>
-                                        <span>{detail.included_ad_rank}위</span>
+                                        <span>광고 </span>
+                                        <span style={{ color: 'var(--mainColor)' }}>{idx+1} 위</span>
                                     </div>
                                 </InfoGroupBox>
                             </div>
@@ -120,14 +92,9 @@ export default function RankDetailFieldView({
                     </DetailInfoWrapper>
                 )
             })}
-
-            {!(recordDetails?.length > 0) &&
+            {!(adRecordDetails?.length > 0) &&
                 <InfoText>
-                    {record?.last_searched_at ?
-                        <div>조회된 페이지 내 순위에 오르지 못했습니다</div>
-                        :
-                        <div>조회 버튼을 눌러 순위를 검색해보세요</div>
-                    }
+                    <div>조회 결과가 존재하지 않습니다.</div>
                 </InfoText>
             }
         </Wrapper>

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-    background-color: white;
-    border: 1px solid #efefef;
+    background-color: #fff;
+    border: 1px solid #fff;
     box-shadow: var(--defaultBoxShadow);
     padding: 20px;
     border-radius: 15px;
@@ -14,6 +14,7 @@ export const LabelGroup = styled.div`
     align-items: center;
     white-space: break-spaces;
     margin-bottom: 15px;
+    color: #666;
 
     &:last-child{
         margin-bottom: 0;
@@ -21,5 +22,7 @@ export const LabelGroup = styled.div`
 
     .content-value {
         font-weight: 700;
+        color: #4b4b4b;
+        font-size: 1.2rem;
     }
 `;

@@ -7,6 +7,7 @@ export default function useNRankRecordDetailHook({
     record
 }) {
     const [recordDetails, setRecordDetails] = useState(null);
+    const [adRecordDetails, setAdRecordDetails] = useState(null);
     const workspaceRedux = useSelector(state => state.workspaceRedux);
 
     useEffect(() => {
@@ -40,7 +41,18 @@ export default function useNRankRecordDetailHook({
         await nRankRecordDetailDataConnect().searchList(params, headers)
             .then(res => {
                 if(res.status === 200) {
-                    setRecordDetails(res.data.data)
+                    let data = res.data.data;
+                    let rankDetails = []
+                    let adRankDetails = []
+                    data.forEach(r => {
+                        if(r.advertising_yn === 'y') {
+                            adRankDetails.push(r)
+                        }else {
+                            rankDetails.push(r)
+                        }
+                    })
+                    setRecordDetails(rankDetails)
+                    setAdRecordDetails(adRankDetails)
                 }
             })
             .catch(err => {
@@ -80,6 +92,7 @@ export default function useNRankRecordDetailHook({
 
     return {
         recordDetails,
+        adRecordDetails,
         reqCreateNRankRecordDetail
     }
 }

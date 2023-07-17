@@ -1,13 +1,21 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-    padding: 20px 0;
+    min-height: 45vh;
+    max-height: 45vh;
+    margin-bottom: 20px;
+    border: 1px solid #4c4c4c;
+    border-radius: 0 15px 15px 15px;
+    box-shadow: var(--defaultBoxShadow);
+    padding: 10px;
+    background-color: #4c4c4c;
+    overflow: auto;
 `;
 
 export const DetailInfoWrapper = styled.div`
     padding: 10px;
     background-color: white;
-    border: 1px solid var(--mainColorOpacity500);
+    border: 1px solid #fff;
     margin-bottom: 10px;
     box-shadow: var(--defaultBoxShadow);
     border-radius: 15px;
@@ -15,6 +23,10 @@ export const DetailInfoWrapper = styled.div`
     font-size: 14px;
     font-weight: 600;
     color: #666;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 
     .info-field {
         padding: 0 10px;
@@ -28,7 +40,7 @@ export const DetailInfoWrapper = styled.div`
     .accent-text {
         font-weight: 800;
         font-size: 1.1rem;
-        color: #000;
+        color: #4b4b4b;
     }
 
     .sub-info {
@@ -61,4 +73,10 @@ export const InfoGroupBox = styled.div`
             text-underline-offset: 1px;
         }
     }
+`;
+
+export const InfoText = styled.div`
+    text-align: center;
+    color: #666;
+    padding: 20px;
 `;

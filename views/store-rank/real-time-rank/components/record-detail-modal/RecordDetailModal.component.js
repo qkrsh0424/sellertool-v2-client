@@ -55,10 +55,10 @@ export function RecordDetailModalComponent({
         return () => clearInterval(timer)
     }, [record])
 
-    const handleActionCreateNRankRecordDetail = async () => {
+    const handleActionCreateNRankRecordDetail = () => {
         setIsSearchable(false);
 
-        await reqCreateNRankRecordDetail(() => {
+        reqCreateNRankRecordDetail(() => {
             onActionOpenSearchedRecordDetail();
         })
     }

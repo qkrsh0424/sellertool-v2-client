@@ -6,18 +6,8 @@ export const Wrapper = styled.div`
     @media all and (max-width:992px){
         padding: 20px 10px 0 10px;
     }
+`;
 
-    .button-item {
-        font-size: 1rem;
-        font-weight: 700;
-        background-color: var(--mainColor);
-        border-radius: 10px;
-        color: #fff;
-        box-shadow: var(--defaultBoxShadow);
-    }
+export const DetailWrapper = styled.div`
 
-    .disabled-btn {
-        border-radius: 10px;
-
-    }
 `;

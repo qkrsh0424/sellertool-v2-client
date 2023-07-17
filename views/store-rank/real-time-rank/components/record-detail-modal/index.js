@@ -1,1 +1,1 @@
-export { RecordDetailModalComponent } from "./RecordDetailModal.component"
+export { RecordDetailModalComponent } from "./RecordDetailModalV2.component"

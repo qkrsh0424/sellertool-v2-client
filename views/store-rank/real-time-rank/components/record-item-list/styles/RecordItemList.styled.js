@@ -41,7 +41,6 @@ export const RecordItemBox = styled.div`
 
 export const ControlBox = styled.div`
     opacity: 0;
-    transition: all 0.2s;
 
     ${RecordItemBox}:hover & {
         opacity: 1;

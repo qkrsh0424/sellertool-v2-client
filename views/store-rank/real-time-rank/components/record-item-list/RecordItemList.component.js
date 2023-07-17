@@ -136,6 +136,7 @@ export function RecordItemListComponent({
                     })}
                 </Wrapper>
 
+                {/* record detail (랭킹 조회 내역) 모달창 */}
                 {detailSearchModalOpen && 
                     <RecordDetailModalComponent
                         open={detailSearchModalOpen}
@@ -144,6 +145,7 @@ export function RecordItemListComponent({
                     />
                 }
 
+                {/* 검색 내역 제거 확인 모달창 */}
                 {recordDeleteModalOpen &&
                     <ConfirmModalComponentV2
                         open={recordDeleteModalOpen}

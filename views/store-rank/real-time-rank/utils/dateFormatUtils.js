@@ -3,7 +3,6 @@ import moment from 'moment';
 function diffTimeToHHmmss(startDate, endDate) {
     let diffTime = new Date(endDate) - new Date(startDate);
     let tempTime = moment.duration(diffTime);
-    console.log(tempTime.asMilliseconds())
     return moment.utc(tempTime.asMilliseconds()).format('HH : mm : ss');
 }
 

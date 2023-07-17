@@ -13,6 +13,9 @@ import { PinButtonBox, TableFieldWrapper, ViewHeaderSelectNotice } from "./style
 import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
 import { CustomVirtualTable } from "../../../../../components/table/virtual-table/v1";
 import { TextDragableDancer } from "../../../../../components/tapdancer/v1";
+import { Base64Utils } from "../../../../../utils/base64Utils";
+
+const base64Utils = Base64Utils();
 
 export default function ErpItemListComponent({
     erpCollectionHeader,
@@ -440,7 +443,7 @@ function Td({
             }
 
         case 'receiver':
-            let sameReceiverHint = `${erpItem.receiver}${erpItem.receiverContact1}${erpItem.destination}${erpItem.destinationDetail}`;
+            let sameReceiverHint = base64Utils.encodeBase64(`${erpItem?.receiver}${erpItem?.receiverContact1}${erpItem?.destination}${erpItem?.destinationDetail}`);
             let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
             return (
                 <TextDragableDancer

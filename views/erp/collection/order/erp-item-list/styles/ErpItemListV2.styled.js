@@ -204,16 +204,29 @@ export const TableFieldWrapper = styled.div`
         }
     }
 
-    .view-sameReceiver-button-item{
+    .td-control-button-item{
         user-select: none;
         -webkit-tap-highlight-color: #00000000;
         cursor: pointer;
         outline: none;
         font-size: 11px;
         margin-left: 3px;
-        background: #f7f7f7;
+        background: #a0a0a0;
         border-radius: 3px;
-        border: 1px solid #e0e0e0;
-        color: #606060;
+        border: 1px solid #a0a0a0;
+        color: #404040;
+        padding: 3px;
+        width: 24px;
+        height: 24px;
+    }
+
+    .td-copyable-text{
+        display: inline-block;
+        cursor: pointer;
+        &:hover{
+            transform: scale(1.02);
+            font-weight: 500;
+            color:var(--mainColor);
+        }
     }
 `;

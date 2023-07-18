@@ -8,8 +8,8 @@ import useMarginRecordFormHook from '../hooks/useMarginRecordFormHook';
 import CreateMarginRecordModalComponent from './modal/CreateMarginRecordModal.component';
 import UpdateMarginRecordModalComponent from './modal/UpdateMarginRecordModal.component';
 import ButtonGroupsView from './ButtonGroups.view';
-import { toast } from 'react-toastify';
 import { customToast, defaultOptions } from '../../../../components/toast/custom-react-toastify/v1';
+import { AnalysisUtils } from '../../../../utils/analysisUtils';
 
 const ContentFieldComponent = ({
     marginRecord,
@@ -271,6 +271,7 @@ const ContentFieldComponent = ({
                                 <SingleBlockButton
                                     type='submit'
                                     className='calc-button'
+                                    onClick={() => AnalysisUtils.gtagClickEventHandler(AnalysisUtils.eventName.MARGIN_CALCULATE_BTN_CLICKED, { wsId: workspaceRedux?.workspaceInfo?.id })}
                                 >
                                     계산하기
                                 </SingleBlockButton>

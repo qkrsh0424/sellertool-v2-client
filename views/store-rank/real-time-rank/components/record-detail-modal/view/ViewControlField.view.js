@@ -12,7 +12,7 @@ export default function ViewControlFieldView({
             <ButtonBox>
                 <button
                     className={`button-el ${!isAdRankView && 'active-el'}`}
-                    style={{ borderRadius: '5px 5px 0 0' }}
+                    style={{ borderRadius: '15px 15px 0 0' }}
                     onClick={() => onChangeRankView()}
                 >
                     <span>일반 </span>
@@ -22,7 +22,7 @@ export default function ViewControlFieldView({
             <ButtonBox>
                 <button
                     className={`button-el ${isAdRankView && 'active-el'}`}
-                    style={{ borderRadius: '5px 5px 0 0' }}
+                    style={{ borderRadius: '15px 15px 0 0' }}
                     onClick={() => onChangeAdRankView()}
                 >
                     <span>광고 </span>

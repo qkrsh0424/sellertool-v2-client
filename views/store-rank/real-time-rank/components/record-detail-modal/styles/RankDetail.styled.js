@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
     max-height: 45vh;
     margin-bottom: 20px;
     border: 1px solid #4c4c4c;
-    border-radius: 0 15px 15px 15px;
+    border-radius: 0 0 15px 15px;
     box-shadow: var(--defaultBoxShadow);
     padding: 10px;
     background-color: #4c4c4c;

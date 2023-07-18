@@ -90,15 +90,6 @@ export default function RankDetailFieldView({
                             </div>
                             <div className='rank-field'>
                                 <InfoGroupBox>
-                                    {detail.price_comparision_yn === 'y' &&
-                                        <div>
-                                            <span style={{ color: '#000', fontWeight: '700' }}>가격 비교 </span>
-                                            <span style={{ color: '#000', fontWeight: '700' }}>{detail.comparision_rank}위 </span>
-                                            <span>(총 {detail.low_mall_count}개 중)</span>
-                                        </div>
-                                    }
-                                </InfoGroupBox>
-                                <InfoGroupBox>
                                     <div className='accent-text'>
                                         <span>총 </span>
                                         <span style={{ color: 'var(--mainColor)' }}>{detail.rank}위 </span>
@@ -108,6 +99,15 @@ export default function RankDetailFieldView({
                                         <span>-</span>
                                         <span>{detail.rank % 40 === 0 ? (detail.rank) : (detail.rank % 40)}위)</span>
                                     </div>
+                                </InfoGroupBox>
+                                <InfoGroupBox>
+                                    {detail.price_comparision_yn === 'y' &&
+                                        <div>
+                                            <span style={{ color: '#000', fontWeight: '700' }}>가격 비교 </span>
+                                            <span style={{ color: '#000', fontWeight: '700' }}>{detail.comparision_rank}위 </span>
+                                            <span>(총 {detail.low_mall_count}개 중)</span>
+                                        </div>
+                                    }
                                 </InfoGroupBox>
                                 <InfoGroupBox>
                                     <div>

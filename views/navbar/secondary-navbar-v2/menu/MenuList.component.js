@@ -190,7 +190,7 @@ const MENU_LIST = [
                 targetBlank: false
             },
             {
-                title: '판매 분석',
+                title: '통합 판매 분석',
                 href: '/sales-analysis/dashboard',
                 targetBlank: false
             }

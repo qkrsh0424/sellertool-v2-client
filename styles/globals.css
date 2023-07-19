@@ -12,11 +12,12 @@
     --defaultBlueColor: #418cff;
     --defaultBlueColorOpacity100: #418cff10;
     --defaultBlueColorOpacity200: #418cff20;
+    --defaultSkyBlueColor: #5c8cd5;
     --defaultRedColor: #e56767;
     --defaultRedColorOpacity500: #e5676780;
     --defaultRedColorOpacity30: #e5676730;
-    --defaultYellowColor:#eed202;
-    --defaultYellowColorOpacity30:#eed20230;
+    --defaultYellowColor: #eed202;
+    --defaultYellowColorOpacity30: #eed20230;
     --defaultGreenColor: #5fcf80;
     --defaultGreenColorOpacity40: #5fcf8040;
     --defaultGrayColor: #f1f3f9;

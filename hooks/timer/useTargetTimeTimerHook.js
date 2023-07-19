@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { diffTimeToHHmmss } from "../../views/store-rank/real-time-rank/utils/dateFormatUtils";
+import { diffTimeToHHmmss } from "../../views/store-rank/real-time-rank/v1/utils/dateFormatUtils";
 
 export default function useTargetTimeTimerHook() {
     const [targetTime, setTargetTime] = useState(null);

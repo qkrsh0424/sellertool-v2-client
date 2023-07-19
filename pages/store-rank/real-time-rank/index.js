@@ -2,7 +2,7 @@ import Head from "next/head";
 import FooterMain from "../../../views/footer/FooterMain";
 import PrimaryNavbarMainComponent from "../../../views/navbar/primary-navbar";
 import SecondaryNavbarMainComponent from "../../../views/navbar/secondary-navbar-v2";
-import MainComponent from "../../../views/store-rank/real-time-rank";
+import MainComponent from "../../../views/store-rank/real-time-rank/v2";
 
 const StoreRankRealTimeRankPage = () => {
     return (

@@ -455,189 +455,227 @@ function Td({
     onActionOpenEditReleaseOptionCodeModal,
     onActionOpenItemsForSameReceiverModal
 }) {
+    let renderingType = 'default';
+    
     switch (matchedFieldName) {
-        case 'createdAt': case 'salesAt': case 'releaseAt': case 'holdAt': case 'channelOrderDate':
-            return (
-                <td>
+        case 'createdAt': case 'salesAt': case 'releaseAt': case 'holdAt': case 'channelOrderDate': renderingType = 'date'; break;
+        case 'price': case 'deliveryCharge': renderingType = 'money'; break;
+        case 'optionCode': renderingType = 'optionCode'; break;
+        case 'releaseOptionCode': renderingType = 'releaseOptionCode'; break;
+        case 'optionStockUnit': renderingType = 'optionStockUnit'; break;
+        case 'receiver': renderingType = 'receiver'; break;
+        default: renderingType = 'default'; break;
+    }
+
+    return RenderingTdComponent({
+        erpItem,
+        matchedFieldName,
+        isPackaged,
+        isOutOfStock,
+        inventoryStock,
+        erpItemSameReceiverHints,
+        onActionOpenEditOptionCodeModal,
+        onActionOpenEditReleaseOptionCodeModal,
+        onActionOpenItemsForSameReceiverModal
+    })[renderingType];
+}
+
+const RenderingTdComponent = (props) => ({
+    date: <DateTd {...props} />,
+    money: <MoneyTd {...props} />,
+    optionCode: <OptionCodeTd {...props} />,
+    releaseOptionCode: <ReleaseOptionCodeTd {...props} />,
+    optionStockUnit: <OptionStockUnitTd {...props} />,
+    receiver: <ReceiverTd {...props} />,
+    default: <DefaultTd {...props} />,
+});
+
+function DateTd(props) {
+    const erpItem = props?.erpItem;
+    const matchedFieldName = props?.matchedFieldName;
+
+    return (
+        <td>
+            <TextDragableDancer
+                type='span'
+                className='td-copyable-text'
+                onTapInRange={(e) => {
+                    e.stopPropagation();
+                    ClipboardUtils.copyToClipboard(erpItem[matchedFieldName] ? dateToYYYYMMDDhhmmss(erpItem[matchedFieldName]) : "")
+                }}
+            >
+                {erpItem[matchedFieldName] ? dateToYYYYMMDDhhmmss(erpItem[matchedFieldName]) : ""}
+            </TextDragableDancer>
+        </td>
+    );
+}
+
+function MoneyTd(props) {
+    const erpItem = props?.erpItem;
+    const matchedFieldName = props?.matchedFieldName;
+
+    return (
+        <td>
+            <TextDragableDancer
+                type='span'
+                className='td-copyable-text'
+                onTapInRange={(e) => {
+                    e.stopPropagation();
+                    ClipboardUtils.copyToClipboard(erpItem[matchedFieldName] ? numberWithCommas(erpItem[matchedFieldName]) : "0")
+                }}
+            >
+                {erpItem[matchedFieldName] ? numberWithCommas(erpItem[matchedFieldName]) : "0"}
+            </TextDragableDancer>
+        </td>
+    );
+}
+
+function OptionCodeTd(props) {
+    const erpItem = props?.erpItem;
+    const matchedFieldName = props?.matchedFieldName;
+    const onActionOpenEditOptionCodeModal = props?.onActionOpenEditOptionCodeModal;
+
+    return (
+        <td>
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '100%'
+                }}
+            >
+                <div
+                    style={{
+                        background: 'var(--defaultBlueColor)',
+                        borderRadius: '5px',
+                        width: '5px',
+                        height: '100%'
+                    }}
+                ></div>
+                <div style={{ flex: 7 }}>
                     <TextDragableDancer
                         type='span'
                         className='td-copyable-text'
                         onTapInRange={(e) => {
                             e.stopPropagation();
-                            ClipboardUtils.copyToClipboard(erpItem[matchedFieldName] ? dateToYYYYMMDDhhmmss(erpItem[matchedFieldName]) : "")
+                            ClipboardUtils.copyToClipboard(erpItem[matchedFieldName])
+                        }}
+                        style={{
+                            color: erpItem[matchedFieldName] ? '' : '#808080'
                         }}
                     >
-                        {erpItem[matchedFieldName] ? dateToYYYYMMDDhhmmss(erpItem[matchedFieldName]) : ""}
+                        {erpItem[matchedFieldName] || '[M] 옵션코드 미지정'}
                     </TextDragableDancer>
-                </td>
-            );
-        case 'price': case 'deliveryCharge':
-            return (
-                <td>
+                </div>
+                <TextDragableDancer
+                    type='button'
+                    className='td-control-button-item'
+                    onTapInRange={(e) => onActionOpenEditOptionCodeModal(e, erpItem)}
+                >
+                    <CustomImage
+                        src={'/images/icon/search_default_ffffff.svg'}
+                    />
+                </TextDragableDancer>
+            </div>
+        </td>
+    );
+}
+
+function ReleaseOptionCodeTd(props) {
+    const erpItem = props?.erpItem;
+    const matchedFieldName = props?.matchedFieldName;
+    const onActionOpenEditReleaseOptionCodeModal = props?.onActionOpenEditReleaseOptionCodeModal;
+
+    return (
+        <td>
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '100%'
+                }}
+            >
+                <div
+                    style={{
+                        background: 'var(--defaultBlueColor)',
+                        borderRadius: '5px',
+                        width: '5px',
+                        height: '100%'
+                    }}
+                ></div>
+                <div style={{ flex: 1 }}>
                     <TextDragableDancer
                         type='span'
                         className='td-copyable-text'
                         onTapInRange={(e) => {
                             e.stopPropagation();
-                            ClipboardUtils.copyToClipboard(erpItem[matchedFieldName] ? numberWithCommas(erpItem[matchedFieldName]) : "0")
+                            ClipboardUtils.copyToClipboard(erpItem[matchedFieldName])
+                        }}
+                        style={{
+                            color: erpItem[matchedFieldName] ? '' : '#808080'
                         }}
                     >
-                        {erpItem[matchedFieldName] ? numberWithCommas(erpItem[matchedFieldName]) : "0"}
+                        {erpItem[matchedFieldName] || '[M] 출고옵션코드 미지정'}
                     </TextDragableDancer>
-                </td>
-            );
-        case 'optionCode':
-            return (
-                <td>
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            height: '100%'
-                        }}
-                    >
-                        <div
-                            style={{
-                                background: 'var(--defaultBlueColor)',
-                                borderRadius: '5px',
-                                width: '5px',
-                                height: '100%'
-                            }}
-                        ></div>
-                        <div style={{ flex: 7 }}>
-                            <TextDragableDancer
-                                type='span'
-                                className='td-copyable-text'
-                                onTapInRange={(e) => {
-                                    e.stopPropagation();
-                                    ClipboardUtils.copyToClipboard(erpItem[matchedFieldName])
-                                }}
-                                style={{
-                                    color: erpItem[matchedFieldName] ? '' : '#808080'
-                                }}
-                            >
-                                {erpItem[matchedFieldName] || '[M] 옵션코드 미지정'}
-                            </TextDragableDancer>
-                        </div>
-                        <TextDragableDancer
-                            type='button'
-                            className='td-control-button-item'
-                            onTapInRange={(e) => onActionOpenEditOptionCodeModal(e, erpItem)}
-                        >
-                            <CustomImage
-                                src={'/images/icon/search_default_ffffff.svg'}
-                            />
-                        </TextDragableDancer>
-                    </div>
-                </td>
-            )
-        case 'releaseOptionCode':
-            return (
-                <td>
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            height: '100%'
-                        }}
-                    >
-                        <div
-                            style={{
-                                background: 'var(--defaultBlueColor)',
-                                borderRadius: '5px',
-                                width: '5px',
-                                height: '100%'
-                            }}
-                        ></div>
-                        <div style={{ flex: 1 }}>
-                            <TextDragableDancer
-                                type='span'
-                                className='td-copyable-text'
-                                onTapInRange={(e) => {
-                                    e.stopPropagation();
-                                    ClipboardUtils.copyToClipboard(erpItem[matchedFieldName])
-                                }}
-                                style={{
-                                    color: erpItem[matchedFieldName] ? '' : '#808080'
-                                }}
-                            >
-                                {erpItem[matchedFieldName] || '[M] 출고옵션코드 미지정'}
-                            </TextDragableDancer>
-                        </div>
-                        <TextDragableDancer
-                            type='button'
-                            className='td-control-button-item'
-                            onTapInRange={(e) => onActionOpenEditReleaseOptionCodeModal(e, erpItem)}
-                        >
-                            <CustomImage
-                                src={'/images/icon/search_default_ffffff.svg'}
-                                loading="eager"
-                            />
-                        </TextDragableDancer>
-                    </div>
-                </td>
-            )
-        case 'optionStockUnit':
-            if (isPackaged) {
-                return (
-                    <td style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity500)' : '', color: 'var(--defaultGreenColor)' }}>패키지상품</td>
-                );
-            } else {
-                return (
-                    <td style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity500)' : '' }}>{inventoryStock ? inventoryStock.stockUnit : '옵션코드 미지정'}</td>
-                );
-            }
-        case 'receiver':
-            let sameReceiverHint = base64Utils.encodeBase64(`${erpItem?.receiver}${erpItem?.receiverContact1}${erpItem?.destination}${erpItem?.destinationDetail}`);
-            let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
-            return (
-                <td>
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            height: '100%'
-                        }}
-                    >
-                        <div
-                            style={{
-                                background: hasSameReceiver ? 'var(--defaultPurpleColor)' : '',
-                                borderRadius: '5px',
-                                width: '5px',
-                                height: '100%'
-                            }}
-                        ></div>
-                        <div style={{ flex: 1 }}>
-                            <TextDragableDancer
-                                type='span'
-                                className='td-copyable-text'
-                                onTapInRange={(e) => {
-                                    e.stopPropagation();
-                                    ClipboardUtils.copyToClipboard(erpItem[matchedFieldName])
-                                }}
-                            >
-                                {erpItem[matchedFieldName]}
-                            </TextDragableDancer>
-                        </div>
-                        <div style={{ width: '30px' }}>
-                            {hasSameReceiver &&
-                                <TextDragableDancer
-                                    type='button'
-                                    className='td-control-button-item'
-                                    onTapInRange={hasSameReceiver ? (e) => onActionOpenItemsForSameReceiverModal(e, sameReceiverHint) : () => { }}
-                                >
-                                    <CustomImage
-                                        src={'/images/icon/search_default_ffffff.svg'}
-                                    />
-                                </TextDragableDancer>
-                            }
-                        </div>
-                    </div>
-                </td >
-            );
-        default:
-            return (
-                <td>
+                </div>
+                <TextDragableDancer
+                    type='button'
+                    className='td-control-button-item'
+                    onTapInRange={(e) => onActionOpenEditReleaseOptionCodeModal(e, erpItem)}
+                >
+                    <CustomImage
+                        src={'/images/icon/search_default_ffffff.svg'}
+                        loading="eager"
+                    />
+                </TextDragableDancer>
+            </div>
+        </td>
+    );
+}
+
+function OptionStockUnitTd(props) {
+    const isPackaged = props?.isPackaged;
+    const isOutOfStock = props?.isOutOfStock;
+    const inventoryStock = props?.inventoryStock;
+
+    if (isPackaged) {
+        return (
+            <td style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity500)' : '', color: 'var(--defaultGreenColor)' }}>패키지상품</td>
+        );
+    } else {
+        return (
+            <td style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity500)' : '' }}>{inventoryStock ? inventoryStock?.stockUnit : '옵션코드 미지정'}</td>
+        );
+    }
+
+}
+
+function ReceiverTd(props) {
+    const erpItem = props?.erpItem;
+    const matchedFieldName = props?.matchedFieldName;
+    const erpItemSameReceiverHints = props?.erpItemSameReceiverHints;
+    const onActionOpenItemsForSameReceiverModal = props?.onActionOpenItemsForSameReceiverModal;
+    const sameReceiverHint = base64Utils.encodeBase64(`${erpItem?.receiver}${erpItem?.receiverContact1}${erpItem?.destination}${erpItem?.destinationDetail}`);
+    const hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
+
+    return (
+        <td>
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '100%'
+                }}
+            >
+                <div
+                    style={{
+                        background: hasSameReceiver ? 'var(--defaultPurpleColor)' : '',
+                        borderRadius: '5px',
+                        width: '5px',
+                        height: '100%'
+                    }}
+                ></div>
+                <div style={{ flex: 1 }}>
                     <TextDragableDancer
                         type='span'
                         className='td-copyable-text'
@@ -648,7 +686,41 @@ function Td({
                     >
                         {erpItem[matchedFieldName]}
                     </TextDragableDancer>
-                </td>
-            )
-    }
+                </div>
+                <div style={{ width: '30px' }}>
+                    {hasSameReceiver &&
+                        <TextDragableDancer
+                            type='button'
+                            className='td-control-button-item'
+                            onTapInRange={hasSameReceiver ? (e) => onActionOpenItemsForSameReceiverModal(e, sameReceiverHint) : () => { }}
+                        >
+                            <CustomImage
+                                src={'/images/icon/search_default_ffffff.svg'}
+                            />
+                        </TextDragableDancer>
+                    }
+                </div>
+            </div>
+        </td>
+    );
+}
+
+function DefaultTd(props) {
+    const erpItem = props?.erpItem;
+    const matchedFieldName = props?.matchedFieldName;
+
+    return (
+        <td>
+            <TextDragableDancer
+                type='span'
+                className='td-copyable-text'
+                onTapInRange={(e) => {
+                    e.stopPropagation();
+                    ClipboardUtils.copyToClipboard(erpItem[matchedFieldName])
+                }}
+            >
+                {erpItem[matchedFieldName]}
+            </TextDragableDancer>
+        </td>
+    )
 }

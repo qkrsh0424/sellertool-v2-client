@@ -38,9 +38,9 @@ export default function useTargetTimeTimerHook() {
         setIsTimerActive(true);
     }
 
-    const onInactiveTimer = () => {
-        setIsTimerActive(false);
-    }
+    // const onInactiveTimer = () => {
+    //     setIsTimerActive(false);
+    // }
 
     const onUpdateTargetTime = (targetTime) => {
         setTargetTime(targetTime);
@@ -51,6 +51,6 @@ export default function useTargetTimeTimerHook() {
         isTimerActive,
         onUpdateTargetTime,
         onActiveTimer,
-        onInactiveTimer,
+        // onInactiveTimer,
     }
 }

@@ -140,7 +140,6 @@ export function RecordItemListComponent({
                                                 </ContentValue>
                                             </ContentGroup>
                                             <ContentGroup>
-                                                {/* <span>최근 검색일시 : </span> */}
                                                 <ContentValue>
                                                     {currentRecordInfo ?
                                                         <div style={{ color: '#444', fontSize: '16px' }}>
@@ -179,7 +178,7 @@ export function RecordItemListComponent({
                         message={
                             (
                                 <>
-                                    <div>검색 내역을 삭제하면 <span style={{ color: 'var(--defaultRedColor)' }}>하위 데이터(랭킹 조회 결과)도 모두 삭제됩니다.</span></div>
+                                    <div>검색 내역을 삭제하면 <span style={{ color: 'var(--defaultRedColor)' }}>하위 데이터(랭킹 조회 내역)도 모두 삭제됩니다.</span></div>
                                     <div>정말로 해당 검색 내역을 삭제하시겠습니까?</div>
                                 </>
                             )
@@ -189,10 +188,7 @@ export function RecordItemListComponent({
                             width: '40%'
                         }}
                         onConfirm={() => handleDeleteRankRecord(selectedRecord.id)}
-                    >
-
-
-                    </ConfirmModalComponentV2>
+                    />
                 }
             </Container>
         </>

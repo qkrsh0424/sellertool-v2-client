@@ -5,7 +5,7 @@ import RankDetailFieldView from "./view/RankDetailField.view";
 import RecordInfoFieldView from "./view/RecordInfoField.view";
 import ButtonFieldView from "./view/ButtonField.view";
 import AdRankDetailFieldView from "./view/AdRankDetailField.view";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ViewControlFieldView from "./view/ViewControlField.view";
 import { CustomDialog } from "../../../../../../../components/dialog/v1/CustomDialog";
 
@@ -16,26 +16,13 @@ export function RecordDetailModalComponent({
     reqSearchNRankRecordList
 }) {
     const [isAdRankView, setIsAdRankView] = useState(false);
-    const [currentRecordInfo, setCurrentRecordInfo] = useState(null);
 
     const {
         recordDetails,
         adRecordDetails,
+        targetRecordInfo,
         reqCreateNRankRecordDetail
     } = useNRankRecordDetailHook({ record });
-
-    useEffect(() => {
-        if(!record) {
-            return;
-        }
-
-        handleInitCurrentRecordInfo()
-    }, [record])
-
-    const handleInitCurrentRecordInfo = () => {
-        let data = record?.infos?.find(info => record.current_nrank_record_info_id === info.id);
-        setCurrentRecordInfo(data);
-    }
 
     const handleChangeAdRankView = () => {
         setIsAdRankView(true);
@@ -63,10 +50,10 @@ export function RecordDetailModalComponent({
                 <Wrapper>
                     <RecordInfoFieldView
                         record={record}
-                        currentRecordInfo={currentRecordInfo}
+                        targetRecordInfo={targetRecordInfo}
                     />
                     <ButtonFieldView
-                        currentRecordInfo={currentRecordInfo}
+                        targetRecordInfo={targetRecordInfo}
                         onSubmit={handleCreateNRankRecordDetail}
                     />
                     <DetailWrapper>
@@ -83,7 +70,7 @@ export function RecordDetailModalComponent({
                             />
                             :
                             <RankDetailFieldView
-                                currentRecordInfo={currentRecordInfo}
+                                targetRecordInfo={targetRecordInfo}
                                 recordDetails={recordDetails}
                             />
                         }

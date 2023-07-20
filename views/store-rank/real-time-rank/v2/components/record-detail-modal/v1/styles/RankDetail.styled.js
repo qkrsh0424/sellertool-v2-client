@@ -19,7 +19,6 @@ export const DetailInfoWrapper = styled.div`
     font-weight: 600;
     color: #666;
     padding: 10px;
-    margin-bottom: 10px;
     border-bottom: 4px solid #eef2f9;
 
     &:last-child {

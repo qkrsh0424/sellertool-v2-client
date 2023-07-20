@@ -5,10 +5,9 @@ import { Wrapper } from "../styles/Button.styled";
 import { CustomBoxImage } from "../../../../modules";
 import { CustomBlockButton } from "../../../buttons/block-button/v1";
 import { CustomProgressBar } from "../../../progress/progress-bar/v1";
-import { Fab, LinearProgress } from "@mui/material";
 
 export default function ButtonFieldView({
-    currentRecordInfo,
+    targetRecordInfo,
     onSubmit
 }) {
     const [disabledBtn, setDisabledBtn] = useState(false);
@@ -21,15 +20,15 @@ export default function ButtonFieldView({
     } = useTargetTimeTimerHook();
 
     useEffect(() => {
-        if(!currentRecordInfo) {
+        if(!targetRecordInfo) {
             return;
         }
 
-        let targetTime = setPlusTime(currentRecordInfo?.created_at, 1, 0, 0);
+        let targetTime = setPlusTime(targetRecordInfo?.created_at, 1, 0, 0);
         onUpdateTargetTime(targetTime);
         onActiveTimer();
         setDisabledBtn(false)
-    }, [currentRecordInfo])
+    }, [targetRecordInfo])
 
     const handleSubmit = (e) => {
         e.preventDefault();

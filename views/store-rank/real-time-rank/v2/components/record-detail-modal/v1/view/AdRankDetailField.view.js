@@ -61,7 +61,7 @@ export default function AdRankDetailFieldView({
                                         <div>
                                             <CustomBoxImage
                                                 src="/images/icon/star_default_ffdf00.svg"
-                                                size='30px'
+                                                size='20px'
                                             />
                                         </div>
                                         <div>

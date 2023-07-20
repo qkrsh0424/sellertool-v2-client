@@ -15,8 +15,8 @@ export default function ViewControlFieldView({
                     style={{ borderRadius: '15px 15px 0 0' }}
                     onClick={() => onChangeRankView()}
                 >
-                    <span>일반 </span>
-                    <span>({recordDetails?.length ?? 0})</span>
+                    <div>일반</div>
+                    <div className='sub-info'>{recordDetails?.length ?? 0}</div>
                 </button>
             </ButtonBox>
             <ButtonBox>
@@ -25,8 +25,8 @@ export default function ViewControlFieldView({
                     style={{ borderRadius: '15px 15px 0 0' }}
                     onClick={() => onChangeAdRankView()}
                 >
-                    <span>광고 </span>
-                    <span>({adRecordDetails?.length ?? 0})</span>
+                    <div>광고</div>
+                    <div className='sub-info'>{adRecordDetails?.length ?? 0}</div>
                 </button>
             </ButtonBox>
         </Wrapper>

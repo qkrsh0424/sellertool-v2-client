@@ -26,6 +26,10 @@ export const ButtonBox = styled.div`
         transition: 0.15s;
         box-shadow: var(--defaultBoxShadow);
 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
 
         &:hover {
             background-color: #f0f2f4;
@@ -36,6 +40,18 @@ export const ButtonBox = styled.div`
             border: 1px solid #eef2f9;
             color: #404040;
             font-weight: 600;
+
+            .sub-info {
+                background-color: #c4cad4;
+            }
+        }
+        
+        .sub-info {
+            background-color: #d8d8d8;
+            border-radius: 2px;
+            color: white;
+            padding: 2px 7px;
+            margin: 0 10px;
         }
     }
 `;

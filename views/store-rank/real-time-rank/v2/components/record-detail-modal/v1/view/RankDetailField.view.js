@@ -5,8 +5,8 @@ import { DetailInfoWrapper, InfoGroupBox, InfoText, Wrapper } from "../styles/Ra
 const NAVER_SHOPPING_PRODUCT_URL = "https://smartstore.naver.com/main/products/"
 
 export default function RankDetailFieldView({
-    currentRecordInfo,
-    recordDetails
+    recordDetails,
+    targetRecordInfo
 }) {
     return (
         <Wrapper>
@@ -69,7 +69,7 @@ export default function RankDetailFieldView({
                                         <div>
                                             <CustomBoxImage
                                                 src="/images/icon/star_default_ffdf00.svg"
-                                                size='30px'
+                                                size='20px'
                                             />
                                         </div>
                                         <div>
@@ -125,7 +125,7 @@ export default function RankDetailFieldView({
 
             {!(recordDetails?.length > 0) &&
                 <InfoText>
-                    {currentRecordInfo?.created_at ?
+                    {targetRecordInfo?.created_at ?
                         <div>조회된 페이지 내 순위에 오르지 못했습니다</div>
                         :
                         <div>조회 버튼을 눌러 순위를 검색해보세요</div>

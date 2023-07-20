@@ -8,6 +8,7 @@ export default function useNRankRecordDetailHook({
 }) {
     const [recordDetails, setRecordDetails] = useState(null);
     const [adRecordDetails, setAdRecordDetails] = useState(null);
+    const [targetRecordInfo, setTargetRecordInfo] = useState(null);
     const workspaceRedux = useSelector(state => state.workspaceRedux);
 
     useEffect(() => {
@@ -28,6 +29,20 @@ export default function useNRankRecordDetailHook({
         workspaceRedux?.workspaceInfo?.id,
         record
     ])
+
+    useEffect(() => {
+        if(!(record && record.current_nrank_record_info_id)) {
+            return;
+        }
+
+        onActionUpdateTargetRecordInfo(record.current_nrank_record_info_id);
+    }, [record])
+
+    const onActionUpdateTargetRecordInfo = (targetId) => {
+        let target = record.infos?.find(info => info.id === targetId);
+
+        setTargetRecordInfo(target);
+    }
 
     const reqSearchNRankRecordDetail = async () => {
         let params = {
@@ -91,6 +106,7 @@ export default function useNRankRecordDetailHook({
     return {
         recordDetails,
         adRecordDetails,
+        targetRecordInfo,
         reqCreateNRankRecordDetail
     }
 }

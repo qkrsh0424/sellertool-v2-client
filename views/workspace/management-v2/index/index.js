@@ -9,6 +9,7 @@ import InviteMemberComponent from "./invite-member/InviteMember.component";
 import AuthTemplateListComponent from "./auth-template-list/AuthTemplateList.component";
 import ProfileComponent from "./profile/Profile.component";
 import SettingsComponent from "./settings/Settings.component";
+import SubscriptionPlanComponent from "./subscription-plan";
 
 const Container = styled.div`
     background-color: var(--defaultBackground);
@@ -61,6 +62,7 @@ const WorkspaceManagementMainComponent = (props) => {
                         onSubmitModifyWorkspaceName={handleSubmitModifyWorkspaceName}
                     />
                     <LayoutComponent
+                        workspace={workspace}
                         isWorkspaceMaster={workspace?.masterFlag}
                     >
                         {
@@ -102,6 +104,14 @@ const WorkspaceManagementMainComponent = (props) => {
                                     workspace={workspace}
                                     onSubmitDeleteWorkspace={handleSubmitDeleteWorkspace}
                                     onSubmitChangeSubscriptionPlanToPrivate={handleSubmitChangeSubscriptionPlanToPrivate}
+                                />
+                            )
+                        }
+                        {
+                            (workspace?.masterFlag && viewType && viewType === 'SUBSCRIPTION_PLAN') &&
+                            (
+                                <SubscriptionPlanComponent
+                                    workspace={workspace}
                                 />
                             )
                         }

@@ -10,6 +10,10 @@ export const Wrapper = styled.div`
         border-radius: 10px;
         color: #fff;
         box-shadow: var(--defaultBoxShadow);
+
+        &:hover {
+            background-color: var(--mainColorHover);
+        }
     }
 
     .disabled-btn {

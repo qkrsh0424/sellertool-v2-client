@@ -69,10 +69,6 @@ export function RecordItemListComponent({
         })
     }
 
-    const onActionOpenSearchedRecordDetail = async () => {
-        await reqSearchNRankRecordList();
-    }
-
     return (
         <>
             <Container>
@@ -140,10 +136,11 @@ export function RecordItemListComponent({
                                                 </ContentValue>
                                             </ContentGroup>
                                             <ContentGroup>
+                                                <span>최근 조회 : </span>
                                                 <ContentValue>
                                                     {currentRecordInfo ?
-                                                        <div style={{ color: '#444', fontSize: '16px' }}>
-                                                            <span >{dateToStrYYYYMMDD(currentRecordInfo.created_at)} </span>
+                                                        <div style={{ color: '#444', fontSize: '16px', display: 'inline' }}>
+                                                            <span>{dateToStrYYYYMMDD(currentRecordInfo.created_at)} </span>
                                                             <span>({dateToStrHHmm(currentRecordInfo.created_at)})</span>
                                                         </div>
                                                         :
@@ -165,7 +162,6 @@ export function RecordItemListComponent({
                         open={detailSearchModalOpen}
                         record={selectedRecord}
                         onClose={handleCloseDetailSearchModal}
-                        onActionOpenSearchedRecordDetail={onActionOpenSearchedRecordDetail}
                         reqSearchNRankRecordList={reqSearchNRankRecordList}
                     />
                 }

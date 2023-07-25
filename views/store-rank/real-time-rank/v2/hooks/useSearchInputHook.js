@@ -68,12 +68,19 @@ export default function useSearchInputHook({
             throw new Error("검색 스토어명을 정확하게 입력해주세요.")
         }
 
+        if(keyword.length > 50) {
+            throw new Error("키워드는 50자 이내로 입력해주세요.")
+        }
+
+        if(mallName.length > 50) {
+            throw new Error("스토어명은 50자 이내로 입력해주세요.")
+        }
+
         if(recordList?.length > 0) {
             if(recordList.find(r => r.keyword === keyword && r.mall_name === mallName)) {
                 throw new Error("동일한 검색항목이 존재합니다")
             }
         }
-        // TODO :: mallName, keyword 글자수 제한 추가
     }
 
     return {

@@ -24,7 +24,7 @@ export function CustomProgressBar({
     value,
     className,
     thickness,
-    customColor,
+    customColor = '#efefef',
     ...props
 }) {
     return (

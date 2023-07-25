@@ -11,6 +11,7 @@ export default function ViewControlFieldView({
         <Wrapper>
             <ButtonBox>
                 <button
+                    type='button'
                     className={`button-el ${!isAdRankView && 'active-el'}`}
                     style={{ borderRadius: '15px 15px 0 0' }}
                     onClick={() => onChangeRankView()}
@@ -21,6 +22,7 @@ export default function ViewControlFieldView({
             </ButtonBox>
             <ButtonBox>
                 <button
+                    type='button'
                     className={`button-el ${isAdRankView && 'active-el'}`}
                     style={{ borderRadius: '15px 15px 0 0' }}
                     onClick={() => onChangeAdRankView()}

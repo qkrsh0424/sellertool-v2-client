@@ -6,6 +6,7 @@ import { customToast, defaultOptions } from "../../../../../../../../components/
 export default function useNRankRecordDetailHook({
     record
 }) {
+    const [isLoading, setIsLoading] = useState(false);
     const [recordDetails, setRecordDetails] = useState(null);
     const [adRecordDetails, setAdRecordDetails] = useState(null);
     const [targetRecordInfo, setTargetRecordInfo] = useState(null);
@@ -80,6 +81,8 @@ export default function useNRankRecordDetailHook({
     }
 
     const reqCreateNRankRecordDetail = async (successCallback) => {
+        setIsLoading(true);
+
         let body = {
             record_id: record.id
         }
@@ -91,7 +94,12 @@ export default function useNRankRecordDetailHook({
         await nRankRecordDetailDataConnect().createList(body, headers)
             .then(res => {
                 if(res.status === 200) {
-                    successCallback()
+                    let content = "조회 결과가 업데이트되었습니다."
+                    customToast.success(content, {
+                        ...defaultOptions,
+                        toastId: content
+                    });
+                    successCallback();
                 }
             })
             .catch(err => {
@@ -99,11 +107,14 @@ export default function useNRankRecordDetailHook({
                 customToast.error(res?.data?.memo, {
                     ...defaultOptions,
                     toastId: res?.data?.memo
-                })
+                });
             })
+
+        setIsLoading(false);
     }
 
     return {
+        isLoading,
         recordDetails,
         adRecordDetails,
         targetRecordInfo,

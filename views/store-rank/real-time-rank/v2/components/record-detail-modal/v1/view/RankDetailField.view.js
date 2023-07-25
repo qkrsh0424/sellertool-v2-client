@@ -1,5 +1,5 @@
-import { dateToYYYYMMDD } from "../../../../../../../../utils/dateFormatUtils";
 import { CustomBoxImage } from "../../../../modules/index";
+import { strToYYYYMMDD } from "../../../../utils/dateFormatUtils";
 import { DetailInfoWrapper, InfoGroupBox, InfoText, Wrapper } from "../styles/RankDetail.styled";
 
 const NAVER_SHOPPING_PRODUCT_URL = "https://smartstore.naver.com/main/products/"
@@ -13,11 +13,6 @@ export default function RankDetailFieldView({
             {recordDetails?.map((detail, idx) => {
                 return (
                     <DetailInfoWrapper key={'record_detail_list_idx' + idx}>
-                        <div className='sub-info'>
-                            {detail.price_comparision_yn === 'y' &&
-                                <div className='sub-info-box' style={{ "--default-box-color": "#9da0a9" }}>가격 비교</div>
-                            }
-                        </div>
                         <div>
                             <CustomBoxImage
                                 className='image-el'
@@ -28,6 +23,11 @@ export default function RankDetailFieldView({
                         <div style={{ padding: '0 10px' }}>
                             <div className='info-field'>
                                 <InfoGroupBox>
+                                    <div className='sub-info'>
+                                        {detail.price_comparision_yn === 'y' &&
+                                            <div className='sub-info-box' style={{ "--default-box-color": "#9da0a9" }}>가격 비교</div>
+                                        }
+                                    </div>
                                     <div className='hover-effet'>
                                         <a href={NAVER_SHOPPING_PRODUCT_URL + detail.mall_product_id} target="_blank" rel="noopener">
                                             <span className='accent-text'>{detail.product_title}</span>
@@ -87,7 +87,7 @@ export default function RankDetailFieldView({
                                 <InfoGroupBox>
                                     <div>
                                         <span>상품 게시일 : </span>
-                                        <span>{detail.registration_date ? dateToYYYYMMDD(detail.registration_date) : '-'}</span>
+                                        <span>{detail.registration_date ? strToYYYYMMDD(detail.registration_date) : '-'}</span>
                                     </div>
                                 </InfoGroupBox>
                             </div>

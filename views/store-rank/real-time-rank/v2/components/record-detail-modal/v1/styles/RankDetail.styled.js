@@ -19,6 +19,8 @@ export const DetailInfoWrapper = styled.div`
     font-weight: 600;
     color: #666;
     padding: 10px;
+    min-height: 200px;
+    max-height: 200px;
     border-bottom: 4px solid #eef2f9;
 
     &:last-child {
@@ -45,23 +47,6 @@ export const DetailInfoWrapper = styled.div`
         font-size: 1.1rem;
         color: #4b4b4b;
     }
-
-    .sub-info {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        min-height: 20px;
-        position: absolute;
-        top: 0;
-
-        .sub-info-box {
-            padding: 0 4px;
-            background-color: var(--default-box-color);
-            border: 1px solid var(--default-box-color);
-            color: white;
-            border-radius: 2px;
-        }
-    }
 `;
 
 export const InfoGroupBox = styled.div`
@@ -78,12 +63,30 @@ export const InfoGroupBox = styled.div`
             text-underline-offset: 1px;
         }
     }
+
+    .sub-info {
+        display: flex;
+        align-items: center;
+        min-height: 20px;
+
+        .sub-info-box {
+            padding: 0 4px;
+            background-color: var(--default-box-color);
+            border: 1px solid var(--default-box-color);
+            color: white;
+            border-radius: 2px;
+        }
+    }
 `;
 
 export const InfoText = styled.div`
-    height: 40vh;
+    position: absolute;
+    top: 1;
+    left: 0;
+    width: 100%;
+    height: 90%;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #666;
+    color: #939393;
 `;

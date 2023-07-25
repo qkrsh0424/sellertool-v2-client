@@ -8,6 +8,7 @@ import AdRankDetailFieldView from "./view/AdRankDetailField.view";
 import { useState } from "react";
 import ViewControlFieldView from "./view/ViewControlField.view";
 import { CustomDialog } from "../../../../../../../components/dialog/v1/CustomDialog";
+import { CustomProgressIcon } from "../../progress/progress-icon/v1";
 
 export function RecordDetailModalComponent({
     open,
@@ -18,6 +19,7 @@ export function RecordDetailModalComponent({
     const [isAdRankView, setIsAdRankView] = useState(false);
 
     const {
+        isLoading: isRecordDetailsSearchLoading,
         recordDetails,
         adRecordDetails,
         targetRecordInfo,
@@ -54,9 +56,10 @@ export function RecordDetailModalComponent({
                     />
                     <ButtonFieldView
                         targetRecordInfo={targetRecordInfo}
+                        isRecordDetailsSearchLoading={isRecordDetailsSearchLoading}
                         onSubmit={handleCreateNRankRecordDetail}
                     />
-                    <DetailWrapper>
+                    <DetailWrapper style={{ position: 'relative' }}>
                         <ViewControlFieldView
                             isAdRankView={isAdRankView}
                             recordDetails={recordDetails}
@@ -64,6 +67,15 @@ export function RecordDetailModalComponent({
                             onChangeAdRankView={handleChangeAdRankView}
                             onChangeRankView={handleChangeRankView}
                         />
+                        
+                        {isRecordDetailsSearchLoading &&
+                            <CustomProgressIcon
+                                type={'pluse'}
+                                color='#a7abb9'
+                                margin={15}
+                            />
+                        }
+
                         {isAdRankView ?
                             <AdRankDetailFieldView
                                 adRecordDetails={adRecordDetails}

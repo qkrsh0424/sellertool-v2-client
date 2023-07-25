@@ -3,11 +3,10 @@ import { diffTimeToHHmmss } from "../../views/store-rank/real-time-rank/v1/utils
 
 export default function useTargetTimeTimerHook() {
     const [targetTime, setTargetTime] = useState(null);
-    const [isTimerActive, setIsTimerActive] = useState(false);
     const [timer, setTimer] = useState(null);
 
     useEffect(() => {
-        if(!isTimerActive) {
+        if(!targetTime) {
             setTimer(null);
             return;
         }
@@ -19,13 +18,13 @@ export default function useTargetTimeTimerHook() {
         }, 1000)
 
         return () => clearInterval(timer)
-    }, [isTimerActive])
+    }, [targetTime])
 
     const onSettingTimerValue = () => {
         let currentTime = new Date();
 
         if(currentTime > targetTime) {
-            setIsTimerActive(false);
+            setTargetTime(null);
             setTimer(null);
             return;
         }
@@ -33,24 +32,13 @@ export default function useTargetTimeTimerHook() {
         let updateTimeDiff = diffTimeToHHmmss(currentTime, targetTime);
         setTimer(updateTimeDiff);
     }
-
-    const onActiveTimer = () => {
-        setIsTimerActive(true);
-    }
-
-    // const onInactiveTimer = () => {
-    //     setIsTimerActive(false);
-    // }
-
+    
     const onUpdateTargetTime = (targetTime) => {
         setTargetTime(targetTime);
     }
 
     return {
         timer,
-        isTimerActive,
         onUpdateTargetTime,
-        onActiveTimer,
-        // onInactiveTimer,
     }
 }

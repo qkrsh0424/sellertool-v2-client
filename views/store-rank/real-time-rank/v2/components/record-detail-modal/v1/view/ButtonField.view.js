@@ -1,32 +1,36 @@
 import { useEffect, useState } from "react";
-import useTargetTimeTimerHook from "../../../../../../../../hooks/timer/useTargetTimeTimerHook";
 import { setPlusTime } from "../../../../utils/dateFormatUtils";
 import { Wrapper } from "../styles/Button.styled";
 import { CustomBoxImage } from "../../../../modules";
 import { CustomBlockButton } from "../../../buttons/block-button/v1";
 import { CustomProgressBar } from "../../../progress/progress-bar/v1";
+import useTargetTimeTimerHook from "../../../../../../../../hooks/timer/useTargetTimeTimerHook";
 
 export default function ButtonFieldView({
     targetRecordInfo,
+    isRecordDetailsSearchLoading,
     onSubmit
 }) {
     const [disabledBtn, setDisabledBtn] = useState(false);
 
     const {
-        isTimerActive,
         timer,
         onUpdateTargetTime,
-        onActiveTimer
     } = useTargetTimeTimerHook();
+
+    useEffect(() => {
+        if(!isRecordDetailsSearchLoading) {
+            setDisabledBtn(false)
+        }
+    }, [isRecordDetailsSearchLoading])
 
     useEffect(() => {
         if(!targetRecordInfo) {
             return;
         }
 
-        let targetTime = setPlusTime(targetRecordInfo?.created_at, 1, 0, 0);
+        let targetTime = setPlusTime(targetRecordInfo?.created_at, 0, 1, 0);
         onUpdateTargetTime(targetTime);
-        onActiveTimer();
         setDisabledBtn(false)
     }, [targetRecordInfo])
 
@@ -41,7 +45,7 @@ export default function ButtonFieldView({
     return (
         <Wrapper>
             <form onSubmit={(e) => handleSubmit(e)}>
-                {isTimerActive ?
+                {timer ?
                     <CustomBlockButton
                         type='button'
                         className='disabled-btn timer-button'

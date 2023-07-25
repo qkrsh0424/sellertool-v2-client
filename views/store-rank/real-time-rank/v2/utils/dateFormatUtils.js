@@ -16,18 +16,28 @@ function setPlusTime(idate, hour, min, sec) {
 
 function dateToStrYYYYMMDD(idate) {
     var date = new Date(idate);
-    return moment(date).format("YYYY년 MM월 DD일");
+    return moment(date).format("YYYY.MM.DD");
 }
 
 function dateToStrHHmm(idate) {
     var date = new Date(idate);
-    var h = date.getHours() < 12 ? "오전 " : "오후 ";
-    return h + moment(date).format("hh시 mm분");
+    // var h = date.getHours() < 12 ? "오전 " : "오후 ";
+    return moment(date).format("hh:mm");
+}
+
+function strToYYYYMMDD(strDate) {
+    var year = strDate.substring(0, 4);
+    var month = strDate.substring(4, 6);
+    var day = strDate.substring(6, 8);
+
+    var date = new Date(year, month, day);
+    return moment(date).format("YYYY년 MM월 DD일");
 }
 
 export {
     setPlusTime,
     diffTimeToHHmmss,
     dateToStrYYYYMMDD,
-    dateToStrHHmm
+    dateToStrHHmm,
+    strToYYYYMMDD,
 }

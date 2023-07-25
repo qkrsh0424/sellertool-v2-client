@@ -1,5 +1,5 @@
-import { dateToYYYYMMDD } from "../../../../../../../../utils/dateFormatUtils";
 import { CustomBoxImage } from "../../../../modules/index";
+import { strToYYYYMMDD } from "../../../../utils/dateFormatUtils";
 import { DetailInfoWrapper, InfoGroupBox, InfoText, Wrapper } from "../styles/RankDetail.styled";
 
 const NAVER_SHOPPING_PRODUCT_URL = "https://smartstore.naver.com/main/products/"
@@ -22,6 +22,11 @@ export default function AdRankDetailFieldView({
                         <div style={{ padding: '0 10px' }}>
                             <div className='info-field'>
                                 <InfoGroupBox>
+                                    <div className='sub-info'>
+                                        {detail.advertising_yn === 'y' &&
+                                            <div className='sub-info-box' style={{ "--default-box-color": "#9da0a9" }}>광고 상품</div>
+                                        }
+                                    </div>
                                     <div className='hover-effet'>
                                         <a href={NAVER_SHOPPING_PRODUCT_URL + detail.mall_product_id} target="_blank" rel="noopener">
                                             <span className='accent-text'>{detail.product_title}</span>
@@ -79,7 +84,7 @@ export default function AdRankDetailFieldView({
                                 <InfoGroupBox>
                                     <div>
                                         <span>상품 게시일 : </span>
-                                        <span>{detail.registration_date ? dateToYYYYMMDD(detail.registration_date) : '-'}</span>
+                                        <span>{detail.registration_date ? strToYYYYMMDD(detail.registration_date) : '-'}</span>
                                     </div>
                                 </InfoGroupBox>
                             </div>
@@ -88,6 +93,12 @@ export default function AdRankDetailFieldView({
                                     <div className='accent-text'>
                                         <span>총 </span>
                                         <span style={{ color: 'var(--mainColor)' }}>{detail.rank} 위</span>
+                                    </div>
+                                </InfoGroupBox>
+                                <InfoGroupBox>
+                                    <div>
+                                        <span>일반 상품 포함 시 </span>
+                                        <span>{detail.included_ad_rank}위</span>
                                     </div>
                                 </InfoGroupBox>
                             </div>

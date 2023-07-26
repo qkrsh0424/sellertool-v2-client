@@ -22,7 +22,7 @@ function dateToStrYYYYMMDD(idate) {
 function dateToStrHHmm(idate) {
     var date = new Date(idate);
     // var h = date.getHours() < 12 ? "오전 " : "오후 ";
-    return moment(date).format("hh:mm");
+    return moment(date).format("HH:mm");
 }
 
 function strToYYYYMMDD(strDate) {

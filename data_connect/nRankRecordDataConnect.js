@@ -26,14 +26,14 @@ const nRankRecordDataConnect = () => {
             )
         },
         searchOne: async function (params, headers) {
-            return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-records/${params.id}`, {
-                    headers,
-                    withCredentials: true,
-                    xsrfCookieName: 'x_api_csrf_token',
-                    xsrfHeaderName: 'X-XSRF-TOKEN'
-                })
-            )
+            // return await withMainApiCsrfWrapper(
+            //     () => axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-records/${params.id}`, {
+            //         headers,
+            //         withCredentials: true,
+            //         xsrfCookieName: 'x_api_csrf_token',
+            //         xsrfHeaderName: 'X-XSRF-TOKEN'
+            //     })
+            // )
         },
         deleteOne: async function (params, headers) {
             return await withMainApiCsrfWrapper(

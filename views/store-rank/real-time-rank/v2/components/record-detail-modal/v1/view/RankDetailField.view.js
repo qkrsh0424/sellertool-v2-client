@@ -77,11 +77,27 @@ export default function RankDetailFieldView({
                                             <span>({detail.review_count ?? 0})</span>
                                         </div>
                                     </div>
-                                    <div>
-                                        <span>구매({detail.purchase_count ?? 0})</span>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <div>
+                                            <CustomBoxImage
+                                                src="/images/icon/shopping_bag_fill_808080.svg"
+                                                size='20px'
+                                            />
+                                        </div>
+                                        <div>
+                                            <span>({detail.purchase_count ?? 0})</span>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <span>찜({detail.keep_count ?? 0})</span>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <div>
+                                            <CustomBoxImage
+                                                src="/images/icon/heart_check_fill_e56780.svg"
+                                                size='20px'
+                                            />
+                                        </div>
+                                        <div>
+                                            <span>({detail.keep_count ?? 0})</span>
+                                        </div>
                                     </div>
                                 </InfoGroupBox>
                                 <InfoGroupBox>

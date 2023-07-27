@@ -23,7 +23,7 @@ const ProfileWorkspacePage = (props) => {
     return (
         <>
             <Head>
-                <title>프로필 / 워크스페이스</title>
+                <title>프로필 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <ProfileWorkspaceMainComponent></ProfileWorkspaceMainComponent>

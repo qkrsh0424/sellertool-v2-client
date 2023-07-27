@@ -22,14 +22,14 @@ export default function ProductAddCategoryPage(props) {
         fetchInit();
     }, [userRedux.isLoading, userRedux.userInfo]);
 
-    if(userRedux.isLoading || !userRedux.userInfo){
+    if (userRedux.isLoading || !userRedux.userInfo) {
         return null;
     }
 
     return (
         <>
             <Head>
-                <title>카테고리 추가 | 셀러툴</title>
+                <title>통합 상품 관리 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />

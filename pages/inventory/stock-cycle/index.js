@@ -24,11 +24,11 @@ export default function InventoryStockCyclePage(props) {
     if (userRedux.isLoading || !userRedux.userInfo) {
         return null;
     }
-    
+
     return (
         <>
             <Head>
-                <title>통합 재고 관리 | 셀러툴</title>
+                <title>통합 재고 관리 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />

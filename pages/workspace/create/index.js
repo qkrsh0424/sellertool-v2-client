@@ -23,7 +23,7 @@ const WorkspaceCreatePage = () => {
     return (
         <>
             <Head>
-                <title>워크스페이스 생성 | 셀러툴</title>
+                <title>워크스페이스 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <WorkspaceCreateMainComponent></WorkspaceCreateMainComponent>

@@ -7,7 +7,7 @@ const SignupPage = () => {
     return (
         <>
             <Head>
-                <title>회원가입 | 셀러툴</title>
+                <title>회원가입 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <MainComponent></MainComponent>
             {/* <FooterMain></FooterMain> */}

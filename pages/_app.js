@@ -98,6 +98,11 @@ function MyApp({ Component, pageProps }) {
 						`,
 					}}
 				></script>
+				<script
+					async
+					src={`https://cdn.iamport.kr/v1/iamport.js`}>
+				</script>
+
 			</Head>
 			<UserPermissionComponent />
 			<WorkspacePermissionComponent />

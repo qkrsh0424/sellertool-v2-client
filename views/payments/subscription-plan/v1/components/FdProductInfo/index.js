@@ -1,0 +1,1 @@
+export { FdProductInfo } from './FdProductInfo';

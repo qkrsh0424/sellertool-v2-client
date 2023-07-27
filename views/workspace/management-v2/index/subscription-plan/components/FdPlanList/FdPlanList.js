@@ -1,17 +1,25 @@
-import { useSelector } from "react-redux";
 import CustomBlockButton from "../../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { STY_Card, STY_CardListWrapper, STY_Container } from "./FdPlanList.styled";
 import { numberFormatUtils } from "../../../../../../../utils/numberFormatUtils";
 import { SubscriptionPlanDetails } from "../../config/SubscriptionPlanDetails";
+import { useRouter } from "next/router";
 
 export function FdPlanList({
     currentWorkspace,
     refSubscriptionPlanList
 }) {
+    const router = useRouter();
     const subscriptionPlan = currentWorkspace?.subscriptionPlan;
 
-    const handleApplySubscriptionPlan = (plan) => {
-        console.log(plan);
+    const handleApplySubscriptionPlan = (refSubscriptionPlanId) => {
+        router.push({
+            pathname: '/payments/subscription-plan',
+            query: {
+                wsId: currentWorkspace?.id,
+                spId: refSubscriptionPlanId,
+                paymentType: 'SUBSCRIPTION_PLAN'
+            }
+        })
     }
 
     return (
@@ -47,7 +55,7 @@ export function FdPlanList({
                                                 <CustomBlockButton
                                                     type='button'
                                                     className='button-item'
-                                                    onClick={()=>handleApplySubscriptionPlan(refSubscriptionPlan?.id)}
+                                                    onClick={() => handleApplySubscriptionPlan(refSubscriptionPlan?.id)}
                                                 >
                                                     구독하기
                                                 </CustomBlockButton>
@@ -65,6 +73,7 @@ export function FdPlanList({
                                                 <CustomBlockButton
                                                     type='button'
                                                     className='button-item'
+                                                    onClick={() => handleApplySubscriptionPlan(refSubscriptionPlan?.id)}
                                                 >
                                                     구독 연장하기
                                                 </CustomBlockButton>

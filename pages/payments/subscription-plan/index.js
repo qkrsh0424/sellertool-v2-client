@@ -1,17 +1,19 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import PrimaryNavbarMainComponent from "../../../views/navbar/primary-navbar";
-import WorkspaceManagementMainComponent from "../../../views/workspace/management-v2/index";
+import SecondaryNavbarMainComponent from "../../../views/navbar/secondary-navbar-v2";
+import { useEffect } from "react";
+import MainComponent from "../../../views/payments/subscription-plan/v1";
 
-const WorkspaceManagementPage = (props) => {
+export default function PaymentsSubscriptionPlanPage(props) {
     const userRedux = useSelector(state => state.userRedux);
     const router = useRouter();
 
     useEffect(() => {
         async function fetchInit() {
             if (userRedux.isLoading === false && !userRedux.userInfo) {
+                alert('로그인이 필요한 서비스 입니다.');
                 router.replace('/');
                 return;
             }
@@ -19,14 +21,17 @@ const WorkspaceManagementPage = (props) => {
         fetchInit();
     }, [userRedux.isLoading, userRedux.userInfo]);
 
+    if (userRedux.isLoading || !userRedux.userInfo) {
+        return null;
+    }
+
     return (
         <>
             <Head>
-                <title>워크스페이스 관리 | 셀러툴</title>
+                <title>구독플랜 결제 | 셀러툴</title>
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
-            <WorkspaceManagementMainComponent></WorkspaceManagementMainComponent>
+            <MainComponent />
         </>
     );
 }
-export default WorkspaceManagementPage;

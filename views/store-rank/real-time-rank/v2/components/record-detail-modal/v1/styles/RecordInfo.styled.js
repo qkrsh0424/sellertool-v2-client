@@ -1,23 +1,24 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
+    display: flex;
+    align-items: center;
     background-color: #fff;
     border: 1px solid #fff;
     box-shadow: var(--defaultBoxShadow);
-    overflow: hidden;
     border-radius: 15px;
     margin-bottom: 20px;
-    
-    display: flex;
-    align-items: center;
+    overflow: hidden;
+    overflow-x: scroll;
 `;
 
 export const LabelGroup = styled.div`
     display: flex;
     align-items: center;
-    white-space: break-spaces;
-    margin-bottom: 15px;
+    white-space: nowrap;
+    gap: 10px;
     color: #666;
+    margin-bottom: 10px;
 
     &:last-child{
         margin-bottom: 0;

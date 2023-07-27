@@ -17,14 +17,20 @@ export const DetailInfoWrapper = styled.div`
     align-items: center;
     font-size: 14px;
     font-weight: 600;
-    color: #666;
+    color: #888;
     padding: 10px;
-    min-height: 200px;
-    max-height: 200px;
+    min-height: 220px;
+    max-height: 220px;
     border-bottom: 4px solid #eef2f9;
 
     &:last-child {
         margin-bottom: 0;
+    }
+
+    @media screen and (max-width: 992px){
+        max-height: fit-content;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .image-el {
@@ -34,12 +40,12 @@ export const DetailInfoWrapper = styled.div`
     }
 
     .info-field {
-        padding: 0 10px;
+        /* padding: 0 10px; */
         margin-bottom: 10px;
     }
 
     .rank-field {
-        padding: 0 10px;
+        /* padding: 0 10px; */
     }
 
     .accent-text {
@@ -52,17 +58,7 @@ export const DetailInfoWrapper = styled.div`
 export const InfoGroupBox = styled.div`
     display: flex;
     align-items: center;
-    gap: 10px;
-    white-space: break-spaces;
-
-    .hover-effet {
-        transition: 0.2s;
-
-        &:hover {
-            text-decoration: underline;
-            text-underline-offset: 1px;
-        }
-    }
+    flex-wrap: wrap;
 
     .sub-info {
         display: flex;
@@ -75,7 +71,37 @@ export const InfoGroupBox = styled.div`
             border: 1px solid var(--default-box-color);
             color: white;
             border-radius: 2px;
+            margin-right: 5px;
         }
+    }
+
+    .highlight{
+        display: inline-block;
+        position:relative;
+        font-weight: 700;
+        color: #404040;
+    }
+
+    .highlight:hover:after{
+        content:"";
+        position: absolute;
+        bottom:0;
+        left:0;
+        width: 100%;
+        height: 7px;
+        border-radius: 3px;
+        display: inline-block;
+        background: var(--mainColorOpacity30);
+    }
+`;
+
+export const DetailInfoBox = styled.div`
+    display: flex;
+    align-items: center;
+    margin-right: 7px;
+
+    &:last-child {
+        margin-right: 0;
     }
 `;
 

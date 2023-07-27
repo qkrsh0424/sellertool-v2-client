@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { InputFieldComponent, RecordItemListComponent } from "./components";
 import useSearchInputHook from "./hooks/useSearchInputHook";
 import useNRankRecordListHook from "./hooks/useNRankRecordListHook";
+import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
 
 export const Container = styled.div`
     background:var(--defaultBackground);
@@ -12,21 +13,32 @@ export const Container = styled.div`
 export default function MainComponent(){
 
     const {
-        recordList,
-        reqDeleteNRankRecord,
-        reqSearchNRankRecordList
-    } = useNRankRecordListHook();
-
-    const {
         keyword,
         mallName,
         onChangeKeyword,
         onChangeMallName,
         reqCreateSearchInfo
-    } = useSearchInputHook({ recordList })
+    } = useSearchInputHook()
+
+    const {
+        searchedRecordList: recordList,
+        reqDeleteNRankRecord,
+        reqSearchNRankRecordList
+    } = useNRankRecordListHook({ keyword, mallName });
 
     const handleActionSubmitRecordInfo = (e) => {
         e.preventDefault();
+
+        if(recordList?.length > 0) {
+            if(recordList.find(r => r.keyword === keyword && r.mall_name === mallName)) {
+                let message = "동일한 검색 항목이 존재합니다";
+                customToast.error(message, {
+                    ...defaultOptions,
+                    toastId: message
+                });
+                return;
+            }
+        }
 
         reqCreateSearchInfo(() => {
             reqSearchNRankRecordList()

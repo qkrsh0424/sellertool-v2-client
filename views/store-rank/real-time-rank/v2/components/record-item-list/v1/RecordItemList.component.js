@@ -72,7 +72,10 @@ export function RecordItemListComponent({
     return (
         <>
             <Container>
-                <div className='list-title'>검색 내역</div>
+                <div className='list-title'>
+                    <span>검색 내역 </span>
+                    <span>({recordList?.length ?? 0} 개)</span>
+                </div>
                 <Wrapper>
                     {recordList?.map((item, index) => {
                         let isKeywordAccent = keyword && (item.keyword).includes(keyword);
@@ -102,13 +105,15 @@ export function RecordItemListComponent({
                                     <div className='content-box'>
                                         <div>
                                             <CustomBoxImage
+                                                className='thumbnail-img-box'
                                                 src={currentRecordInfo?.thumbnail_url}
                                                 size='150px'
                                             />
                                         </div>
-                                        <div style={{ padding: '0 20px', flex: 1 }}>
+                                        <div style={{ padding: '0 20px' }}>
                                             <ContentGroup>
-                                                <span>키워드 : </span>
+                                                <div style={{ minWidth: '60px' }}>키워드</div>
+                                                <div>|</div>
                                                 <ContentValue>
                                                     {isKeywordAccent ?
                                                         <HighlightedText
@@ -122,7 +127,8 @@ export function RecordItemListComponent({
                                                 </ContentValue>
                                             </ContentGroup>
                                             <ContentGroup>
-                                                <span>스토어명 : </span>
+                                                <div style={{ minWidth: '60px' }}>스토어명</div>
+                                                <div>|</div>
                                                 <ContentValue>
                                                     {isMallNameAccent ?
                                                         <HighlightedText
@@ -136,7 +142,8 @@ export function RecordItemListComponent({
                                                 </ContentValue>
                                             </ContentGroup>
                                             <ContentGroup>
-                                                <span>최근 조회 : </span>
+                                                <div style={{ minWidth: '60px' }}>최근 조회</div>
+                                                <div>|</div>
                                                 <ContentValue>
                                                     {currentRecordInfo ?
                                                         <div style={{ color: '#444', fontSize: '16px', display: 'inline' }}>

@@ -5,11 +5,11 @@ const LinearBar = styled(LinearProgress)`
 
     &.css-eglki6-MuiLinearProgress-root {
         height: 6px;
-        background-color: ${props => props.customColor + '88'}
+        background-color: ${props => props.customcolor + '88'}
     }
     
     .MuiLinearProgress-bar {
-        background-color: ${props => props.customColor};
+        background-color: ${props => props.customcolor};
     }
 
 `
@@ -24,7 +24,7 @@ export function CustomProgressBar({
     value,
     className,
     thickness,
-    customColor = '#efefef',
+    customcolor = '#efefef',
     ...props
 }) {
     return (
@@ -44,7 +44,7 @@ export function CustomProgressBar({
                     color={color}
                     variant={variant}
                     value={value}
-                    customColor={customColor}
+                    customColor={customcolor}
                     {...props}
                 />
             }

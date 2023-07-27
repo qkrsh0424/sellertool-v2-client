@@ -1,6 +1,6 @@
 import { CustomBoxImage } from "../../../../modules/index";
 import { strToYYYYMMDD } from "../../../../utils/dateFormatUtils";
-import { DetailInfoWrapper, InfoGroupBox, InfoText, Wrapper } from "../styles/RankDetail.styled";
+import { DetailInfoBox, DetailInfoWrapper, InfoGroupBox, InfoText, Wrapper } from "../styles/RankDetail.styled";
 
 const NAVER_SHOPPING_PRODUCT_URL = "https://smartstore.naver.com/main/products/"
 
@@ -13,14 +13,14 @@ export default function RankDetailFieldView({
             {recordDetails?.map((detail, idx) => {
                 return (
                     <DetailInfoWrapper key={'record_detail_list_idx' + idx}>
-                        <div>
+                        <div style={{ paddingRight: '10px' }}>
                             <CustomBoxImage
                                 className='image-el'
                                 src={detail.thumbnail_url}
-                                size='150px'
+                                size='160px'
                             />
                         </div>
-                        <div style={{ padding: '0 10px' }}>
+                        <div>
                             <div className='info-field'>
                                 <InfoGroupBox>
                                     <div className='sub-info'>
@@ -28,7 +28,7 @@ export default function RankDetailFieldView({
                                             <div className='sub-info-box' style={{ "--default-box-color": "#9da0a9" }}>가격 비교</div>
                                         }
                                     </div>
-                                    <div className='hover-effet'>
+                                    <div className='highlight'>
                                         <a href={NAVER_SHOPPING_PRODUCT_URL + detail.mall_product_id} target="_blank" rel="noopener">
                                             <span className='accent-text'>{detail.product_title}</span>
                                         </a>
@@ -49,10 +49,9 @@ export default function RankDetailFieldView({
                             <div className='info-field'>
                                 <InfoGroupBox>
                                     <div>
-                                        <span className='accent-text'>{detail.price}</span>
-                                        <span> 원</span>
+                                        <span className='accent-text'>{detail.price} 원</span>
                                     </div>
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <DetailInfoBox>
                                         <div>
                                             <CustomBoxImage
                                                 src='/images/icon/delivery_truck_default_808080.svg'
@@ -62,10 +61,10 @@ export default function RankDetailFieldView({
                                         <div>
                                             <span>{detail.delivery_fee === 0 ? '무료' : detail.delivery_fee}</span>
                                         </div>
-                                    </div>
+                                    </DetailInfoBox>
                                 </InfoGroupBox>
                                 <InfoGroupBox>
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <DetailInfoBox>
                                         <div>
                                             <CustomBoxImage
                                                 src="/images/icon/star_default_ffdf00.svg"
@@ -76,8 +75,8 @@ export default function RankDetailFieldView({
                                             <span>{detail.score_info ?? 0}</span>
                                             <span>({detail.review_count ?? 0})</span>
                                         </div>
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    </DetailInfoBox>
+                                    <DetailInfoBox>
                                         <div>
                                             <CustomBoxImage
                                                 src="/images/icon/shopping_bag_fill_808080.svg"
@@ -87,8 +86,8 @@ export default function RankDetailFieldView({
                                         <div>
                                             <span>({detail.purchase_count ?? 0})</span>
                                         </div>
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    </DetailInfoBox>
+                                    <DetailInfoBox>
                                         <div>
                                             <CustomBoxImage
                                                 src="/images/icon/heart_check_fill_e56780.svg"
@@ -98,7 +97,7 @@ export default function RankDetailFieldView({
                                         <div>
                                             <span>({detail.keep_count ?? 0})</span>
                                         </div>
-                                    </div>
+                                    </DetailInfoBox>
                                 </InfoGroupBox>
                                 <InfoGroupBox>
                                     <div>
@@ -129,7 +128,7 @@ export default function RankDetailFieldView({
                                 </InfoGroupBox>
                                 <InfoGroupBox>
                                     <div>
-                                        <span>광고 포함 시 </span>
+                                        <span>광고 상품 포함 시 </span>
                                         <span>{detail.included_ad_rank}위</span>
                                     </div>
                                 </InfoGroupBox>

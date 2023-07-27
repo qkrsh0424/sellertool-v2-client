@@ -10,25 +10,37 @@ export const Container = styled.div`
     .list-title {
         padding: 20px 10px;
         font-weight: 600;
+        font-size: 1.2rem;
     }
 `;
 
 export const Wrapper = styled.div`
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 15px;
 
     border-top: 1px solid #a4aabd;
     padding: 20px 5px;
+
+    @media screen and (max-width: 576px){
+        display: block;
+    }
 `;
 
 export const RecordItemBox = styled.div`
     position: relative;
-    margin-right: 30px;
-    margin-bottom: 30px;
+    
+    &:hover {
+        cursor: pointer;
+    }
+
+    @media screen and (max-width: 576px){
+        width: 100%;
+        margin-bottom: 15px;
+    }
 `;
 
 export const RecordInfo = styled.div`
-    width: 500px;
     background-color: white;
     border-radius: 20px;
     box-shadow: var(--defaultBoxShadow);
@@ -48,6 +60,8 @@ export const RecordInfo = styled.div`
     .content-box {
         display: flex;
         align-items: center;
+        overflow: hidden;
+        overflow-x: scroll;
     }
 `;
 
@@ -79,17 +93,24 @@ export const ControlBox = styled.div`
 `;
 
 export const ContentGroup = styled.div`
+    display: flex;
+    gap: 5px;
     padding: 5px 0px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #444;
-    width: 100%;
+    color: #a0a0a0;
+    white-space: break-spaces;
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
+    /* white-space: nowrap; */
+    
+    @media screen and (max-width: 1280px) {
+        overflow: hidden;
+        white-space: nowrap;
+    }
 `;
 
 export const ContentValue = styled.div`
     display: inline;
     font-weight: 600;
-    color: #000;
+    color: #505050;
     font-size: 1.1rem;
 `;

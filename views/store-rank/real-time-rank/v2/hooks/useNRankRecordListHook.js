@@ -5,9 +5,13 @@ import { nRankRecordDataConnect } from "../../../../../data_connect/nRankRecordD
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 import { customBackdropController } from "../../../../../components/backdrop/default/v1";
 
-export default function useNRankRecordListHook () {
+export default function useNRankRecordListHook ({
+    keyword,
+    mallName
+}) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const [recordList, setRecordList] = useState(null);
+    const [searchedRecordList, setSearchedRecordList] = useState(null);
     const customBackground = customBackdropController();
 
     useEffect(() => {
@@ -23,6 +27,35 @@ export default function useNRankRecordListHook () {
         
         fetchInit()
     }, [workspaceRedux?.workspaceInfo?.id])
+
+    useEffect(() => {
+        if(!recordList) {
+            return
+        }
+        
+        if(!(keyword || mallName)) {
+            setSearchedRecordList([...recordList]);
+            return;
+        }
+
+        onChangeSearchedRecordList()
+    }, [keyword, mallName, recordList])
+
+    const onChangeSearchedRecordList = () => {
+        let data = [];
+
+        recordList.forEach(item => {
+            if((item.keyword).includes(keyword) && (item.mall_name).includes(mallName)){
+                data.unshift(item);
+            }else if (keyword !== '' && (item.keyword).includes(keyword)) {
+                data.push(item)
+            }else if (mallName !== '' && (item.mall_name).includes(mallName)) {
+                data.push(item)
+            }
+        })
+
+        setSearchedRecordList(data);
+    }
 
     const reqSearchNRankRecordList = async () => {
         let headers = {
@@ -63,7 +96,7 @@ export default function useNRankRecordListHook () {
     }
 
     return {
-        recordList,
+        searchedRecordList,
         reqDeleteNRankRecord,
         reqSearchNRankRecordList
     }

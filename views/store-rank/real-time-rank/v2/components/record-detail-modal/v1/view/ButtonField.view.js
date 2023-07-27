@@ -70,7 +70,7 @@ export default function ButtonFieldView({
                                     조회중입니다...
                                 </span>
                                 <div className='progress-box'>
-                                    <CustomProgressBar type='linear' customColor={'#9aaae0'} />
+                                    <CustomProgressBar type='linear' customcolor={'#9aaae0'} />
                                 </div>
                             </CustomBlockButton>
                             :

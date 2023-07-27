@@ -19,7 +19,13 @@ export const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     
-    margin-bottom: 50px;
+    margin-bottom: 30px;
+
+    @media screen and (max-width: 992px) {
+        width: 100%;
+        height: 150px;
+        padding: 15px;
+    }
 `;
 
 export const InputFieldBox = styled.div`
@@ -30,12 +36,17 @@ export const InputFieldBox = styled.div`
         box-sizing: border-box;
         border: 1px solid #fff;
         border-bottom: 1px solid #bdbdbd;
-        height: 40px;
+        height: 45px;
 
         &:focus{
             outline: none;
             border: 1px solid #fff;
             border-bottom: 1px solid #bdbdbd;
+        }
+
+
+        @media screen and (max-width: 992px) {
+            width: 90%;
         }
     }
 `

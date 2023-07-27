@@ -1,6 +1,6 @@
 import { CustomBoxImage } from "../../../../modules";
 import { dateToStrHHmm, dateToStrYYYYMMDD } from "../../../../utils/dateFormatUtils";
-import { LabelGroup, Wrapper } from "../styles/RecordInfo.styled";
+import { ContentGroup, LabelGroup, Wrapper } from "../styles/RecordInfo.styled";
 
 export default function RecordInfoFieldView({
     record,
@@ -9,33 +9,31 @@ export default function RecordInfoFieldView({
     return (
         record && 
         <Wrapper>
-            <div style={{ marginRight: '20px' }}>
+            <div>
                 <CustomBoxImage
                     src={targetRecordInfo?.thumbnail_url}
-                    size='130px'
+                    size='80px'
                 />
             </div>
-            <div>
+            <div style={{ margin: '0 10px'}}>
                 <LabelGroup>
-                    <div>키워드 : </div>
-                    <div className='content-value'>{record.keyword}</div>
+                    <span className='content-value' style={{ color: 'var(--mainColor)'}}>{record.mall_name}</span>
+                    <span> | </span>
+                    <span className='content-value'>{record.keyword}</span>
                 </LabelGroup>
-                <LabelGroup>
-                    <div>스토어명 : </div>
-                    <div className='content-value'>{record.mall_name}</div>
-                </LabelGroup>
-                <LabelGroup>
-                    <div>최근 검색일시 : </div>
-                    <div className='content-value'>
+                <LabelGroup style={{ fontSize: '14px', fontWeight: 700, color: '#808080' }}>
+                    <span>최근조회 (</span>
+                    <span>
                         {targetRecordInfo ?
                             <>
                                 <span>{dateToStrYYYYMMDD(targetRecordInfo.created_at)} </span>
-                                <span style={{ color: '#808080', fontSize: '16px' }}>({dateToStrHHmm(targetRecordInfo.created_at)})</span>
+                                <span>{dateToStrHHmm(targetRecordInfo.created_at)}</span>
                             </>
                             :
                             '-'
                         }
-                    </div>
+                    </span>
+                    <span>)</span>
                 </LabelGroup>
             </div>
         </Wrapper>

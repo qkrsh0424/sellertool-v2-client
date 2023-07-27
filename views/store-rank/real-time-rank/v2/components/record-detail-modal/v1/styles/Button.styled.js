@@ -10,6 +10,7 @@ export const Wrapper = styled.div`
         border-radius: 10px;
         color: #fff;
         box-shadow: var(--defaultBoxShadow);
+        transition: 0.2s;
 
         &:hover {
             background-color: var(--mainColorHover);
@@ -25,7 +26,6 @@ export const Wrapper = styled.div`
         font-size: 1.1rem;
         font-weight: 700;
         color: #999;
-        /* -webkit-text-stroke: 0.5px #000; */
         
         display: flex;
         align-items: center;

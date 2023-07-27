@@ -23,7 +23,7 @@ const ProfileAccountPage = (props) => {
     return (
         <>
             <Head>
-                <title>프로필 / 내 정보</title>
+                <title>프로필 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <ProfileAccountMainComponent></ProfileAccountMainComponent>

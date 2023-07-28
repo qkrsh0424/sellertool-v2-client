@@ -56,7 +56,6 @@ export function RecordDetailModalComponent({
                     />
                     <ButtonFieldView
                         targetRecordInfo={targetRecordInfo}
-                        isRecordDetailsSearchLoading={isRecordDetailsSearchLoading}
                         onSubmit={handleCreateNRankRecordDetail}
                     />
                     <DetailWrapper style={{ position: 'relative' }}>

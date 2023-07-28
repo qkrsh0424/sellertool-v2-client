@@ -49,7 +49,7 @@ export const DetailInfoWrapper = styled.div`
     }
 
     .accent-text {
-        font-weight: 800;
+        font-weight: 700;
         font-size: 1.1rem;
         color: #4b4b4b;
     }

@@ -8,7 +8,6 @@ import useTargetTimeTimerHook from "../../../../../../../../hooks/timer/useTarge
 
 export default function ButtonFieldView({
     targetRecordInfo,
-    isRecordDetailsSearchLoading,
     onSubmit
 }) {
     const [disabledBtn, setDisabledBtn] = useState(false);
@@ -19,17 +18,11 @@ export default function ButtonFieldView({
     } = useTargetTimeTimerHook();
 
     useEffect(() => {
-        if(!isRecordDetailsSearchLoading) {
-            setDisabledBtn(false)
-        }
-    }, [isRecordDetailsSearchLoading])
-
-    useEffect(() => {
         if(!targetRecordInfo) {
             return;
         }
 
-        let targetTime = setPlusTime(targetRecordInfo?.created_at, 0, 1, 0);
+        let targetTime = setPlusTime(targetRecordInfo?.created_at, 1, 0, 0);
         onUpdateTargetTime(targetTime);
         setDisabledBtn(false)
     }, [targetRecordInfo])

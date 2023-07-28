@@ -96,7 +96,7 @@ export const ContentGroup = styled.div`
     display: flex;
     gap: 5px;
     padding: 5px 0px;
-    color: #a0a0a0;
+    color: #7f7f7f;
     white-space: break-spaces;
     /* overflow: hidden; */
     /* text-overflow: ellipsis; */

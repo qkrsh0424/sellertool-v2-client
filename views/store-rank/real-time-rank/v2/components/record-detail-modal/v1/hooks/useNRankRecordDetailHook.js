@@ -27,10 +27,11 @@ export default function useNRankRecordDetailHook({
         }
 
         if(record) {
-            let pendingId = getCookie('nrank_search_pending_id');
-            if(pendingId === record.id) {
+            let pendingIds = getCookie('nrank_search_pending_ids');
+            let ids = pendingIds?.split(" ") ?? [];
+            if (ids.includes(record.id)) {
                 setIsLoading(true)
-            }else {
+            } else {
                 setIsLoading(false);
             }
         }
@@ -96,17 +97,27 @@ export default function useNRankRecordDetailHook({
     }
 
     const reqCreateNRankRecordDetail = async (successCallback) => {
-        let pendingIds = getCookie('nrank_search_pending_id');
+        let pendingIds = getCookie('nrank_search_pending_ids');
+        let updatedIds = '';
+
         if(pendingIds) {
-            let message = '아직 종료되지 않은 조회 내역이 있습니다. 잠시 후 다시 시도해주세요.';
-            customToast.error(message, {
-                ...defaultOptions,
-                toastId: message
-            })
-            return;
+            // includes 상태는 reqCreateNRankRecordDetail을 조회할 수 없음
+            // let ids = pendingIds.split(" ");
+            // if(ids.includes(record.id)) {
+            //     let message = '아직 종료되지 않은 조회 내역이 있습니다. 잠시 후 다시 시도해주세요.';
+            //     customToast.error(message, {
+            //         ...defaultOptions,
+            //         toastId: message
+            //     })
+            //     return;
+            // }
+
+            updatedIds = pendingIds.concat(" ", record.id);
         }else {
-            setCookie('nrank_search_pending_id', record.id)
+            updatedIds = record.id
         }
+
+        setCookie('nrank_search_pending_ids', updatedIds);
 
         setIsLoading(true);
 
@@ -121,7 +132,7 @@ export default function useNRankRecordDetailHook({
         await nRankRecordDetailDataConnect().createList(body, headers)
             .then(res => {
                 if(res.status === 200) {
-                    let content = `(${record.keyword} - ${record.mall_name}) 조회 결과가 업데이트되었습니다.`
+                    let content = `[${record.keyword} - ${record.mall_name}] 랭킹 업데이트 완료 !`
                     customToast.success(content, {
                         ...defaultOptions,
                         toastId: content
@@ -136,7 +147,11 @@ export default function useNRankRecordDetailHook({
                     toastId: res?.data?.memo
                 });
             }).finally(() => {
-                deleteCookie('nrank_search_pending_id');
+                let pendingIds = getCookie('nrank_search_pending_ids');
+                let ids = pendingIds.split(" ");
+                let updatedIds = ids.filter(id => id !== record.id).join(" ");
+
+                setCookie('nrank_search_pending_ids', updatedIds);
             })
 
         setIsLoading(false);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { setPlusTime } from "../../../../utils/dateFormatUtils";
 import { Wrapper } from "../styles/Button.styled";
 import { CustomBoxImage } from "../../../../modules";
@@ -22,8 +22,7 @@ export default function ButtonFieldView({
             return;
         }
 
-        // let targetTime = setPlusTime(targetRecordInfo?.created_at, 1, 0, 0);
-        let targetTime = setPlusTime(targetRecordInfo?.created_at, 0, 1, 0);
+        let targetTime = setPlusTime(targetRecordInfo?.created_at, 1, 0, 0);
         onUpdateTargetTime(targetTime);
     }, [targetRecordInfo])
 

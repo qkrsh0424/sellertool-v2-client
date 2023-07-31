@@ -18,7 +18,7 @@ export function RecordItemListComponent({
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
     const [recordDeleteModalOpen, setRecordDeleteModalOpen] = useState(false);
     const workspaceRedux = useSelector(state => state.workspaceRedux);
-
+    
     useEffect(() => {
         if(!recordList) {
             return;
@@ -42,7 +42,7 @@ export function RecordItemListComponent({
     }
 
     const handleCloseDetailSearchModal = () => {
-        setDetailSearchModalOpen(false)
+        setDetailSearchModalOpen(false);
     }
 
     const handleOpenctionDeleteRecord = (e, item) => {
@@ -107,7 +107,7 @@ export function RecordItemListComponent({
                                             <CustomBoxImage
                                                 className='thumbnail-img-box'
                                                 src={currentRecordInfo?.thumbnail_url}
-                                                size='150px'
+                                                size='170px'
                                             />
                                         </div>
                                         <div style={{ padding: '0 20px' }}>
@@ -157,6 +157,12 @@ export function RecordItemListComponent({
                                             </ContentGroup>
                                         </div>
                                     </div>
+                                    {currentRecordInfo &&
+                                        <div className='sub-info-box'>
+                                            <div className='item-el'>일반 <span style={{ fontWeight: '700', color: '#444' }}>{currentRecordInfo.rank_detail_unit ?? 0}</span></div>
+                                            <div className='item-el'>광고 <span style={{ fontWeight: '700', color: '#444' }}>{currentRecordInfo.ad_rank_detail_unit ?? 0}</span></div>
+                                        </div>
+                                    }
                                 </RecordInfo>
                             </RecordItemBox>
                         )
@@ -164,7 +170,7 @@ export function RecordItemListComponent({
                 </Wrapper>
 
                 {/* record detail (랭킹 조회 내역) 모달창 */}
-                {detailSearchModalOpen && 
+                {detailSearchModalOpen &&
                     <RecordDetailModalComponent
                         open={detailSearchModalOpen}
                         record={selectedRecord}

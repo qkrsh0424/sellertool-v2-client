@@ -16,7 +16,7 @@ export const Container = styled.div`
 
 export const Wrapper = styled.div`
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
     gap: 15px;
 
     border-top: 1px solid #a4aabd;
@@ -41,6 +41,7 @@ export const RecordItemBox = styled.div`
 `;
 
 export const RecordInfo = styled.div`
+    position: relative;
     background-color: white;
     border-radius: 20px;
     box-shadow: var(--defaultBoxShadow);
@@ -63,6 +64,25 @@ export const RecordInfo = styled.div`
         overflow: hidden;
         overflow-x: scroll;
     }
+
+    .sub-info-box {
+        display: flex;
+        gap: 5px;
+        position: absolute;
+        bottom: 10px;
+        right: 15px;
+        margin: 5px;
+
+        .item-el {
+            color: #666;
+            font-weight: 500;
+            font-size: 14px;
+            background-color: var(--defaultGrayColor);
+            border: 1px solid var(--defaultGrayColor);
+            border-radius: 5px;
+            padding: 2px 5px;
+        }
+    }
 `;
 
 export const ControlBox = styled.div`
@@ -76,6 +96,7 @@ export const ControlBox = styled.div`
         position: absolute;
         right: -3px;
         top: -8px;
+        z-index: 10;
     }
 
     .delete-box .button-item {

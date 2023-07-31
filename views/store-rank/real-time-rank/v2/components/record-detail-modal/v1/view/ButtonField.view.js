@@ -8,9 +8,9 @@ import useTargetTimeTimerHook from "../../../../../../../../hooks/timer/useTarge
 
 export default function ButtonFieldView({
     targetRecordInfo,
+    isRecordDetailsSearchLoading,
     onSubmit
 }) {
-    const [disabledBtn, setDisabledBtn] = useState(false);
 
     const {
         timer,
@@ -22,16 +22,15 @@ export default function ButtonFieldView({
             return;
         }
 
-        let targetTime = setPlusTime(targetRecordInfo?.created_at, 1, 0, 0);
+        // let targetTime = setPlusTime(targetRecordInfo?.created_at, 1, 0, 0);
+        let targetTime = setPlusTime(targetRecordInfo?.created_at, 0, 1, 0);
         onUpdateTargetTime(targetTime);
-        setDisabledBtn(false)
     }, [targetRecordInfo])
 
     const handleSubmit = (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        setDisabledBtn(true);
         onSubmit();
     }
 
@@ -54,7 +53,7 @@ export default function ButtonFieldView({
                     </CustomBlockButton>
                     :
                     <>
-                        {disabledBtn ?
+                        {isRecordDetailsSearchLoading ?
                             <CustomBlockButton
                                 className='button-item'
                                 disabled={true}
@@ -70,7 +69,7 @@ export default function ButtonFieldView({
                             <CustomBlockButton
                                 type='submit'
                                 className='button-item'
-                                disabled={disabledBtn}
+                                disabled={isRecordDetailsSearchLoading}
                             >
                                 조회
                             </CustomBlockButton>

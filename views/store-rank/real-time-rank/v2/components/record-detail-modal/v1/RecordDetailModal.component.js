@@ -17,7 +17,7 @@ export function RecordDetailModalComponent({
     reqSearchNRankRecordList
 }) {
     const [isAdRankView, setIsAdRankView] = useState(false);
-
+    
     const {
         isLoading: isRecordDetailsSearchLoading,
         recordDetails,
@@ -37,7 +37,7 @@ export function RecordDetailModalComponent({
     const handleCreateNRankRecordDetail = () => {
         reqCreateNRankRecordDetail(() => {
             reqSearchNRankRecordList()
-        })
+        });
     }
 
     return (
@@ -56,6 +56,7 @@ export function RecordDetailModalComponent({
                     />
                     <ButtonFieldView
                         targetRecordInfo={targetRecordInfo}
+                        isRecordDetailsSearchLoading={isRecordDetailsSearchLoading}
                         onSubmit={handleCreateNRankRecordDetail}
                     />
                     <DetailWrapper style={{ position: 'relative' }}>
@@ -69,9 +70,12 @@ export function RecordDetailModalComponent({
                         
                         {isRecordDetailsSearchLoading &&
                             <CustomProgressIcon
-                                type={'pluse'}
-                                color='#a7abb9'
-                                margin={15}
+                                type={'sync'}
+                                // color='#a7abb9'
+                                color='var(--mainColor)'
+                                size={20}
+                                margin={20}
+                                isBackgroundBlur={true}
                             />
                         }
 

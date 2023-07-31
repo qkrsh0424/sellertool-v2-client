@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BarLoader, BeatLoader, PulseLoader } from "react-spinners";
+import { BarLoader, BeatLoader, PulseLoader, SyncLoader } from "react-spinners";
 
 const Container = styled.div`
     position: absolute;
@@ -8,7 +8,7 @@ const Container = styled.div`
     width: 100%;
     height: 100%;
     background: #a0a0a010;
-    backdrop-filter: blur(1px);
+    backdrop-filter: ${props => props.isBackgroundBlur && 'blur(1px)'};
     z-index: 999;
     display: flex;
     align-items: center;
@@ -27,6 +27,10 @@ const PluseBox = styled(PulseLoader)`
     color: ${props => props.color};
 `
 
+const SyncBox = styled(SyncLoader)`
+    color: ${props => props.color};
+`
+
 export function CustomProgressIcon({
     type = 'bar',
     className,
@@ -35,11 +39,12 @@ export function CustomProgressIcon({
     margin = 2,
     loading = true,
     speedMultiplier = 1,
+    isBackgroundBlur=false,
     ...props
 }) {
     return (
         <>
-            <Container>
+            <Container isBackgroundBlur={isBackgroundBlur}>
                 {type === 'bar' &&
                     <BarBox
                         className={className}
@@ -64,6 +69,17 @@ export function CustomProgressIcon({
                 }
                 {type === 'pluse' &&
                     <PluseBox
+                        className={className}
+                        color={color}
+                        size={size}
+                        margin={margin}
+                        loading={loading}
+                        speedMultiplier={speedMultiplier}
+                        {...props}
+                    />
+                }
+                {type === 'sync' &&
+                    <SyncBox
                         className={className}
                         color={color}
                         size={size}

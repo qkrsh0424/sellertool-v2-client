@@ -22,14 +22,14 @@ export default function ErpCollectionDashboardPage(props) {
         fetchInit();
     }, [userRedux.isLoading, userRedux.userInfo]);
 
-    if(userRedux.isLoading || !userRedux.userInfo){
+    if (userRedux.isLoading || !userRedux.userInfo) {
         return null;
     }
 
     return (
         <>
             <Head>
-                <title>통합 발주 관리 | 셀러툴</title>
+                <title>통합 발주 관리 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />

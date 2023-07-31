@@ -28,7 +28,7 @@ export default function ProductEditProductPage(props) {
     return (
         <>
             <Head>
-                <title>상품 수정 | 셀러툴</title>
+                <title>통합 상품 관리 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />

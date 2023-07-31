@@ -29,7 +29,7 @@ export default function ErpCollectionEditExcelDownloadFormPage(props) {
     return (
         <>
             <Head>
-                <title>통합 발주 관리 | 셀러툴</title>
+                <title>통합 발주 관리 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />

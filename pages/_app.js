@@ -46,17 +46,18 @@ function MyApp({ Component, pageProps }) {
 		<>
 			<Head>
 				{/* SEO */}
-				<title>셀러툴</title>
+				<title>셀러툴 - 쇼핑몰 통합관리</title>
 				<link rel="canonical" href="https://www.sellertool.io" />
-				<meta name="description" content="성공적인 온라인 커머스를 위한 통합 관리 도구 셀러툴" />
-				<meta name="keywords" content="셀러툴,마진율 계산기,엑셀 변환기,스마트스토어,내 상품 순위,온라인 커머스,오픈마켓 관리,매출 관리,선입선출,WMS,ERP,주문관리" />
+				<meta name="description" content="마진율 계산기 부터 재고관리 까지 오픈마켓 통합 관리 솔루션 셀러툴!" />
+				<meta name="keywords" content="셀러툴, 마진율 계산기, 엑셀 변환기, 스마트스토어, 내 상품 순위, 온라인 커머스, 3PL, WMS, 선입선출, 주문관리" />
 				<meta property="og:type" content="website" />
-				<meta property="og:title" content="셀러툴" />
-				<meta property="og:description" content="성공적인 온라인 커머스를 위한 통합 관리 도구 셀러툴" />
-				<meta property="og:site_name" content="셀러툴" />
+				<meta property="og:title" content="셀러툴 - 쇼핑몰 통합관리" />
+				<meta property="og:description" content="마진율 계산기 부터 재고관리 까지 오픈마켓 관리 솔루션 셀러툴!" />
+				<meta property="og:site_name" content="셀러툴 - 쇼핑몰 통합관리" />
 				<meta property="og:url" content="https://www.sellertool.io" />
 				<meta property="og:locale" content="ko_KR" />
-				<meta name="naver-site-verification" content="252da9b025f87c789d7fb532484cf85a81ed52f0" />
+				{/* <meta name="naver-site-verification" content="252da9b025f87c789d7fb532484cf85a81ed52f0" /> */}
+				<meta name="naver-site-verification" content="5abe3c64078f2d1754ecfd2de8327d7e31542d4c" />
 				{/* SEO */}
 
 				{/* Icon */}

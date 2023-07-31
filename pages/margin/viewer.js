@@ -8,7 +8,7 @@ const MarginViewerPage = () => {
     return (
         <>
             <Head>
-                <title>마진율 계산기 뷰어 | 셀러툴</title>
+                <title>마진율 계산기 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <SecondaryNavbarMainComponent></SecondaryNavbarMainComponent>

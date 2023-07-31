@@ -56,7 +56,8 @@ function MyApp({ Component, pageProps }) {
 				<meta property="og:site_name" content="셀러툴 - 쇼핑몰 통합관리" />
 				<meta property="og:url" content="https://www.sellertool.io" />
 				<meta property="og:locale" content="ko_KR" />
-				<meta name="naver-site-verification" content="252da9b025f87c789d7fb532484cf85a81ed52f0" />
+				{/* <meta name="naver-site-verification" content="252da9b025f87c789d7fb532484cf85a81ed52f0" /> */}
+				<meta name="naver-site-verification" content="5abe3c64078f2d1754ecfd2de8327d7e31542d4c" />
 				{/* SEO */}
 
 				{/* Icon */}

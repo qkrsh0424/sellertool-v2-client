@@ -2,10 +2,10 @@ import { customToast, defaultOptions } from "../../../../../components/toast/cus
 import { nRankRecordDataConnect } from "../../../../../data_connect/nRankRecordDataConnect";
 
 export function useApiHook() {
-    const onReqCreateSearchInfo = async (
-        options = {body: {}, params: {}, headers: {}},
+    const onReqCreateSearchInput = async (
+        options = {body: {}, headers: {}},
         callbackFn = {
-            successCallback: (results, response) => { },
+            successCallback: (results, response) => {},
             failCallback: () => {}
         }
     ) => {
@@ -29,7 +29,53 @@ export function useApiHook() {
             })
     }
 
+    const onReqDeleteNRankRecord = async (
+        options = {params: {}, headers: {}},
+        callbackFn = {
+            successCallback: (results, response) => {},
+            failCallback: () => {}
+        }
+    ) => {
+        await nRankRecordDataConnect().deleteOne(options?.params, options?.headers)
+            .then(res => {
+                if (res.status === 200) {
+                    callbackFn.successCallback(res?.data?.data, res);
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                })
+            })
+    }
+
+    const onReqSearchNRankRecordList = async (
+        options = {headers: {}},
+        callbackFn = {
+            successCallback: (results, response) => {},
+            failCallback: () => {}
+        }
+    ) => {
+        await nRankRecordDataConnect().searchRecordList(options?.headers)
+            .then(res => {
+                if (res.status === 200) {
+                    callbackFn.successCallback(res?.data?.data, res);
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                })
+            })
+    }
+
     return {
-        onReqCreateSearchInfo
+        onReqCreateSearchInput,
+        onReqDeleteNRankRecord,
+        onReqSearchNRankRecordList
     }
 }

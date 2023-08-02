@@ -6,6 +6,7 @@ import useNRankRecordListHook from "./hooks/useNRankRecordListHook";
 import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
 import { useSelector } from "react-redux";
 import { useApiHook } from "./hooks/useApiHook";
+import { useEffect } from "react";
 
 export const Container = styled.div`
     background:var(--defaultBackground);
@@ -16,17 +17,23 @@ export default function MainComponent(){
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const { onReqCreateSearchInfo } = useApiHook();
+    const { onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList } = useApiHook();
     const { keyword, mallName, onChangeKeyword, onChangeMallName, onClearKeyword, onClearMallName, checkSearchInfoForm } = useSearchInputHook();
+    const { searchedRecordList: recordList, onSetRecordList } = useNRankRecordListHook({ keyword, mallName });
 
-    const {
-        isSearchLoading: isRecordSearchLoading,
-        searchedRecordList: recordList,
-        reqDeleteNRankRecord,
-        reqSearchNRankRecordList
-    } = useNRankRecordListHook({ keyword, mallName });
+    useEffect(() => {
+        if(!wsId) {
+            return;
+        }
 
-    const handleActionSubmitRecordInfo = async (e) => {
+        async function initialize() {
+            handleReqSearchNRankRecordList()
+        }
+
+        initialize();
+    }, [wsId])
+
+    const handleSubmitRecordInput = async (e) => {
         e.preventDefault();
 
         if(recordList?.length > 0) {
@@ -50,18 +57,41 @@ export default function MainComponent(){
             return;
         }
         
-        await onReqCreateSearchInfo({
+        await onReqCreateSearchInput({
             body: {
                 keyword: keyword.trim(),
                 mall_name: mallName.trim()
             },
             headers: { wsId: wsId }
-        },
-        {
+        },{
             successCallback: () => {
                 onClearKeyword();
                 onClearMallName();
-                reqSearchNRankRecordList();
+                handleReqSearchNRankRecordList();
+            }
+        })
+    }
+
+    const handleReqDeleteRankRecord = async (selectedId, callback) => {
+        await onReqDeleteNRankRecord({
+            params: {
+                id: selectedId
+            },
+            headers: { wsId: wsId }
+        },{
+            successCallback: () => {
+                callback();
+                handleReqSearchNRankRecordList();
+            }
+        })
+    }
+
+    const handleReqSearchNRankRecordList = async () => {
+        await onReqSearchNRankRecordList({
+            headers: { wsId: wsId }
+        }, {
+            successCallback: (results) => {
+                onSetRecordList(results);
             }
         })
     }
@@ -79,15 +109,15 @@ export default function MainComponent(){
                         mallName={mallName}
                         onChangeKeyword={onChangeKeyword}
                         onChangeMallName={onChangeMallName}
-                        onSubmitRecordInfo={handleActionSubmitRecordInfo}
+                        onSubmitRecordInput={handleSubmitRecordInput}
                     />
                     <RecordItemListComponent
                         keyword={keyword}
                         mallName={mallName}
                         recordList={recordList}
-                        reqDeleteNRankRecord={reqDeleteNRankRecord}
-                        isRecordSearchLoading={isRecordSearchLoading}
-                        reqSearchNRankRecordList={reqSearchNRankRecordList}
+                        onDeleteRankRecord={handleReqDeleteRankRecord}
+                        onSearchNRankRecordList={handleReqSearchNRankRecordList}
+                        onSetRecordList={onSetRecordList}
                     />
                 </Layout>
             </Container>

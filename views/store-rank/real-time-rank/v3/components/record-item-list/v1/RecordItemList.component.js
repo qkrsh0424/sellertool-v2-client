@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Container, ContentGroup, ContentValue, ControlBox, RecordInfo, RecordItemBox, Wrapper } from "./styles/RecordItemList.styled";
 import { RecordDetailModalComponent } from "../../record-detail-modal/v1";
-import { useSelector } from "react-redux";
 import { CustomBoxImage } from "../../../modules";
 import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
@@ -11,14 +10,12 @@ export function RecordItemListComponent({
     keyword,
     mallName,
     recordList,
-    reqDeleteNRankRecord,
-    isRecordSearchLoading,
-    reqSearchNRankRecordList
+    onDeleteRankRecord,
+    onSearchNRankRecordList
 }) {
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
     const [recordDeleteModalOpen, setRecordDeleteModalOpen] = useState(false);
-    const workspaceRedux = useSelector(state => state.workspaceRedux);
     
     useEffect(() => {
         if(!recordList) {
@@ -58,16 +55,7 @@ export function RecordItemListComponent({
     }
 
     const handleDeleteRankRecord = async () => {
-        let params = {
-            id: selectedRecord?.id
-        }
-        let headers = {
-            wsId: workspaceRedux?.workspaceInfo?.id
-        }
-
-        await reqDeleteNRankRecord(params, headers, () => {
-            handleCloseRecordDeleteModal();
-        })
+        onDeleteRankRecord(selectedRecord?.id, () => handleCloseRecordDeleteModal())
     }
 
     return (
@@ -176,8 +164,7 @@ export function RecordItemListComponent({
                         open={detailSearchModalOpen}
                         record={selectedRecord}
                         onClose={handleCloseDetailSearchModal}
-                        isRecordSearchLoading={isRecordSearchLoading}
-                        reqSearchNRankRecordList={reqSearchNRankRecordList}
+                        onSearchNRankRecordList={onSearchNRankRecordList}
                     />
                 }
 

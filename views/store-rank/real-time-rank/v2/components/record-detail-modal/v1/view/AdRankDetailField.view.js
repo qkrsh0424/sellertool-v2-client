@@ -124,7 +124,7 @@ export default function AdRankDetailFieldView({
             })}
             {!(adRecordDetails?.length > 0) &&
                 <InfoText>
-                    <div>조회 결과가 존재하지 않습니다.</div>
+                    <div>조회 결과가 존재하지 않습니다</div>
                 </InfoText>
             }
         </Wrapper>

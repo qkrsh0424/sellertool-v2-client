@@ -141,9 +141,9 @@ export default function RankDetailFieldView({
             {!(recordDetails?.length > 0) &&
                 <InfoText>
                     {targetRecordInfo?.created_at ?
-                        <div>조회된 페이지 내 순위에 오르지 못했습니다</div>
+                        <div>조회 결과가 존재하지 않습니다</div>
                         :
-                        <div>조회 버튼을 눌러 순위를 검색해보세요</div>
+                        <div style={{ color: '#606060' }}>조회 버튼을 눌러 순위를 검색해보세요 !</div>
                     }
                 </InfoText>
             }

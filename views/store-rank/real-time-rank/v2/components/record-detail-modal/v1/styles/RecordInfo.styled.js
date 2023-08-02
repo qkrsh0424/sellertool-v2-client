@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
     border: 1px solid #fff;
     box-shadow: var(--defaultBoxShadow);
     border-radius: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     overflow: hidden;
     overflow-x: scroll;
 `;

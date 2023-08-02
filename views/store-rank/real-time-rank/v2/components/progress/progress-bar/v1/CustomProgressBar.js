@@ -44,7 +44,7 @@ export function CustomProgressBar({
                     color={color}
                     variant={variant}
                     value={value}
-                    customColor={customcolor}
+                    customcolor={customcolor}
                     {...props}
                 />
             }

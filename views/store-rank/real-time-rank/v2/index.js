@@ -21,6 +21,7 @@ export default function MainComponent(){
     } = useSearchInputHook()
 
     const {
+        isSearchLoading: isRecordSearchLoading,
         searchedRecordList: recordList,
         reqDeleteNRankRecord,
         reqSearchNRankRecordList
@@ -65,6 +66,7 @@ export default function MainComponent(){
                         mallName={mallName}
                         recordList={recordList}
                         reqDeleteNRankRecord={reqDeleteNRankRecord}
+                        isRecordSearchLoading={isRecordSearchLoading}
                         reqSearchNRankRecordList={reqSearchNRankRecordList}
                     />
                 </Layout>

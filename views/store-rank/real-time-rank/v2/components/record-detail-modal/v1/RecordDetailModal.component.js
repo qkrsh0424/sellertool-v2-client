@@ -9,15 +9,17 @@ import { useState } from "react";
 import ViewControlFieldView from "./view/ViewControlField.view";
 import { CustomDialog } from "../../../../../../../components/dialog/v1/CustomDialog";
 import { CustomProgressIcon } from "../../progress/progress-icon/v1";
+import SubInfoFieldView from "./view/SubInfoField.view";
 
 export function RecordDetailModalComponent({
     open,
     onClose,
     record,
+    isRecordSearchLoading,
     reqSearchNRankRecordList
 }) {
     const [isAdRankView, setIsAdRankView] = useState(false);
-    
+
     const {
         isLoading: isRecordDetailsSearchLoading,
         recordDetails,
@@ -54,8 +56,12 @@ export function RecordDetailModalComponent({
                         record={record}
                         targetRecordInfo={targetRecordInfo}
                     />
+                    <SubInfoFieldView
+                        record={record}
+                    />
                     <ButtonFieldView
                         targetRecordInfo={targetRecordInfo}
+                        isRecordSearchLoading={isRecordSearchLoading}
                         isRecordDetailsSearchLoading={isRecordDetailsSearchLoading}
                         onSubmit={handleCreateNRankRecordDetail}
                     />
@@ -71,7 +77,6 @@ export function RecordDetailModalComponent({
                         {isRecordDetailsSearchLoading &&
                             <CustomProgressIcon
                                 type={'sync'}
-                                // color='#a7abb9'
                                 color='var(--mainColor)'
                                 size={20}
                                 margin={20}

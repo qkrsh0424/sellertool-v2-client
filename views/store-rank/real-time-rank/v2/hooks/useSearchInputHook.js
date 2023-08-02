@@ -36,7 +36,7 @@ export default function useSearchInputHook() {
         }
         
         let headers = {
-            wsId: workspaceRedux?.workspaceInfo.id
+            wsId: workspaceRedux?.workspaceInfo?.id
         }
         
         await nRankRecordDataConnect().createOne(body, headers)
@@ -73,12 +73,6 @@ export default function useSearchInputHook() {
         if(mallName.length > 50) {
             throw new Error("스토어명은 50자 이내로 입력해주세요.")
         }
-
-        // if(recordList?.length > 0) {
-        //     if(recordList.find(r => r.keyword === keyword && r.mall_name === mallName)) {
-        //         throw new Error("동일한 검색항목이 존재합니다")
-        //     }
-        // }
     }
 
     return {

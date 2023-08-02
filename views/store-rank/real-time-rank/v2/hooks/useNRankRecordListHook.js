@@ -9,6 +9,7 @@ export default function useNRankRecordListHook ({
     keyword,
     mallName
 }) {
+    const [isSearchLoading, setIsSearchLoading] = useState(false);
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const [recordList, setRecordList] = useState(null);
     const [searchedRecordList, setSearchedRecordList] = useState(null);
@@ -62,6 +63,7 @@ export default function useNRankRecordListHook ({
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
+        setIsSearchLoading(true);
         await nRankRecordDataConnect().searchRecordList(headers)
             .then(res => {
                 if(res.status === 200) {
@@ -76,6 +78,7 @@ export default function useNRankRecordListHook ({
                     toastId: res?.data?.memo
                 })
             })
+        setIsSearchLoading(false);
     }
 
     const reqDeleteNRankRecord = async (params, headers, successCallback) => {
@@ -96,6 +99,7 @@ export default function useNRankRecordListHook ({
     }
 
     return {
+        isSearchLoading,
         searchedRecordList,
         reqDeleteNRankRecord,
         reqSearchNRankRecordList

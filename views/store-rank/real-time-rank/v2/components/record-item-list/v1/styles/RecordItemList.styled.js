@@ -71,7 +71,7 @@ export const RecordInfo = styled.div`
         position: absolute;
         bottom: 10px;
         right: 15px;
-        margin: 5px;
+        margin: 2px;
 
         .item-el {
             color: #666;
@@ -80,7 +80,7 @@ export const RecordInfo = styled.div`
             background-color: var(--defaultGrayColor);
             border: 1px solid var(--defaultGrayColor);
             border-radius: 5px;
-            padding: 2px 5px;
+            padding: 5px 7px;
         }
     }
 `;

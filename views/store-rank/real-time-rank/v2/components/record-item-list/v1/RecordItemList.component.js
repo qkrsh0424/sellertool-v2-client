@@ -12,6 +12,7 @@ export function RecordItemListComponent({
     mallName,
     recordList,
     reqDeleteNRankRecord,
+    isRecordSearchLoading,
     reqSearchNRankRecordList
 }) {
     const [selectedRecord, setSelectedRecord] = useState(null);
@@ -175,6 +176,7 @@ export function RecordItemListComponent({
                         open={detailSearchModalOpen}
                         record={selectedRecord}
                         onClose={handleCloseDetailSearchModal}
+                        isRecordSearchLoading={isRecordSearchLoading}
                         reqSearchNRankRecordList={reqSearchNRankRecordList}
                     />
                 }

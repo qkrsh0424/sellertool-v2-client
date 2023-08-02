@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { nRankRecordDetailDataConnect } from "../../../../../../../../data_connect/nRankRecordDetailDataConnect";
 import { customToast, defaultOptions } from "../../../../../../../../components/toast/custom-react-toastify/v1";
-import { getCookie, setCookie, deleteCookie } from 'cookies-next';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
 export default function useNRankRecordDetailHook({
     record
 }) {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
     const [recordDetails, setRecordDetails] = useState(null);
     const [adRecordDetails, setAdRecordDetails] = useState(null);
     const [targetRecordInfo, setTargetRecordInfo] = useState(null);
@@ -30,7 +30,7 @@ export default function useNRankRecordDetailHook({
             let pendingIds = getCookie('nrank_search_pending_ids');
             let ids = pendingIds?.split(" ") ?? [];
             if (ids.includes(record.id)) {
-                setIsLoading(true)
+                setIsLoading(true);
             } else {
                 setIsLoading(false);
             }
@@ -119,8 +119,6 @@ export default function useNRankRecordDetailHook({
 
         setCookie('nrank_search_pending_ids', updatedIds);
 
-        setIsLoading(true);
-
         let body = {
             record_id: record.id
         }
@@ -129,6 +127,7 @@ export default function useNRankRecordDetailHook({
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
+        setIsLoading(true);
         await nRankRecordDetailDataConnect().createList(body, headers)
             .then(res => {
                 if(res.status === 200) {
@@ -151,9 +150,12 @@ export default function useNRankRecordDetailHook({
                 let ids = pendingIds.split(" ");
                 let updatedIds = ids.filter(id => id !== record.id).join(" ");
 
-                setCookie('nrank_search_pending_ids', updatedIds);
+                if(updatedIds.length === 0) {
+                    deleteCookie('nrank_search_pending_ids');
+                }else {
+                    setCookie('nrank_search_pending_ids', updatedIds);
+                }
             })
-
         setIsLoading(false);
     }
 

@@ -87,6 +87,6 @@ export function useDataSourceHook(props) {
     return {
         onReqFetchWorkspace,
         onReqFetchRefSubscriptionPlan,
-        onReqPreparePayments
+        onReqPreparePayments,
     }
 }

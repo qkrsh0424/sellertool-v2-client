@@ -1,4 +1,6 @@
 const IMP_CODE = process.env.NODE_ENV == 'development' ? process.env.development.portoneImpCode : process.env.production.portoneImpCode
+const PORTONE_NOTICE_URL = process.env.NODE_ENV == 'development' ? process.env.development.portoneNoticeUrl : process.env.production.portoneNoticeUrl
+const CLIENT_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.clientAddress : process.env.production.clientAddress
 
 export const PortoneUtils = () => {
     return {
@@ -29,6 +31,7 @@ const requestPay = async (options = { payData }, callbackFn = (response) => { })
     /* 결제 창 호출하기 */
     await IMP.request_pay({
         ...options?.payData,
-        notice_url:'https://9830-175-197-128-183.ngrok.io/auth/v1/payments/portone-webhook'
+        notice_url: PORTONE_NOTICE_URL,
+        m_redirect_url: `${CLIENT_ADDRESS}/payments/complete`
     }, (response) => callbackFn(response));
 }

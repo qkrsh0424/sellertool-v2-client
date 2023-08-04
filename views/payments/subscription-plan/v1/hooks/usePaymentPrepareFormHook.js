@@ -5,7 +5,7 @@ const getInitPaymentPrepareForm = () => {
     return {
         id: uuidv4(),
         payServiceType: 'SUBSCRIPTION_PLAN',
-        pg: 'nice',
+        pg: 'html5_inicis',
         payMethod: 'card',
         buyerName: '',
         buyerPhoneNumber: '',

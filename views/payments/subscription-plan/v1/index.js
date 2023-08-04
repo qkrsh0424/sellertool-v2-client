@@ -11,6 +11,7 @@ import { customToast, defaultOptions } from "../../../../components/toast/custom
 import formatValidUtils from "../../../../utils/formatValidUtils";
 import { customBackdropController } from "../../../../components/backdrop/default/v1";
 import { PortoneUtils } from "../../../../utils/PortoneUtils";
+import { EventUtils } from "../../../../utils/EventUtils";
 
 const portoneUtils = PortoneUtils();
 
@@ -132,9 +133,15 @@ export default function MainComponent(props) {
         await dataSourceHook.onReqPreparePayments({
             body: body,
         }, (results, response) => {
+            console.log(results);
             preparePaymentsResults = results
         });
+
         customBackdropControl.hideBackdrop();
+
+        if (!preparePaymentsResults) {
+            return;
+        }
 
         await portoneUtils.requestPay({
             payData: {
@@ -147,48 +154,22 @@ export default function MainComponent(props) {
                 buyer_name: preparePaymentsResults?.buyerName,
                 buyer_tel: preparePaymentsResults?.buyerPhoneNumber,
                 buyer_addr: preparePaymentsResults?.buyerAddress,
-                buyer_postcode: preparePaymentsResults?.buyerPostcode
+                buyer_postcode: preparePaymentsResults?.buyerPostcode,
             }
-        }, (response) => {
-            // apply_num: "30003184"
-            // bank_name: null
-            // buyer_addr: ""
-            // buyer_email: "piaar.techteam@gmail.com"
-            // buyer_name: "후닛훈"
-            // buyer_postcode: ""
-            // buyer_tel: "01085356112"
-            // card_name: "국민KB카드"
-            // card_number: "62337400****6021"
-            // card_quota: 0
-            // currency: "KRW"
-            // custom_data: null
-            // imp_uid: "imp_926994632760"
-            // merchant_uid: "mid_c2d10df5-11c8-4a6a-9b82-1b669b850637"
-            // name: "후닛훈"
-            // paid_amount: 925
-            // paid_at: 1690424028
-            // pay_method: "card"
-            // pg_provider: "nice"
-            // pg_tid: "nictest04m01012307271113477313"
-            // pg_type: "payment"
-            // receipt_url: "https://npg.nicepay.co.kr/issue/IssueLoader.do?TID=nictest04m01012307271113477313&type=0&InnerWin=Y"
-            // status: "paid"
-            // success: true
-            console.log(response);
+        }, async (response) => {
             if (response?.success) {
-                alert('결제가 성공적으로 완료되었습니다.');
+                await EventUtils.delay(2000);
+                // alert('결제가 성공적으로 완료되었습니다.');
                 router.replace({
-                    pathname: '/workspace/management',
-                    query: {
-                        wsId: workspaceId,
-                        view: 'SUBSCRIPTION_PLAN'
-                    }
-                })
+                    pathname: '/payments/complete'
+                });
+
             } else {
                 alert(response?.error_msg);
                 router.reload();
             }
         });
+
     }
 
     return (

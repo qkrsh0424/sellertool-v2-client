@@ -39,4 +39,15 @@ export const LinkButton = styled.div`
     .link-text{
         margin-left: 15px;
     }
+    
+    .alram-tag{
+        font-size: 11px;
+        vertical-align: top;
+        border: 1px solid var(--defaultSkyBlueColor);
+        border-radius: 10px;
+        padding: 0 5px;
+        margin-left: 5px;
+        color: var(--defaultSkyBlueColor);
+        font-weight: 700;
+    }
 `;

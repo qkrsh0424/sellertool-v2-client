@@ -2,11 +2,6 @@ const delay = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export const eventUtils = {
-    delay
+export const EventUtils = {
+    delay: delay
 }
-// export function eventUtils() {
-//     return {
-//         delay
-//     }
-// }

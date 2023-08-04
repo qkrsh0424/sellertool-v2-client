@@ -1,5 +1,5 @@
 import axios from "axios";
-import { eventUtils } from "../utils/eventUtils";
+import { EventUtils } from "../utils/EventUtils";
 
 const AUTH_API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.authApiAddress : process.env.production.authApiAddress
 
@@ -50,7 +50,7 @@ axiosAuthInterceptor.interceptors.response.use(
                     })
 
                 console.log('csrf 토큰 응답받음');
-                await eventUtils.delay(500).then(() => { isAuthTokenRefreshing = false; });
+                await EventUtils.delay(500).then(() => { isAuthTokenRefreshing = false; });
                 console.log('csrf 토큰 응답받고 다음작업 준비중.');
             }
 
@@ -69,7 +69,7 @@ axiosAuthInterceptor.interceptors.response.use(
                         return Promise.reject(error);
                     });
                 console.log('기존 요청들 실행전')
-                await eventUtils.delay(500)
+                await EventUtils.delay(500)
                     .then(() => {
                         onTokenRefreshed();
                         isCsrfRefreshing = false;

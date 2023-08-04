@@ -24,13 +24,14 @@ const ContentWrapper = styled.div`
 
 
 export default function LayoutComponent({
+    workspace,
     isWorkspaceMaster,
     children
 }) {
     return (
         <>
             <Container>
-                <NavbarComponent isWorkspaceMaster={isWorkspaceMaster} />
+                <NavbarComponent workspace={workspace} isWorkspaceMaster={isWorkspaceMaster} />
                 <Block />
                 <ContentWrapper>
                     {children}

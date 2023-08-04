@@ -1,0 +1,1 @@
+export { FdPaymentConfirm } from './FdPaymentConfirm';

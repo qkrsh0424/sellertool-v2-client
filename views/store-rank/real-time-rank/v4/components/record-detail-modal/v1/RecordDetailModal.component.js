@@ -12,35 +12,28 @@ import { CustomProgressIcon } from "../../progress/progress-icon/v1";
 import SubInfoFieldView from "./view/SubInfoField.view";
 import { useApiHook } from "./hooks/useApiHook";
 import { useSelector } from "react-redux";
-import { deleteCookie, getCookie, setCookie } from "cookies-next";
-import { customToast, defaultOptions } from "../../../../../../../components/toast/custom-react-toastify/v1";
 import RankDetailSkeletonFieldView from "./view/RankDetailSkeletonField.view";
 
 export function RecordDetailModalComponent({
     open,
     onClose,
     record,
+    currentPendingRecordIds,
+    onSetCurrentPendingRecordIds,
     onSearchNRankRecordList
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const [isRecordSearchLoading, setIsRecordSearchLoading] = useState(false);
-    const [isRecordDetailsSearchLoading, setIsRecordDetailsSearchLoading] = useState(false);
     const [isAdRankView, setIsAdRankView] = useState(false);
 
-    const { onReqCreateNRankRecordDetail, onReqSearchNRankRecordDetail } = useApiHook();
+    const { onReqCreateNRankRecordDetail, onReqSearchNRankRecordDetail, onReqChangeNRankRecordStatusToPending, onReqChangeNRankRecordStatusToFail } = useApiHook();
     const { recordDetails, adRecordDetails, targetRecordInfo, onSetRecordDetails, onSetAdRecordDetails, onActionUpdateTargetRecordInfo } = useNRankRecordDetailHook({ record });
 
     useEffect(() => {
         if(!wsId) {
             return;
-        }
-
-        if(record) {
-            let pendingIds = getCookie('nrank_search_pending_ids');
-            let ids = pendingIds?.split(" ") ?? [];
-            ids.includes(record.id) ? setIsRecordDetailsSearchLoading(true) : setIsRecordDetailsSearchLoading(false);
         }
 
         if(!(record && record.current_nrank_record_info_id)) {
@@ -70,35 +63,45 @@ export function RecordDetailModalComponent({
         setIsAdRankView(false);
     }
 
+    const handleChangeNRankRecordStatusToFail = async () => {
+        let recordId = record.id;
+
+        await onReqChangeNRankRecordStatusToFail({
+            params: { id: recordId },
+            headers: { wsId: wsId }
+        })
+    }
+
+    const handleChangeNRankRecordStatusToPending = async () => {
+        let recordId = record.id;
+
+        await onReqChangeNRankRecordStatusToPending({
+            params: { id: recordId },
+            headers: { wsId: wsId }
+        }, {
+            success: async () => {
+                let ids = [...currentPendingRecordIds].concat(recordId);
+                onSetCurrentPendingRecordIds(ids);
+
+                handleCreateNRankRecordDetail();
+            }
+        })
+    }
+
     const handleCreateNRankRecordDetail = async () => {
-        let pendingIds = getCookie('nrank_search_pending_ids');
-        let updatedIds = pendingIds ? pendingIds.concat(",", record.id) : record.id
-        setCookie('nrank_search_pending_ids', updatedIds);
-        
-        setIsRecordDetailsSearchLoading(true);
         await onReqCreateNRankRecordDetail({
             body: { record_id: record.id },
             headers: { wsId: wsId }
         },{
             success: async () => {
-                let content = `[${record.keyword} - ${record.mall_name}] 랭킹 업데이트 완료 !`
-                customToast.success(content, {
-                    ...defaultOptions,
-                    toastId: content
-                });
-
                 setIsRecordSearchLoading(true);
                 await onSearchNRankRecordList();
                 setIsRecordSearchLoading(false);
             },
-            finally: () => {
-                let updatedPendingIds = getCookie('nrank_search_pending_ids');
-                let ids = updatedPendingIds.split(",");
-                let updatedIds = ids.filter(id => id !== record.id).join(",");
-                updatedIds.length === 0 ? deleteCookie('nrank_search_pending_ids') : setCookie('nrank_search_pending_ids', updatedIds);
+            fail: async () => {
+                handleChangeNRankRecordStatusToFail()
             }
         })
-        setIsRecordDetailsSearchLoading(false);
     }
 
     const handleSearchNRankRecordDetail = async () => {
@@ -115,6 +118,8 @@ export function RecordDetailModalComponent({
             }
         })
     }
+
+    let isPending = currentPendingRecordIds.includes(record.id);
 
     return (
         <>
@@ -136,8 +141,8 @@ export function RecordDetailModalComponent({
                     <ButtonFieldView
                         targetRecordInfo={targetRecordInfo}
                         isRecordSearchLoading={isRecordSearchLoading}
-                        isRecordDetailsSearchLoading={isRecordDetailsSearchLoading}
-                        onSubmit={handleCreateNRankRecordDetail}
+                        isPending={isPending}
+                        onSubmit={handleChangeNRankRecordStatusToPending}
                     />
                     <DetailWrapper style={{ position: 'relative' }}>
                         <ViewControlFieldView
@@ -148,7 +153,7 @@ export function RecordDetailModalComponent({
                             onChangeRankView={handleChangeRankView}
                         />
                         
-                        {isRecordDetailsSearchLoading &&
+                        {isPending &&
                             <CustomProgressIcon
                                 type={'sync'}
                                 color='var(--mainColor)'
@@ -172,7 +177,7 @@ export function RecordDetailModalComponent({
                             <RankDetailSkeletonFieldView />
                         } */}
                         
-                        {(adRecordDetails && recordDetails && !isRecordDetailsSearchLoading) &&
+                        {(adRecordDetails && recordDetails && !isPending) &&
                             <>
                                 {isAdRankView ?
                                     <AdRankDetailFieldView
@@ -187,7 +192,7 @@ export function RecordDetailModalComponent({
                             </>
                         }
 
-                        {isRecordDetailsSearchLoading &&
+                        {isPending &&
                             <RankDetailSkeletonFieldView />
                         }
                     </DetailWrapper>

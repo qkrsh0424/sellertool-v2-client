@@ -8,6 +8,13 @@ import { useSelector } from "react-redux";
 import { useApiHook } from "./hooks/useApiHook";
 import { useEffect } from "react";
 
+const RECORD_STATUS_ENUM = {
+    NONE: 'NONE',
+    PENDING: 'PENDING',
+    COMPLETE: 'COMPLETE',
+    FAIL: 'FAIL'
+}
+    
 export const Container = styled.div`
     background:var(--defaultBackground);
     min-height: 800px;
@@ -17,9 +24,9 @@ export default function MainComponent(){
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const { onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList } = useApiHook();
+    const { onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList, onReqSearchNRankRecordByIds } = useApiHook();
     const { keyword, mallName, onChangeKeyword, onChangeMallName, onClearKeyword, onClearMallName, checkSearchInfoForm } = useSearchInputHook();
-    const { searchedRecordList: recordList, onSetRecordList } = useNRankRecordListHook({ keyword, mallName });
+    const { searchedRecordList: recordList, currentPendingRecordIds, onSetRecordList, onSetCurrentPendingRecordIds } = useNRankRecordListHook({ keyword, mallName });
 
     useEffect(() => {
         if(!wsId) {
@@ -32,6 +39,18 @@ export default function MainComponent(){
 
         initialize();
     }, [wsId])
+
+    useEffect(() => {
+        if(!(currentPendingRecordIds?.length > 0)) {
+            return;
+        }
+
+        const fetch = setInterval(() => {
+            handleSearchNRankRecordByIds();
+        }, [3000])
+
+        return () => clearInterval(fetch);
+    }, [currentPendingRecordIds])
 
     const handleSubmitRecordInput = async (e) => {
         e.preventDefault();
@@ -72,6 +91,36 @@ export default function MainComponent(){
         })
     }
 
+    const handleSearchNRankRecordByIds = async () => {
+        await onReqSearchNRankRecordByIds({
+            body: { ids: currentPendingRecordIds },
+            headers: { wsId: wsId }
+        }, {
+            success: async (results) => {
+                let pendingIds = [];
+                
+                results.forEach(r => {
+                    if(r.status === RECORD_STATUS_ENUM.PENDING) {
+                        pendingIds.push(r.id);
+                    } else if(r.status === RECORD_STATUS_ENUM.COMPLETE) {
+                        let content = `[${r.keyword} - ${r.mall_name}] 랭킹 업데이트 완료 !`
+                        customToast.success(content, {
+                            ...defaultOptions,
+                            toastId: content
+                        });
+                    } else if(r.status === RECORD_STATUS_ENUM.FAIL) {
+                        let content = `[${r.keyword} - ${r.mall_name}] 랭킹 검색 실패. 재시도 해주세요.`
+                        customToast.error(content, {
+                            ...defaultOptions,
+                            toastId: content
+                        });
+                    }
+                })
+                onSetCurrentPendingRecordIds(pendingIds);                
+            }
+        })
+    }
+
     const handleReqDeleteRankRecord = async (selectedId, callback) => {
         await onReqDeleteNRankRecord({
             params: { id: selectedId },
@@ -89,7 +138,32 @@ export default function MainComponent(){
             headers: { wsId: wsId }
         }, {
             success: (results) => {
+                let pendingIds = [];
+                results.forEach(r => {
+                    // 실패와 성공만 확인
+                    if(currentPendingRecordIds.includes(r.id)) {
+                        if(r.status === RECORD_STATUS_ENUM.COMPLETE) {
+                            let content = `[${r.keyword} - ${r.mall_name}] 랭킹 업데이트 완료 !`
+                            customToast.success(content, {
+                                ...defaultOptions,
+                                toastId: content
+                            });
+                        } else if(r.status === RECORD_STATUS_ENUM.FAIL) {
+                            let content = `[${r.keyword} - ${r.mall_name}] 랭킹 검색 실패. 재시도 해주세요.`
+                            customToast.error(content, {
+                                ...defaultOptions,
+                                toastId: content
+                            });
+                        }
+                    }
+
+                    if(r.status === RECORD_STATUS_ENUM.PENDING) {
+                        pendingIds.push(r.id);
+                    }
+                })
+
                 onSetRecordList(results);
+                onSetCurrentPendingRecordIds(pendingIds);
             }
         })
     }
@@ -116,7 +190,8 @@ export default function MainComponent(){
                             recordList={recordList}
                             onDeleteRankRecord={handleReqDeleteRankRecord}
                             onSearchNRankRecordList={handleReqSearchNRankRecordList}
-                            onSetRecordList={onSetRecordList}
+                            currentPendingRecordIds={currentPendingRecordIds}
+                            onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
                         />
                         :
                         <RecordItemListSkeletonComponent />

@@ -120,17 +120,11 @@ export default function RankDetailFieldView({
                                 <InfoGroupBox>
                                     {detail.price_comparision_yn === 'y' &&
                                         <div>
-                                            <span style={{ color: '#000', fontWeight: '600' }}>가격 비교 </span>
-                                            <span style={{ color: '#000', fontWeight: '600' }}>{detail.comparision_rank}위 </span>
+                                            <span style={{ color: '#000', fontWeight: '600' }}>가격 비교</span>
+                                            <span style={{ color: '#000', fontWeight: '600' }}>{detail.comparision_rank}위</span>
                                             <span>({detail.low_mall_count}개 중)</span>
                                         </div>
                                     }
-                                </InfoGroupBox>
-                                <InfoGroupBox>
-                                    <div>
-                                        <span>광고 상품 포함 시 </span>
-                                        <span>{detail.included_ad_rank}위</span>
-                                    </div>
                                 </InfoGroupBox>
                             </div>
                         </div>

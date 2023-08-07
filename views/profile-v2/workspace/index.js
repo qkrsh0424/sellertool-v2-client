@@ -1,15 +1,11 @@
-import { useEffect, useReducer } from 'react';
 import styled from 'styled-components';
-import { csrfDataConnect } from '../../../data_connect/csrfDataConnect';
-import { inviteMemberDataConnect } from '../../../data_connect/inviteMemberDataConnect';
-import { workspaceDataConnect } from '../../../data_connect/workspaceDataConnect';
-import LineBreakerBottom from '../../modules/fragment/LineBreakerBottom';
 import Layout from '../layout/Layout';
 import HeadComponent from './head/Head.component';
 import useInviteMembersHook from './hooks/useInviteMembersHook';
 import useWorkspacesHook from './hooks/useWorkspacesHook';
 import RequestListComponent from './request-list/RequestList.component';
 import WorkspaceListComponent from './workspace-list/WorkspaceList.component';
+import { HocEmptyItemsWithBox, withPendingComponent } from '../../../hoc/loading';
 
 const Container = styled.div`
     overflow: hidden;
@@ -17,6 +13,15 @@ const Container = styled.div`
     min-height: 800px;
 `;
 
+const WorkspaceListWithPending = withPendingComponent({
+    Component: WorkspaceListComponent,
+    EmptyComponent: () => <HocEmptyItemsWithBox element={'생성된 워크스페이스가 없습니다.'} />
+});
+
+const RequestListWithPending = withPendingComponent({
+    Component: RequestListComponent,
+    EmptyComponent: () => <HocEmptyItemsWithBox element={'다른 워크스페이스로부터의 초대 요청이 없습니다.'} />
+})
 const ProfileWorkspaceMainComponent = (props) => {
     const {
         workspaces,
@@ -65,59 +70,6 @@ const ProfileWorkspaceMainComponent = (props) => {
             }
         }
     }
-    // const __inviteMember = {
-    //     req: {
-    //         acceptWorkspace: async (inviteMemberId) => {
-    //             await csrfDataConnect().getApiCsrf();
-    //             await inviteMemberDataConnect().actionAccept({ inviteMemberId })
-    //                 .catch(err => {
-    //                     let res = err?.response;
-
-    //                     if (!res) {
-    //                         alert('네트워크 연결이 원활하지 않습니다.');
-    //                         return;
-    //                     }
-
-    //                     if (res?.status === 500) {
-    //                         alert('undefined error.');
-    //                         return;
-    //                     }
-
-    //                     alert(res?.data?.memo);
-    //                 })
-    //         },
-    //         rejectWorkspace: async (inviteMemberId) => {
-    //             await csrfDataConnect().getApiCsrf();
-    //             await inviteMemberDataConnect().actionReject({ inviteMemberId })
-    //                 .catch(err => {
-    //                     let res = err?.response;
-
-    //                     if (!res) {
-    //                         alert('네트워크 연결이 원활하지 않습니다.');
-    //                         return;
-    //                     }
-
-    //                     if (res?.status === 500) {
-    //                         alert('undefined error.');
-    //                         return;
-    //                     }
-
-    //                     alert(res?.data?.memo);
-    //                 })
-    //         }
-    //     },
-    //     submit: {
-    //         acceptWorkspace: async (inviteMemberId) => {
-    //             await __inviteMember.req.acceptWorkspace(inviteMemberId);
-    //             await __inviteMember.req.fetchInviteMembers();
-    //             await __workspace.req.fetchWorkspaces();
-    //         },
-    //         rejectWorkspace: async (inviteMemberId) => {
-    //             await __inviteMember.req.rejectWorkspace(inviteMemberId);
-    //             await __inviteMember.req.fetchInviteMembers();
-    //         }
-    //     }
-    // }
 
     return (
         <>
@@ -125,36 +77,25 @@ const ProfileWorkspaceMainComponent = (props) => {
                 <HeadComponent></HeadComponent>
                 <Layout>
                     <>
-                        <WorkspaceListComponent
+                        <WorkspaceListWithPending
+                            pendingDatas={workspaces}
                             workspaces={workspaces}
 
                             onSubmitRefreshWorkspaces={__handle.submit.refreshWorkspaces}
                         />
-                        <RequestListComponent
-                            inviteMembers={inviteMembers}
+                        <div style={{ marginTop: '40px' }}>
+                            <RequestListWithPending
+                                pendingDatas={inviteMembers}
+                                inviteMembers={inviteMembers}
 
-                            onSubmitRefreshInviteMembers={__handle.submit.refreshInviteMembers}
-                            onSubmitAcceptWorkspace={__handle.submit.acceptWorkspace}
-                            onSubmitRejectWorkspace={__handle.submit.rejectWorkspace}
-                        />
+                                onSubmitRefreshInviteMembers={__handle.submit.refreshInviteMembers}
+                                onSubmitAcceptWorkspace={__handle.submit.acceptWorkspace}
+                                onSubmitRejectWorkspace={__handle.submit.rejectWorkspace}
+                            />
+                        </div>
                     </>
                 </Layout>
             </Container>
-            {/* <Layout>
-                <Container>
-                    <HeadComponent />
-                    <WorkspaceListComponent
-                        workspaces={workspaces}
-                    />
-                    <LineBreakerBottom />
-                    <RequestListComponent
-                        inviteMembers={inviteMembers}
-
-                        onSubmitAcceptWorkspace={__inviteMember.submit.acceptWorkspace}
-                        onSubmitRejectWorkspace={__inviteMember.submit.rejectWorkspace}
-                    />
-                </Container>
-            </Layout> */}
         </>
     );
 }

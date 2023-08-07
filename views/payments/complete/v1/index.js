@@ -48,7 +48,7 @@ function SuccessCard({
                     <div className='button-link-group'>
                         <Link
                             href={{
-                                pathname: '/workspace/management',
+                                pathname: '/profile/payment',
                                 query: {
                                     view: 'SETTINGS',
                                     wsId: wsId

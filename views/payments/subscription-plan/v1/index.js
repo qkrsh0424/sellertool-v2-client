@@ -133,7 +133,6 @@ export default function MainComponent(props) {
         await dataSourceHook.onReqPreparePayments({
             body: body,
         }, (results, response) => {
-            console.log(results);
             preparePaymentsResults = results
         });
 

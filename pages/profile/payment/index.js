@@ -2,9 +2,8 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import FooterMain from '../../views/footer/FooterMain';
-import PrimaryNavbarMainComponent from '../../views/navbar/primary-navbar';
-import ProfileAccountMainComponent from '../../views/profile-v2/account';
+import PrimaryNavbarMainComponent from '../../../views/navbar/primary-navbar';
+import ProfilePaymentMainComponent from '../../../views/profile-v2/payment';
 
 const ProfileAccountPage = (props) => {
     const userRedux = useSelector(state => state.userRedux);
@@ -25,9 +24,8 @@ const ProfileAccountPage = (props) => {
             <Head>
                 <title>프로필 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
-            <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
-            <ProfileAccountMainComponent></ProfileAccountMainComponent>
-            {/* <FooterMain></FooterMain> */}
+            <PrimaryNavbarMainComponent />
+            <ProfilePaymentMainComponent />
         </>
     );
 }

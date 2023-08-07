@@ -18,6 +18,11 @@ export default function NavbarComponent(props) {
                     pathname: '/profile/workspace'
                 })
                 break;
+            case 'payment':
+                router.push({
+                    pathname: '/profile/payment'
+                })
+                break;
             default:
                 break;
         }
@@ -68,6 +73,28 @@ export default function NavbarComponent(props) {
                         ></Image>
                     </div>
                     <div className='link-text'>워크스페이스</div>
+                </LinkButton>
+                <LinkButton
+                    onClick={() => onActionRouteToPath('payment')}
+                    style={{
+                        background: (router.pathname === '/profile/payment') ? '#f0f0f0' : ''
+                    }}
+                >
+                    <div
+                        className='icon-figure'
+                    >
+                        <Image
+                            loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
+                            src='/images/icon/payment_default_808080.svg'
+                            layout='responsive'
+                            width={1}
+                            height={1}
+                            objectFit={'cover'}
+                            alt='image'
+                            loading='lazy'
+                        ></Image>
+                    </div>
+                    <div className='link-text'>결제내역</div>
                 </LinkButton>
             </Container>
         </>

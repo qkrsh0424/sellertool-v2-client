@@ -155,18 +155,34 @@ export default function MainComponent(props) {
                 buyer_tel: preparePaymentsResults?.buyerPhoneNumber,
                 buyer_addr: preparePaymentsResults?.buyerAddress,
                 buyer_postcode: preparePaymentsResults?.buyerPostcode,
+            },
+            params: {
+                wsId: workspaceId
             }
         }, async (response) => {
             if (response?.success) {
-                await EventUtils.delay(2000);
-                // alert('결제가 성공적으로 완료되었습니다.');
+                await EventUtils.delay(1000);
                 router.replace({
-                    pathname: '/payments/complete'
+                    pathname: '/payments/complete',
+                    query: {
+                        wsId: workspaceId,
+                        imp_uid: response?.imp_uid,
+                        merchant_uid: response?.merchant_uid,
+                        imp_success: true
+                    }
                 });
 
             } else {
-                alert(response?.error_msg);
-                router.reload();
+                router.replace({
+                    pathname: '/payments/complete',
+                    query: {
+                        wsId: workspaceId,
+                        imp_uid: response?.imp_uid,
+                        merchant_uid: response?.merchant_uid,
+                        imp_success: false,
+                        error_msg: response?.error_msg
+                    }
+                });
             }
         });
 

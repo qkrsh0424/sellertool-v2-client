@@ -20,7 +20,7 @@ export function FdServiceList() {
             target: '_self'
         },
         {
-            href: '#',
+            href: '/#',
             name: '스토어 랭킹',
             isReady: false,
             target: '_self'

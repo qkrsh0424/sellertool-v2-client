@@ -22,7 +22,7 @@ options.payData = {
     buyer_postcode: "string"
 }
 */
-const requestPay = async (options = { payData }, callbackFn = (response) => { }) => {
+const requestPay = async (options = { payData, params }, callbackFn = (response) => { }) => {
     if (!window.IMP) return;
     /* 가맹점 식별하기 */
     const { IMP } = window;
@@ -32,6 +32,6 @@ const requestPay = async (options = { payData }, callbackFn = (response) => { })
     await IMP.request_pay({
         ...options?.payData,
         notice_url: PORTONE_NOTICE_URL,
-        m_redirect_url: `${CLIENT_ADDRESS}/payments/complete`
+        m_redirect_url: `${CLIENT_ADDRESS}/payments/complete?wsId=${options?.params?.wsId}`
     }, (response) => callbackFn(response));
 }

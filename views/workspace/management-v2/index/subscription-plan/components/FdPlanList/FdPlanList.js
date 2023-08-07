@@ -11,7 +11,17 @@ export function FdPlanList({
     const router = useRouter();
     const subscriptionPlan = currentWorkspace?.subscriptionPlan;
 
-    const handleApplySubscriptionPlan = (refSubscriptionPlanId) => {
+    const handleApplySubscriptionPlan = (refSubscriptionPlanId, plan) => {
+        if (plan === 'PRIVATE') {
+            router.push({
+                pathname: '/workspace/management',
+                query: {
+                    wsId: currentWorkspace?.id,
+                    view: 'SETTINGS'
+                }
+            });
+            return;
+        }
         router.push({
             pathname: '/payments/subscription-plan',
             query: {
@@ -28,7 +38,6 @@ export function FdPlanList({
                 <STY_CardListWrapper>
                     {refSubscriptionPlanList?.map(refSubscriptionPlan => {
                         const buttonType = SubscriptionPlanDetails[refSubscriptionPlan?.subscriptionPlan]?.returnButtonType(subscriptionPlan);
-
                         return (
                             <STY_Card.Container key={refSubscriptionPlan?.id}>
                                 <STY_Card.TitleBox>
@@ -55,7 +64,7 @@ export function FdPlanList({
                                                 <CustomBlockButton
                                                     type='button'
                                                     className='button-item'
-                                                    onClick={() => handleApplySubscriptionPlan(refSubscriptionPlan?.id)}
+                                                    onClick={() => handleApplySubscriptionPlan(refSubscriptionPlan?.id, refSubscriptionPlan?.subscriptionPlan)}
                                                 >
                                                     구독하기
                                                 </CustomBlockButton>

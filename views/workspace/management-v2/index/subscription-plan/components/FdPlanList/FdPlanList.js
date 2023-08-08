@@ -38,6 +38,18 @@ export function FdPlanList({
                 <STY_CardListWrapper>
                     {refSubscriptionPlanList?.map(refSubscriptionPlan => {
                         const buttonType = SubscriptionPlanDetails[refSubscriptionPlan?.subscriptionPlan]?.returnButtonType(subscriptionPlan);
+                        if (refSubscriptionPlan?.statusType === 'HIDE') {
+                            return null;
+                        }
+
+                        if (refSubscriptionPlan?.subscriptionPlan === 'PRIVATE') {
+                            return (
+                                <PrivateCard
+                                    refSubscriptionPlan={refSubscriptionPlan}
+                                    buttonType={buttonType}
+                                />
+                            );
+                        }
                         return (
                             <STY_Card.Container key={refSubscriptionPlan?.id}>
                                 <STY_Card.TitleBox>
@@ -137,5 +149,95 @@ export function FdPlanList({
                 </STY_CardListWrapper>
             </STY_Container>
         </>
+    );
+}
+
+function PrivateCard({
+    refSubscriptionPlan,
+    buttonType
+}) {
+    return (
+        <STY_Card.Container key={refSubscriptionPlan?.id}>
+            <STY_Card.TitleBox>
+                {refSubscriptionPlan?.name}
+            </STY_Card.TitleBox>
+            <div style={{ height: '67.5px', margin: '40px 0', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '18px', fontWeight: '700', color: 'var(--mainColor)' }}>
+                무료 제공 서비스
+            </div>
+            <STY_Card.SubscriptionButtonBox>
+                {refSubscriptionPlan?.statusType === 'OPEN' &&
+                    <>
+                        {buttonType === 'SUBSCRIBE' &&
+                            <CustomBlockButton
+                                type='button'
+                                className='button-item'
+                                onClick={() => handleApplySubscriptionPlan(refSubscriptionPlan?.id, refSubscriptionPlan?.subscriptionPlan)}
+                            >
+                                구독하기
+                            </CustomBlockButton>
+                        }
+                        {buttonType === 'USING_THIS' &&
+                            <CustomBlockButton
+                                type='button'
+                                className='button-item'
+                                disabled
+                            >
+                                이용중
+                            </CustomBlockButton>
+                        }
+                        {buttonType === 'EXTEND' &&
+                            <CustomBlockButton
+                                type='button'
+                                className='button-item'
+                                onClick={() => handleApplySubscriptionPlan(refSubscriptionPlan?.id)}
+                            >
+                                구독 연장하기
+                            </CustomBlockButton>
+                        }
+                        {buttonType === 'USING_ANOTHER' &&
+                            <CustomBlockButton
+                                type='button'
+                                className='button-item'
+                                disabled
+                            >
+                                다른 플랜 사용중
+                            </CustomBlockButton>
+                        }
+                    </>
+                }
+                {refSubscriptionPlan?.statusType === 'CLOSE' &&
+                    <>
+                        <CustomBlockButton
+                            type='button'
+                            className='button-item'
+                            disabled
+                        >
+                            준비중
+                        </CustomBlockButton>
+                    </>
+                }
+            </STY_Card.SubscriptionButtonBox>
+            <STY_Card.LineBreaker />
+            <STY_Card.ServiceList>
+                {SubscriptionPlanDetails[refSubscriptionPlan?.subscriptionPlan]?.mainList.map(main => {
+                    return (
+                        <li key={main.name} className={`li-main ${main.upgradeBadge ? 'upgrade-item' : ''} ${main.newBadge ? 'new-item' : ''}`}>
+                            {main.name}
+                            {main?.subList &&
+                                <>
+                                    <STY_Card.ServiceList>
+                                        {main?.subList?.map(sub => {
+                                            return (
+                                                <li key={sub.name} className={`li-sub ${sub.upgradeBadge ? 'upgrade-item' : ''}`}>{sub?.name}</li>
+                                            );
+                                        })}
+                                    </STY_Card.ServiceList>
+                                </>
+                            }
+                        </li>
+                    )
+                })}
+            </STY_Card.ServiceList>
+        </STY_Card.Container>
     );
 }

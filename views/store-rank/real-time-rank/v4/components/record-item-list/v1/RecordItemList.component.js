@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { Container, ContentGroup, ContentValue, ControlBox, RecordInfo, RecordItemBox, Wrapper } from "./styles/RecordItemList.styled";
+import { Container, ContentGroup, ContentValue, ControlBox, RecordInfo, RecordItemBox, StatusBox, Wrapper } from "./styles/RecordItemList.styled";
 import { RecordDetailModalComponent } from "../../record-detail-modal/v1";
 import { CustomBoxImage } from "../../../modules";
 import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
 import { dateToStrHHmm, dateToStrYYYYMMDD } from "../../../utils/dateFormatUtils";
+import { CustomProgressBar } from "../../progress/progress-bar/v1";
+import { useApiHook } from "./hooks/useApiHook";
+import { useSelector } from "react-redux";
 
 export function RecordItemListComponent({
     keyword,
@@ -12,9 +15,13 @@ export function RecordItemListComponent({
     recordList,
     currentPendingRecordIds,
     onSetCurrentPendingRecordIds,
-    onDeleteRankRecord,
-    onSearchNRankRecordList
+    onDeleteRankRecord
 }) {
+    const workspaceRedux = useSelector(state => state.workspaceRedux);
+    const wsId = workspaceRedux?.workspaceInfo?.id;
+
+    const { onReqCreateNRankRecordDetail, onReqChangeNRankRecordStatusToFail } = useApiHook();
+
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
     const [recordDeleteModalOpen, setRecordDeleteModalOpen] = useState(false);
@@ -60,6 +67,24 @@ export function RecordItemListComponent({
         onDeleteRankRecord(selectedRecord?.id, () => handleCloseRecordDeleteModal())
     }
 
+    const handleCreateNRankRecordDetail = async () => {
+        await onReqCreateNRankRecordDetail({
+            body: { record_id: selectedRecord.id },
+            headers: { wsId: wsId }
+        },{
+            fail: () => {
+                handleChangeNRankRecordStatusToFail()
+            }
+        })
+    }
+
+    const handleChangeNRankRecordStatusToFail = async () => {
+        await onReqChangeNRankRecordStatusToFail({
+            params: { id: selectedRecord },
+            headers: { wsId: wsId }
+        })
+    }
+
     return (
         <>
             <Container>
@@ -72,6 +97,7 @@ export function RecordItemListComponent({
                         let isKeywordAccent = keyword && (item.keyword).includes(keyword);
                         let isMallNameAccent = mallName && (item.mall_name).includes(mallName);
                         let currentRecordInfo = item.infos.find(r => item.current_nrank_record_info_id === r.id);
+                        let isPending = currentPendingRecordIds.includes(item.id);
 
                         return (
                             <RecordItemBox key={'record-info-idx' + index} >
@@ -99,6 +125,7 @@ export function RecordItemListComponent({
                                                 className='thumbnail-img-box'
                                                 src={currentRecordInfo?.thumbnail_url}
                                                 size='170px'
+                                                mobileSize='100px'
                                             />
                                         </div>
                                         <div style={{ padding: '0 20px' }}>
@@ -137,7 +164,7 @@ export function RecordItemListComponent({
                                                 <div>|</div>
                                                 <ContentValue>
                                                     {currentRecordInfo ?
-                                                        <div style={{ color: '#444', fontSize: '16px', display: 'inline' }}>
+                                                        <div style={{ color: '#444', display: 'inline' }}>
                                                             <span>{dateToStrYYYYMMDD(currentRecordInfo.created_at)} </span>
                                                             <span>({dateToStrHHmm(currentRecordInfo.created_at)})</span>
                                                         </div>
@@ -147,13 +174,18 @@ export function RecordItemListComponent({
                                                 </ContentValue>
                                             </ContentGroup>
                                         </div>
+                                        {currentRecordInfo &&
+                                            <div className='sub-info-box'>
+                                                <div className='item-el'>일반 <span style={{ fontWeight: '700', color: '#444' }}>{currentRecordInfo.rank_detail_unit ?? 0}</span></div>
+                                                <div className='item-el'>광고 <span style={{ fontWeight: '700', color: '#444' }}>{currentRecordInfo.ad_rank_detail_unit ?? 0}</span></div>
+                                            </div>
+                                        }
                                     </div>
-                                    {currentRecordInfo &&
-                                        <div className='sub-info-box'>
-                                            <div className='item-el'>일반 <span style={{ fontWeight: '700', color: '#444' }}>{currentRecordInfo.rank_detail_unit ?? 0}</span></div>
-                                            <div className='item-el'>광고 <span style={{ fontWeight: '700', color: '#444' }}>{currentRecordInfo.ad_rank_detail_unit ?? 0}</span></div>
-                                        </div>
-                                    }
+                                    <StatusBox>
+                                        {isPending &&
+                                            <CustomProgressBar type='linear' customcolor={'#9ac7e0'} />
+                                        }
+                                    </StatusBox>
                                 </RecordInfo>
                             </RecordItemBox>
                         )
@@ -166,9 +198,9 @@ export function RecordItemListComponent({
                         open={detailSearchModalOpen}
                         record={selectedRecord}
                         onClose={handleCloseDetailSearchModal}
-                        onSearchNRankRecordList={onSearchNRankRecordList}
                         currentPendingRecordIds={currentPendingRecordIds}
                         onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
+                        onCreateNRankRecordDetail={handleCreateNRankRecordDetail}
                     />
                 }
 

@@ -16,7 +16,7 @@ const RECORD_STATUS_ENUM = {
 }
     
 export const Container = styled.div`
-    background:var(--defaultBackground);
+    background: var(--defaultBackground);
     min-height: 800px;
 `;
 
@@ -24,7 +24,7 @@ export default function MainComponent(){
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const { onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList, onReqSearchNRankRecordByIds } = useApiHook();
+    const { onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList } = useApiHook();
     const { keyword, mallName, onChangeKeyword, onChangeMallName, onClearKeyword, onClearMallName, checkSearchInfoForm } = useSearchInputHook();
     const { searchedRecordList: recordList, currentPendingRecordIds, onSetRecordList, onSetCurrentPendingRecordIds } = useNRankRecordListHook({ keyword, mallName });
 
@@ -46,7 +46,7 @@ export default function MainComponent(){
         }
 
         const fetch = setInterval(() => {
-            handleSearchNRankRecordByIds();
+            handleReqSearchNRankRecordList();
         }, [3000])
 
         return () => clearInterval(fetch);
@@ -91,42 +91,17 @@ export default function MainComponent(){
         })
     }
 
-    const handleSearchNRankRecordByIds = async () => {
-        await onReqSearchNRankRecordByIds({
-            body: { ids: currentPendingRecordIds },
-            headers: { wsId: wsId }
-        }, {
-            success: async (results) => {
-                let pendingIds = [];
-                
-                results.forEach(r => {
-                    if(r.status === RECORD_STATUS_ENUM.PENDING) {
-                        pendingIds.push(r.id);
-                    } else if(r.status === RECORD_STATUS_ENUM.COMPLETE) {
-                        let content = `[${r.keyword} - ${r.mall_name}] 랭킹 업데이트 완료 !`
-                        customToast.success(content, {
-                            ...defaultOptions,
-                            toastId: content
-                        });
-                    } else if(r.status === RECORD_STATUS_ENUM.FAIL) {
-                        let content = `[${r.keyword} - ${r.mall_name}] 랭킹 검색 실패. 재시도 해주세요.`
-                        customToast.error(content, {
-                            ...defaultOptions,
-                            toastId: content
-                        });
-                    }
-                })
-                onSetCurrentPendingRecordIds(pendingIds);                
-            }
-        })
-    }
-
     const handleReqDeleteRankRecord = async (selectedId, callback) => {
         await onReqDeleteNRankRecord({
             params: { id: selectedId },
             headers: { wsId: wsId }
         },{
             success: () => {
+                let content = `정상적으로 제거되었습니다.`
+                customToast.success(content, {
+                    ...defaultOptions,
+                    toastId: content
+                });
                 callback();
                 handleReqSearchNRankRecordList();
             }
@@ -140,30 +115,38 @@ export default function MainComponent(){
             success: (results) => {
                 let pendingIds = [];
                 results.forEach(r => {
-                    // 실패와 성공만 확인
-                    if(currentPendingRecordIds.includes(r.id)) {
-                        if(r.status === RECORD_STATUS_ENUM.COMPLETE) {
-                            let content = `[${r.keyword} - ${r.mall_name}] 랭킹 업데이트 완료 !`
-                            customToast.success(content, {
-                                ...defaultOptions,
-                                toastId: content
-                            });
-                        } else if(r.status === RECORD_STATUS_ENUM.FAIL) {
-                            let content = `[${r.keyword} - ${r.mall_name}] 랭킹 검색 실패. 재시도 해주세요.`
-                            customToast.error(content, {
-                                ...defaultOptions,
-                                toastId: content
-                            });
-                        }
-                    }
-
                     if(r.status === RECORD_STATUS_ENUM.PENDING) {
                         pendingIds.push(r.id);
                     }
-                })
 
+                    // pending -> complete / fail 로 update된 경우
+                    if(currentPendingRecordIds?.includes(r.id)) {
+                        switch(r.status) {
+                            case(RECORD_STATUS_ENUM.PENDING):
+                                pendingIds.push(r.id);
+                                break;
+                            case(RECORD_STATUS_ENUM.COMPLETE):
+                                var content = `[${r.keyword} - ${r.mall_name}] 랭킹 업데이트 완료 !`
+                                customToast.success(content, {
+                                    ...defaultOptions,
+                                    toastId: content
+                                });
+                                break;
+                            case(RECORD_STATUS_ENUM.FAIL):
+                                var content = `[${r.keyword} - ${r.mall_name}] 랭킹 검색 실패. 재시도 해주세요.`
+                                customToast.error(content, {
+                                    ...defaultOptions,
+                                    toastId: content
+                                });
+                                break;
+                            default:
+                                break;
+                        }   
+                    }
+                })
+                
                 onSetRecordList(results);
-                onSetCurrentPendingRecordIds(pendingIds);
+                onSetCurrentPendingRecordIds([...pendingIds]);
             }
         })
     }
@@ -189,7 +172,6 @@ export default function MainComponent(){
                             mallName={mallName}
                             recordList={recordList}
                             onDeleteRankRecord={handleReqDeleteRankRecord}
-                            onSearchNRankRecordList={handleReqSearchNRankRecordList}
                             currentPendingRecordIds={currentPendingRecordIds}
                             onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
                         />

@@ -81,6 +81,11 @@ export const RecordInfo = styled.div`
             border: 1px solid var(--defaultGrayColor);
             border-radius: 5px;
             padding: 5px 7px;
+
+            @media screen and (max-width: 992px) {
+                font-size: 12px;
+                padding: 2px 5px;
+            }
         }
     }
 `;
@@ -129,19 +134,27 @@ export const ControlBox = styled.div`
     }
 `;
 
+export const StatusBox = styled.div`
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+`;
+
 export const ContentGroup = styled.div`
     display: flex;
     gap: 5px;
     padding: 5px 0px;
     color: #7f7f7f;
     white-space: break-spaces;
-    /* overflow: hidden; */
-    /* text-overflow: ellipsis; */
-    /* white-space: nowrap; */
+    font-size: 16px;
     
     @media screen and (max-width: 1280px) {
         overflow: hidden;
         white-space: nowrap;
+    }
+
+    @media screen and (max-width: 992px) {
+        font-size: 12px;
     }
 `;
 
@@ -150,4 +163,8 @@ export const ContentValue = styled.div`
     font-weight: 600;
     color: #505050;
     font-size: 1.1rem;
+
+    @media screen and (max-width: 992px) {
+        font-size: 14px;
+    }
 `;

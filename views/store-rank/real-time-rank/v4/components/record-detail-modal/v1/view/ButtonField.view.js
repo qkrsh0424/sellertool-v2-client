@@ -11,7 +11,6 @@ const SEARCHABLE_DIFF_HOUR = 1
 
 export default function ButtonFieldView({
     targetRecordInfo,
-    isRecordSearchLoading,
     isPending,
     onSubmit
 }) {
@@ -56,7 +55,7 @@ export default function ButtonFieldView({
                     </CustomBlockButton>
                     :
                     <>
-                        {(isRecordSearchLoading || isPending) ?
+                        {isPending ?
                             <CustomBlockButton
                                 type='button'
                                 className='button-item'

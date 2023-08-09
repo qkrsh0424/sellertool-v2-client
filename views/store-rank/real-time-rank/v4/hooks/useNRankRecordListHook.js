@@ -6,7 +6,7 @@ export default function useNRankRecordListHook ({
     mallName
 }) {
     const [recordList, setRecordList] = useState(null);
-    const [currentPendingRecordIds, setCurrentPendingRecordIds] = useState(null);
+    const [currentPendingRecordIds, setCurrentPendingRecordIds] = useState([]);
     const [searchedRecordList, setSearchedRecordList] = useState(null);
 
     useEffect(() => {

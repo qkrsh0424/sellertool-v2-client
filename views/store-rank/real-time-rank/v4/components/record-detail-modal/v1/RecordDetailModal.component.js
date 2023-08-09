@@ -20,15 +20,14 @@ export function RecordDetailModalComponent({
     record,
     currentPendingRecordIds,
     onSetCurrentPendingRecordIds,
-    onSearchNRankRecordList
+    onCreateNRankRecordDetail
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const [isRecordSearchLoading, setIsRecordSearchLoading] = useState(false);
     const [isAdRankView, setIsAdRankView] = useState(false);
-
-    const { onReqCreateNRankRecordDetail, onReqSearchNRankRecordDetail, onReqChangeNRankRecordStatusToPending, onReqChangeNRankRecordStatusToFail } = useApiHook();
+    
+    const { onReqSearchNRankRecordDetail, onReqChangeNRankRecordStatusToPending } = useApiHook();
     const { recordDetails, adRecordDetails, targetRecordInfo, onSetRecordDetails, onSetAdRecordDetails, onActionUpdateTargetRecordInfo } = useNRankRecordDetailHook({ record });
 
     useEffect(() => {
@@ -63,47 +62,6 @@ export function RecordDetailModalComponent({
         setIsAdRankView(false);
     }
 
-    const handleChangeNRankRecordStatusToFail = async () => {
-        let recordId = record.id;
-
-        await onReqChangeNRankRecordStatusToFail({
-            params: { id: recordId },
-            headers: { wsId: wsId }
-        })
-    }
-
-    const handleChangeNRankRecordStatusToPending = async () => {
-        let recordId = record.id;
-
-        await onReqChangeNRankRecordStatusToPending({
-            params: { id: recordId },
-            headers: { wsId: wsId }
-        }, {
-            success: async () => {
-                let ids = [...currentPendingRecordIds].concat(recordId);
-                onSetCurrentPendingRecordIds(ids);
-
-                handleCreateNRankRecordDetail();
-            }
-        })
-    }
-
-    const handleCreateNRankRecordDetail = async () => {
-        await onReqCreateNRankRecordDetail({
-            body: { record_id: record.id },
-            headers: { wsId: wsId }
-        },{
-            success: async () => {
-                setIsRecordSearchLoading(true);
-                await onSearchNRankRecordList();
-                setIsRecordSearchLoading(false);
-            },
-            fail: async () => {
-                handleChangeNRankRecordStatusToFail()
-            }
-        })
-    }
-
     const handleSearchNRankRecordDetail = async () => {
         await onReqSearchNRankRecordDetail({
             params: { record_info_id: record.current_nrank_record_info_id},
@@ -119,7 +77,42 @@ export function RecordDetailModalComponent({
         })
     }
 
-    let isPending = currentPendingRecordIds.includes(record.id);
+    const handleChangeNRankRecordStatusToPending = async () => {
+        let recordId = record.id;
+        
+        await onReqChangeNRankRecordStatusToPending({
+            params: { id: recordId },
+            headers: { wsId: wsId }
+        }, {
+            success: () => {
+                let ids = [...currentPendingRecordIds].concat(recordId);
+                onSetCurrentPendingRecordIds(ids);
+                onCreateNRankRecordDetail();
+            }
+        })
+    }
+
+    // const handleCreateNRankRecordDetail = async () => {
+    //     await onReqCreateNRankRecordDetail({
+    //         body: { record_id: record.id },
+    //         headers: { wsId: wsId }
+    //     },{
+    //         fail: () => {
+    //             handleChangeNRankRecordStatusToFail()
+    //         }
+    //     })
+    // }
+
+    // const handleChangeNRankRecordStatusToFail = async () => {
+    //     let recordId = record.id;
+
+    //     await onReqChangeNRankRecordStatusToFail({
+    //         params: { id: recordId },
+    //         headers: { wsId: wsId }
+    //     })
+    // }
+
+    let isPending = currentPendingRecordIds?.includes(record.id);
 
     return (
         <>
@@ -140,7 +133,6 @@ export function RecordDetailModalComponent({
                     />
                     <ButtonFieldView
                         targetRecordInfo={targetRecordInfo}
-                        isRecordSearchLoading={isRecordSearchLoading}
                         isPending={isPending}
                         onSubmit={handleChangeNRankRecordStatusToPending}
                     />
@@ -162,20 +154,6 @@ export function RecordDetailModalComponent({
                                 isBackgroundBlur={true}
                             />
                         }
-
-                        {/* {(adRecordDetails && recordDetails) ?
-                            (isAdRankView) ?
-                                <AdRankDetailFieldView
-                                    adRecordDetails={adRecordDetails}
-                                />
-                                :
-                                <RankDetailFieldView
-                                    targetRecordInfo={targetRecordInfo}
-                                    recordDetails={recordDetails}
-                                />
-                            :
-                            <RankDetailSkeletonFieldView />
-                        } */}
                         
                         {(adRecordDetails && recordDetails && !isPending) &&
                             <>

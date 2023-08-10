@@ -62,22 +62,8 @@ export function useApiHook() {
             })
     }
 
-    const onReqChangeNRankRecordStatusToFail = async (
-        options = {params: {}, headers: {}},
-    ) => {
-        await nRankRecordDataConnect().changeStatusToFail(options.params, options.headers)
-            .catch(err => {
-                const res = err.response;
-                customToast.error(res?.data?.memo, {
-                    ...defaultOptions,
-                    toastId: res?.data?.memo
-                })
-            })
-    }
-
     return {
         onReqChangeNRankRecordStatusToPending,
-        onReqChangeNRankRecordStatusToFail,
         onReqCreateNRankRecordDetail,
         onReqSearchNRankRecordDetail
     }

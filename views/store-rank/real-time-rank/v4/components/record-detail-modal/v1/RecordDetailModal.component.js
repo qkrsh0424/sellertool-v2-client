@@ -27,7 +27,7 @@ export function RecordDetailModalComponent({
 
     const [isAdRankView, setIsAdRankView] = useState(false);
     
-    const { onReqSearchNRankRecordDetail, onReqChangeNRankRecordStatusToPending } = useApiHook();
+    const { onReqSearchNRankRecordDetail, onReqChangeNRankRecordStatusToPending, onReqCreateNRankRecordDetail } = useApiHook();
     const { recordDetails, adRecordDetails, targetRecordInfo, onSetRecordDetails, onSetAdRecordDetails, onActionUpdateTargetRecordInfo } = useNRankRecordDetailHook({ record });
 
     useEffect(() => {
@@ -87,30 +87,17 @@ export function RecordDetailModalComponent({
             success: () => {
                 let ids = [...currentPendingRecordIds].concat(recordId);
                 onSetCurrentPendingRecordIds(ids);
-                onCreateNRankRecordDetail();
+                handleCreateNRankRecordDetail();
             }
         })
     }
 
-    // const handleCreateNRankRecordDetail = async () => {
-    //     await onReqCreateNRankRecordDetail({
-    //         body: { record_id: record.id },
-    //         headers: { wsId: wsId }
-    //     },{
-    //         fail: () => {
-    //             handleChangeNRankRecordStatusToFail()
-    //         }
-    //     })
-    // }
-
-    // const handleChangeNRankRecordStatusToFail = async () => {
-    //     let recordId = record.id;
-
-    //     await onReqChangeNRankRecordStatusToFail({
-    //         params: { id: recordId },
-    //         headers: { wsId: wsId }
-    //     })
-    // }
+    const handleCreateNRankRecordDetail = async () => {
+        await onReqCreateNRankRecordDetail({
+            body: { record_id: record.id },
+            headers: { wsId: wsId }
+        })
+    }
 
     let isPending = currentPendingRecordIds?.includes(record.id);
 

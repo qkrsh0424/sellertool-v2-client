@@ -65,16 +65,16 @@ const nRankRecordDataConnect = () => {
                 })
             )
         },
-        changeStatusToFail: async function (params, headers) {
-            return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/nrank-records/${params.id}/target:status/action:fail`, {},  {
-                    headers,
-                    withCredentials: true,
-                    xsrfCookieName: 'x_api_csrf_token',
-                    xsrfHeaderName: 'X-XSRF-TOKEN'
-                })
-            )
-        }
+        // changeStatusToFail: async function (params, headers) {
+        //     return await withMainApiCsrfWrapper(
+        //         () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/nrank-records/${params.id}/target:status/action:fail`, {},  {
+        //             headers,
+        //             withCredentials: true,
+        //             xsrfCookieName: 'x_api_csrf_token',
+        //             xsrfHeaderName: 'X-XSRF-TOKEN'
+        //         })
+        //     )
+        // }
     }
 }
 

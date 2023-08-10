@@ -6,7 +6,6 @@ import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
 import { dateToStrHHmm, dateToStrYYYYMMDD } from "../../../utils/dateFormatUtils";
 import { CustomProgressBar } from "../../progress/progress-bar/v1";
-import { useApiHook } from "./hooks/useApiHook";
 import { useSelector } from "react-redux";
 
 export function RecordItemListComponent({
@@ -19,8 +18,6 @@ export function RecordItemListComponent({
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
-
-    const { onReqCreateNRankRecordDetail, onReqChangeNRankRecordStatusToFail } = useApiHook();
 
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
@@ -65,24 +62,6 @@ export function RecordItemListComponent({
 
     const handleDeleteRankRecord = async () => {
         onDeleteRankRecord(selectedRecord?.id, () => handleCloseRecordDeleteModal())
-    }
-
-    const handleCreateNRankRecordDetail = async () => {
-        await onReqCreateNRankRecordDetail({
-            body: { record_id: selectedRecord.id },
-            headers: { wsId: wsId }
-        },{
-            fail: () => {
-                handleChangeNRankRecordStatusToFail()
-            }
-        })
-    }
-
-    const handleChangeNRankRecordStatusToFail = async () => {
-        await onReqChangeNRankRecordStatusToFail({
-            params: { id: selectedRecord },
-            headers: { wsId: wsId }
-        })
     }
 
     return (
@@ -200,7 +179,6 @@ export function RecordItemListComponent({
                         onClose={handleCloseDetailSearchModal}
                         currentPendingRecordIds={currentPendingRecordIds}
                         onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
-                        onCreateNRankRecordDetail={handleCreateNRankRecordDetail}
                     />
                 }
 

@@ -6,7 +6,6 @@ import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
 import { dateToStrHHmm, dateToStrYYYYMMDD } from "../../../utils/dateFormatUtils";
 import { CustomProgressBar } from "../../progress/progress-bar/v1";
-import { useSelector } from "react-redux";
 
 export function RecordItemListComponent({
     keyword,
@@ -16,9 +15,6 @@ export function RecordItemListComponent({
     onSetCurrentPendingRecordIds,
     onDeleteRankRecord
 }) {
-    const workspaceRedux = useSelector(state => state.workspaceRedux);
-    const wsId = workspaceRedux?.workspaceInfo?.id;
-
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
     const [recordDeleteModalOpen, setRecordDeleteModalOpen] = useState(false);

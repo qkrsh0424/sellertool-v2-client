@@ -19,8 +19,7 @@ export function RecordDetailModalComponent({
     onClose,
     record,
     currentPendingRecordIds,
-    onSetCurrentPendingRecordIds,
-    onCreateNRankRecordDetail
+    onSetCurrentPendingRecordIds
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;

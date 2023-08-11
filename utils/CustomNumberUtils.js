@@ -1,17 +1,32 @@
 export const CustomNumberUtils = () => {
     return {
         numberWithCommas: numberWithCommas,
+        numberWithCommas2: numberWithCommas2,
         isNumberValueWithDecimalPoint: isNumberValueWithDecimalPoint,
         toPriceUnitFormat: toPriceUnitFormat,
         isNumericValue: isNumericValue,
         getRemovedPrefixZero: getRemovedPrefixZero,
-        roundToTwo: roundToTwo
+        roundToTwo: roundToTwo,
+        roundToDigit: roundToDigit,
+        hasPrefixZero: hasPrefixZero,
     }
 }
 
 function numberWithCommas(number) {
     let formatedNumber = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return formatedNumber;
+};
+
+// 소숫점 아래에는 콤마 표시를 하지않는 버전
+function numberWithCommas2(number) {
+    // 숫자를 정수 부분과 소수 부분으로 분리
+    let parts = number.toString().split(".");
+
+    // 정수 부분에만 쉼표 추가
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    // 정수 부분과 소수 부분을 다시 합치기
+    return parts.join(".");
 };
 
 function isNumberValueWithDecimalPoint(number, numberOfDigitsAfterDecimalPoint = 2) {
@@ -23,6 +38,11 @@ function isNumberValueWithDecimalPoint(number, numberOfDigitsAfterDecimalPoint =
      */
     // const regex = /^(([1-9]\d*)|0)(\.\d{0,2})?$/
     const regex = new RegExp(`^(([1-9]\\d*)|0)(\\.\\d{0,${numberOfDigitsAfterDecimalPoint}})?$`);
+    return regex.test(number);
+}
+
+function hasPrefixZero(number) {
+    const regex = /^0.+/;
     return regex.test(number);
 }
 
@@ -58,4 +78,8 @@ const getRemovedPrefixZero = (value) => {
 
 const roundToTwo = (number) => {
     return +(Math.round(number + "e+2") + "e-2");
+}
+
+const roundToDigit = (number, digit) => {
+    return +(Math.round(number + `e+${digit}`) + `e-${digit}`);
 }

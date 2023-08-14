@@ -1,13 +1,8 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { nRankRecordDataConnect } from "../../../../../data_connect/nRankRecordDataConnect";
-import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 
 export default function useSearchInputHook() {
     const [keyword, setKeyword] = useState(null);
     const [mallName, setMallName] = useState(null);
-
-    const workspaceRedux = useSelector(state => state.workspaceRedux);
 
     const onChangeKeyword = (e) => {
         let value = e.target.value;
@@ -19,42 +14,12 @@ export default function useSearchInputHook() {
         setMallName(value)
     }
 
-    const reqCreateSearchInfo = async (successCallback) => {
-        try {
-            checkSearchInfoForm();
-        } catch (err) {
-            customToast.error(err?.message, {
-                ...defaultOptions,
-                toastId: err?.message
-            });
-            return;
-        }
+    const onClearKeyword = () => {
+        setKeyword(null);
+    }
 
-        let body = {
-            keyword: keyword.trim(),
-            mall_name: mallName.trim()
-        }
-        
-        let headers = {
-            wsId: workspaceRedux?.workspaceInfo?.id
-        }
-        
-        await nRankRecordDataConnect().createOne(body, headers)
-            .then(res => {
-                if(res.status === 200) {
-                    setKeyword(null);
-                    setMallName(null);
-                    successCallback();
-                }
-            })
-            .catch(err => {
-                const res = err.response;
-                customToast.error(res?.data?.memo, {
-                    ...defaultOptions,
-                    toastId: res?.data?.memo
-                })
-            })
-        
+    const onClearMallName = () => {
+        setMallName(null);
     }
 
     const checkSearchInfoForm = () => {
@@ -80,6 +45,8 @@ export default function useSearchInputHook() {
         mallName,
         onChangeKeyword,
         onChangeMallName,
-        reqCreateSearchInfo
+        onClearKeyword,
+        onClearMallName,
+        checkSearchInfoForm
     }
 }

@@ -2,14 +2,16 @@ import { useEffect } from "react";
 import { setPlusTime } from "../../../../utils/dateFormatUtils";
 import { Wrapper } from "../styles/Button.styled";
 import { CustomBoxImage } from "../../../../modules";
-import { CustomBlockButton } from "../../../buttons/block-button/v1";
+import { CustomBlockButton } from "../../../../modules/buttons/block-button/v1";
 import { CustomProgressBar } from "../../../progress/progress-bar/v1";
 import useTargetTimeTimerHook from "../../../../../../../../hooks/timer/useTargetTimeTimerHook";
 
+// 변경 시 server SEARCHABLE_DIFF_TIME도 함께 변경해야 함
+const SEARCHABLE_DIFF_HOUR = 1
+
 export default function ButtonFieldView({
     targetRecordInfo,
-    isRecordSearchLoading,
-    isRecordDetailsSearchLoading,
+    isPending,
     onSubmit
 }) {
     const {
@@ -22,7 +24,7 @@ export default function ButtonFieldView({
             return;
         }
         
-        // let targetTime = setPlusTime(targetRecordInfo?.created_at, 1, 0, 0);
+        // let targetTime = setPlusTime(targetRecordInfo?.created_at, SEARCHABLE_DIFF_HOUR, 0, 0);
         let targetTime = setPlusTime(targetRecordInfo?.created_at, 0, 1, 0);
         onUpdateTargetTime(targetTime);
     }, [targetRecordInfo])
@@ -53,7 +55,7 @@ export default function ButtonFieldView({
                     </CustomBlockButton>
                     :
                     <>
-                        {(isRecordSearchLoading || isRecordDetailsSearchLoading) ?
+                        {isPending ?
                             <CustomBlockButton
                                 type='button'
                                 className='button-item'

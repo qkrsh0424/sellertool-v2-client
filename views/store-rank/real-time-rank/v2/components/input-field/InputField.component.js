@@ -7,12 +7,12 @@ export function InputFieldComponent({
     mallName,
     onChangeKeyword,
     onChangeMallName,
-    onSubmitRecordInfo
+    onSubmitRecordInput
 }) {
     return (
         <>
             <Container>
-                <form onSubmit={(e) => onSubmitRecordInfo(e)} method="post">
+                <form onSubmit={(e) => onSubmitRecordInput(e)} method="post">
                     <Wrapper>
                         <InputFieldBox>
                             <CustomInput
@@ -22,6 +22,7 @@ export function InputFieldComponent({
                                 className='input-el'
                                 placeholder='검색 키워드'
                                 onChange={(e) => onChangeKeyword(e)}
+                                required
                             />
                             <CustomInput
                                 type='text'
@@ -30,6 +31,7 @@ export function InputFieldComponent({
                                 className='input-el'
                                 placeholder='검색 스토어명'
                                 onChange={(e) => onChangeMallName(e)}
+                                required
                             />
                         </InputFieldBox>
                         <ButtonFieldBox>

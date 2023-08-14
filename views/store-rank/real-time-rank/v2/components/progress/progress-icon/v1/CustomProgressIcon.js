@@ -7,7 +7,7 @@ const Container = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background: #a0a0a010;
+    background: ${props => props.isBackgroundBlur && '#a0a0a010'};
     backdrop-filter: ${props => props.isBackgroundBlur && 'blur(1px)'};
     z-index: 999;
     display: flex;

@@ -1,10 +1,56 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    padding: 20px 20px 0 20px;
+    overflow: hidden;
+    
+    form {
+        padding: 20px;
+        background-color: var(--mainColorOpacity30);
+        border-radius: 0 0 50px 50px;
+        display: inline-block;
+        overflow: hidden;
+        animation-duration: 1s;
+        animation-name: slidedown;
+    }
 
     @media all and (max-width:992px){
-        padding: 20px 10px 0 10px;
+        padding: 10px;
+    }
+
+    @keyframes slidedown {
+        from {
+            transform: translateY(-80%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+        
+    @-moz-keyframes slidedown { /* Firefox */
+        from {
+            transform: translateY(-80%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+        
+    @-webkit-keyframes slidedown { /* Safari and Chrome */
+        from {
+            transform: translateY(-80%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+    
+    @-o-keyframes slidedown { /* Opera */
+        from {
+            transform: translateY(-80%);
+        }
+        to {
+            transform: translateY(0);
+        }
     }
 `;
 
@@ -18,8 +64,6 @@ export const Wrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    margin-bottom: 30px;
 
     @media screen and (max-width: 992px) {
         width: 100%;

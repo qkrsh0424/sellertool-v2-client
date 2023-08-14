@@ -24,7 +24,7 @@ export default function AdRankDetailFieldView({
                                 <InfoGroupBox>
                                     <div className='sub-info'>
                                         {detail.advertising_yn === 'y' &&
-                                            <div className='sub-info-box' style={{ "--default-box-color": "#9da0a9" }}>광고</div>
+                                            <div className='sub-info-box' style={{ "--thisBoxColor": "#919dbd" }}>광고</div>
                                         }
                                     </div>
                                     <div className='highlight'>
@@ -108,7 +108,7 @@ export default function AdRankDetailFieldView({
                                 <InfoGroupBox>
                                     <div className='accent-text'>
                                         <span>총 </span>
-                                        <span style={{ color: 'var(--mainColor)' }}>{detail.rank} 위</span>
+                                        <span style={{ color: 'var(--defaultBlueColor)' }}>{detail.rank} 위</span>
                                     </div>
                                 </InfoGroupBox>
                                 <InfoGroupBox>

@@ -4,7 +4,6 @@ export const Wrapper = styled.div`
     display: flex;
     align-items: center;
     background-color: #fff;
-    border: 1px solid #fff;
     box-shadow: var(--defaultBoxShadow);
     border-radius: 15px;
     margin-bottom: 10px;

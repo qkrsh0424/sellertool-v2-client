@@ -67,8 +67,8 @@ export const InfoGroupBox = styled.div`
 
         .sub-info-box {
             padding: 0 4px;
-            background-color: var(--default-box-color);
-            border: 1px solid var(--default-box-color);
+            background-color: var(--thisBoxColor);
+            border: 1px solid var(--thisBoxColor);
             color: white;
             border-radius: 2px;
             margin-right: 5px;

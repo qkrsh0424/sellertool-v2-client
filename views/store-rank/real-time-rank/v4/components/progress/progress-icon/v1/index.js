@@ -1,1 +1,0 @@
-export { CustomProgressIcon } from "./CustomProgressIcon"

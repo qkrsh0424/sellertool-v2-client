@@ -11,6 +11,7 @@ export const Container = styled.div`
         padding: 20px 10px;
         font-weight: 600;
         font-size: 1.2rem;
+        border-bottom: 1px solid #a4aabd;
     }
 `;
 
@@ -18,8 +19,6 @@ export const Wrapper = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
     gap: 15px;
-
-    border-top: 1px solid #a4aabd;
     padding: 20px 5px;
 
     @media screen and (max-width: 576px){
@@ -43,7 +42,7 @@ export const RecordItemBox = styled.div`
 export const RecordInfo = styled.div`
     position: relative;
     background-color: white;
-    border-radius: 20px;
+    border-radius: 30px;
     box-shadow: var(--defaultBoxShadow);
     transition: all 0.2s;
     cursor: pointer;
@@ -81,7 +80,28 @@ export const RecordInfo = styled.div`
             border: 1px solid var(--defaultGrayColor);
             border-radius: 5px;
             padding: 5px 7px;
+
+            @media screen and (max-width: 992px) {
+                font-size: 12px;
+                padding: 2px 5px;
+            }
         }
+    }
+`;
+
+export const RecordInfoSkeletonBox = styled.div`
+    position: relative;
+    background-color: white;
+    border-radius: 30px;
+    box-shadow: var(--defaultBoxShadow);
+    border: 1px solid #efefef;
+    overflow: hidden;
+
+    .content-box {
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        overflow-x: scroll;
     }
 `;
 
@@ -113,19 +133,27 @@ export const ControlBox = styled.div`
     }
 `;
 
+export const StatusBox = styled.div`
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+`;
+
 export const ContentGroup = styled.div`
     display: flex;
     gap: 5px;
     padding: 5px 0px;
     color: #7f7f7f;
     white-space: break-spaces;
-    /* overflow: hidden; */
-    /* text-overflow: ellipsis; */
-    /* white-space: nowrap; */
+    font-size: 16px;
     
     @media screen and (max-width: 1280px) {
         overflow: hidden;
         white-space: nowrap;
+    }
+
+    @media screen and (max-width: 992px) {
+        font-size: 12px;
     }
 `;
 
@@ -134,4 +162,8 @@ export const ContentValue = styled.div`
     font-weight: 600;
     color: #505050;
     font-size: 1.1rem;
+
+    @media screen and (max-width: 992px) {
+        font-size: 14px;
+    }
 `;

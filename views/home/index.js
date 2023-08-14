@@ -60,16 +60,16 @@ const HomeMain = () => {
     }
 
     {/* TEST Code */ }
-    const [purchaseCostCalcModalOpen, setPurchaseCostCalcModalOpen] = useState(false);
+    // const [purchaseCostCalcModalOpen, setPurchaseCostCalcModalOpen] = useState(false);
 
-    const togglePurchaseCostCalcModalOpen = (setOpen) => {
-        setPurchaseCostCalcModalOpen(setOpen);
-    }
+    // const togglePurchaseCostCalcModalOpen = (setOpen) => {
+    //     setPurchaseCostCalcModalOpen(setOpen);
+    // }
     {/* TEST Code */ }
     return (
         <>
             {/* TEST Code */}
-            <button
+            {/* <button
                 type='button'
                 onClick={() => togglePurchaseCostCalcModalOpen(true)}
             >
@@ -80,7 +80,7 @@ const HomeMain = () => {
                     open={purchaseCostCalcModalOpen}
                     onClose={() => togglePurchaseCostCalcModalOpen(false)}
                 />
-            }
+            } */}
             {/* TEST Code */}
             <Container>
                 <div className='link-box'>

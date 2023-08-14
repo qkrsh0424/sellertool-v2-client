@@ -4,10 +4,7 @@ import { nRankRecordDataConnect } from "../../../../../../../../data_connect/nRa
 
 export function useApiHook() {
     const onReqCreateNRankRecordDetail = async (
-        options = {params: {}, body: {}, headers: {}},
-        callbackFn = {
-            fail: () => {}
-        }
+        options = {params: {}, body: {}, headers: {}}
     ) => {
         await nRankRecordDetailDataConnect().createList(options.body, options.headers)
             .catch(err => {
@@ -16,7 +13,6 @@ export function useApiHook() {
                     ...defaultOptions,
                     toastId: res?.data?.memo
                 });
-                callbackFn.fail();
             })
     }
 

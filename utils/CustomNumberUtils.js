@@ -9,6 +9,7 @@ export const CustomNumberUtils = () => {
         roundToTwo: roundToTwo,
         roundToDigit: roundToDigit,
         hasPrefixZero: hasPrefixZero,
+        returnExchangeRateValue: returnExchangeRateValue
     }
 }
 
@@ -19,8 +20,9 @@ function numberWithCommas(number) {
 
 // 소숫점 아래에는 콤마 표시를 하지않는 버전
 function numberWithCommas2(number) {
+    let num = number || '';
     // 숫자를 정수 부분과 소수 부분으로 분리
-    let parts = number.toString().split(".");
+    let parts = num.toString().split(".");
 
     // 정수 부분에만 쉼표 추가
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -82,4 +84,18 @@ const roundToTwo = (number) => {
 
 const roundToDigit = (number, digit) => {
     return +(Math.round(number + `e+${digit}`) + `e-${digit}`);
+}
+
+const returnExchangeRateValue = (baseExchangeRateList, currentBaseExchangeRateId) => {
+    let baseExchangeRate = baseExchangeRateList?.find(r => r.id === currentBaseExchangeRateId) || baseExchangeRateList[0];
+    if (baseExchangeRate?.valueType === 'STATIC') {
+        return baseExchangeRate?.staticValue;
+    } else if (baseExchangeRate?.valueType === 'DYNAMIC') {
+        let dynamicExchangeRate = baseExchangeRateList?.find(r => r.id === baseExchangeRate?.dynamicValueRelatedId) || baseExchangeRateList[0];
+        let value = dynamicExchangeRate?.staticValue + dynamicExchangeRate?.extraValue;
+
+        return value;
+    } else {
+        return baseExchangeRateList[0]?.staticValue;
+    }
 }

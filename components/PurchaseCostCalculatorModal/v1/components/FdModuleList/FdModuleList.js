@@ -20,7 +20,18 @@ const generateInitAddModuleForm = () => {
     return {
         cid: null,
         id: id,
-        name: name
+        name: name,
+        productUnitPrice: '0',
+        productUnitPriceMberId: "75a58be7-37f9-11ee-8d3c-06fe28321f8c",
+        totalProductQty: '1',
+        localFreightCost: '0',
+        localFreightCostMberId: "75a58be7-37f9-11ee-8d3c-06fe28321f8c",
+        extraCost: '0',
+        extraCostMberId: "75a58be7-37f9-11ee-8d3c-06fe28321f8c",
+        customsDutyRate: '0',
+        customsTaxRate: '0',
+        purchaseUnitPrice: '0',
+        purchaseUnitPriceMberId: "75a58be7-37f9-11ee-8d3c-06fe28321f8c"
     }
 }
 

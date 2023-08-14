@@ -3,12 +3,12 @@ import { CustomNumberUtils } from "../../../utils/CustomNumberUtils";
 import CustomBlockButton from "../../buttons/block-button/v1/CustomBlockButton";
 import { CustomDialog } from "../../dialog/v1/CustomDialog";
 import CustomInput from "../../input/default/v1/CustomInput";
-import { FdModuleList } from "./components/FdModuleList/FdModuleList";
 import { useDataSourceHook, useMrPurchaseModuleHook, usePurchaseCostFormHook } from "./hooks";
 import { St } from "./index.styled";
 import { useSelector } from "react-redux";
 import { customBackdropController } from "../../backdrop/default/v1";
-import { withPendingComponent } from "../../../hoc/loading/withPendingComponent";
+import { FdModuleList, FdPurchaseUnitPriceCalculator } from "./components";
+import { useMrBaseExchangeRateHook } from "./hooks/useMrBaseExchangeRateHook";
 
 const customNumberUtils = CustomNumberUtils();
 const customBackdropControl = customBackdropController();
@@ -25,6 +25,7 @@ export function PurchaseCostCalculatorModal({
         BASE_EXCHANGE_RATE_LIST: BASE_EXCHANGE_RATE_LIST
     });
     const mrPurchaseModuleHook = useMrPurchaseModuleHook();
+    const mrBaseExchangeRateHook = useMrBaseExchangeRateHook();
 
     useEffect(() => {
         if (!wsId) {
@@ -32,11 +33,14 @@ export function PurchaseCostCalculatorModal({
         }
 
         dataSourceHook.onReqFetchMrPurchaseModuleList({ headers: { wsId: wsId } }, (results) => {
-            console.log(results);
             mrPurchaseModuleHook.onSetMrPurchaseModuleList(results);
+        });
+        dataSourceHook.onReqFetchMrBaseExchangeRateList({ headers: { wsId: wsId } }, (results) => {
+            mrBaseExchangeRateHook.onSetMrBaseExchangeRateList(results);
         })
     }, [wsId]);
 
+    console.log(mrBaseExchangeRateHook);
     const handleCalculate = () => {
         let productUnitPriceWithBaseExchangeRate = purchaseCostFormHook.returnProductUnitPriceWithBaseExchangeRate();
         let totalProductQty = purchaseCostFormHook.returnTotalProductQty();
@@ -60,6 +64,10 @@ export function PurchaseCostCalculatorModal({
         //     purchaseUnitPrice,
         //     customNumberUtils.roundToDigit(purchaseUnitPrice, 0)
         // );
+    }
+
+    const handleSubmitSavePurchaseUnitPriceForm = () => {
+
     }
 
     const handleSubmitAddPurchaseModule = async (form) => {
@@ -107,8 +115,9 @@ export function PurchaseCostCalculatorModal({
         }
 
         let body = {
-            id: form?.id,
-            name: form?.name
+            ...form
+            // id: form?.id,
+            // name: form?.name
         }
 
         let editedMrPurchaseModuleId = null;
@@ -190,6 +199,9 @@ export function PurchaseCostCalculatorModal({
                     </St.ModuleListFieldWrapper>
 
                     <St.InputFieldWrapper>
+                        <FdPurchaseUnitPriceCalculator
+                            baseExchangeRateList={mrBaseExchangeRateHook?.mrBaseExchangeRateList}
+                        />
                         <NumberInputWithExchangeRate
                             label='제품단가'
                             valueType='PRICE'

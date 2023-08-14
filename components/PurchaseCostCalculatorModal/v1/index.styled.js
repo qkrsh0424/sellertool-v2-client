@@ -13,9 +13,6 @@ export const St = {
     ModuleListFieldWrapper: styled.div`
         width:100%;
         flex:1;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
     `,
     InputFieldWrapper: styled.div`
         width:100%;

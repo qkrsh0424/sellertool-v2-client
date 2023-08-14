@@ -45,6 +45,7 @@ export function FdPlanList({
                         if (refSubscriptionPlan?.subscriptionPlan === 'PRIVATE') {
                             return (
                                 <PrivateCard
+                                    key={refSubscriptionPlan?.id}
                                     refSubscriptionPlan={refSubscriptionPlan}
                                     buttonType={buttonType}
                                 />
@@ -157,7 +158,7 @@ function PrivateCard({
     buttonType
 }) {
     return (
-        <STY_Card.Container key={refSubscriptionPlan?.id}>
+        <STY_Card.Container>
             <STY_Card.TitleBox>
                 {refSubscriptionPlan?.name}
             </STY_Card.TitleBox>

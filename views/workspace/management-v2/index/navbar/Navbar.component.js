@@ -31,14 +31,14 @@ const VIEW_TYPES = [
         default: false,
         masterOnly: true,
     },
-    // {
-    //     type: 'SUBSCRIPTION_PLAN',
-    //     title: '구독플랜',
-    //     iconSrc: '/images/icon/rocket_default_808080.svg',
-    //     default: false,
-    //     masterOnly: true,
-    //     alarm: <span className='alram-tag'>구독 필요</span>
-    // },
+    {
+        type: 'SUBSCRIPTION_PLAN',
+        title: '구독플랜',
+        iconSrc: '/images/icon/rocket_default_808080.svg',
+        default: false,
+        masterOnly: true,
+        alarm: <span className='alram-tag'>구독 필요</span>
+    },
     {
         type: 'SETTINGS',
         title: '설정',

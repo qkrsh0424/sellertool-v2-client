@@ -9,6 +9,8 @@ export const St = {
         border-radius: 15px;
         background: #fff;
         padding: 0 20px;
+        max-height: 800px;
+        overflow: auto;
     `,
     ItemCard: styled.div`
         padding: 20px 0;

@@ -18,12 +18,15 @@ export const STY_CardListWrapper = styled.div`
 export const STY_Card = {
     Container: styled.div`
         width: 100%;
-        height: 100%;
+        /* height: 100%; */
         padding: 20px;
         background: #fff;
         border: 1px solid #f0f0f0;
         border-radius: 10px;
         box-shadow: var(--defaultBoxShadow);
+        @media all and (max-width:992px){
+            height: 100%;
+        }
     `,
     TitleBox: styled.div`
         margin: 20px 0;

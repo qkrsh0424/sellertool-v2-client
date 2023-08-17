@@ -76,16 +76,15 @@ export function RecordDetailModalComponent({
         })
     }
 
-    const handleChangeNRankRecordStatusToPending = async () => {
+    const handleChangeNRankRecordStatusToPending = async () => {     
         let recordId = record.id;
-        
         await onReqChangeNRankRecordStatusToPending({
             params: { id: recordId },
             headers: { wsId: wsId }
         }, {
             success: () => {
-                let ids = [...currentPendingRecordIds].concat(recordId);
-                onSetCurrentPendingRecordIds(ids);
+                let recordIds = [...currentPendingRecordIds].concat(recordId);
+                onSetCurrentPendingRecordIds(recordIds);
                 handleCreateNRankRecordDetail();
             }
         })

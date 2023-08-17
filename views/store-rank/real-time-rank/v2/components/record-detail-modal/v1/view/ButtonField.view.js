@@ -5,9 +5,7 @@ import { CustomBoxImage } from "../../../../modules";
 import { CustomBlockButton } from "../../../../modules/buttons/block-button/v1";
 import { CustomProgressBar } from "../../../progress/progress-bar/v1";
 import useTargetTimeTimerHook from "../../../../../../../../hooks/timer/useTargetTimeTimerHook";
-
-// 변경 시 server SEARCHABLE_DIFF_TIME도 함께 변경해야 함
-const SEARCHABLE_DIFF_HOUR = 1
+import { getSearchableDiffSeconds } from "../../../../../../../../static-data/nrankRecordOptions";
 
 export default function ButtonFieldView({
     targetRecordInfo,
@@ -24,8 +22,7 @@ export default function ButtonFieldView({
             return;
         }
         
-        // let targetTime = setPlusTime(targetRecordInfo?.created_at, SEARCHABLE_DIFF_HOUR, 0, 0);
-        let targetTime = setPlusTime(targetRecordInfo?.created_at, 0, 1, 0);
+        let targetTime = setPlusTime(targetRecordInfo?.created_at, 0, 0, getSearchableDiffSeconds());
         onUpdateTargetTime(targetTime);
     }, [targetRecordInfo])
 

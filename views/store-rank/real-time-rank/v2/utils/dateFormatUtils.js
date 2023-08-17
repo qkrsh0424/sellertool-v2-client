@@ -7,6 +7,8 @@ function diffTimeToHHmmss(startDate, endDate) {
 }
 
 function setPlusTime(idate, hour, min, sec) {
+    if(!idate) return;
+    
     var date = new Date(idate);
     date.setHours(date.getHours() + hour);
     date.setMinutes(date.getMinutes() + min);

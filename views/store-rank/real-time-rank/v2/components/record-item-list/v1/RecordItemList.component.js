@@ -72,7 +72,7 @@ export function RecordItemListComponent({
                         let isKeywordAccent = keyword && (item.keyword).includes(keyword);
                         let isMallNameAccent = mallName && (item.mall_name).includes(mallName);
                         let currentRecordInfo = item.infos.find(r => item.current_nrank_record_info_id === r.id);
-                        let isPending = currentPendingRecordIds.includes(item.id);
+                        let isPending = currentPendingRecordIds?.includes(item.id);
 
                         return (
                             <RecordItemBox key={'record-info-idx' + index} >

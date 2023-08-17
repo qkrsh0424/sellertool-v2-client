@@ -7,6 +7,8 @@ import { customToast, defaultOptions } from "../../../../components/toast/custom
 import { useSelector } from "react-redux";
 import { useApiHook } from "./hooks/useApiHook";
 import { useEffect } from "react";
+import { setPlusTime } from "./utils/dateFormatUtils";
+import { getRecordPendingStatusExceedSeconds } from "../../../../static-data/nrankRecordOptions";
 
 const RECORD_STATUS_ENUM = {
     NONE: 'NONE',
@@ -24,7 +26,7 @@ export default function MainComponent(){
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const { onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList } = useApiHook();
+    const { onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList, onReqChangeNRankRecordListStatusToFail } = useApiHook();
     const { keyword, mallName, onChangeKeyword, onChangeMallName, onClearKeyword, onClearMallName, checkSearchInfoForm } = useSearchInputHook();
     const { searchedRecordList: recordList, currentPendingRecordIds, onSetRecordList, onSetCurrentPendingRecordIds } = useNRankRecordListHook({ keyword, mallName });
 
@@ -108,47 +110,75 @@ export default function MainComponent(){
         })
     }
 
+    const handleReqChangeNRankRecordListStatusToFail = async (ids) => {
+        await onReqChangeNRankRecordListStatusToFail({
+            body: {ids: ids},
+            headers: { wsId: wsId }
+        });
+    }
+
     const handleReqSearchNRankRecordList = async () => {
         await onReqSearchNRankRecordList({
             headers: { wsId: wsId }
         }, {
             success: (results) => {
-                let pendingIds = [];
-                results.forEach(r => {
-                    if(r.status === RECORD_STATUS_ENUM.PENDING) {
-                        pendingIds.push(r.id);
-                    }
-
-                    // pending -> complete / fail 로 update된 경우
-                    if(currentPendingRecordIds?.includes(r.id)) {
-                        switch(r.status) {
-                            case(RECORD_STATUS_ENUM.PENDING):
-                                pendingIds.push(r.id);
-                                break;
-                            case(RECORD_STATUS_ENUM.COMPLETE):
-                                var content = `[${r.keyword} - ${r.mall_name}] 랭킹 업데이트 완료 !`
-                                customToast.success(content, {
-                                    ...defaultOptions,
-                                    toastId: content
-                                });
-                                break;
-                            case(RECORD_STATUS_ENUM.FAIL):
-                                var content = `[${r.keyword} - ${r.mall_name}] 랭킹 검색 실패. 재시도 해주세요.`
-                                customToast.error(content, {
-                                    ...defaultOptions,
-                                    toastId: content
-                                });
-                                break;
-                            default:
-                                break;
-                        }   
-                    }
-                })
-                
-                onSetRecordList(results);
-                onSetCurrentPendingRecordIds([...pendingIds]);
+                handleUpdateRecordStatus(results)
+                handleChangeLongPendingRecordStatusToFail(results)
             }
         })
+    }
+
+    const handleUpdateRecordStatus = (results) => {
+        let recordIds = [];
+
+        results.forEach(r => {
+            if (r.status === RECORD_STATUS_ENUM.PENDING) {
+                recordIds.push(r.id);
+            }
+
+            // pending -> complete / fail 로 update된 경우
+            if (currentPendingRecordIds?.includes(r.id)) {
+                switch (r.status) {
+                    case (RECORD_STATUS_ENUM.COMPLETE):
+                        var content = `[${r.keyword} - ${r.mall_name}] 랭킹 업데이트 완료 !`
+                        customToast.success(content, {
+                            ...defaultOptions,
+                            toastId: content
+                        });
+                        break;
+                    case (RECORD_STATUS_ENUM.FAIL):
+                        var content = `[${r.keyword} - ${r.mall_name}] 랭킹 검색 실패. 재시도 해주세요.`
+                        customToast.error(content, {
+                            ...defaultOptions,
+                            toastId: content
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            }
+        })
+
+        onSetRecordList(results);
+        onSetCurrentPendingRecordIds([...recordIds]);
+    }
+
+    const handleChangeLongPendingRecordStatusToFail = (results) => {
+        let recordIds = []
+        let currentDate = new Date()
+
+        results.forEach(r => {
+            if(r.status === RECORD_STATUS_ENUM.PENDING && r.status_updated_at) {
+                let exceedTargetTime = setPlusTime(r.status_updated_at, 0, 0, getRecordPendingStatusExceedSeconds());
+                if(currentDate > exceedTargetTime) {
+                    recordIds.push(r.id)
+                }
+            }
+        });
+
+        if(recordIds.length > 0) {
+            handleReqChangeNRankRecordListStatusToFail(recordIds);
+        }
     }
 
     return (

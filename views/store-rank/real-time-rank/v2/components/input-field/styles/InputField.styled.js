@@ -4,9 +4,13 @@ export const Container = styled.div`
     overflow: hidden;
     
     form {
-        padding: 20px;
+        box-shadow: var(--defaultBoxShadow);
+        padding: 15px;
         background-color: var(--mainColorOpacity30);
-        border-radius: 0 0 50px 50px;
+        /* border-radius: 0 0 50px 50px; */
+        border-radius: 60px;
+        margin: 15px;
+        margin-bottom: 0;
         display: inline-block;
         overflow: hidden;
         animation-duration: 1s;
@@ -19,36 +23,44 @@ export const Container = styled.div`
 
     @keyframes slidedown {
         from {
+            opacity: 0;
             transform: translateY(-80%);
         }
         to {
+            opacity: 1;
             transform: translateY(0);
         }
     }
         
     @-moz-keyframes slidedown { /* Firefox */
         from {
+            opacity: 0;
             transform: translateY(-80%);
         }
         to {
+            opacity: 1;
             transform: translateY(0);
         }
     }
         
     @-webkit-keyframes slidedown { /* Safari and Chrome */
         from {
+            opacity: 0;
             transform: translateY(-80%);
         }
         to {
+            opacity: 1;
             transform: translateY(0);
         }
     }
     
     @-o-keyframes slidedown { /* Opera */
         from {
+            opacity: 0;
             transform: translateY(-80%);
         }
         to {
+            opacity: 1;
             transform: translateY(0);
         }
     }

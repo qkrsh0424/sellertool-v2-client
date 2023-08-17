@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { FdPlanList } from "./components";
+import { FdCheckNotice, FdPlanList } from "./components";
 import { Container, TitleFieldWrapper } from "./index.styled";
 import { useDataSourceHook, useRefSubscriptionPlanListHook } from "./hooks";
 
@@ -31,6 +31,9 @@ export default function SubscriptionPlanComponent({ workspace }) {
                 <FdPlanList
                     currentWorkspace={workspace}
                     refSubscriptionPlanList={refSubscriptionPlanListHook.refSubscriptionPlanList}
+                />
+                <FdCheckNotice
+
                 />
             </Container>
         </>

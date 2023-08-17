@@ -48,6 +48,7 @@ export function FdPlanList({
                                     key={refSubscriptionPlan?.id}
                                     refSubscriptionPlan={refSubscriptionPlan}
                                     buttonType={buttonType}
+                                    handleApplySubscriptionPlan={handleApplySubscriptionPlan}
                                 />
                             );
                         }
@@ -91,22 +92,13 @@ export function FdPlanList({
                                                     이용중
                                                 </CustomBlockButton>
                                             }
-                                            {buttonType === 'EXTEND' &&
-                                                <CustomBlockButton
-                                                    type='button'
-                                                    className='button-item'
-                                                    onClick={() => handleApplySubscriptionPlan(refSubscriptionPlan?.id)}
-                                                >
-                                                    구독 연장하기
-                                                </CustomBlockButton>
-                                            }
                                             {buttonType === 'USING_ANOTHER' &&
                                                 <CustomBlockButton
                                                     type='button'
                                                     className='button-item'
                                                     disabled
                                                 >
-                                                    다른 플랜 사용중
+                                                    다른 플랜 이용중
                                                 </CustomBlockButton>
                                             }
                                         </>
@@ -155,7 +147,8 @@ export function FdPlanList({
 
 function PrivateCard({
     refSubscriptionPlan,
-    buttonType
+    buttonType,
+    handleApplySubscriptionPlan
 }) {
     return (
         <STY_Card.Container>
@@ -201,7 +194,7 @@ function PrivateCard({
                                 className='button-item'
                                 disabled
                             >
-                                다른 플랜 사용중
+                                다른 플랜 이용중
                             </CustomBlockButton>
                         }
                     </>

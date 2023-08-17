@@ -13,7 +13,7 @@ export function FdCheckNotice(props) {
                             />
                         </div>
                         <div className='title'>
-                            구독플랜 유의사항
+                            구독플랜 결제시 유의사항
                         </div>
                     </St.TitleBox>
                     <St.ItemList>

@@ -9,7 +9,10 @@ export const CustomNumberUtils = () => {
         roundToTwo: roundToTwo,
         roundToDigit: roundToDigit,
         hasPrefixZero: hasPrefixZero,
-        returnExchangeRateValue: returnExchangeRateValue
+        returnBaseExchangeRateId: returnBaseExchangeRateId,
+        returnExchangeRateValue: returnExchangeRateValue,
+        parseNumberToFloat: parseNumberToFloat,
+        parseNumberToInt: parseNumberToInt
     }
 }
 
@@ -86,16 +89,59 @@ const roundToDigit = (number, digit) => {
     return +(Math.round(number + `e+${digit}`) + `e-${digit}`);
 }
 
+const returnBaseExchangeRateId = (baseExchangeRateList, currentBaseExchangeRateId) => {
+    let baseExchangeRate = baseExchangeRateList?.find(r => r.id === currentBaseExchangeRateId) || baseExchangeRateList[0];
+    return baseExchangeRate?.id;
+}
+
 const returnExchangeRateValue = (baseExchangeRateList, currentBaseExchangeRateId) => {
+    baseExchangeRateList = baseExchangeRateList ? baseExchangeRateList : [];
+
     let baseExchangeRate = baseExchangeRateList?.find(r => r.id === currentBaseExchangeRateId) || baseExchangeRateList[0];
     if (baseExchangeRate?.valueType === 'STATIC') {
         return baseExchangeRate?.staticValue;
     } else if (baseExchangeRate?.valueType === 'DYNAMIC') {
         let dynamicExchangeRate = baseExchangeRateList?.find(r => r.id === baseExchangeRate?.dynamicValueRelatedId) || baseExchangeRateList[0];
-        let value = dynamicExchangeRate?.staticValue + dynamicExchangeRate?.extraValue;
+        let value = dynamicExchangeRate?.staticValue + baseExchangeRate?.extraValue;
 
         return value;
     } else {
         return baseExchangeRateList[0]?.staticValue;
     }
+}
+
+const parseNumberToFloat = ({ value, defaultValue = 0, min, max }) => {
+    value = Number.parseFloat(value || defaultValue);
+
+    if (min && max && max < min) {
+        throw new Error('max 는 min 보다 작을 수 없습니다.');
+    }
+
+    if (min && value <= min) {
+        return min;
+    }
+
+    if (max && value >= max) {
+        return max;
+    }
+
+    return value;
+}
+
+const parseNumberToInt = ({ value, defaultValue = 0, min, max }) => {
+    value = Number.parseInt(value || defaultValue);
+
+    if (min && max && max < min) {
+        throw new Error('max 는 min 보다 작을 수 없습니다.');
+    }
+
+    if (min && value <= min) {
+        return min;
+    }
+
+    if (max && value >= max) {
+        return max;
+    }
+
+    return value;
 }

@@ -24,7 +24,8 @@ const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
     overflow: hidden;
     padding: 0;
     position: absolute;
-    white-space: nowrap;
+    white-space: pre-line;
+    word-break: keep-all;
     width: 1px;
 `
 

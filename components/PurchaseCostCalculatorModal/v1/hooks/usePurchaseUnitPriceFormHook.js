@@ -3,25 +3,39 @@ import { CustomNumberUtils } from "../../../../utils/CustomNumberUtils";
 
 const customNumberUtils = CustomNumberUtils();
 
-export function usePurchaseUnitPriceFormHook({
-    baseExchangeRateList
-}) {
+export function usePurchaseUnitPriceFormHook(props) {
     const [purchaseUnitPriceForm, setPurchaseUnitPriceForm] = useState({
         productUnitPrice: '',
-        productUnitPriceBaseExchangeRateId: "9e53a616-37f9-11ee-8d3c-06fe28321f8c",
+        productUnitPriceMberId: "9e53a616-37f9-11ee-8d3c-06fe28321f8c",
         totalProductQty: '',
         localFreightCost: '',
-        localFreightCostBaseExchangeRateId: "9e53a616-37f9-11ee-8d3c-06fe28321f8c",
+        localFreightCostMberId: "9e53a616-37f9-11ee-8d3c-06fe28321f8c",
         extraCost: '',
-        extraCostBaseExchangeRateId: 2,
+        extraCostMberId: 2,
         customsDutyRate: '',
         customsTaxRate: '',
-        purchaseUnitPrice: '',
-        purchaseUnitPriceBaseExchangeRateId: 1
+        purchaseUnitPriceKRW: '',
+        purchaseUnitPriceMberId: 1
     });
 
-    const onSetPurchaseCostForm = (value) => {
+    const onSetPurchaseUnitPriceForm = (value) => {
         setPurchaseUnitPriceForm(value)
+    }
+
+    const onInitializedSet = (selectedModule) => {
+        onSetPurchaseUnitPriceForm({
+            productUnitPrice: selectedModule?.productUnitPrice,
+            productUnitPriceMberId: selectedModule?.productUnitPriceMberId,
+            totalProductQty: selectedModule?.totalProductQty,
+            localFreightCost: selectedModule?.localFreightCost,
+            localFreightCostMberId: selectedModule?.localFreightCostMberId,
+            extraCost: selectedModule?.extraCost,
+            extraCostMberId: selectedModule?.extraCostMberId,
+            customsDutyRate: selectedModule?.customsDutyRate,
+            customsTaxRate: selectedModule?.customsTaxRate,
+            purchaseUnitPriceKRW: selectedModule?.purchaseUnitPriceKRW,
+            purchaseUnitPriceMberId: selectedModule?.purchaseUnitPriceMberId,
+        })
     }
 
     const onChangeValueOfName = (name, value) => {
@@ -31,52 +45,25 @@ export function usePurchaseUnitPriceFormHook({
         })
     }
 
-    const returnProductUnitPriceWithBaseExchangeRate = () => {
-        console.log(baseExchangeRateList);
-        let value = Number.parseFloat(purchaseUnitPriceForm?.productUnitPrice || 0);
-        let baseExchangeRateValue = customNumberUtils.returnExchangeRateValue(baseExchangeRateList, purchaseUnitPriceForm?.productUnitPriceBaseExchangeRateId);
+    /**
+     * 
+     * @param {*} value 
+     * @param {*} mberId MarginRecordBaseExchangeRateId
+     * @param {*} baseExchangeRateList 
+     * @returns 
+     */
+    const returnValueWithBaseExchangeRate = (value, mberId, baseExchangeRateList) => {
+        value = Number.parseFloat(value || 0);
+        let baseExchangeRateValue = customNumberUtils.returnExchangeRateValue(baseExchangeRateList, mberId);
         value = value * baseExchangeRateValue;
         return value;
     }
 
-    const returnTotalProductQty = () => {
-        let value = Number.parseInt(purchaseUnitPriceForm?.totalProductQty || 1);
-        value = value <= 0 ? 1 : value;
-        return value;
-    }
-
-    const returnLocalFreightCostWithBaseExchangeRate = () => {
-        let value = Number.parseFloat(purchaseUnitPriceForm?.localFreightCost || 0);
-        let baseExchangeRateValue = customNumberUtils.returnExchangeRateValue(baseExchangeRateList, purchaseUnitPriceForm?.localFreightCostBaseExchangeRateId);
-        value = value * baseExchangeRateValue;
-        return value;
-    }
-
-    const returnExtraCostWithBaseExchangeRate = () => {
-        let value = Number.parseFloat(purchaseUnitPriceForm?.extraCost || 0);
-        let baseExchangeRateValue = customNumberUtils.returnExchangeRateValue(baseExchangeRateList, purchaseUnitPriceForm?.extraCostBaseExchangeRateId);
-        value = value * baseExchangeRateValue;
-        return value;
-    }
-
-    const returnCustomsDutyRate = () => {
-        let value = Number.parseFloat(purchaseUnitPriceForm?.customsDutyRate || 0);
-        return value;
-    }
-
-    const returnCustomsTaxRate = () => {
-        let value = Number.parseFloat(purchaseUnitPriceForm?.customsTaxRate || 0);
-        return value;
-    }
     return {
         purchaseUnitPriceForm,
-        onSetPurchaseCostForm,
+        onSetPurchaseUnitPriceForm,
+        onInitializedSet,
         onChangeValueOfName,
-        returnProductUnitPriceWithBaseExchangeRate,
-        returnTotalProductQty,
-        returnLocalFreightCostWithBaseExchangeRate,
-        returnExtraCostWithBaseExchangeRate,
-        returnCustomsDutyRate,
-        returnCustomsTaxRate
+        returnValueWithBaseExchangeRate,
     }
 }

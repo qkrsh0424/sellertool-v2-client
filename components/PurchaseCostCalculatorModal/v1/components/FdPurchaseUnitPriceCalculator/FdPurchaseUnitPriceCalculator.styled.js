@@ -10,6 +10,15 @@ export const St = {
         display: flex;
         flex-direction: column;
         gap: 20px;
+
+        .calculate-button{
+            background: var(--mainColor);
+            color:#fff;
+            border: none;
+            font-weight: 800;
+            height: 48px;
+            border-radius: 5px;
+        }
     `,
     NumberInputWrapper: styled.div`
         label{
@@ -36,6 +45,17 @@ export const St = {
             &:read-only{}
         }
 
+        .result-input{
+            border: 1.5px solid #888;
+            font-weight: 600;
+            background: #f0f0f0;
+
+            &::placeholder{
+                color: #222;
+                font-size: 12px;
+            }
+        }
+        
         button{
             width:80px;
             height: 100%;

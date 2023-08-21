@@ -33,5 +33,17 @@ function baseMarginRecord() {
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             });
         },
+        createOne: async function (options = { headers, params, body }) {
+            const { headers, body } = options;
+
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${BASE_URL}`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            );
+        }
     }
 }

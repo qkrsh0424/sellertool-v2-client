@@ -30,7 +30,7 @@ const generateInitAddModuleForm = () => {
         extraCostMberId: "75a58be7-37f9-11ee-8d3c-06fe28321f8c",
         customsDutyRate: '0',
         customsTaxRate: '0',
-        purchaseUnitPrice: '0',
+        purchaseUnitPriceKRW: '0',
         purchaseUnitPriceMberId: "75a58be7-37f9-11ee-8d3c-06fe28321f8c"
     }
 }

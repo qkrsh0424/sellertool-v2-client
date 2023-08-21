@@ -33,6 +33,8 @@ export const St = {
         
         .name-label{
             flex:1;
+            white-space: pre-line;
+            word-break: break-all;
         }
 
         .editBtn{

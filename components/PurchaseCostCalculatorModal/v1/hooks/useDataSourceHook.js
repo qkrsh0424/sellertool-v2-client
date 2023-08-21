@@ -1,20 +1,7 @@
 import { MrPurchaseModuleDataConnect } from "../../../../data_connect/MrPurchaseModuleDataConnect";
 import { MrBaseExchangeRateDataConnect } from "../../../../data_connect/MrBaseExchangeRateDataConnect";
-import { EventUtils } from "../../../../utils/EventUtils";
 import { customToast, defaultOptions } from "../../../toast/custom-react-toastify/v1";
 
-const MODULE_LIST = [
-    {
-        cid: null,
-        id: 1,
-        name: 'abcd'
-    },
-    {
-        cid: null,
-        id: 2,
-        name: 'bcde'
-    },
-]
 
 const mrPurchaseModuleDataConnect = MrPurchaseModuleDataConnect.baseMarginRecord();
 const mrBaseExchangeRateDataConnect = MrBaseExchangeRateDataConnect.baseMarginRecord();
@@ -104,6 +91,47 @@ export function useDataSourceHook(props) {
             });
     }
 
+    const onReqChangeMberId = async (options = { headers, body }, callbackFn = (results, response) => { }) => {
+        await mrPurchaseModuleDataConnect.changeMberId({
+            headers: options?.headers,
+            body: options?.body
+        })
+            .then(res => {
+                if (res?.status === 200) {
+                    callbackFn(res?.data?.data, res);
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            });
+    }
+
+    const onReqChangeMrPurchaseModulePurchaseUnitPriceForm = async (options = { headers, body }, callbackFn = (results, response) => { }) => {
+        const { headers, body } = options;
+        await mrPurchaseModuleDataConnect.changePurchaseUnitPriceForm({
+            headers: headers,
+            body: body
+        })
+            .then(res => {
+                if (res?.status === 200) {
+                    callbackFn(res?.data?.data, res);
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            });
+    }
+
     const onReqDeleteMrPurchaseModuleOne = async (options = { headers, body }, callbackFn = (results, response) => { }) => {
         const { headers, body } = options;
 
@@ -128,6 +156,8 @@ export function useDataSourceHook(props) {
         onReqFetchMrBaseExchangeRateList,
         onReqCreateMrPurchaseModule,
         onReqChangeMrPurchaseModuleName,
+        onReqChangeMrPurchaseModulePurchaseUnitPriceForm,
+        onReqChangeMberId,
         onReqDeleteMrPurchaseModuleOne
     }
 }

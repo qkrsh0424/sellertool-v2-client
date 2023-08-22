@@ -94,6 +94,50 @@ export const St = {
             }
         }
     `,
+    DeleteItemBox: styled.div`
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-start;
+        padding: 10px;
+        background: #fff;
+        scale: 1.03;
+        box-shadow: var(--defaultBoxShadow);
+        border: 1px solid var(--defaultRedColor);
+        border-radius: 5px;
+        transition: all .3s;
+
+        .item{
+            width:100%;
+            text-align: center;
+            .description{
+                flex:1;
+                font-size: 13px;
+                color:#222;
+                font-weight: 700;
+            }
+
+            .buttonEl{
+                height: 30px;
+                font-size: 13px;   
+                border:none;
+                font-weight: 600;
+                border-radius: 5px;
+
+                &:hover{
+                    background: #f0f0f0;
+                }
+            }
+
+        }
+
+        .flex-row-item{
+            display: flex;
+            flex-direction: row;
+            flex:1;
+            gap: 10px;
+        }
+    `,
     AutoUpdateBadge: styled.div`
         width:5px;
         height: 5px;

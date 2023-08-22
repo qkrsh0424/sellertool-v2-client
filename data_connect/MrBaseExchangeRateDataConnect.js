@@ -44,6 +44,30 @@ function baseMarginRecord() {
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
             );
-        }
+        },
+        updateOne: async function (options = { headers, params, body }) {
+            const { headers, body } = options;
+
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.put(`${BASE_URL}`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            );
+        },
+        deleteOne: async function (options = { headers, params, body }) {
+            const { headers, body } = options;
+
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.delete(`${BASE_URL}/${body?.id}`, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            );
+        },
     }
 }

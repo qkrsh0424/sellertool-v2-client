@@ -72,6 +72,12 @@ export const St = {
             border: 1px solid var(--mainColor);
         }
 
+        .notset-button{
+            background: #fff;
+            color: var(--defaultRedColor);
+            border: 1px solid var(--defaultRedColor);
+        }
+
         .readOnly-button{
             cursor:default;
             outline: none;

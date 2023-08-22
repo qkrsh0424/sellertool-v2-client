@@ -307,6 +307,8 @@ export function FdPurchaseUnitPriceCalculator({
                     onClose={() => toggleMrBaseExchangeRateModalOpen(false)}
                     onSelect={handleSelectMber}
                     onCreateCompleted={onRefetchMrBaseExchangeRateList}
+                    onDeleteCompleted={onRefetchMrBaseExchangeRateList}
+                    onUpdateCompleted={onRefetchMrBaseExchangeRateList}
                 />
             }
         </>
@@ -325,9 +327,15 @@ function BaseExchangeRateButton({
     onClick
 }) {
     const baseExchangeRate = baseExchangeRateList?.find(r => r.id === currentMberId);
-    return (
-        <CustomBlockButton className='active-button' onClick={onClick}>{baseExchangeRate?.name || 'NN'}</CustomBlockButton>
-    );
+    if (baseExchangeRate) {
+        return (
+            <CustomBlockButton className='active-button' onClick={onClick}>{baseExchangeRate?.name}</CustomBlockButton>
+        );
+    } else {
+        return (
+            <CustomBlockButton className='notset-button' onClick={onClick}>미지정</CustomBlockButton>
+        );
+    }
 }
 
 function QuantityButton() {

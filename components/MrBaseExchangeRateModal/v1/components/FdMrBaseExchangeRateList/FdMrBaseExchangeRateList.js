@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CustomNumberUtils } from "../../../../../utils/CustomNumberUtils";
 import CustomBlockButton from "../../../../buttons/block-button/v1/CustomBlockButton";
 import CustomImage from "../../../../image/CustomImage";
@@ -8,8 +9,21 @@ const customNumberUtils = CustomNumberUtils();
 
 export function FdMrBaseExchangeRateList({
     mrBaseExchangeRateList,
-    onSelect
+    onSetEditTargetItem,
+    onSelect,
+    onDelete
 }) {
+    const [deleteTargetItem, setDeleteTargetItem] = useState(null);
+
+    const handleSetDeleteTargetItem = (targetItem) => {
+        setDeleteTargetItem(targetItem);
+    }
+
+    const handleSubmitDelete = async () => {
+        await onDelete(deleteTargetItem);
+        handleSetDeleteTargetItem(null);
+    }
+
     return (
         <>
             <St.Container>
@@ -38,6 +52,47 @@ export function FdMrBaseExchangeRateList({
                                 </St.ItemBox>
                             );
                         }
+
+                        if (deleteTargetItem && deleteTargetItem?.id === mrBaseExchangeRate?.id) {
+                            return (
+                                <St.DeleteItemBox
+                                    key={mrBaseExchangeRate?.id}
+                                >
+                                    <div className='item'>
+                                        <div className='description'>
+                                            기준환율을 삭제하면 적용된 모든 데이터가 영향을 받습니다.
+                                        </div>
+                                    </div>
+                                    <div className='item'>
+                                        <div className='description'>
+                                            정말로 삭제하시겠습니까?
+                                        </div>
+                                    </div>
+                                    <div className='item flex-row-item'>
+                                        <CustomBlockButton
+                                            className='buttonEl'
+                                            style={{ color: '#666' }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleSetDeleteTargetItem(null);
+                                            }}
+                                        >
+                                            취소
+                                        </CustomBlockButton>
+                                        <CustomBlockButton
+                                            className='buttonEl'
+                                            style={{ color: 'var(--defaultRedColor)' }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleSubmitDelete();
+                                            }}
+                                        >
+                                            삭제
+                                        </CustomBlockButton>
+                                    </div>
+                                </St.DeleteItemBox>
+                            );
+                        }
                         return (
                             <St.ItemBox
                                 key={mrBaseExchangeRate?.id}
@@ -57,6 +112,11 @@ export function FdMrBaseExchangeRateList({
                                 <CustomBlockButton
                                     type='button'
                                     className='editBtn'
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleSetDeleteTargetItem(null);
+                                        onSetEditTargetItem(mrBaseExchangeRate);
+                                    }}
                                 >
                                     <CustomImage
                                         src='/images/icon/edit_default_808080.svg'
@@ -65,6 +125,10 @@ export function FdMrBaseExchangeRateList({
                                 <CustomBlockButton
                                     type='button'
                                     className='removeBtn'
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleSetDeleteTargetItem(mrBaseExchangeRate);
+                                    }}
                                 >
                                     <CustomImage
                                         src='/images/icon/delete_default_e56767.svg'

@@ -4,7 +4,7 @@ import { useDataSourceHook, useMrPurchaseModuleHook } from "./hooks";
 import { St } from "./index.styled";
 import { useSelector } from "react-redux";
 import { customBackdropController } from "../../backdrop/default/v1";
-import { FdModuleList, FdPurchaseUnitPriceCalculator } from "./components";
+import { FdCalculator, FdModuleList, FdPurchaseUnitPriceCalculator } from "./components";
 import { useMrBaseExchangeRateHook } from "./hooks";
 
 const customBackdropControl = customBackdropController();
@@ -41,7 +41,7 @@ export function PurchaseCostCalculatorModal({
 
     const handleSubmitSavePurchaseUnitPriceForm = async (form) => {
         let body = {
-            ...mrPurchaseModuleHook.selectedMrPurchaseModule,
+            id: mrPurchaseModuleHook.selectedMrPurchaseModule?.id,
             ...form
         }
 
@@ -54,7 +54,7 @@ export function PurchaseCostCalculatorModal({
 
         customBackdropControl.showBackdrop();
         // UPDATE
-        await dataSourceHook.onReqChangeMrPurchaseModulePurchaseUnitPriceForm({
+        await dataSourceHook.onReqChangeMrPurchaseModulePurchaseDataForm({
             headers: headers,
             body: body,
         });
@@ -204,29 +204,18 @@ export function PurchaseCostCalculatorModal({
                         />
                     </St.ModuleListFieldWrapper>
                     {!mrPurchaseModuleHook?.selectedMrPurchaseModule &&
-                        <div style={{ flex: '1' }}>
-
+                        <div style={{ flex: '1', textAlign: 'center', fontSize: '16px', fontWeight: '600' }}>
+                            매입정보 모듈을 먼저 선택해 주세요.
                         </div>
                     }
                     {mrPurchaseModuleHook?.selectedMrPurchaseModule &&
                         <>
-                            <St.InputFieldWrapper>
-                                <FdPurchaseUnitPriceCalculator
-                                    baseExchangeRateList={mrBaseExchangeRateHook?.mrBaseExchangeRateList}
-                                    selectedMrPurchaseModule={mrPurchaseModuleHook?.selectedMrPurchaseModule}
-                                    handleSubmitSavePurchaseUnitPriceForm={handleSubmitSavePurchaseUnitPriceForm}
-                                    onRefetchMrBaseExchangeRateList={handleReqFetchMrBaseExchangeRateList}
-                                />
-                            </St.InputFieldWrapper>
-                            <St.InputFieldWrapper>
-                                <FdPurchaseUnitPriceCalculator
-                                    baseExchangeRateList={mrBaseExchangeRateHook?.mrBaseExchangeRateList}
-                                    selectedMrPurchaseModule={mrPurchaseModuleHook?.selectedMrPurchaseModule}
-                                    handleSubmitSavePurchaseUnitPriceForm={handleSubmitSavePurchaseUnitPriceForm}
-                                />
-                            </St.InputFieldWrapper>
-                            <St.InputFieldWrapper>
-                            </St.InputFieldWrapper>
+                            <FdCalculator
+                                mrBaseExchangeRateList={mrBaseExchangeRateHook?.mrBaseExchangeRateList}
+                                selectedMrPurchaseModule={mrPurchaseModuleHook?.selectedMrPurchaseModule}
+                                handleSubmitSavePurchaseUnitPriceForm={handleSubmitSavePurchaseUnitPriceForm}
+                                onRefetchMrBaseExchangeRateList={handleReqFetchMrBaseExchangeRateList}
+                            />
                         </>
                     }
                 </St.Container>

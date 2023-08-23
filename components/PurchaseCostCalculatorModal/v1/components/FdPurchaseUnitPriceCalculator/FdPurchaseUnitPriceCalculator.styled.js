@@ -10,6 +10,10 @@ export const St = {
         display: flex;
         flex-direction: column;
         gap: 20px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: var(--defaultBoxShadow);
 
         .calculate-button{
             background: var(--mainColor);

@@ -2,12 +2,15 @@ import styled from 'styled-components';
 
 export const St = {
     Container: styled.div`
-        padding: 20px;
+        padding: 0 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
         display: flex;
         gap:20px;  
 
         @media all and (max-width:1280px){
             flex-direction: column;
+            padding: 10px;
         }
     `,
     ModuleListFieldWrapper: styled.div`

@@ -130,9 +130,11 @@ export function FdModuleList({
 
     const handleSubmitDeleteModule = async (targetId) => {
         await onSubmitDelete(targetId);
+        toggleIsActiveDeleteMode(false);
     }
 
     const handleSelectMrPurchaseModule = (targetId) => {
+        toggleIsActiveDeleteMode(false);
         toggleIsActiveAddMode(false);
         toggleIsActiveEditMode(false);
         onSetSelectedMrPurchaseModule(mrPurchaseModuleList?.find(r => r.id === targetId));
@@ -141,8 +143,8 @@ export function FdModuleList({
     return (
         <>
             <St.Container>
-                <St.Title>매입정보 모듈 선택</St.Title>
                 <St.Wrapper>
+                    <St.Title>매입정보 모듈 선택</St.Title>
                     <AddModule
                         mrPurchaseModuleList={mrPurchaseModuleList}
                         addModuleForm={addModuleForm}

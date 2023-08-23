@@ -91,29 +91,9 @@ export function useDataSourceHook(props) {
             });
     }
 
-    const onReqChangeMberId = async (options = { headers, body }, callbackFn = (results, response) => { }) => {
-        await mrPurchaseModuleDataConnect.changeMberId({
-            headers: options?.headers,
-            body: options?.body
-        })
-            .then(res => {
-                if (res?.status === 200) {
-                    callbackFn(res?.data?.data, res);
-                }
-            })
-            .catch(err => {
-                const res = err.response;
-                console.log(res);
-                customToast.error(res?.data?.memo, {
-                    ...defaultOptions,
-                    toastId: res?.data?.memo
-                });
-            });
-    }
-
-    const onReqChangeMrPurchaseModulePurchaseUnitPriceForm = async (options = { headers, body }, callbackFn = (results, response) => { }) => {
+    const onReqChangeMrPurchaseModulePurchaseDataForm = async (options = { headers, body }, callbackFn = (results, response) => { }) => {
         const { headers, body } = options;
-        await mrPurchaseModuleDataConnect.changePurchaseUnitPriceForm({
+        await mrPurchaseModuleDataConnect.changePurchaseDataForm({
             headers: headers,
             body: body
         })
@@ -156,8 +136,7 @@ export function useDataSourceHook(props) {
         onReqFetchMrBaseExchangeRateList,
         onReqCreateMrPurchaseModule,
         onReqChangeMrPurchaseModuleName,
-        onReqChangeMrPurchaseModulePurchaseUnitPriceForm,
-        onReqChangeMberId,
+        onReqChangeMrPurchaseModulePurchaseDataForm,
         onReqDeleteMrPurchaseModuleOne
     }
 }

@@ -62,21 +62,10 @@ function baseMarginRecord() {
                 })
             )
         },
-        changePurchaseUnitPriceForm: async function (options = { headers, params, body }) {
+        changePurchaseDataForm: async function (options = { headers, params, body }) {
             const { headers, body } = options;
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.patch(`${BASE_URL}/purchaseUnitPriceForm`, body, {
-                    headers: headers,
-                    withCredentials: true,
-                    xsrfCookieName: 'x_api_csrf_token',
-                    xsrfHeaderName: 'X-XSRF-TOKEN'
-                })
-            )
-        },
-        changeMberId: async function (options = { headers, params, body }) {
-            const { headers, body } = options;
-            return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.patch(`${BASE_URL}/mberId`, body, {
                     headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',

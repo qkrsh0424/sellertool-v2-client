@@ -46,7 +46,7 @@ export function useApiHook() {
         await nRankRecordDataConnect().changeStatusToPending(options.params, options.headers)
             .then(res => {
                 if (res.status === 200) {
-                    callbackFn.success();
+                    callbackFn.success(res?.data?.data);
                 }
             })
             .catch(err => {

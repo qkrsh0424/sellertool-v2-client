@@ -17,7 +17,7 @@ const nRankRecordDetailDataConnect = () => {
         },
         createList: async function (body, headers) {
             return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/nrank-record-details/${body.record_id}`, {}, {
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/nrank-record-details`, body, {
                     headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',

@@ -21,7 +21,8 @@ export function RecordDetailModalComponent({
     record,
     rankSearchInfo,
     currentPendingRecordIds,
-    onSetCurrentPendingRecordIds
+    onSetCurrentPendingRecordIds,
+    onSearchSubscriptionPlanSearchInfo
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
@@ -96,17 +97,18 @@ export function RecordDetailModalComponent({
             params: { id: recordId },
             headers: { wsId: wsId }
         }, {
-            success: () => {
+            success: (results) => {
                 let recordIds = [...currentPendingRecordIds].concat(recordId);
                 onSetCurrentPendingRecordIds(recordIds);
-                handleCreateNRankRecordDetail();
+                handleCreateNRankRecordDetail(results);
+                onSearchSubscriptionPlanSearchInfo();
             }
         })
     }
 
-    const handleCreateNRankRecordDetail = async () => {
+    const handleCreateNRankRecordDetail = async (info_id) => {
         await onReqCreateNRankRecordDetail({
-            body: { record_id: record.id },
+            body: { record_id: record.id, record_info_id: info_id },
             headers: { wsId: wsId }
         })
     }

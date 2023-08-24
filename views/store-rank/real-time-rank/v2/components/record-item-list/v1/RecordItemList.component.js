@@ -15,7 +15,8 @@ export function RecordItemListComponent({
     rankSearchInfo,
     currentPendingRecordIds,
     onSetCurrentPendingRecordIds,
-    onDeleteRankRecord
+    onDeleteRankRecord,
+    onSearchSubscriptionPlanSearchInfo
 }) {
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
@@ -183,6 +184,7 @@ export function RecordItemListComponent({
                         rankSearchInfo={rankSearchInfo}
                         onClose={handleCloseDetailSearchModal}
                         onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
+                        onSearchSubscriptionPlanSearchInfo={onSearchSubscriptionPlanSearchInfo}
                     />
                 }
 

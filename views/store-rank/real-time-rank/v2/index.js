@@ -111,6 +111,10 @@ export default function MainComponent(){
         await onReqChangeNRankRecordListStatusToFail({
             body: {ids: ids},
             headers: { wsId: wsId }
+        }, {
+            success: () => {
+                handleReqSearchSubscriptionPlanSearchInfo()
+            }
         });
     }
 
@@ -131,7 +135,6 @@ export default function MainComponent(){
             success: (results) => {
                 handleUpdateRecordStatus(results)
                 handleChangeLongPendingRecordStatusToFail(results)
-                handleReqSearchSubscriptionPlanSearchInfo()
             }
         })
     }
@@ -214,6 +217,7 @@ export default function MainComponent(){
                             currentPendingRecordIds={currentPendingRecordIds}
                             onDeleteRankRecord={handleReqDeleteRankRecord}
                             onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
+                            onSearchSubscriptionPlanSearchInfo={handleReqSearchSubscriptionPlanSearchInfo}
                         />
                         :
                         <RecordItemListSkeletonComponent />

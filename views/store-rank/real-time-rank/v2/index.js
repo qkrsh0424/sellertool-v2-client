@@ -9,6 +9,7 @@ import { useApiHook } from "./hooks/useApiHook";
 import { useEffect } from "react";
 import { setPlusTime } from "./utils/dateFormatUtils";
 import { getRecordPendingStatusExceedSeconds } from "../../../../static-data/nrankRecordOptions";
+import useSubscriptionPlanSearchInfoHook from "./hooks/useSubscriptionPlanSearchInfoHook";
 
 const RECORD_STATUS_ENUM = {
     NONE: 'NONE',
@@ -26,7 +27,8 @@ export default function MainComponent(){
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const { onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList, onReqChangeNRankRecordListStatusToFail } = useApiHook();
+    const { onReqSearchSubscriptionPlanSearchInfo, onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList, onReqChangeNRankRecordListStatusToFail } = useApiHook();
+    const { rankSearchInfo, onSetRankSearchInfo } = useSubscriptionPlanSearchInfoHook();
     const { keyword, mallName, onChangeKeyword, onChangeMallName, onClearKeyword, onClearMallName, checkSearchInfoForm } = useSearchInputHook();
     const { searchedRecordList: recordList, currentPendingRecordIds, onSetRecordList, onSetCurrentPendingRecordIds } = useNRankRecordListHook({ keyword, mallName });
 
@@ -37,6 +39,7 @@ export default function MainComponent(){
 
         async function initialize() {
             handleReqSearchNRankRecordList()
+            handleReqSearchSubscriptionPlanSearchInfo()
         }
 
         initialize();
@@ -47,6 +50,7 @@ export default function MainComponent(){
             return;
         }
 
+        // poling 방식 nrank record 조회 요청
         const fetch = setInterval(() => {
             handleReqSearchNRankRecordList();
         }, [3000])
@@ -57,18 +61,11 @@ export default function MainComponent(){
     const handleSubmitRecordInput = async (e) => {
         e.preventDefault();
 
-        if(recordList?.length > 0) {
-            if(recordList.find(r => r.keyword === keyword && r.mall_name === mallName)) {
-                let message = "동일한 검색 항목이 존재합니다";
-                customToast.error(message, {
-                    ...defaultOptions,
-                    toastId: message
-                });
-                return;
-            }
-        }
-
         try {
+            if(recordList?.find(r => r.keyword === keyword && r.mall_name === mallName)) {
+                throw Error("동일한 검색 항목이 존재합니다")
+            }
+
             checkSearchInfoForm();
         } catch (err) {
             customToast.error(err?.message, {
@@ -93,7 +90,7 @@ export default function MainComponent(){
         })
     }
 
-    const handleReqDeleteRankRecord = async (selectedId, callback) => {
+    const handleReqDeleteRankRecord = async (selectedId, modalClose) => {
         await onReqDeleteNRankRecord({
             params: { id: selectedId },
             headers: { wsId: wsId }
@@ -104,7 +101,7 @@ export default function MainComponent(){
                     ...defaultOptions,
                     toastId: content
                 });
-                callback();
+                modalClose();
                 handleReqSearchNRankRecordList();
             }
         })
@@ -117,6 +114,16 @@ export default function MainComponent(){
         });
     }
 
+    const handleReqSearchSubscriptionPlanSearchInfo = async () => {
+        await onReqSearchSubscriptionPlanSearchInfo({
+            headers: { wsId: wsId }
+        }, {
+            success: (results) => {
+                onSetRankSearchInfo(results);
+            }
+        })
+    }
+
     const handleReqSearchNRankRecordList = async () => {
         await onReqSearchNRankRecordList({
             headers: { wsId: wsId }
@@ -124,6 +131,7 @@ export default function MainComponent(){
             success: (results) => {
                 handleUpdateRecordStatus(results)
                 handleChangeLongPendingRecordStatusToFail(results)
+                handleReqSearchSubscriptionPlanSearchInfo()
             }
         })
     }
@@ -196,13 +204,15 @@ export default function MainComponent(){
                         onChangeMallName={onChangeMallName}
                         onSubmitRecordInput={handleSubmitRecordInput}
                     />
+                    
                     {recordList ? 
                         <RecordItemListComponent
                             keyword={keyword}
                             mallName={mallName}
                             recordList={recordList}
-                            onDeleteRankRecord={handleReqDeleteRankRecord}
+                            rankSearchInfo={rankSearchInfo}
                             currentPendingRecordIds={currentPendingRecordIds}
+                            onDeleteRankRecord={handleReqDeleteRankRecord}
                             onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
                         />
                         :

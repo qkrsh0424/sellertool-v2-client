@@ -13,11 +13,13 @@ import SubInfoFieldView from "./view/SubInfoField.view";
 import { useApiHook } from "./hooks/useApiHook";
 import { useSelector } from "react-redux";
 import RankDetailSkeletonFieldView from "./view/RankDetailSkeletonField.view";
+import { customToast, defaultOptions } from "../../../../../../../components/toast/custom-react-toastify/v1";
 
 export function RecordDetailModalComponent({
     open,
     onClose,
     record,
+    rankSearchInfo,
     currentPendingRecordIds,
     onSetCurrentPendingRecordIds
 }) {
@@ -76,7 +78,19 @@ export function RecordDetailModalComponent({
         })
     }
 
-    const handleChangeNRankRecordStatusToPending = async () => {     
+    const handleChangeNRankRecordStatusToPending = async () => {   
+        try {
+            if(rankSearchInfo.allowed_search_count <= rankSearchInfo.searched_count) {
+                throw new Error("금일 요청 가능한 횟수를 초과하였습니다.");
+            }
+        } catch (err) {
+            customToast.error(err?.message, {
+                ...defaultOptions,
+                toastId: err?.message
+            });
+            return;
+        }
+
         let recordId = record.id;
         await onReqChangeNRankRecordStatusToPending({
             params: { id: recordId },

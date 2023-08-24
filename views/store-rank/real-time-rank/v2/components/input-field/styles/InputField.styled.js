@@ -79,7 +79,7 @@ export const Wrapper = styled.div`
 
     @media screen and (max-width: 992px) {
         width: 100%;
-        height: 150px;
+        height: 100px;
         padding: 15px;
     }
 `;
@@ -102,7 +102,9 @@ export const InputFieldBox = styled.div`
 
 
         @media screen and (max-width: 992px) {
+            font-size: 14px;
             width: 90%;
+            height: 30px;
         }
     }
 `

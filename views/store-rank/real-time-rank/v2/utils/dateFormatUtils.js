@@ -32,7 +32,7 @@ function strToYYYYMMDD(strDate) {
     var month = strDate.substring(4, 6);
     var day = strDate.substring(6, 8);
 
-    var date = new Date(year, month, day);
+    var date = new Date(year, month-1, day);
     return moment(date).format("YYYY년 MM월 DD일");
 }
 

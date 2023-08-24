@@ -49,9 +49,9 @@ export default function RankDetailFieldView({
                             <div className='info-field'>
                                 <InfoGroupBox>
                                     <div>
-                                        <span className='accent-text'>{detail.price} 원</span>
+                                        <span className='accent-text'>{detail.price?.toLocaleString()}원</span>
                                     </div>
-                                    <DetailInfoBox>
+                                    <DetailInfoBox style={{ marginLeft: '5px'}}>
                                         <div>
                                             <CustomBoxImage
                                                 src='/images/icon/delivery_truck_default_808080.svg'

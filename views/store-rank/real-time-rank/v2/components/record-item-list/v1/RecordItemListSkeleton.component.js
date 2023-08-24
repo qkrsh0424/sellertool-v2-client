@@ -1,5 +1,6 @@
 import { Container, ContentGroup, RecordInfo, RecordInfoSkeletonBox, RecordItemBox, Wrapper } from "./styles/RecordItemList.styled";
 import SkeletonEl from "../../../modules/skeleton/v1/SkeletonEl";
+import { SearchInfoFieldView } from "./views/SearchInfoField.view";
 
 const EMPTY_ARRAY = [1, 2, 3, 4, 5];
 
@@ -7,10 +8,8 @@ export function RecordItemListSkeletonComponent() {
     return (
         <>
             <Container>
-            <div className='list-title'>
-                    <span>검색 내역 </span>
-                    <span>( - 개)</span>
-                </div>
+                <SearchInfoFieldView />
+
                 <Wrapper>
                     {EMPTY_ARRAY.map(r => {
                         return (

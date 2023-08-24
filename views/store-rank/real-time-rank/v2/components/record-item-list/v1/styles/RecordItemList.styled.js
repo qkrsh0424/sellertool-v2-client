@@ -6,13 +6,6 @@ export const Container = styled.div`
     @media all and (max-width:992px){
         padding: 20px 10px 0 10px;
     }
-
-    .list-title {
-        padding: 20px 10px;
-        font-weight: 600;
-        font-size: 1.2rem;
-        border-bottom: 1px solid #a4aabd;
-    }
 `;
 
 export const Wrapper = styled.div`
@@ -72,14 +65,18 @@ export const RecordInfo = styled.div`
         right: 15px;
         margin: 2px;
 
+        @media screen and (max-width: 576px) {
+            display: none;
+        }
+
         .item-el {
-            color: #666;
+            color: #736d6d;
             font-weight: 500;
             font-size: 14px;
             background-color: var(--defaultGrayColor);
             border: 1px solid var(--defaultGrayColor);
-            border-radius: 5px;
-            padding: 5px 7px;
+            border-radius: 15px;
+            padding: 5px 10px;
 
             @media screen and (max-width: 992px) {
                 font-size: 12px;

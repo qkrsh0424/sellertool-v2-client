@@ -6,11 +6,13 @@ import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
 import { dateToStrHHmm, dateToStrYYYYMMDD } from "../../../utils/dateFormatUtils";
 import { CustomProgressBar } from "../../progress/progress-bar/v1";
+import { SearchInfoFieldView } from "./views/SearchInfoField.view";
 
 export function RecordItemListComponent({
     keyword,
     mallName,
     recordList,
+    rankSearchInfo,
     currentPendingRecordIds,
     onSetCurrentPendingRecordIds,
     onDeleteRankRecord
@@ -63,15 +65,16 @@ export function RecordItemListComponent({
     return (
         <>
             <Container>
-                <div className='list-title'>
-                    <span>검색 내역 </span>
-                    <span>({recordList?.length ?? 0} 개)</span>
-                </div>
+                <SearchInfoFieldView
+                    recordList={recordList}
+                    rankSearchInfo={rankSearchInfo}
+                />
+                
                 <Wrapper>
                     {recordList?.map((item, index) => {
                         let isKeywordAccent = keyword && (item.keyword).includes(keyword);
                         let isMallNameAccent = mallName && (item.mall_name).includes(mallName);
-                        let currentRecordInfo = item.infos.find(r => item.current_nrank_record_info_id === r.id);
+                        let currentRecordInfo = item.infos?.find(info => item.current_nrank_record_info_id === info.id);
                         let isPending = currentPendingRecordIds?.includes(item.id);
 
                         return (
@@ -151,15 +154,19 @@ export function RecordItemListComponent({
                                         </div>
                                         {currentRecordInfo &&
                                             <div className='sub-info-box'>
-                                                <div className='item-el'>일반 <span style={{ fontWeight: '700', color: '#444' }}>{currentRecordInfo.rank_detail_unit ?? 0}</span></div>
-                                                <div className='item-el'>광고 <span style={{ fontWeight: '700', color: '#444' }}>{currentRecordInfo.ad_rank_detail_unit ?? 0}</span></div>
+                                                <div className='item-el'>
+                                                    <span>일반 </span>
+                                                    <span style={{ fontWeight: '700', color: '#4d4d4d' }}>{currentRecordInfo.rank_detail_unit ?? 0}</span>
+                                                </div>
+                                                <div className='item-el'>
+                                                    <span>광고 </span>
+                                                    <span style={{ fontWeight: '700', color: '#4d4d4d' }}>{currentRecordInfo.ad_rank_detail_unit ?? 0}</span>
+                                                </div>
                                             </div>
                                         }
                                     </div>
                                     <StatusBox>
-                                        {isPending &&
-                                            <CustomProgressBar type='linear' customcolor={'#9ac7e0'} />
-                                        }
+                                        {isPending && <CustomProgressBar type='linear' customcolor={'#9ac7e0'} />}
                                     </StatusBox>
                                 </RecordInfo>
                             </RecordItemBox>
@@ -172,8 +179,9 @@ export function RecordItemListComponent({
                     <RecordDetailModalComponent
                         open={detailSearchModalOpen}
                         record={selectedRecord}
-                        onClose={handleCloseDetailSearchModal}
                         currentPendingRecordIds={currentPendingRecordIds}
+                        rankSearchInfo={rankSearchInfo}
+                        onClose={handleCloseDetailSearchModal}
                         onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
                     />
                 }

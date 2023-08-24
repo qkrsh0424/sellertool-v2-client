@@ -1,7 +1,27 @@
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 import { nRankRecordDataConnect } from "../../../../../data_connect/nRankRecordDataConnect";
+import { workspaceDataConnect } from "../../../../../data_connect/workspaceDataConnect";
 
 export function useApiHook() {
+    const onReqSearchSubscriptionPlanSearchInfo = async (
+        options = {headers: {}},
+        callbackFn = {
+            success: (results, response) => {}
+        }
+    ) => {
+        await workspaceDataConnect().getNRankSearchInfo(options?.headers)
+            .then(res => {
+                callbackFn.success(res?.data?.data, res);
+            })
+            .catch(err => {
+                const res = err.response;
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                })
+            })
+    }
+
     const onReqCreateSearchInput = async (
         options = {body: {}, headers: {}},
         callbackFn = {
@@ -92,6 +112,7 @@ export function useApiHook() {
     }
 
     return {
+        onReqSearchSubscriptionPlanSearchInfo,
         onReqCreateSearchInput,
         onReqDeleteNRankRecord,
         onReqSearchNRankRecordList,

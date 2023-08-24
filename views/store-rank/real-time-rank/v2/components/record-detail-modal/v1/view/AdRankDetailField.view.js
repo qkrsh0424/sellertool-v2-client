@@ -48,10 +48,9 @@ export default function AdRankDetailFieldView({
                             <div className='info-field'>
                                 <InfoGroupBox>
                                     <div>
-                                        <span className='accent-text'>{detail.price}</span>
-                                        <span> 원</span>
+                                        <span className='accent-text'>{detail.price?.toLocaleString()}원</span>
                                     </div>
-                                    <DetailInfoBox>
+                                    <DetailInfoBox style={{ marginLeft: '5px' }}>
                                         <span>
                                             <CustomBoxImage
                                                 src='/images/icon/delivery_truck_default_808080.svg'
@@ -107,14 +106,8 @@ export default function AdRankDetailFieldView({
                             <div className='rank-field'>
                                 <InfoGroupBox>
                                     <div className='accent-text'>
-                                        <span>총 </span>
+                                        <span>광고 </span>
                                         <span style={{ color: 'var(--defaultBlueColor)' }}>{detail.rank} 위</span>
-                                    </div>
-                                </InfoGroupBox>
-                                <InfoGroupBox>
-                                    <div>
-                                        <span>일반 상품 포함 시 </span>
-                                        <span>{detail.included_ad_rank}위</span>
                                     </div>
                                 </InfoGroupBox>
                             </div>

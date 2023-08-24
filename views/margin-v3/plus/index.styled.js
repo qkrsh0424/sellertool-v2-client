@@ -2,9 +2,9 @@ import styled from 'styled-components';
 
 export const St = {
     Container: styled.div`
-        margin-bottom: 20px;
+        padding: 20px;
     `,
-    Title:styled.div`
+    Title: styled.div`
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -17,14 +17,30 @@ export const St = {
 
         .tagBadge{
             font-size: 14px;
-            color: #909090;
+            color: var(--defaultPurpleColorOpacity600);
             font-weight: 400;
-            border:0.5px solid #909090;
+            border:0.5px solid var(--defaultPurpleColorOpacity600);
             padding: 3px 0;
             width: 70px;
             text-align: center;
             background: #fff;
             border-radius: 10px;
+        }
+    `,
+    BodyWrapper: styled.div`
+        display: flex;
+        flex-direction: row;
+        margin-top: 20px;
+        gap: 20px;
+
+        .marginRecordList-wrapper{
+            width: 400px;
+        }
+
+        .calculator-wrapper{
+            flex:1;
+            height: 300px;
+            background: #00ff0010;
         }
     `,
 }

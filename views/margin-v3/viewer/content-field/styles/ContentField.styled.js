@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    margin-bottom: 20px;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 10px;
+    margin-top: 20px;
 `;
 
 export const Wrapper = styled.div`
@@ -10,6 +14,7 @@ export const Wrapper = styled.div`
     box-shadow: var(--defaultBoxShadow);
     padding: 0 20px;
     border-radius: 5px;
+    overflow: hidden;
 `;
 
 export const ProductName = styled.div`
@@ -52,7 +57,7 @@ export const RightBox = styled.div`
 `;
 
 export const FlexBlock = styled.div`
-    padding:15px;
+    padding:10px;
 `;
 
 export const InputWrapper = styled.div`
@@ -110,7 +115,6 @@ export const InputBox = styled.div`
         font-size: 16px;
         color: #444;
     }
-
 `;
 
 export const CommonWrapper = styled.div`
@@ -197,8 +201,9 @@ export const ResultBox = styled.div`
     padding: 20px;
     margin-bottom: 20px;
     background: white;
-    border:1px solid #e0e0e0;
+    border:1px solid #f0f0f0;
     border-radius: 5px;
+    box-shadow: var(--defaultBoxShadow);
     color: #404040;
 
     .title{
@@ -213,3 +218,14 @@ export const ResultBox = styled.div`
         font-weight: 700;
     }
 `;
+
+export const FixedBottomNotice = styled.div`
+    position: fixed;
+    bottom: 50px;
+    width: 100%;
+    text-align: center;
+
+    font-size: 20px;
+    font-weight: 800;
+    color: #55555580;
+`

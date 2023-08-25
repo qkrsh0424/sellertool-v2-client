@@ -20,7 +20,18 @@ const generateInitAddModuleForm = () => {
     return {
         cid: null,
         id: id,
-        name: name
+        name: name,
+        productUnitPrice: '0',
+        productUnitPriceMberId: "75a58be7-37f9-11ee-8d3c-06fe28321f8c",
+        totalProductQty: '1',
+        localFreightCost: '0',
+        localFreightCostMberId: "75a58be7-37f9-11ee-8d3c-06fe28321f8c",
+        extraCost: '0',
+        extraCostMberId: "75a58be7-37f9-11ee-8d3c-06fe28321f8c",
+        customsDutyRate: '0',
+        customsTaxRate: '0',
+        purchaseUnitPriceKRW: '0',
+        purchaseUnitPriceMberId: "75a58be7-37f9-11ee-8d3c-06fe28321f8c"
     }
 }
 
@@ -119,9 +130,11 @@ export function FdModuleList({
 
     const handleSubmitDeleteModule = async (targetId) => {
         await onSubmitDelete(targetId);
+        toggleIsActiveDeleteMode(false);
     }
 
     const handleSelectMrPurchaseModule = (targetId) => {
+        toggleIsActiveDeleteMode(false);
         toggleIsActiveAddMode(false);
         toggleIsActiveEditMode(false);
         onSetSelectedMrPurchaseModule(mrPurchaseModuleList?.find(r => r.id === targetId));
@@ -130,8 +143,8 @@ export function FdModuleList({
     return (
         <>
             <St.Container>
-                <St.Title>매입정보 모듈 선택</St.Title>
                 <St.Wrapper>
+                    <St.Title>매입정보 모듈 선택</St.Title>
                     <AddModule
                         mrPurchaseModuleList={mrPurchaseModuleList}
                         addModuleForm={addModuleForm}

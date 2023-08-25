@@ -1,16 +1,12 @@
 import { useEffect } from "react";
-import { CustomNumberUtils } from "../../../utils/CustomNumberUtils";
-import CustomBlockButton from "../../buttons/block-button/v1/CustomBlockButton";
 import { CustomDialog } from "../../dialog/v1/CustomDialog";
-import CustomInput from "../../input/default/v1/CustomInput";
-import { FdModuleList } from "./components/FdModuleList/FdModuleList";
-import { useDataSourceHook, useMrPurchaseModuleHook, usePurchaseCostFormHook } from "./hooks";
+import { useDataSourceHook, useMrPurchaseModuleHook } from "./hooks";
 import { St } from "./index.styled";
 import { useSelector } from "react-redux";
 import { customBackdropController } from "../../backdrop/default/v1";
-import { withPendingComponent } from "../../../hoc/loading/withPendingComponent";
+import { FdCalculator, FdModuleList, FdPurchaseUnitPriceCalculator } from "./components";
+import { useMrBaseExchangeRateHook } from "./hooks";
 
-const customNumberUtils = CustomNumberUtils();
 const customBackdropControl = customBackdropController();
 
 export function PurchaseCostCalculatorModal({
@@ -21,10 +17,8 @@ export function PurchaseCostCalculatorModal({
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const dataSourceHook = useDataSourceHook();
-    const purchaseCostFormHook = usePurchaseCostFormHook({
-        BASE_EXCHANGE_RATE_LIST: BASE_EXCHANGE_RATE_LIST
-    });
     const mrPurchaseModuleHook = useMrPurchaseModuleHook();
+    const mrBaseExchangeRateHook = useMrBaseExchangeRateHook();
 
     useEffect(() => {
         if (!wsId) {
@@ -32,34 +26,54 @@ export function PurchaseCostCalculatorModal({
         }
 
         dataSourceHook.onReqFetchMrPurchaseModuleList({ headers: { wsId: wsId } }, (results) => {
-            console.log(results);
             mrPurchaseModuleHook.onSetMrPurchaseModuleList(results);
+        });
+        dataSourceHook.onReqFetchMrBaseExchangeRateList({ headers: { wsId: wsId } }, (results) => {
+            mrBaseExchangeRateHook.onSetMrBaseExchangeRateList(results);
         })
     }, [wsId]);
 
-    const handleCalculate = () => {
-        let productUnitPriceWithBaseExchangeRate = purchaseCostFormHook.returnProductUnitPriceWithBaseExchangeRate();
-        let totalProductQty = purchaseCostFormHook.returnTotalProductQty();
-        let localFreightCostWithBaseExchangeRate = purchaseCostFormHook.returnLocalFreightCostWithBaseExchangeRate();
-        let extraCostWithBaseExchangeRate = purchaseCostFormHook.returnExtraCostWithBaseExchangeRate();
-        let customsDutyRate = purchaseCostFormHook.returnCustomsDutyRate();
-        let customsTaxRate = purchaseCostFormHook.returnCustomsTaxRate();
+    const handleReqFetchMrBaseExchangeRateList = () => {
+        dataSourceHook.onReqFetchMrBaseExchangeRateList({ headers: { wsId: wsId } }, (results) => {
+            mrBaseExchangeRateHook.onSetMrBaseExchangeRateList(results);
+        })
+    }
 
-        let beforeCustomsSum = productUnitPriceWithBaseExchangeRate * totalProductQty + localFreightCostWithBaseExchangeRate + extraCostWithBaseExchangeRate;
-        let afterCustomsSum = beforeCustomsSum + beforeCustomsSum * customsDutyRate + beforeCustomsSum * customsTaxRate;
-        let purchaseUnitPrice = afterCustomsSum / totalProductQty;
+    const handleSubmitSavePurchaseUnitPriceForm = async (form) => {
+        let body = {
+            id: mrPurchaseModuleHook.selectedMrPurchaseModule?.id,
+            ...form
+        }
 
-        purchaseCostFormHook.onChangeValueOfName('purchaseUnitPrice', customNumberUtils.roundToDigit(purchaseUnitPrice, 0));
-        // console.log(
-        //     productUnitPriceWithBaseExchangeRate,
-        //     totalProductQty,
-        //     localFreightCostWithBaseExchangeRate,
-        //     extraCostWithBaseExchangeRate,
-        //     customsDutyRate,
-        //     customsTaxRate,
-        //     purchaseUnitPrice,
-        //     customNumberUtils.roundToDigit(purchaseUnitPrice, 0)
-        // );
+        let headers = {
+            wsId: wsId
+        }
+
+        let newMrPurchaseModuleList = null;
+        let newSelectedMrPurchaseModule = null;
+
+        customBackdropControl.showBackdrop();
+        // UPDATE
+        await dataSourceHook.onReqChangeMrPurchaseModulePurchaseDataForm({
+            headers: headers,
+            body: body,
+        });
+
+        // RE-FETCH List
+        await dataSourceHook.onReqFetchMrPurchaseModuleList({ headers: { wsId: wsId } }, (results2) => {
+            newMrPurchaseModuleList = results2;
+        });
+
+        if (newMrPurchaseModuleList) {
+            newSelectedMrPurchaseModule = newMrPurchaseModuleList?.find(r => r.id === mrPurchaseModuleHook?.selectedMrPurchaseModule?.id);
+            mrPurchaseModuleHook.onSetMrPurchaseModuleList(newMrPurchaseModuleList);
+        }
+
+        if (newSelectedMrPurchaseModule) {
+            mrPurchaseModuleHook.onSetSelectedMrPurchaseModule(newSelectedMrPurchaseModule);
+        }
+
+        customBackdropControl.hideBackdrop();
     }
 
     const handleSubmitAddPurchaseModule = async (form) => {
@@ -107,15 +121,16 @@ export function PurchaseCostCalculatorModal({
         }
 
         let body = {
-            id: form?.id,
-            name: form?.name
+            ...form
+            // id: form?.id,
+            // name: form?.name
         }
 
         let editedMrPurchaseModuleId = null;
         let newMrPurchaseModuleList = null;
         let newSelectedMrPurchaseModule = null;
 
-        // 생성
+        // 수정
         await dataSourceHook.onReqChangeMrPurchaseModuleName({ headers, body }, (results, response) => {
             editedMrPurchaseModuleId = results?.id;
         });
@@ -188,266 +203,23 @@ export function PurchaseCostCalculatorModal({
                             onSetSelectedMrPurchaseModule={mrPurchaseModuleHook.onSetSelectedMrPurchaseModule}
                         />
                     </St.ModuleListFieldWrapper>
-
-                    <St.InputFieldWrapper>
-                        <NumberInputWithExchangeRate
-                            label='제품단가'
-                            valueType='PRICE'
-                            buttonType='BASE_EXCHANGE_RATE'
-                            baseExchangeRateId={purchaseCostFormHook?.purchaseCostForm?.productUnitPriceBaseExchangeRateId}
-                            inputName='productUnitPrice'
-                            purchaseCostForm={purchaseCostFormHook?.purchaseCostForm}
-                            onChangeValueOfName={purchaseCostFormHook?.onChangeValueOfName}
-                        />
-                        <NumberInputWithExchangeRate
-                            label='제품 총 수량'
-                            valueType='QUANTITY'
-                            buttonType='PCS'
-                            inputName='totalProductQty'
-                            purchaseCostForm={purchaseCostFormHook?.purchaseCostForm}
-                            onChangeValueOfName={purchaseCostFormHook?.onChangeValueOfName}
-                        />
-                        <NumberInputWithExchangeRate
-                            label='현지 운임비'
-                            valueType='PRICE'
-                            buttonType='BASE_EXCHANGE_RATE'
-                            baseExchangeRateId={purchaseCostFormHook?.purchaseCostForm?.localFreightCostBaseExchangeRateId}
-                            inputName='localFreightCost'
-                            purchaseCostForm={purchaseCostFormHook?.purchaseCostForm}
-                            onChangeValueOfName={purchaseCostFormHook?.onChangeValueOfName}
-                        />
-                        <NumberInputWithExchangeRate
-                            label='기타비용'
-                            valueType='PRICE'
-                            buttonType='BASE_EXCHANGE_RATE'
-                            baseExchangeRateId={purchaseCostFormHook?.purchaseCostForm?.extraCostBaseExchangeRateId}
-                            inputName='extraCost'
-                            purchaseCostForm={purchaseCostFormHook?.purchaseCostForm}
-                            onChangeValueOfName={purchaseCostFormHook?.onChangeValueOfName}
-                        />
-                        <NumberInputWithExchangeRate
-                            label='관세'
-                            valueType='RATE'
-                            buttonType='PERCENTAGE'
-                            inputName='customsDutyRate'
-                            purchaseCostForm={purchaseCostFormHook?.purchaseCostForm}
-                            onChangeValueOfName={purchaseCostFormHook?.onChangeValueOfName}
-                        />
-                        <NumberInputWithExchangeRate
-                            label='관부가세'
-                            valueType='RATE'
-                            buttonType='PERCENTAGE'
-                            inputName='customsTaxRate'
-                            purchaseCostForm={purchaseCostFormHook?.purchaseCostForm}
-                            onChangeValueOfName={purchaseCostFormHook?.onChangeValueOfName}
-                        />
-                        <CustomBlockButton
-                            type='button'
-                            className='calculate-button'
-                            onClick={() => handleCalculate()}
-                        >
-                            계산하기
-                        </CustomBlockButton>
-                    </St.InputFieldWrapper>
-                    <St.ModuleListFieldWrapper>
-                    </St.ModuleListFieldWrapper>
-                    <St.ResultFieldWrapper>
-                        <St.NumberInputWithExchangeRate>
-                            <label>매입단가(원)</label>
-                            <div className='flexible'>
-                                <CustomInput
-                                    type='text'
-                                    className='result-input'
-                                    name={'purchaseUnitPrice'}
-                                    value={customNumberUtils.numberWithCommas2(purchaseCostFormHook?.purchaseCostForm?.purchaseUnitPrice) || ''}
-                                    onChange={(e) => handleChangeValue(e)}
-                                    inputmode='decimal'
-                                    placeholder={'결과값이 표시됩니다.'}
-                                    readOnly
-                                ></CustomInput>
-
-                                {/* {UnitTypeButton['BASE_EXCHANGE_RATE'](purchaseCostFormHook?.purchaseCostForm?.purchaseUnitPriceBaseExchangeRateId)} */}
-                            </div>
-                        </St.NumberInputWithExchangeRate>
-                        <St.NumberInputWithExchangeRate>
-                            <label>매입단가 (기준환율적용)</label>
-                            <div className='flexible'>
-                                <CustomInput
-                                    type='text'
-                                    className='result-input'
-                                    name={'purchaseUnitPrice'}
-                                    value={customNumberUtils.numberWithCommas2(purchaseCostFormHook?.purchaseCostForm?.purchaseUnitPrice) || ''}
-                                    onChange={(e) => handleChangeValue(e)}
-                                    inputmode='decimal'
-                                    placeholder={'결과값이 표시됩니다.'}
-                                    readOnly
-                                ></CustomInput>
-
-                                {UnitTypeButton['BASE_EXCHANGE_RATE'](purchaseCostFormHook?.purchaseCostForm?.purchaseUnitPriceBaseExchangeRateId)}
-                            </div>
-                        </St.NumberInputWithExchangeRate>
-                    </St.ResultFieldWrapper>
+                    {!mrPurchaseModuleHook?.selectedMrPurchaseModule &&
+                        <div style={{ flex: '1', textAlign: 'center', fontSize: '16px', fontWeight: '600' }}>
+                            매입정보 모듈을 먼저 선택해 주세요.
+                        </div>
+                    }
+                    {mrPurchaseModuleHook?.selectedMrPurchaseModule &&
+                        <>
+                            <FdCalculator
+                                mrBaseExchangeRateList={mrBaseExchangeRateHook?.mrBaseExchangeRateList}
+                                selectedMrPurchaseModule={mrPurchaseModuleHook?.selectedMrPurchaseModule}
+                                handleSubmitSavePurchaseUnitPriceForm={handleSubmitSavePurchaseUnitPriceForm}
+                                onRefetchMrBaseExchangeRateList={handleReqFetchMrBaseExchangeRateList}
+                            />
+                        </>
+                    }
                 </St.Container>
             </CustomDialog>
         </>
     );
 }
-
-function NumberInputWithExchangeRate({
-    label,
-    valueType,
-    buttonType,
-    baseExchangeRateId,
-    inputName,
-    purchaseCostForm,
-    onChangeValueOfName,
-    readOnly
-}) {
-    const handleChangeValue = (e) => {
-        switch (valueType) {
-            case 'PRICE':
-                handleChangePriceValue(e);
-                break;
-            case 'QUANTITY':
-                handleChangeQuantityValue(e);
-                break;
-            case 'RATE':
-                handleChangeRateValue(e);
-                break;
-        }
-    }
-    const handleChangePriceValue = (e) => {
-        let value = e.target.value;
-        if (!value) {
-            onChangeValueOfName(inputName, '');
-            return;
-        }
-
-        value = value.replaceAll(",", "");
-
-        try {
-            returnPriceValueElseThrow(value);
-        } catch (err) {
-            return;
-        }
-
-        if (customNumberUtils.isNumberValueWithDecimalPoint(value, 6)) {
-            onChangeValueOfName(inputName, value || '');
-        }
-    }
-
-    const handleChangeRateValue = (e) => {
-        let value = e.target.value;
-
-        if (!value) {
-            onChangeValueOfName(inputName, value || '');
-            return;
-        }
-
-        value = value.replaceAll(",", "");
-
-        try {
-            returnRateValueElseThrow(value);
-        } catch (err) {
-            return;
-        }
-
-        if (customNumberUtils.isNumberValueWithDecimalPoint(value, 6)) {
-            onChangeValueOfName(inputName, value || '');
-        }
-    }
-
-    const handleChangeQuantityValue = (e) => {
-        let value = e.target.value;
-
-        if (!value) {
-            onChangeValueOfName(inputName, value || '');
-            return;
-        }
-
-        value = value.replaceAll(",", "");
-        if (customNumberUtils.hasPrefixZero(value)) {
-            return;
-        }
-
-        if ((/^[0-9]{0,12}$/).test(value)) {
-            onChangeValueOfName(inputName, value || '');
-        }
-    }
-
-    const returnPriceValueElseThrow = (price, errorMessage) => {
-        if (!price) {
-            return 0;
-        }
-
-        if (price < 0 || price > 99999999999) { // 0.9e11
-            throw new Error(errorMessage);
-        }
-
-        return price;
-    }
-
-    const returnRateValueElseThrow = (value, errorMessage) => {
-        if (!value) {
-            return 0;
-        }
-
-        if (value < 0 || value > 100) {
-            throw new Error(errorMessage);
-        }
-
-        return value;
-    }
-
-    return (
-        <St.NumberInputWithExchangeRate>
-            <label>{label}</label>
-            <div className='flexible'>
-                <CustomInput
-                    type='text'
-                    name={inputName}
-                    value={customNumberUtils.numberWithCommas2(purchaseCostForm[inputName]) || ''}
-                    onChange={(e) => handleChangeValue(e)}
-                    inputmode='decimal'
-                    placeholder={valueType === 'QUANTITY' ? '1' : '0'}
-                    readOnly={readOnly}
-                ></CustomInput>
-
-                {UnitTypeButton[buttonType](baseExchangeRateId)}
-            </div>
-        </St.NumberInputWithExchangeRate>
-    );
-}
-
-const UnitTypeButton = {
-    PCS: () => <button className='readOnly-button'>PCS</button>,
-    BASE_EXCHANGE_RATE: (baseExchangeRateId) => {
-        const baseExchangeRate = BASE_EXCHANGE_RATE_LIST?.find(r => r.id === baseExchangeRateId);
-
-        return (
-            <CustomBlockButton className='active-button' title={baseExchangeRate?.value}>{baseExchangeRate?.name || 'NN'}</CustomBlockButton>
-        );
-    },
-    PERCENTAGE: () => <button className='readOnly-button'>%</button>
-}
-
-const BASE_EXCHANGE_RATE_LIST = [
-    {
-        cid: 1,
-        id: 1,
-        name: 'KRW',
-        value: 1
-    },
-    {
-        cid: 2,
-        id: 2,
-        name: 'USD',
-        value: 1300
-    },
-    {
-        cid: 3,
-        id: 3,
-        name: 'CNY',
-        value: 190
-    }
-]

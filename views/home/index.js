@@ -6,7 +6,6 @@ import WorkspaceNoticeModalComponent from "./modal/WorkspaceNoticeModal.componen
 import BannerComponent from "./banner/Banner.component";
 import Section1Component from "./section1/Section1.component";
 import Link from "next/link";
-import { PurchaseCostCalculatorModal } from "../../components/PurchaseCostCalculatorModal/v1";
 
 const Container = styled.div`
     background: var(--defaultBackground);
@@ -59,29 +58,8 @@ const HomeMain = () => {
         }
     }
 
-    {/* TEST Code */ }
-    // const [purchaseCostCalcModalOpen, setPurchaseCostCalcModalOpen] = useState(false);
-
-    // const togglePurchaseCostCalcModalOpen = (setOpen) => {
-    //     setPurchaseCostCalcModalOpen(setOpen);
-    // }
-    {/* TEST Code */ }
     return (
         <>
-            {/* TEST Code */}
-            {/* <button
-                type='button'
-                onClick={() => togglePurchaseCostCalcModalOpen(true)}
-            >
-                매입단가 계산기
-            </button>
-            {purchaseCostCalcModalOpen &&
-                <PurchaseCostCalculatorModal
-                    open={purchaseCostCalcModalOpen}
-                    onClose={() => togglePurchaseCostCalcModalOpen(false)}
-                />
-            } */}
-            {/* TEST Code */}
             <Container>
                 <div className='link-box'>
                     <Link

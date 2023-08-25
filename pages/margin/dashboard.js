@@ -2,8 +2,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import FooterMain from "../../views/footer/FooterMain";
-import MainComponent from "../../views/margin-v2/dashboard";
+import MainComponent from "../../views/margin-v3/dashboard";
 import PrimaryNavbarMainComponent from "../../views/navbar/primary-navbar";
 import SecondaryNavbarMainComponent from "../../views/navbar/secondary-navbar-v2";
 

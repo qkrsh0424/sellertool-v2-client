@@ -3,15 +3,28 @@
 :root {
     --mainColor: #344b98;
     --mainColorHover: #344b98f0;
-    --mainColorOpacity500: #344b9880;
     --mainColorOpacity30: #344b9830;
-    --mainColorOpacity100: #344b9810;
+    --mainColorOpacity50: #f3f4f8;
+    --mainColorOpacity100: #e6e8f2;
+    --mainColorOpacity200: #ccd2e6;
+    --mainColorOpacity300: #b3bbd9;
+    --mainColorOpacity400: #9aa5cc;
+    /* --mainColorOpacity500: #344b9880; */
+    --mainColorOpacity500: #808fbf;
+    --mainColorOpacity600: #6677b2;
+    --mainColorOpacity700: #596cac;
     --mainColorSelected1: #344b9820;
     --defaultBackground: #f9fbfc;
     --defaultBoxShadow: 1px 1px 10px 0 rgb(72 75 108 / 8%);
     --defaultBlueColor: #418cff;
-    --defaultBlueColorOpacity100: #418cff10;
-    --defaultBlueColorOpacity200: #418cff20;
+    --defaultBlueColorOpacity50: #f3f8ff;
+    --defaultBlueColorOpacity100: #e9f0ff;
+    --defaultBlueColorOpacity200: #d1e2ff;
+    --defaultBlueColorOpacity300: #bbd4ff;
+    --defaultBlueColorOpacity400: #a2c5ff;
+    --defaultBlueColorOpacity500: #8bb7ff;
+    --defaultBlueColorOpacity600: #74a9ff;
+    --defaultBlueColorOpacity700: #5a99ff;
     --defaultSkyBlueColor: #5c8cd5;
     --defaultRedColor: #e56767;
     --defaultRedColorOpacity500: #e5676780;
@@ -22,6 +35,13 @@
     --defaultGreenColorOpacity40: #5fcf8040;
     --defaultGrayColor: #f1f3f9;
     --defaultPurpleColor: #8250df;
+    --defaultPurpleColorOpacity100: #eae6f9;
+    --defaultPurpleColorOpacity200: #dcd1f6;
+    --defaultPurpleColorOpacity300: #ccbbf2;
+    --defaultPurpleColorOpacity400: #bfa5ef;
+    --defaultPurpleColorOpacity500: #ae91eb;
+    --defaultPurpleColorOpacity600: #a07be7;
+    --defaultPurpleColorOpacity700: #9065e3;
     --defaultModalCloseColor: #959eae;
     --contentHeadBackground: #eef2f9;
 }

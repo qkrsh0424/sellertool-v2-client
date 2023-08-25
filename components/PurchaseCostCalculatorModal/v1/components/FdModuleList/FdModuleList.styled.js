@@ -5,19 +5,21 @@ export const St = {
         
     `,
     Title: styled.div`
-        font-size: 13px;
-        font-weight: 600;
-        margin-bottom: 5px;
+        font-size: 16px;
+        font-weight: 700;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
         color:#404040;
+        border-bottom: 1px solid #f0f0f0;
     `,
     Wrapper: styled.div`
         background: #fff;
         height: 400px;
-        border: 1px solid #f0f0f0;
-        border-radius: 5px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
         box-shadow: var(--defaultBoxShadow);
         overflow-y:auto;
-        padding: 0 10px;
+        padding: 10px;
     `,
     ItemBox: styled.div`
         padding: 10px 10px;
@@ -33,6 +35,8 @@ export const St = {
         
         .name-label{
             flex:1;
+            white-space: pre-line;
+            word-break: break-all;
         }
 
         .editBtn{

@@ -17,8 +17,14 @@
     --defaultBackground: #f9fbfc;
     --defaultBoxShadow: 1px 1px 10px 0 rgb(72 75 108 / 8%);
     --defaultBlueColor: #418cff;
-    --defaultBlueColorOpacity100: #418cff10;
-    --defaultBlueColorOpacity200: #418cff20;
+    --defaultBlueColorOpacity50: #f3f8ff;
+    --defaultBlueColorOpacity100: #e9f0ff;
+    --defaultBlueColorOpacity200: #d1e2ff;
+    --defaultBlueColorOpacity300: #bbd4ff;
+    --defaultBlueColorOpacity400: #a2c5ff;
+    --defaultBlueColorOpacity500: #8bb7ff;
+    --defaultBlueColorOpacity600: #74a9ff;
+    --defaultBlueColorOpacity700: #5a99ff;
     --defaultSkyBlueColor: #5c8cd5;
     --defaultRedColor: #e56767;
     --defaultRedColorOpacity500: #e5676780;

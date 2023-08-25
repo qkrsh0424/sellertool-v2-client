@@ -1,72 +1,124 @@
-import _ from "lodash";
-import { useEffect, useState } from "react";
-import { getRemovedPrefixZero, numberFormatUtils, roundToTwo } from "../../../../utils/numberFormatUtils";
+import { useState } from "react";
+import { numberFormatUtils, roundToTwo } from "../../../../utils/numberFormatUtils";
+import { CustomNumberUtils } from "../../../../utils/CustomNumberUtils";
+import { CalculateUtils } from "../utils/CalculateUtils";
 
-const initialMarginRecordForm = {
-    name: '',
-    tag: '',
-    salePrice: '',
-    purchaseCost: '',
-    consumerDeliveryCharge: '',
-    sellerDeliveryCharge: '',
-    purchaseDeliveryCharge: '',
-    extraCost: '',
-    commission: '',
-    totalIncome: '',
-    totalIncomeInterestExpense: '',
-    totalExpense: '',
-    margin: '',
-    marginRate: '',
-    incomeTax: '',
-    expenseTax: '',
-    totalTax: '',
-    finalMargin: ''
-};
-
-export default function useMarginRecordFormHook(marginRecord) {
-    const [marginRecordForm, setMarginRecordForm] = useState(initialMarginRecordForm);
-
-    useEffect(() => {
-        if (!marginRecord) {
-            setMarginRecordForm(initialMarginRecordForm);
-            return;
-        }
-        onSetMarginRecordForm();
-
-    }, [marginRecord]);
-
-    const onSetMarginRecordForm = () => {
-        let currMarginRecord = _.cloneDeep(marginRecord);
-
-        setMarginRecordForm({
-            name: currMarginRecord.name,
-            tag: currMarginRecord.tag,
-            salePrice: currMarginRecord.salePrice,
-            purchaseCost: currMarginRecord.purchaseCost,
-            consumerDeliveryCharge: currMarginRecord.consumerDeliveryCharge,
-            sellerDeliveryCharge: currMarginRecord.sellerDeliveryCharge,
-            purchaseDeliveryCharge: currMarginRecord.purchaseDeliveryCharge,
-            extraCost: currMarginRecord.extraCost,
-            commission: currMarginRecord.commission,
-            totalIncome: currMarginRecord.totalIncome,
-            totalIncomeInterestExpense: currMarginRecord.totalIncomeInterestExpense,
-            totalExpense: currMarginRecord.totalExpense,
-            margin: currMarginRecord.margin,
-            marginRate: currMarginRecord.marginRate,
-            incomeTax: currMarginRecord.incomeTax,
-            expenseTax: currMarginRecord.expenseTax,
-            totalTax: currMarginRecord.totalTax
-        })
+const returnPriceValueElseThrow = (price, errorMessage) => {
+    if (!price) {
+        return 0;
     }
 
-    const onChangeMarginRecordNumberValueOfName = (e) => {
+    if (price < 0 || price > 99999999999) { // 0.9e11
+        throw new Error(errorMessage);
+    }
+
+    return price;
+}
+
+const returnRateValueElseThrow = (value, errorMessage) => {
+    if (!value) {
+        return 0;
+    }
+
+    if (value < 0 || value > 100) {
+        throw new Error(errorMessage);
+    }
+
+    return value;
+}
+
+const initialMarginRecordForm = {
+    salesPrice: '', // 판매가격
+    salesPriceMberId: '75a58be7-37f9-11ee-8d3c-06fe28321f8c',
+    consumerDeliveryCharge: '', // 배송비
+    consumerDeliveryChargeMberId: '75a58be7-37f9-11ee-8d3c-06fe28321f8c',
+    purchaseUnitPrice: '', // 매입단가
+    purchaseUnitPriceMberId: '75a58be7-37f9-11ee-8d3c-06fe28321f8c',
+    purchaseUnitFreightCost: '', // 매입운임비
+    purchaseUnitFreightCostMberId: '75a58be7-37f9-11ee-8d3c-06fe28321f8c',
+    sellerDeliveryCharge: '', // 판매자 부담 운임비
+    sellerDeliveryChargeMberId: '75a58be7-37f9-11ee-8d3c-06fe28321f8c',
+    marketDefaultCommission: '', // 마켓 기본수수료
+    marketLinkedCommission: '', // 연동 수수료
+    marketDeliveryCommission: '', // 배송비 수수료
+    marketingCost: '', // 마케팅비용
+    marketingCostMberId: '75a58be7-37f9-11ee-8d3c-06fe28321f8c',
+    extraCost: '', // 기타비용
+    extraCostMberId: '75a58be7-37f9-11ee-8d3c-06fe28321f8c',
+};
+
+const initialResultForm = {
+    totalIncomeKRW: '',
+    totalExpenseKRW: '',
+    marginKRW: '',
+    marginRate: '',
+    incomeTaxKRW: '',
+    expenseTaxKRW: '',
+    vatKRW: '',
+    marginAfterVatKRW: ''
+}
+
+const marketCommissionList = [
+    {
+        name: '직접입력',
+        value: 'etc',
+        marketDefaultCommission: '',
+        marketLinkedCommission: '',
+        marketDeliveryCommission: '',
+    },
+    {
+        name: '스마트스토어',
+        value: 'naver',
+        marketDefaultCommission: '3.63',
+        marketLinkedCommission: '2',
+        marketDeliveryCommission: '3.63',
+    },
+    {
+        name: '쿠팡',
+        value: 'coupang',
+        marketDefaultCommission: '10.8',
+        marketLinkedCommission: '',
+        marketDeliveryCommission: '3.3',
+    },
+    {
+        name: '옥션',
+        value: 'auction',
+        marketDefaultCommission: '13',
+        marketLinkedCommission: '2',
+        marketDeliveryCommission: '3.3',
+    },
+    {
+        name: 'G마켓',
+        value: 'gmarket',
+        marketDefaultCommission: '13',
+        marketLinkedCommission: '2',
+        marketDeliveryCommission: '3.3',
+    },
+    {
+        name: '11번가',
+        value: '11st',
+        marketDefaultCommission: '13',
+        marketLinkedCommission: '2',
+        marketDeliveryCommission: '3.3',
+    },
+]
+
+const customNumberUtils = CustomNumberUtils();
+const calculateUtils = CalculateUtils();
+
+
+export function useMarginRecordFormHook() {
+    const [marginRecordForm, setMarginRecordForm] = useState(initialMarginRecordForm);
+    const [resultForm, setResultForm] = useState(initialResultForm);
+    const [selectedMarketCommission, setSelectedMarketCommission] = useState(marketCommissionList[0]);
+
+    const onChangePriceValueFromEvent = (e) => {
         let name = e.target.name;
         let value = e.target.value;
-
         if (!value) {
             setMarginRecordForm({
                 ...marginRecordForm,
-                [name]: ''
+                [name]: value || ''
             });
             return;
         }
@@ -79,7 +131,7 @@ export default function useMarginRecordFormHook(marginRecord) {
             return;
         }
 
-        if (numberFormatUtils.isNumberValueWithDecimalPoint(value, 2)) {
+        if (customNumberUtils.isNumberValueWithDecimalPoint(value, 6)) {
             setMarginRecordForm({
                 ...marginRecordForm,
                 [name]: value || ''
@@ -87,13 +139,14 @@ export default function useMarginRecordFormHook(marginRecord) {
         }
     }
 
-    const onChangeMarginRecordCommission = (e) => {
+    const onChangeRateValueFromEvent = (e) => {
+        let name = e.target.name;
         let value = e.target.value;
 
         if (!value) {
             setMarginRecordForm({
                 ...marginRecordForm,
-                commission: ''
+                [name]: value || ''
             });
             return;
         }
@@ -101,208 +154,111 @@ export default function useMarginRecordFormHook(marginRecord) {
         value = value.replaceAll(",", "");
 
         try {
-            returnCommissionValueElseThrow(value);
+            returnRateValueElseThrow(value);
         } catch (err) {
             return;
         }
 
-        if (numberFormatUtils.isNumberValueWithDecimalPoint(value, 2)) {
+        if (customNumberUtils.isNumberValueWithDecimalPoint(value, 6)) {
             setMarginRecordForm({
                 ...marginRecordForm,
-                commission: value || ''
+                [name]: value || ''
             });
         }
     }
 
-    const onChangeMarginRecordTextValueOfName = (e) => {
-        let name = e.target.name;
+    const onChangeSelectedMarketCommissiomFromEvent = (e) => {
         let value = e.target.value;
 
-        setMarginRecordForm({
-            ...marginRecordForm,
-            [name]: value
-        })
-    }
-
-    const onActionCalculateMargin = () => {
-        let salePrice = 0;
-        let purchaseCost = 0;
-        let consumerDeliveryCharge = 0;
-        let sellerDeliveryCharge = 0;
-        let purchaseDeliveryCharge = 0;
-        let extraCost = 0;
-        let commission = 0;
-
-        try {
-            salePrice = parseFloat(returnPriceValueElseThrow(marginRecordForm.salePrice, '판매가격을 정확히 입력해 주세요. (값 범위: 0 ~ 99999999999.99)'));
-            purchaseCost = parseFloat(returnPriceValueElseThrow(marginRecordForm.purchaseCost, '매입가격을 정확히 입력해 주세요. (값 범위: 0 ~ 99999999999.99)'));
-            consumerDeliveryCharge = parseFloat(returnPriceValueElseThrow(marginRecordForm.consumerDeliveryCharge, '소비자 부담 운임비를 정확히 입력해 주세요. (값 범위: 0 ~ 99999999999.99)'));
-            sellerDeliveryCharge = parseFloat(returnPriceValueElseThrow(marginRecordForm.sellerDeliveryCharge, '판매자 실질 부담 운임비를 정확히 입력해 주세요. (값 범위: 0 ~ 99999999999.99)'));
-            purchaseDeliveryCharge = parseFloat(returnPriceValueElseThrow(marginRecordForm.purchaseDeliveryCharge, '매입 운임비를 정확히 입력해 주세요. (값 범위: 0 ~ 99999999999.99)'));
-            extraCost = parseFloat(returnPriceValueElseThrow(marginRecordForm.extraCost, '기타비용을 정확히 입력해 주세요. (값 범위: 0 ~ 99999999999.99)'));
-            commission = parseFloat(returnCommissionValueElseThrow(marginRecordForm.commission, '마켓 수수료를 정확히 입력해 주세요. (값 범위: 0 ~ 100)'));
-        } catch (err) {
-            throw new Error(err.message);
-        }
-
-        const totalIncome = setTotalIncome(); // 매출 총액
-        const totalIncomeInterestExpense = setTotalIncomeInterestExpense(); // 수수료 비용
-        const totalExpense = setTotalExpense(); // 매입 총 비용
-        const margin = setMargin(); // 마진액
-        const marginRate = setMarginRate(); // 마진율
-        const incomeTax = setIncomeTax(); // 매출 부가세
-        const expenseTax = setExpenseTax(); // 매입 부가세
-        const totalTax = setTotalTax(); // 총 부가세
-        const finalMargin = setFinalMargin();
-
-        function setTotalIncome() {
-            return salePrice + consumerDeliveryCharge;
-        }
-
-        function setTotalIncomeInterestExpense() {
-            return totalIncome * commission * 0.01;
-        }
-
-        function setTotalExpense() {
-            return purchaseCost + purchaseDeliveryCharge + sellerDeliveryCharge + extraCost + totalIncomeInterestExpense;
-        }
-
-        function setMargin() {
-            return totalIncome - totalExpense;
-        }
-
-        function setMarginRate() {
-            let bar = 0;
-            if (totalIncome !== 0) {
-                bar = margin / totalIncome * 100;
-            }
-
-            return bar;
-        }
-
-        function setIncomeTax() {
-            return totalIncome - (totalIncome / 1.1);
-        }
-
-        function setExpenseTax() {
-            return totalExpense - (totalExpense / 1.1);
-        }
-
-        function setTotalTax() {
-            return incomeTax - expenseTax;
-        }
-
-        function setFinalMargin() {
-            return margin - totalTax;
-        }
-
-        try {
-            checkResultPriceValueFormatValid(totalIncome, '유효하지 않는 계산식 입니다. 다시 입력해 주세요.');
-            checkResultPriceValueFormatValid(totalIncomeInterestExpense, '유효하지 않는 계산식 입니다. 다시 입력해 주세요.');
-            checkResultPriceValueFormatValid(totalExpense, '유효하지 않는 계산식 입니다. 다시 입력해 주세요.');
-            checkResultPriceValueFormatValid(margin, '유효하지 않는 계산식 입니다. 다시 입력해 주세요.');
-            checkResultPriceValueFormatValid(marginRate, '유효하지 않는 계산식 입니다. 다시 입력해 주세요.');
-            checkResultPriceValueFormatValid(incomeTax, '유효하지 않는 계산식 입니다. 다시 입력해 주세요.');
-            checkResultPriceValueFormatValid(expenseTax, '유효하지 않는 계산식 입니다. 다시 입력해 주세요.');
-            checkResultPriceValueFormatValid(totalTax, '유효하지 않는 계산식 입니다. 다시 입력해 주세요.');
-            checkResultPriceValueFormatValid(finalMargin, '유효하지 않는 계산식 입니다. 다시 입력해 주세요.');
-        } catch (err) {
-            throw new Error(err.message);
+        let marketCommission = marketCommissionList?.find(r => r.value === value);
+        if (!marketCommission) {
+            setSelectedMarketCommission(marketCommissionList[0]);
+            return;
         }
 
         setMarginRecordForm({
             ...marginRecordForm,
-            salePrice: roundToTwo(salePrice),
-            consumerDeliveryCharge: roundToTwo(consumerDeliveryCharge),
-            commission: roundToTwo(commission),
-            purchaseCost: roundToTwo(purchaseCost),
-            purchaseDeliveryCharge: roundToTwo(purchaseDeliveryCharge),
-            sellerDeliveryCharge: roundToTwo(sellerDeliveryCharge),
-            extraCost: roundToTwo(extraCost),
-            totalIncome: roundToTwo(totalIncome),
-            totalIncomeInterestExpense: roundToTwo(totalIncomeInterestExpense),
-            totalExpense: roundToTwo(totalExpense),
-            margin: roundToTwo(margin),
-            marginRate: roundToTwo(marginRate),
-            incomeTax: roundToTwo(incomeTax),
-            expenseTax: roundToTwo(expenseTax),
-            totalTax: roundToTwo(totalTax),
-            finalMargin: roundToTwo(finalMargin)
+            marketDefaultCommission: marketCommission?.marketDefaultCommission,
+            marketLinkedCommission: marketCommission?.marketLinkedCommission,
+            marketDeliveryCommission: marketCommission?.marketDeliveryCommission
         })
+        setSelectedMarketCommission(marketCommission);
+
     }
 
     const onActionClearForm = () => {
         setMarginRecordForm(initialMarginRecordForm);
+        setResultForm(initialResultForm);
     }
 
-    const checkNameValueFormatValid = () => {
-        const name = marginRecordForm?.name;
-        let spaceSearchRegex = /^(\s)|(\s)$/;
-
-        if (name.search(spaceSearchRegex) !== -1) {
-            throw new Error('레코드명을 정확히 입력해 주세요. 앞뒤 공백 없이 2-50자');
+    const onCalculateAndSetResultForm = (mrBaseExchangeRateList) => {
+        let form = {
+            salesPrice: customNumberUtils.parseNumberToFloat({ value: marginRecordForm?.salesPrice, defaultValue: 0 }),
+            salesPriceMberId: customNumberUtils.returnBaseExchangeRateId(mrBaseExchangeRateList, marginRecordForm?.salesPriceMberId),
+            consumerDeliveryCharge: customNumberUtils.parseNumberToFloat({ value: marginRecordForm?.consumerDeliveryCharge, defaultValue: 0 }),
+            consumerDeliveryChargeMberId: customNumberUtils.returnBaseExchangeRateId(mrBaseExchangeRateList, marginRecordForm?.consumerDeliveryChargeMberId),
+            purchaseUnitPrice: customNumberUtils.parseNumberToFloat({ value: marginRecordForm?.purchaseUnitPrice, defaultValue: 0 }),
+            purchaseUnitPriceMberId: customNumberUtils.returnBaseExchangeRateId(mrBaseExchangeRateList, marginRecordForm?.purchaseUnitPriceMberId),
+            purchaseUnitFreightCost: customNumberUtils.parseNumberToFloat({ value: marginRecordForm?.purchaseUnitFreightCost, defaultValue: 0 }),
+            purchaseUnitFreightCostMberId: customNumberUtils.returnBaseExchangeRateId(mrBaseExchangeRateList, marginRecordForm?.purchaseUnitFreightCostMberId),
+            sellerDeliveryCharge: customNumberUtils.parseNumberToFloat({ value: marginRecordForm?.sellerDeliveryCharge, defaultValue: 0 }),
+            sellerDeliveryChargeMberId: customNumberUtils.returnBaseExchangeRateId(mrBaseExchangeRateList, marginRecordForm?.sellerDeliveryChargeMberId),
+            marketDefaultCommission: customNumberUtils.parseNumberToFloat({ value: marginRecordForm?.marketDefaultCommission, defaultValue: 0 }),
+            marketLinkedCommission: customNumberUtils.parseNumberToFloat({ value: marginRecordForm?.marketLinkedCommission, defaultValue: 0 }),
+            marketDeliveryCommission: customNumberUtils.parseNumberToFloat({ value: marginRecordForm?.marketDeliveryCommission, defaultValue: 0 }),
+            marketingCost: customNumberUtils.parseNumberToFloat({ value: marginRecordForm?.marketingCost, defaultValue: 0 }),
+            marketingCostMberId: customNumberUtils.returnBaseExchangeRateId(mrBaseExchangeRateList, marginRecordForm?.marketingCostMberId),
+            extraCost: customNumberUtils.parseNumberToFloat({ value: marginRecordForm?.extraCost, defaultValue: 0 }),
+            extraCostMberId: customNumberUtils.returnBaseExchangeRateId(mrBaseExchangeRateList, marginRecordForm?.extraCostMberId),
         }
 
-        if (name.length < 2 || name.length > 50) {
-            throw new Error('레코드명을 정확히 입력해 주세요. 앞뒤 공백 없이 2-50자');
-        }
-    }
+        // 판매정보
+        let salesPriceKRW = calculateUtils.getPriceValueWithBaseExchangeRate(form?.salesPrice, form?.salesPriceMberId, mrBaseExchangeRateList);
+        let consumerDeliveryChargeKRW = calculateUtils.getPriceValueWithBaseExchangeRate(form?.consumerDeliveryCharge, form?.consumerDeliveryChargeMberId, mrBaseExchangeRateList);
 
-    const checkTagValueFormatValid = () => {
-        const tag = marginRecordForm?.tag;
-        let spaceSearchRegex = /^(\s)|(\s)$/;
+        // 매입정보
+        let purchaseUnitPriceKRW = calculateUtils.getPriceValueWithBaseExchangeRate(form?.purchaseUnitPrice, form?.purchaseUnitPriceMberId, mrBaseExchangeRateList);
+        let purchaseUnitFreightCostKRW = calculateUtils.getPriceValueWithBaseExchangeRate(form?.purchaseUnitFreightCost, form?.purchaseUnitFreightCostMberId, mrBaseExchangeRateList);
+        let sellerDeliveryChargeKRW = calculateUtils.getPriceValueWithBaseExchangeRate(form?.sellerDeliveryCharge, form?.sellerDeliveryChargeMberId, mrBaseExchangeRateList);
 
-        if (!tag) {
-            return;
-        }
+        // 수수료 및 기타비용
+        let marketDefaultCommissionPriceKRW = salesPriceKRW * form?.marketDefaultCommission / 100;
+        let marketLinkedCommissionPriceKRW = salesPriceKRW * form?.marketLinkedCommission / 100;
+        let marketDeliveryCommissionPriceKRW = consumerDeliveryChargeKRW * form?.marketDeliveryCommission / 100;
+        let marketingCostKRW = calculateUtils.getPriceValueWithBaseExchangeRate(form?.marketingCost, form?.marketingCostMberId, mrBaseExchangeRateList);
+        let extraCostKRW = calculateUtils.getPriceValueWithBaseExchangeRate(form?.extraCost, form?.extraCostMberId, mrBaseExchangeRateList);
 
-        if (tag.search(spaceSearchRegex) !== -1) {
-            throw new Error('관리태그를 정확히 입력해 주세요. 앞뒤 공백 없이 2-50자');
-        }
 
-        if (tag.length < 0 || tag.length > 50) {
-            throw new Error('관리태그를 정확히 입력해 주세요. 앞뒤 공백 없이 2-50자');
-        }
-    }
+        let totalIncomeKRW = customNumberUtils.roundToDigit(salesPriceKRW + consumerDeliveryChargeKRW, 2);
+        let totalExpenseKRW = customNumberUtils.roundToDigit(purchaseUnitPriceKRW + purchaseUnitFreightCostKRW + sellerDeliveryChargeKRW + marketDefaultCommissionPriceKRW + marketLinkedCommissionPriceKRW + marketDeliveryCommissionPriceKRW + marketingCostKRW + extraCostKRW, 2);
+        let marginKRW = customNumberUtils.roundToDigit(totalIncomeKRW - totalExpenseKRW, 2);
+        let marginRate = customNumberUtils.roundToDigit(marginKRW / totalIncomeKRW * 100, 2);
 
-    const returnPriceValueElseThrow = (price, errorMessage) => {
-        if (!price) {
-            return 0;
-        }
-
-        if (price < 0 || price > 99999999999.99) { // 0.9e11
-            throw new Error(errorMessage);
-        }
-
-        return price;
-    }
-
-    const returnCommissionValueElseThrow = (commission, errorMessage) => {
-        if (!commission) {
-            return 0;
-        }
-
-        if (commission < 0 || commission > 100) {
-            throw new Error(errorMessage);
-        }
-
-        return commission;
-    }
-
-    const checkResultPriceValueFormatValid = (price, errorMessage) => {
-        if (price < -999999999999.99 || price > 999999999999.99) { // 0.9e12
-            throw new Error(errorMessage);
-        }
+        let incomeTaxKRW = customNumberUtils.roundToDigit(totalIncomeKRW / 11, 2);
+        let expenseTaxKRW = customNumberUtils.roundToDigit(totalExpenseKRW / 11, 2);
+        let vatKRW = customNumberUtils.roundToDigit(incomeTaxKRW - expenseTaxKRW, 2);
+        let marginAfterVatKRW = customNumberUtils.roundToDigit(marginKRW - vatKRW, 2);
+        setResultForm({
+            totalIncomeKRW: totalIncomeKRW,
+            totalExpenseKRW: totalExpenseKRW,
+            marginKRW: marginKRW,
+            marginRate: marginRate,
+            incomeTaxKRW: incomeTaxKRW,
+            expenseTaxKRW: expenseTaxKRW,
+            vatKRW: vatKRW,
+            marginAfterVatKRW: marginAfterVatKRW
+        })
     }
 
     return {
         marginRecordForm,
-        onChangeMarginRecordNumberValueOfName,
-        onChangeMarginRecordCommission,
-        onChangeMarginRecordTextValueOfName,
-        onActionCalculateMargin,
+        resultForm,
+        marketCommissionList,
+        selectedMarketCommission,
+        onChangePriceValueFromEvent,
+        onChangeRateValueFromEvent,
+        onChangeSelectedMarketCommissiomFromEvent,
         onActionClearForm,
-        checkNameValueFormatValid,
-        checkTagValueFormatValid
+        onCalculateAndSetResultForm
     }
 }

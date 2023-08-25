@@ -1,6 +1,6 @@
-import { Container, St } from "./styles/Head.styled";
+import { St } from "./FdHead.styled";
 
-export default function HeadComponent(props) {
+export function FdHead(props) {
     return (
         <>
             <St.Container>

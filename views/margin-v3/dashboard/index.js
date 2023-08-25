@@ -1,93 +1,37 @@
-import { useRouter } from "next/router";
-import styled from "styled-components";
 import CalculatorMain from "../../calculator/CalculatorMain";
-import ContentFieldComponent from "./content-field/ContentField.component";
-import HeadComponent from "./head/Head.component";
-import useMarginRecordHook from "./hooks/useMarginRecordHook";
-import useMarginRecordPageHook from "./hooks/useMarginRecordPageHook";
-import NameFieldComponent from "./name-field/NameField.component";
 import Layout from "../layout";
-
-const Container = styled.div`
-    overflow: hidden;
-    background: var(--defaultBackground);
-    padding-bottom: 150px;
-    padding: 20px;
-`;
+import { St } from "./index.styled";
+import { FdHead, FdCalculator } from "./components";
+import { useDataSourceHook, useMrBaseExchangeRateHook } from "./hooks";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const MainComponent = () => {
-    const router = useRouter();
-    const {
-        marginRecordPage,
-        reqFetchMarginRecordPage,
-        size: MARGIN_RECORDS_SIZE,
-        page: MARGIN_RECORDS_PAGE,
-        onChangePage,
-        onChangeSize
-    } = useMarginRecordPageHook();
+    const workspaceRedux = useSelector(state => state?.workspaceRedux);
+    const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const {
-        marginRecord,
-        reqCreateMarginRecord,
-        reqUpdateMarginRecord,
-        reqDeleteMarginRecord
-    } = useMarginRecordHook();
+    const dataSourceHook = useDataSourceHook();
+    const mrBaseExchangeRateHook = useMrBaseExchangeRateHook();
 
-    const handleSubmitCreateMarginRecord = async (body, successCallback) => {
-        await reqCreateMarginRecord({
-            body: body,
-            successCallback: () => {
-                successCallback();
-                reqFetchMarginRecordPage();
-            }
+    useEffect(() => {
+        if (!wsId) {
+            return;
+        }
+
+        dataSourceHook.onReqFetchMrBaseExchangeRateList({ headers: { wsId: wsId } }, (results, response) => {
+            mrBaseExchangeRateHook.onSetMrBaseExchangeRateList(results);
         })
-    }
-
-    const handleSubmitUpdateMarginRecord = async (body, successCallback) => {
-        await reqUpdateMarginRecord({
-            body: body,
-            successCallback: () => {
-                successCallback();
-                reqFetchMarginRecordPage();
-            }
-        })
-    }
-
-    const handleSubmitDeleteMarginRecord = async (body, successCallback) => {
-        await reqDeleteMarginRecord({
-            body: body,
-            successCallback: () => {
-                successCallback();
-                router.replace({
-                    pathname: '/margin/dashboard'
-                });
-                reqFetchMarginRecordPage();
-            }
-        })
-    }
-
+    }, [wsId]);
+    
     return (
         <>
             <Layout>
-                <Container>
-                    <HeadComponent />
-                    <NameFieldComponent
-                        marginRecordPage={marginRecordPage}
-                        marginRecord={marginRecord}
-                        onSubmitDeleteMarginRecord={handleSubmitDeleteMarginRecord}
-                        MARGIN_RECORDS_SIZE={MARGIN_RECORDS_SIZE}
-                        MARGIN_RECORDS_PAGE={MARGIN_RECORDS_PAGE}
-                        onChangePage={onChangePage}
-                        onChangeSize={onChangeSize}
+                <St.Container>
+                    <FdHead />
+                    <FdCalculator
+                        mrBaseExchangeRateList={mrBaseExchangeRateHook?.mrBaseExchangeRateList}
                     />
-                    <ContentFieldComponent
-                        marginRecords={marginRecordPage?.content}
-                        marginRecord={marginRecord}
-
-                        onSubmitCreateMarginRecord={handleSubmitCreateMarginRecord}
-                        onSubmitUpdateMarginRecord={handleSubmitUpdateMarginRecord}
-                    />
-                </Container>
+                </St.Container>
                 <CalculatorMain></CalculatorMain>
             </Layout>
         </>

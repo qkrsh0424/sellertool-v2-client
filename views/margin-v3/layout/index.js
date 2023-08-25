@@ -23,7 +23,7 @@ export default function Layout({ children }) {
                             </a>
                         </Link>
                     </div>
-                    <div>
+                    {/* <div>
                         <Link
                             href='/margin/plus'
                             passHref
@@ -35,7 +35,7 @@ export default function Layout({ children }) {
                                 플러스+
                             </a>
                         </Link>
-                    </div>
+                    </div> */}
                 </St.SidebarContainer>
                 <St.MainContainer>
                     {children}

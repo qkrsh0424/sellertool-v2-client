@@ -107,8 +107,6 @@ axiosAuthInterceptor.interceptors.response.use(
             //     isCsrfRefreshing = false;
             // }, 2000);
 
-
-
             return retryOriginalRequest;
         }
         return Promise.reject(error);

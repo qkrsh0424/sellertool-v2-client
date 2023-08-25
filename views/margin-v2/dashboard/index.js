@@ -6,11 +6,13 @@ import HeadComponent from "./head/Head.component";
 import useMarginRecordHook from "./hooks/useMarginRecordHook";
 import useMarginRecordPageHook from "./hooks/useMarginRecordPageHook";
 import NameFieldComponent from "./name-field/NameField.component";
+import Layout from "../layout";
 
 const Container = styled.div`
     overflow: hidden;
     background: var(--defaultBackground);
     padding-bottom: 150px;
+    padding: 20px;
 `;
 
 const MainComponent = () => {
@@ -66,26 +68,28 @@ const MainComponent = () => {
 
     return (
         <>
-            <Container>
-                <HeadComponent />
-                <NameFieldComponent
-                    marginRecordPage={marginRecordPage}
-                    marginRecord={marginRecord}
-                    onSubmitDeleteMarginRecord={handleSubmitDeleteMarginRecord}
-                    MARGIN_RECORDS_SIZE={MARGIN_RECORDS_SIZE}
-                    MARGIN_RECORDS_PAGE={MARGIN_RECORDS_PAGE}
-                    onChangePage={onChangePage}
-                    onChangeSize={onChangeSize}
-                />
-                <ContentFieldComponent
-                    marginRecords={marginRecordPage?.content}
-                    marginRecord={marginRecord}
+            <Layout>
+                <Container>
+                    <HeadComponent />
+                    <NameFieldComponent
+                        marginRecordPage={marginRecordPage}
+                        marginRecord={marginRecord}
+                        onSubmitDeleteMarginRecord={handleSubmitDeleteMarginRecord}
+                        MARGIN_RECORDS_SIZE={MARGIN_RECORDS_SIZE}
+                        MARGIN_RECORDS_PAGE={MARGIN_RECORDS_PAGE}
+                        onChangePage={onChangePage}
+                        onChangeSize={onChangeSize}
+                    />
+                    <ContentFieldComponent
+                        marginRecords={marginRecordPage?.content}
+                        marginRecord={marginRecord}
 
-                    onSubmitCreateMarginRecord={handleSubmitCreateMarginRecord}
-                    onSubmitUpdateMarginRecord={handleSubmitUpdateMarginRecord}
-                />
-            </Container>
-            <CalculatorMain></CalculatorMain>
+                        onSubmitCreateMarginRecord={handleSubmitCreateMarginRecord}
+                        onSubmitUpdateMarginRecord={handleSubmitUpdateMarginRecord}
+                    />
+                </Container>
+                <CalculatorMain></CalculatorMain>
+            </Layout>
         </>
     );
 }

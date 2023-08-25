@@ -90,8 +90,8 @@ const FooterMain = () => {
                 <Wrapper>
                     <div>
                         <MenuItemsBox>
-                            <div className='item-el'>개인정보처리방침</div>
-                            <div className='item-el'>이용약관</div>
+                            <div className='item-el'><a href='https://assets.sellertool.io/consent_form/privacy_policy_v1.html' target="_blank" rel="noreferrer">개인정보처리방침</a></div>
+                            <div className='item-el'><a href='https://assets.sellertool.io/consent_form/service_terms_v1.html' target="_blank" rel="noreferrer">이용약관</a></div>
                         </MenuItemsBox>
                         <ComponyInfoBox>
                             <div className="item-el">상호명: (주)피아르홀딩스</div>
@@ -104,7 +104,7 @@ const FooterMain = () => {
                             <div className="item-el">개인정보관리책임자: 박세훈</div>
                         </ComponyInfoBox>
                         <Copyright>
-                            Copyright ⓒ 2023 All rights reserved by Piaar Holdings Corp.
+                            Copyright ⓒ 2023 All rights reserved by Piaar Holdings Co.
                         </Copyright>
                     </div>
                 </Wrapper>

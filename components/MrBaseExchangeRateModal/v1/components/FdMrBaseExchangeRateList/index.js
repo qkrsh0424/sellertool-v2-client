@@ -1,0 +1,1 @@
+export { FdMrBaseExchangeRateList } from './FdMrBaseExchangeRateList';

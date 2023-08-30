@@ -1,12 +1,18 @@
 import { useEffect } from "react";
 import Layout from "../layout";
-import { FdMarginRecordList } from "./components";
+import { FdCalculator, FdMarginRecordList } from "./components";
 import { St } from "./index.styled";
-import { useSelector } from "react-redux";
-import { useDataSourceHook, useMarginRecordHook } from "./hooks";
+import { useDispatch, useSelector } from "react-redux";
+import { useDataSourceHook, useMarginRecordHook, useMrBaseExchangeRateHook } from "./hooks";
+import { customBackdropController } from "../../../components/backdrop/default/v1";
+
+const customBackdropControl = customBackdropController();
 
 export default function MainComponent(props) {
+    const reduxDispatch = useDispatch();
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
+    const mrBaseExchangeRateRedux = useSelector(state => state?.mrBaseExchangeRateRedux);
+    const mrPurchaseModuleRedux = useSelector(state => state?.mrPurchaseModuleRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const dataSourceHook = useDataSourceHook();
@@ -18,23 +24,114 @@ export default function MainComponent(props) {
         }
 
         async function initialize() {
-            let marginRecordPage = null;
-
-            await dataSourceHook.onReqFetchMarginRecordPage({ headers: { wsId: wsId } }, (results) => {
-                marginRecordPage = results;
-            })
-
-            if (marginRecordPage) {
-                marginRecordHook.onSetMarginRecordList(marginRecordPage?.content);
-            }
+            handleReqFetchMrBaseExchangeRateList();
+            handleReqFetchMrPurchaseModuleList();
+            handleReqFetchMarginRecordList();
         }
 
         initialize();
+
+        return () => {
+            reduxDispatch({
+                type: 'MR_BASE_EXCHANGE_RATE_CHANGE_DATA',
+                payload: {
+                    name: 'mrBaseExchangeRateList',
+                    value: null
+                }
+            });
+            reduxDispatch({
+                type: 'MR_PURCHASE_MODULE_CHANGE_DATA',
+                payload: {
+                    name: 'mrPurchaseModuleList',
+                    value: null
+                }
+            })
+        }
     }, [wsId]);
 
+    const handleReqFetchMarginRecordList = async () => {
+        await dataSourceHook.onReqFetchMarginRecordList({ headers: { wsId: wsId } }, (results) => {
+            marginRecordHook.onSetMarginRecordList(results);
+        })
+    }
+
+    const handleReqFetchMrBaseExchangeRateList = async () => {
+        await dataSourceHook.onReqFetchMrBaseExchangeRateList({ headers: { wsId: wsId } }, (results) => {
+            reduxDispatch({
+                type: 'MR_BASE_EXCHANGE_RATE_CHANGE_DATA',
+                payload: {
+                    name: 'mrBaseExchangeRateList',
+                    value: results
+                }
+            })
+        })
+    }
+
+    const handleReqFetchMrPurchaseModuleList = async () => {
+        await dataSourceHook.onReqFetchMrPurchaseModuleList({ headers: { wsId: wsId } }, (results) => {
+            reduxDispatch({
+                type: 'MR_PURCHASE_MODULE_CHANGE_DATA',
+                payload: {
+                    name: 'mrPurchaseModuleList',
+                    value: results
+                }
+            })
+        })
+    }
+
+    const handleReqCreateMarginRecord = async (body, callbackFn) => {
+        let createdMarginRecordId = null;
+        let newMarginRecordList = null;
+
+        customBackdropControl.showBackdrop();
+        await dataSourceHook.onReqCreateMarginRecord({ headers: { wsId, wsId }, body: body }, (results) => {
+            createdMarginRecordId = results?.id;
+        });
+
+
+        if (createdMarginRecordId) {
+            callbackFn();
+            await dataSourceHook.onReqFetchMarginRecordList({ headers: { wsId: wsId } }, (results) => {
+                newMarginRecordList = results;
+            })
+        }
+
+        if (newMarginRecordList) {
+            let newSelectedMarginRecord = newMarginRecordList?.find(r => r?.id === createdMarginRecordId);
+            marginRecordHook.onSetMarginRecordList(newMarginRecordList);
+            marginRecordHook.onSetSelectedMarginRecord(newSelectedMarginRecord);
+        }
+        customBackdropControl.hideBackdrop();
+    }
+
     const handleSelectMarginRecord = (value) => {
+        if (marginRecordHook?.selectedMarginRecord?.id === value?.id) {
+            marginRecordHook.onSetSelectedMarginRecord(null);
+            return;
+        }
         marginRecordHook.onSetSelectedMarginRecord(value);
     }
+
+    const handleReqUpdate = async (form) => {
+        let headers = { wsId: wsId };
+        let body = { ...form };
+        customBackdropControl.showBackdrop();
+        let updatedMarginRecordId = null;
+
+        await dataSourceHook.onReqUpdateMarginRecord({ headers: headers, body: body }, (results, respones) => {
+            updatedMarginRecordId = results?.id;
+        });
+
+        if (updatedMarginRecordId) {
+            handleReqFetchMarginRecordList();
+        }
+        customBackdropControl.hideBackdrop();
+    }
+
+    if (!mrBaseExchangeRateRedux?.mrBaseExchangeRateList || !mrPurchaseModuleRedux?.mrPurchaseModuleList) {
+        return null;
+    }
+    
     return (
         <>
             <Layout>
@@ -49,10 +146,20 @@ export default function MainComponent(props) {
                                 marginRecordList={marginRecordHook?.marginRecordList}
                                 selectedMarginRecord={marginRecordHook?.selectedMarginRecord}
                                 onSelectMarginRecord={handleSelectMarginRecord}
+                                onReqCreateMarginRecord={handleReqCreateMarginRecord}
                             />
                         </div>
                         <div className='calculator-wrapper'>
-
+                            {marginRecordHook?.selectedMarginRecord ?
+                                <FdCalculator
+                                    mrBaseExchangeRateList={mrBaseExchangeRateRedux?.mrBaseExchangeRateList}
+                                    mrPurchaseModuleList={mrPurchaseModuleRedux?.mrPurchaseModuleList}
+                                    selectedMarginRecord={marginRecordHook?.selectedMarginRecord}
+                                    onReqSave={handleReqUpdate}
+                                />
+                                :
+                                <div className="emptyField">상품을 선택해 주세요.</div>
+                            }
                         </div>
                     </St.BodyWrapper>
                 </St.Container>

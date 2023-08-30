@@ -32,6 +32,17 @@ function baseMarginRecord() {
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             });
         },
+        searchOne: async function (options = { headers, params, pathVariables }) {
+            const { headers, params, pathVariables } = options;
+
+            return await axiosAuthInterceptor.get(`${BASE_URL}/${pathVariables?.id}`, {
+                params: params,
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            });
+        },
         /**
          * @param {object} options
          * @returns 

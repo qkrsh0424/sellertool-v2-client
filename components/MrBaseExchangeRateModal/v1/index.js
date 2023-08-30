@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CustomDialog } from "../../dialog/v1/CustomDialog";
 import { useDataSourceHook, useMrBaseExchangeRateHook } from "./hooks";
 import { useEffect } from "react";
@@ -17,11 +17,12 @@ export function MrBaseExchangeRateModal({
     onUpdateCompleted = () => { },
     onDeleteCompleted = () => { }
 }) {
+    const reduxDispatch = useDispatch();
+    const mrBaseExchangeRateRedux = useSelector(state => state?.mrBaseExchangeRateRedux);
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const dataSourceHook = useDataSourceHook();
-    const mrBaseExchangeRateHook = useMrBaseExchangeRateHook();
 
     const [addItemModeOpen, setAddItemModeOpen] = useState(false);
     const [editTargetItem, setEditTargetItem] = useState(null);
@@ -36,7 +37,13 @@ export function MrBaseExchangeRateModal({
             await dataSourceHook.onReqFetchMrBaseExchangeRateList({
                 headers: { wsId: wsId }
             }, (results, response) => {
-                mrBaseExchangeRateHook.onSetMrBaseExchangeRateList(results);
+                reduxDispatch({
+                    type: 'MR_BASE_EXCHANGE_RATE_CHANGE_DATA',
+                    payload: {
+                        name: 'mrBaseExchangeRateList',
+                        value: results
+                    }
+                })
             })
         }
         initialize();
@@ -66,7 +73,13 @@ export function MrBaseExchangeRateModal({
             await dataSourceHook.onReqFetchMrBaseExchangeRateList({
                 headers: { wsId: wsId }
             }, (results, response) => {
-                mrBaseExchangeRateHook.onSetMrBaseExchangeRateList(results);
+                reduxDispatch({
+                    type: 'MR_BASE_EXCHANGE_RATE_CHANGE_DATA',
+                    payload: {
+                        name: 'mrBaseExchangeRateList',
+                        value: results
+                    }
+                })
             })
         }
         onCreateCompleted();
@@ -85,7 +98,13 @@ export function MrBaseExchangeRateModal({
             await dataSourceHook.onReqFetchMrBaseExchangeRateList({
                 headers: { wsId: wsId }
             }, (results, response) => {
-                mrBaseExchangeRateHook.onSetMrBaseExchangeRateList(results);
+                reduxDispatch({
+                    type: 'MR_BASE_EXCHANGE_RATE_CHANGE_DATA',
+                    payload: {
+                        name: 'mrBaseExchangeRateList',
+                        value: results
+                    }
+                })
             })
         }
         onUpdateCompleted();
@@ -108,7 +127,13 @@ export function MrBaseExchangeRateModal({
             await dataSourceHook.onReqFetchMrBaseExchangeRateList({
                 headers: { wsId: wsId }
             }, (results, response) => {
-                mrBaseExchangeRateHook.onSetMrBaseExchangeRateList(results);
+                reduxDispatch({
+                    type: 'MR_BASE_EXCHANGE_RATE_CHANGE_DATA',
+                    payload: {
+                        name: 'mrBaseExchangeRateList',
+                        value: results
+                    }
+                })
             })
         }
 
@@ -125,7 +150,7 @@ export function MrBaseExchangeRateModal({
                 {!addItemModeOpen && !editItemModeOpen &&
                     <St.Container>
                         <FdMrBaseExchangeRateList
-                            mrBaseExchangeRateList={mrBaseExchangeRateHook?.mrBaseExchangeRateList}
+                            mrBaseExchangeRateList={mrBaseExchangeRateRedux?.mrBaseExchangeRateList}
                             onSetEditTargetItem={handleSetEditTargetItem}
                             onSelect={handleSelect}
                             onDelete={handleReqDeleteMrBaseExchangeRate}
@@ -138,7 +163,7 @@ export function MrBaseExchangeRateModal({
                 {addItemModeOpen &&
                     <St.Container>
                         <FdAddItem
-                            mrBaseExchangeRateList={mrBaseExchangeRateHook?.mrBaseExchangeRateList}
+                            mrBaseExchangeRateList={mrBaseExchangeRateRedux?.mrBaseExchangeRateList}
                             onClose={() => toggleAddItemModeOpen(false)}
                             onConfirm={(body) => handleReqCreateMrBaseExchangeRate(body)}
                         />
@@ -148,7 +173,7 @@ export function MrBaseExchangeRateModal({
                 {editItemModeOpen &&
                     <St.Container>
                         <FdEditItem
-                            mrBaseExchangeRateList={mrBaseExchangeRateHook?.mrBaseExchangeRateList}
+                            mrBaseExchangeRateList={mrBaseExchangeRateRedux?.mrBaseExchangeRateList}
                             editTargetItem={editTargetItem}
                             onClose={() => handleSetEditTargetItem(null)}
                             onConfirm={(body) => handleReqUpdateMrBaseExchangeRate(body)}

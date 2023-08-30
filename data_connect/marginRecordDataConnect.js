@@ -12,25 +12,9 @@ const marginRecordDataConnect = () => {
          * @param {string} headers.wsId
          * @returns 
          */
-        searchList: async function (headers) {
+        searchList: async function (options = { headers, params }) {
+            const { headers, params } = options;
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/margin-records`, {
-                headers: headers,
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
-        },
-        /**
-         * 
-         * @param {object} params
-         * @param {number} params.size
-         * @param {number} params.page
-         * @param {object} headers 
-         * @param {string} headers.wsId
-         * @returns 
-         */
-        searchPage: async function (params, headers) {
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/margin-records/page`, {
                 headers: headers,
                 params: params,
                 withCredentials: true,
@@ -43,46 +27,26 @@ const marginRecordDataConnect = () => {
         },
         /**
          * 
-         * @param {object} params 
-         * @param {string} params.marginRecordId
-         * @param {object} headers 
-         * @param {string} headers.wsId
-         * @returns 
-         */
-        searchMarginRecord: async function (params, headers) {
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/margin-records/${params.marginRecordId}`, {
-                headers: headers,
-                params: params,
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
-        },
-        /**
-         * 
-         * @param {object} params
-         * @param {string} params.marginRecordId
-         * @param {string} params.openKey
-         * @returns 
-         */
-        searchMarginRecordViewer: async function (params) {
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/margin-records/viewer`, {
-                params: params,
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
-        },
-        /**
-         * 
          * @param {object} body [...moreItems]
          * @param {object} headers 
          * @param {string} headers.wsId
          * @returns 
          */
-        createMarginRecord: async function (body, headers) {
+        createOne: async function (options = { body, headers }) {
+            const { headers, body } = options;
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/margin-records`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
+        updateOneV3: async function (options = { body, headers }) {
+            const { headers, body } = options;
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.put(`${API_ADDRESS}/api/v1/margin-records`, body, {
                     headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',

@@ -6,6 +6,7 @@ import WorkspaceNoticeModalComponent from "./modal/WorkspaceNoticeModal.componen
 import BannerComponent from "./banner/Banner.component";
 import Section1Component from "./section1/Section1.component";
 import Link from "next/link";
+import { PurchaseCostCalculatorModal } from "../../components/PurchaseCostCalculatorModal/v1";
 
 const Container = styled.div`
     background: var(--defaultBackground);

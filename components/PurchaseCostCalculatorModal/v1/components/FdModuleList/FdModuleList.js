@@ -197,7 +197,7 @@ function AddModule({
                         onClick={() => handleSubmitAddModule()}
                     >
                         <CustomImage
-                            src='./images/icon/check_default_5fcf80.svg'
+                            src='/images/icon/check_default_5fcf80.svg'
                         />
                     </CustomBlockButton>
                     <CustomBlockButton
@@ -206,7 +206,7 @@ function AddModule({
                         onClick={() => toggleIsActiveAddMode(false)}
                     >
                         <CustomImage
-                            src='./images/icon/close_default_e56767.svg'
+                            src='/images/icon/close_default_e56767.svg'
                         />
                     </CustomBlockButton>
                 </St.AddModeBox>
@@ -260,7 +260,7 @@ function ItemList({
                                     onClick={() => handleSubmitEditModule()}
                                 >
                                     <CustomImage
-                                        src='./images/icon/check_default_5fcf80.svg'
+                                        src='/images/icon/check_default_5fcf80.svg'
                                     />
                                 </CustomBlockButton>
                                 <CustomBlockButton
@@ -269,7 +269,7 @@ function ItemList({
                                     onClick={() => toggleIsActiveEditMode(false)}
                                 >
                                     <CustomImage
-                                        src='./images/icon/close_default_e56767.svg'
+                                        src='/images/icon/close_default_e56767.svg'
                                     />
                                 </CustomBlockButton>
                             </St.EditModeBox>

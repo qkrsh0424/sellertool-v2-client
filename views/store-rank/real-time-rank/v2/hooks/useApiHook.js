@@ -1,6 +1,5 @@
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 import { nRankRecordDataConnect } from "../../../../../data_connect/nRankRecordDataConnect";
-import { workspaceDataConnect } from "../../../../../data_connect/workspaceDataConnect";
 
 export function useApiHook() {
     const onReqSearchSubscriptionPlanSearchInfo = async (
@@ -9,7 +8,7 @@ export function useApiHook() {
             success: (results, response) => {}
         }
     ) => {
-        await workspaceDataConnect().getNRankSearchInfo(options?.headers)
+        await nRankRecordDataConnect().searchWorkspaceUsageInfo(options?.headers)
             .then(res => {
                 callbackFn.success(res?.data?.data, res);
             })

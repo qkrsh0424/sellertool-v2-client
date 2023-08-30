@@ -54,6 +54,16 @@ const nRankRecordDataConnect = () => {
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
             )
+        },
+        searchWorkspaceUsageInfo: async function (headers) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-records/workspace-usage-info`, {
+                    headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         }
     }
 }

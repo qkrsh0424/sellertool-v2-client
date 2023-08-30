@@ -58,7 +58,7 @@ export default function MainComponent(){
         return () => clearInterval(fetch);
     }, [currentPendingRecordIds])
 
-    const handleSubmitRecordInput = async (e) => {
+    const handleReqCreateRecordInput = async (e) => {
         e.preventDefault();
 
         try {
@@ -205,7 +205,7 @@ export default function MainComponent(){
                         mallName={mallName}
                         onChangeKeyword={onChangeKeyword}
                         onChangeMallName={onChangeMallName}
-                        onSubmitRecordInput={handleSubmitRecordInput}
+                        onSubmitRecordInput={handleReqCreateRecordInput}
                     />
                     
                     {recordList ? 

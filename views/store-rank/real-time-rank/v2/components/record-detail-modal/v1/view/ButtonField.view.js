@@ -42,13 +42,13 @@ export default function ButtonFieldView({
                         className='disabled-btn timer-button'
                         disabled
                     >
-                        <div>{timer}</div>
                         <div>
                             <CustomBoxImage
                                 src='/images/icon/timer_default_999999.svg'
                                 size='20px'
-                            />
+                                />
                         </div>
+                        <div>{timer}</div>
                     </CustomBlockButton>
                     :
                     <>

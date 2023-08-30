@@ -16,21 +16,26 @@ export function SearchInfoFieldView({
             </div>
             <SearchInfoBox>
                 <div className='info-group'>
-                    <span>랭킹 조회 횟수 </span>
-                    <span>(</span>
-                    <span
-                        className={(searched_count !== 0) && (searched_count >= allowed_search_count) ? 'red-text' : ''}
-                        style={{ color: '#737784' }}
-                    >
-                        {searched_count ?? 0}
-                    </span>
-                    <span style={{ color: '#737784' }}> / </span>
-                    <span style={{ color: '#737784' }}>{allowed_search_count ?? 0}</span>
-                    <span>)</span>
+                    <div>
+                        <span>랭킹 조회 횟수</span>
+                    </div>
+                    <div style={{ color: '#737784' }}>
+                        <span>(</span>
+                        <span className={(searched_count !== 0) && (searched_count >= allowed_search_count) ? 'red-text' : ''}>
+                            {searched_count ?? 0}
+                        </span>
+                        <span> / </span>
+                        <span>{allowed_search_count ?? 0}</span>
+                        <span>)</span>
+                    </div>
                 </div>
                 <div className='info-group'>
-                    <span>랭킹 검색 순위 </span>
-                    <span style={{ color: '#737784' }}>(최대 {(search_page_size ?? 0) * 40}위)</span>
+                    <div>
+                        <span>랭킹 검색 순위</span>
+                    </div>
+                    <div style={{ color: '#737784' }}>
+                        <span>(최대 {(search_page_size ?? 0) * 80}위)</span>
+                    </div>
                 </div>
             </SearchInfoBox>
         </Wrapper>

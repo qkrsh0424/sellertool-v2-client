@@ -25,12 +25,15 @@ export const SearchInfoBox = styled.div`
     flex-wrap: wrap;
 
     .info-group {
+        padding: 3px 5px;
         min-width: 150px;
         margin-right: 10px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
     }
 
     .red-text {
-        /* color: var(--defaultRedColor); */
         color: var(--defaultRedColor) !important;
     }
 `;

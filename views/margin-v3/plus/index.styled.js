@@ -13,6 +13,7 @@ export const St = {
         flex-direction: row;
         align-items: center;
         gap: 5px;
+        margin-bottom: 20px;
         .title{
             font-size: 24px;
             font-weight: 700;
@@ -34,7 +35,6 @@ export const St = {
     BodyWrapper: styled.div`
         display: flex;
         flex-direction: row;
-        margin-top: 40px;
         gap: 20px;
 
         @media all and (max-width:992px){

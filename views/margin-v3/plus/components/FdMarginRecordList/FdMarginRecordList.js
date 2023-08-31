@@ -5,12 +5,20 @@ import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 import { St } from "./FdMarginRecordList.styled";
 import { MdCreateMarginRecord } from "./MdCreateMarginRecord";
 import { CustomDateUtils } from "../../../../../utils/CustomDateUtils";
+import { CalculateUtils } from "../../utils/CalculateUtils";
+import { CustomNumberUtils } from "../../../../../utils/CustomNumberUtils";
 
 const customDateUtils = CustomDateUtils();
+const calculateUtils = CalculateUtils();
+const customNumberUtils = CustomNumberUtils();
 
 export function FdMarginRecordList({
     marginRecordList,
     selectedMarginRecord,
+    mrBaseExchangeRateList,
+    mrPurchaseModuleList,
+    selectResultMber,
+    selectResultMberValue,
     onSelectMarginRecord,
     onReqCreateMarginRecord
 }) {
@@ -77,9 +85,9 @@ export function FdMarginRecordList({
                                         }}
                                     >
                                         <div className='text-box'>
-                                            <div className='text'>매출합계</div>
+                                            <div className='text'>매출합계 ({selectResultMber?.name})</div>
                                             <div className='lineBreaker'></div>
-                                            <div className='text'>매입합계</div>
+                                            <div className='text'>매입합계 ({selectResultMber?.name})</div>
                                         </div>
                                     </ResizableTh>
                                     <ResizableTh
@@ -91,7 +99,7 @@ export function FdMarginRecordList({
                                             zIndex: '10'
                                         }}
                                     >
-                                        <div>마진율</div>
+                                        <div>마진율(%)</div>
                                     </ResizableTh>
                                     <ResizableTh
                                         className="fixed-header"
@@ -119,6 +127,25 @@ export function FdMarginRecordList({
                             </thead>
                             <tbody>
                                 {marginRecordList?.map(marginRecord => {
+                                    let resultForm = null;
+
+                                    if (marginRecord?.mrPurchaseModuleYn === 'y') {
+                                        let mrPurchaseModule = mrPurchaseModuleList?.find(r => r.id === marginRecord?.mrPurchaseModuleId);
+                                        resultForm = calculateUtils.getMarginResultForm({
+                                            marginRecordForm: marginRecord,
+                                            mrBaseExchangeRateList: mrBaseExchangeRateList,
+                                            mrPurchaseModuleForm: mrPurchaseModule
+                                        })
+                                    } else {
+                                        resultForm = calculateUtils.getMarginResultForm({
+                                            marginRecordForm: marginRecord,
+                                            mrBaseExchangeRateList: mrBaseExchangeRateList,
+                                        })
+                                    }
+
+                                    let totalExpensePriceWithBaseExchangeRate = customNumberUtils.roundToDigit(resultForm?.totalExpenseKRW / selectResultMberValue, 2);
+                                    let totalIncomePriceWithBaseExchangeRate = customNumberUtils.roundToDigit(resultForm?.totalIncomeKRW / selectResultMberValue, 2);
+                                    
                                     return (
                                         <tr
                                             key={marginRecord?.id}
@@ -143,14 +170,14 @@ export function FdMarginRecordList({
                                             </td>
                                             <td>
                                                 <div className='text-box'>
-                                                    <div className='text'>100,000</div>
+                                                    <div className='text'>{customNumberUtils.numberWithCommas2(totalIncomePriceWithBaseExchangeRate) || '0'}</div>
                                                     <div className='lineBreaker'></div>
-                                                    <div className='text'>50,000</div>
+                                                    <div className='text'>{customNumberUtils.numberWithCommas2(totalExpensePriceWithBaseExchangeRate) || '0'}</div>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div className='text-box'>
-                                                    <div className='text'>40%</div>
+                                                    <div className='text'>{resultForm?.marginRate}</div>
                                                 </div>
                                             </td>
                                             <td>

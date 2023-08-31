@@ -1,12 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../layout";
-import { FdCalculator, FdMarginRecordList } from "./components";
+import { FdCalculator, FdMarginRecordList, FdResultMber } from "./components";
 import { St } from "./index.styled";
 import { useDispatch, useSelector } from "react-redux";
 import { useDataSourceHook, useMarginRecordHook, useMrBaseExchangeRateHook } from "./hooks";
 import { customBackdropController } from "../../../components/backdrop/default/v1";
+import { CustomNumberUtils } from "../../../utils/CustomNumberUtils";
 
 const customBackdropControl = customBackdropController();
+const customNumberUtils = CustomNumberUtils();
 
 export default function MainComponent(props) {
     const reduxDispatch = useDispatch();
@@ -17,6 +19,8 @@ export default function MainComponent(props) {
 
     const dataSourceHook = useDataSourceHook();
     const marginRecordHook = useMarginRecordHook();
+
+    const [resultMberId, setResultMberId] = useState("75a58be7-37f9-11ee-8d3c-06fe28321f8c");
 
     useEffect(() => {
         if (!wsId) {
@@ -128,10 +132,17 @@ export default function MainComponent(props) {
         customBackdropControl.hideBackdrop();
     }
 
+    const handleChangeResultMberId = (id) => {
+        setResultMberId(id);
+    }
+
     if (!mrBaseExchangeRateRedux?.mrBaseExchangeRateList || !mrPurchaseModuleRedux?.mrPurchaseModuleList) {
         return null;
     }
-    
+
+    const resultMrBaseExchangeRate = mrBaseExchangeRateRedux?.mrBaseExchangeRateList?.find(r => r?.id === resultMberId);
+    const resultMrBaseExchangeRateValue = customNumberUtils.returnExchangeRateValue(mrBaseExchangeRateRedux?.mrBaseExchangeRateList, resultMberId);
+
     return (
         <>
             <Layout>
@@ -140,11 +151,20 @@ export default function MainComponent(props) {
                         <div className='title'>마진율 계산기</div>
                         <div className='tagBadge'>플러스+</div>
                     </St.Title>
+                    <FdResultMber
+                        selectedMrBaseExchangeRate={resultMrBaseExchangeRate}
+                        selectedMrBaseExchangeRateValue={resultMrBaseExchangeRateValue}
+                        onSelectResultMberId={handleChangeResultMberId}
+                    />
                     <St.BodyWrapper>
                         <div className='marginRecordList-wrapper'>
                             <FdMarginRecordList
                                 marginRecordList={marginRecordHook?.marginRecordList}
                                 selectedMarginRecord={marginRecordHook?.selectedMarginRecord}
+                                mrBaseExchangeRateList={mrBaseExchangeRateRedux?.mrBaseExchangeRateList}
+                                mrPurchaseModuleList={mrPurchaseModuleRedux?.mrPurchaseModuleList}
+                                selectResultMber={resultMrBaseExchangeRate}
+                                selectResultMberValue={resultMrBaseExchangeRateValue}
                                 onSelectMarginRecord={handleSelectMarginRecord}
                                 onReqCreateMarginRecord={handleReqCreateMarginRecord}
                             />
@@ -155,6 +175,8 @@ export default function MainComponent(props) {
                                     mrBaseExchangeRateList={mrBaseExchangeRateRedux?.mrBaseExchangeRateList}
                                     mrPurchaseModuleList={mrPurchaseModuleRedux?.mrPurchaseModuleList}
                                     selectedMarginRecord={marginRecordHook?.selectedMarginRecord}
+                                    selectResultMber={resultMrBaseExchangeRate}
+                                    selectResultMberValue={resultMrBaseExchangeRateValue}
                                     onReqSave={handleReqUpdate}
                                 />
                                 :

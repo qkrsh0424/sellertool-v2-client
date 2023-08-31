@@ -21,6 +21,8 @@ export const FdCalculator = ({
     mrBaseExchangeRateList,
     mrPurchaseModuleList,
     selectedMarginRecord,
+    selectResultMber,
+    selectResultMberValue,
     onReqSave
 }) => {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
@@ -160,59 +162,13 @@ export const FdCalculator = ({
                             resultDetailModeOpen={resultDetailModeOpen}
                             onToggleResultDetailModeOpen={() => toggleResultDetailModeOpen()}
                         />
-                        <St.ResultWrapper
-                            ref={resultWrapperRef}
-                            style={{
-                                gridTemplateColumns: resultDetailModeOpen ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)'
-                            }}
-                        >
-                            <div
-                                className='result-box'
-                                style={{
-                                    border: '1px solid var(--mainColor)'
-                                }}
-                            >
-                                <div className='title'>마진율 (세전)</div>
-                                <div className='result'>{marginRecordFormHook?.resultForm?.marginRate || 0} (%)</div>
-                            </div>
-                            <div
-                                className='result-box'
-                                style={{
-                                    border: '1px solid var(--mainColor)'
-                                }}
-                            >
-                                <div className='title'>마진액 (세전)</div>
-                                <div className='result'>{customNumberUtils.numberWithCommas2(marginRecordFormHook?.resultForm?.marginKRW) || 0} (원)</div>
-                            </div>
-                            {resultDetailModeOpen &&
-                                <>
-                                    <div
-                                        className='result-box'
-                                    >
-                                        <div className='title'>매출 합계</div>
-                                        <div className='result'>{customNumberUtils.numberWithCommas2(marginRecordFormHook?.resultForm?.totalIncomeKRW) || 0} (원)</div>
-                                    </div>
-                                    <div
-                                        className='result-box'
-                                    >
-                                        <div className='title'>매입 합계</div>
-                                        <div className='result'>{customNumberUtils.numberWithCommas2(marginRecordFormHook?.resultForm?.totalExpenseKRW) || 0} (원)</div>
-                                    </div>
-                                    <div
-                                        className='result-box'
-                                    >
-                                        <div className='title'>VAT</div>
-                                        <div className='result'>{customNumberUtils.numberWithCommas2(marginRecordFormHook?.resultForm?.vatKRW) || 0} (원)</div>
-                                    </div>
-                                    <div
-                                        className='result-box'
-                                    >
-                                        <div className='title'>최종 마진액 (세후)</div>
-                                        <div className='result'>{customNumberUtils.numberWithCommas2(marginRecordFormHook?.resultForm?.marginAfterVatKRW) || 0} (원)</div>
-                                    </div>
-                                </>
-                            }
-                        </St.ResultWrapper>
+                        <ResultField
+                            resultWrapperRef={resultWrapperRef}
+                            resultDetailModeOpen={resultDetailModeOpen}
+                            marginRecordFormHook={marginRecordFormHook}
+                            selectResultMber={selectResultMber}
+                            selectResultMberValue={selectResultMberValue}
+                        />
                         <div style={{ background: '#f0f0f0', height: '0.5px' }}></div>
                         <div className='control-wrapper'>
                             <div className='flexible'>
@@ -549,6 +505,76 @@ function BaseExchangeRateButton({
             <div className={`${readOnly ? 'currency-readOnly' : 'currency'} currency-notset`} onClick={onClick} style={{ background: readOnly ? '#f0f0f0' : '' }}>미지정</div>
         );
     }
+}
+
+function ResultField({
+    resultWrapperRef,
+    resultDetailModeOpen,
+    marginRecordFormHook,
+    selectResultMber,
+    selectResultMberValue
+}) {
+    let resultMarginPriceWithMrBaseExchangeRate = customNumberUtils.roundToDigit(marginRecordFormHook?.resultForm?.marginKRW / selectResultMberValue, 2);
+    let resultTotalIncomePriceWithMrBaseExchangeRate = customNumberUtils.roundToDigit(marginRecordFormHook?.resultForm?.totalIncomeKRW / selectResultMberValue, 2);
+    let resultTotalExpensePriceWithMrBaseExchangeRate = customNumberUtils.roundToDigit(marginRecordFormHook?.resultForm?.totalExpenseKRW / selectResultMberValue, 2);
+    let resultVatPriceWithMrBaseExchangeRate = customNumberUtils.roundToDigit(marginRecordFormHook?.resultForm?.vatKRW / selectResultMberValue, 2);
+    let resultMarginAfterVatKRWWithMrBaseExchangeRate = customNumberUtils.roundToDigit(marginRecordFormHook?.resultForm?.marginAfterVatKRW / selectResultMberValue, 2);
+
+    return (
+        <St.ResultWrapper
+            ref={resultWrapperRef}
+            style={{
+                gridTemplateColumns: resultDetailModeOpen ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)'
+            }}
+        >
+            <div
+                className='result-box'
+                style={{
+                    border: '1px solid var(--mainColor)'
+                }}
+            >
+                <div className='title'>마진율 (세전)</div>
+                <div className='result'>{marginRecordFormHook?.resultForm?.marginRate || 0} (%)</div>
+            </div>
+            <div
+                className='result-box'
+                style={{
+                    border: '1px solid var(--mainColor)'
+                }}
+            >
+                <div className='title'>마진액 (세전)</div>
+                <div className='result'>{customNumberUtils.numberWithCommas2(resultMarginPriceWithMrBaseExchangeRate) || 0} ({selectResultMber?.name})</div>
+            </div>
+            {resultDetailModeOpen &&
+                <>
+                    <div
+                        className='result-box'
+                    >
+                        <div className='title'>매출 합계</div>
+                        <div className='result'>{customNumberUtils.numberWithCommas2(resultTotalIncomePriceWithMrBaseExchangeRate) || 0} ({selectResultMber?.name})</div>
+                    </div>
+                    <div
+                        className='result-box'
+                    >
+                        <div className='title'>매입 합계</div>
+                        <div className='result'>{customNumberUtils.numberWithCommas2(resultTotalExpensePriceWithMrBaseExchangeRate) || 0} ({selectResultMber?.name})</div>
+                    </div>
+                    <div
+                        className='result-box'
+                    >
+                        <div className='title'>VAT</div>
+                        <div className='result'>{customNumberUtils.numberWithCommas2(resultVatPriceWithMrBaseExchangeRate) || 0} ({selectResultMber?.name})</div>
+                    </div>
+                    <div
+                        className='result-box'
+                    >
+                        <div className='title'>최종 마진액 (세후)</div>
+                        <div className='result'>{customNumberUtils.numberWithCommas2(resultMarginAfterVatKRWWithMrBaseExchangeRate) || 0} ({selectResultMber?.name})</div>
+                    </div>
+                </>
+            }
+        </St.ResultWrapper>
+    );
 }
 
 function PurchasePriceFieldWithModule({

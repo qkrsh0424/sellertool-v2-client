@@ -1,0 +1,1 @@
+export { InventoryReceiveSeperatedItemsModalComponent } from './InventoryReceiveSeperatedItemsModal.component';

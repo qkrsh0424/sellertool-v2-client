@@ -23,7 +23,7 @@ const LoginPage = () => {
     return (
         <>
             <Head>
-                <title>로그인 | 셀러툴</title>
+                <title>로그인 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             {(userRedux.isLoading === false && !userRedux.userInfo) &&
                 <>

@@ -52,7 +52,7 @@ export default function DeleteWorkspaceModalComponent({
             >
                 <CustomDialog.CloseButton onClose={() => onClose()} />
                 <CustomDialog.Title>
-                    {workspace?.name} 을 삭제
+                    <b>{workspace?.name}</b> 을 삭제
                 </CustomDialog.Title>
                 <ContentContainer>
                     <div className='description'>

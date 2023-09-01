@@ -10,8 +10,9 @@ import StockReleaseModalComponent from "./modal/StockReleaseModal.component";
 import ViewSelectedModalComponent from "./modal/ViewSelectedModalV2.component";
 import WaybillRegistrationModalComponent from "./modal/WaybillRegistrationModal.component";
 import { Container } from "./styles/FloatingControlBar.styled";
-import EditErpItemsModalComponent from "../../fragments/edit-erp-items-modal/EditErpItemsModal.component";
 import { ProductListModalComponent } from "../../fragments/product-list-modal";
+import { MdBulkUpdateErpItems } from "../../fragments/MdBulkUpdateErpItems/v1";
+import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -214,6 +215,9 @@ export default function FloatingControlToggle({
             handleToggleEditErpItemModalOpen(false);
             handleToggleControlDrawerOpen(false);
             onActionClearAllSelectedItems();
+            customToast.success(`${body?.length}건이 수정되었습니다.`, {
+                ...defaultOptions
+            })
         })
         handleToggleBackdropOpen(false);
     }
@@ -366,12 +370,11 @@ export default function FloatingControlToggle({
             />
 
             {editErpItemsModalOpen &&
-                <EditErpItemsModalComponent
+                <MdBulkUpdateErpItems
                     open={editErpItemsModalOpen}
                     onClose={() => handleToggleEditErpItemModalOpen(false)}
                     maxWidth={'xl'}
                     selectedErpItems={selectedErpItems}
-                    onSelectClearErpItem={handleClearSelectedItem}
                     onSubmitUpdateErpItems={handleSubmitUpdateErpItems}
                 />
             }

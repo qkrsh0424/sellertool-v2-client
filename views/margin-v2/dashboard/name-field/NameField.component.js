@@ -5,11 +5,7 @@ import DeleteMarginRecordModalComponent from './DeleteMarginRecordModal.componen
 import MarginRecordsModalComponent from './MarginRecordsModal.component';
 
 const Container = styled.div`
-    max-width: 1280px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 10px;
-    margin-top: 20px;
+    margin-bottom: 20px;
 `;
 
 const Wrapper = styled.div`

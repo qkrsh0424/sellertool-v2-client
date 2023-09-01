@@ -77,6 +77,16 @@ const MenuBox = styled.div`
 
 const SALES_ANALISIS_CLIENT_ORIGIN = process.env.NODE_ENV == 'development' ? process.env.development.salesAnalisisClientAddress : process.env.production.salesAnalisisClientAddress;
 
+const gtagClickEventHandler = (data) => {
+    if (window?.gtag) {
+        gtag('event', 'service_link_clicked', {
+            custom_source: data?.custom_source,
+            custom_link: data?.custom_link,
+            custom_name: data?.custom_name
+        })
+    }
+}
+
 const getMenuHref = (href, workspaceId) => {
     if (href === '/sales-analysis/dashboard') {
         return `${SALES_ANALISIS_CLIENT_ORIGIN}${href}?workspaceId=${workspaceId}`
@@ -114,9 +124,10 @@ export default function MenuListComponent({
                                             href={getMenuHref(subMenu?.href, workspaceId)}
                                             passHref
                                         >
-                                            <a>
+                                            <a target={subMenu?.targetBlank ? '_blank' : '_self'} onClick={() => gtagClickEventHandler({ custom_source: 'nav', custom_link: subMenu?.href, custom_name: subMenu?.title })}>
                                                 <CustomBlockButton
                                                     className='menu-item'
+                                                    style={{ color: subMenu?.disabled ? '#a0a0a0' : '' }}
                                                 >
                                                     {subMenu?.title}
                                                 </CustomBlockButton>
@@ -139,11 +150,19 @@ const MENU_LIST = [
         subMenuItems: [
             {
                 title: '마진율 계산기',
-                href: '/margin/dashboard'
+                href: '/margin/dashboard',
+                targetBlank: false
             },
             {
                 title: '엑셀 변환기',
-                href: '/excel-translator'
+                href: '/excel-translator',
+                targetBlank: false
+            },
+            {
+                title: '스토어 랭킹(준비중)',
+                href: '/',
+                targetBlank: false,
+                disabled: true
             }
         ]
     },
@@ -152,11 +171,13 @@ const MENU_LIST = [
         subMenuItems: [
             {
                 title: '통합 상품 관리',
-                href: '/product/dashboard'
+                href: '/product/dashboard',
+                targetBlank: false
             },
             {
                 title: '통합 재고 관리',
-                href: '/inventory'
+                href: '/inventory',
+                targetBlank: false
             }
         ]
     },
@@ -165,12 +186,34 @@ const MENU_LIST = [
         subMenuItems: [
             {
                 title: '통합 발주 관리',
-                href: '/erp/collection/dashboard'
+                href: '/erp/collection/dashboard',
+                targetBlank: false
             },
             {
-                title: '판매 분석',
-                href: '/sales-analysis/dashboard'
+                title: '통합 판매 분석',
+                href: '/sales-analysis/dashboard',
+                targetBlank: false
             }
+        ]
+    },
+    {
+        title: '고객센터',
+        subMenuItems: [
+            {
+                title: '셀러툴 이용 가이드',
+                href: 'https://sellertool.notion.site/b2533e2649154dae926982488dad3cae?pvs=4',
+                targetBlank: true
+            },
+            {
+                title: '이용약관',
+                href: 'https://assets.sellertool.io/consent_form/service_terms_v1.html',
+                targetBlank: true
+            },
+            {
+                title: '개인정보처리방침',
+                href: 'https://assets.sellertool.io/consent_form/privacy_policy_v1.html',
+                targetBlank: true
+            },
         ]
     }
 ]

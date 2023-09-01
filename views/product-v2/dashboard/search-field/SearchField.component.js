@@ -17,6 +17,7 @@ import SettingCategoryModalComponent from "./modal/SettingCategoryModal.componen
 import SettingSubCategoryModalComponent from "./modal/SettingSubCategoryModal.component";
 import { CategoryWrapper, Container, ContentWrapper, LinkButton, SearchButtonWrapper, SearchConsoleWrapper } from "./styles/SearchField.styled";
 import { useMediaQuery } from "@mui/material";
+import { customBackdropController } from "../../../../components/backdrop/default/v1";
 
 export default function SearchFieldComponent({
     onCloseSidebar
@@ -59,6 +60,8 @@ export default function SearchFieldComponent({
         onChangeSearchCondition,
         onChangeSearchQuery
     } = useSearchConditionsHook();
+
+    const customBackdropControl = customBackdropController();
 
     const __handle = {
         action: {
@@ -153,12 +156,14 @@ export default function SearchFieldComponent({
                     name: name
                 }
 
+                customBackdropControl.showBackdrop();
                 await reqChangeProductCategoryName({
                     body: body,
                     successCallback: () => {
                         __handle.action.closeModifyCategoryNameModal();
                     }
                 });
+                customBackdropControl.hideBackdrop();
             },
             deleteProductCategory: async () => {
                 if (!productCategory) {
@@ -170,6 +175,7 @@ export default function SearchFieldComponent({
                     productCategoryId: productCategory.id
                 }
 
+                customBackdropControl.showBackdrop();
                 await reqDeleteProductCategory({
                     body: body,
                     successCallback: () => {
@@ -179,6 +185,7 @@ export default function SearchFieldComponent({
                         __handle.action.closeDeleteCategoryModal()
                     }
                 })
+                customBackdropControl.hideBackdrop();
             },
             modifyProductSubCategoryName: async (name) => {
                 if (!productSubCategory) {
@@ -191,12 +198,14 @@ export default function SearchFieldComponent({
                     name: name
                 }
 
+                customBackdropControl.showBackdrop();
                 await reqChangeName({
                     body: body,
                     successCallback: () => {
                         __handle.action.closeModifySubCategoryNameModal();
                     }
                 })
+                customBackdropControl.hideBackdrop();
             },
             deleteProductSubCategory: async () => {
                 if (!productSubCategory) {
@@ -208,6 +217,7 @@ export default function SearchFieldComponent({
                     productSubCategoryId: productSubCategory?.id
                 }
 
+                customBackdropControl.showBackdrop();
                 await reqDeleteProductSubCategory({
                     body: body,
                     successCallback: () => {
@@ -221,6 +231,7 @@ export default function SearchFieldComponent({
                         })
                     }
                 });
+                customBackdropControl.hideBackdrop();
             },
             searchItems: (e) => {
                 e.preventDefault();

@@ -17,7 +17,7 @@ const LogoFieldComponent = (props) => {
                             loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
                             src={LogoSrc}
                             layout='fill'
-                            alt="logo"
+                            alt="셀러툴"
                             className='logo-el'
                             priority={true}
                         ></Image>

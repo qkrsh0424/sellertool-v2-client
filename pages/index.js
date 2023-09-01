@@ -10,7 +10,7 @@ export default function Home() {
 	return (
 		<>
 			<Head>
-				<title>셀러툴 홈</title>
+				<title>셀러툴 - 쇼핑몰 통합관리</title>
 			</Head>
 			<PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
 			<SecondaryNavbarMainComponent></SecondaryNavbarMainComponent>

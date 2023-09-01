@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import FooterMain from "../../../views/footer/FooterMain";
 import PrimaryNavbarMainComponent from "../../../views/navbar/primary-navbar";
 import WorkspaceManagementMainComponent from "../../../views/workspace/management-v2/index";
 
@@ -23,11 +22,10 @@ const WorkspaceManagementPage = (props) => {
     return (
         <>
             <Head>
-                <title>워크스페이스 관리 | 셀러툴</title>
+                <title>워크스페이스 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <PrimaryNavbarMainComponent></PrimaryNavbarMainComponent>
             <WorkspaceManagementMainComponent></WorkspaceManagementMainComponent>
-            {/* <FooterMain></FooterMain> */}
         </>
     );
 }

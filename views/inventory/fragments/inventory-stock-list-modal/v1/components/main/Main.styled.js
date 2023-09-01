@@ -163,6 +163,10 @@ export const ItemCardBox = styled.div`
     margin-top: 5px;
     display: flex;
     align-items: center;
+    
+    &:hover{
+        background: #fafafa;
+    }
 
     &:hover{
         .edit-button-item{
@@ -242,6 +246,7 @@ export const ItemCardBox = styled.div`
         width:24px;
         height: 24px;
         border: none;
+        background: none;
     }
 `;
 

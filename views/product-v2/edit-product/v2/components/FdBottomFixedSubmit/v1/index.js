@@ -1,0 +1,1 @@
+export { FdBottomFixedSubmit } from './FdBottomFixedSubmit';

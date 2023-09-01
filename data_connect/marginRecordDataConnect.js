@@ -129,6 +129,8 @@ const marginRecordDataConnect = () => {
     }
 }
 
+const MarginRecordDataConnect = marginRecordDataConnect;
 export {
+    MarginRecordDataConnect,
     marginRecordDataConnect
 }

@@ -22,14 +22,14 @@ export default function ExcelTranslatorPage(props) {
         fetchInit();
     }, [userRedux.isLoading, userRedux.userInfo]);
 
-    if(userRedux.isLoading || !userRedux.userInfo){
+    if (userRedux.isLoading || !userRedux.userInfo) {
         return null;
     }
 
     return (
         <>
             <Head>
-                <title>엑셀 변환기 | 셀러툴</title>
+                <title>엑셀 변환기 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />

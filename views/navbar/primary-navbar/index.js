@@ -1,13 +1,14 @@
-import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { userDataConnect } from "../../../data_connect/userDataConnect";
 import { Container, Wrapper } from "./index.styled";
 import InfoFieldComponent from "./info-field/InfoField.component";
 import LogoFieldComponent from "./logo-field/LogoField.component";
+import { FdServiceList } from "./FdServiceList";
+import { useMediaQuery } from "@mui/material";
 
 const PrimaryNavbarMainComponent = (props) => {
-    const router = useRouter();
     const reduxDispatch = useDispatch();
+    const isMobile = useMediaQuery(`(max-width: 992px)`);
 
     const __handle = {
         req: {
@@ -49,7 +50,15 @@ const PrimaryNavbarMainComponent = (props) => {
         <>
             <Container>
                 <Wrapper>
-                    <LogoFieldComponent />
+                    <div className="mgl-flex mgl-flex-alignItems-center">
+                        <LogoFieldComponent />
+                        {isMobile ?
+                            <></>
+                            :
+                            <FdServiceList />
+                        }
+
+                    </div>
                     <InfoFieldComponent
                         onLogout={__handle.action.logout}
                     />

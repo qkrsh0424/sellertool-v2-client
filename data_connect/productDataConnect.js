@@ -112,6 +112,23 @@ const productDataConnect = () => {
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
             )
+        },
+        /**
+         * 
+         * @param {FormData} formData 
+         * @param {object} headers
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        productOptionBulkCreateExcelUpload: async function (formData, headers) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/products/product-options/bulkCreateExcelUpload/add-product`, formData, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         }
     }
 }

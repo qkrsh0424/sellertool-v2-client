@@ -1,0 +1,1 @@
+export { OptionBulkCreateTemplate } from './add-product';

@@ -8,7 +8,7 @@ const StoreRankRealTimeRankPage = () => {
     return (
         <>
             <Head>
-                <title>스토어 랭킹 | 셀러툴</title>
+                <title>스토어 랭킹 | 셀러툴 - 쇼핑몰 통합관리</title>
             </Head>
             <PrimaryNavbarMainComponent />
             <SecondaryNavbarMainComponent />

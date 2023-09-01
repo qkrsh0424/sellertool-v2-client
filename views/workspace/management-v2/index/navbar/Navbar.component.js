@@ -32,18 +32,28 @@ const VIEW_TYPES = [
         masterOnly: true,
     },
     {
+        type: 'SUBSCRIPTION_PLAN',
+        title: '구독플랜',
+        iconSrc: '/images/icon/rocket_default_808080.svg',
+        default: false,
+        masterOnly: true,
+        alarm: <span className='alram-tag'>구독 필요</span>
+    },
+    {
         type: 'SETTINGS',
         title: '설정',
         iconSrc: '/images/icon/settings_default_808080.svg',
         default: false,
         masterOnly: true,
+        alarm: <span className='alram-tag'>개인 전환 필요</span>
     },
 ]
 
-export default function NavbarComponent({ isWorkspaceMaster }) {
+export default function NavbarComponent({ workspace, isWorkspaceMaster }) {
     const router = useRouter();
     const wsId = router?.query?.wsId;
     const viewType = router?.query?.view;
+    const subscriptionPlan = workspace?.subscriptionPlan;
 
     const handleRouteTo = (type) => {
         router.push({
@@ -76,7 +86,10 @@ export default function NavbarComponent({ isWorkspaceMaster }) {
                             >
                                 <CustomImage src={r.iconSrc} />
                             </div>
-                            <div className='link-text'>{r.title}</div>
+                            <div className='link-text'>
+                                {r.title}
+                                {(!subscriptionPlan || subscriptionPlan === 'NONE') ? r?.alarm : <></>}
+                            </div>
                         </LinkButton>
                     );
                 })}

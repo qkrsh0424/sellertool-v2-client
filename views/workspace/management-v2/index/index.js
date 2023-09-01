@@ -9,6 +9,7 @@ import InviteMemberComponent from "./invite-member/InviteMember.component";
 import AuthTemplateListComponent from "./auth-template-list/AuthTemplateList.component";
 import ProfileComponent from "./profile/Profile.component";
 import SettingsComponent from "./settings/Settings.component";
+import SubscriptionPlanComponent from "./subscription-plan";
 
 const Container = styled.div`
     background-color: var(--defaultBackground);
@@ -22,7 +23,8 @@ const WorkspaceManagementMainComponent = (props) => {
     const {
         workspace,
         reqChangeWorkspaceName,
-        reqDeleteWorkspace
+        reqDeleteWorkspace,
+        reqChangeSubscriptionPlanToPrivate
     } = useWorkspaceHook();
 
     const handleSubmitModifyWorkspaceName = async ({
@@ -43,6 +45,12 @@ const WorkspaceManagementMainComponent = (props) => {
         })
     }
 
+    const handleSubmitChangeSubscriptionPlanToPrivate = async (successCallback) => {
+        await reqChangeSubscriptionPlanToPrivate(null, () => {
+            successCallback();
+        });
+    }
+
     return (
         <Container>
             <WorkspaceSelectorComponent />
@@ -54,6 +62,7 @@ const WorkspaceManagementMainComponent = (props) => {
                         onSubmitModifyWorkspaceName={handleSubmitModifyWorkspaceName}
                     />
                     <LayoutComponent
+                        workspace={workspace}
                         isWorkspaceMaster={workspace?.masterFlag}
                     >
                         {
@@ -94,6 +103,15 @@ const WorkspaceManagementMainComponent = (props) => {
                                 <SettingsComponent
                                     workspace={workspace}
                                     onSubmitDeleteWorkspace={handleSubmitDeleteWorkspace}
+                                    onSubmitChangeSubscriptionPlanToPrivate={handleSubmitChangeSubscriptionPlanToPrivate}
+                                />
+                            )
+                        }
+                        {
+                            (workspace?.masterFlag && viewType && viewType === 'SUBSCRIPTION_PLAN') &&
+                            (
+                                <SubscriptionPlanComponent
+                                    workspace={workspace}
                                 />
                             )
                         }

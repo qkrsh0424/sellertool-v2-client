@@ -102,15 +102,15 @@ const Layout = ({
 
     ...props
 }) => {
-    const isDesktop = useMediaQuery(`(min-width: 992px)`);
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const isMobile = useMediaQuery(`(max-width: 992px)`);
+    const [sidebarOpen, setSidebarOpen] = useState(true);
 
     useEffect(() => {
-        if (isDesktop) {
-            setSidebarOpen(true);
+        if (isMobile) {
+            setSidebarOpen(false);
             return;
         }
-    }, [isDesktop])
+    }, [isMobile])
 
     const handleOpenSidebar = useCallback(() => {
         setSidebarOpen(true);
@@ -121,10 +121,10 @@ const Layout = ({
     }, []);
 
     const handleClickLink = useCallback(() => {
-        if (!isDesktop) {
+        if (isMobile) {
             handleCloseSidebar();
         }
-    }, [isDesktop])
+    }, [isMobile])
 
     return (
         <>
@@ -137,7 +137,7 @@ const Layout = ({
                     sidebarColor={sidebarColor ?? '#3d4858'}
                 >
                     <ClickableWrapper
-                        isActive={isDesktop ? false : true}
+                        isActive={isMobile ? true : false}
                         onClickOutside={() => handleClickLink()}
                     >
                         <div className='sidebar-header'>

@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { erpItemSameReceiverDataConnect } from "../../../../../data_connect/erpItemSameReceiverDataConnect";
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
+import { Base64Utils } from "../../../../../utils/base64Utils";
+
+const base64Utils = Base64Utils();
 
 export default function useErpItemSameReceiverHintsHook(erpItemPage) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
@@ -21,7 +24,7 @@ export default function useErpItemSameReceiverHintsHook(erpItemPage) {
         }
 
         let sameReceiverHints = erpItemPage?.content?.map(r => {
-            return `${r.receiver}${r.receiverContact1}${r.destination}${r.destinationDetail}`;
+            return base64Utils.encodeBase64(`${r.receiver}${r.receiverContact1}${r.destination}${r.destinationDetail}`);
         })
 
         let body = {

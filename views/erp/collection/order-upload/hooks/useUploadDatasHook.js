@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { erpItemDataConnect } from "../../../../../data_connect/erpItemDataConnect";
 import { dateToYYYYMMDDhhmmssWithT } from "../../../../../utils/dateFormatUtils";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function useUploadDatasHook(props) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
@@ -16,7 +17,14 @@ export default function useUploadDatasHook(props) {
             .then(res => {
                 if (res.status === 200) {
                     successCallback();
-                    setUploadDatas([...uploadDatas.concat(res.data.data)]);
+                    let results = res.data.data;
+                    results = results?.map(r => {
+                        return {
+                            ...r,
+                            id: uuidv4()
+                        }
+                    })
+                    setUploadDatas([...uploadDatas, ...results]);
                 }
             })
             .catch(err => {
@@ -45,7 +53,9 @@ export default function useUploadDatasHook(props) {
         await erpItemDataConnect().createAll(formData)
             .then(res => {
                 if (res.status === 200) {
-                    setUploadDatas([]);
+                    let results = res?.data?.data;
+
+                    setUploadDatas(uploadDatas?.filter(uploadData => !results?.includes(uploadData?.id)));
                     alert(res.data.memo);
                 }
             })
@@ -84,7 +94,17 @@ export default function useUploadDatasHook(props) {
     }
 
     const onSubmitUploadWithSingle = (form) => {
-        setUploadDatas([...uploadDatas.concat(form)]);
+        form = form?.map(r => {
+            return {
+                ...r,
+                id: uuidv4()
+            }
+
+        })
+        setUploadDatas([
+            ...uploadDatas,
+            ...form
+        ]);
     }
 
     const onDeleteUploadData = (reqIndex) => {

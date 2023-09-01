@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import useDisabledBtn from "../../../../hooks/button/useDisabledBtn";
 import SingleBlockButton from "../../../modules/button/SingleBlockButton";
 import { Container, FormGroup, InputBox, Title, Wrapper } from "./styles/FormField.styled";
+import { customBackdropController } from "../../../../components/backdrop/default/v1";
 
 export default function FormFieldComponent({
     onSubmitCreateProductCategory
@@ -11,10 +12,11 @@ export default function FormFieldComponent({
     const categoryNameRef = useRef();
 
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+    const customBackdropControl = customBackdropController();
 
     const __handle = {
         submit: {
-            add: (e) => {
+            add: async (e) => {
                 e.preventDefault();
                 setDisabledBtn(true);
                 let categoryName = categoryNameRef.current.value;
@@ -30,9 +32,11 @@ export default function FormFieldComponent({
                     workspaceId: workspaceRedux?.workspaceInfo?.id,
                     name: categoryName
                 }
-                onSubmitCreateProductCategory({
+                customBackdropControl.showBackdrop();
+                await onSubmitCreateProductCategory({
                     body: body
                 });
+                customBackdropControl.hideBackdrop();
             }
         },
         check: {

@@ -1,5 +1,5 @@
 import { CustomBoxImage } from "../../../../modules";
-import { dateToStrHHmm, dateToStrYYYYMMDD } from "../../../../utils/dateFormatUtils";
+import { dateToHHmm, dateToYYYYMMDD } from "../../../../utils/dateFormatUtils";
 import { LabelGroup, Wrapper } from "../styles/RecordInfo.styled";
 
 export default function RecordInfoFieldView({
@@ -26,8 +26,8 @@ export default function RecordInfoFieldView({
                     <span>
                         {targetRecordInfo ?
                             <>
-                                <span>{dateToStrYYYYMMDD(targetRecordInfo.created_at)} </span>
-                                <span>{dateToStrHHmm(targetRecordInfo.created_at)}</span>
+                                <span>{dateToYYYYMMDD(targetRecordInfo.created_at)} </span>
+                                <span>{dateToHHmm(targetRecordInfo.created_at)}</span>
                             </>
                             :
                             '-'

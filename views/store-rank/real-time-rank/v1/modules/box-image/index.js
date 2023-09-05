@@ -1,0 +1,1 @@
+export { CustomBoxImage } from "./CustomBoxImage"

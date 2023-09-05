@@ -20,9 +20,9 @@ export function FdServiceList() {
             target: '_self'
         },
         {
-            href: '/#',
+            href: '/store-rank/real-time-rank',
             name: '스토어 랭킹',
-            isReady: false,
+            isReady: true,
             target: '_self'
         },
         {

@@ -159,10 +159,9 @@ const MENU_LIST = [
                 targetBlank: false
             },
             {
-                title: '스토어 랭킹(준비중)',
-                href: '/',
-                targetBlank: false,
-                disabled: true
+                title: '스토어 랭킹',
+                href: '/store-rank/real-time-rank',
+                targetBlank: false
             }
         ]
     },

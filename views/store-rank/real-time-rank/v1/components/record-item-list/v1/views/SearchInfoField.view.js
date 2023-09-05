@@ -43,7 +43,7 @@ export function SearchInfoFieldView({
                     </div>
                 </div>
                 <div className='sub-info'>
-                    {`* 랭킹 조회 횟수는 매 ${getUTCStartTime()}시마다 초기화됩니다.`}
+                    {`* 랭킹 조회 횟수는 매일 ${getUTCStartTime()}시에 초기화됩니다.`}
                 </div>
             </SearchInfoBox>
         </Wrapper>

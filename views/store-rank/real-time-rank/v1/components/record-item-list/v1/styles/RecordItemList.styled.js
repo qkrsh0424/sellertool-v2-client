@@ -11,6 +11,8 @@ export const Container = styled.div`
 export const Wrapper = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+    /* grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); */
+    /* align-items: stretch */
     gap: 15px;
     padding: 20px 5px;
 
@@ -33,6 +35,7 @@ export const RecordItemBox = styled.div`
 `;
 
 export const RecordInfo = styled.div`
+    /* height: 100%; */
     position: relative;
     background-color: white;
     border-radius: 30px;

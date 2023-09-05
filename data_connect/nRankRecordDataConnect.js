@@ -16,14 +16,12 @@ const nRankRecordDataConnect = () => {
             )
         },
         searchRecordList: async function (headers) {
-            return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-records`, {
-                    headers,
-                    withCredentials: true,
-                    xsrfCookieName: 'x_api_csrf_token',
-                    xsrfHeaderName: 'X-XSRF-TOKEN'
-                })
-            )
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-records`, {
+                headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         },
         deleteOne: async function (params, headers) {
             return await withMainApiCsrfWrapper(
@@ -56,14 +54,12 @@ const nRankRecordDataConnect = () => {
             )
         },
         searchWorkspaceUsageInfo: async function (headers) {
-            return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-records/workspace-usage-info`, {
-                    headers,
-                    withCredentials: true,
-                    xsrfCookieName: 'x_api_csrf_token',
-                    xsrfHeaderName: 'X-XSRF-TOKEN'
-                })
-            )
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-records/workspace-usage-info`, {
+                headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
         }
     }
 }

@@ -4,7 +4,7 @@ import { RecordDetailModalComponent } from "../../record-detail-modal/v1";
 import { CustomBoxImage } from "../../../modules";
 import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
-import { dateToStrHHmm, dateToStrYYYYMMDD } from "../../../utils/dateFormatUtils";
+import { dateToHHmm, dateToYYYYMMDD } from "../../../utils/dateFormatUtils";
 import { CustomProgressBar } from "../../progress/progress-bar/v1";
 import { SearchInfoFieldView } from "./views/SearchInfoField.view";
 
@@ -144,8 +144,8 @@ export function RecordItemListComponent({
                                                 <ContentValue>
                                                     {currentRecordInfo ?
                                                         <div style={{ color: '#444', display: 'inline' }}>
-                                                            <span>{dateToStrYYYYMMDD(currentRecordInfo.created_at)} </span>
-                                                            <span>({dateToStrHHmm(currentRecordInfo.created_at)})</span>
+                                                            <span>{dateToYYYYMMDD(currentRecordInfo.created_at)} </span>
+                                                            <span>({dateToHHmm(currentRecordInfo.created_at)})</span>
                                                         </div>
                                                         :
                                                         '-'

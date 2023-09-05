@@ -44,12 +44,13 @@ const ServiceListComponent = () => {
                     </CardContainer>
                     <CardContainer>
                         <Link
-                            href={`/store-rank/real-time-rank`}
+                            // href={`/store-rank/real-time-rank`}
+                            href={`/`}
                             passHref
                         >
-                            <CardWrapper onClick={() => gtagClickEventHandler({ custom_source: 'home', custom_link: '/store-rank/real-time-rank', custom_name: '스토어 랭킹'})}>
+                            <CardWrapper className='isReady' onClick={() => gtagClickEventHandler({ custom_source: 'home', custom_link: '/store-rank/real-time-rank', custom_name: '스토어 랭킹'})}>
                                 <CardTitle>스토어 랭킹</CardTitle>
-                                <CardDescription>스토어 랭킹 체험하기</CardDescription>
+                                <CardDescription>준비중</CardDescription>
                             </CardWrapper>
                         </Link>
                     </CardContainer>

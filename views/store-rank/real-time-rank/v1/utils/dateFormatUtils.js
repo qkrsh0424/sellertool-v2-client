@@ -17,12 +17,12 @@ function setPlusTime(idate, hour, min, sec) {
     return new Date(moment(date));
 }
 
-function dateToStrYYYYMMDD(idate) {
+function dateToYYYYMMDD(idate) {
     var date = new Date(idate);
     return moment(date).format("YYYY.MM.DD");
 }
 
-function dateToStrHHmm(idate) {
+function dateToHHmm(idate) {
     var date = new Date(idate);
     // var h = date.getHours() < 12 ? "오전 " : "오후 ";
     return moment(date).format("HH:mm");
@@ -49,14 +49,14 @@ const getUTCStartTime = () => {
     }
     
     var date = getStartDate(d).setHours(utcDiffHour)
-    return dateToStrHHmm(date);
+    return dateToHHmm(date);
 }
 
 export {
     setPlusTime,
     diffTimeToHHmmss,
-    dateToStrYYYYMMDD,
-    dateToStrHHmm,
+    dateToYYYYMMDD,
+    dateToHHmm,
     strToYYYYMMDD,
     getUTCStartTime
 }

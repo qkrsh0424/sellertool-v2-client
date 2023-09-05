@@ -40,6 +40,7 @@ export default function useNRankRecordListHook ({
 
     const onSetRecordList = (data) => {
         let sortedData = _.orderBy(data, 'created_at', 'desc');
+        // let sortedData = _.orderBy(data, 'status_updated_at', 'desc');
         setRecordList([...sortedData])
     }
 

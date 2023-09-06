@@ -3,7 +3,7 @@ import { setPlusTime } from "../../../../utils/dateFormatUtils";
 import { Wrapper } from "../styles/Button.styled";
 import { CustomBoxImage } from "../../../../modules";
 import { CustomBlockButton } from "../../../../modules/buttons/block-button/v1";
-import { CustomProgressBar } from "../../../progress/progress-bar/v1";
+import { CustomProgressBar } from "../../../../modules/progress/progress-bar/v1";
 import useTargetTimeTimerHook from "../../../../../../../../hooks/timer/useTargetTimeTimerHook";
 import { getSearchableDiffSeconds } from "../../../../../../../../static-data/nRankRecordOptions";
 

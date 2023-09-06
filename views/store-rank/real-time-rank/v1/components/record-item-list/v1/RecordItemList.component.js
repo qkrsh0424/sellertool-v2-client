@@ -5,7 +5,7 @@ import { CustomBoxImage } from "../../../modules";
 import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
 import { dateToHHmm, dateToYYYYMMDD } from "../../../utils/dateFormatUtils";
-import { CustomProgressBar } from "../../progress/progress-bar/v1";
+import { CustomProgressBar } from "../../../modules/progress/progress-bar/v1";
 import { SearchInfoFieldView } from "./views/SearchInfoField.view";
 
 export function RecordItemListComponent({

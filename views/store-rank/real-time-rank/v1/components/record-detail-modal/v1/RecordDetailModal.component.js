@@ -8,7 +8,7 @@ import AdRankDetailFieldView from "./view/AdRankDetailField.view";
 import { useEffect, useState } from "react";
 import ViewControlFieldView from "./view/ViewControlField.view";
 import { CustomDialog } from "../../../../../../../components/dialog/v1/CustomDialog";
-import { CustomProgressIcon } from "../../progress/progress-icon/v1";
+import { CustomProgressIcon } from "../../../modules/progress/progress-icon/v1";
 import SubInfoFieldView from "./view/SubInfoField.view";
 import { useApiHook } from "./hooks/useApiHook";
 import { useSelector } from "react-redux";

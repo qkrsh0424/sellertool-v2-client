@@ -53,7 +53,13 @@ export function FdPlanList({
                             );
                         }
                         return (
-                            <STY_Card.Container key={refSubscriptionPlan?.id}>
+                            <STY_Card.Container
+                                key={refSubscriptionPlan?.id}
+                                subscriptionPlan={refSubscriptionPlan?.subscriptionPlan}
+                            >
+                                {refSubscriptionPlan?.subscriptionPlan === 'PLUS' &&
+                                    <div className='bestTag'>BEST</div>
+                                }
                                 <STY_Card.TitleBox>
                                     {refSubscriptionPlan?.name}
                                 </STY_Card.TitleBox>

@@ -39,7 +39,7 @@ export function FdCalculator({
     mrBaseExchangeRateList,
     selectedMrPurchaseModule,
     handleSubmitSavePurchaseUnitPriceForm,
-    onRefetchMrBaseExchangeRateList
+    onSubmitExport,
 }) {
     const [formValues, setFormValues] = useState(null);
     const [mrBaseExchangeRateModalOpen, setMrBaseExchangeRateModalOpen] = useState(false);
@@ -268,9 +268,9 @@ export function FdCalculator({
                         <CustomBlockButton
                             type='button'
                             className='export-button'
-                            onClick={() => handleSubmitCalculateAndSave()}
+                            onClick={() => onSubmitExport()}
                         >
-                            결과 내보내기
+                            선택
                         </CustomBlockButton>
                     </St.ResultWrapper>
                     <St.FormWrapper>
@@ -508,9 +508,6 @@ export function FdCalculator({
                     open={mrBaseExchangeRateModalOpen}
                     onClose={() => toggleMrBaseExchangeRateModalOpen(false)}
                     onSelect={handleSelectMber}
-                    onCreateCompleted={onRefetchMrBaseExchangeRateList}
-                    onDeleteCompleted={onRefetchMrBaseExchangeRateList}
-                    onUpdateCompleted={onRefetchMrBaseExchangeRateList}
                 />
             }
         </>

@@ -1,5 +1,5 @@
+import withStoreRankApiCsrfWrapper from "../utils/withStoreRankApiCsrfWrapper"
 import { axiosAuthInterceptor } from "./axiosInterceptors"
-import withMainApiCsrfWrapper from "../utils/withMainApiCsrfWrapper";
 
 const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.storeRankApiAddress : process.env.production.storeRankApiAddress
 
@@ -12,7 +12,7 @@ const nRankRecordDetailDataConnect = () => {
             })
         },
         createList: async function (body, headers) {
-            return await withMainApiCsrfWrapper(
+            return await withStoreRankApiCsrfWrapper(
                 () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/nrank-record-details`, body, {
                     headers,
                     withCredentials: true,

@@ -122,7 +122,7 @@ export const SubscriptionPlanDetails = {
                 case 'NONE': case 'PRIVATE': case 'PUBLIC':
                     return 'SUBSCRIBE';
                 case 'PLUS':
-                    return 'EXTEND';
+                    return 'USING_THIS';
                 default:
                     return 'USING_ANOTHER';
             }

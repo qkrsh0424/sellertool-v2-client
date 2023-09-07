@@ -45,13 +45,21 @@ export function FdPlanList({
                         if (refSubscriptionPlan?.subscriptionPlan === 'PRIVATE') {
                             return (
                                 <PrivateCard
+                                    key={refSubscriptionPlan?.id}
                                     refSubscriptionPlan={refSubscriptionPlan}
                                     buttonType={buttonType}
+                                    handleApplySubscriptionPlan={handleApplySubscriptionPlan}
                                 />
                             );
                         }
                         return (
-                            <STY_Card.Container key={refSubscriptionPlan?.id}>
+                            <STY_Card.Container
+                                key={refSubscriptionPlan?.id}
+                                subscriptionPlan={refSubscriptionPlan?.subscriptionPlan}
+                            >
+                                {refSubscriptionPlan?.subscriptionPlan === 'PLUS' &&
+                                    <div className='bestTag'>BEST</div>
+                                }
                                 <STY_Card.TitleBox>
                                     {refSubscriptionPlan?.name}
                                 </STY_Card.TitleBox>
@@ -90,22 +98,13 @@ export function FdPlanList({
                                                     이용중
                                                 </CustomBlockButton>
                                             }
-                                            {buttonType === 'EXTEND' &&
-                                                <CustomBlockButton
-                                                    type='button'
-                                                    className='button-item'
-                                                    onClick={() => handleApplySubscriptionPlan(refSubscriptionPlan?.id)}
-                                                >
-                                                    구독 연장하기
-                                                </CustomBlockButton>
-                                            }
                                             {buttonType === 'USING_ANOTHER' &&
                                                 <CustomBlockButton
                                                     type='button'
                                                     className='button-item'
                                                     disabled
                                                 >
-                                                    다른 플랜 사용중
+                                                    다른 플랜 이용중
                                                 </CustomBlockButton>
                                             }
                                         </>
@@ -154,10 +153,11 @@ export function FdPlanList({
 
 function PrivateCard({
     refSubscriptionPlan,
-    buttonType
+    buttonType,
+    handleApplySubscriptionPlan
 }) {
     return (
-        <STY_Card.Container key={refSubscriptionPlan?.id}>
+        <STY_Card.Container>
             <STY_Card.TitleBox>
                 {refSubscriptionPlan?.name}
             </STY_Card.TitleBox>
@@ -200,7 +200,7 @@ function PrivateCard({
                                 className='button-item'
                                 disabled
                             >
-                                다른 플랜 사용중
+                                다른 플랜 이용중
                             </CustomBlockButton>
                         }
                     </>

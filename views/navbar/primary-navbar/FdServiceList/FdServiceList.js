@@ -20,7 +20,7 @@ export function FdServiceList() {
             target: '_self'
         },
         {
-            href: '/#',
+            href: '/store-rank/real-time-rank',
             name: '스토어 랭킹',
             isReady: false,
             target: '_self'
@@ -53,7 +53,7 @@ export function FdServiceList() {
                         return (
                             <li key={r?.name} className='menu-item'>
                                 <Link
-                                    href={r?.href}
+                                    href={r?.isReady ? r?.href : '/'}
                                     passHref
                                 >
                                     <a className='serviceLink' style={{ opacity: !r?.isReady ? 0.7 : '' }} target={r?.target}>

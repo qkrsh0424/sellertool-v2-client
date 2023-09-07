@@ -12,6 +12,7 @@ export const CustomDateUtils = () => {
         dateToYYMMDDhhmmss: dateToYYMMDDhhmmss,
         dateToYYYYMMDDhhmmssFile: dateToYYYYMMDDhhmmssFile,
         getDiffDate: getDiffDate,
+        getDiffDays: getDiffDays,
         dateToHHmm: dateToHHmm,
         getDiffHourWithUTC: getDiffHourWithUTC,
         setPlusDate: setPlusDate
@@ -112,6 +113,11 @@ function getDiffDate(startDate, endDate) {
     const diffDays = Math.round(diffMilli / day);
 
     return diffDays + 1;
+}
+
+function getDiffDays(fDate, sDate) {
+    let days = moment(fDate).diff(sDate, 'days');
+    return Math.abs(days);
 }
 
 function dateToHHmm(idate) {

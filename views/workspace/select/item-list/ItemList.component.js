@@ -69,14 +69,19 @@ export default function ItemListComponent(props) {
                                     <div
                                         key={r.id}
                                         className='item-group'
-                                        style={{ background: '#f0f0f060' }}
+                                        style={{ background: '#f0f0f0a0' }}
                                     >
                                         <div
                                             className={`item-box ${workspaceRedux?.workspaceInfo?.id === r.id ? 'item-box-active' : ''}`}
                                             style={{ color: '#808080' }}
                                         >
-                                            <span className='workspaceName'>{r.name}</span>
-                                            <span className='disabledWorkspaceTag'>구독플랜 필요</span>
+                                            <div className='workspaceTag disabledWorkspace-tag'>
+                                                구독 필요
+                                            </div>
+                                            <div className='workspaceName'>
+                                                {r.name}
+                                                <div className='disabledWorkspace-notification'>구독플랜을 연장하거나 개인 워크스페이스로 전환 해주세요.</div>
+                                            </div>
                                         </div>
                                         <SingleBlockButton
                                             type='button'
@@ -107,8 +112,10 @@ export default function ItemListComponent(props) {
                                         className={`item-box ${workspaceRedux?.workspaceInfo?.id === r.id ? 'item-box-active' : ''}`}
                                         onClick={() => __handle.action.selectWorkspace(r)}
                                     >
-                                        <span className='workspaceName'>{r.name}</span>
-                                        {r?.subscriptionPlan === 'PUBLIC' && <span className='subscriptionPlan-tag'>퍼블릭</span>}
+                                        {r?.subscriptionPlan === 'PRIVATE' && <div className='workspaceTag privateWorkspace-tag'>PRIVATE</div>}
+                                        {r?.subscriptionPlan === 'PUBLIC' && <div className='workspaceTag publicWorkspace-tag'>PUBLIC</div>}
+                                        {r?.subscriptionPlan === 'PLUS' && <div className='workspaceTag plusWorkspace-tag'>PLUS+</div>}
+                                        <div className='workspaceName'>{r.name}</div>
                                     </div>
                                     <SingleBlockButton
                                         type='button'

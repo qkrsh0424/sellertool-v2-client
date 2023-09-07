@@ -61,7 +61,7 @@ export const SubscriptionPlanDetails = {
                 case 'NONE': case 'PRIVATE':
                     return 'SUBSCRIBE';
                 case 'PUBLIC':
-                    return 'EXTEND';
+                    return 'USING_THIS';
                 default:
                     return 'USING_ANOTHER';
             }
@@ -75,17 +75,17 @@ export const SubscriptionPlanDetails = {
             {
                 name: '스토어 랭킹',
                 newBadge: false,
-                upgradeBadge: true,
+                upgradeBadge: false,
                 subList: [
                     {
-                        name: '일50회',
+                        name: '일5회',
                         newBadge: false,
-                        upgradeBadge: true
+                        upgradeBadge: false
                     },
                     {
-                        name: '1200위 까지',
+                        name: '400위 까지',
                         newBadge: false,
-                        upgradeBadge: true
+                        upgradeBadge: false
                     }
                 ]
             },
@@ -176,25 +176,10 @@ export const SubscriptionPlanDetails = {
                 upgradeBadge: false
             },
             {
-                name: '반품 교환 관리',
+                name: '마진율 계산기 플러스+',
                 newBadge: true,
                 upgradeBadge: false
             },
-            {
-                name: '마진율 계산기 플러스',
-                newBadge: true,
-                upgradeBadge: false
-            },
-            {
-                name: '구매 프로세스',
-                newBadge: true,
-                upgradeBadge: false
-            },
-            {
-                name: '스토어 자동 주문수집',
-                newBadge: true,
-                upgradeBadge: false
-            }
         ]
     }
 }

@@ -47,11 +47,10 @@ const ServiceListComponent = () => {
                             // href={`/store-rank/real-time-rank`}
                             href={`/`}
                             passHref
-                            disabled
                         >
-                            <CardWrapper style={{ background: '#f0f0f0', cursor: 'not-allowed' }}>
-                                <CardTitle style={{ color: '#808080' }}>스토어 랭킹</CardTitle>
-                                <CardDescription style={{ color: '#808080' }}>오픈 준비중</CardDescription>
+                            <CardWrapper className='isReady' onClick={() => gtagClickEventHandler({ custom_source: 'home', custom_link: '/store-rank/real-time-rank', custom_name: '스토어 랭킹'})}>
+                                <CardTitle>스토어 랭킹</CardTitle>
+                                <CardDescription>준비중</CardDescription>
                             </CardWrapper>
                         </Link>
                     </CardContainer>

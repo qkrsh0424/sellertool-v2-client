@@ -15,6 +15,9 @@ const LinearBar = styled(LinearProgress)`
 `
 
 const CircularBar = styled(CircularProgress)`
+    &.css-18lrjg1-MuiCircularProgress-root {
+        color: ${props => props.customcolor};
+    }
 `
 
 export function CustomProgressBar({
@@ -24,6 +27,7 @@ export function CustomProgressBar({
     value,
     className,
     thickness,
+    size = '40px',
     customcolor = '#efefef',
     ...props
 }) {
@@ -35,6 +39,8 @@ export function CustomProgressBar({
                     variant={variant}
                     value={value}
                     thickness={thickness}
+                    size={size}
+                    customcolor={customcolor}
                     {...props}
                 />
             }

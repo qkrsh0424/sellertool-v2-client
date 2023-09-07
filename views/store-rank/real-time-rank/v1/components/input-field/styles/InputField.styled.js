@@ -83,8 +83,9 @@ export const InputFieldBox = styled.div`
     gap: 15px;
 
     @media screen and (max-width: 992px) {
-        flex-direction: column;
         width: 80%;
+        flex-direction: column;
+        gap: 0px;
     }
 
     .input-el {

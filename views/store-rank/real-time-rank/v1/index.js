@@ -208,20 +208,16 @@ export default function MainComponent(){
                         onSubmitRecordInput={handleReqCreateRecordInput}
                     />
                     
-                    {recordList ? 
-                        <RecordItemListComponent
-                            keyword={keyword}
-                            mallName={mallName}
-                            recordList={recordList}
-                            rankSearchInfo={rankSearchInfo}
-                            currentPendingRecordIds={currentPendingRecordIds}
-                            onDeleteRankRecord={handleReqDeleteRankRecord}
-                            onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
-                            onSearchSubscriptionPlanSearchInfo={handleReqSearchSubscriptionPlanSearchInfo}
-                        />
-                        :
-                        <RecordItemListSkeletonComponent />
-                    }
+                    <RecordItemListComponent
+                        keyword={keyword}
+                        mallName={mallName}
+                        recordList={recordList}
+                        rankSearchInfo={rankSearchInfo}
+                        currentPendingRecordIds={currentPendingRecordIds}
+                        onDeleteRankRecord={handleReqDeleteRankRecord}
+                        onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
+                        onSearchSubscriptionPlanSearchInfo={handleReqSearchSubscriptionPlanSearchInfo}
+                    />
                 </Layout>
             </Container>
         </>

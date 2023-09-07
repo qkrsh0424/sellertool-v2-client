@@ -43,6 +43,12 @@ export function PurchaseCostCalculatorModal({
         if (!mrPurchaseModuleRedux?.mrPurchaseModuleList || !selectedMrPurchaseModuleId) {
             return;
         }
+
+        if (mrPurchaseModuleHook?.selectedMrPurchaseModule) {
+            mrPurchaseModuleHook.onSetSelectedMrPurchaseModule(mrPurchaseModuleRedux?.mrPurchaseModuleList?.find(r => r.id === mrPurchaseModuleHook?.selectedMrPurchaseModule?.id) || null);
+            return;
+        }
+
         mrPurchaseModuleHook.onSetSelectedMrPurchaseModule(mrPurchaseModuleRedux?.mrPurchaseModuleList?.find(r => r.id === selectedMrPurchaseModuleId) || null);
     }, [mrPurchaseModuleRedux?.mrPurchaseModuleList, selectedMrPurchaseModuleId])
 
@@ -271,15 +277,14 @@ export function PurchaseCostCalculatorModal({
                             매입정보 모듈을 먼저 선택해 주세요.
                         </div>
                     }
+
                     {mrPurchaseModuleHook?.selectedMrPurchaseModule &&
-                        <>
-                            <FdCalculator
-                                mrBaseExchangeRateList={mrBaseExchangeRateRedux?.mrBaseExchangeRateList}
-                                selectedMrPurchaseModule={mrPurchaseModuleHook?.selectedMrPurchaseModule}
-                                handleSubmitSavePurchaseUnitPriceForm={handleSubmitSavePurchaseUnitPriceForm}
-                                onSubmitExport={handleSubmitExport}
-                            />
-                        </>
+                        <FdCalculator
+                            mrBaseExchangeRateList={mrBaseExchangeRateRedux?.mrBaseExchangeRateList}
+                            selectedMrPurchaseModule={mrPurchaseModuleHook?.selectedMrPurchaseModule}
+                            handleSubmitSavePurchaseUnitPriceForm={handleSubmitSavePurchaseUnitPriceForm}
+                            onSubmitExport={handleSubmitExport}
+                        />
                     }
                 </St.Container>
             </CustomDialog>

@@ -48,47 +48,69 @@ export const ItemListWrapper = styled.div`
     }
 
     .item-box{
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
         user-select: none;
         -webkit-tap-highlight-color: #00000000;
         cursor: pointer;
         flex:1;
         font-size: 16px;
         color:#303030;
-        padding: 15px 20px;
+        padding: 15px 10px;
         
-
         &:hover{
             background: #f0f0f040;
         }
+
+        .workspaceTag{
+            /* width:70px; */
+            display: inline-block;
+            font-size: 10px;
+            border:0.9px solid #808080;
+            color: #808080;
+            font-weight: 700;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width:60px;
+            height: 22px;
+        }
+
+        .disabledWorkspace-notification{
+            margin-top: 3px;
+            font-size: 10px;
+            color:var(--defaultRedColorOpacity600);
+        }
+
+        .disabledWorkspace-tag{
+            border:0.9px solid var(--defaultRedColorOpacity600);
+            color: var(--defaultRedColorOpacity600);
+        }
+
+        .privateWorkspace-tag{
+            border:0.9px solid #808080;
+            color: #808080;
+        }
+
+        .publicWorkspace-tag{
+            border:0.9px solid var(--publicWorkspaceColor);
+            color: var(--publicWorkspaceColor);
+        }
+
+        .plusWorkspace-tag{
+            border:0.9px solid var(--plusWorkspaceColor);
+            color: var(--plusWorkspaceColor);
+        }
+        
+        .workspaceName{
+            display: inline-block;
+            flex:1;
+        }
     }
 
-    .workspaceName{
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 10px;
-    }
-
-    .subscriptionPlan-tag{
-        display: inline-block;
-        font-size: 10px;
-        border:0.9px solid var(--defaultPurpleColor);
-        color: var(--defaultPurpleColor);
-        font-weight: 700;
-        padding:2px 7px;
-        border-radius: 20px;
-        vertical-align: middle;
-    }
-
-    .disabledWorkspaceTag{
-        display: inline-block;
-        font-size: 10px;
-        border:0.9px solid #808080;
-        color: #808080;
-        font-weight: 700;
-        padding:2px 7px;
-        border-radius: 20px;
-        vertical-align: middle;
-    }
 
     .item-box-active{
         color:var(--mainColor);

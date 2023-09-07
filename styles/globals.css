@@ -27,7 +27,13 @@
     --defaultBlueColorOpacity700: #5a99ff;
     --defaultSkyBlueColor: #5c8cd5;
     --defaultRedColor: #e56767;
-    --defaultRedColorOpacity500: #e5676780;
+    --defaultRedColorOpacity100: #fdecec;
+    --defaultRedColorOpacity200: #fadad9;
+    --defaultRedColorOpacity300: #f6c7c6;
+    --defaultRedColorOpacity400: #f3b3b4;
+    --defaultRedColorOpacity500: #f0a1a0;
+    --defaultRedColorOpacity600: #ed8e8d;
+    --defaultRedColorOpacity700: #e87a7a;
     --defaultRedColorOpacity30: #e5676730;
     --defaultYellowColor: #eed202;
     --defaultYellowColorOpacity30: #eed20230;
@@ -44,6 +50,8 @@
     --defaultPurpleColorOpacity700: #9065e3;
     --defaultModalCloseColor: #959eae;
     --contentHeadBackground: #eef2f9;
+    --publicWorkspaceColor:#5fcf80;
+    --plusWorkspaceColor:#8250df;
 }
 
 html,

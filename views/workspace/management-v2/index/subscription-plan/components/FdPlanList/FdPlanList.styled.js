@@ -11,21 +11,41 @@ export const STY_CardListWrapper = styled.div`
 
     @media all and (max-width:992px){
         flex-direction: column;
+        gap: 40px;
     }
 
 `;
 
 export const STY_Card = {
     Container: styled.div`
+        position:relative;
         width: 100%;
         /* height: 100%; */
         padding: 20px;
         background: #fff;
-        border: 1px solid #f0f0f0;
+        border: ${props => props.subscriptionPlan === 'PLUS' ? '3px solid var(--defaultBlueColorOpacity300)' : '1px solid #f0f0f0'};
         border-radius: 10px;
         box-shadow: var(--defaultBoxShadow);
         @media all and (max-width:992px){
             height: 100%;
+        }
+
+        .bestTag{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            width: 100px;
+            height: 40px;
+            background: var(--defaultBlueColorOpacity600);
+            position: absolute; 
+            top: -20px; 
+            left: 50%; 
+            transform: translate(-50%, 0); 
+            border-radius: 20px; 
+            color: #fff;
         }
     `,
     TitleBox: styled.div`

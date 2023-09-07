@@ -4,14 +4,15 @@ import { St } from "./index.styled";
 import { FdHead, FdCalculator } from "./components";
 import { useDataSourceHook, useMrBaseExchangeRateHook } from "./hooks";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const MainComponent = () => {
+    const reduxDispatch = useDispatch();
+    const mrBaseExchangeRateRedux = useSelector(state => state?.mrBaseExchangeRateRedux);
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const dataSourceHook = useDataSourceHook();
-    const mrBaseExchangeRateHook = useMrBaseExchangeRateHook();
 
     useEffect(() => {
         if (!wsId) {
@@ -19,17 +20,33 @@ const MainComponent = () => {
         }
 
         dataSourceHook.onReqFetchMrBaseExchangeRateList({ headers: { wsId: wsId } }, (results, response) => {
-            mrBaseExchangeRateHook.onSetMrBaseExchangeRateList(results);
+            reduxDispatch({
+                type: 'MR_BASE_EXCHANGE_RATE_CHANGE_DATA',
+                payload: {
+                    name: 'mrBaseExchangeRateList',
+                    value: results
+                }
+            })
         })
+
+        return () => {
+            reduxDispatch({
+                type: 'MR_BASE_EXCHANGE_RATE_CHANGE_DATA',
+                payload: {
+                    name: 'mrBaseExchangeRateList',
+                    value: null
+                }
+            })
+        }
     }, [wsId]);
-    
+
     return (
         <>
             <Layout>
                 <St.Container>
                     <FdHead />
                     <FdCalculator
-                        mrBaseExchangeRateList={mrBaseExchangeRateHook?.mrBaseExchangeRateList}
+                        mrBaseExchangeRateList={mrBaseExchangeRateRedux?.mrBaseExchangeRateList}
                     />
                 </St.Container>
                 <CalculatorMain></CalculatorMain>

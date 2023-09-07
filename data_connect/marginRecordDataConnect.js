@@ -75,6 +75,25 @@ const marginRecordDataConnect = () => {
         /**
          * 
          * @param {object} body 
+         * @param {string} body.id
+         * @param {object} headers
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        deleteOne: async function (options = { body, headers }) {
+            const { body, headers } = options;
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/margin-records/${body.id}`, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
+        /**
+         * 
+         * @param {object} body 
          * @param {string} body.marginRecordId
          * @param {object} headers
          * @param {string} headers.wsId

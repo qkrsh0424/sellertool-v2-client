@@ -23,7 +23,8 @@ export const FdCalculator = ({
     selectedMarginRecord,
     selectResultMber,
     selectResultMberValue,
-    onReqSave
+    onReqSave,
+    onReqDelete
 }) => {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
 
@@ -160,6 +161,7 @@ export const FdCalculator = ({
                     <St.CalculatorWrapper>
                         <ButtonGroupsView
                             resultDetailModeOpen={resultDetailModeOpen}
+                            onSubmitDelete={() => onReqDelete()}
                             onToggleResultDetailModeOpen={() => toggleResultDetailModeOpen()}
                         />
                         <ResultField
@@ -207,15 +209,6 @@ export const FdCalculator = ({
                             className='button-wrapper'
 
                         >
-                            <CustomBlockButton
-                                type='button'
-                                className='saveBtn'
-                                onClick={(e) => {
-                                    handleSubmitSave();
-                                }}
-                            >
-                                저장
-                            </CustomBlockButton>
                             <CustomBlockButton type='button' className='refreshBtn' onClick={() => marginRecordFormHook.onActionClearForm()}>새로고침</CustomBlockButton>
                         </div>
                         <div className='control-wrapper'>
@@ -290,63 +283,66 @@ export const FdCalculator = ({
                                     />
                                 </>
                                 :
-                                <div className='flexible'>
-                                    <div className='input-box'>
-                                        <label>매입단가</label>
-                                        <div className='flexItem'>
-                                            <CustomInput
-                                                type='text'
-                                                name={'purchaseUnitPrice'}
-                                                value={customNumberUtils.numberWithCommas2(marginRecordForm?.purchaseUnitPrice) || ''}
-                                                onChange={(e) => marginRecordFormHook.onChangePriceValueFromEvent(e)}
-                                                placeholder='0'
-                                            />
-                                            <BaseExchangeRateButton
-                                                mrBaseExchangeRateList={mrBaseExchangeRateList}
-                                                currentMberId={marginRecordForm?.purchaseUnitPriceMberId}
-                                                onClick={() => toggleMrBaseExchangeRateModalOpen(true, 'purchaseUnitPriceMberId')}
-                                            />
+                                <>
+                                    <div className='flexible'>
+                                        <div className='input-box'>
+                                            <label>매입단가</label>
+                                            <div className='flexItem'>
+                                                <CustomInput
+                                                    type='text'
+                                                    name={'purchaseUnitPrice'}
+                                                    value={customNumberUtils.numberWithCommas2(marginRecordForm?.purchaseUnitPrice) || ''}
+                                                    onChange={(e) => marginRecordFormHook.onChangePriceValueFromEvent(e)}
+                                                    placeholder='0'
+                                                />
+                                                <BaseExchangeRateButton
+                                                    mrBaseExchangeRateList={mrBaseExchangeRateList}
+                                                    currentMberId={marginRecordForm?.purchaseUnitPriceMberId}
+                                                    onClick={() => toggleMrBaseExchangeRateModalOpen(true, 'purchaseUnitPriceMberId')}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className='input-box'>
+                                            <label>매입운임비(개당)</label>
+                                            <div className='flexItem'>
+                                                <CustomInput
+                                                    type='text'
+                                                    name={'purchaseUnitFreightCost'}
+                                                    value={customNumberUtils.numberWithCommas2(marginRecordForm?.purchaseUnitFreightCost) || ''}
+                                                    onChange={(e) => marginRecordFormHook.onChangePriceValueFromEvent(e)}
+                                                    placeholder='0'
+                                                />
+                                                <BaseExchangeRateButton
+                                                    mrBaseExchangeRateList={mrBaseExchangeRateList}
+                                                    currentMberId={marginRecordForm?.purchaseUnitFreightCostMberId}
+                                                    onClick={() => toggleMrBaseExchangeRateModalOpen(true, 'purchaseUnitFreightCostMberId')}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className='input-box'>
-                                        <label>매입운임비(개당)</label>
-                                        <div className='flexItem'>
-                                            <CustomInput
-                                                type='text'
-                                                name={'purchaseUnitFreightCost'}
-                                                value={customNumberUtils.numberWithCommas2(marginRecordForm?.purchaseUnitFreightCost) || ''}
-                                                onChange={(e) => marginRecordFormHook.onChangePriceValueFromEvent(e)}
-                                                placeholder='0'
-                                            />
-                                            <BaseExchangeRateButton
-                                                mrBaseExchangeRateList={mrBaseExchangeRateList}
-                                                currentMberId={marginRecordForm?.purchaseUnitFreightCostMberId}
-                                                onClick={() => toggleMrBaseExchangeRateModalOpen(true, 'purchaseUnitFreightCostMberId')}
-                                            />
+                                    <div className='flexible'>
+                                        <div className='input-box'>
+                                            <label>판매자 부담 배송비</label>
+                                            <div className='flexItem'>
+                                                <CustomInput
+                                                    type='text'
+                                                    name={'sellerDeliveryCharge'}
+                                                    value={customNumberUtils.numberWithCommas2(marginRecordForm?.sellerDeliveryCharge) || ''}
+                                                    onChange={(e) => marginRecordFormHook.onChangePriceValueFromEvent(e)}
+                                                    placeholder='0'
+                                                />
+                                                <BaseExchangeRateButton
+                                                    mrBaseExchangeRateList={mrBaseExchangeRateList}
+                                                    currentMberId={marginRecordForm?.sellerDeliveryChargeMberId}
+                                                    onClick={() => toggleMrBaseExchangeRateModalOpen(true, 'sellerDeliveryChargeMberId')}
+                                                />
+                                            </div>
                                         </div>
+                                        <div className='input-box'></div>
                                     </div>
-                                </div>
+                                </>
                             }
-                            <div className='flexible'>
-                                <div className='input-box'>
-                                    <label>판매자 부담 배송비</label>
-                                    <div className='flexItem'>
-                                        <CustomInput
-                                            type='text'
-                                            name={'sellerDeliveryCharge'}
-                                            value={customNumberUtils.numberWithCommas2(marginRecordForm?.sellerDeliveryCharge) || ''}
-                                            onChange={(e) => marginRecordFormHook.onChangePriceValueFromEvent(e)}
-                                            placeholder='0'
-                                        />
-                                        <BaseExchangeRateButton
-                                            mrBaseExchangeRateList={mrBaseExchangeRateList}
-                                            currentMberId={marginRecordForm?.sellerDeliveryChargeMberId}
-                                            onClick={() => toggleMrBaseExchangeRateModalOpen(true, 'sellerDeliveryChargeMberId')}
-                                        />
-                                    </div>
-                                </div>
-                                <div className='input-box'></div>
-                            </div>
+
                         </div>
                         <div className='control-wrapper'>
                             <div className='title'>마켓 수수료</div>
@@ -454,6 +450,15 @@ export const FdCalculator = ({
                         </div>
                         <div className='control-wrapper'>
                             <div className='button-wrapper'>
+                                <CustomBlockButton
+                                    type='button'
+                                    className='saveBtn'
+                                    onClick={(e) => {
+                                        handleSubmitSave();
+                                    }}
+                                >
+                                    저장
+                                </CustomBlockButton>
                                 <CustomBlockButton
                                     type='submit'
                                     className='calculatorBtn'
@@ -580,46 +585,66 @@ function ResultField({
 function PurchasePriceFieldWithModule({
     mrPurchaseModule,
     mrBaseExchangeRateList
-
 }) {
-    const purchaseUnitPriceWithExchangeRate = customNumberUtils.roundToDigit(calculcateUtils.getPurchaseUnitPriceKRW(mrPurchaseModule, mrBaseExchangeRateList) / customNumberUtils.returnExchangeRateValue(mrBaseExchangeRateList, mrPurchaseModule?.purchaseUnitPriceMberId), 6);
-    const purchaseUnitFreightCostWithExchangeRate = customNumberUtils.roundToDigit(calculcateUtils.getPurchaseUnitFreightCostKRW(mrPurchaseModule, mrBaseExchangeRateList) / customNumberUtils.returnExchangeRateValue(mrBaseExchangeRateList, mrPurchaseModule?.purchaseUnitFreightCostMberId), 6);
+
     return (
-        <div className='flexible'>
-            <div className='input-box'>
-                <label>매입단가</label>
-                <div className='flexItem'>
-                    <CustomInput
-                        type='text'
-                        name={'purchaseUnitPrice'}
-                        value={customNumberUtils.numberWithCommas2(purchaseUnitPriceWithExchangeRate) || ''}
-                        readOnly
-                        placeholder='0'
-                    />
-                    <BaseExchangeRateButton
-                        mrBaseExchangeRateList={mrBaseExchangeRateList}
-                        currentMberId={mrPurchaseModule?.purchaseUnitPriceMberId}
-                        readOnly={true}
-                    />
+        <>
+            <div className='flexible'>
+                <div className='input-box'>
+                    <label>매입단가</label>
+                    <div className='flexItem'>
+                        <CustomInput
+                            type='text'
+                            name={'purchaseUnitPrice'}
+                            value={customNumberUtils.numberWithCommas2(mrPurchaseModule?.purchaseUnitPrice) || ''}
+                            readOnly
+                            placeholder='0'
+                        />
+                        <BaseExchangeRateButton
+                            mrBaseExchangeRateList={mrBaseExchangeRateList}
+                            currentMberId={mrPurchaseModule?.purchaseUnitPriceMberId}
+                            readOnly={true}
+                        />
+                    </div>
+                </div>
+                <div className='input-box'>
+                    <label>매입운임비(개당)</label>
+                    <div className='flexItem'>
+                        <CustomInput
+                            type='text'
+                            name={'purchaseUnitFreightCost'}
+                            value={customNumberUtils.numberWithCommas2(mrPurchaseModule?.purchaseUnitFreightCost) || ''}
+                            readOnly
+                            placeholder='0'
+                        />
+                        <BaseExchangeRateButton
+                            mrBaseExchangeRateList={mrBaseExchangeRateList}
+                            currentMberId={mrPurchaseModule?.purchaseUnitFreightCostMberId}
+                            readOnly={true}
+                        />
+                    </div>
                 </div>
             </div>
-            <div className='input-box'>
-                <label>매입운임비(개당)</label>
-                <div className='flexItem'>
-                    <CustomInput
-                        type='text'
-                        name={'purchaseUnitFreightCost'}
-                        value={customNumberUtils.numberWithCommas2(purchaseUnitFreightCostWithExchangeRate) || ''}
-                        readOnly
-                        placeholder='0'
-                    />
-                    <BaseExchangeRateButton
-                        mrBaseExchangeRateList={mrBaseExchangeRateList}
-                        currentMberId={mrPurchaseModule?.purchaseUnitFreightCostMberId}
-                        readOnly={true}
-                    />
+            <div className='flexible'>
+                <div className='input-box'>
+                    <label>판매자 부담 배송비</label>
+                    <div className='flexItem'>
+                        <CustomInput
+                            type='text'
+                            name={'sellerDeliveryCharge'}
+                            value={customNumberUtils.numberWithCommas2(mrPurchaseModule?.sellerDeliveryCharge) || ''}
+                            readOnly
+                            placeholder='0'
+                        />
+                        <BaseExchangeRateButton
+                            mrBaseExchangeRateList={mrBaseExchangeRateList}
+                            currentMberId={mrPurchaseModule?.sellerDeliveryChargeMberId}
+                            readOnly={true}
+                        />
+                    </div>
                 </div>
+                <div className='input-box'></div>
             </div>
-        </div>
+        </>
     );
 }

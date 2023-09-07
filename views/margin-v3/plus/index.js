@@ -119,6 +119,7 @@ export default function MainComponent(props) {
     const handleReqUpdate = async (form) => {
         let headers = { wsId: wsId };
         let body = { ...form };
+
         customBackdropControl.showBackdrop();
         let updatedMarginRecordId = null;
 
@@ -127,6 +128,23 @@ export default function MainComponent(props) {
         });
 
         if (updatedMarginRecordId) {
+            handleReqFetchMarginRecordList();
+        }
+        customBackdropControl.hideBackdrop();
+    }
+
+    const handleReqDelete = async (form) => {
+        let headers = { wsId: wsId };
+        let body = { id: marginRecordHook?.selectedMarginRecord?.id };
+        customBackdropControl.showBackdrop();
+        let deletedMarginRecordId = null;
+
+        await dataSourceHook.onReqDeleteMarginRecord({ headers: headers, body: body }, (results, respones) => {
+            deletedMarginRecordId = results;
+        });
+
+        if (deletedMarginRecordId) {
+            marginRecordHook.onSetSelectedMarginRecord(null);
             handleReqFetchMarginRecordList();
         }
         customBackdropControl.hideBackdrop();
@@ -178,6 +196,7 @@ export default function MainComponent(props) {
                                     selectResultMber={resultMrBaseExchangeRate}
                                     selectResultMberValue={resultMrBaseExchangeRateValue}
                                     onReqSave={handleReqUpdate}
+                                    onReqDelete={handleReqDelete}
                                 />
                                 :
                                 <div className="emptyField">상품을 선택해 주세요.</div>

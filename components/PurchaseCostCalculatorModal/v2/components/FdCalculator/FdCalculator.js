@@ -47,7 +47,6 @@ export function FdCalculator({
             sellerDeliveryCharge: selectedMrPurchaseModule?.sellerDeliveryCharge,
             sellerDeliveryChargeMberId: selectedMrPurchaseModule?.sellerDeliveryChargeMberId,
         })
-        console.log(selectedMrPurchaseModule);
     }, [selectedMrPurchaseModule]);
 
     const toggleMrBaseExchangeRateModalOpen = (bool, name) => {
@@ -117,6 +116,11 @@ export function FdCalculator({
 
         handleSubmitSavePurchaseUnitPriceForm(body);
     }
+
+    const handleSubmitExport = () => {
+        onSubmitExport(selectedMrPurchaseModule);
+    }
+
     return (
         <>
             <St.Container>
@@ -197,6 +201,7 @@ export function FdCalculator({
                         <CustomBlockButton
                             type='button'
                             className='buttonEl selectBtn'
+                            onClick={() => handleSubmitExport()}
                         >
                             선택
                         </CustomBlockButton>

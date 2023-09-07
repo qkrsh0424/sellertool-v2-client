@@ -47,10 +47,10 @@ function _getMarginResultForm({
     let purchaseUnitPriceKRW = 0;
     let purchaseUnitFreightCostKRW = 0;
     let sellerDeliveryChargeKRW = _getPriceValueWithBaseExchangeRate(form?.sellerDeliveryCharge, form?.sellerDeliveryChargeMberId, mrBaseExchangeRateList);
-        // 매입모듈 사용
+    // 매입모듈 사용
     if (form?.mrPurchaseModuleYn === 'y' && form?.mrPurchaseModuleId && mrPurchaseModuleForm) {
-        purchaseUnitPriceKRW = _getPurchaseUnitPriceKRW(mrPurchaseModuleForm, mrBaseExchangeRateList);
-        purchaseUnitFreightCostKRW = _getPurchaseUnitFreightCostKRW(mrPurchaseModuleForm, mrBaseExchangeRateList);
+        purchaseUnitPriceKRW = _getPriceValueWithBaseExchangeRate(mrPurchaseModuleForm?.purchaseUnitPrice, mrPurchaseModuleForm?.purchaseUnitPriceMberId, mrBaseExchangeRateList);
+        purchaseUnitFreightCostKRW = _getPriceValueWithBaseExchangeRate(mrPurchaseModuleForm?.purchaseUnitFreightCost, mrPurchaseModuleForm?.purchaseUnitFreightCostMberId, mrBaseExchangeRateList);
         // 일반형태로 계산
     } else {
         purchaseUnitPriceKRW = _getPriceValueWithBaseExchangeRate(form?.purchaseUnitPrice, form?.purchaseUnitPriceMberId, mrBaseExchangeRateList);
@@ -68,7 +68,7 @@ function _getMarginResultForm({
     let totalIncomeKRW = customNumberUtils.roundToDigit(salesPriceKRW + consumerDeliveryChargeKRW, 2);
     let totalExpenseKRW = customNumberUtils.roundToDigit(purchaseUnitPriceKRW + purchaseUnitFreightCostKRW + sellerDeliveryChargeKRW + marketDefaultCommissionPriceKRW + marketLinkedCommissionPriceKRW + marketDeliveryCommissionPriceKRW + marketingCostKRW + extraCostKRW, 2);
     let marginKRW = customNumberUtils.roundToDigit(totalIncomeKRW - totalExpenseKRW, 2);
-    let marginRate = customNumberUtils.roundToDigit(marginKRW / totalIncomeKRW * 100, 2);
+    let marginRate = totalIncomeKRW <= 0 ? 0 : customNumberUtils.roundToDigit(marginKRW / totalIncomeKRW * 100, 2);
 
     let incomeTaxKRW = customNumberUtils.roundToDigit(totalIncomeKRW / 11, 2);
     let expenseTaxKRW = customNumberUtils.roundToDigit(totalExpenseKRW / 11, 2);
@@ -85,6 +85,7 @@ function _getMarginResultForm({
         marginAfterVatKRW: marginAfterVatKRW
     };
 }
+
 
 function _getPurchaseUnitPriceKRW(formValues, mrBaseExchangeRateList) {
     let purchaseType = formValues?.purchaseType;

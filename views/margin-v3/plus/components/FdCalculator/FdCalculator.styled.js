@@ -66,11 +66,11 @@ export const St = {
             .refreshBtn{
                 width:100px;
                 height: 40px;
-                background:#b0b0b0;
-                color:#fff;
+                background:#e0e0e0;
+                color:#222;
                 border-radius: 5px;
-                font-weight: 600;
-                font-size: 16px;
+                font-weight: 700;
+                font-size: 14px;
                 border:none;
             }
 
@@ -81,18 +81,23 @@ export const St = {
                 font-size: 16px;
                 font-weight: 700;
                 border-radius: 5px;
-                border:none;
+                border:1px solid var(--mainColor);
             }
 
             .saveBtn{
-                width:100px;
-                height: 40px;
-                background: var(--mainColor);
-                color:#fff;
+                width:150px;
+                background: #fff;
+                color:var(--mainColor);
                 font-size: 16px;
-                font-weight: 600;
+                font-weight: 700;
                 border-radius: 5px;
-                border:none;
+                border:1px solid var(--mainColor);
+                transition: all .3s;
+
+                &:hover{
+                    background: var(--mainColor);
+                    color:#fff;
+                }
             }
         }
         .control-wrapper{
@@ -253,6 +258,14 @@ export const St = {
                     border-radius: 5px;
                     color:#606060;
                     font-weight: 600;
+
+                    &:focus{
+                        z-index: 10;
+                        scale: 1.01;
+                        border-top-right-radius: 5px;
+                        border-bottom-right-radius: 5px;
+                        border:1px solid var(--mainColor);
+                    }
 
                     &:hover{
                         z-index: 10;

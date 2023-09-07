@@ -22,9 +22,9 @@ export const St = {
 
         .tagBadge{
             font-size: 14px;
-            color: var(--defaultPurpleColorOpacity600);
+            color: var(--plusWorkspaceColor);
             font-weight: 400;
-            border:0.5px solid var(--defaultPurpleColorOpacity600);
+            border:0.5px solid var(--plusWorkspaceColor);
             padding: 3px 0;
             width: 70px;
             text-align: center;

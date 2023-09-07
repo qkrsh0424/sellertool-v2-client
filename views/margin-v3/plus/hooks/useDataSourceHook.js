@@ -119,6 +119,23 @@ export function useDataSourceHook(props) {
             })
     }
 
+    const onReqDeleteMarginRecord = async (options = {
+        headers: { wsId },
+        body: {},
+    }, callbackFn = (results, response) => { }) => {
+        const { headers, body } = options;
+
+        await marginRecordDataConnect.deleteOne({ body, headers })
+            .then(res => {
+                if (res.status === 200) {
+                    callbackFn(res?.data?.data, res);
+                }
+            })
+            .catch(err => {
+                CustomErrorHandler.error(err);
+            })
+    }
+
     return {
         onReqFetchMarginRecordList,
         onReqFetchMrBaseExchangeRateList,
@@ -126,5 +143,6 @@ export function useDataSourceHook(props) {
         onReqFetchMrPurchaseModuleOne,
         onReqCreateMarginRecord,
         onReqUpdateMarginRecord,
+        onReqDeleteMarginRecord,
     }
 }

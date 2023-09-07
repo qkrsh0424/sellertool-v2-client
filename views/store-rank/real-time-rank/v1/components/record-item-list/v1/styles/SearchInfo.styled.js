@@ -9,7 +9,7 @@ export const SearchTitleBox = styled.div`
 
     .list-title {
         font-weight: 600;
-        font-size: 1.2rem;
+        font-size: 14px;
         margin-right: 20px
     }
 `;
@@ -17,29 +17,35 @@ export const SearchTitleBox = styled.div`
 export const SearchInfoBox = styled.div`
     color: #979ba5;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 12px;
     margin-bottom: 15px;
     padding: 0 10px;
     
     .sub-info-box {
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         flex-wrap: wrap;
         padding: 10px 0;
+        gap: 15px;
     }
 
     .info-group {
-        padding: 3px 0;
-        min-width: 150px;
-        margin-right: 10px;
         display: flex;
         align-items: center;
         gap: 5px;
     }
 
-    .sub-info {
-        font-size: 12px;
-        color: var(--mainColor);
+    .exclamation-icon {
+        border: 1px solid #a3a8b2;
+        border-radius: 10px;
+    }
+
+    .tooltip {
+        
+    }
+
+    .tooltip-text {
+        width: 300px;
     }
 
     .red-text {

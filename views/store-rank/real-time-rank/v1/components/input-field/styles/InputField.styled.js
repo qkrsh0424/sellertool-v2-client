@@ -6,7 +6,7 @@ export const Container = styled.div`
 
     form {
         box-shadow: var(--defaultBoxShadow);
-        padding: 15px;
+        padding: 13px;
         background-color: var(--mainColorOpacity30);
         border-radius: 60px;
         display: inline-block;
@@ -65,7 +65,7 @@ export const Container = styled.div`
 `;
 
 export const Wrapper = styled.div`
-    padding: 15px 30px;
+    padding: 10px 20px;
     border-radius: 50px;
     background-color: #fff;
     box-shadow: var(--defaultBoxShadow);

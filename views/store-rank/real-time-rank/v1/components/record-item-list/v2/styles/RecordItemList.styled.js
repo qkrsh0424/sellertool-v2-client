@@ -21,6 +21,7 @@ export const Wrapper = styled.div`
         overflow: hidden;
         border: none;
         border-radius: 10px;
+        box-shadow: var(--defaultBoxShadow);
 
         @media only screen and (max-width:768px){
             font-size: 10px;

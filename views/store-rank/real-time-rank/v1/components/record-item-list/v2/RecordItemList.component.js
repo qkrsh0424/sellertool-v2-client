@@ -238,7 +238,7 @@ function TableBodyRow({
                     '-'
                 }
             </td>
-            <td>{isPending && <CustomProgressBar customcolor={'#9ac7e0'} />}</td>
+            <td>{isPending && <CustomProgressBar customcolor={'#9ac7e0'} size='30px'/>}</td>
             <td>
                 <div className='delete-box'>
                     <button

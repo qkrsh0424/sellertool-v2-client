@@ -15,13 +15,15 @@ export default function RecordInfoFieldView({
                     size='90px'
                 />
             </div>
-            <div style={{ margin: '0 10px' }}>
+            <div>
                 <LabelGroup>
-                    <span className='content-value' style={{ color: 'var(--mainColor)' }}>{record.mall_name}</span>
-                    <span> | </span>
-                    <span className='content-value'>{record.keyword}</span>
+                    <div style={{ width: '100%' }}>
+                        <span className='content-value' style={{ color: 'var(--mainColor)' }}>{record.mall_name}</span>
+                        <span> | </span>
+                        <span className='content-value'>{record.keyword}</span>
+                    </div>
                 </LabelGroup>
-                <LabelGroup style={{ fontSize: '14px', fontWeight: 700, color: '#808080' }}>
+                <LabelGroup style={{ color: '#808080' }}>
                     <span>최근조회 (</span>
                     <span>
                         {targetRecordInfo ?

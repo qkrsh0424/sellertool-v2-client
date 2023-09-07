@@ -10,7 +10,7 @@ import { useDataSourceHook, useMarginRecordFormHook } from '../../hooks';
 import CustomSelect from '../../../../../components/select/default/v1/CustomSelect';
 import { MrBaseExchangeRateModal } from '../../../../../components/MrBaseExchangeRateModal/v1';
 import CustomCheckboxV2 from '../../../../../components/checkbox/CustomCheckboxV2';
-import { PurchaseCostCalculatorModal } from '../../../../../components/PurchaseCostCalculatorModal/v1';
+import { PurchaseCostCalculatorModal } from '../../../../../components/PurchaseCostCalculatorModal/v2';
 import { CalculateUtils } from '../../utils/CalculateUtils';
 import { customToast } from '../../../../../components/toast/custom-react-toastify/v1';
 

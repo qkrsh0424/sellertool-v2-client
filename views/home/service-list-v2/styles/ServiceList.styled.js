@@ -32,6 +32,15 @@ export const ContentWrapper = styled.div`
 
 export const CardContainer = styled.div`
     padding: 10px;
+
+    .isReady{
+        background: #f0f0f0;
+
+        &:hover{
+            transform: scale(1);
+            border: 1px solid #f0f0f0;
+        }
+    }
 `;
 
 export const CardWrapper = styled.div`

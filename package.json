@@ -39,6 +39,7 @@
         "react-dom": "^17.0.2",
         "react-draggable": "^4.4.4",
         "react-redux": "^7.2.5",
+        "react-spinners": "^0.13.8",
         "react-toastify": "^9.1.2",
         "react-virtuoso": "^4.3.8",
         "redux": "^4.1.1",

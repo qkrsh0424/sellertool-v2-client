@@ -74,7 +74,7 @@ export const St = {
                 border:none;
             }
 
-            .calculatorBtn{
+            .calculateBtn{
                 width:150px;
                 background: var(--mainColor);
                 color:#fff;
@@ -149,6 +149,7 @@ export const St = {
                     transition: all .3s;
                     text-align: end;
                     font-weight: 700;
+                    flex:1;
                     background: var(--defaultBlueColorOpacity50);
                     &:focus{
                         z-index: 10;
@@ -276,6 +277,21 @@ export const St = {
                     }
                 }
 
+                .calculator-select-btn{
+                    cursor:pointer;
+                    background: #fff;
+                    width:40px;
+                    height: 40px;
+                    font-size: 13px;
+                    border-radius: 20px;
+                    font-weight: 700;
+                    transition: all .3s;
+                    padding:5px;
+                    margin-top: 5px;
+                    &:hover{
+                        background:#f0f0f0;
+                    }
+                }
             }
         }
     `,

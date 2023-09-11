@@ -13,6 +13,8 @@ import CustomCheckboxV2 from '../../../../../components/checkbox/CustomCheckboxV
 import { PurchaseCostCalculatorModal } from '../../../../../components/PurchaseCostCalculatorModal/v2';
 import { CalculateUtils } from '../../utils/CalculateUtils';
 import { customToast } from '../../../../../components/toast/custom-react-toastify/v1';
+import CustomImage from '../../../../../components/image/CustomImage';
+import { MdPurchaseUnitPriceCalculator } from '../../../../../components/MdPurchaseUnitPriceCalculator/v1';
 
 const customNumberUtils = CustomNumberUtils();
 const calculcateUtils = CalculateUtils();
@@ -35,6 +37,7 @@ export const FdCalculator = ({
     const [mrBaseExchangeRateModalOpen, setMrBaseExchangeRateModalOpen] = useState(false);
     const [mrPurchaseModuleModalOpen, setMrPurchaseModuleModalOpen] = useState(false);
     const [editMberTargetName, setEditMberTargetName] = useState(null);
+    const [purchaseUnitPriceCalculatorModalOpen, setPurchaseUnitPriceCalculatorModalOpen] = useState(false);
 
     useEffect(() => {
         if (!selectedMarginRecord?.id) {
@@ -99,6 +102,10 @@ export const FdCalculator = ({
         toggleMrBaseExchangeRateModalOpen(false);
     }
 
+    const togglePurchaseUnitPriceCalculatorModalOpen = (bool) => {
+        setPurchaseUnitPriceCalculatorModalOpen(bool);
+    }
+
     const handleSubmitCalculateMargin = async (e) => {
         e.preventDefault();
 
@@ -149,6 +156,13 @@ export const FdCalculator = ({
     const handleSelectMrPurchaseModule = (module) => {
         toggleMrPurchaseModuleModalOpen(false);
         marginRecordFormHook?.onChangeMrPurchaseModuleId(module);
+    }
+
+    const handleChangePurchaseValuesFromPurchaseCalculator = (body) => {
+        marginRecordFormHook.onSetMarginRecordForm({
+            ...marginRecordFormHook.marginRecordForm,
+            ...body
+        })
     }
 
     const marginRecordForm = marginRecordFormHook?.marginRecordForm;
@@ -301,6 +315,11 @@ export const FdCalculator = ({
                                                     onClick={() => toggleMrBaseExchangeRateModalOpen(true, 'purchaseUnitPriceMberId')}
                                                 />
                                             </div>
+                                            <div className='calculator-select-btn' onClick={() => togglePurchaseUnitPriceCalculatorModalOpen(true)}>
+                                                <CustomImage
+                                                    src="/images/icon/calculate_default_808080.svg"
+                                                />
+                                            </div>
                                         </div>
                                         <div className='input-box'>
                                             <label>매입운임비(개당)</label>
@@ -316,6 +335,11 @@ export const FdCalculator = ({
                                                     mrBaseExchangeRateList={mrBaseExchangeRateList}
                                                     currentMberId={marginRecordForm?.purchaseUnitFreightCostMberId}
                                                     onClick={() => toggleMrBaseExchangeRateModalOpen(true, 'purchaseUnitFreightCostMberId')}
+                                                />
+                                            </div>
+                                            <div className='calculator-select-btn' onClick={() => togglePurchaseUnitPriceCalculatorModalOpen(true)}>
+                                                <CustomImage
+                                                    src="/images/icon/calculate_default_808080.svg"
                                                 />
                                             </div>
                                         </div>
@@ -461,7 +485,7 @@ export const FdCalculator = ({
                                 </CustomBlockButton>
                                 <CustomBlockButton
                                     type='submit'
-                                    className='calculatorBtn'
+                                    className='calculateBtn'
                                     onClick={(e) => {
                                         AnalysisUtils.gtagClickEventHandler(AnalysisUtils.eventName.MARGIN_CALCULATE_BTN_CLICKED, { wsId: workspaceRedux?.workspaceInfo?.id })
                                     }}
@@ -488,6 +512,14 @@ export const FdCalculator = ({
                     selectedMrPurchaseModuleId={marginRecordFormHook?.marginRecordForm?.mrPurchaseModuleId}
                     onClose={() => toggleMrPurchaseModuleModalOpen(false)}
                     onExport={(mrPurchaseModule) => handleSelectMrPurchaseModule(mrPurchaseModule)}
+                />
+            }
+
+            {purchaseUnitPriceCalculatorModalOpen &&
+                <MdPurchaseUnitPriceCalculator
+                    open={purchaseUnitPriceCalculatorModalOpen}
+                    onClose={() => togglePurchaseUnitPriceCalculatorModalOpen(false)}
+                    onExport={(body) => handleChangePurchaseValuesFromPurchaseCalculator(body)}
                 />
             }
         </>

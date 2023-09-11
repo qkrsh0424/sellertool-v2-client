@@ -17,7 +17,7 @@ export default function ViewControlFieldView({
                     onClick={() => onChangeRankView()}
                 >
                     <div>일반</div>
-                    <div className='sub-info'>{recordDetails?.length ?? 0}</div>
+                    <div className='info-box'>{recordDetails?.length ?? 0}</div>
                 </button>
             </ButtonBox>
             <ButtonBox>
@@ -28,7 +28,7 @@ export default function ViewControlFieldView({
                     onClick={() => onChangeAdRankView()}
                 >
                     <div>광고</div>
-                    <div className='sub-info'>{adRecordDetails?.length ?? 0}</div>
+                    <div className='info-box'>{adRecordDetails?.length ?? 0}</div>
                 </button>
             </ButtonBox>
         </Wrapper>

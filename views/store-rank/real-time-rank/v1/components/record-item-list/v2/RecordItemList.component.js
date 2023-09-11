@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Container, ContentGroup, ContentValue, ControlBox, RecordInfo, RecordItemBox, StatusBox, Wrapper } from "./styles/RecordItemList.styled";
+import { useEffect, useState } from "react";
+import { Container, Wrapper } from "./styles/RecordItemList.styled";
 import { RecordDetailModalComponent } from "../../record-detail-modal/v1";
 import { CustomBoxImage } from "../../../modules";
 import HighlightedText from "../../../../../../modules/text/HighlightedText";
@@ -7,7 +7,6 @@ import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModa
 import { dateToHHmm, dateToYYYYMMDD } from "../../../utils/dateFormatUtils";
 import { CustomProgressBar } from "../../../modules/progress/progress-bar/v1";
 import { SearchInfoFieldView } from "./views/SearchInfoField.view";
-import CustomTableVirtuoso from "../../../../../../../components/virtualization/virtuoso/table/v1/CustomTableVirtuoso";
 import ResizableTh from "../../../../../../../components/table/th/v1/ResizableTh";
 import { CustomVirtualTable } from "../../../../../../../components/table/virtual-table/v1";
 import FieldLoadingV2 from "../../../../../../modules/loading/FieldLoadingV2";
@@ -22,8 +21,6 @@ export function RecordItemListComponent({
     onDeleteRankRecord,
     onSearchSubscriptionPlanSearchInfo
 }) {
-    const virtuosoScrollRef = useRef();
-
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
     const [recordDeleteModalOpen, setRecordDeleteModalOpen] = useState(false);
@@ -45,7 +42,10 @@ export function RecordItemListComponent({
         setSelectedRecord(data);
     }
 
-    const handleOpenDetailSearchModal = (item) => {
+    const handleOpenDetailSearchModal = (e, item) => {
+        e.stopPropagation();
+        e.preventDefault();
+
         setSelectedRecord(item);
         setDetailSearchModalOpen(true)
     }
@@ -54,7 +54,7 @@ export function RecordItemListComponent({
         setDetailSearchModalOpen(false);
     }
 
-    const handleOpenctionDeleteRecord = (e, item) => {
+    const handleOpenRecordDeleteModal = (e, item) => {
         e.stopPropagation();
 
         setSelectedRecord(item)
@@ -88,7 +88,6 @@ export function RecordItemListComponent({
                         }
                         <div className="table-box">
                             <CustomVirtualTable
-                                ref={virtuosoScrollRef}
                                 height={800}
                                 data={recordList}
                                 THeadRow={
@@ -105,7 +104,7 @@ export function RecordItemListComponent({
                                             mallName={mallName}
                                             currentPendingRecordIds={currentPendingRecordIds}
                                             handleOpenDetailSearchModal={handleOpenDetailSearchModal}
-                                            handleOpenctionDeleteRecord={handleOpenctionDeleteRecord}
+                                            handleOpenRecordDeleteModal={handleOpenRecordDeleteModal}
                                         />
                                     )
                                 }
@@ -174,7 +173,7 @@ function TableBodyRow({
     mallName,
     currentPendingRecordIds,
     handleOpenDetailSearchModal,
-    handleOpenctionDeleteRecord
+    handleOpenRecordDeleteModal
 }) {
     let item = virtuosoData?.item;
     let isKeywordAccent = keyword && (item.keyword).includes(keyword);
@@ -183,7 +182,7 @@ function TableBodyRow({
     let isPending = currentPendingRecordIds?.includes(item.id);
 
     return (
-        <tr onClick={() => handleOpenDetailSearchModal(item)} {...virtuosoData}>
+        <tr onClick={(e) => handleOpenDetailSearchModal(e, item)} {...virtuosoData}>
             <td>
                 <div className='thumbnail'>
                     <CustomBoxImage
@@ -213,7 +212,7 @@ function TableBodyRow({
                     <span>{item.mall_name}</span>
                 }
             </td>
-            <td>카테</td>
+            <td>-</td>
             <td>
                 {currentRecordInfo ?
                     <div style={{ color: '#444', display: 'inline' }}>
@@ -244,7 +243,7 @@ function TableBodyRow({
                     <button
                         type='button'
                         className='button-item'
-                        onClick={(e) => handleOpenctionDeleteRecord(e, item)}
+                        onClick={(e) => handleOpenRecordDeleteModal(e, item)}
                     >
                         <CustomBoxImage
                             src='/images/icon/delete_default_e56767.svg'

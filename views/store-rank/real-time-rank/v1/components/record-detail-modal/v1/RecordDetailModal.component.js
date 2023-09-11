@@ -1,6 +1,6 @@
 
 import useNRankRecordDetailHook from "./hooks/useNRankRecordDetailHook";
-import { DetailWrapper, Wrapper } from "./styles/RecordDetailModal.styled";
+import { Wrapper } from "./styles/RecordDetailModal.styled";
 import RankDetailFieldView from "./view/RankDetailField.view";
 import RecordInfoFieldView from "./view/RecordInfoField.view";
 import ButtonFieldView from "./view/ButtonField.view";
@@ -30,7 +30,19 @@ export function RecordDetailModalComponent({
     const [isAdRankView, setIsAdRankView] = useState(false);
     
     const { onReqSearchNRankRecordDetail, onReqChangeNRankRecordStatusToPending, onReqCreateNRankRecordDetail } = useApiHook();
-    const { recordDetails, adRecordDetails, targetRecordInfo, onSetRecordDetails, onSetAdRecordDetails, onActionUpdateTargetRecordInfo } = useNRankRecordDetailHook({ record });
+    const {
+        recordDetails,
+        adRecordDetails,
+        targetRecordInfo,
+        openedSubInfoRecordDetailIds,
+        onSetRecordDetails,
+        onSetAdRecordDetails,
+        onActionUpdateTargetRecordInfo,
+        onAddOpenedSubInfoRecordDetailId,
+        onRemoveOpenedSubInfoRecordDetailId,
+        onActionFoldAllOptions,
+        onActionUnfoldAllOptions
+    } = useNRankRecordDetailHook({ record });
 
     useEffect(() => {
         if(!wsId) {
@@ -120,7 +132,7 @@ export function RecordDetailModalComponent({
             <CustomDialog
                 open={open}
                 onClose={() => onClose()}
-                maxWidth="md"
+                maxWidth="sm"
             >
                 <CustomDialog.CloseButton onClose={() => onClose()} />
                 <CustomDialog.Title>랭킹 조회</CustomDialog.Title>
@@ -131,13 +143,15 @@ export function RecordDetailModalComponent({
                     />
                     <SubInfoFieldView
                         record={record}
+                        onActionFoldAllOptions={onActionFoldAllOptions}
+                        onActionUnfoldAllOptions={onActionUnfoldAllOptions}
                     />
                     <ButtonFieldView
                         targetRecordInfo={targetRecordInfo}
                         isPending={isPending}
                         onSubmit={handleChangeNRankRecordStatusToPending}
                     />
-                    <DetailWrapper style={{ position: 'relative' }}>
+                    <div style={{ position: 'relative' }}>
                         <ViewControlFieldView
                             isAdRankView={isAdRankView}
                             recordDetails={recordDetails}
@@ -160,12 +174,17 @@ export function RecordDetailModalComponent({
                             <>
                                 {isAdRankView ?
                                     <AdRankDetailFieldView
+                                        record={record}
                                         adRecordDetails={adRecordDetails}
                                     />
                                     :
                                     <RankDetailFieldView
+                                        record={record}
                                         targetRecordInfo={targetRecordInfo}
                                         recordDetails={recordDetails}
+                                        openedSubInfoRecordDetailIds={openedSubInfoRecordDetailIds}
+                                        onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
+                                        onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
                                     />
                                 }
                             </>
@@ -174,7 +193,7 @@ export function RecordDetailModalComponent({
                         {isPending &&
                             <RankDetailSkeletonFieldView />
                         }
-                    </DetailWrapper>
+                    </div>
                 </Wrapper>
             </CustomDialog>
         </>

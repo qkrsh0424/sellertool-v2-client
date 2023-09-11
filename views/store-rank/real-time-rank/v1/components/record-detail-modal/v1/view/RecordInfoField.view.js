@@ -15,16 +15,16 @@ export default function RecordInfoFieldView({
                     size='90px'
                 />
             </div>
-            <div>
+            <div style={{ overflow: 'hidden' }}>
                 <LabelGroup>
-                    <div style={{ width: '100%' }}>
+                    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         <span className='content-value' style={{ color: 'var(--mainColor)' }}>{record.mall_name}</span>
                         <span> | </span>
                         <span className='content-value'>{record.keyword}</span>
                     </div>
                 </LabelGroup>
                 <LabelGroup style={{ color: '#808080' }}>
-                    <span>최근조회 (</span>
+                    <span>최근조회 </span>
                     <span>
                         {targetRecordInfo ?
                             <>
@@ -35,7 +35,6 @@ export default function RecordInfoFieldView({
                             '-'
                         }
                     </span>
-                    <span>)</span>
                 </LabelGroup>
             </div>
         </Wrapper>

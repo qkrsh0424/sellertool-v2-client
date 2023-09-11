@@ -41,6 +41,7 @@ export default function ButtonFieldView({
                         type='button'
                         className='disabled-btn timer-button'
                         disabled
+                        style={{ height: '45px' }}
                     >
                         <div>
                             <CustomBoxImage

@@ -12,25 +12,22 @@ export const Wrapper = styled.div`
 `;
 
 export const DetailInfoWrapper = styled.div`
+    padding: 5px;
+    min-height: 120px;
+    border-bottom: 4px solid #eef2f9;
+`;
+
+export const MainInfoWrapper = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     color: #888;
-    padding: 10px;
-    min-height: 220px;
-    max-height: 220px;
-    border-bottom: 4px solid #eef2f9;
+    min-height: 120px;
 
     &:last-child {
         margin-bottom: 0;
-    }
-
-    @media screen and (max-width: 992px){
-        max-height: fit-content;
-        flex-direction: column;
-        align-items: flex-start;
     }
 
     .image-el {
@@ -42,16 +39,44 @@ export const DetailInfoWrapper = styled.div`
     .info-field {
         /* padding: 0 10px; */
         margin-bottom: 10px;
-    }
-
-    .rank-field {
-        /* padding: 0 10px; */
-    }
+        overflow: hidden;
+    }   
 
     .accent-text {
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 14px;
         color: #4b4b4b;
+    }
+
+    .rank-box {
+        border: 1px solid var(--defaultBlueColor);
+        padding: 0px 10px;
+        border-radius: 10px;
+        color: var(--defaultBlueColor);
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--defaultBlueColor);
+            color: white;
+        }
+    }
+
+    .dropdown-button-item{
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        
+        margin:0;
+        padding:0;
+        width:25px;
+        height: 25px;
+        border-radius: 5px;
+        margin-left: 10px;
+
+        @media all and (max-width: 992px){
+            position: relative;
+            bottom: 0;
+        }
     }
 `;
 
@@ -59,27 +84,23 @@ export const InfoGroupBox = styled.div`
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    overflow: hidden;
 
-    .sub-info {
-        display: flex;
-        align-items: center;
-        min-height: 20px;
-
-        .sub-info-box {
-            padding: 0 4px;
-            background-color: var(--thisBoxColor);
-            border: 1px solid var(--thisBoxColor);
-            color: white;
-            border-radius: 2px;
-            margin-right: 5px;
-        }
+    .sub-info-box {
+        padding: 0 4px;
+        background-color: var(--thisBoxColor);
+        border: 1px solid var(--thisBoxColor);
+        color: white;
+        border-radius: 2px;
+        margin-right: 5px;
     }
 
     .highlight{
         display: inline-block;
         position:relative;
-        font-weight: 700;
+        /* font-weight: 700; */
         color: #404040;
+        cursor: pointer;
     }
 
     .highlight:hover:after{
@@ -95,10 +116,34 @@ export const InfoGroupBox = styled.div`
     }
 `;
 
+export const SubInfoWrapper = styled.div`
+    font-size: 12px;
+    padding: 10px;
+    border-top: 1px solid #efefef;
+    color: #888;
+    font-weight: 600;
+`;
+
+export const SubInfoGroupBox = styled.div`
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 2px;
+
+    .sub-info-box {
+        padding: 0 4px;
+        background-color: var(--thisBoxColor);
+        border: 1px solid var(--thisBoxColor);
+        color: white;
+        border-radius: 2px;
+        margin-right: 5px;
+    }
+`;
+
 export const DetailInfoBox = styled.div`
     display: flex;
     align-items: center;
-    margin-right: 7px;
 
     &:last-child {
         margin-right: 0;

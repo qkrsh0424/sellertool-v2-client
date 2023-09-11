@@ -1,137 +1,181 @@
+import SingleBlockButton from "../../../../../../../modules/button/SingleBlockButton";
 import { CustomBoxImage } from "../../../../modules/index";
 import { strToYYYYMMDD } from "../../../../utils/dateFormatUtils";
-import { DetailInfoBox, DetailInfoWrapper, InfoGroupBox, InfoText, Wrapper } from "../styles/RankDetail.styled";
+import { DetailInfoBox, DetailInfoWrapper, InfoGroupBox, InfoText, MainInfoWrapper, SubInfoGroupBox, SubInfoWrapper, Wrapper } from "../styles/RankDetail.styled";
 
 const NAVER_SHOPPING_PRODUCT_URL = "https://smartstore.naver.com/main/products/"
+const NAVER_SHOPPING_SEARCH_URL = "https://search.shopping.naver.com/search/all"
 
 export default function RankDetailFieldView({
+    record,
     recordDetails,
-    targetRecordInfo
+    targetRecordInfo,
+    openedSubInfoRecordDetailIds,
+    onAddOpenedSubInfoRecordDetailId,
+    onRemoveOpenedSubInfoRecordDetailId
 }) {
     return (
         <Wrapper>
             {recordDetails?.map((detail, idx) => {
+                let isOpenedSubInfo = openedSubInfoRecordDetailIds.includes(detail.id)
+
                 return (
                     <DetailInfoWrapper key={'record_detail_list_idx' + idx}>
-                        <div style={{ paddingRight: '10px' }}>
-                            <CustomBoxImage
-                                className='image-el'
-                                src={detail.thumbnail_url}
-                                size='160px'
-                            />
-                        </div>
-                        <div>
-                            <div className='info-field'>
-                                <InfoGroupBox>
-                                    <div className='sub-info'>
-                                        {detail.price_comparision_yn === 'y' &&
-                                            <div className='sub-info-box' style={{ "--thisBoxColor": "#919dbd" }}>가격비교</div>
-                                        }
-                                    </div>
-                                    <div className='highlight'>
-                                        <a href={NAVER_SHOPPING_PRODUCT_URL + detail.mall_product_id} target="_blank" rel="noopener">
-                                            <span className='accent-text'>{detail.product_title}</span>
-                                        </a>
-                                    </div>
-                                </InfoGroupBox>
-                                <InfoGroupBox>
-                                    <div>
-                                        <span>{detail.category1_name}</span>
-                                        <span style={{ color: '#b4b4b4'}}>{' > '}</span>
-                                        <span>{detail.category2_name}</span>
-                                        <span style={{ color: '#b4b4b4'}}>{' > '}</span>
-                                        <span>{detail.category3_name}</span>
-                                        <span style={{ color: '#b4b4b4'}}>{' > '}</span>                            
-                                        <span>{detail.category4_name}</span>
-                                    </div>
-                                </InfoGroupBox>
+                        <MainInfoWrapper>
+                            <div style={{ padding: '0 10px', minWidth: '110px', maxWidth: '110px' }}>
+                                <CustomBoxImage
+                                    className='image-el'
+                                    src={detail.thumbnail_url}
+                                />
                             </div>
-                            <div className='info-field'>
-                                <InfoGroupBox>
-                                    <div>
-                                        <span className='accent-text'>{detail.price?.toLocaleString()}원</span>
-                                    </div>
-                                    <DetailInfoBox style={{ marginLeft: '5px'}}>
+                            <div style={{ overflow: 'hidden' }}>
+                                <div className='info-field'>
+                                    <InfoGroupBox>
                                         <div>
-                                            <CustomBoxImage
-                                                src='/images/icon/delivery_truck_default_808080.svg'
-                                                size='20px'
-                                            />
+                                            {detail.price_comparision_yn === 'y' &&
+                                                <span className='sub-info-box' style={{ "--thisBoxColor": "#919dbd" }}>가격비교</span>
+                                            }
                                         </div>
-                                        <div>
-                                            <span>{detail.delivery_fee === 0 ? '무료' : detail.delivery_fee}</span>
+                                        <div className='highlight' style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                            <a href={NAVER_SHOPPING_PRODUCT_URL + detail.mall_product_id} target="_blank" rel="noopener">
+                                                <span className='accent-text'>{detail.product_title}</span>
+                                            </a>
                                         </div>
-                                    </DetailInfoBox>
-                                </InfoGroupBox>
-                                <InfoGroupBox>
-                                    <DetailInfoBox>
-                                        <div>
-                                            <CustomBoxImage
-                                                src="/images/icon/star_default_ffdf00.svg"
-                                                size='20px'
-                                            />
+                                    </InfoGroupBox>
+                                </div>
+                                <div>
+                                    <InfoGroupBox>
+                                        <div className='mgl-flex mgl-flex-alignItems-center' style={{ marginRight: '5px' }}>
+                                            <div className='rank-box accent-text' style={{ marginRight: '5px' }} tooltip="hi">
+                                                <a href={`${NAVER_SHOPPING_SEARCH_URL}?query=${record.keyword}&pagingIndex=${detail.page}`} target="_blank" rel="noopener">
+                                                    <span>{detail.rank}위</span>
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <span>({detail.page}페이지 </span>
+                                                <span>{detail.rank % 40 === 0 ? 40 : (detail.rank % 40)}위)</span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <span>{detail.score_info ?? 0}</span>
-                                            <span>({detail.review_count ?? 0})</span>
+                                        <div className='mgl-flex mgl-flex-alignItems-center'>
+                                            {detail.price_comparision_yn === 'y' &&
+                                                <div>
+                                                    <span>, 가격 비교</span>
+                                                    <span>{detail.comparision_rank}위 </span>
+                                                    <span>(총 {detail.low_mall_count}개 중)</span>
+                                                </div>
+                                            }
                                         </div>
-                                    </DetailInfoBox>
-                                    <DetailInfoBox>
-                                        <div>
-                                            <CustomBoxImage
-                                                src="/images/icon/shopping_bag_fill_808080.svg"
-                                                size='20px'
-                                            />
-                                        </div>
-                                        <div>
-                                            <span>({detail.purchase_count ?? 0})</span>
-                                        </div>
-                                    </DetailInfoBox>
-                                    <DetailInfoBox>
-                                        <div>
-                                            <CustomBoxImage
-                                                src="/images/icon/heart_check_fill_e56780.svg"
-                                                size='20px'
-                                            />
-                                        </div>
-                                        <div>
-                                            <span>({detail.keep_count ?? 0})</span>
-                                        </div>
-                                    </DetailInfoBox>
-                                </InfoGroupBox>
-                                <InfoGroupBox>
-                                    <div>
-                                        <span>상품 게시일 : </span>
-                                        <span>{detail.registration_date ? strToYYYYMMDD(detail.registration_date) : '-'}</span>
-                                    </div>
-                                </InfoGroupBox>
+                                    </InfoGroupBox>
+                                </div>
                             </div>
-                            <div className='rank-field'>
-                                <InfoGroupBox>
-                                    <div className='accent-text'>
-                                        <span>총 </span>
-                                        <span style={{ color: 'var(--defaultBlueColor)' }}>{detail.rank}위</span>
-                                    </div>
-                                    <div>
-                                        <span>({detail.page}페이지 </span>
-                                        <span>{detail.rank % 40 === 0 ? (detail.rank) : (detail.rank % 40)}위)</span>
-                                    </div>
-                                </InfoGroupBox>
-                                <InfoGroupBox>
-                                    {detail.price_comparision_yn === 'y' &&
+                            <div>
+                                {isOpenedSubInfo ?
+                                    <SingleBlockButton
+                                        type='button'
+                                        className='dropdown-button-item'
+                                        onClick={() => onRemoveOpenedSubInfoRecordDetailId(detail.id)}
+                                    >
                                         <div>
-                                            <span style={{ color: '#000', fontWeight: '600' }}>가격 비교</span>
-                                            <span style={{ color: '#000', fontWeight: '600' }}>{detail.comparision_rank}위</span>
-                                            <span>({detail.low_mall_count}개 중)</span>
+                                            <CustomBoxImage
+                                                src={'/images/icon/arrowDropUp_default_808080.svg'}
+                                            />
                                         </div>
-                                    }
-                                </InfoGroupBox>
+                                    </SingleBlockButton>
+                                    :
+                                    <SingleBlockButton
+                                        type='button'
+                                        className='dropdown-button-item'
+                                        onClick={() => onAddOpenedSubInfoRecordDetailId(detail.id)}
+                                    >
+                                        <div>
+                                            <CustomBoxImage
+                                                src={'/images/icon/arrowDropDown_default_808080.svg'}
+                                            />
+                                        </div>
+                                    </SingleBlockButton>
+                                }
                             </div>
-                        </div>
+                        </MainInfoWrapper>
+                        {isOpenedSubInfo &&
+                            <SubInfoWrapper>
+                                <div>
+                                    <SubInfoGroupBox>
+                                        <div>카테고리 : </div>
+                                        <div>
+                                            <span>{detail.category1_name}</span>
+                                            <span style={{ color: '#b4b4b4' }}>{' > '}</span>
+                                            <span>{detail.category2_name}</span>
+                                            <span style={{ color: '#b4b4b4' }}>{' > '}</span>
+                                            <span>{detail.category3_name}</span>
+                                            <span style={{ color: '#b4b4b4' }}>{' > '}</span>
+                                            <span>{detail.category4_name}</span>
+                                        </div>
+                                    </SubInfoGroupBox>
+                                    <SubInfoGroupBox>
+                                        <div>가격 : </div>
+                                        <div>
+                                            <span>{detail.price?.toLocaleString()}원</span>
+                                        </div>
+                                        <div style={{ marginLeft: '5px', display: 'flex' }}>
+                                            <div>
+                                                <CustomBoxImage
+                                                    src='/images/icon/delivery_truck_default_808080.svg'
+                                                    size='15px'
+                                                />
+                                            </div>
+                                            <div>
+                                                <span>{detail.delivery_fee === 0 ? '무료' : detail.delivery_fee}</span>
+                                            </div>
+                                        </div>
+                                    </SubInfoGroupBox>
+                                    <SubInfoGroupBox>
+                                        <div>게시일 : </div>
+                                        <div>
+                                            <span>{detail.registration_date ? strToYYYYMMDD(detail.registration_date) : '-'}</span>
+                                        </div>
+                                    </SubInfoGroupBox>
+                                    <SubInfoGroupBox>
+                                        <DetailInfoBox>
+                                            <div>
+                                                <CustomBoxImage
+                                                    src="/images/icon/star_default_ffdf00.svg"
+                                                    size='15px'
+                                                />
+                                            </div>
+                                            <div>
+                                                <span>{detail.score_info ?? 0}</span>
+                                                <span>({detail.review_count ?? 0})</span>
+                                            </div>
+                                        </DetailInfoBox>
+                                        <DetailInfoBox>
+                                            <div>
+                                                <CustomBoxImage
+                                                    src="/images/icon/shopping_bag_fill_808080.svg"
+                                                    size='15px'
+                                                />
+                                            </div>
+                                            <div>
+                                                <span>({detail.purchase_count ?? 0})</span>
+                                            </div>
+                                        </DetailInfoBox>
+                                        <DetailInfoBox>
+                                            <div>
+                                                <CustomBoxImage
+                                                    src="/images/icon/heart_check_fill_e56780.svg"
+                                                    size='15px'
+                                                />
+                                            </div>
+                                            <div>
+                                                <span>({detail.keep_count ?? 0})</span>
+                                            </div>
+                                        </DetailInfoBox>
+                                    </SubInfoGroupBox>
+                                </div>
+                            </SubInfoWrapper>
+                        }
                     </DetailInfoWrapper>
                 )
             })}
-
             {!(recordDetails?.length > 0) &&
                 <InfoText>
                     {targetRecordInfo?.created_at ?

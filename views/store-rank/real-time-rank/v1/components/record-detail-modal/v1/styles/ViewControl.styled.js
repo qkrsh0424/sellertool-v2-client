@@ -15,11 +15,10 @@ export const ButtonBox = styled.div`
     .button-el {
         width: 100%;
         border: 1px solid #efefef;
-        padding: 10px 15px;
-        font-size: 14px;
+        padding: 7px;
+        font-size: 12px;
         background-color: #efefef;
         color: #808080;
-        font-size: 16px;
         font-weight: 500;
         cursor: pointer;
         white-space: break-spaces;
@@ -41,12 +40,12 @@ export const ButtonBox = styled.div`
             color: #404040;
             font-weight: 600;
 
-            .sub-info {
+            .info-box {
                 background-color: #c4cad4;
             }
         }
         
-        .sub-info {
+        .info-box {
             background-color: #d8d8d8;
             border-radius: 2px;
             color: white;

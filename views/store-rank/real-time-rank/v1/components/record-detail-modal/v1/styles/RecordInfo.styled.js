@@ -12,10 +12,7 @@ export const Wrapper = styled.div`
 `;
 
 export const LabelGroup = styled.div`
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    gap: 10px;
+    padding: 0 5px;
     color: #666;
     font-size: 14px;
     margin-bottom: 10px;
@@ -25,7 +22,6 @@ export const LabelGroup = styled.div`
     }
 
     .content-value {
-        font-size: 16px;
         font-weight: 700;
         color: #4b4b4b;
     }

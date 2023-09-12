@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
 import { Container, Wrapper } from "./styles/RecordItemList.styled";
 import { RecordDetailModalComponent } from "../../record-detail-modal/v1";
@@ -24,6 +25,7 @@ export function RecordItemListComponent({
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
     const [recordDeleteModalOpen, setRecordDeleteModalOpen] = useState(false);
+    const [createRecordInfoId, setCreateRecordInfoId] = useState(null);
 
     useEffect(() => {
         if(!recordList) {
@@ -45,11 +47,14 @@ export function RecordItemListComponent({
     const handleOpenDetailSearchModal = (e, item) => {
         e.stopPropagation();
 
+        let infoId = uuidv4();
+        setCreateRecordInfoId(infoId);
         setSelectedRecord(item);
         setDetailSearchModalOpen(true)
     }
 
     const handleCloseDetailSearchModal = () => {
+        setCreateRecordInfoId(null);
         setDetailSearchModalOpen(false);
     }
 
@@ -117,6 +122,7 @@ export function RecordItemListComponent({
                     <RecordDetailModalComponent
                         open={detailSearchModalOpen}
                         record={selectedRecord}
+                        createRecordInfoId={createRecordInfoId}
                         currentPendingRecordIds={currentPendingRecordIds}
                         rankSearchInfo={rankSearchInfo}
                         onClose={handleCloseDetailSearchModal}
@@ -154,12 +160,12 @@ function TableHeaderRow() {
     return (
         <tr>
             <th width={100} className="fixed-header"></th>
-            <ResizableTh width={250} className="fixed-header">상품</ResizableTh>
-            <ResizableTh width={250} className="fixed-header">스토어</ResizableTh>
-            <th width={200} className="fixed-header">카테고리</th>
-            <th width={150} className="fixed-header">최근 조회</th>
-            <th width={150} className="fixed-header">일반 상품</th>
-            <th width={150} className="fixed-header">광고 상품</th>
+            <ResizableTh width={180} className="fixed-header">상품</ResizableTh>
+            <ResizableTh width={180} className="fixed-header">스토어</ResizableTh>
+            <th width={150} className="fixed-header">카테고리</th>
+            <th width={120} className="fixed-header">최근 조회</th>
+            <th width={100} className="fixed-header">일반 상품</th>
+            <th width={100} className="fixed-header">광고 상품</th>
             <th width={80} className="fixed-header">상태</th>
             <th width={80} className="fixed-header">삭제</th>
         </tr>

@@ -16,7 +16,6 @@ export const Wrapper = styled.div`
     .table-box {
         width: 100%;
         position:relative;
-        font-size: 14px;
         /* height: 300px; */
         overflow: hidden;
         border: none;
@@ -29,7 +28,6 @@ export const Wrapper = styled.div`
     }
 
     .main-info {
-        font-size: 14px;
         font-weight: 600;
     }
 
@@ -87,8 +85,8 @@ export const Wrapper = styled.div`
     }
 
     .thumbnail {
-        width: 80px;
-        height: 80px;
+        width: 50px;
+        height: 50px;
         border-radius: 10px;
         overflow: hidden;
     }

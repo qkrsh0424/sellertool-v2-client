@@ -9,12 +9,18 @@ export const Wrapper = styled.div`
     border-radius: 15px;
     margin-bottom: 10px;
     overflow: hidden;
+
+    .image-box {
+        min-width: 90px;
+        max-width: 90px;
+        height: 90px;
+    }
 `;
 
 export const LabelGroup = styled.div`
     padding: 0 5px;
     color: #666;
-    font-size: 14px;
+    font-size: 12px;
     margin-bottom: 10px;
 
     &:last-child{
@@ -22,6 +28,7 @@ export const LabelGroup = styled.div`
     }
 
     .content-value {
+        font-size: 14px;
         font-weight: 700;
         color: #4b4b4b;
     }

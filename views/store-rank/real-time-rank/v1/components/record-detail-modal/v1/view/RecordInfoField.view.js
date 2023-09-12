@@ -9,10 +9,9 @@ export default function RecordInfoFieldView({
     return (
         record &&
         <Wrapper>
-            <div>
+            <div className="image-box">
                 <CustomBoxImage
                     src={targetRecordInfo?.thumbnail_url}
-                    size='90px'
                 />
             </div>
             <div style={{ overflow: 'hidden' }}>

@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import useNRankRecordDetailHook from "./hooks/useNRankRecordDetailHook";
 import { Wrapper } from "./styles/RecordDetailModal.styled";
 import RankDetailFieldView from "./view/RankDetailField.view";
@@ -14,11 +13,15 @@ import { useApiHook } from "./hooks/useApiHook";
 import { useSelector } from "react-redux";
 import RankDetailSkeletonFieldView from "./view/RankDetailSkeletonField.view";
 import { customToast, defaultOptions } from "../../../../../../../components/toast/custom-react-toastify/v1";
+import { customBackdropController } from "../../../../../../../components/backdrop/default/v1";
+
+const customBackdropControl = customBackdropController();
 
 export function RecordDetailModalComponent({
     open,
     onClose,
     record,
+    createRecordInfoId,
     rankSearchInfo,
     currentPendingRecordIds,
     onSetCurrentPendingRecordIds,
@@ -26,7 +29,6 @@ export function RecordDetailModalComponent({
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
-    const RECORD_INFO_ID = uuidv4();
 
     const [isAdRankView, setIsAdRankView] = useState(false);
     
@@ -92,7 +94,7 @@ export function RecordDetailModalComponent({
         })
     }
 
-    const handleChangeNRankRecordStatusToPending = async () => {   
+    const handleChangeNRankRecordStatusToPending = async () => {
         try {
             if(rankSearchInfo.allowed_search_count <= rankSearchInfo.searched_count) {
                 throw new Error("금일 요청 가능한 횟수를 초과하였습니다.");
@@ -105,11 +107,12 @@ export function RecordDetailModalComponent({
             return;
         }
 
+        customBackdropControl.showBackdrop();
         let recordId = record.id;
         await onReqChangeNRankRecordStatusToPending({
             params: { id: recordId },
             headers: { wsId: wsId },
-            body: { record_info_id: RECORD_INFO_ID }
+            body: { record_info_id: createRecordInfoId }
         }, {
             success: () => {
                 let recordIds = [...currentPendingRecordIds].concat(recordId);
@@ -118,11 +121,12 @@ export function RecordDetailModalComponent({
                 onSearchSubscriptionPlanSearchInfo();
             }
         })
+        customBackdropControl.hideBackdrop();
     }
 
     const handleCreateNRankRecordDetail = async () => {
         await onReqCreateNRankRecordDetail({
-            body: { record_id: record.id, record_info_id: RECORD_INFO_ID },
+            body: { record_id: record.id, record_info_id: createRecordInfoId },
             headers: { wsId: wsId }
         })
     }
@@ -176,7 +180,7 @@ export function RecordDetailModalComponent({
                                         <RankDetailSkeletonFieldView />
                                     </>
                                     :
-                                    isAdRankView ?
+                                    (isAdRankView ?
                                         <AdRankDetailFieldView
                                             record={record}
                                             adRecordDetails={adRecordDetails}
@@ -193,12 +197,9 @@ export function RecordDetailModalComponent({
                                             onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
                                             onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
                                         />
+                                    )
                                 }
                             </div>
-                        }
-
-                        {isPending &&
-                            <RankDetailSkeletonFieldView />
                         }
                     </div>
                 </Wrapper>

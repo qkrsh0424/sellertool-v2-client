@@ -39,12 +39,12 @@ export const MainInfoWrapper = styled.div`
     }
 
     .image-box {
-        min-width: 90px;
-        max-width: 90px;
+        min-width: 80px;
+        max-width: 80px;
 
         @media screen and (max-width: 992px){
-            min-width: 70px;
-            max-width: 70px;
+            min-width: 60px;
+            max-width: 60px;
         }
     }
 
@@ -192,4 +192,5 @@ export const InfoText = styled.div`
     justify-content: center;
     align-items: center;
     color: #939393;
+    font-size: 12px;
 `;

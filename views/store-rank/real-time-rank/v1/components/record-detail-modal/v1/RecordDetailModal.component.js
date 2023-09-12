@@ -1,4 +1,4 @@
-
+import { v4 as uuidv4 } from 'uuid';
 import useNRankRecordDetailHook from "./hooks/useNRankRecordDetailHook";
 import { Wrapper } from "./styles/RecordDetailModal.styled";
 import RankDetailFieldView from "./view/RankDetailField.view";
@@ -26,6 +26,7 @@ export function RecordDetailModalComponent({
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
+    const RECORD_INFO_ID = uuidv4();
 
     const [isAdRankView, setIsAdRankView] = useState(false);
     
@@ -107,20 +108,21 @@ export function RecordDetailModalComponent({
         let recordId = record.id;
         await onReqChangeNRankRecordStatusToPending({
             params: { id: recordId },
-            headers: { wsId: wsId }
+            headers: { wsId: wsId },
+            body: { record_info_id: RECORD_INFO_ID }
         }, {
-            success: (results) => {
+            success: () => {
                 let recordIds = [...currentPendingRecordIds].concat(recordId);
                 onSetCurrentPendingRecordIds(recordIds);
-                handleCreateNRankRecordDetail(results);
+                handleCreateNRankRecordDetail();
                 onSearchSubscriptionPlanSearchInfo();
             }
         })
     }
 
-    const handleCreateNRankRecordDetail = async (info_id) => {
+    const handleCreateNRankRecordDetail = async () => {
         await onReqCreateNRankRecordDetail({
-            body: { record_id: record.id, record_info_id: info_id },
+            body: { record_id: record.id, record_info_id: RECORD_INFO_ID },
             headers: { wsId: wsId }
         })
     }
@@ -143,8 +145,6 @@ export function RecordDetailModalComponent({
                     />
                     <SubInfoFieldView
                         record={record}
-                        onActionFoldAllOptions={onActionFoldAllOptions}
-                        onActionUnfoldAllOptions={onActionUnfoldAllOptions}
                     />
                     <ButtonFieldView
                         targetRecordInfo={targetRecordInfo}
@@ -158,36 +158,43 @@ export function RecordDetailModalComponent({
                             adRecordDetails={adRecordDetails}
                             onChangeAdRankView={handleChangeAdRankView}
                             onChangeRankView={handleChangeRankView}
+                            onActionFoldAllOptions={onActionFoldAllOptions}
+                            onActionUnfoldAllOptions={onActionUnfoldAllOptions}
                         />
-                        
-                        {isPending &&
-                            <CustomProgressIcon
-                                type={'sync'}
-                                color='var(--mainColor)'
-                                size={20}
-                                margin={20}
-                                isBackgroundBlur={true}
-                            />
-                        }
-                        
-                        {(adRecordDetails && recordDetails && !isPending) &&
-                            <>
-                                {isAdRankView ?
-                                    <AdRankDetailFieldView
-                                        record={record}
-                                        adRecordDetails={adRecordDetails}
-                                    />
+
+                        {(adRecordDetails && recordDetails) &&
+                            <div style={{ position: 'relative' }}>
+                                {isPending ?
+                                    <>
+                                        <CustomProgressIcon
+                                            type={'sync'}
+                                            color='var(--mainColor)'
+                                            size={20}
+                                            margin={20}
+                                            isBackgroundBlur={true}
+                                        />
+                                        <RankDetailSkeletonFieldView />
+                                    </>
                                     :
-                                    <RankDetailFieldView
-                                        record={record}
-                                        targetRecordInfo={targetRecordInfo}
-                                        recordDetails={recordDetails}
-                                        openedSubInfoRecordDetailIds={openedSubInfoRecordDetailIds}
-                                        onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
-                                        onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
-                                    />
+                                    isAdRankView ?
+                                        <AdRankDetailFieldView
+                                            record={record}
+                                            adRecordDetails={adRecordDetails}
+                                            openedSubInfoRecordDetailIds={openedSubInfoRecordDetailIds}
+                                            onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
+                                            onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
+                                        />
+                                        :
+                                        <RankDetailFieldView
+                                            record={record}
+                                            targetRecordInfo={targetRecordInfo}
+                                            recordDetails={recordDetails}
+                                            openedSubInfoRecordDetailIds={openedSubInfoRecordDetailIds}
+                                            onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
+                                            onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
+                                        />
                                 }
-                            </>
+                            </div>
                         }
 
                         {isPending &&

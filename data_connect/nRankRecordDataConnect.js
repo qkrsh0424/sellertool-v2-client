@@ -5,7 +5,7 @@ const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.developm
 
 const nRankRecordDataConnect = () => {
     return {
-        createOne: async function (body, headers) {
+        createOne: async function (headers, body) {
             return await withStoreRankApiCsrfWrapper(
                 () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/nrank-records`, body, {
                     headers,
@@ -21,7 +21,7 @@ const nRankRecordDataConnect = () => {
                 withCredentials: true
             })
         },
-        deleteOne: async function (params, headers) {
+        deleteOne: async function (headers, params) {
             return await withStoreRankApiCsrfWrapper(
                 () => axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/nrank-records/${params.id}`, {
                     headers,
@@ -31,9 +31,9 @@ const nRankRecordDataConnect = () => {
                 })
             )
         },
-        changeStatusToPending: async function (params, headers) {
+        changeStatusToPending: async function (headers, params, body) {
             return await withStoreRankApiCsrfWrapper(
-                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/nrank-records/${params.id}/target:status/action:pending`, {},  {
+                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/nrank-records/${params.id}/target:status/action:pending`, body,  {
                     headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_nrank_api_csrf_token',
@@ -41,7 +41,7 @@ const nRankRecordDataConnect = () => {
                 })
             )
         },
-        changeListStatusToFail: async function (body, headers) {
+        changeListStatusToFail: async function (headers, body) {
             return await withStoreRankApiCsrfWrapper(
                 () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/nrank-records/target:status/action:fail`, body,  {
                     headers,

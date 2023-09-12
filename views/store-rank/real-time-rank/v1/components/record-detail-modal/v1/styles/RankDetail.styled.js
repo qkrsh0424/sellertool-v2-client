@@ -21,13 +21,31 @@ export const MainInfoWrapper = styled.div`
     position: relative;
     display: flex;
     align-items: center;
+    gap: 10px;
     font-size: 12px;
     font-weight: 600;
     color: #888;
     min-height: 120px;
+    padding: 5px;
+
+    @media screen and (max-width: 992px) {
+        font-size: 11px;
+        flex-direction: column;
+        align-items: normal;
+    }
 
     &:last-child {
         margin-bottom: 0;
+    }
+
+    .image-box {
+        min-width: 90px;
+        max-width: 90px;
+
+        @media screen and (max-width: 992px){
+            min-width: 70px;
+            max-width: 70px;
+        }
     }
 
     .image-el {
@@ -46,6 +64,10 @@ export const MainInfoWrapper = styled.div`
         font-weight: 700;
         font-size: 14px;
         color: #4b4b4b;
+
+        @media screen and (max-width: 992px) {
+            font-size: 12px;
+        }
     }
 
     .rank-box {
@@ -61,10 +83,16 @@ export const MainInfoWrapper = styled.div`
         }
     }
 
+    .ad-rank-box {
+        border: 1px solid var(--defaultBlueColor);
+        padding: 0px 10px;
+        border-radius: 10px;
+        color: var(--defaultBlueColor);
+    }
+
     .dropdown-button-item{
-        position: absolute;
-        right: 10px;
-        bottom: 10px;
+        right: 5px;
+        bottom: -30px;
         
         margin:0;
         padding:0;
@@ -73,9 +101,9 @@ export const MainInfoWrapper = styled.div`
         border-radius: 5px;
         margin-left: 10px;
 
-        @media all and (max-width: 992px){
-            position: relative;
+        @media screen and (max-width: 992px){
             bottom: 0;
+            float: right;
         }
     }
 `;
@@ -138,6 +166,10 @@ export const SubInfoGroupBox = styled.div`
         color: white;
         border-radius: 2px;
         margin-right: 5px;
+    }
+
+    .info-title {
+        color: #a4a5a6
     }
 `;
 

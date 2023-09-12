@@ -6,12 +6,15 @@ import { CustomBlockButton } from "../../../../modules/buttons/block-button/v1";
 import { CustomProgressBar } from "../../../../modules/progress/progress-bar/v1";
 import useTargetTimeTimerHook from "../../../../../../../../hooks/timer/useTargetTimeTimerHook";
 import { getSearchableDiffSeconds } from "../../../../../../../../static-data/nRankRecordOptions";
+import useDisabledBtn from "../../../../../../../../hooks/button/useDisabledBtn";
 
 export default function ButtonFieldView({
     targetRecordInfo,
     isPending,
     onSubmit
 }) {
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+
     const {
         timer,
         onUpdateTargetTime,
@@ -30,6 +33,7 @@ export default function ButtonFieldView({
         e.preventDefault();
         e.stopPropagation();
 
+        setDisabledBtn(true);
         onSubmit();
     }
 
@@ -57,7 +61,7 @@ export default function ButtonFieldView({
                             <CustomBlockButton
                                 type='button'
                                 className='button-item'
-                                disabled={true}
+                                disabled
                             >
                                 <span>
                                     조회중입니다...
@@ -70,6 +74,7 @@ export default function ButtonFieldView({
                             <CustomBlockButton
                                 type='submit'
                                 className='button-item'
+                                disabled={disabledBtn}
                             >
                                 조회
                             </CustomBlockButton>

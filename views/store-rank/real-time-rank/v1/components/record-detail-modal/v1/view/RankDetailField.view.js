@@ -17,18 +17,18 @@ export default function RankDetailFieldView({
     return (
         <Wrapper>
             {recordDetails?.map((detail, idx) => {
-                let isOpenedSubInfo = openedSubInfoRecordDetailIds.includes(detail.id)
+                let isOpenedSubInfo = openedSubInfoRecordDetailIds?.includes(detail.id)
 
                 return (
                     <DetailInfoWrapper key={'record_detail_list_idx' + idx}>
                         <MainInfoWrapper>
-                            <div style={{ padding: '0 10px', minWidth: '110px', maxWidth: '110px' }}>
+                            <div className='image-box'>
                                 <CustomBoxImage
                                     className='image-el'
                                     src={detail.thumbnail_url}
                                 />
                             </div>
-                            <div style={{ overflow: 'hidden' }}>
+                            <div style={{ overflow: 'hidden', flex: '1' }}>
                                 <div className='info-field'>
                                     <InfoGroupBox>
                                         <div>
@@ -46,7 +46,7 @@ export default function RankDetailFieldView({
                                 <div>
                                     <InfoGroupBox>
                                         <div className='mgl-flex mgl-flex-alignItems-center' style={{ marginRight: '5px' }}>
-                                            <div className='rank-box accent-text' style={{ marginRight: '5px' }} tooltip="hi">
+                                            <div className='rank-box accent-text' style={{ marginRight: '5px' }}>
                                                 <a href={`${NAVER_SHOPPING_SEARCH_URL}?query=${record.keyword}&pagingIndex=${detail.page}`} target="_blank" rel="noopener">
                                                     <span>{detail.rank}위</span>
                                                 </a>
@@ -100,7 +100,7 @@ export default function RankDetailFieldView({
                             <SubInfoWrapper>
                                 <div>
                                     <SubInfoGroupBox>
-                                        <div>카테고리 : </div>
+                                        <div className='info-title'>카테고리 : </div>
                                         <div>
                                             <span>{detail.category1_name}</span>
                                             <span style={{ color: '#b4b4b4' }}>{' > '}</span>
@@ -112,7 +112,7 @@ export default function RankDetailFieldView({
                                         </div>
                                     </SubInfoGroupBox>
                                     <SubInfoGroupBox>
-                                        <div>가격 : </div>
+                                        <div className='info-title'>가격 : </div>
                                         <div>
                                             <span>{detail.price?.toLocaleString()}원</span>
                                         </div>
@@ -129,7 +129,7 @@ export default function RankDetailFieldView({
                                         </div>
                                     </SubInfoGroupBox>
                                     <SubInfoGroupBox>
-                                        <div>게시일 : </div>
+                                        <div className='info-title'>게시일 : </div>
                                         <div>
                                             <span>{detail.registration_date ? strToYYYYMMDD(detail.registration_date) : '-'}</span>
                                         </div>

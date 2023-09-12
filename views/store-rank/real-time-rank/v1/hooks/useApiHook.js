@@ -22,12 +22,12 @@ export function useApiHook() {
     }
 
     const onReqCreateSearchInput = async (
-        options = {body: {}, headers: {}},
+        options = {headers: {}, body: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().createOne(options?.body, options?.headers)
+        await nRankRecordDataConnect().createOne(options?.headers, options?.body)
             .then(res => {
                 if(res.status === 200) {
                     let memo = '정상적으로 추가되었습니다.'
@@ -48,12 +48,12 @@ export function useApiHook() {
     }
 
     const onReqDeleteNRankRecord = async (
-        options = {params: {}, headers: {}},
+        options = {headers: {}, params: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().deleteOne(options?.params, options?.headers)
+        await nRankRecordDataConnect().deleteOne(options?.headers, options?.params)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data, res);
@@ -90,12 +90,12 @@ export function useApiHook() {
     }
 
     const onReqChangeNRankRecordListStatusToFail = async (
-        options = {body: {}, headers: {}},
+        options = {headers: {}, body: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().changeListStatusToFail(options.body, options.headers)
+        await nRankRecordDataConnect().changeListStatusToFail(options.headers, options.body)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success();

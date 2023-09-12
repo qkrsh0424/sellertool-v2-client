@@ -44,7 +44,6 @@ export function RecordItemListComponent({
 
     const handleOpenDetailSearchModal = (e, item) => {
         e.stopPropagation();
-        e.preventDefault();
 
         setSelectedRecord(item);
         setDetailSearchModalOpen(true)
@@ -62,7 +61,7 @@ export function RecordItemListComponent({
     }
 
     const handleCloseRecordDeleteModal = () => {
-        setRecordDeleteModalOpen(false)
+        setRecordDeleteModalOpen(false);
     }
 
     const handleDeleteRankRecord = async () => {

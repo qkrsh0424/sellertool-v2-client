@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 
     .button-item {
         font-size: 14px;

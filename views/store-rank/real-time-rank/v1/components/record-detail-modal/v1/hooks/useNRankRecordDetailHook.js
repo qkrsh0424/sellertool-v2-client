@@ -36,7 +36,8 @@ export default function useNRankRecordDetailHook({
 
     const onActionFoldAllOptions = () => {
         let ids = recordDetails?.map(r => r.id);
-        setOpenedSubInfoRecordDetailIds(ids)
+        let adIds = adRecordDetails?.map(r => r.id);
+        setOpenedSubInfoRecordDetailIds([...ids, ...adIds])
     }
 
     const onActionUnfoldAllOptions = () => {

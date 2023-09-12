@@ -1,8 +1,26 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-    display: flex;
-    align-items: center;
+
+    .control-btn-box {
+        margin-bottom: 10px;
+    }
+
+    .button-el {
+        border: none;
+        width: 70px;
+        font-size: 11px;
+        background-color: #f4f4f4;
+        border-radius: 5px;
+        cursor: pointer;
+        color: rgb(96, 96, 96);
+        height: 30px;
+    }
+
+    .tab-container {
+        display: flex;
+        align-items: center;
+    }
 `;
 
 export const ButtonBox = styled.div`

@@ -4,9 +4,9 @@ import { nRankRecordDataConnect } from "../../../../../../../../data_connect/nRa
 
 export function useApiHook() {
     const onReqCreateNRankRecordDetail = async (
-        options = {params: {}, body: {}, headers: {}}
+        options = {headers: {}, params: {}, body: {}}
     ) => {
-        await nRankRecordDetailDataConnect().createList(options.body, options.headers)
+        await nRankRecordDetailDataConnect().createList(options.headers, options.body)
             .catch(err => {
                 const res = err.response;
                 customToast.error(res?.data?.memo, {
@@ -17,12 +17,12 @@ export function useApiHook() {
     }
 
     const onReqSearchNRankRecordDetail = async (
-        options = {params: {}, headers: {}},
+        options = {headers: {}, params: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDetailDataConnect().searchList(options.params, options.headers)
+        await nRankRecordDetailDataConnect().searchList(options.headers, options.params)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data, res);
@@ -38,12 +38,12 @@ export function useApiHook() {
     }
 
     const onReqChangeNRankRecordStatusToPending = async (
-        options = {params: {}, headers: {}},
+        options = {headers: {}, params: {}, body: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().changeStatusToPending(options.params, options.headers)
+        await nRankRecordDataConnect().changeStatusToPending(options.headers, options.params, options.body)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data);

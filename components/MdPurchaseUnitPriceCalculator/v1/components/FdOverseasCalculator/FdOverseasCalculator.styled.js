@@ -241,8 +241,8 @@ export const St = {
         }
 
         .scenario-wrapper{
-            padding: 10px;
             line-height: 1.5;
+            margin-top: 10px;
 
             .scenario-table-box{
                 overflow: auto;
@@ -253,7 +253,7 @@ export const St = {
                     width:100%;
                     background: white;
                     text-align: center;
-                    font-size: 12px;
+                    font-size: 10px;
                     border-collapse: collapse;
                 }
 
@@ -261,7 +261,7 @@ export const St = {
                     border: 1px solid #f0f0f0;
                 }
                 thead th{
-                    width: 100px;
+                    width: 120px;
                 }
             }
             .scenario-title{

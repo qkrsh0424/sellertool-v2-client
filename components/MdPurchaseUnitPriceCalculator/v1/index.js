@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { CustomDialog } from "../../dialog/v1/CustomDialog";
 import { St } from "./index.styled";
-import CustomInput from "../../input/default/v1/CustomInput";
 import CustomBlockButton from "../../buttons/block-button/v1/CustomBlockButton";
-import { FdCommonCalculator } from "./components";
+import { FdCommonCalculator, FdOverseasCalculator } from "./components";
 import { useDataSourceHook } from "./hooks";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -48,6 +47,10 @@ export function MdPurchaseUnitPriceCalculator({
         });
     }
 
+    const handleChangeType = (type) => {
+        setType(type);
+    }
+
     const handleSubmitExport = (body) => {
         onExport(body);
         onClose();
@@ -67,17 +70,27 @@ export function MdPurchaseUnitPriceCalculator({
                             <CustomBlockButton
                                 type='button'
                                 className={`button-item ${type === 'COMMON' ? 'button-item-isActive' : ''}`}
+                                onClick={() => handleChangeType('COMMON')}
                             >일반형</CustomBlockButton>
                             <CustomBlockButton
                                 type='button'
                                 className={`button-item ${type === 'OVERSEAS' ? 'button-item-isActive' : ''}`}
+                                onClick={() => handleChangeType('OVERSEAS')}
                             >해외 수입형</CustomBlockButton>
                         </div>
                     </St.ButtonGroupWrapper>
-                    <FdCommonCalculator
-                        mrBaseExchangeRateList={mrBaseExchangeRateList}
-                        onExport={handleSubmitExport}
-                    />
+                    {type === 'COMMON' &&
+                        <FdCommonCalculator
+                            mrBaseExchangeRateList={mrBaseExchangeRateList}
+                            onExport={handleSubmitExport}
+                        />
+                    }
+                    {type === 'OVERSEAS' &&
+                        <FdOverseasCalculator
+                            mrBaseExchangeRateList={mrBaseExchangeRateList}
+                            onExport={handleSubmitExport}
+                        />
+                    }
                 </St.Container>
             </CustomDialog>
         </>

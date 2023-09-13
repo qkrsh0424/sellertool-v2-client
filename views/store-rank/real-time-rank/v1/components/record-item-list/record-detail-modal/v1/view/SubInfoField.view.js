@@ -1,4 +1,4 @@
-import { CustomBoxImage } from "../../../../modules";
+import { CustomBoxImage } from "../../../../../modules";
 import { Wrapper } from "../styles/SubInfo.styled";
 
 const NAVER_SHOPPING_RANKING_URL = "https://search.shopping.naver.com/search/all"

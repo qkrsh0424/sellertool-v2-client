@@ -1,4 +1,4 @@
-import SkeletonEl from "../../../../modules/skeleton/v1/SkeletonEl";
+import SkeletonEl from "../../../../../modules/skeleton/v1/SkeletonEl";
 import { DetailInfoWrapper, InfoGroupBox, MainInfoWrapper, Wrapper } from "../styles/RankDetail.styled";
 
 const EMPTY_ARRAY = [1, 2];

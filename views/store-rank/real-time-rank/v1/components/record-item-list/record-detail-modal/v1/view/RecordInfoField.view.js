@@ -1,5 +1,5 @@
-import { CustomBoxImage } from "../../../../modules";
-import { dateToHHmm, dateToYYYYMMDD } from "../../../../utils/dateFormatUtils";
+import { CustomBoxImage } from "../../../../../modules";
+import { dateToHHmm, dateToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
 import { LabelGroup, Wrapper } from "../styles/RecordInfo.styled";
 
 export default function RecordInfoFieldView({

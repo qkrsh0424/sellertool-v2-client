@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     overflow: hidden;
-    padding: 15px;
+    padding: 20px;
 
     form {
         box-shadow: var(--defaultBoxShadow);

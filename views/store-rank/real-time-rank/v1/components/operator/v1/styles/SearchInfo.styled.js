@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-    margin-bottom: 30px;
+
 `;
 
 export const SearchTitleBox = styled.div`
@@ -19,7 +19,6 @@ export const SearchInfoBox = styled.div`
     color: #979ba5;
     font-weight: 600;
     font-size: 12px;
-    margin-bottom: 15px;
     padding: 0 10px;
     
     .sub-info-box {

@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { setPlusTime } from "../../../../utils/dateFormatUtils";
+import { setPlusTime } from "../../../../../utils/dateFormatUtils";
 import { Wrapper } from "../styles/Button.styled";
-import { CustomBoxImage } from "../../../../modules";
-import { CustomBlockButton } from "../../../../modules/buttons/block-button/v1";
-import { CustomProgressBar } from "../../../../modules/progress/progress-bar/v1";
-import useTargetTimeTimerHook from "../../../../../../../../hooks/timer/useTargetTimeTimerHook";
-import { getSearchableDiffSeconds } from "../../../../../../../../static-data/nRankRecordOptions";
-import useDisabledBtn from "../../../../../../../../hooks/button/useDisabledBtn";
+import { CustomBoxImage } from "../../../../../modules";
+import { CustomBlockButton } from "../../../../../modules/buttons/block-button/v1";
+import { CustomProgressBar } from "../../../../../modules/progress/progress-bar/v1";
+import useTargetTimeTimerHook from "../../../../../../../../../hooks/timer/useTargetTimeTimerHook";
+import { getSearchableDiffSeconds } from "../../../../../../../../../static-data/nRankRecordOptions";
+import useDisabledBtn from "../../../../../../../../../hooks/button/useDisabledBtn";
 
 export default function ButtonFieldView({
     targetRecordInfo,

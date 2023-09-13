@@ -1,6 +1,6 @@
-import { customToast, defaultOptions } from "../../../../../../../../components/toast/custom-react-toastify/v1";
-import { nRankRecordDetailDataConnect } from "../../../../../../../../data_connect/nRankRecordDetailDataConnect";
-import { nRankRecordDataConnect } from "../../../../../../../../data_connect/nRankRecordDataConnect";
+import { customToast, defaultOptions } from "../../../../../../../../../components/toast/custom-react-toastify/v1";
+import { nRankRecordDetailDataConnect } from "../../../../../../../../../data_connect/nRankRecordDetailDataConnect";
+import { nRankRecordDataConnect } from "../../../../../../../../../data_connect/nRankRecordDataConnect";
 
 export function useApiHook() {
     const onReqCreateNRankRecordDetail = async (

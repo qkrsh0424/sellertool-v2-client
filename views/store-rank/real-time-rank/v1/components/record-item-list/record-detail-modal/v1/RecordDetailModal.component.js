@@ -6,14 +6,14 @@ import ButtonFieldView from "./view/ButtonField.view";
 import AdRankDetailFieldView from "./view/AdRankDetailField.view";
 import { useEffect, useState } from "react";
 import ViewControlFieldView from "./view/ViewControlField.view";
-import { CustomDialog } from "../../../../../../../components/dialog/v1/CustomDialog";
-import { CustomProgressIcon } from "../../../modules/progress/progress-icon/v1";
+import { CustomDialog } from "../../../../../../../../components/dialog/v1/CustomDialog";
+import { CustomProgressIcon } from "../../../../modules/progress/progress-icon/v1";
 import SubInfoFieldView from "./view/SubInfoField.view";
 import { useApiHook } from "./hooks/useApiHook";
 import { useSelector } from "react-redux";
 import RankDetailSkeletonFieldView from "./view/RankDetailSkeletonField.view";
-import { customToast, defaultOptions } from "../../../../../../../components/toast/custom-react-toastify/v1";
-import { customBackdropController } from "../../../../../../../components/backdrop/default/v1";
+import { customToast, defaultOptions } from "../../../../../../../../components/toast/custom-react-toastify/v1";
+import { customBackdropController } from "../../../../../../../../components/backdrop/default/v1";
 
 const customBackdropControl = customBackdropController();
 

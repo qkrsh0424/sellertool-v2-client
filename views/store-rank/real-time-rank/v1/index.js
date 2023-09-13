@@ -1,6 +1,6 @@
 import Layout from "../../layout/Layout";
 import styled from "styled-components";
-import { InputFieldComponent, RecordItemListComponent, RecordItemListSkeletonComponent } from "./components";
+import { InputFieldComponent, OperatorComponent, RecordItemListComponent, RecordItemListSkeletonComponent } from "./components";
 import useSearchInputHook from "./hooks/useSearchInputHook";
 import useNRankRecordListHook from "./hooks/useNRankRecordListHook";
 import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
@@ -206,6 +206,11 @@ export default function MainComponent(){
                         onChangeKeyword={onChangeKeyword}
                         onChangeMallName={onChangeMallName}
                         onSubmitRecordInput={handleReqCreateRecordInput}
+                    />
+
+                    <OperatorComponent
+                        recordList={recordList}
+                        rankSearchInfo={rankSearchInfo}
                     />
                     
                     <RecordItemListComponent

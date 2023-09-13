@@ -1,6 +1,6 @@
-import SingleBlockButton from "../../../../../../../modules/button/SingleBlockButton";
-import { CustomBoxImage } from "../../../../modules/index";
-import { strToYYYYMMDD } from "../../../../utils/dateFormatUtils";
+import SingleBlockButton from "../../../../../../../../modules/button/SingleBlockButton";
+import { CustomBoxImage } from "../../../../../modules/index";
+import { strToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
 import { DetailInfoBox, DetailInfoWrapper, InfoGroupBox, InfoText, MainInfoWrapper, SubInfoGroupBox, SubInfoWrapper, Wrapper } from "../styles/RankDetail.styled";
 
 const NAVER_SHOPPING_PRODUCT_URL = "https://smartstore.naver.com/main/products/"

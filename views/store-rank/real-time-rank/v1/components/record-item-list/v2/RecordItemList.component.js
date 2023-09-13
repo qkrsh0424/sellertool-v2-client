@@ -1,13 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
 import { Container, Wrapper } from "./styles/RecordItemList.styled";
-import { RecordDetailModalComponent } from "../../record-detail-modal/v1";
+import { RecordDetailModalComponent } from "../record-detail-modal/v1";
 import { CustomBoxImage } from "../../../modules";
 import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
 import { dateToHHmm, dateToYYYYMMDD } from "../../../utils/dateFormatUtils";
 import { CustomProgressBar } from "../../../modules/progress/progress-bar/v1";
-import { SearchInfoFieldView } from "./views/SearchInfoField.view";
 import ResizableTh from "../../../../../../../components/table/th/v1/ResizableTh";
 import { CustomVirtualTable } from "../../../../../../../components/table/virtual-table/v1";
 import FieldLoadingV2 from "../../../../../../modules/loading/FieldLoadingV2";
@@ -76,11 +75,6 @@ export function RecordItemListComponent({
     return (
         <>
             <Container>
-                <SearchInfoFieldView
-                    recordList={recordList}
-                    rankSearchInfo={rankSearchInfo}
-                />
-                
                 <Wrapper>
                     <div style={{ position: 'relative' }}>
                         {!recordList &&

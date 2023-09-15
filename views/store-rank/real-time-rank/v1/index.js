@@ -1,6 +1,6 @@
 import Layout from "../../layout/Layout";
 import styled from "styled-components";
-import { InputFieldComponent, OperatorComponent, RecordItemListComponent, RecordItemListSkeletonComponent } from "./components";
+import { InputFieldComponent, OperatorComponent, RecordItemListComponent } from "./components";
 import useSearchInputHook from "./hooks/useSearchInputHook";
 import useNRankRecordListHook from "./hooks/useNRankRecordListHook";
 import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { setPlusTime } from "./utils/dateFormatUtils";
 import { getRecordPendingStatusExceedSeconds } from "../../../../static-data/nRankRecordOptions";
 import useSubscriptionPlanSearchInfoHook from "./hooks/useSubscriptionPlanSearchInfoHook";
+import useNRankRecordCategoriesHook from "./hooks/useNRankRecordCategoriesHook";
 
 const RECORD_STATUS_ENUM = {
     NONE: 'NONE',
@@ -27,10 +28,11 @@ export default function MainComponent(){
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const { onReqSearchSubscriptionPlanSearchInfo, onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList, onReqChangeNRankRecordListStatusToFail } = useApiHook();
+    const { onReqSearchSubscriptionPlanSearchInfo, onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList, onReqChangeNRankRecordListStatusToFail, onReqSearchNRankRecordCategories } = useApiHook();
     const { rankSearchInfo, onSetRankSearchInfo } = useSubscriptionPlanSearchInfoHook();
     const { keyword, mallName, onChangeKeyword, onChangeMallName, onClearKeyword, onClearMallName, checkSearchInfoForm } = useSearchInputHook();
     const { searchedRecordList: recordList, currentPendingRecordIds, onSetRecordList, onSetCurrentPendingRecordIds } = useNRankRecordListHook({ keyword, mallName });
+    const { categories, onSetCategories } = useNRankRecordCategoriesHook();
 
     useEffect(() => {
         if(!wsId) {
@@ -38,8 +40,9 @@ export default function MainComponent(){
         }
 
         async function initialize() {
-            handleReqSearchNRankRecordList()
-            handleReqSearchSubscriptionPlanSearchInfo()
+            handleReqSearchNRankRecordList();
+            handleReqSearchSubscriptionPlanSearchInfo();
+            handleSearchNRankRecordCategories();
         }
 
         initialize();
@@ -192,6 +195,16 @@ export default function MainComponent(){
         }
     }
 
+    const handleSearchNRankRecordCategories = async () => {
+        await onReqSearchNRankRecordCategories({
+            headers: { wsId: wsId }
+        }, {
+            success: (results) => {
+                onSetCategories(results);
+            }
+        })
+    }
+
     return (
         <>
             <Container>
@@ -209,8 +222,10 @@ export default function MainComponent(){
                     />
 
                     <OperatorComponent
+                        categories={categories}
                         recordList={recordList}
                         rankSearchInfo={rankSearchInfo}
+                        onSearchNRankRecordCategories={handleSearchNRankRecordCategories}
                     />
                     
                     <RecordItemListComponent
@@ -219,9 +234,12 @@ export default function MainComponent(){
                         recordList={recordList}
                         rankSearchInfo={rankSearchInfo}
                         currentPendingRecordIds={currentPendingRecordIds}
+                        categories={categories}
                         onDeleteRankRecord={handleReqDeleteRankRecord}
                         onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
                         onSearchSubscriptionPlanSearchInfo={handleReqSearchSubscriptionPlanSearchInfo}
+                        onSearchNRankRecordList={handleReqSearchNRankRecordList}
+                        onSearchNRankRecordCategories={handleSearchNRankRecordCategories}
                     />
                 </Layout>
             </Container>

@@ -23,27 +23,6 @@ export function useApiHook() {
             })
     }
 
-    const onReqSearchNRankRecordCategory = async (
-        options = {headers: {}},
-        callbackFn = {
-            success: (results, response) => {}
-        }
-    ) => {
-        await nRankRecordCategoryDataConnect().searchList(options.headers)
-            .then(res => {
-                if(res.status === 200) {
-                    callbackFn.success(res?.data?.data, res);
-                }
-            })
-            .catch(err => {
-                const res = err.response;
-                customToast.error(res?.data?.memo, {
-                    ...defaultOptions,
-                    toastId: res?.data?.memo
-                })
-            })
-    }
-
     const onReqUpdateNRankRecordCategory = async (
         options = {headers: {}, body: {}},
         callbackFn = {
@@ -88,7 +67,6 @@ export function useApiHook() {
 
     return {
         onReqCreateNRankRecordCategory,
-        onReqSearchNRankRecordCategory,
         onReqUpdateNRankRecordCategory,
         onReqDeleteNRankRecordCategory
     }

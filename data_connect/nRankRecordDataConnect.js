@@ -56,6 +56,16 @@ const nRankRecordDataConnect = () => {
                 headers,
                 withCredentials: true
             })
+        },
+        changeCategory: async function (headers, params, body) {
+            return await withStoreRankApiCsrfWrapper(
+                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/nrank-records/${params.id}/target:category`, body,  {
+                    headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_nrank_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         }
     }
 }

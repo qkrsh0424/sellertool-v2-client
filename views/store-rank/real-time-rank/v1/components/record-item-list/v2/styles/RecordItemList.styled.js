@@ -91,7 +91,7 @@ export const Wrapper = styled.div`
         overflow: hidden;
     }
 
-    .button-item {
+    .control-btn {
         border-radius: 50%;
         padding: 2px;
         border: none;
@@ -102,6 +102,24 @@ export const Wrapper = styled.div`
         &:hover {
             transform: scale(1.1);
             background-color: #ffe0e0;
+        }
+    }
+
+    .button-el {
+        width: 100px;
+        font-size: 12px;
+        padding: 5px 7px;
+        border-radius: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        background-color: #f8f9fb;
+        border: 1px solid #d4dbe9;
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.05);
+            background-color: #d4dbe9;
         }
     }
 `;

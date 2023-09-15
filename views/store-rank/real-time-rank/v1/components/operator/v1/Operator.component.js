@@ -5,8 +5,10 @@ import { SearchInfoFieldView } from "./view/SearchInfoField.view";
 import { CategoryControlModalComponent } from "../category-control-modal/v1";
 
 export function OperatorComponent({
+    categories,
     recordList,
-    rankSearchInfo
+    rankSearchInfo,
+    onSearchNRankRecordCategories
 }) {
     const [categoryControlModalOpen, setCategoryControlModalOpen] = useState(false);
 
@@ -34,6 +36,8 @@ export function OperatorComponent({
                     <CategoryControlModalComponent
                         open={categoryControlModalOpen}
                         onClose={handleCloseCategoryControlModal}
+                        categories={categories}
+                        onSearchNRankRecordCategories={onSearchNRankRecordCategories}
                     />
                 }
             </Container>

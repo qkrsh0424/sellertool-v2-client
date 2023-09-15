@@ -110,8 +110,8 @@ export function RecordDetailModalComponent({
         customBackdropControl.showBackdrop();
         let recordId = record.id;
         await onReqChangeNRankRecordStatusToPending({
-            params: { id: recordId },
             headers: { wsId: wsId },
+            params: { id: recordId },
             body: { record_info_id: createRecordInfoId }
         }, {
             success: () => {

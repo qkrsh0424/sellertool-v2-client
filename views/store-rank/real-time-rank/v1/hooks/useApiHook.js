@@ -1,4 +1,5 @@
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
+import { nRankRecordCategoryDataConnect } from "../../../../../data_connect/nRankRecordCategoryDataConnect";
 import { nRankRecordDataConnect } from "../../../../../data_connect/nRankRecordDataConnect";
 
 export function useApiHook() {
@@ -110,11 +111,33 @@ export function useApiHook() {
             })
     }
 
+    const onReqSearchNRankRecordCategories = async (
+        options = {headers: {}, params: {}},
+        callbackFn = {
+            success: (results, response) => {},
+        }
+    ) => {
+        await nRankRecordCategoryDataConnect().searchList(options.headers, options.params)
+            .then(res => {
+                if (res.status === 200) {
+                    callbackFn.success(res?.data?.data, res);
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                })
+            })
+    }
+
     return {
         onReqSearchSubscriptionPlanSearchInfo,
         onReqCreateSearchInput,
         onReqDeleteNRankRecord,
         onReqSearchNRankRecordList,
-        onReqChangeNRankRecordListStatusToFail
+        onReqChangeNRankRecordListStatusToFail,
+        onReqSearchNRankRecordCategories
     }
 }

@@ -7,8 +7,9 @@ const PAGE_CONTROL = {
     DELETE: 'delete'
 }
 
-export function useCategoryControlHook() {
-    const [categories, setCategories] = useState(null);
+export function useCategoryControlHook({
+    categories
+}) {
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     const [pageControl, setPageControl] = useState(PAGE_CONTROL.MAIN);
@@ -36,13 +37,9 @@ export function useCategoryControlHook() {
             setInputValue(null);
             return;
         }
-        let value = categories.find(category => category.id === categoryId)
+        let value = categories?.find(category => category.id === categoryId)
         setSelectedCategory(value);
         setInputValue(value.name);
-    }
-
-    const onSetCategories = (categories) => {
-        setCategories(categories)
     }
 
     const checkFormat = (body) => {
@@ -56,7 +53,6 @@ export function useCategoryControlHook() {
         selectedCategory,
         pageControl,
         inputValue,
-        onSetCategories,
         handleChangePage,
         handleChangePageToMain,
         handleChangeInputValue,

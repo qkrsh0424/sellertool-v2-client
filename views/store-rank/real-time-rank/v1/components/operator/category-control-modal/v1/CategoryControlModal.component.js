@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react";
 import { CustomDialog } from "../../../../../../../../components/dialog/v1/CustomDialog";
-import SingleBlockButton from "../../../../../../../modules/button/SingleBlockButton";
-import { Container, Wrapper } from "./styles/CategoryControlModal.styled";
 import CreateFieldView from "./view/CreateField.view";
 import { useApiHook } from "./hooks/useApiHook";
 import { useSelector } from "react-redux";
@@ -10,6 +7,7 @@ import EditFieldView from "./view/EditField.view";
 import DeleteFieldView from "./view/DeleteField.view";
 import { customBackdropController } from "../../../../../../../../components/backdrop/default/v1";
 import { useCategoryControlHook } from "./hooks/useCategoryControlHook";
+import MainFieldView from "./view/MainField.view";
 
 const PAGE_CONTROL = {
     MAIN: 'main',
@@ -22,35 +20,15 @@ const customBackdropControl = customBackdropController();
 
 export function CategoryControlModalComponent({
     open,
-    onClose
+    onClose,
+    categories,
+    onSearchNRankRecordCategories
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const { onReqCreateNRankRecordCategory, onReqSearchNRankRecordCategory, onReqUpdateNRankRecordCategory, onReqDeleteNRankRecordCategory } = useApiHook();
-    const { categories, pageControl, inputValue, selectedCategory, onSetCategories, handleChangePage, handleChangePageToMain, handleChangeInputValue, handleChangeSelectedCategory, checkFormat } = useCategoryControlHook(); 
-
-    useEffect(() => {
-        if(!wsId) {
-            return;
-        }
-
-        async function initialize() {
-            await handleSearchNRankRecordCategories()
-        }
-
-        initialize()
-    }, [wsId])
-
-    const handleSearchNRankRecordCategories = async () => {
-        await onReqSearchNRankRecordCategory({
-            headers: { wsId: wsId }
-        }, {
-            success: (results) => {
-                onSetCategories(results);
-            }
-        })
-    }
+    const { onReqCreateNRankRecordCategory, onReqUpdateNRankRecordCategory, onReqDeleteNRankRecordCategory } = useApiHook();
+    const { pageControl, inputValue, selectedCategory, handleChangePage, handleChangePageToMain, handleChangeInputValue, handleChangeSelectedCategory, checkFormat } = useCategoryControlHook({ categories }); 
 
     const handleCreateNRankRecordCategory = async () => {
         let body = {
@@ -74,7 +52,7 @@ export function CategoryControlModalComponent({
         }, {
             success: () => {
                 handleChangePageToMain();
-                handleSearchNRankRecordCategories();
+                onSearchNRankRecordCategories();
             }
         })
         customBackdropControl.hideBackdrop();
@@ -87,7 +65,7 @@ export function CategoryControlModalComponent({
         }
 
         try {
-            checkDuplication(body);
+            checkFormat(body);
         } catch (err) {
             customToast.error(err?.message, {
                 ...defaultOptions,
@@ -103,7 +81,7 @@ export function CategoryControlModalComponent({
         }, {
             success: () => {
                 handleChangePageToMain();
-                handleSearchNRankRecordCategories();
+                onSearchNRankRecordCategories();
             }
         })
         customBackdropControl.hideBackdrop();
@@ -117,7 +95,7 @@ export function CategoryControlModalComponent({
         }, {
             success: () => {
                 handleChangePageToMain();
-                handleSearchNRankRecordCategories();
+                onSearchNRankRecordCategories();
             }
         })
         customBackdropControl.hideBackdrop();
@@ -132,34 +110,11 @@ export function CategoryControlModalComponent({
             >
                 <CustomDialog.CloseButton onClose={() => onClose()} />
                 <CustomDialog.Title>카테고리 설정</CustomDialog.Title>
-                <Container>
+                <>
                     {pageControl === PAGE_CONTROL.MAIN &&
-                        <Wrapper>
-                            <div>
-                                <SingleBlockButton
-                                    className='button-el'
-                                    onClick={() => handleChangePage(PAGE_CONTROL.CREATE)}
-                                >
-                                    카테고리 생성
-                                </SingleBlockButton>
-                            </div>
-                            <div>
-                                <SingleBlockButton
-                                    className='button-el'
-                                    onClick={() => handleChangePage(PAGE_CONTROL.EDIT)}
-                                >
-                                    카테고리 수정
-                                </SingleBlockButton>
-                            </div>
-                            <div>
-                                <SingleBlockButton
-                                    className='button-el'
-                                    onClick={() => handleChangePage(PAGE_CONTROL.DELETE)}
-                                >
-                                    카테고리 삭제
-                                </SingleBlockButton>
-                            </div>
-                        </Wrapper>
+                        <MainFieldView
+                            handleChangePage={handleChangePage}
+                        />
                     }
                     {pageControl === PAGE_CONTROL.CREATE &&
                         <CreateFieldView
@@ -189,7 +144,7 @@ export function CategoryControlModalComponent({
                             onDeleteNRankRecordCategory={handleDeleteNRankRecordCategory}
                         />
                     }
-                </Container>
+                </>
             </CustomDialog>
         </>
     )

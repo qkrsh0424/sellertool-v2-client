@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
 import { Container, Wrapper } from "./styles/RecordItemList.styled";
 import { RecordDetailModalComponent } from "../record-detail-modal/v1";
+import { CategorySelectorModalComponent } from '../category-selector-modal/v1';
 import { CustomBoxImage } from "../../../modules";
 import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
@@ -10,6 +11,12 @@ import { CustomProgressBar } from "../../../modules/progress/progress-bar/v1";
 import ResizableTh from "../../../../../../../components/table/th/v1/ResizableTh";
 import { CustomVirtualTable } from "../../../../../../../components/table/virtual-table/v1";
 import FieldLoadingV2 from "../../../../../../modules/loading/FieldLoadingV2";
+import { useApiHook } from './hooks/useApiHook';
+import { useSelector } from 'react-redux';
+import { customToast, defaultOptions } from '../../../../../../../components/toast/custom-react-toastify/v1';
+import { customBackdropController } from '../../../../../../../components/backdrop/default/v1';
+
+const customBackdropControl = customBackdropController();
 
 export function RecordItemListComponent({
     keyword,
@@ -17,14 +24,23 @@ export function RecordItemListComponent({
     recordList,
     rankSearchInfo,
     currentPendingRecordIds,
+    categories,
     onSetCurrentPendingRecordIds,
     onDeleteRankRecord,
-    onSearchSubscriptionPlanSearchInfo
+    onSearchSubscriptionPlanSearchInfo,
+    onSearchNRankRecordList
 }) {
+    const workspaceRedux = useSelector(state => state.workspaceRedux);
+    const wsId = workspaceRedux?.workspaceInfo?.id;
+
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
     const [recordDeleteModalOpen, setRecordDeleteModalOpen] = useState(false);
+
     const [createRecordInfoId, setCreateRecordInfoId] = useState(null);
+    const [categorySelectorModalOpen, setCategorySelectorModalOpen] = useState(false);
+
+    const { onReqChangeNRankRecordCategory } = useApiHook();
 
     useEffect(() => {
         if(!recordList) {
@@ -36,7 +52,28 @@ export function RecordItemListComponent({
         }
 
         handleUpdateSelectedRecord();
-    }, [recordList, selectedRecord])
+    }, [recordList])
+
+    const handleUpdateNRankRecordCategoryId = async () => {
+        customBackdropControl.showBackdrop();
+        await onReqChangeNRankRecordCategory({
+            headers: { wsId: wsId },
+            params: { id: selectedRecord.id },
+            body: { nrank_record_category_id: selectedRecord.nrank_record_category_id }
+        }, {
+            success: () => {
+                onSearchNRankRecordList();
+                handleCloseCategorySelectorModal();
+
+                let message = '완료되었습니다.'
+                customToast.success(message, {
+                    ...defaultOptions,
+                    toastId: message
+                })
+            }
+        })
+        customBackdropControl.hideBackdrop();
+    }
 
     const handleUpdateSelectedRecord = () => {
         let data = recordList?.find(r => r.id === selectedRecord.id)
@@ -72,6 +109,25 @@ export function RecordItemListComponent({
         onDeleteRankRecord(selectedRecord?.id, () => handleCloseRecordDeleteModal())
     }
 
+    const handleOpenCategorySelectorModal = async (e, record) => {
+        e.stopPropagation();
+
+        setSelectedRecord({...record})
+        setCategorySelectorModalOpen(true);
+    }
+
+    const handleCloseCategorySelectorModal = () => {
+        setCategorySelectorModalOpen(false);
+    }
+
+    const handleChangeSelectedRecordCategory = (e) => {
+        let id = e.target.value;
+        setSelectedRecord({
+            ...selectedRecord,
+            nrank_record_category_id: id
+        })
+    }
+
     return (
         <>
             <Container>
@@ -100,9 +156,11 @@ export function RecordItemListComponent({
 
                                             keyword={keyword}
                                             mallName={mallName}
+                                            categories={categories}
                                             currentPendingRecordIds={currentPendingRecordIds}
                                             handleOpenDetailSearchModal={handleOpenDetailSearchModal}
                                             handleOpenRecordDeleteModal={handleOpenRecordDeleteModal}
+                                            handleOpenCategorySelectorModal={handleOpenCategorySelectorModal}
                                         />
                                     )
                                 }
@@ -122,6 +180,17 @@ export function RecordItemListComponent({
                         onClose={handleCloseDetailSearchModal}
                         onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
                         onSearchSubscriptionPlanSearchInfo={onSearchSubscriptionPlanSearchInfo}
+                    />
+                }
+
+                {categorySelectorModalOpen && 
+                    <CategorySelectorModalComponent
+                        open={categorySelectorModalOpen}
+                        categories={categories}
+                        selectedRecord={selectedRecord}
+                        onClose={handleCloseCategorySelectorModal}
+                        onUpdateNRankRecordCategoryId={handleUpdateNRankRecordCategoryId}
+                        onChangeSelectedRecordCategory={handleChangeSelectedRecordCategory}
                     />
                 }
 
@@ -170,15 +239,18 @@ function TableBodyRow({
     virtuosoData,
     keyword,
     mallName,
+    categories,
     currentPendingRecordIds,
     handleOpenDetailSearchModal,
-    handleOpenRecordDeleteModal
+    handleOpenRecordDeleteModal,
+    handleOpenCategorySelectorModal
 }) {
     let item = virtuosoData?.item;
     let isKeywordAccent = keyword && (item.keyword).includes(keyword);
     let isMallNameAccent = mallName && (item.mall_name).includes(mallName);
     let currentRecordInfo = item.infos?.find(info => item.current_nrank_record_info_id === info.id);
     let isPending = currentPendingRecordIds?.includes(item.id);
+    let category = categories?.find(r => r.id === item.nrank_record_category_id);
 
     return (
         <tr onClick={(e) => handleOpenDetailSearchModal(e, item)} {...virtuosoData}>
@@ -211,7 +283,14 @@ function TableBodyRow({
                     <span>{item.mall_name}</span>
                 }
             </td>
-            <td>-</td>
+            <td>
+                <button
+                    className='button-el'
+                    onClick={(e) => handleOpenCategorySelectorModal(e, item)}
+                >
+                    {category?.name || '-'}
+                </button>
+            </td>
             <td>
                 {currentRecordInfo ?
                     <div style={{ color: '#444', display: 'inline' }}>
@@ -241,7 +320,7 @@ function TableBodyRow({
                 <div className='delete-box'>
                     <button
                         type='button'
-                        className='button-item'
+                        className='control-btn'
                         onClick={(e) => handleOpenRecordDeleteModal(e, item)}
                     >
                         <CustomBoxImage

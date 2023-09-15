@@ -28,7 +28,6 @@ export default function DeleteFieldView({
                 </div>
             </div>
             <CustomCancelConfirmButton
-                className='button-el'
                 onCancel={onChagnePageToMain}
                 onConfirm={onDeleteNRankRecordCategory}
                 confirmBtnStyle={{

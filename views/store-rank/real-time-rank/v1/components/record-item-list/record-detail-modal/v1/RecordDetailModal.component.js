@@ -31,7 +31,8 @@ export function RecordDetailModalComponent({
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const [isAdRankView, setIsAdRankView] = useState(false);
-    
+    const [isInitSearchLoading, setIsInitSearchLoading] = useState(false);
+
     const { onReqSearchNRankRecordDetail, onReqChangeNRankRecordStatusToPending, onReqCreateNRankRecordDetail } = useApiHook();
     const {
         recordDetails,
@@ -80,6 +81,7 @@ export function RecordDetailModalComponent({
     }
 
     const handleSearchNRankRecordDetail = async () => {
+        setIsInitSearchLoading(true);
         await onReqSearchNRankRecordDetail({
             params: { record_info_id: record.current_nrank_record_info_id},
             headers: { wsId: wsId }
@@ -92,6 +94,7 @@ export function RecordDetailModalComponent({
                 onSetAdRecordDetails(adRankDetails)
             }
         })
+        setIsInitSearchLoading(false);
     }
 
     const handleChangeNRankRecordStatusToPending = async () => {
@@ -153,6 +156,7 @@ export function RecordDetailModalComponent({
                     <ButtonFieldView
                         targetRecordInfo={targetRecordInfo}
                         isPending={isPending}
+                        isInitSearchLoading={isInitSearchLoading}
                         onSubmit={handleChangeNRankRecordStatusToPending}
                     />
                     <div style={{ position: 'relative' }}>
@@ -166,21 +170,27 @@ export function RecordDetailModalComponent({
                             onActionUnfoldAllOptions={onActionUnfoldAllOptions}
                         />
 
-                        {(adRecordDetails && recordDetails) &&
-                            <div style={{ position: 'relative' }}>
-                                {isPending ?
-                                    <>
-                                        <CustomProgressIcon
-                                            type={'sync'}
-                                            color='var(--mainColor)'
-                                            size={20}
-                                            margin={20}
-                                            isBackgroundBlur={true}
-                                        />
+                        <div style={{ position: 'relative' }}>
+                            {isPending &&
+                                <>
+                                    <CustomProgressIcon
+                                        type={'sync'}
+                                        color='var(--mainColor)'
+                                        size={20}
+                                        margin={20}
+                                        isBackgroundBlur={true}
+                                    />
+                                    <RankDetailSkeletonFieldView />
+                                </>
+                            }
+
+                            {!isPending &&
+                                <>
+                                    {isInitSearchLoading &&
                                         <RankDetailSkeletonFieldView />
-                                    </>
-                                    :
-                                    (isAdRankView ?
+                                    }
+
+                                    {isAdRankView ?
                                         <AdRankDetailFieldView
                                             record={record}
                                             adRecordDetails={adRecordDetails}
@@ -188,7 +198,7 @@ export function RecordDetailModalComponent({
                                             onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
                                             onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
                                         />
-                                        :
+                                    :
                                         <RankDetailFieldView
                                             record={record}
                                             targetRecordInfo={targetRecordInfo}
@@ -197,10 +207,10 @@ export function RecordDetailModalComponent({
                                             onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
                                             onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
                                         />
-                                    )
-                                }
-                            </div>
-                        }
+                                    }
+                                </>
+                            }
+                        </div>
                     </div>
                 </Wrapper>
             </CustomDialog>

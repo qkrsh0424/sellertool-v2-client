@@ -11,6 +11,7 @@ import useDisabledBtn from "../../../../../../../../../hooks/button/useDisabledB
 export default function ButtonFieldView({
     targetRecordInfo,
     isPending,
+    isInitSearchLoading,
     onSubmit
 }) {
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
@@ -40,7 +41,7 @@ export default function ButtonFieldView({
     return (
         <Wrapper>
             <form onSubmit={(e) => handleSubmit(e)}>
-                {timer ?
+                {timer &&
                     <CustomBlockButton
                         type='button'
                         className='disabled-btn timer-button'
@@ -55,7 +56,9 @@ export default function ButtonFieldView({
                         </div>
                         <div>{timer}</div>
                     </CustomBlockButton>
-                    :
+                }
+
+                {!timer && 
                     <>
                         {isPending ?
                             <CustomBlockButton
@@ -74,7 +77,7 @@ export default function ButtonFieldView({
                             <CustomBlockButton
                                 type='submit'
                                 className='button-item'
-                                disabled={disabledBtn}
+                                disabled={disabledBtn || isInitSearchLoading}
                             >
                                 조회
                             </CustomBlockButton>

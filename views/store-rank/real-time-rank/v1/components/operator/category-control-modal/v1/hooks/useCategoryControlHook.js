@@ -43,8 +43,14 @@ export function useCategoryControlHook({
     }
 
     const checkFormat = (body) => {
-        if(categories.some(category => category.name === body.name)) {
+        let name = body.name;
+
+        if(categories.some(category => category.name === name)) {
             throw new Error("이미 등록된 카테고리입니다.")
+        }
+
+        if(!name || name.trim() === '') {
+            throw new Error("카테고리명을 정확하게 입력해주세요.");
         }
     }
 

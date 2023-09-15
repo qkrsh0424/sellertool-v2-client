@@ -7,6 +7,7 @@ const NAVER_SHOPPING_PRODUCT_URL = "https://smartstore.naver.com/main/products/"
 
 export default function AdRankDetailFieldView({
     adRecordDetails,
+    targetRecordInfo,
     openedSubInfoRecordDetailIds,
     onAddOpenedSubInfoRecordDetailId,
     onRemoveOpenedSubInfoRecordDetailId
@@ -160,7 +161,11 @@ export default function AdRankDetailFieldView({
             })}
             {!(adRecordDetails?.length > 0) &&
                 <InfoText>
-                    <div>조회 결과가 존재하지 않습니다</div>
+                    {targetRecordInfo?.created_at ?
+                        <div>조회 결과가 존재하지 않습니다</div>
+                        :
+                        <div style={{ color: '#606060' }}>조회 버튼을 눌러 순위를 검색해보세요 !</div>
+                    }
                 </InfoText>
             }
         </Wrapper>

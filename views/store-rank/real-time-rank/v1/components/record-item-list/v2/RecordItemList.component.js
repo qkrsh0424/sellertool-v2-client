@@ -7,7 +7,6 @@ import { CustomBoxImage } from "../../../modules";
 import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
 import { dateToHHmm, dateToYYYYMMDD } from "../../../utils/dateFormatUtils";
-import { CustomProgressBar } from "../../../modules/progress/progress-bar/v1";
 import ResizableTh from "../../../../../../../components/table/th/v1/ResizableTh";
 import { CustomVirtualTable } from "../../../../../../../components/table/virtual-table/v1";
 import FieldLoadingV2 from "../../../../../../modules/loading/FieldLoadingV2";
@@ -17,6 +16,13 @@ import { customToast, defaultOptions } from '../../../../../../../components/toa
 import { customBackdropController } from '../../../../../../../components/backdrop/default/v1';
 
 const customBackdropControl = customBackdropController();
+
+const RECORD_STATUS = {
+    NONE: "NONE",
+    PENDING: "PENDING",
+    COMPLETE: "COMPLETE",
+    FAIL: "FAIL"
+}
 
 export function RecordItemListComponent({
     keyword,
@@ -225,7 +231,7 @@ function TableHeaderRow() {
             <th width={100} className="fixed-header"></th>
             <ResizableTh width={180} className="fixed-header">상품</ResizableTh>
             <ResizableTh width={180} className="fixed-header">스토어</ResizableTh>
-            <th width={150} className="fixed-header">카테고리</th>
+            <ResizableTh width={100} className="fixed-header">카테고리</ResizableTh>
             <th width={120} className="fixed-header">최근 조회</th>
             <th width={100} className="fixed-header">일반 상품</th>
             <th width={100} className="fixed-header">광고 상품</th>
@@ -315,7 +321,20 @@ function TableBodyRow({
                     '-'
                 }
             </td>
-            <td>{isPending && <CustomProgressBar customcolor={'#9ac7e0'} size='30px'/>}</td>
+            <td style={{ fontWeight: '700' }}>
+                {(isPending || item.status === RECORD_STATUS.PENDING) ?
+                    <span style={{ color: 'var(--defaultBlueColor)' }}>조회중..</span>
+                    :
+                    <>
+                        {item.status === RECORD_STATUS.FAIL &&
+                            <span style={{ color: 'var(--defaultRedColor)' }}>실패</span>
+                        }
+                        {item.status === RECORD_STATUS.COMPLETE &&
+                            <span style={{ color: 'var(--defaultGreenColor)' }}>완료</span>
+                        }
+                    </>
+                }
+            </td>
             <td>
                 <div className='delete-box'>
                     <button

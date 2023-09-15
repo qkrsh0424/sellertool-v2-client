@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import RankDetailSkeletonFieldView from "./view/RankDetailSkeletonField.view";
 import { customToast, defaultOptions } from "../../../../../../../../components/toast/custom-react-toastify/v1";
 import { customBackdropController } from "../../../../../../../../components/backdrop/default/v1";
+import FieldLoadingV2 from "../../../../../../../modules/loading/FieldLoadingV2";
 
 const customBackdropControl = customBackdropController();
 
@@ -58,7 +59,9 @@ export function RecordDetailModalComponent({
         }
 
         async function initialize() {
+            setIsInitSearchLoading(true);
             await handleSearchNRankRecordDetail()
+            setIsInitSearchLoading(false);
         }
 
         initialize()
@@ -81,7 +84,6 @@ export function RecordDetailModalComponent({
     }
 
     const handleSearchNRankRecordDetail = async () => {
-        setIsInitSearchLoading(true);
         await onReqSearchNRankRecordDetail({
             params: { record_info_id: record.current_nrank_record_info_id},
             headers: { wsId: wsId }
@@ -94,7 +96,6 @@ export function RecordDetailModalComponent({
                 onSetAdRecordDetails(adRankDetails)
             }
         })
-        setIsInitSearchLoading(false);
     }
 
     const handleChangeNRankRecordStatusToPending = async () => {
@@ -187,18 +188,23 @@ export function RecordDetailModalComponent({
                             {!isPending &&
                                 <>
                                     {isInitSearchLoading &&
-                                        <RankDetailSkeletonFieldView />
+                                        <FieldLoadingV2
+                                            oxStyle={{
+                                                borderRadius: '15px'
+                                            }}
+                                        />
                                     }
 
                                     {isAdRankView ?
                                         <AdRankDetailFieldView
                                             record={record}
+                                            targetRecordInfo={targetRecordInfo}
                                             adRecordDetails={adRecordDetails}
                                             openedSubInfoRecordDetailIds={openedSubInfoRecordDetailIds}
                                             onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
                                             onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
                                         />
-                                    :
+                                        :
                                         <RankDetailFieldView
                                             record={record}
                                             targetRecordInfo={targetRecordInfo}

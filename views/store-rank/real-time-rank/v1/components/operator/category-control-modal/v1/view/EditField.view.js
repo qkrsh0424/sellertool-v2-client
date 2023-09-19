@@ -1,5 +1,5 @@
-import CustomSelect from "../../../../../../../../modules/select/CustomSelect";
 import { CustomCancelConfirmButton } from "../../../../../modules/buttons/cancel-confirm-button/v1";
+import CustomSelect from "../../../../../modules/select/CustomSelect";
 import { Wrapper } from "../styles/EditField.styled";
 
 export default function EditFieldView({

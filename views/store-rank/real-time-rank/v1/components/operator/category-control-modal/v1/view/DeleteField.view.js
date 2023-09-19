@@ -1,5 +1,5 @@
-import CustomSelect from "../../../../../../../../modules/select/CustomSelect";
 import { CustomCancelConfirmButton } from "../../../../../modules/buttons/cancel-confirm-button/v1";
+import CustomSelect from "../../../../../modules/select/CustomSelect";
 import { Wrapper } from "../styles/EditField.styled";
 
 export default function DeleteFieldView({
@@ -23,7 +23,7 @@ export default function DeleteFieldView({
                     </CustomSelect>
                 </div>
                 <div>
-                    <div><span style={{ color: 'var(--defaultRedColor)' }}>해당 카테고리로 설정된 랭킹 내역은 모두 초기화됩니다.</span></div>
+                    <div><span style={{ color: 'var(--defaultRedColor)' }}>해당 카테고리로 설정된 랭킹 내역이 모두 초기화됩니다.</span></div>
                     <div>정말로 해당 카테고리를 삭제하시겠습니까?</div>
                 </div>
             </div>

@@ -11,6 +11,14 @@ import { setPlusTime } from "./utils/dateFormatUtils";
 import { getRecordPendingStatusExceedSeconds } from "../../../../static-data/nRankRecordOptions";
 import useSubscriptionPlanSearchInfoHook from "./hooks/useSubscriptionPlanSearchInfoHook";
 import useNRankRecordCategoriesHook from "./hooks/useNRankRecordCategoriesHook";
+import { useRouter } from "next/router";
+import FloatingPagenationComponent from "./components/floating-pagenation/FloatingPagenation.component";
+import useItemCountHook from "./hooks/useItemCountHook";
+
+const DEFAULT_SORT_COLUMN = 'created_at';
+const DEFAULT_SORT_DIRECTION = 'desc';
+const DEFAULT_PAGE = 1;
+const DEFAULT_SIZE = 20;
 
 const RECORD_STATUS_ENUM = {
     NONE: 'NONE',
@@ -25,14 +33,25 @@ export const Container = styled.div`
 `;
 
 export default function MainComponent(){
+    const router = useRouter()
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const { onReqSearchSubscriptionPlanSearchInfo, onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList, onReqChangeNRankRecordListStatusToFail, onReqSearchNRankRecordCategories } = useApiHook();
+    const { onReqSearchSubscriptionPlanSearchInfo, onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList, onReqSearchNRankRecordListCount, onReqChangeNRankRecordListStatusToFail, onReqSearchNRankRecordCategories } = useApiHook();
     const { rankSearchInfo, onSetRankSearchInfo } = useSubscriptionPlanSearchInfoHook();
     const { keyword, mallName, onChangeKeyword, onChangeMallName, onClearKeyword, onClearMallName, checkSearchInfoForm } = useSearchInputHook();
-    const { searchedRecordList: recordList, currentPendingRecordIds, onSetRecordList, onSetCurrentPendingRecordIds } = useNRankRecordListHook({ keyword, mallName });
+    const { recordList, recordListPage, currentPendingRecordIds, onSetRecordList, onSetRecordListPage, onSetCurrentPendingRecordIds } = useNRankRecordListHook();
     const { categories, onSetCategories } = useNRankRecordCategoriesHook();
+    const { totalSize, totalPages, onSetTotalSize, onSetTotalPages } = useItemCountHook();
+
+    useEffect(() => {
+        if(!wsId) {
+            return;
+        }
+
+        handleReqSearchNRankRecordList();
+        handleReqSearchNRankRecordListCount();
+    }, [wsId, router?.query])
 
     useEffect(() => {
         if(!wsId) {
@@ -40,7 +59,6 @@ export default function MainComponent(){
         }
 
         async function initialize() {
-            handleReqSearchNRankRecordList();
             handleReqSearchSubscriptionPlanSearchInfo();
             handleSearchNRankRecordCategories();
         }
@@ -56,6 +74,7 @@ export default function MainComponent(){
         // poling 방식 nrank record 조회 요청
         const fetch = setInterval(() => {
             handleReqSearchNRankRecordList();
+            handleReqSearchNRankRecordListCount();
         }, [3000])
 
         return () => clearInterval(fetch);
@@ -89,6 +108,7 @@ export default function MainComponent(){
                 onClearKeyword();
                 onClearMallName();
                 handleReqSearchNRankRecordList();
+                handleReqSearchNRankRecordListCount();
             }
         })
     }
@@ -106,6 +126,7 @@ export default function MainComponent(){
                 });
                 modalClose();
                 handleReqSearchNRankRecordList();
+                handleReqSearchNRankRecordListCount();
             }
         })
     }
@@ -132,12 +153,64 @@ export default function MainComponent(){
     }
 
     const handleReqSearchNRankRecordList = async () => {
+        const params = {
+            search_condition: router?.query?.searchCondition,
+            search_query: router?.query?.searchQuery,
+            search_category_id: router?.query?.searchCategoryId,
+            search_status: router?.query?.searchStatus,
+
+            sort_column: router?.query?.sortColumn || DEFAULT_SORT_COLUMN,
+            sort_direction: router?.query?.sortDirection || DEFAULT_SORT_DIRECTION,
+            page: router?.query?.page || DEFAULT_PAGE,
+            size: router?.query?.size || DEFAULT_SIZE
+        }
+
         await onReqSearchNRankRecordList({
-            headers: { wsId: wsId }
+            headers: { wsId: wsId },
+            params
         }, {
             success: (results) => {
-                handleUpdateRecordStatus(results)
-                handleChangeLongPendingRecordStatusToFail(results)
+                let contents = results?.content;
+
+                onSetRecordListPage(results);
+                onSetRecordList(contents);
+
+                handleUpdateRecordStatus(contents);
+                handleChangeLongPendingRecordStatusToFail(contents);
+            }
+        })
+    }
+
+    const handleReqSearchNRankRecordListCount = async () => {
+        let size = router?.query?.size || DEFAULT_SIZE;
+
+        const params = {
+            search_condition: router?.query?.searchCondition,
+            search_query: router?.query?.searchQuery,
+            search_category_id: router?.query?.searchCategoryId,
+            search_status: router?.query?.searchStatus,
+
+            sort_column: router?.query?.sortColumn || DEFAULT_SORT_COLUMN,
+            sort_direction: router?.query?.sortDirection || DEFAULT_SORT_DIRECTION,
+            page: router?.query?.page || DEFAULT_PAGE,
+            size
+        }
+
+        await onReqSearchNRankRecordListCount({
+            headers: { wsId: wsId },
+            params
+        }, {
+            success: (results) => {
+                let resTotalSize = results.total_size;
+                if (resTotalSize <= 0) {
+                    onSetTotalSize(0);
+                    onSetTotalPages(1);
+                    return;
+                }
+
+                let totalPages = Math.ceil(resTotalSize / size);
+                onSetTotalSize(resTotalSize);
+                onSetTotalPages(totalPages);
             }
         })
     }
@@ -173,7 +246,6 @@ export default function MainComponent(){
             }
         })
 
-        onSetRecordList(results);
         onSetCurrentPendingRecordIds([...recordIds]);
     }
 
@@ -239,10 +311,17 @@ export default function MainComponent(){
                         onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
                         onSearchSubscriptionPlanSearchInfo={handleReqSearchSubscriptionPlanSearchInfo}
                         onSearchNRankRecordList={handleReqSearchNRankRecordList}
+                        onSearchNRankRecordListCount={handleReqSearchNRankRecordListCount}
                         onSearchNRankRecordCategories={handleSearchNRankRecordCategories}
                     />
                 </Layout>
             </Container>
+
+            <FloatingPagenationComponent
+                itemPage={recordListPage}
+                totalSize={totalSize}
+                totalPages={totalPages}
+            />
         </>
     );
 }

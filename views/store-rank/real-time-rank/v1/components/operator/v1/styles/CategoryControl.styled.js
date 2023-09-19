@@ -4,6 +4,7 @@ export const Wrapper = styled.div`
     padding: 0 10px;
     display: flex;
     justify-content: flex-end;
+    margin-bottom: 10px;
 
     .button-item {
         border: 1px solid var(--mainColor);

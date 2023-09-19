@@ -15,9 +15,17 @@ const nRankRecordDataConnect = () => {
                 })
             )
         },
-        searchRecordList: async function (headers) {
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-records`, {
+        searchRecordList: async function (headers, params) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-records/slice`, {
                 headers,
+                params,
+                withCredentials: true
+            })
+        },
+        searchRecordListCount: async function (headers, params) {
+            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-records/count`, {
+                headers,
+                params,
                 withCredentials: true
             })
         },

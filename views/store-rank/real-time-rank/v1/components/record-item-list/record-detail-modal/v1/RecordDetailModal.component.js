@@ -135,7 +135,7 @@ export function RecordDetailModalComponent({
         })
     }
 
-    let isPending = currentPendingRecordIds?.includes(record.id);
+    let isPending = currentPendingRecordIds?.includes(record?.id);
 
     return (
         <>

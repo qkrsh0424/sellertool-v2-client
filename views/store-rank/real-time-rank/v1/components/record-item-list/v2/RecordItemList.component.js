@@ -6,7 +6,7 @@ import { CategorySelectorModalComponent } from '../category-selector-modal/v1';
 import { CustomBoxImage } from "../../../modules";
 import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
-import { dateToHHmm, dateToYYYYMMDD } from "../../../utils/dateFormatUtils";
+import { dateToHHmm } from "../../../utils/dateFormatUtils";
 import ResizableTh from "../../../../../../../components/table/th/v1/ResizableTh";
 import { CustomVirtualTable } from "../../../../../../../components/table/virtual-table/v1";
 import FieldLoadingV2 from "../../../../../../modules/loading/FieldLoadingV2";
@@ -14,6 +14,7 @@ import { useApiHook } from './hooks/useApiHook';
 import { useSelector } from 'react-redux';
 import { customToast, defaultOptions } from '../../../../../../../components/toast/custom-react-toastify/v1';
 import { customBackdropController } from '../../../../../../../components/backdrop/default/v1';
+import { dateToYYMMDD } from '../../../../../../../utils/dateFormatUtils';
 
 const customBackdropControl = customBackdropController();
 
@@ -34,7 +35,8 @@ export function RecordItemListComponent({
     onSetCurrentPendingRecordIds,
     onDeleteRankRecord,
     onSearchSubscriptionPlanSearchInfo,
-    onSearchNRankRecordList
+    onSearchNRankRecordList,
+    onSearchNRankRecordListCount
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
@@ -69,6 +71,7 @@ export function RecordItemListComponent({
         }, {
             success: () => {
                 onSearchNRankRecordList();
+                onSearchNRankRecordListCount();
                 handleCloseCategorySelectorModal();
 
                 let message = '완료되었습니다.'
@@ -229,13 +232,14 @@ function TableHeaderRow() {
     return (
         <tr>
             <th width={100} className="fixed-header"></th>
-            <ResizableTh width={180} className="fixed-header">상품</ResizableTh>
-            <ResizableTh width={180} className="fixed-header">스토어</ResizableTh>
-            <ResizableTh width={100} className="fixed-header">카테고리</ResizableTh>
+            <ResizableTh width={180} className="fixed-header">키워드</ResizableTh>
+            <ResizableTh width={180} className="fixed-header">스토어명</ResizableTh>
+            <ResizableTh width={120} className="fixed-header">카테고리</ResizableTh>
             <th width={120} className="fixed-header">최근 조회</th>
-            <th width={100} className="fixed-header">일반 상품</th>
-            <th width={100} className="fixed-header">광고 상품</th>
+            <th width={80} className="fixed-header">일반 상품</th>
+            <th width={80} className="fixed-header">광고 상품</th>
             <th width={80} className="fixed-header">상태</th>
+            <th width={80} className="fixed-header">등록일</th>
             <th width={80} className="fixed-header">삭제</th>
         </tr>
     )
@@ -300,7 +304,7 @@ function TableBodyRow({
             <td>
                 {currentRecordInfo ?
                     <div style={{ color: '#444', display: 'inline' }}>
-                        <div>{dateToYYYYMMDD(currentRecordInfo.created_at)}</div>
+                        <div>{dateToYYMMDD(currentRecordInfo.created_at)}</div>
                         <div> {dateToHHmm(currentRecordInfo.created_at)}</div>
                     </div>
                     :
@@ -332,8 +336,16 @@ function TableBodyRow({
                         {item.status === RECORD_STATUS.COMPLETE &&
                             <span style={{ color: 'var(--defaultGreenColor)' }}>완료</span>
                         }
+                        {item.status === RECORD_STATUS.NONE &&
+                            <span style={{ color: '#a0a0a0' }}>미검색</span>
+                        }
                     </>
                 }
+            </td>
+            <td>
+                <div style={{ color: '#444', display: 'inline' }}>
+                    <div>{dateToYYMMDD(item.created_at)}</div>
+                </div>
             </td>
             <td>
                 <div className='delete-box'>

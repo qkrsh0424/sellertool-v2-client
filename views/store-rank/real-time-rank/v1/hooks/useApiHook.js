@@ -70,12 +70,33 @@ export function useApiHook() {
     }
 
     const onReqSearchNRankRecordList = async (
-        options = {headers: {}},
+        options = {headers: {}, params: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().searchRecordList(options?.headers)
+        await nRankRecordDataConnect().searchRecordList(options?.headers, options?.params)
+            .then(res => {
+                if (res.status === 200) {
+                    callbackFn.success(res?.data?.data, res);
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                })
+            })
+    }
+
+    const onReqSearchNRankRecordListCount = async (
+        options = {headers: {}, params: {}},
+        callbackFn = {
+            success: (results, response) => {},
+        }
+    ) => {
+        await nRankRecordDataConnect().searchRecordListCount(options?.headers, options?.params)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data, res);
@@ -137,6 +158,7 @@ export function useApiHook() {
         onReqCreateSearchInput,
         onReqDeleteNRankRecord,
         onReqSearchNRankRecordList,
+        onReqSearchNRankRecordListCount,
         onReqChangeNRankRecordListStatusToFail,
         onReqSearchNRankRecordCategories
     }

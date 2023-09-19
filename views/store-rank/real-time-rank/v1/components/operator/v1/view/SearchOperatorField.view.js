@@ -47,6 +47,7 @@ export default function SearchOperatorFieldView({
                                 value={searchQuery || ''}
                                 onChange={(e) => onChangeSearchQuery(e)}
                                 disabled={!searchCondition}
+                                required
                             ></CustomInput>
                         </ConditionWrapper>
                     </ConditionContainer>

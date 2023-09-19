@@ -356,7 +356,7 @@ function TableBodyRow({
                     >
                         <CustomBoxImage
                             src='/images/icon/delete_default_e56767.svg'
-                            size='23px'
+                            size='20px'
                         />
                     </button>
                 </div>

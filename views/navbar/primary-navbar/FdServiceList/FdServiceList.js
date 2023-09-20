@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Nav } from "./FdServiceList.styled";
 import { useSelector } from "react-redux";
 
+const SALES_ANALISIS_CLIENT_ORIGIN = process.env.NODE_ENV == 'development' ? process.env.development.salesAnalisisClientAddress : process.env.production.salesAnalisisClientAddress;
+
 export function FdServiceList() {
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
@@ -32,7 +34,7 @@ export function FdServiceList() {
             target: '_self'
         },
         {
-            href: `https://sales-analysis.sellertool.io/sales-analysis/dashboard?workspaceId=${wsId}`,
+            href: `${SALES_ANALISIS_CLIENT_ORIGIN}/sales-analysis/dashboard?workspaceId=${wsId}`,
             name: '통합 판매 분석',
             isReady: true,
             target: '_self'

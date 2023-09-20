@@ -28,6 +28,7 @@ export const Title = styled.div`
 `;
 
 export const ItemListWrapper = styled.div`
+    padding: 20px 0;
     .item-group{
         display: flex;
         justify-content: space-between;

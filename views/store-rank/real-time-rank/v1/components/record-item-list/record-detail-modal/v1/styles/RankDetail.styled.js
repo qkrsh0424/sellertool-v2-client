@@ -173,6 +173,12 @@ export const SubInfoGroupBox = styled.div`
     }
 `;
 
+export const FlexBox = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 5px;
+`;
+
 export const DetailInfoBox = styled.div`
     display: flex;
     align-items: center;

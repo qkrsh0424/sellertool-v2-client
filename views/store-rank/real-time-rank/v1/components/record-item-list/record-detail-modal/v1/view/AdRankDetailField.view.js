@@ -122,7 +122,7 @@ export default function AdRankDetailFieldView({
                                             <div>
                                                 <CustomBoxImage
                                                     src="/images/icon/star_default_ffdf00.svg"
-                                                    size='20px'
+                                                    size='15px'
                                                 />
                                             </div>
                                             <div>
@@ -134,7 +134,7 @@ export default function AdRankDetailFieldView({
                                             <div>
                                                 <CustomBoxImage
                                                     src="/images/icon/shopping_bag_fill_808080.svg"
-                                                    size='20px'
+                                                    size='15px'
                                                 />
                                             </div>
                                             <div>
@@ -145,7 +145,7 @@ export default function AdRankDetailFieldView({
                                             <div>
                                                 <CustomBoxImage
                                                     src="/images/icon/heart_check_fill_e56780.svg"
-                                                    size='20px'
+                                                    size='15px'
                                                 />
                                             </div>
                                             <div>

@@ -1,7 +1,7 @@
 import SingleBlockButton from "../../../../../../../../modules/button/SingleBlockButton";
 import { CustomBoxImage } from "../../../../../modules/index";
 import { strToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
-import { DetailInfoBox, DetailInfoWrapper, InfoGroupBox, InfoText, MainInfoWrapper, SubInfoGroupBox, SubInfoWrapper, Wrapper } from "../styles/RankDetail.styled";
+import { DetailInfoBox, DetailInfoWrapper, FlexBox, InfoGroupBox, InfoText, MainInfoWrapper, SubInfoGroupBox, SubInfoWrapper, Wrapper } from "../styles/RankDetail.styled";
 
 const NAVER_SHOPPING_PRODUCT_URL = "https://smartstore.naver.com/main/products/"
 const NAVER_SHOPPING_SEARCH_URL = "https://search.shopping.naver.com/search/all"
@@ -101,15 +101,31 @@ export default function RankDetailFieldView({
                                 <div>
                                     <SubInfoGroupBox>
                                         <div className='info-title'>카테고리 : </div>
-                                        <div>
-                                            <span>{detail.category1_name}</span>
-                                            <span style={{ color: '#b4b4b4' }}>{' > '}</span>
-                                            <span>{detail.category2_name}</span>
-                                            <span style={{ color: '#b4b4b4' }}>{' > '}</span>
-                                            <span>{detail.category3_name}</span>
-                                            <span style={{ color: '#b4b4b4' }}>{' > '}</span>
-                                            <span>{detail.category4_name}</span>
-                                        </div>
+                                        <FlexBox>
+                                            {detail.category1_name &&
+                                                <div>
+                                                    <span>{detail.category1_name}</span>
+                                                </div>
+                                            }
+                                            {detail.category2_name &&
+                                                <div>
+                                                    <span style={{ color: '#b4b4b4' }}>{' > '}</span>
+                                                    <span>{detail.category2_name}</span>
+                                                </div>
+                                            }
+                                            {detail.category3_name &&
+                                                <div>
+                                                    <span style={{ color: '#b4b4b4' }}>{' > '}</span>
+                                                    <span>{detail.category3_name}</span>
+                                                </div>
+                                            }
+                                            {detail.category4_name &&
+                                                <div>
+                                                    <span style={{ color: '#b4b4b4' }}>{' > '}</span>
+                                                    <span>{detail.category4_name}</span>
+                                                </div>
+                                            }
+                                        </FlexBox>
                                     </SubInfoGroupBox>
                                     <SubInfoGroupBox>
                                         <div className='info-title'>가격 : </div>

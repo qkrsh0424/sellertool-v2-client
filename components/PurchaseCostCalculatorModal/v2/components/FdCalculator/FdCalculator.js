@@ -7,6 +7,8 @@ import { CalculateUtils } from "../../utils/CalculateUtils";
 import { InitializerUtils } from "../../utils/InitializerUtils";
 import { MrBaseExchangeRateModal } from "../../../../MrBaseExchangeRateModal/v1";
 import { customToast } from "../../../../toast/custom-react-toastify/v1";
+import { MdPurchaseUnitPriceCalculator } from "../../../../MdPurchaseUnitPriceCalculator/v1";
+import CustomImage from "../../../../image/CustomImage";
 
 const customNumberUtils = CustomNumberUtils();
 const calculateUtils = CalculateUtils();
@@ -33,6 +35,7 @@ export function FdCalculator({
     const [formValues, setFormValues] = useState(null);
     const [mrBaseExchangeRateModalOpen, setMrBaseExchangeRateModalOpen] = useState(false);
     const [editMberTargetName, setEditMberTargetName] = useState(null);
+    const [purchaseUnitPriceCalculatorModalOpen, setPurchaseUnitPriceCalculatorModalOpen] = useState(false);
 
     useEffect(() => {
         if (!selectedMrPurchaseModule) {
@@ -57,6 +60,10 @@ export function FdCalculator({
         }
 
         setMrBaseExchangeRateModalOpen(bool);
+    }
+
+    const togglePurchaseUnitPriceCalculatorModalOpen = (bool) => {
+        setPurchaseUnitPriceCalculatorModalOpen(bool);
     }
 
     const handleChangePriceValueFromEvent = (e) => {
@@ -121,6 +128,16 @@ export function FdCalculator({
         onSubmitExport(selectedMrPurchaseModule);
     }
 
+    const handleChangePurchaseValuesFromPurchaseCalculator = (body) => {
+        setFormValues((prev) => {
+            return {
+                ...prev,
+                ...body
+            }
+        });
+        togglePurchaseUnitPriceCalculatorModalOpen(false);
+    }
+
     return (
         <>
             <St.Container>
@@ -142,6 +159,11 @@ export function FdCalculator({
                                     onClick={() => toggleMrBaseExchangeRateModalOpen(true, 'purchaseUnitPriceMberId')}
                                 />
                             </div>
+                            <div className='calculator-select-btn' onClick={() => togglePurchaseUnitPriceCalculatorModalOpen(true)}>
+                                <CustomImage
+                                    src="/images/icon/calculate_default_808080.svg"
+                                />
+                            </div>
                             {/* <div className='flexible' style={{ marginTop: '10px', gap: '10px' }}>
                                 <div className='calculatorBtn'>합계계산</div>
                                 <div className='calculatorBtn'>수입계산</div>
@@ -161,6 +183,11 @@ export function FdCalculator({
                                     mrBaseExchangeRateList={mrBaseExchangeRateList}
                                     currentMberId={formValues?.purchaseUnitFreightCostMberId}
                                     onClick={() => toggleMrBaseExchangeRateModalOpen(true, 'purchaseUnitFreightCostMberId')}
+                                />
+                            </div>
+                            <div className='calculator-select-btn' onClick={() => togglePurchaseUnitPriceCalculatorModalOpen(true)}>
+                                <CustomImage
+                                    src="/images/icon/calculate_default_808080.svg"
                                 />
                             </div>
                             {/* <div className='flexible' style={{ marginTop: '10px', gap: '10px' }}>
@@ -213,6 +240,14 @@ export function FdCalculator({
                     open={mrBaseExchangeRateModalOpen}
                     onClose={() => toggleMrBaseExchangeRateModalOpen(false)}
                     onSelect={handleSelectMber}
+                />
+            }
+
+            {purchaseUnitPriceCalculatorModalOpen &&
+                <MdPurchaseUnitPriceCalculator
+                    open={purchaseUnitPriceCalculatorModalOpen}
+                    onClose={() => togglePurchaseUnitPriceCalculatorModalOpen(false)}
+                    onExport={(body) => handleChangePurchaseValuesFromPurchaseCalculator(body)}
                 />
             }
         </>

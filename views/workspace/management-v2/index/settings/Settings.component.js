@@ -4,16 +4,23 @@ import { Container, PaperBox, TitleFieldWrapper } from "./Settings.styled";
 import DeleteWorkspaceModalComponent from "./modal/DeleteWorkspaceModal.component";
 import ChangePrivateModalComponent from "./modal/ChangePrivateModal.component";
 import { customBackdropController } from "../../../../../components/backdrop/default/v1";
+import MdModifyWorkspaceName from "./modal/MdModifyWorkspaceName";
 
 export default function SettingsComponent({
     workspace,
+    onSubmitModifyWorkspaceName,
     onSubmitDeleteWorkspace,
     onSubmitChangeSubscriptionPlanToPrivate
 }) {
+    const [modifyWorkspaceNameModalOpen, setModifyWorkspaceNameModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [changePrivateModalOpen, setChangePrivateModalOpen] = useState(false);
 
     const customBackdropControl = customBackdropController();
+
+    const toggleModifyWorkspaceNameModalOpen = (bool) => {
+        setModifyWorkspaceNameModalOpen(bool);
+    }
 
     const toggleDeleteModalOpen = (setOpen) => {
         setDeleteModalOpen(setOpen);
@@ -21,6 +28,18 @@ export default function SettingsComponent({
 
     const toggleChangePrivateModalOpen = (setOpen) => {
         setChangePrivateModalOpen(setOpen);
+    }
+
+    const handleSubmitModifyWorkspaceName = async (body) => {
+        if (!workspace) {
+            return;
+        }
+
+        customBackdropControl.showBackdrop();
+        await onSubmitModifyWorkspaceName(body, () => {
+            toggleModifyWorkspaceNameModalOpen(false);
+        })
+        customBackdropControl.hideBackdrop();
     }
 
     const handleSubmitDeleteWorkspace = async () => {
@@ -43,7 +62,7 @@ export default function SettingsComponent({
         })
         customBackdropControl.hideBackdrop();
     }
-    
+
     return (
         <>
             <Container>
@@ -54,7 +73,18 @@ export default function SettingsComponent({
                         </div>
                     </div>
                 </TitleFieldWrapper>
-                <PaperBox className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-spaceBetween' style={{opacity: workspace?.subscriptionPlan === 'NONE' ? 1 : 0.5}}>
+                <PaperBox className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-spaceBetween'>
+                    <div>
+                        <div className='title'>워크스페이스 이름 변경</div>
+                        <div className='description'>해당 워크스페이스의 이름을 변경합니다.</div>
+                    </div>
+                    <CustomBlockButton
+                        type='button'
+                        className='common-btn'
+                        onClick={() => toggleModifyWorkspaceNameModalOpen(true)}
+                    >변경</CustomBlockButton>
+                </PaperBox>
+                <PaperBox className='mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-spaceBetween' style={{ opacity: workspace?.subscriptionPlan === 'NONE' ? 1 : 0.5 }}>
                     <div>
                         <div className='title'>개인 워크스페이스로 전환</div>
                         <div className='description'>해당 워크스페이스를 개인 워크스페이스로 전환 됩니다.</div>
@@ -77,6 +107,16 @@ export default function SettingsComponent({
                     >삭제</CustomBlockButton>
                 </PaperBox>
             </Container>
+
+            {/* Modal */}
+            {modifyWorkspaceNameModalOpen &&
+                <MdModifyWorkspaceName
+                    open={modifyWorkspaceNameModalOpen}
+                    workspace={workspace}
+                    onClose={() => toggleModifyWorkspaceNameModalOpen(false)}
+                    onSubmit={handleSubmitModifyWorkspaceName}
+                />
+            }
 
             {deleteModalOpen &&
                 <DeleteWorkspaceModalComponent

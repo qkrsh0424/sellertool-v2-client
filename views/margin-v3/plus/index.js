@@ -3,7 +3,7 @@ import Layout from "../layout";
 import { FdCalculator, FdMarginRecordList, FdResultMber } from "./components";
 import { St } from "./index.styled";
 import { useDispatch, useSelector } from "react-redux";
-import { useDataSourceHook, useMarginRecordHook, useMrBaseExchangeRateHook } from "./hooks";
+import { useDataSourceHook, useMarginRecordHook } from "./hooks";
 import { customBackdropController } from "../../../components/backdrop/default/v1";
 import { CustomNumberUtils } from "../../../utils/CustomNumberUtils";
 
@@ -21,6 +21,7 @@ export default function MainComponent(props) {
     const marginRecordHook = useMarginRecordHook();
 
     const [resultMberId, setResultMberId] = useState("75a58be7-37f9-11ee-8d3c-06fe28321f8c");
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         if (!wsId) {
@@ -53,10 +54,22 @@ export default function MainComponent(props) {
         }
     }, [wsId]);
 
-    const handleReqFetchMarginRecordList = async () => {
-        await dataSourceHook.onReqFetchMarginRecordList({ headers: { wsId: wsId } }, (results) => {
-            marginRecordHook.onSetMarginRecordList(results);
-        })
+    const handleReqFetchMarginRecordList = async (e) => {
+        if (e) {
+            e.preventDefault();
+        }
+
+        await dataSourceHook.onReqFetchMarginRecordList(
+            {
+                headers: { wsId: wsId },
+                params: {
+                    sort: ['createdAt_asc'],
+                    searchQuery: searchQuery || ''
+                }
+            },
+            (results) => {
+                marginRecordHook.onSetMarginRecordList(results);
+            })
     }
 
     const handleReqFetchMrBaseExchangeRateList = async () => {
@@ -154,8 +167,10 @@ export default function MainComponent(props) {
         setResultMberId(id);
     }
 
-    if (!mrBaseExchangeRateRedux?.mrBaseExchangeRateList || !mrPurchaseModuleRedux?.mrPurchaseModuleList) {
-        return null;
+    const handleChangeSearchQueryFromEvent = (e) => {
+        const value = e.target.value;
+
+        setSearchQuery(value);
     }
 
     const resultMrBaseExchangeRate = mrBaseExchangeRateRedux?.mrBaseExchangeRateList?.find(r => r?.id === resultMberId);
@@ -183,6 +198,10 @@ export default function MainComponent(props) {
                                 mrPurchaseModuleList={mrPurchaseModuleRedux?.mrPurchaseModuleList}
                                 selectResultMber={resultMrBaseExchangeRate}
                                 selectResultMberValue={resultMrBaseExchangeRateValue}
+                                searchQuery={searchQuery}
+
+                                onReqFetchMarginRecordList={handleReqFetchMarginRecordList}
+                                onChangeSearchQueryFromEvent={handleChangeSearchQueryFromEvent}
                                 onSelectMarginRecord={handleSelectMarginRecord}
                                 onReqCreateMarginRecord={handleReqCreateMarginRecord}
                             />

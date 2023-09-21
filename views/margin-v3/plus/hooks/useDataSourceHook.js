@@ -11,17 +11,15 @@ export function useDataSourceHook(props) {
     /**
      * sort = ['createdAt_asc', 'createdAt_desc', 'name_asc', 'name_desc', 'tag_asc', 'tag_desc']
      * 
-     * @param {*} options 
-     * @param options.headers [wsId]
-     * @param options.params [sort]
+     * @param headers [wsId]
+     * @param params [sort, searchQuery]
      * @param {*} callbackFn 
      */
-    const onReqFetchMarginRecordList = async (options = {
-        headers: { wsId },
-        params: { sort: 'createdAt_asc' },
-    }, callbackFn = (results, response) => { }) => {
-        const { headers, params } = options;
-
+    const onReqFetchMarginRecordList = async ({
+        headers = { wsId: null },
+        params = { sort: 'createdAt_asc', searchQuery: null }
+    }, callbackFn = (results, response) => { }
+    ) => {
         await marginRecordDataConnect.searchList({ params, headers })
             .then(res => {
                 if (res.status === 200) {
@@ -33,8 +31,8 @@ export function useDataSourceHook(props) {
             })
     }
 
-    const onReqFetchMrBaseExchangeRateList = async (options = { headers, params }, callbackFn = (results, response) => { }) => {
-        const { headers, params } = options;
+    const onReqFetchMrBaseExchangeRateList = async ({ headers = { wsId: null }, params = {} }, callbackFn = (results, response) => { }) => {
+
 
         await mrBaseExchangeRateDataConnect.searchList({
             headers,
@@ -50,8 +48,8 @@ export function useDataSourceHook(props) {
             });
     }
 
-    const onReqFetchMrPurchaseModuleList = async (options = { headers, params }, callbackFn = (results, response) => { }) => {
-        const { headers, params } = options;
+    const onReqFetchMrPurchaseModuleList = async ({ headers = { wsId: null }, params = {} }, callbackFn = (results, response) => { }) => {
+
 
         await mrPurchaseModuleDataConnect.searchList({
             headers,
@@ -67,8 +65,8 @@ export function useDataSourceHook(props) {
             });
     }
 
-    const onReqFetchMrPurchaseModuleOne = async (options = { headers, params, pathVariables }, callbackFn = (results, response) => { }) => {
-        const { headers, params, pathVariables } = options;
+    const onReqFetchMrPurchaseModuleOne = async ({ headers = { wsId: null }, params = {}, pathVariables = {} }, callbackFn = (results, response) => { }) => {
+
 
         await mrPurchaseModuleDataConnect.searchOne({
             headers,
@@ -85,11 +83,11 @@ export function useDataSourceHook(props) {
             });
     }
 
-    const onReqCreateMarginRecord = async (options = {
-        headers: { wsId },
-        body: {},
+    const onReqCreateMarginRecord = async ({
+        headers = { wsId: null },
+        body = {},
     }, callbackFn = (results, response) => { }) => {
-        const { headers, body } = options;
+
 
         await marginRecordDataConnect.createOne({ body, headers })
             .then(res => {
@@ -102,11 +100,11 @@ export function useDataSourceHook(props) {
             })
     }
 
-    const onReqUpdateMarginRecord = async (options = {
-        headers: { wsId },
-        body: {},
+    const onReqUpdateMarginRecord = async ({
+        headers = { wsId: null },
+        body = {},
     }, callbackFn = (results, response) => { }) => {
-        const { headers, body } = options;
+
 
         await marginRecordDataConnect.updateOneV3({ body, headers })
             .then(res => {
@@ -119,11 +117,11 @@ export function useDataSourceHook(props) {
             })
     }
 
-    const onReqDeleteMarginRecord = async (options = {
-        headers: { wsId },
-        body: {},
+    const onReqDeleteMarginRecord = async ({
+        headers = { wsId: null },
+        body = {},
     }, callbackFn = (results, response) => { }) => {
-        const { headers, body } = options;
+
 
         await marginRecordDataConnect.deleteOne({ body, headers })
             .then(res => {

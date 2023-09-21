@@ -12,13 +12,21 @@ export const Wrapper = styled.div`
 
 export const TranslatorSelectorWrapper = styled.div`
     display: flex;
+    gap: 10px;
+    align-items: center;
 
     .setting-button{
-        width:48px;
+        padding:0;
+        line-height: 1.2;
+        width: 48px;
         height: 48px;
+        color:var(--defaultBlueColor);
+        font-size: 12px;
+        font-weight: 500;
         border-radius: 5px;
-        margin-left:5px;
-        padding: 8px;
+        border:1px solid var(--defaultBlueColor);
+        background: #fff;
+        box-shadow: var(--defaultBoxShadow);
     }
 `;
 

@@ -123,9 +123,7 @@ export default function ExcelUploaderControlComponent({
                         className='setting-button'
                         onClick={() => toggleFavoriteTranslatorsModalOpen(true)}
                     >
-                        <CustomImage
-                            src='/images/icon/settings_default_808080.svg'
-                        />
+                        보기<br/>설정
                     </CustomBlockButton>
                 </TranslatorSelectorWrapper>
                 <ButtonGroup>

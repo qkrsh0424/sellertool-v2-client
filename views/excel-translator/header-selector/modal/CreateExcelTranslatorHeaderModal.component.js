@@ -95,6 +95,7 @@ export default function CreateExcelTranslatorHeaderModalComponent({
                             </div>
                         </div>
                     </div>
+                    <div className='tip-field'>엑셀 변환기를 생성 후 <b>&quot;보기설정&quot;</b> 버튼으로 선택창에 보여질 목록을 설정해 주세요.</div>
                     <div className='button-group'>
                         <SingleBlockButton
                             type='button'

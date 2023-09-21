@@ -1,6 +1,8 @@
+import { useEffect, useRef } from "react";
 import { CustomCancelConfirmButton } from "../../../../../modules/buttons/cancel-confirm-button/v1";
 import CustomSelect from "../../../../../modules/select/CustomSelect";
 import { Wrapper } from "../styles/EditField.styled";
+import CustomInput from "../../../../../../../../modules/input/CustomInput";
 
 export default function EditFieldView({
     categories,
@@ -11,6 +13,16 @@ export default function EditFieldView({
     onChangeSelectedCategory,
     onUpdateNRankRecordCategory
 }) {
+    const inputRef = useRef();
+
+    useEffect(() => {
+        if(!selectedCategory) {
+            return;
+        }
+
+        inputRef?.current?.focus();
+    }, [selectedCategory])
+
     return (
         <Wrapper>
             <div className='content-box'>
@@ -25,7 +37,8 @@ export default function EditFieldView({
                     </CustomSelect>
                 </div>
 
-                <input
+                <CustomInput
+                    ref={inputRef}
                     className='input-el'
                     name='name'
                     onChange={(e) => onChangeInputValue(e)}

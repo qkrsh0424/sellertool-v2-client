@@ -36,19 +36,19 @@ export function SearchInfoFieldView({
                         />
                         <div>
                             <span>랭킹 조회 횟수 </span>
-                            <span>(</span>
+                            <span>( </span>
                             <span className={(searched_count !== 0) && (searched_count >= allowed_search_count) ? 'red-text' : ''}>
                                 {searched_count ?? 0}
                             </span>
                             <span> / </span>
                             <span>{allowed_search_count ?? 0}</span>
-                            <span>)</span>
+                            <span> )</span>
                         </div>
                     </div>
                     <div className='info-group'>
                         <div>
                             <span>랭킹 검색 순위 </span>
-                            <span>(최대 {(search_page_size ?? 0) * 80}위)</span>
+                            <span>( 최대 {(search_page_size ?? 0) * 80}위 )</span>
                         </div>
                     </div>
                 </div>

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import SingleBlockButton from "../../../../../../../modules/button/SingleBlockButton";
 import CustomInput from "../../../../../../../modules/input/CustomInput";
 import CustomSelect from "../../../../modules/select/CustomSelect";
@@ -18,6 +19,16 @@ export default function SearchOperatorFieldView({
     handleSubmitClear,
     handleSubmit
 }) {
+    const inputRef = useRef();
+
+    useEffect(() => {
+        if(!searchCondition) {
+            return
+        }
+
+        inputRef?.current?.focus();
+    }, [searchCondition])
+
     return (
         <Wrapper>
             <form onSubmit={(e) => handleSubmit(e)}>
@@ -42,13 +53,14 @@ export default function SearchOperatorFieldView({
                                 })}
                             </CustomSelect>
                             <CustomInput
+                                ref={inputRef}
                                 type='text'
                                 className='input-item'
                                 value={searchQuery || ''}
                                 onChange={(e) => onChangeSearchQuery(e)}
                                 disabled={!searchCondition}
                                 required
-                            ></CustomInput>
+                            />
                         </ConditionWrapper>
                     </ConditionContainer>
                 </FlexGroup>

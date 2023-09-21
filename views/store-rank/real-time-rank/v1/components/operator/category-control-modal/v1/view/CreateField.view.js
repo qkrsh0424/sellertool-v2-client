@@ -31,6 +31,7 @@ export default function CreateFieldView({
                         onChange={(e) => onChangeInputValue(e)}
                         value={inputValue || ''}
                         placeholder="카테고리명"
+                        autoFocus
                         required
                     />
                 </div>

@@ -23,6 +23,7 @@ export const Wrapper = styled.div`
         border-radius: 5px;
         flex:1;
         outline:none;
+        height: 40px;
 
         &:focus{
             border:1px solid var(--mainColor);

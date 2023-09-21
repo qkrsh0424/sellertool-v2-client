@@ -19,6 +19,10 @@ export function FdMarginRecordList({
     mrPurchaseModuleList,
     selectResultMber,
     selectResultMberValue,
+    searchQuery,
+
+    onReqFetchMarginRecordList,
+    onChangeSearchQueryFromEvent,
     onSelectMarginRecord,
     onReqCreateMarginRecord
 }) {
@@ -40,17 +44,21 @@ export function FdMarginRecordList({
                         상품추가
                     </CustomBlockButton>
                     <div className='control-box'>
-                        <div className='flexible'>
-                            <CustomInput
-                                type='text'
-                                className='input-item'
-                                placeholder='상품명 or 태그'
-                            />
-                            <CustomBlockButton
-                                type='button'
-                                className='button-item'
-                            >조회</CustomBlockButton>
-                        </div>
+                        <form onSubmit={(e) => onReqFetchMarginRecordList(e)}>
+                            <div className='flexible'>
+                                <CustomInput
+                                    type='text'
+                                    className='input-item'
+                                    placeholder='상품명 or 태그'
+                                    onChange={(e) => onChangeSearchQueryFromEvent(e)}
+                                    value={searchQuery || ''}
+                                />
+                                <CustomBlockButton
+                                    type='submit'
+                                    className='button-item'
+                                >조회</CustomBlockButton>
+                            </div>
+                        </form>
                     </div>
                 </St.SearchFieldWrapper>
                 <St.TableWrapper>
@@ -145,7 +153,7 @@ export function FdMarginRecordList({
 
                                     let totalExpensePriceWithBaseExchangeRate = customNumberUtils.roundToDigit(resultForm?.totalExpenseKRW / selectResultMberValue, 2);
                                     let totalIncomePriceWithBaseExchangeRate = customNumberUtils.roundToDigit(resultForm?.totalIncomeKRW / selectResultMberValue, 2);
-                                    
+
                                     return (
                                         <tr
                                             key={marginRecord?.id}

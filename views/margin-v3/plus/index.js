@@ -173,6 +173,10 @@ export default function MainComponent(props) {
         setSearchQuery(value);
     }
 
+    if (!mrBaseExchangeRateRedux?.mrBaseExchangeRateList || !mrPurchaseModuleRedux?.mrPurchaseModuleList) {
+        return <LoadingField />
+    }
+
     const resultMrBaseExchangeRate = mrBaseExchangeRateRedux?.mrBaseExchangeRateList?.find(r => r?.id === resultMberId);
     const resultMrBaseExchangeRateValue = customNumberUtils.returnExchangeRateValue(mrBaseExchangeRateRedux?.mrBaseExchangeRateList, resultMberId);
 
@@ -225,5 +229,18 @@ export default function MainComponent(props) {
                 </St.Container>
             </Layout>
         </>
+    );
+}
+
+function LoadingField() {
+    return (
+        <Layout>
+            <St.Container>
+                <St.Title>
+                    <div className='title'>마진율 계산기</div>
+                    <div className='tagBadge'>플러스+</div>
+                </St.Title>
+            </St.Container>
+        </Layout>
     );
 }

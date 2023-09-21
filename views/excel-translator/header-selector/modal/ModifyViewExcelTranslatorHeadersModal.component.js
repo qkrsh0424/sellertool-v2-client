@@ -72,7 +72,7 @@ export default function ModifyViewExcelTranslatorHeadersModalComponent({
                         <div className='content-box'>
                             <div className='title mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-spaceBetween'>
                                 <div>
-                                    선택목록
+                                    숨겨짐
                                 </div>
                             </div>
                             <div className='item-list'>
@@ -116,7 +116,7 @@ export default function ModifyViewExcelTranslatorHeadersModalComponent({
                         <div className='content-box'>
                             <div className='title mgl-flex mgl-flex-alignItems-center mgl-flex-justifyContent-spaceBetween'>
                                 <div>
-                                    노출목록
+                                    보여짐
                                 </div>
                                 <div className='mgl-flex mgl-flex-alignItems-center'>
                                     <SingleBlockButton

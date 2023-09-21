@@ -10,6 +10,7 @@ import CreateExcelTranslatorHeaderModalComponent from "./modal/CreateExcelTransl
 import ModifyExcelTranslatorHeaderModalComponent from "./modal/ModifyExcelTranslatorHeaderModal.component";
 import ModifyViewExcelTranslatorHeadersModalComponent from "./modal/ModifyViewExcelTranslatorHeadersModal.component";
 import { ButtonGroup, Container, ContentWrapper, SelectBox, SettingGroup, Title, Wrapper } from "./styles/HeaderSelector.styled";
+import CustomBlockButton from "../../../components/buttons/block-button/v1/CustomBlockButton";
 
 export default function HeaderSelectorComponent({
     excelTranslatorHeaders,
@@ -167,24 +168,13 @@ export default function HeaderSelectorComponent({
                                     })}
                                 </CustomSelect>
                             </SelectBox>
-                            <SingleBlockButton
+                            <CustomBlockButton
                                 type='button'
-                                className='icon-button'
+                                className='setting-button'
                                 onClick={() => __handle.action.openModifyViewExcelTranslatorHeadersModal()}
                             >
-                                <div className='button-icon-figure'>
-                                    <Image
-                                        loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                        src={'/images/icon/settings_default_808080.svg'}
-                                        layout='responsive'
-                                        width={1}
-                                        height={1}
-                                        objectFit={'cover'}
-                                        alt='image'
-                                        loading='lazy'
-                                    ></Image>
-                                </div>
-                            </SingleBlockButton>
+                                보기<br />설정
+                            </CustomBlockButton>
                         </SettingGroup>
                         <ButtonGroup className='mgl-flex'>
                             <SingleBlockButton

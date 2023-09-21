@@ -99,8 +99,6 @@ export const Container = styled.div`
         }
     }
 
-
-
     .button-group{
         margin-top: 40px;
         display: flex;
@@ -113,6 +111,19 @@ export const Container = styled.div`
             color:#fff;
             font-size: 18px;
             font-weight: 500;
+        }
+    }
+
+    .tip-field{
+        padding: 0 20px;
+        margin-top: 40px;
+        font-size: 14px;
+        color:#444;
+        font-weight: 500;
+        word-break: keep-all;
+
+        b{
+            color:var(--defaultBlueColor);
         }
     }
 `;

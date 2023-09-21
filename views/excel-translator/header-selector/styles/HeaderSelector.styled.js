@@ -32,7 +32,7 @@ export const ContentWrapper = styled.div`
 `;
 
 export const SettingGroup = styled.div`
-    
+    gap: 10px;
     @media all and (max-width: 992px){
         width: 100%;
         justify-content: space-between;
@@ -47,6 +47,20 @@ export const SettingGroup = styled.div`
         border: 1px solid #f0f0f0;
         box-shadow: var(--defaultBoxShadow);
         margin-left: 10px;
+    }
+
+    .setting-button{
+        padding:0;
+        line-height: 1.2;
+        width: 48px;
+        height: 48px;
+        color:var(--defaultBlueColor);
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 5px;
+        border:1px solid var(--defaultBlueColor);
+        background: #fff;
+        box-shadow: var(--defaultBoxShadow);
     }
 
     .button-icon-figure{
@@ -66,7 +80,7 @@ export const SelectBox = styled.div`
     .select{
         width: 250px;
         border: 1px solid #e0e0e0;
-        border-radius: 10px;
+        border-radius: 5px;
         box-shadow: var(--defaultBoxShadow);
 
         @media all and (max-width: 992px){

@@ -27,10 +27,10 @@ const WorkspaceManagementMainComponent = (props) => {
         reqChangeSubscriptionPlanToPrivate
     } = useWorkspaceHook();
 
-    const handleSubmitModifyWorkspaceName = async ({
+    const handleSubmitModifyWorkspaceName = async (
         body,
         successCallback
-    }) => {
+    ) => {
         await reqChangeWorkspaceName({
             body: body,
             successCallback: () => {
@@ -58,8 +58,6 @@ const WorkspaceManagementMainComponent = (props) => {
                 <>
                     <WorkspaceNameFieldComponent
                         workspace={workspace}
-
-                        onSubmitModifyWorkspaceName={handleSubmitModifyWorkspaceName}
                     />
                     <LayoutComponent
                         workspace={workspace}
@@ -102,6 +100,7 @@ const WorkspaceManagementMainComponent = (props) => {
                             (
                                 <SettingsComponent
                                     workspace={workspace}
+                                    onSubmitModifyWorkspaceName={handleSubmitModifyWorkspaceName}
                                     onSubmitDeleteWorkspace={handleSubmitDeleteWorkspace}
                                     onSubmitChangeSubscriptionPlanToPrivate={handleSubmitChangeSubscriptionPlanToPrivate}
                                 />

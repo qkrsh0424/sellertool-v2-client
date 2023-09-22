@@ -45,7 +45,7 @@ export function useCategoryControlHook({
     const checkFormat = (body) => {
         let name = body.name;
 
-        if(categories.some(category => category.name === name)) {
+        if(categories?.some(category => category.name === name)) {
             throw new Error("이미 등록된 카테고리입니다.")
         }
 

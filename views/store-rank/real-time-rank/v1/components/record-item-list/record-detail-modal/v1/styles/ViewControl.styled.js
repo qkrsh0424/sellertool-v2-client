@@ -4,6 +4,10 @@ export const Wrapper = styled.div`
 
     .control-btn-box {
         margin-bottom: 10px;
+
+        @media screen and (max-width: 992px) {
+            display: flex;
+        }
     }
 
     .button-el {
@@ -15,6 +19,10 @@ export const Wrapper = styled.div`
         cursor: pointer;
         color: rgb(96, 96, 96);
         height: 30px;
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+        }
     }
 
     .tab-container {

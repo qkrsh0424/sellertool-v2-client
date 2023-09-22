@@ -36,7 +36,7 @@ const ListFieldWrapper = styled.div`
     padding:0 20px;
 
     .item-group{
-        padding:10px 0;
+        padding:15px 0;
         font-size: 14px;
         color:#404040;
         border-bottom: 1px solid #f0f0f0;
@@ -98,6 +98,47 @@ const ListFieldWrapper = styled.div`
                     font-weight: 600;
                     font-size: 12px;
                 }
+
+                .workspaceTag{
+                    /* width:70px; */
+                    display: inline-block;
+                    font-size: 10px;
+                    border:0.9px solid #808080;
+                    color: #808080;
+                    font-weight: 700;
+                    border-radius: 20px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width:60px;
+                    height: 22px;
+                }
+
+                .disabledWorkspace-notification{
+                    margin-top: 3px;
+                    font-size: 10px;
+                    color:var(--defaultRedColorOpacity600);
+                }
+
+                .disabledWorkspace-tag{
+                    border:0.9px solid var(--defaultRedColorOpacity600);
+                    color: var(--defaultRedColorOpacity600);
+                }
+
+                .privateWorkspace-tag{
+                    border:0.9px solid #808080;
+                    color: #808080;
+                }
+
+                .publicWorkspace-tag{
+                    border:0.9px solid var(--publicWorkspaceColor);
+                    color: var(--publicWorkspaceColor);
+                }
+
+                .plusWorkspace-tag{
+                    border:0.9px solid var(--plusWorkspaceColor);
+                    color: var(--plusWorkspaceColor);
+                }
             }
 
 
@@ -112,6 +153,10 @@ const ListFieldWrapper = styled.div`
                             text-decoration: underline;
                         }
                     }
+                }
+
+                .user-item-disabled{
+                    color:#808080;
                 }
             }
         }

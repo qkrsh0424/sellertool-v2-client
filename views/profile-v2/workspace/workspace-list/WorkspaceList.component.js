@@ -49,7 +49,38 @@ const WorkspaceListComponent = ({
                 </TitleFieldWrapper>
                 <ListFieldWrapper>
                     {workspaces?.map(r => {
-                        let isPublicWorkspace = returnSubscriptionPlans(r?.subscriptionPlan)?.includes('PUBLIC');
+                        const disabledWorkspace = r?.subscriptionPlan === 'NONE' || (r?.subscriptionPlan === 'PRIVATE' && !r?.masterFlag);
+                        if (disabledWorkspace) {
+                            return (
+                                <div
+                                    key={r.id}
+                                    className='item-group mgl-flex mgl-flex-alignItems-center'
+                                >
+                                    <div
+                                        className='content-group mgl-flex mgl-flex-justifyContent-spaceBetween mgl-flex-alignItems-center'
+                                    >
+                                        <div className='info-items mgl-flex'>
+                                            <div className='tag-items'>
+                                                {r?.subscriptionPlan === 'NONE' && <div className='workspaceTag disabledWorkspace-tag'>구독 필요</div>}
+                                            </div>
+                                            <div className='user-items tag-items'>
+                                                <div className='user-item mgl-font-color-primary user-item-disabled'>
+                                                    <Link
+                                                        href={`/workspace/management/?wsId=${r.id}`}
+                                                        passHref
+                                                    >
+                                                        <a>
+                                                            {r.name}
+                                                        </a>
+                                                    </Link>
+                                                </div>
+                                                <div className='disabledWorkspace-notification'>구독플랜을 연장하거나 개인 워크스페이스로 전환 해주세요.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        }
                         return (
                             <div
                                 key={r.id}
@@ -58,39 +89,11 @@ const WorkspaceListComponent = ({
                                 <div
                                     className='content-group mgl-flex mgl-flex-justifyContent-spaceBetween mgl-flex-alignItems-center'
                                 >
-                                    <div className='profile-image-figure'>
-                                        {isPublicWorkspace &&
-                                            <Image
-                                                className='item-icon-el'
-                                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                src='/images/icon/groups_default_808080.svg'
-                                                layout='fill'
-                                                alt='image'
-                                                loading='lazy'
-                                            ></Image>
-                                        }
-                                        {!isPublicWorkspace &&
-                                            <Image
-                                                className='item-icon-el'
-                                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                                src='/images/icon/person_default_808080.svg'
-                                                layout='fill'
-                                                alt='image'
-                                                loading='lazy'
-                                            ></Image>
-                                        }
-                                    </div>
-
                                     <div className='info-items mgl-flex'>
                                         <div className='tag-items'>
-                                            <div className='grade-tag'>
-                                                {!isPublicWorkspace &&
-                                                    '개인용'
-                                                }
-                                                {isPublicWorkspace &&
-                                                    '단체용'
-                                                }
-                                            </div>
+                                            {r?.subscriptionPlan === 'PRIVATE' && <div className='workspaceTag privateWorkspace-tag'>PRIVATE</div>}
+                                            {r?.subscriptionPlan === 'PUBLIC' && <div className='workspaceTag publicWorkspace-tag'>PUBLIC</div>}
+                                            {r?.subscriptionPlan === 'PLUS' && <div className='workspaceTag plusWorkspace-tag'>PLUS+</div>}
                                         </div>
                                         <div className='user-items'>
                                             <div className='user-item mgl-font-color-primary'>

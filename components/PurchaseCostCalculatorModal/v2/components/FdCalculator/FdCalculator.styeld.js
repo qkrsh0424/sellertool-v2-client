@@ -96,6 +96,22 @@ export const St = {
                 border-color: var(--defaultRedColor);
                 color: var(--defaultRedColor);
             }
+
+            .calculator-select-btn{
+                cursor:pointer;
+                background: #fff;
+                width:40px;
+                height: 40px;
+                font-size: 13px;
+                border-radius: 20px;
+                font-weight: 700;
+                transition: all .3s;
+                padding:5px;
+                margin-top: 5px;
+                &:hover{
+                    background:#f0f0f0;
+                }
+            }
         }
     `,
     FooterWrapper: styled.div`

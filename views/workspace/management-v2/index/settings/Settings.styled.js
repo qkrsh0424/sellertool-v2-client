@@ -47,6 +47,16 @@ export const PaperBox = styled.div`
         margin-top: 10px;
     }
 
+    .common-btn{
+        width: 100px;
+        height: 30px;
+        background: #000000;
+        border: 1px solid #e0e0e0;
+        color: #fff;
+        border-radius: 5px;
+        font-weight: 500;
+    }
+
     .delete-btn{
         width: 100px;
         height: 30px;
@@ -54,6 +64,7 @@ export const PaperBox = styled.div`
         border: 1px solid var(--defaultRedColor);
         color: #fff;
         border-radius: 5px;
+        font-weight: 500;
     }
 
     .warning-btn{
@@ -62,7 +73,7 @@ export const PaperBox = styled.div`
         background: var(--defaultYellowColor);
         border: 1px solid var(--defaultYellowColor);
         color: #fff;
-        font-weight: 700;
         border-radius: 5px;
+        font-weight: 500;
     }
 `;

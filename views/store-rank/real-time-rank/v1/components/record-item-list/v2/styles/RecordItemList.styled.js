@@ -10,7 +10,6 @@ export const Container = styled.div`
 `;
 
 export const Wrapper = styled.div`
-    padding: 0 10px;
     position:relative;
     margin-bottom: 100px;
 

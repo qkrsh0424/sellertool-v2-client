@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-    min-height: 50vh;
-    max-height: 50vh;
+    min-height: 45vh;
+    max-height: 45vh;
     margin-bottom: 20px;
     border-radius: 0 0 15px 15px;
     box-shadow: var(--defaultBoxShadow);
@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
 
 export const DetailInfoWrapper = styled.div`
     padding: 5px;
-    min-height: 120px;
+    min-height: 100px;
     border-bottom: 4px solid #eef2f9;
 `;
 
@@ -25,7 +25,6 @@ export const MainInfoWrapper = styled.div`
     font-size: 12px;
     font-weight: 600;
     color: #888;
-    min-height: 120px;
     padding: 5px;
 
     @media screen and (max-width: 992px) {

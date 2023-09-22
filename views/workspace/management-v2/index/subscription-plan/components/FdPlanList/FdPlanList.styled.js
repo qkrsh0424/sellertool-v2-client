@@ -5,13 +5,14 @@ export const STY_Container = styled.div`
 `;
 
 export const STY_CardListWrapper = styled.div`
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
+    /* display: flex;
+    justify-content: space-between; */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
 
     @media all and (max-width:992px){
-        flex-direction: column;
-        gap: 40px;
+        grid-template-columns: repeat(1, 1fr);
     }
 
 `;
@@ -20,17 +21,17 @@ export const STY_Card = {
     Container: styled.div`
         position:relative;
         width: 100%;
-        /* height: 100%; */
         padding: 20px;
         background: #fff;
-        border: ${props => props.subscriptionPlan === 'PLUS' ? '3px solid var(--defaultBlueColorOpacity300)' : '1px solid #f0f0f0'};
+        border: 1px solid #f0f0f0;
         border-radius: 10px;
         box-shadow: var(--defaultBoxShadow);
+
         @media all and (max-width:992px){
             height: 100%;
         }
 
-        .bestTag{
+        .highlightTag{
             display: flex;
             justify-content: center;
             align-items: center;
@@ -49,7 +50,7 @@ export const STY_Card = {
         }
     `,
     TitleBox: styled.div`
-        margin: 20px 0;
+        margin: 20px 0 0 0;
         background: #fff;
         text-align: center;
         font-size: 22px;
@@ -58,8 +59,12 @@ export const STY_Card = {
         border-radius: 5px;
     `,
     PriceBox: styled.div`
-        margin: 40px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 140px;
         text-align: center;
+        gap: 10px;
 
         .original-price-wrapper{
             display: flex;
@@ -84,7 +89,6 @@ export const STY_Card = {
         }
 
         .sales-price-wrapper{
-            margin-top: 10px;
         }
 
         .sales-price-tag{

@@ -56,9 +56,10 @@ export function FdPlanList({
                             <STY_Card.Container
                                 key={refSubscriptionPlan?.id}
                                 subscriptionPlan={refSubscriptionPlan?.subscriptionPlan}
+                                style={refSubscriptionPlan?.highlightFlag ? { border: `3px solid ${refSubscriptionPlan?.highlightColorCode}` } : {}}
                             >
-                                {refSubscriptionPlan?.subscriptionPlan === 'PLUS' &&
-                                    <div className='bestTag'>BEST</div>
+                                {refSubscriptionPlan?.highlightFlag &&
+                                    <div className='highlightTag'>{refSubscriptionPlan?.highlightTagName}</div>
                                 }
                                 <STY_Card.TitleBox>
                                     {refSubscriptionPlan?.name}
@@ -161,9 +162,9 @@ function PrivateCard({
             <STY_Card.TitleBox>
                 {refSubscriptionPlan?.name}
             </STY_Card.TitleBox>
-            <div style={{ height: '67.5px', margin: '40px 0', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '18px', fontWeight: '700', color: 'var(--mainColor)' }}>
-                무료 제공 서비스
-            </div>
+            <STY_Card.PriceBox>
+                <div style={{ fontSize: '18px', fontWeight: '700', color: 'var(--mainColor)' }}>무료 제공 서비스</div>
+            </STY_Card.PriceBox>
             <STY_Card.SubscriptionButtonBox>
                 {refSubscriptionPlan?.statusType === 'OPEN' &&
                     <>

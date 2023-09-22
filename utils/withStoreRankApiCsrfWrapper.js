@@ -14,7 +14,7 @@ const addCallbackSubscriber = (callback) => {
     CALLBACK_SUBSCRIBERS.push(callback);
 };
 
-export default async function withNRankApiCsrfWrapper(callback) {
+export default async function withStoreRankApiCsrfWrapper(callback) {
     const retryOriginReq = new Promise((resolve) => {
         addCallbackSubscriber(() => {
             resolve(callback());

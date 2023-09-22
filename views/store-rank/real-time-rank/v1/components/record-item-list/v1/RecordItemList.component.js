@@ -99,12 +99,9 @@ export function RecordItemListComponent({
                                     isSameRecord={isKeywordAccent && isMallNameAccent}
                                 >
                                     <div className='content-box'>
-                                        <div>
+                                        <div className="thumbnail">
                                             <CustomBoxImage
-                                                className='thumbnail-img-box'
                                                 src={currentRecordInfo?.thumbnail_url}
-                                                size='170px'
-                                                mobileSize='100px'
                                             />
                                         </div>
                                         <div style={{ padding: '0 20px' }}>
@@ -124,7 +121,7 @@ export function RecordItemListComponent({
                                                 </ContentValue>
                                             </ContentGroup>
                                             <ContentGroup>
-                                                <div style={{ minWidth: '60px' }}>스토어명</div>
+                                                <div style={{ minWidth: '60px' }}>스토어</div>
                                                 <div>|</div>
                                                 <ContentValue>
                                                     {isMallNameAccent ?

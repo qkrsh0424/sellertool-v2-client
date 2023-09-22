@@ -1,4 +1,5 @@
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
+import { nRankRecordCategoryDataConnect } from "../../../../../data_connect/nRankRecordCategoryDataConnect";
 import { nRankRecordDataConnect } from "../../../../../data_connect/nRankRecordDataConnect";
 
 export function useApiHook() {
@@ -22,12 +23,12 @@ export function useApiHook() {
     }
 
     const onReqCreateSearchInput = async (
-        options = {body: {}, headers: {}},
+        options = {headers: {}, body: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().createOne(options?.body, options?.headers)
+        await nRankRecordDataConnect().createOne(options?.headers, options?.body)
             .then(res => {
                 if(res.status === 200) {
                     let memo = '정상적으로 추가되었습니다.'
@@ -48,12 +49,12 @@ export function useApiHook() {
     }
 
     const onReqDeleteNRankRecord = async (
-        options = {params: {}, headers: {}},
+        options = {headers: {}, params: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().deleteOne(options?.params, options?.headers)
+        await nRankRecordDataConnect().deleteOne(options?.headers, options?.params)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data, res);
@@ -69,12 +70,33 @@ export function useApiHook() {
     }
 
     const onReqSearchNRankRecordList = async (
-        options = {headers: {}},
+        options = {headers: {}, params: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().searchRecordList(options?.headers)
+        await nRankRecordDataConnect().searchRecordList(options?.headers, options?.params)
+            .then(res => {
+                if (res.status === 200) {
+                    callbackFn.success(res?.data?.data, res);
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                })
+            })
+    }
+
+    const onReqSearchNRankRecordListCount = async (
+        options = {headers: {}, params: {}},
+        callbackFn = {
+            success: (results, response) => {},
+        }
+    ) => {
+        await nRankRecordDataConnect().searchRecordListCount(options?.headers, options?.params)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data, res);
@@ -90,15 +112,36 @@ export function useApiHook() {
     }
 
     const onReqChangeNRankRecordListStatusToFail = async (
-        options = {body: {}, headers: {}},
+        options = {headers: {}, body: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().changeListStatusToFail(options.body, options.headers)
+        await nRankRecordDataConnect().changeListStatusToFail(options.headers, options.body)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success();
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                })
+            })
+    }
+
+    const onReqSearchNRankRecordCategories = async (
+        options = {headers: {}, params: {}},
+        callbackFn = {
+            success: (results, response) => {},
+        }
+    ) => {
+        await nRankRecordCategoryDataConnect().searchList(options.headers, options.params)
+            .then(res => {
+                if (res.status === 200) {
+                    callbackFn.success(res?.data?.data, res);
                 }
             })
             .catch(err => {
@@ -115,6 +158,8 @@ export function useApiHook() {
         onReqCreateSearchInput,
         onReqDeleteNRankRecord,
         onReqSearchNRankRecordList,
-        onReqChangeNRankRecordListStatusToFail
+        onReqSearchNRankRecordListCount,
+        onReqChangeNRankRecordListStatusToFail,
+        onReqSearchNRankRecordCategories
     }
 }

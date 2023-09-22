@@ -16,7 +16,7 @@ export function RecordItemListSkeletonComponent() {
                             <RecordInfoSkeletonBox key={'record-info-idx' + r} >
                                 <RecordInfo>
                                     <div className='content-box'>
-                                        <div><SkeletonEl variant="rounded" width={170} height={170} /></div>
+                                        <div><SkeletonEl variant="rounded" width={100} height={100} /></div>
                                         <div style={{ padding: '0 20px' }}>
                                             <ContentGroup>
                                                 <div><SkeletonEl variant="rounded" width={60} height={20} /></div>

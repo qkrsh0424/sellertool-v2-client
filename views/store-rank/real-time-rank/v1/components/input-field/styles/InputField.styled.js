@@ -2,23 +2,21 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     overflow: hidden;
-    
+    padding: 20px;
+
     form {
         box-shadow: var(--defaultBoxShadow);
-        padding: 15px;
+        padding: 13px;
         background-color: var(--mainColorOpacity30);
-        /* border-radius: 0 0 50px 50px; */
         border-radius: 60px;
-        margin: 15px;
-        margin-bottom: 0;
         display: inline-block;
         overflow: hidden;
         animation-duration: 1s;
         animation-name: slidedown;
-    }
 
-    @media all and (max-width:992px){
-        padding: 10px;
+        @media screen and (max-width: 992px) {
+            width: 100%;
+        }
     }
 
     @keyframes slidedown {
@@ -67,32 +65,36 @@ export const Container = styled.div`
 `;
 
 export const Wrapper = styled.div`
-    width: 720px;
-    height: 80px;
+    padding: 10px 20px;
     border-radius: 50px;
     background-color: #fff;
     box-shadow: var(--defaultBoxShadow);
 
     display: flex;
+    gap: 15px;
     align-items: center;
     justify-content: center;
-
-    @media screen and (max-width: 992px) {
-        width: 100%;
-        height: 100px;
-        padding: 15px;
-    }
 `;
 
 export const InputFieldBox = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+    @media screen and (max-width: 992px) {
+        width: 80%;
+        flex-direction: column;
+        gap: 0px;
+    }
+
     .input-el {
-        width: 240px;
-        margin-right: 40px;
-        font-size: 1.1rem;
+        width: 200px;
+        height: 30px;
+        font-size: 14px;
         box-sizing: border-box;
         border: 1px solid #fff;
         border-bottom: 1px solid #bdbdbd;
-        height: 45px;
 
         &:focus{
             outline: none;
@@ -100,11 +102,9 @@ export const InputFieldBox = styled.div`
             border-bottom: 1px solid #bdbdbd;
         }
 
-
         @media screen and (max-width: 992px) {
-            font-size: 14px;
-            width: 90%;
-            height: 30px;
+            width: 100%;
+            font-size: 12px;
         }
     }
 `
@@ -131,6 +131,5 @@ export const ButtonFieldBox = styled.div`
             background:none;
             cursor: pointer;
         }
-    
     }
 `;

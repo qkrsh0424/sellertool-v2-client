@@ -38,10 +38,6 @@ export const FdCalculator = ({
     return (
         <>
             <St.Container>
-                <ButtonGroupsView
-                    resultDetailModeOpen={resultDetailModeOpen}
-                    onToggleResultDetailModeOpen={() => toggleResultDetailModeOpen()}
-                />
                 <St.ResultWrapper
                     ref={resultWrapperRef}
                     style={{
@@ -95,6 +91,10 @@ export const FdCalculator = ({
                         </>
                     }
                 </St.ResultWrapper>
+                <ButtonGroupsView
+                    resultDetailModeOpen={resultDetailModeOpen}
+                    onToggleResultDetailModeOpen={() => toggleResultDetailModeOpen()}
+                />
                 <form onSubmit={(e) => handleSubmitCalculateMargin(e)}>
                     <St.CalculatorWrapper>
                         <div className='button-wrapper'>

@@ -126,14 +126,14 @@ export function FdPlanList({
                                 <STY_Card.ServiceList>
                                     {SubscriptionPlanDetails[refSubscriptionPlan?.subscriptionPlan]?.mainList.map(main => {
                                         return (
-                                            <li key={main.name} className={`li-main ${main.upgradeBadge ? 'upgrade-item' : ''} ${main.newBadge ? 'new-item' : ''}`}>
+                                            <li key={main.name} className={`li-main ${main?.badgeStatus === 'UPGRADE' ? 'upgrade-item' : ''} ${main?.badgeStatus === 'NEW' ? 'new-item' : ''} ${main?.badgeStatus === 'PENDING' ? 'pending-item' : ''}`}>
                                                 {main.name}
                                                 {main?.subList &&
                                                     <>
                                                         <STY_Card.ServiceList>
                                                             {main?.subList?.map(sub => {
                                                                 return (
-                                                                    <li key={sub.name} className={`li-sub ${sub.upgradeBadge ? 'upgrade-item' : ''}`}>{sub?.name}</li>
+                                                                    <li key={sub.name} className={`li-sub ${sub?.badgeStatus === 'UPGRADE' ? 'upgrade-item' : ''} ${main?.badgeStatus === 'PENDING' ? 'pending-item' : ''}`}>{sub?.name}</li>
                                                                 );
                                                             })}
                                                         </STY_Card.ServiceList>
@@ -222,14 +222,14 @@ function PrivateCard({
             <STY_Card.ServiceList>
                 {SubscriptionPlanDetails[refSubscriptionPlan?.subscriptionPlan]?.mainList.map(main => {
                     return (
-                        <li key={main.name} className={`li-main ${main.upgradeBadge ? 'upgrade-item' : ''} ${main.newBadge ? 'new-item' : ''}`}>
+                        <li key={main.name} className={`li-main ${main?.badgeStatus === 'UPGRADE' ? 'upgrade-item' : ''} ${main?.badgeStatus === 'NEW' ? 'new-item' : ''} ${main?.badgeStatus === 'PENDING' ? 'pending-item' : ''}`}>
                             {main.name}
                             {main?.subList &&
                                 <>
                                     <STY_Card.ServiceList>
                                         {main?.subList?.map(sub => {
                                             return (
-                                                <li key={sub.name} className={`li-sub ${sub.upgradeBadge ? 'upgrade-item' : ''}`}>{sub?.name}</li>
+                                                <li key={sub.name} className={`li-sub ${sub?.badgeStatus === 'UPGRADE' ? 'upgrade-item' : ''} ${main?.badgeStatus === 'PENDING' ? 'pending-item' : ''}`}>{sub?.name}</li>
                                             );
                                         })}
                                     </STY_Card.ServiceList>

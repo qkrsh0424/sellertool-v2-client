@@ -154,5 +154,10 @@ export const STY_Card = {
             color: var(--defaultBlueColor);
             font-weight: 700;
         }
+
+        .pending-item{
+            color: #e0e0e0;
+            font-weight: 700;
+        }
     `
 }

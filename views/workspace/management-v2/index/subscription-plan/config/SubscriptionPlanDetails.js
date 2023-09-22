@@ -1,3 +1,4 @@
+// badgeStatus = [COMMON, UPGRADE, NEW, PENDING]
 export const SubscriptionPlanDetails = {
     PRIVATE: {
         returnButtonType: (currentSubscriptionType) => {
@@ -13,45 +14,37 @@ export const SubscriptionPlanDetails = {
         mainList: [
             {
                 name: '마진율 계산기',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON'
             },
             {
-                name: '스토어 랭킹',
-                newBadge: false,
-                upgradeBadge: false,
+                name: '스토어 랭킹 (준비중...)',
+                badgeStatus: 'PENDING',
                 subList: [
                     {
                         name: '일5회',
-                        newBadge: false,
-                        upgradeBadge: false
+                        badgeStatus: 'PENDING',
                     },
                     {
                         name: '400위 까지',
-                        newBadge: false,
-                        upgradeBadge: false
+                        badgeStatus: 'PENDING',
                     }
                 ]
             },
             {
                 name: '통합 상품 관리',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON',
             },
             {
                 name: '통합 재고 관리',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON',
             },
             {
                 name: '통합 발주 관리',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON',
             },
             {
                 name: '통합 판매 성과',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON',
             }
         ]
     },
@@ -69,50 +62,41 @@ export const SubscriptionPlanDetails = {
         mainList: [
             {
                 name: '마진율 계산기',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON'
             },
             {
-                name: '스토어 랭킹',
-                newBadge: false,
-                upgradeBadge: false,
+                name: '스토어 랭킹 (준비중...)',
+                badgeStatus: 'PENDING',
                 subList: [
                     {
                         name: '일5회',
-                        newBadge: false,
-                        upgradeBadge: false
+                        badgeStatus: 'PENDING'
                     },
                     {
                         name: '400위 까지',
-                        newBadge: false,
-                        upgradeBadge: false
+                        badgeStatus: 'PENDING'
                     }
                 ]
             },
             {
                 name: '통합 상품 관리',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON'
             },
             {
                 name: '통합 재고 관리',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON'
             },
             {
                 name: '통합 발주 관리',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON'
             },
             {
                 name: '통합 판매 성과',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON'
             },
             {
                 name: '공유 워크스페이스',
-                newBadge: true,
-                upgradeBadge: false
+                badgeStatus: 'NEW'
             }
         ]
     },
@@ -130,55 +114,45 @@ export const SubscriptionPlanDetails = {
         mainList: [
             {
                 name: '마진율 계산기',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON'
             },
             {
-                name: '스토어 랭킹',
-                newBadge: false,
-                upgradeBadge: true,
+                name: '스토어 랭킹 (준비중...)',
+                badgeStatus: 'PENDING',
                 subList: [
                     {
                         name: '일50회',
-                        newBadge: false,
-                        upgradeBadge: true
+                        badgeStatus: 'PENDING',
                     },
                     {
                         name: '1200위 까지',
-                        newBadge: false,
-                        upgradeBadge: true
+                        badgeStatus: 'PENDING',
                     }
                 ]
             },
             {
                 name: '통합 상품 관리',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON'
             },
             {
                 name: '통합 재고 관리',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON'
             },
             {
                 name: '통합 발주 관리',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON'
             },
             {
                 name: '통합 판매 성과',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON'
             },
             {
                 name: '공유 워크스페이스',
-                newBadge: false,
-                upgradeBadge: false
+                badgeStatus: 'COMMON'
             },
             {
                 name: '마진율 계산기 플러스+',
-                newBadge: true,
-                upgradeBadge: false
+                badgeStatus: 'NEW'
             },
         ]
     }

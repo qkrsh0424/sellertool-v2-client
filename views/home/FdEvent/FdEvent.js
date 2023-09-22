@@ -8,7 +8,7 @@ export function FdEvent(props) {
             <St.Container>
                 <St.GridWrapper>
                     <Link
-                        href={'https://www.notion.so/sellertool/PLUS-e3dc9cab54964d27adc677440a079608'}
+                        href={'https://sellertool.notion.site/PLUS-e3dc9cab54964d27adc677440a079608?pvs=4'}
                         passHref
                     >
                         <a target="_blank">

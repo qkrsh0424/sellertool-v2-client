@@ -3,10 +3,11 @@ import styled from 'styled-components';
 export const Container = styled.div`
     position: relative;
     min-height: 800px;
-    background: linear-gradient(to bottom, #c2d2fd 0%, #e7d3ea 50%, #ebf4ff 100%);
+    background: #fff;
     padding-top: 1px;
     overflow: hidden;
     padding: 80px 10px 40px 10px;
+    border-bottom: 1px solid #e0e0e0;
 
     @media all and (max-width:992px){
         padding-top: 50px;
@@ -23,13 +24,20 @@ export const Wrapper = styled.div`
     margin: 0 auto;
     position: relative;
     z-index: 1;
+
+    .emoji{
+        &::before{
+            content: "🌟";
+        }
+    }
 `;
 
 export const H1 = styled.h1`
     font-weight: 800;
     color: var(--mainColor);
-    font-size: 40px;
+    font-size: 50px;
     word-break: keep-all;
+    text-align: center;
 
     opacity:0;
     transition:all 1s;
@@ -41,10 +49,27 @@ export const H1 = styled.h1`
 `;
 
 export const H2 = styled.h2`
-    font-weight: 400;
-    color: #606060;
-    font-size: 30px;
+    font-weight: 700;
+    color: #222;
+    font-size: 34px;
     word-break: keep-all;
+    text-align: center;
+
+    opacity:0;
+    transition:all 1s;
+    transform:translate3d(0, 50%, 0);
+
+    @media all and (max-width:992px){
+        font-size: 20px;
+    }
+`;
+
+export const H3 = styled.h3`
+    font-weight: 400;
+    color: #444;
+    font-size: 20px;
+    word-break: keep-all;
+    text-align: center;
 
     opacity:0;
     transition:all 1s;

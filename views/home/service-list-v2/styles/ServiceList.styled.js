@@ -16,9 +16,10 @@ export const CategoryTitle = styled.div`
 `;
 
 export const ContentWrapper = styled.div`
-    overflow: hidden;
+    /* overflow: hidden; */
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
     
 
     @media all and (max-width:992px) {
@@ -31,14 +32,12 @@ export const ContentWrapper = styled.div`
 `;
 
 export const CardContainer = styled.div`
-    padding: 10px;
-
     .isReady{
-        background: #f0f0f0;
+        background: var(--defaultBlueColorOpacity200);
 
         &:hover{
             transform: scale(1);
-            border: 1px solid #f0f0f0;
+            background: var(--defaultBlueColorOpacity200);
         }
     }
 `;
@@ -46,30 +45,32 @@ export const CardContainer = styled.div`
 export const CardWrapper = styled.div`
     user-select: none;
     -webkit-tap-highlight-color: #00000000;
-    background: #fff;
-    border-radius: 15px;
+    /* background: #fff; */
+    /* background: var(--defaultBlueColorOpacity700); */
+    background: var(--defaultBlueColorOpacity700);
     padding: 10px;
     box-shadow: var(--defaultBoxShadow);
     cursor: pointer;
-    transition: all .2s;
-    border: 1px solid #00000000;
+    /* transition: all .2s; */
+    /* border: 1px solid #00000000; */
+    border:none;
 
     &:hover{
-        transform: scale(1.03);
-        border: 1px solid var(--mainColor);
+        transform: scale(1.05);
+        background: var(--defaultBlueColor);
     }
 `;
 
 export const CardTitle = styled.div`
     text-align: center;
-    color: #404040;
-    font-weight: 600;
+    color: #fff;
+    font-weight: 700;
     padding: 20px 0;
     font-size: 18px;
     transition: all .2s;
 
     ${CardWrapper}:hover &{
-        color: var(--mainColor);
+        /* color: var(--mainColor); */
     }
     
     @media all and (max-width:992px){
@@ -84,13 +85,14 @@ export const CardDescription = styled.div`
     height: 60px;
     line-height: 25px;
     text-align: center;
-    color: #666;
+    color: #fff;
     word-break: keep-all;
     font-size: 14px;
+    font-weight: 600;
     transition: all .2s;
     
     ${CardWrapper}:hover &{
-        color: var(--mainColor);
+        /* color: var(--mainColor); */
     }
 
     @media all and (max-width:992px){

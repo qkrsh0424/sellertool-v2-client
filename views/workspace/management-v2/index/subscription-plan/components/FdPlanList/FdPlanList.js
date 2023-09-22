@@ -4,9 +4,13 @@ import { numberFormatUtils } from "../../../../../../../utils/numberFormatUtils"
 import { SubscriptionPlanDetails } from "../../config/SubscriptionPlanDetails";
 import { useRouter } from "next/router";
 
+{/* 이벤트 종료 후 삭제 */ }
+const CURRENT_EVENT_PLAN_ID = '63f1ee1c-58f2-11ee-8d3c-06fe28321f8c';
+
 export function FdPlanList({
     currentWorkspace,
-    refSubscriptionPlanList
+    refSubscriptionPlanList,
+    eventAppliedLogList
 }) {
     const router = useRouter();
     const subscriptionPlan = currentWorkspace?.subscriptionPlan;
@@ -52,6 +56,12 @@ export function FdPlanList({
                                 />
                             );
                         }
+
+                        {/* 이벤트 종료 후 삭제 */ }
+                        if (refSubscriptionPlan?.id === CURRENT_EVENT_PLAN_ID && eventAppliedLogList?.length > 0) {
+                            return null;
+                        }
+
                         return (
                             <STY_Card.Container
                                 key={refSubscriptionPlan?.id}
@@ -77,6 +87,10 @@ export function FdPlanList({
                                     <div className='sales-price-wrapper'>
                                         <div className='sales-price-tag'>{numberFormatUtils?.numberWithCommas(refSubscriptionPlan?.price - (refSubscriptionPlan?.price * refSubscriptionPlan?.discountRate / 100))}원 <span style={{ fontSize: '12px', color: '#808080', fontWeight: '500' }}>/ {refSubscriptionPlan?.period}일</span></div>
                                     </div>
+                                    {/* 이벤트 종료 후 삭제 */}
+                                    <EventPlanDescription
+                                        refSubscriptionPlan={refSubscriptionPlan}
+                                    />
                                 </STY_Card.PriceBox>
                                 <STY_Card.SubscriptionButtonBox>
                                     {refSubscriptionPlan?.statusType === 'OPEN' &&
@@ -126,14 +140,14 @@ export function FdPlanList({
                                 <STY_Card.ServiceList>
                                     {SubscriptionPlanDetails[refSubscriptionPlan?.subscriptionPlan]?.mainList.map(main => {
                                         return (
-                                            <li key={main.name} className={`li-main ${main.upgradeBadge ? 'upgrade-item' : ''} ${main.newBadge ? 'new-item' : ''}`}>
+                                            <li key={main.name} className={`li-main ${main?.badgeStatus === 'UPGRADE' ? 'upgrade-item' : ''} ${main?.badgeStatus === 'NEW' ? 'new-item' : ''} ${main?.badgeStatus === 'PENDING' ? 'pending-item' : ''}`}>
                                                 {main.name}
                                                 {main?.subList &&
                                                     <>
                                                         <STY_Card.ServiceList>
                                                             {main?.subList?.map(sub => {
                                                                 return (
-                                                                    <li key={sub.name} className={`li-sub ${sub.upgradeBadge ? 'upgrade-item' : ''}`}>{sub?.name}</li>
+                                                                    <li key={sub.name} className={`li-sub ${sub?.badgeStatus === 'UPGRADE' ? 'upgrade-item' : ''} ${main?.badgeStatus === 'PENDING' ? 'pending-item' : ''}`}>{sub?.name}</li>
                                                                 );
                                                             })}
                                                         </STY_Card.ServiceList>
@@ -222,14 +236,14 @@ function PrivateCard({
             <STY_Card.ServiceList>
                 {SubscriptionPlanDetails[refSubscriptionPlan?.subscriptionPlan]?.mainList.map(main => {
                     return (
-                        <li key={main.name} className={`li-main ${main.upgradeBadge ? 'upgrade-item' : ''} ${main.newBadge ? 'new-item' : ''}`}>
+                        <li key={main.name} className={`li-main ${main?.badgeStatus === 'UPGRADE' ? 'upgrade-item' : ''} ${main?.badgeStatus === 'NEW' ? 'new-item' : ''} ${main?.badgeStatus === 'PENDING' ? 'pending-item' : ''}`}>
                             {main.name}
                             {main?.subList &&
                                 <>
                                     <STY_Card.ServiceList>
                                         {main?.subList?.map(sub => {
                                             return (
-                                                <li key={sub.name} className={`li-sub ${sub.upgradeBadge ? 'upgrade-item' : ''}`}>{sub?.name}</li>
+                                                <li key={sub.name} className={`li-sub ${sub?.badgeStatus === 'UPGRADE' ? 'upgrade-item' : ''} ${main?.badgeStatus === 'PENDING' ? 'pending-item' : ''}`}>{sub?.name}</li>
                                             );
                                         })}
                                     </STY_Card.ServiceList>
@@ -241,4 +255,18 @@ function PrivateCard({
             </STY_Card.ServiceList>
         </STY_Card.Container>
     );
+}
+
+{/* 이벤트 종료 후 삭제 */ }
+function EventPlanDescription({
+    refSubscriptionPlan
+}) {
+
+    if (refSubscriptionPlan?.id === CURRENT_EVENT_PLAN_ID) {
+        return (
+            <div style={{ color: 'var(--defaultRedColor)', fontWeight: '600', fontSize: '14px' }}>계정당 1회만 가능합니다.</div>
+        );
+    } else {
+        return null;
+    }
 }

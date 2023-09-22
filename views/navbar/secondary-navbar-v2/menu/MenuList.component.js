@@ -121,13 +121,13 @@ export default function MenuListComponent({
                                     return (
                                         <Link
                                             key={subMenu?.title}
-                                            href={getMenuHref(subMenu?.href, workspaceId)}
+                                            href={subMenu?.status === 'PENDING' ? '/' : getMenuHref(subMenu?.href, workspaceId)}
                                             passHref
                                         >
                                             <a target={subMenu?.targetBlank ? '_blank' : '_self'} onClick={() => gtagClickEventHandler({ custom_source: 'nav', custom_link: subMenu?.href, custom_name: subMenu?.title })}>
                                                 <CustomBlockButton
                                                     className='menu-item'
-                                                    style={{ color: subMenu?.disabled ? '#a0a0a0' : '' }}
+                                                    style={{ color: subMenu?.status === 'PENDING' ? '#a0a0a0' : '' }}
                                                 >
                                                     {subMenu?.title}
                                                 </CustomBlockButton>
@@ -159,9 +159,10 @@ const MENU_LIST = [
                 targetBlank: false
             },
             {
-                title: '스토어 랭킹',
+                title: '스토어 랭킹 (준비중)',
                 href: '/store-rank/real-time-rank',
-                targetBlank: false
+                targetBlank: false,
+                status: 'PENDING'
             }
         ]
     },

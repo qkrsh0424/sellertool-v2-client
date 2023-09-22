@@ -10,7 +10,7 @@ export const Container = styled.div`
 
 export const Wrapper = styled.div`
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     /* grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); */
     /* align-items: stretch */
     gap: 15px;
@@ -44,6 +44,7 @@ export const RecordInfo = styled.div`
     cursor: pointer;
     border: 1px solid #efefef;
     overflow: hidden;
+    height: 100%;
 
     ${RecordItemBox}:hover & {
         border: 1px solid var(--mainColor);
@@ -53,11 +54,23 @@ export const RecordInfo = styled.div`
         'border: 1px solid var(--defaultRedColor)'
     };
 
+    .thumbnail {
+        min-width: 100px;
+        max-width: 100px;
+        /* border-radius: 50%;
+        overflow: hidden;
+        box-shadow: var(--defaultBoxShadow); */
+
+        @media screen and (max-width: 992px) {
+            width: 100px;
+        }
+    }
+
     .content-box {
         display: flex;
-        align-items: center;
+        /* align-items: center; */
         overflow: hidden;
-        overflow-x: scroll;
+        /* overflow-x: scroll; */
     }
 
     .sub-info-box {
@@ -67,6 +80,7 @@ export const RecordInfo = styled.div`
         bottom: 10px;
         right: 15px;
         margin: 2px;
+        font-size: 11px;
 
         @media screen and (max-width: 576px) {
             display: none;
@@ -75,16 +89,14 @@ export const RecordInfo = styled.div`
         .item-el {
             color: #736d6d;
             font-weight: 500;
-            font-size: 14px;
             background-color: var(--defaultGrayColor);
             border: 1px solid var(--defaultGrayColor);
             border-radius: 15px;
             padding: 5px 10px;
 
-            @media screen and (max-width: 992px) {
-                font-size: 12px;
+            /* @media screen and (max-width: 992px) {
                 padding: 2px 5px;
-            }
+            } */
         }
     }
 `;
@@ -145,7 +157,7 @@ export const ContentGroup = styled.div`
     padding: 5px 0px;
     color: #7f7f7f;
     white-space: break-spaces;
-    font-size: 16px;
+    font-size: 12px;
     
     @media screen and (max-width: 1280px) {
         overflow: hidden;
@@ -161,7 +173,7 @@ export const ContentValue = styled.div`
     display: inline;
     font-weight: 600;
     color: #505050;
-    font-size: 1.1rem;
+    font-size: 14px;
 
     @media screen and (max-width: 992px) {
         font-size: 14px;

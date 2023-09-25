@@ -10,7 +10,10 @@ export const Container = styled.div`
 
 export const Wrapper = styled.div`
     display: flex;
-    align-items: center;
+    align-items: start;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 5px;
 
     &:hover{
         .button-box{
@@ -29,45 +32,52 @@ export const Wrapper = styled.div`
             flex:1;
         }
 
-        .workspaceTag{
-            display: inline-block;
-            font-size: 14px;
-            border:1px solid #808080;
-            color: #808080;
-            font-weight: 600;
-            border-radius: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width:80px;
-            height: 25px;
-        }
+    }
 
-        .disabledWorkspace-notification{
-            margin-top: 3px;
-            font-size: 10px;
-            color:var(--defaultRedColorOpacity600);
-        }
+    .workspaceTag{
+        display: inline-block;
+        font-size: 14px;
+        border:1px solid #808080;
+        color: #808080;
+        font-weight: 600;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width:80px;
+        height: 25px;
+    }
 
-        .disabledWorkspace-tag{
-            border:1px solid var(--defaultRedColorOpacity600);
-            color: var(--defaultRedColorOpacity600);
-        }
+    .disabledWorkspace-notification{
+        margin-top: 3px;
+        font-size: 10px;
+        color:var(--defaultRedColorOpacity600);
+    }
 
-        .privateWorkspace-tag{
-            border:1px solid #808080;
-            color: #808080;
-        }
+    .disabledWorkspace-tag{
+        border:1px solid var(--defaultRedColorOpacity600);
+        color: var(--defaultRedColorOpacity600);
+    }
 
-        .publicWorkspace-tag{
-            border:1px solid var(--publicWorkspaceColor);
-            color: var(--publicWorkspaceColor);
-        }
+    .privateWorkspace-tag{
+        border:1px solid #808080;
+        color: #808080;
+    }
 
-        .plusWorkspace-tag{
-            border:1px solid var(--plusWorkspaceColor);
-            color: var(--plusWorkspaceColor);
-        }
+    .publicWorkspace-tag{
+        border:1px solid var(--publicWorkspaceColor);
+        color: var(--publicWorkspaceColor);
+    }
+
+    .plusWorkspace-tag{
+        border:1px solid var(--plusWorkspaceColor);
+        color: var(--plusWorkspaceColor);
+    }
+
+    .expiryDate{
+        color: #808080;
+        font-weight: 500;
+        font-size: 13px;
     }
 
     .button-box{

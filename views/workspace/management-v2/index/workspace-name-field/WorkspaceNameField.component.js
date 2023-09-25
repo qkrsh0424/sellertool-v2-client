@@ -1,4 +1,7 @@
+import { CustomDateUtils } from "../../../../../utils/CustomDateUtils";
 import { Container, Wrapper } from "./styles/WorkspaceNameField.styled";
+
+const customDateUtils = CustomDateUtils();
 
 const WorkspaceNameFieldComponent = ({
     workspace,
@@ -14,6 +17,9 @@ const WorkspaceNameFieldComponent = ({
                         {workspace?.subscriptionPlan === 'PUBLIC' && <div className='workspaceTag publicWorkspace-tag'>PUBLIC</div>}
                         {workspace?.subscriptionPlan === 'PLUS' && <div className='workspaceTag plusWorkspace-tag'>PLUS+</div>}
                     </div>
+                    {!['NONE', 'PRIVATE'].includes(workspace?.subscriptionPlan) &&
+                        <div className='expiryDate'>구독 만료 일시 : ~ {customDateUtils.dateToYYYYMMDDhhmmss(new Date(workspace?.subscriptionExpiryDate))}</div>
+                    }
                 </Wrapper>
             </Container>
         </>

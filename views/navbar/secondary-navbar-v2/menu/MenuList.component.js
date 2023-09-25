@@ -151,18 +151,20 @@ const MENU_LIST = [
             {
                 title: '마진율 계산기',
                 href: '/margin/dashboard',
-                targetBlank: false
+                targetBlank: false,
+                status: 'OPEN'
             },
             {
                 title: '엑셀 변환기',
                 href: '/excel-translator',
-                targetBlank: false
+                targetBlank: false,
+                status: 'OPEN'
             },
             {
-                title: '스토어 랭킹 (준비중)',
+                title: '스토어 랭킹',
                 href: '/store-rank/real-time-rank',
                 targetBlank: false,
-                status: 'PENDING'
+                status: 'OPEN'
             }
         ]
     },
@@ -172,12 +174,14 @@ const MENU_LIST = [
             {
                 title: '통합 상품 관리',
                 href: '/product/dashboard',
-                targetBlank: false
+                targetBlank: false,
+                status: 'OPEN'
             },
             {
                 title: '통합 재고 관리',
                 href: '/inventory',
-                targetBlank: false
+                targetBlank: false,
+                status: 'OPEN'
             }
         ]
     },
@@ -187,12 +191,14 @@ const MENU_LIST = [
             {
                 title: '통합 발주 관리',
                 href: '/erp/collection/dashboard',
-                targetBlank: false
+                targetBlank: false,
+                status: 'OPEN'
             },
             {
                 title: '통합 판매 분석',
                 href: '/sales-analysis/dashboard',
-                targetBlank: false
+                targetBlank: false,
+                status: 'OPEN'
             }
         ]
     },
@@ -202,17 +208,20 @@ const MENU_LIST = [
             {
                 title: '셀러툴 이용 가이드',
                 href: 'https://sellertool.notion.site/b2533e2649154dae926982488dad3cae?pvs=4',
-                targetBlank: true
+                targetBlank: true,
+                status: 'OPEN'
             },
             {
                 title: '이용약관',
                 href: 'https://assets.sellertool.io/consent_form/service_terms_v1.html',
-                targetBlank: true
+                targetBlank: true,
+                status: 'OPEN'
             },
             {
                 title: '개인정보처리방침',
                 href: 'https://assets.sellertool.io/consent_form/privacy_policy_v1.html',
-                targetBlank: true
+                targetBlank: true,
+                status: 'OPEN'
             },
         ]
     }

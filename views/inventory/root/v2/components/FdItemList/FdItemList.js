@@ -130,10 +130,10 @@ export function FdItemList() {
         customBackdropControl.hideBackdrop();
     }
 
-    const handleReqBulkCreateInventoryReleases = async (values, callbackFn) => {
+    const handleReqBulkCreateInventoryReleases = async (body, callbackFn) => {
         customBackdropControl.showBackdrop();
         await _apiHook.onReqBulkCreateInventoryReleases({
-            body: { inventoryReleases: values },
+            body: { inventoryReleases: body?.inventoryReleases },
             headers: { wsId: wsId }
         },
             (results, response) => {

@@ -52,7 +52,7 @@ export default function useInventoryReceiveSeperatedItemsHook({
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await inventoryReceiveDataConnect().changePurchaseCost_InventoryReceiveSeperatedItems(body, headers)
+        await inventoryReceiveDataConnect.changePurchaseCost_InventoryReceiveSeperatedItems(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

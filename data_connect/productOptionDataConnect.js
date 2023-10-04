@@ -39,6 +39,64 @@ function baseInventoryPage() {
                 }
             })
         },
+        /**
+         * 
+         * @param {object} params 
+         * @param {string} params.packageYn
+         * @param {string} params.productCategoryId
+         * @param {string} params.productSubCategoryId
+         * @param {string} params.productId
+         * @param {string} params.stockManagementYn
+         * @param {string} params.searchCondition
+         * @param {string} params.searchQuery
+         * @param {string} params.sort
+         * @param {number} params.page
+         * @param {number} params.size
+         * @param {object} headers 
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        searchPagePositionInventory: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${BASE_URL}/page/related:ProductCategoryAndProductSubCategoryAndProduct`, {
+                params: params,
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN',
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                }
+            })
+        },
+        /**
+         * 
+         * @param {object} params 
+         * @param {string} params.packageYn
+         * @param {string} params.productCategoryId
+         * @param {string} params.productSubCategoryId
+         * @param {string} params.productId
+         * @param {string} params.stockManagementYn
+         * @param {string[]} params.searchCondition
+         * @param {string} params.searchQuery
+         * @param {string} params.sort
+         * @param {number} params.page
+         * @param {number} params.size
+         * @param {object} headers 
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        searchPositionTotalSize: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${BASE_URL}/count`, {
+                params: params,
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN',
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                }
+            })
+        }
     }
 }
 

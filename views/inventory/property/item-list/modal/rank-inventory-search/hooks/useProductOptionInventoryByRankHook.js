@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { inventoryDataConnect } from "../../../../../../../data_connect/inventoryDataConnect";
+import { InventoryDataConnect } from "../../../../../../../data_connect/inventoryDataConnect";
 import defaultErrorHandler from "../../../../../../../handler/dataConnectErrorHandler";
 import { useSelector } from "react-redux";
 
@@ -7,6 +7,9 @@ const DEFAULT_SEARCH_CONDITION = {
     assetType: 'PROPERTY_PRICE',
     orderType: 'DESC'
 }
+
+const inventoryDataConnect = InventoryDataConnect.baseInventoryPage();
+
 export default function useProductOptionInventoryByRankHook() {
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
 
@@ -55,7 +58,7 @@ export default function useProductOptionInventoryByRankHook() {
     const reqFetchRankedProductOptions = async (params, headers) => {
         toggleIsLoading(true);
 
-        await inventoryDataConnect().searchRankedInventory(params, headers)
+        await inventoryDataConnect.searchRankedInventory(params, headers)
             .then(res => {
                 if (res.status === 200) {
                     setRankedProductOptions(res.data.data);

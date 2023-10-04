@@ -1,14 +1,21 @@
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
-import { inventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
-import { inventoryReceiveDataConnect } from "../../../../../data_connect/inventoryReceiveDataConnect";
-import { inventoryReleaseDataConnect } from "../../../../../data_connect/inventoryReleaseDataConnect";
-import { productCategoryDataConnect } from "../../../../../data_connect/productCategoryDataConnect";
-import { productOptionDataConnect } from "../../../../../data_connect/productOptionDataConnect";
-import { productSubCategoryDataConnect } from "../../../../../data_connect/productSubCategoryDataConnect";
+import { InventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
+import { InventoryReceiveDataConnect } from "../../../../../data_connect/inventoryReceiveDataConnect";
+import { InventoryReleaseDataConnect } from "../../../../../data_connect/inventoryReleaseDataConnect";
+import { ProductCategoryDataConnect } from "../../../../../data_connect/productCategoryDataConnect";
+import { ProductOptionDataConnect } from "../../../../../data_connect/productOptionDataConnect";
+import { ProductSubCategoryDataConnect } from "../../../../../data_connect/productSubCategoryDataConnect";
+
+const productCategoryDataConnect = ProductCategoryDataConnect.baseInventoryPage();
+const productSubCategoryDataConnect = ProductSubCategoryDataConnect.baseInventoryPage();
+const productOptionDataConnect = ProductOptionDataConnect.baseInventoryPage();
+const inventoryDataConnect = InventoryDataConnect.baseInventoryPage();
+const inventoryReceiveDataConnect = InventoryReceiveDataConnect.baseInventoryPage();
+const inventoryReleaseDataConnect = InventoryReleaseDataConnect.baseInventoryPage();
 
 export function useApiHook() {
     const onReqFetchProductCategories = async (options = { params: {}, headers: {} }, callbackFn = (results, response) => { }) => {
-        await productCategoryDataConnect().searchList(options?.headers)
+        await productCategoryDataConnect.searchList(options?.headers)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn(res?.data?.data, res);
@@ -25,7 +32,7 @@ export function useApiHook() {
     }
 
     const onReqFetchProductSubCategories = async (options = { params: {}, headers: {} }, callbackFn = (results, response) => { }) => {
-        await productSubCategoryDataConnect().searchList(options?.params, options?.headers)
+        await productSubCategoryDataConnect.searchList(options?.params, options?.headers)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn(res?.data?.data, res);
@@ -56,7 +63,7 @@ export function useApiHook() {
         },
         callbackFn = (results, response) => { }
     ) => {
-        await productOptionDataConnect().searchPage(options?.params, options?.headers)
+        await productOptionDataConnect.searchPage(options?.params, options?.headers)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn(res?.data?.data, res);
@@ -80,7 +87,7 @@ export function useApiHook() {
         callbackFn = (results, response) => { }
     ) => {
 
-        await inventoryDataConnect().searchList(options?.body, options?.headers)
+        await inventoryDataConnect.searchList(options?.body, options?.headers)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn(res?.data?.data, res);
@@ -106,7 +113,7 @@ export function useApiHook() {
         },
         callbackFn = (results, response) => { }
     ) => {
-        await inventoryDataConnect().searchRegisteredStocks(options?.body, options?.headers)
+        await inventoryDataConnect.searchRegisteredStocks(options?.body, options?.headers)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn(res?.data?.data, res);
@@ -129,7 +136,7 @@ export function useApiHook() {
         },
         callbackFn = (results, response) => { }
     ) => {
-        await inventoryReceiveDataConnect().changeMemo(options?.body, options?.headers)
+        await inventoryReceiveDataConnect.changeMemo(options?.body, options?.headers)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn(res?.data?.data, res);
@@ -160,7 +167,7 @@ export function useApiHook() {
         },
         callbackFn = (results, response) => { }
     ) => {
-        await inventoryReleaseDataConnect().changeMemo(options?.body, options?.headers)
+        await inventoryReleaseDataConnect.changeMemo(options?.body, options?.headers)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn(res?.data?.data, res);
@@ -185,7 +192,7 @@ export function useApiHook() {
     }
 
     const onReqBulkCreateInventoryReceives = async (options = { body: {}, headers: {} }, callbackFn = (results, response) => { }) => {
-        await inventoryReceiveDataConnect().createAll(options?.body, options?.headers)
+        await inventoryReceiveDataConnect.createAll(options?.body, options?.headers)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn(res?.data?.data, res);
@@ -210,7 +217,7 @@ export function useApiHook() {
     }
 
     const onReqBulkCreateInventoryReleases = async (options = { body: {}, headers: {} }, callbackFn = (results, response) => { }) => {
-        await inventoryReleaseDataConnect().createAll(options?.body, options?.headers)
+        await inventoryReleaseDataConnect.createAll(options?.body, options?.headers)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn(res?.data?.data, res);

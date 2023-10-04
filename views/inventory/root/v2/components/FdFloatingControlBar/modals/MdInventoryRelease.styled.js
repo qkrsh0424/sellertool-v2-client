@@ -42,11 +42,16 @@ export const DateTimeWrapper = styled.div`
         border-radius: 5px;
         padding:0;
         margin: 0;
-        width:50px;
+        width:60px;
         height: 25px;
         font-size: 13px;
         font-weight: 600;
-        color: #222;
+        background: var(--grayButtonColor);
+        color: #000;
+
+        &:hover{
+            background: var(--grayButtonHoverColor);
+        }
     }
 
     .timeSelectorBtn{

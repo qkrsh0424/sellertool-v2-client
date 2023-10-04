@@ -107,10 +107,10 @@ export function FdItemList() {
         setTargetProductOption(null);
     }
 
-    const handleReqBulkCreateInventoryReceives = async (values, callbackFn) => {
+    const handleReqBulkCreateInventoryReceives = async (body, callbackFn) => {
         customBackdropControl.showBackdrop();
         await _apiHook.onReqBulkCreateInventoryReceives({
-            body: { inventoryReceives: values },
+            body: { inventoryReceives: body?.inventoryReceives },
             headers: { wsId: wsId }
         },
             (results, response) => {

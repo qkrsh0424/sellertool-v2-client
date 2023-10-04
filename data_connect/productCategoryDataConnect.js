@@ -4,6 +4,31 @@ import { csrfDataConnect } from "./csrfDataConnect"
 
 const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress
 
+export const ProductCategoryDataConnect = {
+    baseInventoryPage: baseInventoryPage
+}
+
+function baseInventoryPage() {
+    const BASE_URL = `${API_ADDRESS}/page-api/inventory/v1/product-categories`;
+
+    return {
+        /**
+         * 
+         * @param {object} headers 
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        searchList: async function (headers) {
+            return await axiosAuthInterceptor.get(`${BASE_URL}`, {
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
+    }
+}
+
 // UPDATED wsId -> headers
 const productCategoryDataConnect = () => {
     return {

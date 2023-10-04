@@ -85,7 +85,16 @@ function baseInventoryPage() {
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
-        }
+        },
+        inventoryStockCyclePage: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${BASE_URL}/search/stockCycle/page`, {
+                headers: headers,
+                params: params,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            });
+        },
     }
 }
 

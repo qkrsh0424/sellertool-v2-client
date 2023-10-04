@@ -120,73 +120,6 @@ export const inventoryDataConnect = () => {
         },
         /**
          * 
-         * @param {object} params 
-         * @param {string} params.productOptionId
-         * @param {date} params.startDateTime
-         * @param {date} params.endDateTime
-         * @param {object} headers 
-         * @param {string} headers.wsId
-         * @returns 
-         */
-        searchInventoryStockRegisterStatuses: async function (params, headers) {
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/inventory/search/stockRegisterStatus`, {
-                headers: headers,
-                params: params,
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
-        },
-        /**
-         * 
-         * @param {object} body 
-         * @param {date} body.startDateTime
-         * @param {date} body.endDateTime
-         * @param {object} headers 
-         * @param {string} headers.wsId
-         * @returns 
-         */
-        searchRegisteredStocks: async function (body, headers) {
-            return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory/search/registeredStocks`, body, {
-                    headers: headers,
-                    withCredentials: true,
-                    xsrfCookieName: 'x_api_csrf_token',
-                    xsrfHeaderName: 'X-XSRF-TOKEN'
-                })
-            )
-        },
-        /**
-         * 
-         * @param {object} params 
-         * @param {number} params.size
-         * @param {number} params.page
-         * @param {string} params.assetType required [PROPERTY_PRICE, ESTIMATE_SALES_PRICE, STOCK_UNIT]
-         * @param {string} params.orderType required [ASC, DESC]
-         * @param {object} headers 
-         * @param {string} headers.wsId
-         * @returns 
-         */
-        searchStockAssetsSlice: async function (params, headers) {
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/inventory/search/stockAssets/slice`, {
-                headers: headers,
-                params: params,
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            });
-        },
-        inventoryStockCyclePage: async function (params, headers) {
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/inventory/search/stockCycle/page`, {
-                headers: headers,
-                params: params,
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            });
-        },
-        /**
-         * 
          * @param {object} body
          * @param {string[]} body.erpItemIds
          * @param {string} body.memo
@@ -221,25 +154,6 @@ export const inventoryDataConnect = () => {
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
             )
-        },
-        /**
-         * 
-         * @param {object} params
-         * @param {int} params.page
-         * @param {string} params.assetType
-         * @param {string} params.orderType
-         * @param {object} headers
-         * @param {string} headers.wsId
-         * @returns 
-         */
-        searchRankedInventory: async function (params, headers) {
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/inventory/search/stockAssets/slice`, {
-                params,
-                headers,
-                withCredentials: true,
-                xsrfCookieName: 'x_api_csrf_token',
-                xsrfHeaderName: 'X-XSRF-TOKEN'
-            })
         }
     }
 }

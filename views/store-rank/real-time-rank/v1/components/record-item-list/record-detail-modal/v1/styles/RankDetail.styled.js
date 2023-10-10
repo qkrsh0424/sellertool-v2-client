@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
     min-height: 45vh;
     max-height: 45vh;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
+    margin-bottom: 5px;
     border-radius: 0 0 15px 15px;
     box-shadow: var(--defaultBoxShadow);
     background-color: #fff;
@@ -12,7 +13,6 @@ export const Wrapper = styled.div`
 `;
 
 export const DetailInfoWrapper = styled.div`
-    padding: 5px;
     min-height: 100px;
     border-bottom: 4px solid #eef2f9;
 `;
@@ -26,6 +26,7 @@ export const MainInfoWrapper = styled.div`
     font-weight: 600;
     color: #888;
     padding: 5px;
+    min-height: 100px;
 
     @media screen and (max-width: 992px) {
         font-size: 11px;
@@ -38,12 +39,12 @@ export const MainInfoWrapper = styled.div`
     }
 
     .image-box {
-        min-width: 80px;
-        max-width: 80px;
+        width: 80px;
+        height: 80px;
 
         @media screen and (max-width: 992px){
-            min-width: 60px;
-            max-width: 60px;
+            width: 60px;
+            height: 60px;
         }
     }
 

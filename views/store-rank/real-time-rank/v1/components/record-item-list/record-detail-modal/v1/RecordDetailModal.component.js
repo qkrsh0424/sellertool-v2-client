@@ -15,6 +15,8 @@ import RankDetailSkeletonFieldView from "./view/RankDetailSkeletonField.view";
 import { customToast, defaultOptions } from "../../../../../../../../components/toast/custom-react-toastify/v1";
 import { customBackdropController } from "../../../../../../../../components/backdrop/default/v1";
 import FieldLoadingV2 from "../../../../../../../modules/loading/FieldLoadingV2";
+import DetailControlFieldView from "./view/DetailControlField.view";
+import useNRankRecordInfoHook from "./hooks/useNRankRecordInfoHook";
 
 const customBackdropControl = customBackdropController();
 
@@ -35,6 +37,7 @@ export function RecordDetailModalComponent({
     const [isInitSearchLoading, setIsInitSearchLoading] = useState(false);
 
     const { onReqSearchNRankRecordDetail, onReqChangeNRankRecordStatusToPending, onReqCreateNRankRecordDetail } = useApiHook();
+    
     const {
         recordDetails,
         adRecordDetails,
@@ -49,12 +52,32 @@ export function RecordDetailModalComponent({
         onActionUnfoldAllOptions
     } = useNRankRecordDetailHook({ record });
 
+    const {
+        selectedRecordInfo,
+        currentRecordInfoIdx,
+        onSetCurrentRecordInfoIdx,
+        onChangeSelectedRecordInfo
+    } = useNRankRecordInfoHook({ record });
+
+    useEffect(() => {
+        if(record?.infos.length > 0) {
+            let infoIdx = record.infos.length;
+            onSetCurrentRecordInfoIdx(infoIdx-1)
+        }
+
+        if(!(record?.current_nrank_record_info_id)) {
+            return;
+        }
+
+        onActionUpdateTargetRecordInfo(record.current_nrank_record_info_id)
+    }, [record])
+
     useEffect(() => {
         if(!wsId) {
             return;
         }
 
-        if(!(record && record.current_nrank_record_info_id)) {
+        if(!selectedRecordInfo) {
             return;
         }
 
@@ -65,15 +88,7 @@ export function RecordDetailModalComponent({
         }
 
         initialize()
-    }, [record, wsId])
-
-    useEffect(() => {
-        if(!(record && record.current_nrank_record_info_id)) {
-            return;
-        }
-
-        onActionUpdateTargetRecordInfo(record.current_nrank_record_info_id)
-    }, [record])
+    }, [selectedRecordInfo, wsId])
 
     const handleChangeAdRankView = () => {
         setIsAdRankView(true);
@@ -84,8 +99,10 @@ export function RecordDetailModalComponent({
     }
 
     const handleSearchNRankRecordDetail = async () => {
+        let selectedRecordInfoId = selectedRecordInfo?.id;
+
         await onReqSearchNRankRecordDetail({
-            params: { record_info_id: record.current_nrank_record_info_id},
+            params: { record_info_id: selectedRecordInfoId},
             headers: { wsId: wsId }
         },{
             success: (results) => {
@@ -151,26 +168,35 @@ export function RecordDetailModalComponent({
                         record={record}
                         targetRecordInfo={targetRecordInfo}
                     />
-                    <SubInfoFieldView
+                    {/* <SubInfoFieldView
                         record={record}
-                    />
+                    /> */}
                     <ButtonFieldView
                         targetRecordInfo={targetRecordInfo}
                         isPending={isPending}
                         isInitSearchLoading={isInitSearchLoading}
                         onSubmit={handleChangeNRankRecordStatusToPending}
                     />
-                    <div style={{ position: 'relative' }}>
-                        <ViewControlFieldView
-                            isAdRankView={isAdRankView}
-                            recordDetails={recordDetails}
-                            adRecordDetails={adRecordDetails}
-                            onChangeAdRankView={handleChangeAdRankView}
-                            onChangeRankView={handleChangeRankView}
-                            onActionFoldAllOptions={onActionFoldAllOptions}
-                            onActionUnfoldAllOptions={onActionUnfoldAllOptions}
-                        />
+                    <DetailControlFieldView
+                        isPending={isPending}
+                        record={record}
+                        currentRecordInfoIdx={currentRecordInfoIdx}
+                        selectedRecordInfo={selectedRecordInfo}
+                        onActionFoldAllOptions={onActionFoldAllOptions}
+                        onActionUnfoldAllOptions={onActionUnfoldAllOptions}
+                        onSetCurrentRecordInfoIdx={onSetCurrentRecordInfoIdx}
+                        onChangeSelectedRecordInfo={onChangeSelectedRecordInfo}
+                    />
 
+                    <ViewControlFieldView
+                        isAdRankView={isAdRankView}
+                        recordDetails={recordDetails}
+                        adRecordDetails={adRecordDetails}
+                        onChangeAdRankView={handleChangeAdRankView}
+                        onChangeRankView={handleChangeRankView}
+                    />
+
+                    <div>
                         <div style={{ position: 'relative' }}>
                             {isPending &&
                                 <>
@@ -217,6 +243,12 @@ export function RecordDetailModalComponent({
                                 </>
                             }
                         </div>
+                    </div>
+
+                    <div className='detail-info-text'>
+                        <span>{currentRecordInfoIdx + 1}</span>
+                        <span> / </span>
+                        <span>{record?.infos.length}</span>
                     </div>
                 </Wrapper>
             </CustomDialog>

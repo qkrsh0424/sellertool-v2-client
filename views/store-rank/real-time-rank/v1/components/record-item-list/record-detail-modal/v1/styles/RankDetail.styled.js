@@ -115,7 +115,7 @@ export const InfoGroupBox = styled.div`
     overflow: hidden;
 
     .sub-info-box {
-        padding: 0 4px;
+        text-align: center;
         background-color: var(--thisBoxColor);
         border: 1px solid var(--thisBoxColor);
         color: white;
@@ -128,7 +128,6 @@ export const InfoGroupBox = styled.div`
         position:relative;
         /* font-weight: 700; */
         color: #404040;
-        cursor: pointer;
     }
 
     .highlight:hover:after{

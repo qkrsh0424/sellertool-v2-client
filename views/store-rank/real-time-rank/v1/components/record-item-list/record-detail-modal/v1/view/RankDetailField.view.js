@@ -31,10 +31,10 @@ export default function RankDetailFieldView({
                             </div>
                             <div style={{ overflow: 'hidden', flex: '1' }}>
                                 <div className='info-field'>
-                                    <InfoGroupBox>
+                                    <InfoGroupBox style={{ flexWrap: 'nowrap'}}>
                                         <div>
                                             {detail.price_comparision_yn === 'y' &&
-                                                <span className='sub-info-box' style={{ "--thisBoxColor": "#919dbd" }}>가격비교</span>
+                                                <div className='sub-info-box' style={{ minWidth: '56px', "--thisBoxColor": "#919dbd" }}>가격비교</div>
                                             }
                                         </div>
                                         <div className='highlight' style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

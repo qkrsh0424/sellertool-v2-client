@@ -28,10 +28,10 @@ export default function AdRankDetailFieldView({
                             </div>
                             <div style={{ overflow: 'hidden', flex: '1' }}>
                                 <div className='info-field'>
-                                    <InfoGroupBox>
+                                    <InfoGroupBox style={{ flexWrap: 'nowrap' }}>
                                         <div>
                                             {detail.advertising_yn === 'y' &&
-                                                <span className='sub-info-box' style={{ "--thisBoxColor": "#919dbd" }}>광고</span>
+                                                <div className='sub-info-box' style={{ minWidth: '40px', "--thisBoxColor": "#919dbd" }}>광고</div>
                                             }
                                         </div>
                                         <div className='highlight' style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

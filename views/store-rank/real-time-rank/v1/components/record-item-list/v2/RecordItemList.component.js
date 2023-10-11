@@ -167,9 +167,9 @@ export function RecordItemListComponent({
                                             mallName={mallName}
                                             categories={categories}
                                             currentPendingRecordIds={currentPendingRecordIds}
-                                            handleOpenDetailSearchModal={handleOpenDetailSearchModal}
-                                            handleOpenRecordDeleteModal={handleOpenRecordDeleteModal}
-                                            handleOpenCategorySelectorModal={handleOpenCategorySelectorModal}
+                                            onOpenDetailSearchModal={handleOpenDetailSearchModal}
+                                            onOpenRecordDeleteModal={handleOpenRecordDeleteModal}
+                                            onOpenCategorySelectorModal={handleOpenCategorySelectorModal}
                                         />
                                     )
                                 }
@@ -251,9 +251,9 @@ function TableBodyRow({
     mallName,
     categories,
     currentPendingRecordIds,
-    handleOpenDetailSearchModal,
-    handleOpenRecordDeleteModal,
-    handleOpenCategorySelectorModal
+    onOpenDetailSearchModal,
+    onOpenRecordDeleteModal,
+    onOpenCategorySelectorModal
 }) {
     let item = virtuosoData?.item;
     let isKeywordAccent = keyword && (item.keyword).includes(keyword);
@@ -263,7 +263,7 @@ function TableBodyRow({
     let category = categories?.find(r => r.id === item.nrank_record_category_id);
 
     return (
-        <tr onClick={(e) => handleOpenDetailSearchModal(e, item)} {...virtuosoData}>
+        <tr onClick={(e) => onOpenDetailSearchModal(e, item)} {...virtuosoData}>
             <td>
                 <div className='thumbnail'>
                     <CustomBoxImage
@@ -296,7 +296,7 @@ function TableBodyRow({
             <td>
                 <button
                     className='button-el'
-                    onClick={(e) => handleOpenCategorySelectorModal(e, item)}
+                    onClick={(e) => onOpenCategorySelectorModal(e, item)}
                 >
                     {category?.name || '-'}
                 </button>
@@ -352,7 +352,7 @@ function TableBodyRow({
                     <button
                         type='button'
                         className='control-btn'
-                        onClick={(e) => handleOpenRecordDeleteModal(e, item)}
+                        onClick={(e) => onOpenRecordDeleteModal(e, item)}
                     >
                         <CustomBoxImage
                             src='/images/icon/delete_default_e56767.svg'

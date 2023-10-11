@@ -99,8 +99,8 @@ export default function MainComponent(){
         
         await onReqCreateSearchInput({
             body: {
-                keyword: keyword.trim(),
-                mall_name: mallName.trim()
+                keyword: keyword?.trim(),
+                mall_name: mallName?.trim()
             },
             headers: { wsId: wsId }
         },{

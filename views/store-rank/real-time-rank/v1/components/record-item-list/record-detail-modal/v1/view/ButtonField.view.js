@@ -9,7 +9,7 @@ import { getSearchableDiffSeconds } from "../../../../../../../../../static-data
 import useDisabledBtn from "../../../../../../../../../hooks/button/useDisabledBtn";
 
 export default function ButtonFieldView({
-    targetRecordInfo,
+    recordInfo,
     isPending,
     isInitSearchLoading,
     onSubmit
@@ -22,13 +22,13 @@ export default function ButtonFieldView({
     } = useTargetTimeTimerHook();
 
     useEffect(() => {
-        if(!targetRecordInfo) {
+        if(!recordInfo) {
             return;
         }
         
-        let targetTime = setPlusTime(targetRecordInfo?.created_at, 0, 0, getSearchableDiffSeconds());
+        let targetTime = setPlusTime(recordInfo?.created_at, 0, 0, getSearchableDiffSeconds());
         onUpdateTargetTime(targetTime);
-    }, [targetRecordInfo])
+    }, [recordInfo])
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -77,7 +77,8 @@ export default function ButtonFieldView({
                             <CustomBlockButton
                                 type='submit'
                                 className='button-item'
-                                disabled={disabledBtn || isInitSearchLoading}
+                                // disabled={disabledBtn || isInitSearchLoading}
+                                disabled={disabledBtn}
                             >
                                 조회
                             </CustomBlockButton>

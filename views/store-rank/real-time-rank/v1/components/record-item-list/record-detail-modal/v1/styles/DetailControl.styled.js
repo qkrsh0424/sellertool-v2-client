@@ -46,6 +46,7 @@ export const Wrapper = styled.div`
 
     .date-selector-box {
         flex: 1;
+        text-align: center;
     }
 
    .select-item{

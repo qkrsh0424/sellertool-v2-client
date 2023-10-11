@@ -38,7 +38,7 @@ export default function DetailControlFieldView({
                     type='button'
                     className='button-el'
                     onClick={() => onSetCurrentRecordInfoIdx(currentRecordInfoIdx - 1)}
-                    disabled={isPending || currentRecordInfoIdx === 0}
+                    disabled={isPending || !currentRecordInfoIdx}
                 >
                     <CustomBoxImage
                         src='/images/icon/arrowLeft_chevron_808080.svg'
@@ -75,7 +75,7 @@ export default function DetailControlFieldView({
                     type='button'
                     className='button-el'
                     onClick={() => onSetCurrentRecordInfoIdx(currentRecordInfoIdx + 1)}
-                    disabled={isPending || currentRecordInfoIdx === (record?.infos.length - 1)}
+                    disabled={isPending || (currentRecordInfoIdx !== 0 && !currentRecordInfoIdx) || currentRecordInfoIdx === (record?.infos.length - 1)}
                 >
                     <CustomBoxImage
                         src='/images/icon/arrowRight_chevron_808080.svg'

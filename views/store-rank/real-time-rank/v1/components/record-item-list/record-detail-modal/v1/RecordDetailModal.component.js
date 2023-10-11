@@ -41,11 +41,11 @@ export function RecordDetailModalComponent({
     const {
         recordDetails,
         adRecordDetails,
-        targetRecordInfo,
+        lastSearchedRecordInfo,
         openedSubInfoRecordDetailIds,
         onSetRecordDetails,
         onSetAdRecordDetails,
-        onActionUpdateTargetRecordInfo,
+        onActionUpdateLastSearchedRecordInfo,
         onAddOpenedSubInfoRecordDetailId,
         onRemoveOpenedSubInfoRecordDetailId,
         onActionFoldAllOptions,
@@ -61,15 +61,14 @@ export function RecordDetailModalComponent({
 
     useEffect(() => {
         if(record?.infos.length > 0) {
-            let infoIdx = record.infos.length;
-            onSetCurrentRecordInfoIdx(infoIdx-1)
+            onSetCurrentRecordInfoIdx(record.infos.length-1)
         }
 
         if(!(record?.current_nrank_record_info_id)) {
             return;
         }
 
-        onActionUpdateTargetRecordInfo(record.current_nrank_record_info_id)
+        onActionUpdateLastSearchedRecordInfo(record.current_nrank_record_info_id)
     }, [record])
 
     useEffect(() => {
@@ -166,13 +165,13 @@ export function RecordDetailModalComponent({
                 <Wrapper>
                     <RecordInfoFieldView
                         record={record}
-                        targetRecordInfo={targetRecordInfo}
+                        lastSearchedRecordInfo={lastSearchedRecordInfo}
                     />
                     {/* <SubInfoFieldView
                         record={record}
                     /> */}
                     <ButtonFieldView
-                        targetRecordInfo={targetRecordInfo}
+                        lastSearchedRecordInfo={lastSearchedRecordInfo}
                         isPending={isPending}
                         isInitSearchLoading={isInitSearchLoading}
                         onSubmit={handleChangeNRankRecordStatusToPending}
@@ -224,7 +223,7 @@ export function RecordDetailModalComponent({
                                     {isAdRankView ?
                                         <AdRankDetailFieldView
                                             record={record}
-                                            targetRecordInfo={targetRecordInfo}
+                                            lastSearchedRecordInfo={lastSearchedRecordInfo}
                                             adRecordDetails={adRecordDetails}
                                             openedSubInfoRecordDetailIds={openedSubInfoRecordDetailIds}
                                             onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
@@ -233,7 +232,7 @@ export function RecordDetailModalComponent({
                                         :
                                         <RankDetailFieldView
                                             record={record}
-                                            targetRecordInfo={targetRecordInfo}
+                                            lastSearchedRecordInfo={lastSearchedRecordInfo}
                                             recordDetails={recordDetails}
                                             openedSubInfoRecordDetailIds={openedSubInfoRecordDetailIds}
                                             onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
@@ -248,7 +247,7 @@ export function RecordDetailModalComponent({
                     <div className='detail-info-text'>
                         <span>{currentRecordInfoIdx + 1}</span>
                         <span> / </span>
-                        <span>{record?.infos.length}</span>
+                        <span>{record?.infos.length || 1}</span>
                     </div>
                 </Wrapper>
             </CustomDialog>

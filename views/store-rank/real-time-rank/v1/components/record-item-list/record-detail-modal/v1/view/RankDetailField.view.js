@@ -5,6 +5,7 @@ import { DetailInfoBox, DetailInfoWrapper, FlexBox, InfoGroupBox, InfoText, Main
 
 const NAVER_SHOPPING_PRODUCT_URL = "https://smartstore.naver.com/main/products/"
 const NAVER_SHOPPING_SEARCH_URL = "https://search.shopping.naver.com/search/all"
+const NAVER_SHOPPING_PRICE_COMPARISION_URL = "https://search.shopping.naver.com/catalog/"
 
 export default function RankDetailFieldView({
     record,
@@ -37,9 +38,15 @@ export default function RankDetailFieldView({
                                             }
                                         </div>
                                         <div className='highlight' style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                            <a href={NAVER_SHOPPING_PRODUCT_URL + detail.mall_product_id} target="_blank" rel="noopener">
-                                                <span className='accent-text'>{detail.product_title}</span>
-                                            </a>
+                                            {detail.price_comparision_yn === 'y' ?
+                                                <a href={NAVER_SHOPPING_PRICE_COMPARISION_URL + detail.mall_product_id} target="_blank" rel="noopener">
+                                                    <span className='accent-text'>{detail.product_title}</span>
+                                                </a>
+                                                :
+                                                <a href={NAVER_SHOPPING_PRODUCT_URL + detail.mall_product_id} target="_blank" rel="noopener">
+                                                    <span className='accent-text'>{detail.product_title}</span>
+                                                </a>
+                                            }
                                         </div>
                                     </InfoGroupBox>
                                 </div>

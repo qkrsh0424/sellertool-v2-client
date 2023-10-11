@@ -20,7 +20,7 @@ export default function useNRankRecordInfoHook({
     }, [record, currentRecordInfoIdx])
 
     const onSetCurrentRecordInfoIdx = (idx) => {
-        if(idx < 0 || idx >= record.infos?.length) {
+        if(idx < 0 || idx >= record?.infos.length) {
             return;
         }
 

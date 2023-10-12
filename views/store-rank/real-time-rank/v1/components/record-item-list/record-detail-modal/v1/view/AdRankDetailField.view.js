@@ -36,7 +36,7 @@ export default function AdRankDetailFieldView({
                                         </div>
                                         <div className='highlight' style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                             {detail.price_comparision_yn === 'y' ?
-                                                <a href={NAVER_SHOPPING_PRICE_COMPARISION_URL + detail.mall_product_id} target="_blank" rel="noopener">
+                                                <a href={NAVER_SHOPPING_PRICE_COMPARISION_URL + detail.item_id} target="_blank" rel="noopener">
                                                     <span className='accent-text'>{detail.product_title}</span>
                                                 </a>
                                                 :

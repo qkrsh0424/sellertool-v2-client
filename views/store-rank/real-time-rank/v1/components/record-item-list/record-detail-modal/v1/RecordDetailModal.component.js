@@ -165,13 +165,13 @@ export function RecordDetailModalComponent({
                 <Wrapper>
                     <RecordInfoFieldView
                         record={record}
-                        lastSearchedRecordInfo={lastSearchedRecordInfo}
+                        recordInfo={lastSearchedRecordInfo}
                     />
                     {/* <SubInfoFieldView
                         record={record}
                     /> */}
                     <ButtonFieldView
-                        lastSearchedRecordInfo={lastSearchedRecordInfo}
+                        recordInfo={lastSearchedRecordInfo}
                         isPending={isPending}
                         isInitSearchLoading={isInitSearchLoading}
                         onSubmit={handleChangeNRankRecordStatusToPending}

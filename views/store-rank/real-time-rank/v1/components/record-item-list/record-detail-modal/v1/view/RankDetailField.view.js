@@ -154,9 +154,8 @@ export default function RankDetailFieldView({
                                                     <span>착불</span>
                                                 }
                                                 {detail.delivery_fee > 0 &&
-                                                    <span>{detail.delivery_fee}</span>
+                                                    <span>{detail.delivery_fee?.toLocaleString()}</span>
                                                 }
-                                                {/* <span>{detail.delivery_fee === 0 ? '무료' : detail.delivery_fee}</span> */}
                                             </div>
                                         </div>
                                     </SubInfoGroupBox>

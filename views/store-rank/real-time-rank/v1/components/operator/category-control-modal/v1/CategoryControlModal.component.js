@@ -30,7 +30,7 @@ export function CategoryControlModalComponent({
     const { onReqCreateNRankRecordCategory, onReqUpdateNRankRecordCategory, onReqDeleteNRankRecordCategory } = useApiHook();
     const { pageControl, inputValue, selectedCategory, handleChangePage, handleChangePageToMain, handleChangeInputValue, handleChangeSelectedCategory, checkFormat } = useCategoryControlHook({ categories }); 
 
-    const handleCreateNRankRecordCategory = async () => {
+    const handleReqCreateNRankRecordCategory = async () => {
         let body = {
             name: inputValue.trim()
         }
@@ -58,10 +58,18 @@ export function CategoryControlModalComponent({
         customBackdropControl.hideBackdrop();
     }
 
-    const handleUpdateNRankRecordCategory = async () => {
+    const handleReqUpdateNRankRecordCategory = async () => {
+        let updatedValue = inputValue.trim();
+
+        // 변경되지 않았다면 바로 리턴
+        if(selectedCategory.name === updatedValue) {
+            handleChangePageToMain();
+            return;
+        }
+
         let body = {
             id: selectedCategory.id,
-            name: inputValue.trim()
+            name: updatedValue
         }
 
         try {
@@ -87,7 +95,7 @@ export function CategoryControlModalComponent({
         customBackdropControl.hideBackdrop();
     }
 
-    const handleDeleteNRankRecordCategory = async () => {
+    const handleReqDeleteNRankRecordCategory = async () => {
         customBackdropControl.showBackdrop();
         await onReqDeleteNRankRecordCategory({
             headers: { wsId: wsId },
@@ -119,9 +127,9 @@ export function CategoryControlModalComponent({
                     {pageControl === PAGE_CONTROL.CREATE &&
                         <CreateFieldView
                             inputValue={inputValue}
-                            onChagnePageToMain={handleChangePageToMain}
+                            onChangePageToMain={handleChangePageToMain}
                             onChangeInputValue={handleChangeInputValue}
-                            onCreateNRankRecordCategory={handleCreateNRankRecordCategory}
+                            onCreateNRankRecordCategory={handleReqCreateNRankRecordCategory}
                         />
                     }
                     {pageControl === PAGE_CONTROL.EDIT &&
@@ -129,19 +137,19 @@ export function CategoryControlModalComponent({
                             categories={categories}
                             inputValue={inputValue}
                             selectedCategory={selectedCategory}
-                            onChagnePageToMain={handleChangePageToMain}
+                            onChangePageToMain={handleChangePageToMain}
                             onChangeInputValue={handleChangeInputValue}
                             onChangeSelectedCategory={handleChangeSelectedCategory}
-                            onUpdateNRankRecordCategory={handleUpdateNRankRecordCategory}
+                            onUpdateNRankRecordCategory={handleReqUpdateNRankRecordCategory}
                         />
                     }
                     {pageControl === PAGE_CONTROL.DELETE && 
                         <DeleteFieldView
                             categories={categories}
                             selectedCategory={selectedCategory}
-                            onChagnePageToMain={handleChangePageToMain}
+                            onChangePageToMain={handleChangePageToMain}
                             onChangeSelectedCategory={handleChangeSelectedCategory}
-                            onDeleteNRankRecordCategory={handleDeleteNRankRecordCategory}
+                            onDeleteNRankRecordCategory={handleReqDeleteNRankRecordCategory}
                         />
                     }
                 </>

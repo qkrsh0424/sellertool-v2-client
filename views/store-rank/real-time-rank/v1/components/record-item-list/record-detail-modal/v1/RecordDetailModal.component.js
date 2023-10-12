@@ -33,9 +33,6 @@ export function RecordDetailModalComponent({
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const [isAdRankView, setIsAdRankView] = useState(false);
-    const [isInitSearchLoading, setIsInitSearchLoading] = useState(false);
-
     const { onReqSearchNRankRecordDetail, onReqChangeNRankRecordStatusToPending, onReqCreateNRankRecordDetail } = useApiHook();
     
     const {
@@ -58,6 +55,9 @@ export function RecordDetailModalComponent({
         onSetCurrentRecordInfoIdx,
         onChangeSelectedRecordInfo
     } = useNRankRecordInfoHook({ record });
+
+    const [isAdRankView, setIsAdRankView] = useState(false);
+    const [isInitSearchLoading, setIsInitSearchLoading] = useState(false);
 
     useEffect(() => {
         if(record?.infos.length > 0) {

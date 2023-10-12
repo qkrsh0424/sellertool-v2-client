@@ -41,6 +41,8 @@ export function RecordItemListComponent({
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
+    const { onReqChangeNRankRecordCategory } = useApiHook();
+
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
     const [recordDeleteModalOpen, setRecordDeleteModalOpen] = useState(false);
@@ -48,7 +50,6 @@ export function RecordItemListComponent({
     const [createRecordInfoId, setCreateRecordInfoId] = useState(null);
     const [categorySelectorModalOpen, setCategorySelectorModalOpen] = useState(false);
 
-    const { onReqChangeNRankRecordCategory } = useApiHook();
 
     useEffect(() => {
         if(!recordList) {
@@ -192,6 +193,7 @@ export function RecordItemListComponent({
                     />
                 }
 
+                {/* 랭킹 조회 내역의 카테고리 설정 모달창 */}
                 {categorySelectorModalOpen && 
                     <CategorySelectorModalComponent
                         open={categorySelectorModalOpen}
@@ -313,14 +315,14 @@ function TableBodyRow({
             </td>
             <td>
                 {currentRecordInfo ?
-                    <div>{currentRecordInfo.rank_detail_unit ?? 0}</div>
+                    <div>{currentRecordInfo.rank_detail_unit ?? 0}개</div>
                     :
                     '-'
                 }
             </td>
             <td>
                 {currentRecordInfo ?
-                    <div>{currentRecordInfo.ad_rank_detail_unit ?? 0}</div>
+                    <div>{currentRecordInfo.ad_rank_detail_unit ?? 0}개</div>
                     :
                     '-'
                 }

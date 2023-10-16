@@ -3,7 +3,7 @@ import SingleBlockButton from "../../../../../../../../modules/button/SingleBloc
 import { Wrapper } from "../styles/CreateField.styled";
 
 export default function CreateFieldView({
-    onChagnePageToMain,
+    onChangePageToMain,
     inputValue,
     onChangeInputValue,
     onCreateNRankRecordCategory
@@ -18,7 +18,7 @@ export default function CreateFieldView({
     }
 
     const onClose = () => {
-        onChagnePageToMain()
+        onChangePageToMain()
     }
 
     return (

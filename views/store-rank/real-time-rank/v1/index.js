@@ -37,7 +37,16 @@ export default function MainComponent(){
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const { onReqSearchSubscriptionPlanSearchInfo, onReqCreateSearchInput, onReqDeleteNRankRecord, onReqSearchNRankRecordList, onReqSearchNRankRecordListCount, onReqChangeNRankRecordListStatusToFail, onReqSearchNRankRecordCategories } = useApiHook();
+    const {
+        onReqSearchSubscriptionPlanSearchInfo,
+        onReqCreateSearchInput,
+        onReqDeleteNRankRecord,
+        onReqSearchNRankRecordList,
+        onReqSearchNRankRecordListCount,
+        onReqChangeNRankRecordListStatusToFail,
+        onReqSearchNRankRecordCategories
+    } = useApiHook();
+
     const { rankSearchInfo, onSetRankSearchInfo } = useSubscriptionPlanSearchInfoHook();
     const { keyword, mallName, onChangeKeyword, onChangeMallName, onClearKeyword, onClearMallName, checkSearchInfoForm } = useSearchInputHook();
     const { recordList, recordListPage, currentPendingRecordIds, onSetRecordList, onSetRecordListPage, onSetCurrentPendingRecordIds } = useNRankRecordListHook();
@@ -60,7 +69,7 @@ export default function MainComponent(){
 
         async function initialize() {
             handleReqSearchSubscriptionPlanSearchInfo();
-            handleSearchNRankRecordCategories();
+            handleReqSearchNRankRecordCategories();
         }
 
         initialize();
@@ -99,8 +108,8 @@ export default function MainComponent(){
         
         await onReqCreateSearchInput({
             body: {
-                keyword: keyword.trim(),
-                mall_name: mallName.trim()
+                keyword: keyword?.trim(),
+                mall_name: mallName?.trim()
             },
             headers: { wsId: wsId }
         },{
@@ -267,7 +276,7 @@ export default function MainComponent(){
         }
     }
 
-    const handleSearchNRankRecordCategories = async () => {
+    const handleReqSearchNRankRecordCategories = async () => {
         await onReqSearchNRankRecordCategories({
             headers: { wsId: wsId }
         }, {
@@ -297,7 +306,7 @@ export default function MainComponent(){
                         categories={categories}
                         recordList={recordList}
                         rankSearchInfo={rankSearchInfo}
-                        onSearchNRankRecordCategories={handleSearchNRankRecordCategories}
+                        onSearchNRankRecordCategories={handleReqSearchNRankRecordCategories}
                     />
                     
                     <RecordItemListComponent
@@ -312,7 +321,7 @@ export default function MainComponent(){
                         onSearchSubscriptionPlanSearchInfo={handleReqSearchSubscriptionPlanSearchInfo}
                         onSearchNRankRecordList={handleReqSearchNRankRecordList}
                         onSearchNRankRecordListCount={handleReqSearchNRankRecordListCount}
-                        onSearchNRankRecordCategories={handleSearchNRankRecordCategories}
+                        onSearchNRankRecordCategories={handleReqSearchNRankRecordCategories}
                     />
                 </Layout>
             </Container>

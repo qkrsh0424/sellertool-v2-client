@@ -1,5 +1,6 @@
 @import url(./mgl.flex.css);
 @import url(./mgl.font.css);
+@import url(./font-style/pretendard.css);
 :root {
     --mainColor: #344b98;
     --mainColorHover: #344b98f0;
@@ -62,10 +63,16 @@ body {
     margin: 0;
     /* font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif; */
-    font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕",
-        helvetica, "Apple SD Gothic Neo", sans-serif;
+    /* font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕",
+        helvetica, "Apple SD Gothic Neo", sans-serif; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+body * {
+    /* Pretendard 실패 시 뒤에 선언된 폰트들로 렌더링 */
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕",
+        helvetica, "Apple SD Gothic Neo", sans-serif;
 }
 
 body::-webkit-scrollbar {

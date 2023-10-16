@@ -41,6 +41,8 @@ export function RecordItemListComponent({
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
+    const { onReqChangeNRankRecordCategory } = useApiHook();
+
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
     const [recordDeleteModalOpen, setRecordDeleteModalOpen] = useState(false);
@@ -48,7 +50,6 @@ export function RecordItemListComponent({
     const [createRecordInfoId, setCreateRecordInfoId] = useState(null);
     const [categorySelectorModalOpen, setCategorySelectorModalOpen] = useState(false);
 
-    const { onReqChangeNRankRecordCategory } = useApiHook();
 
     useEffect(() => {
         if(!recordList) {
@@ -167,9 +168,9 @@ export function RecordItemListComponent({
                                             mallName={mallName}
                                             categories={categories}
                                             currentPendingRecordIds={currentPendingRecordIds}
-                                            handleOpenDetailSearchModal={handleOpenDetailSearchModal}
-                                            handleOpenRecordDeleteModal={handleOpenRecordDeleteModal}
-                                            handleOpenCategorySelectorModal={handleOpenCategorySelectorModal}
+                                            onOpenDetailSearchModal={handleOpenDetailSearchModal}
+                                            onOpenRecordDeleteModal={handleOpenRecordDeleteModal}
+                                            onOpenCategorySelectorModal={handleOpenCategorySelectorModal}
                                         />
                                     )
                                 }
@@ -192,6 +193,7 @@ export function RecordItemListComponent({
                     />
                 }
 
+                {/* 랭킹 조회 내역의 카테고리 설정 모달창 */}
                 {categorySelectorModalOpen && 
                     <CategorySelectorModalComponent
                         open={categorySelectorModalOpen}
@@ -251,9 +253,9 @@ function TableBodyRow({
     mallName,
     categories,
     currentPendingRecordIds,
-    handleOpenDetailSearchModal,
-    handleOpenRecordDeleteModal,
-    handleOpenCategorySelectorModal
+    onOpenDetailSearchModal,
+    onOpenRecordDeleteModal,
+    onOpenCategorySelectorModal
 }) {
     let item = virtuosoData?.item;
     let isKeywordAccent = keyword && (item.keyword).includes(keyword);
@@ -263,7 +265,7 @@ function TableBodyRow({
     let category = categories?.find(r => r.id === item.nrank_record_category_id);
 
     return (
-        <tr onClick={(e) => handleOpenDetailSearchModal(e, item)} {...virtuosoData}>
+        <tr onClick={(e) => onOpenDetailSearchModal(e, item)} {...virtuosoData}>
             <td>
                 <div className='thumbnail'>
                     <CustomBoxImage
@@ -296,7 +298,7 @@ function TableBodyRow({
             <td>
                 <button
                     className='button-el'
-                    onClick={(e) => handleOpenCategorySelectorModal(e, item)}
+                    onClick={(e) => onOpenCategorySelectorModal(e, item)}
                 >
                     {category?.name || '-'}
                 </button>
@@ -313,14 +315,14 @@ function TableBodyRow({
             </td>
             <td>
                 {currentRecordInfo ?
-                    <div>{currentRecordInfo.rank_detail_unit ?? 0}</div>
+                    <div>{currentRecordInfo.rank_detail_unit ?? 0}개</div>
                     :
                     '-'
                 }
             </td>
             <td>
                 {currentRecordInfo ?
-                    <div>{currentRecordInfo.ad_rank_detail_unit ?? 0}</div>
+                    <div>{currentRecordInfo.ad_rank_detail_unit ?? 0}개</div>
                     :
                     '-'
                 }
@@ -352,7 +354,7 @@ function TableBodyRow({
                     <button
                         type='button'
                         className='control-btn'
-                        onClick={(e) => handleOpenRecordDeleteModal(e, item)}
+                        onClick={(e) => onOpenRecordDeleteModal(e, item)}
                     >
                         <CustomBoxImage
                             src='/images/icon/delete_default_e56767.svg'

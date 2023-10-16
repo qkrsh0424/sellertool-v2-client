@@ -17,6 +17,7 @@ import { customBackdropController } from "../../../../../../../../components/bac
 import FieldLoadingV2 from "../../../../../../../modules/loading/FieldLoadingV2";
 import DetailControlFieldView from "./view/DetailControlField.view";
 import useNRankRecordInfoHook from "./hooks/useNRankRecordInfoHook";
+import { DetailRankTableComponent } from "../detail-rank-table/v1";
 
 const customBackdropControl = customBackdropController();
 
@@ -58,6 +59,9 @@ export function RecordDetailModalComponent({
 
     const [isAdRankView, setIsAdRankView] = useState(false);
     const [isInitSearchLoading, setIsInitSearchLoading] = useState(false);
+
+    const [detailGraphModalOpen, setDetailGraphModalOpen] = useState(false);
+    const [selectedRecordDetail, setSelectedRecordDetail] = useState(null);
 
     useEffect(() => {
         if(record?.infos.length > 0) {
@@ -151,6 +155,19 @@ export function RecordDetailModalComponent({
         })
     }
 
+    const handleOpenDetailGraphModal = (e, detail) => {
+        e.stopPropagation();
+
+        setDetailGraphModalOpen(true);
+        setSelectedRecordDetail(detail);
+    }
+
+
+    const handleCloseDetailGraphModal = () => {
+        setDetailGraphModalOpen(false);
+        setSelectedRecordDetail(null);
+    }
+
     let isPending = currentPendingRecordIds?.includes(record?.id);
 
     return (
@@ -237,10 +254,19 @@ export function RecordDetailModalComponent({
                                             openedSubInfoRecordDetailIds={openedSubInfoRecordDetailIds}
                                             onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
                                             onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
+
+                                            onOpenDetailGraphModal={handleOpenDetailGraphModal}
                                         />
                                     }
                                 </>
                             }
+
+                            <DetailRankTableComponent
+                                open={detailGraphModalOpen}
+                                onClose={() => handleCloseDetailGraphModal()}
+                                record={record}
+                                recordDetail={selectedRecordDetail}
+                            />
                         </div>
                     </div>
 

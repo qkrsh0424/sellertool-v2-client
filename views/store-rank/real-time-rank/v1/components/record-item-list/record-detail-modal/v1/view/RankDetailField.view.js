@@ -13,7 +13,9 @@ export default function RankDetailFieldView({
     targetRecordInfo,
     openedSubInfoRecordDetailIds,
     onAddOpenedSubInfoRecordDetailId,
-    onRemoveOpenedSubInfoRecordDetailId
+    onRemoveOpenedSubInfoRecordDetailId,
+
+    onOpenDetailGraphModal
 }) {
     return (
         <Wrapper>
@@ -22,6 +24,7 @@ export default function RankDetailFieldView({
 
                 return (
                     <DetailInfoWrapper key={'record_detail_list_idx' + idx}>
+                        <button type='button' onClick={(e) => onOpenDetailGraphModal(e, detail)}>click</button>
                         <MainInfoWrapper>
                             <div className='image-box'>
                                 <CustomBoxImage

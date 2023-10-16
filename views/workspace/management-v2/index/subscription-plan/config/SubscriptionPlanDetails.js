@@ -17,16 +17,16 @@ export const SubscriptionPlanDetails = {
                 badgeStatus: 'COMMON'
             },
             {
-                name: '스토어 랭킹 (준비중...)',
-                badgeStatus: 'PENDING',
+                name: '스토어 랭킹',
+                badgeStatus: 'COMMON',
                 subList: [
                     {
                         name: '일5회',
-                        badgeStatus: 'PENDING',
+                        badgeStatus: 'COMMON',
                     },
                     {
                         name: '400위 까지',
-                        badgeStatus: 'PENDING',
+                        badgeStatus: 'COMMON',
                     }
                 ]
             },
@@ -65,16 +65,16 @@ export const SubscriptionPlanDetails = {
                 badgeStatus: 'COMMON'
             },
             {
-                name: '스토어 랭킹 (준비중...)',
-                badgeStatus: 'PENDING',
+                name: '스토어 랭킹',
+                badgeStatus: 'COMMON',
                 subList: [
                     {
                         name: '일5회',
-                        badgeStatus: 'PENDING'
+                        badgeStatus: 'COMMON'
                     },
                     {
                         name: '400위 까지',
-                        badgeStatus: 'PENDING'
+                        badgeStatus: 'COMMON'
                     }
                 ]
             },
@@ -117,16 +117,16 @@ export const SubscriptionPlanDetails = {
                 badgeStatus: 'COMMON'
             },
             {
-                name: '스토어 랭킹 (준비중...)',
-                badgeStatus: 'PENDING',
+                name: '스토어 랭킹',
+                badgeStatus: 'COMMON',
                 subList: [
                     {
                         name: '일50회',
-                        badgeStatus: 'PENDING',
+                        badgeStatus: 'COMMON',
                     },
                     {
                         name: '1200위 까지',
-                        badgeStatus: 'PENDING',
+                        badgeStatus: 'COMMON',
                     }
                 ]
             },

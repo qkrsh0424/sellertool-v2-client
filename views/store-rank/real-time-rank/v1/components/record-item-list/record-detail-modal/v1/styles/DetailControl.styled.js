@@ -32,7 +32,7 @@ export const Wrapper = styled.div`
         padding: 5px 0;
     }
 
-    .detail-header .button-el {
+    .detail-header .arrow-button {
         width: 30px;
         height: 30px;
         border: none;
@@ -41,6 +41,10 @@ export const Wrapper = styled.div`
         
         &:hover {
             background-color: var(--defaultGrayColor);
+        }
+
+        @media screen and (max-width: 992px) {
+            width: 15px;
         }
     }
 

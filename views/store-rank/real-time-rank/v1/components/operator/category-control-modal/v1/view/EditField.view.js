@@ -8,7 +8,7 @@ export default function EditFieldView({
     categories,
     selectedCategory,
     inputValue,
-    onChagnePageToMain,
+    onChangePageToMain,
     onChangeInputValue,
     onChangeSelectedCategory,
     onUpdateNRankRecordCategory
@@ -50,7 +50,7 @@ export default function EditFieldView({
             </div>
             <CustomCancelConfirmButton
                 className='button-el'
-                onCancel={onChagnePageToMain}
+                onCancel={onChangePageToMain}
                 onConfirm={onUpdateNRankRecordCategory}
             />
         </Wrapper>

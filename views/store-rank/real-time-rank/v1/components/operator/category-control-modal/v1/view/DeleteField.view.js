@@ -5,7 +5,7 @@ import { Wrapper } from "../styles/EditField.styled";
 export default function DeleteFieldView({
     categories,
     selectedCategory,
-    onChagnePageToMain,
+    onChangePageToMain,
     onChangeSelectedCategory,
     onDeleteNRankRecordCategory
 }) {
@@ -28,7 +28,7 @@ export default function DeleteFieldView({
                 </div>
             </div>
             <CustomCancelConfirmButton
-                onCancel={onChagnePageToMain}
+                onCancel={onChangePageToMain}
                 onConfirm={onDeleteNRankRecordCategory}
                 confirmBtnStyle={{
                     background: 'var(--defaultRedColor)',

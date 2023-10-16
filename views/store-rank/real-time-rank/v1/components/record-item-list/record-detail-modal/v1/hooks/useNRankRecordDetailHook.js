@@ -5,12 +5,12 @@ export default function useNRankRecordDetailHook({
 }) {
     const [recordDetails, setRecordDetails] = useState([]);
     const [adRecordDetails, setAdRecordDetails] = useState([]);
-    const [targetRecordInfo, setTargetRecordInfo] = useState(null);
+    const [lastSearchedRecordInfo, setLastSearchedRecordInfo] = useState(null);
     const [openedSubInfoRecordDetailIds, setOpenedSubInfoRecordDetailIds] = useState([]);
 
-    const onActionUpdateTargetRecordInfo = (targetId) => {
-        let target = record.infos?.find(info => info.id === targetId);
-        setTargetRecordInfo(target);
+    const onActionUpdateLastSearchedRecordInfo = (targetId) => {
+        let target = record?.infos.find(info => info.id === targetId);
+        setLastSearchedRecordInfo(target);
     }
 
     const onSetRecordDetails = (data) => {
@@ -19,10 +19,6 @@ export default function useNRankRecordDetailHook({
 
     const onSetAdRecordDetails = (data) => {
         setAdRecordDetails([...data])
-    }
-
-    const onSetTargetRecordInfo = (data) => {
-        setTargetRecordInfo(...data)
     }
 
     const onAddOpenedSubInfoRecordDetailId = (recordId) => {
@@ -47,12 +43,11 @@ export default function useNRankRecordDetailHook({
     return {
         recordDetails,
         adRecordDetails,
-        targetRecordInfo,
+        lastSearchedRecordInfo,
         openedSubInfoRecordDetailIds,
-        onActionUpdateTargetRecordInfo,
+        onActionUpdateLastSearchedRecordInfo,
         onSetRecordDetails,
         onSetAdRecordDetails,
-        onSetTargetRecordInfo,
         onAddOpenedSubInfoRecordDetailId,
         onRemoveOpenedSubInfoRecordDetailId,
         onActionFoldAllOptions,

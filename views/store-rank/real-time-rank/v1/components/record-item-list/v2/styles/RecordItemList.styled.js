@@ -105,7 +105,7 @@ export const Wrapper = styled.div`
     .button-el {
         width: 70%;
         max-width: 250px;
-        font-size: 12px;
+        font-size: 11px;
         padding: 5px 10px;
         border-radius: 20px;
         overflow: hidden;

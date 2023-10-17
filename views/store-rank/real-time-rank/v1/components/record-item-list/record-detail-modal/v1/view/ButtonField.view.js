@@ -9,7 +9,7 @@ import { getSearchableDiffSeconds } from "../../../../../../../../../static-data
 import useDisabledBtn from "../../../../../../../../../hooks/button/useDisabledBtn";
 
 export default function ButtonFieldView({
-    recordInfo,
+    lastSearchedRecordInfo,
     isPending,
     isInitSearchLoading,
     onSubmit
@@ -22,13 +22,13 @@ export default function ButtonFieldView({
     } = useTargetTimeTimerHook();
 
     useEffect(() => {
-        if(!recordInfo) {
+        if(!lastSearchedRecordInfo) {
             return;
         }
         
-        let targetTime = setPlusTime(recordInfo?.created_at, 0, 0, getSearchableDiffSeconds());
+        let targetTime = setPlusTime(lastSearchedRecordInfo?.created_at, 0, 0, getSearchableDiffSeconds());
         onUpdateTargetTime(targetTime);
-    }, [recordInfo])
+    }, [lastSearchedRecordInfo])
 
     const handleSubmit = (e) => {
         e.preventDefault();

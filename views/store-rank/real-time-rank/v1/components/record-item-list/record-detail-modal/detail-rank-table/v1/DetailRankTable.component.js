@@ -1,23 +1,27 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useApiHook } from "./hooks/useApiHook";
 import { useSelector } from "react-redux";
-import ResizableTh from "../../../../../../../../../components/table/th/v1/ResizableTh";
-import { dateToHHmm, dateToMMDD } from "../../../../../utils/dateFormatUtils";
+import { dateToMMDD, dateToHHmm } from "../../../../../utils/dateFormatUtils";
 import { CustomDialog } from "../../../../../../../../../components/dialog/v1/CustomDialog";
-import { Wrapper } from "./style/DetailRankTable.styled";
+import { Container, Wrapper } from "./style/DetailRankTable.styled";
+import { CustomBoxImage } from "../../../../../modules";
+import FieldLoadingV2 from "../../../../../../../../modules/loading/FieldLoadingV2";
 
 export function DetailRankTableComponent({
     open,
     onClose,
     record,
-    recordDetail
+    recordInfos,
+    selectedRecordDetail
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const { onReqSearchNRankRecordDetailByInfosAndPid } = useApiHook();
+    const { onReqSearchNRankRecordDetailByFilter } = useApiHook();
     const [recordDetails, setRecordDetails] = useState(null);
     const [recordViewDetails, setRecordViewDetails] = useState(null);
+
+    let viewRecordInfos = recordInfos && [...recordInfos].reverse();
 
     useEffect(() => {
         if(!wsId) {
@@ -28,16 +32,16 @@ export function DetailRankTableComponent({
             return;
         }
 
-        if(!recordDetail) {
+        if(!selectedRecordDetail) {
             return;
         }
 
-        async function initialze() {
-            await handleSearchNRankRecordDetailByInfos()
+        async function fetchInit() {
+            await handleSearchNRankRecordDetailByFilter()
         }
 
-        initialze();
-    }, [record, recordDetail, wsId])
+        fetchInit();
+    }, [record, selectedRecordDetail, wsId])
 
     useEffect(() => {
         if(!recordDetails) {
@@ -80,103 +84,158 @@ export function DetailRankTableComponent({
         setRecordViewDetails(results)
     }
 
-    const handleSearchNRankRecordDetailByInfos = async () => {
-        let infoIds = record.infos?.map(r => r.id);
+    const handleSearchNRankRecordDetailByFilter = async () => {
+        let infoIds = recordInfos?.map(r => r.id);
 
         let body = {
             info_ids: infoIds,
-            detail_mall_product_id: recordDetail.mall_product_id
+            detail_item_id: selectedRecordDetail.item_id,
+            detail_mall_product_id: selectedRecordDetail.mall_product_id
         }
 
-        await onReqSearchNRankRecordDetailByInfosAndPid({
+        await onReqSearchNRankRecordDetailByFilter({
             headers: { wsId: wsId },
             body
         }, {
             success: (results) => {
                 setRecordDetails(results);
+            },
+            fail: () => {
+                handleClose();
             }
         })
+    }
+
+    const handleClose = () => {
+        setRecordViewDetails(null);
+        onClose();
     }
 
     return (
         <>
             <CustomDialog
                 open={open}
-                onClose={() => onClose()}
+                onClose={() => handleClose()}
                 maxWidth="sm"
             >
-                <CustomDialog.CloseButton onClose={() => onClose()} />
+                <CustomDialog.CloseButton onClose={() => handleClose()} />
                 <CustomDialog.Title>랭킹 조회</CustomDialog.Title>
-                <Wrapper>
-                    {recordViewDetails &&
-                        <div className='table-box'>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        {record.infos?.map(info => {
-                                            return (
-                                                <ResizableTh width={80} className='fixed-header'>
-                                                    <div>
-                                                        <div>{dateToMMDD(info.created_at)}</div>
-                                                        <div>{dateToHHmm(info.created_at)}</div>
-                                                    </div>
-                                                </ResizableTh>
-                                            )
-                                        })}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        {record.infos?.map(info => {
-                                            let detail = recordViewDetails?.find(r => r.nrank_record_info_id === info.id);
-
-                                            if (detail) {
-                                                return (
-                                                    <td>
-                                                        <div className='column-box'>
-                                                            <div>{detail.advertising_yn === 'y' &&
-                                                                <span>광고</span>
-                                                            }</div>
-                                                            <div>{detail.price_comparision_yn === 'y' &&
-                                                                <span>가격비교</span>
-                                                            }</div>
-                                                            <div>
-                                                                <span>{detail.rank}위</span>
-                                                            </div>
-                                                            <div>
-                                                                {detail.price_comparision_yn === 'y' &&
-                                                                    <span style={{ fontSize: '10px' }}>(가격비교 내 {detail.comparision_rank} 위)</span>
-                                                                }
-                                                            </div>
-                                                            {/* 순위 진입 및 상승 하락 표시 */}
-                                                            <div>
-                                                                {detail.rankTrend ?
-                                                                    (detail.rankTrend > 0 ?
-                                                                        <span>{detail.rankTrend} 상승</span>
-                                                                        :
-                                                                        <span>{detail.rankTrend * -1} 하락</span>
-                                                                    )
-                                                                    :
-                                                                    <span>-</span>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                )
-                                            } else {
-                                                return (
-                                                    <td>
-                                                        -
-                                                    </td>
-                                                )
-                                            }
-                                        })}
-                                    </tr>
-                                </tbody>
-                            </table>
+                <Container>
+                    <Wrapper>
+                        <div className='record-info-box'>
+                            <div className='image-box'>
+                                <CustomBoxImage
+                                    className='image-el'
+                                    src={selectedRecordDetail?.thumbnail_url}
+                                />
+                            </div>
+                            <div>
+                                <span style={{ color: 'var(--mainColor)' }}>{record.mall_name}</span>
+                                <span> | </span>
+                                <span>{record.keyword}</span>
+                            </div>
                         </div>
-                    }
-                </Wrapper>
+                        <div className='main-box'>
+                            <div className='table-box'>
+                                {!(recordViewDetails) &&
+                                    <FieldLoadingV2
+                                        oxStyle={{
+                                            borderRadius: '15px'
+                                        }}
+                                    />
+                                }
+
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            {viewRecordInfos?.map(info => {
+                                                return (
+                                                    <th width={100} className='fixed-header' key={info.id}>
+                                                        <div>
+                                                            <div>{dateToMMDD(info.created_at)} </div>
+                                                            <div style={{ fontSize: '10px', fontWeight: '500' }}>({dateToHHmm(info.created_at)})</div>
+                                                        </div>
+                                                    </th>
+                                                )
+                                            })}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style={{ height: '130px' }}>
+                                            {viewRecordInfos?.map((info, idx) => {
+                                                let detail = recordViewDetails?.find(r => r.nrank_record_info_id === info.id);
+
+                                                if (detail) {
+                                                    return (
+                                                        <td key={detail.id}>
+                                                            <div className='column-box'>
+                                                                <div>
+                                                                    {detail.advertising_yn === 'y' &&
+                                                                        <span className='sub-info-box' style={{ "--thisBoxColor": "#456cba" }}>
+                                                                            <span>광고</span>
+                                                                        </span>
+                                                                    }
+                                                                    {detail.price_comparision_yn === 'y' &&
+                                                                        <span className='sub-info-box' style={{ "--thisBoxColor": "#636b82" }}>
+                                                                            <span>가격비교</span>
+                                                                        </span>
+                                                                    }
+                                                                </div>
+                                                                <div>
+                                                                    <span className='rank-box'>{detail.rank}위</span>
+                                                                </div>
+                                                                <div>
+                                                                    {detail.price_comparision_yn === 'y' &&
+                                                                        <span style={{ fontSize: '11px', color: '#636b82' }}>(가격비교 내 {detail.comparision_rank} 위)</span>
+                                                                    }
+                                                                </div>
+                                                                <div>
+                                                                    {detail.rankTrend ?
+                                                                        (detail.rankTrend > 0 ?
+                                                                            <div className='trend-box'>
+                                                                                <div style={{ color: '#e56767' }}>{detail.rankTrend}</div>
+                                                                                <div>
+                                                                                    <CustomBoxImage
+                                                                                        src='/images/icon/trending_up_fill_e56767.svg'
+                                                                                        size='15px'
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+                                                                            :
+                                                                            <div className='trend-box'>
+                                                                                <div style={{ color: '#418cff' }}>{detail.rankTrend * -1}</div>
+                                                                                <div>
+                                                                                    <CustomBoxImage
+                                                                                        src='/images/icon/trending_down_fill_418cff.svg'
+                                                                                        size='15px'
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+                                                                        )
+                                                                        :
+                                                                        <div>-</div>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    )
+                                                } else {
+                                                    return (
+                                                        <td key={idx}>
+                                                            <div>
+                                                                -
+                                                            </div>
+                                                        </td>
+                                                    )
+                                                }
+                                            })}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </Wrapper>
+                </Container>
             </CustomDialog>
         </>
     )

@@ -50,7 +50,6 @@ export function RecordItemListComponent({
     const [createRecordInfoId, setCreateRecordInfoId] = useState(null);
     const [categorySelectorModalOpen, setCategorySelectorModalOpen] = useState(false);
 
-
     useEffect(() => {
         if(!recordList) {
             return;
@@ -260,7 +259,7 @@ function TableBodyRow({
     let item = virtuosoData?.item;
     let isKeywordAccent = keyword && (item.keyword).includes(keyword);
     let isMallNameAccent = mallName && (item.mall_name).includes(mallName);
-    let currentRecordInfo = item.infos?.find(info => item.current_nrank_record_info_id === info.id);
+    let currentRecordInfo = item.nrank_record_info;
     let isPending = currentPendingRecordIds?.includes(item.id);
     let category = categories?.find(r => r.id === item.nrank_record_category_id);
 

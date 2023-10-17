@@ -1,9 +1,37 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
+export const Container = styled.div`
     padding: 20px 20px 0 20px;
+    margin-bottom: 50px;
+`;
+
+export const Wrapper = styled.div`
     position:relative;
-    margin-bottom: 100px;
+    border-radius: 15px;
+    box-shadow: var(--defaultBoxShadow);
+    background-color: #fff;
+    border: 1px solid #eef2f9;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .record-info-box {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .image-box {
+        width: 90px;
+        height: 90px;
+        margin-bottom: 10px;
+
+        @media screen and (max-width: 992px){
+            width: 80px;
+            height: 80px;
+        }
+    }
 
     .table-box {
         width: 100%;
@@ -20,18 +48,25 @@ export const Wrapper = styled.div`
         }
     }
 
+    .image-el {
+        border-radius: 10px;
+        box-shadow: var(--defaultBoxShadow);
+        border: 1px solid #ededed;
+    }
+
     .table-box .fixed-header {
         position: sticky;
         top: 0;
         z-index:10;
         box-shadow: 0 -0.5px 0 0 #e0e0e0 inset;
         background-color: #F3F5F7;
+        min-width: 100px;
     }
 
     table thead tr th{
         vertical-align: middle !important;
         text-align: center;
-        color: #000;
+        color: #333;
         font-weight: 700;
         padding: 10px;
         font-size: 12px;
@@ -71,5 +106,41 @@ export const Wrapper = styled.div`
     .column-box {
         display: flex;
         flex-direction: column;
+        gap: 5px;
+    }
+
+    .column-box div {
+        min-height: 20px;
+        max-height: 20px;
+    }
+
+    .column-box .rank-box {
+        /* border: 1px solid var(--defaultBlueColor); */
+        padding: 0px 10px;
+        border-radius: 10px;
+        color: var(--mainColor);
+        font-size: 14px;
+        font-weight: 700;
+
+        @media screen and (max-width: 992px) {
+            font-size: 12px;
+        }
+    }
+
+    .trend-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .column-box .sub-info-box {
+        text-align: center;
+        border: 1px solid var(--thisBoxColor);
+        color: var(--thisBoxColor);
+        border-radius: 5px;
+        font-weight: 600;
+        font-size: 11px;
+        padding: 1px 7px;
     }
 `;

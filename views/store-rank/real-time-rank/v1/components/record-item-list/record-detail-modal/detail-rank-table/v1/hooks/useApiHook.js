@@ -2,13 +2,14 @@ import { customToast, defaultOptions } from "../../../../../../../../../../compo
 import { nRankRecordDetailDataConnect } from "../../../../../../../../../../data_connect/nRankRecordDetailDataConnect";
 
 export function useApiHook() {
-    const onReqSearchNRankRecordDetailByInfosAndPid = async (
+    const onReqSearchNRankRecordDetailByFilter = async (
         options = {headers: {}, body: {}},
         callbackFn = {
             success: (results, response) => {},
+            fail: () => {}
         }
     ) => {
-        await nRankRecordDetailDataConnect().searchListByInfosAndPid(options.headers, options.body)
+        await nRankRecordDetailDataConnect().searchListByFilter(options.headers, options.body)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data, res);
@@ -20,10 +21,12 @@ export function useApiHook() {
                     ...defaultOptions,
                     toastId: res?.data?.memo
                 })
+                
+                callbackFn.fail();
             })
     }
 
     return {
-        onReqSearchNRankRecordDetailByInfosAndPid
+        onReqSearchNRankRecordDetailByFilter
     }
 }

@@ -1,9 +1,10 @@
 import { customToast, defaultOptions } from "../../../../../../../../../components/toast/custom-react-toastify/v1";
 import { nRankRecordDetailDataConnect } from "../../../../../../../../../data_connect/nRankRecordDetailDataConnect";
 import { nRankRecordDataConnect } from "../../../../../../../../../data_connect/nRankRecordDataConnect";
+import { nRankRecordInfoDataConnect } from "../../../../../../../../../data_connect/nRankRecordInfoDataConnect";
 
 export function useApiHook() {
-    const onReqCreateNRankRecordDetail = async (
+    const onReqCreateNRankRecordDetails = async (
         options = {headers: {}, params: {}, body: {}}
     ) => {
         await nRankRecordDetailDataConnect().createList(options.headers, options.body)
@@ -16,7 +17,7 @@ export function useApiHook() {
             })
     }
 
-    const onReqSearchNRankRecordDetail = async (
+    const onReqSearchNRankRecordDetails = async (
         options = {headers: {}, params: {}},
         callbackFn = {
             success: (results, response) => {},
@@ -58,9 +59,31 @@ export function useApiHook() {
             })
     }
 
+    const onReqSearchNRankRecordInfos = async (
+        options = {headers: {}, params: {}},
+        callbackFn = {
+            success: (results, response) => {},
+        }
+    ) => {
+        await nRankRecordInfoDataConnect().searchList(options.headers, options.params)
+            .then(res => {
+                if (res.status === 200) {
+                    callbackFn.success(res?.data?.data);
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                })
+            })
+    }
+
     return {
         onReqChangeNRankRecordStatusToPending,
-        onReqCreateNRankRecordDetail,
-        onReqSearchNRankRecordDetail
+        onReqCreateNRankRecordDetails,
+        onReqSearchNRankRecordDetails,
+        onReqSearchNRankRecordInfos
     }
 }

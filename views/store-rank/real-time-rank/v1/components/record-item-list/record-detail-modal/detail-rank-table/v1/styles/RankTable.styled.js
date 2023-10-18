@@ -47,7 +47,6 @@ export const Wrapper = styled.div`
     }
 
     table tbody tr td{
-        padding: 10px;
         vertical-align: middle !important;
         border-bottom: 1px solid #dcdee3;
         text-align: center;

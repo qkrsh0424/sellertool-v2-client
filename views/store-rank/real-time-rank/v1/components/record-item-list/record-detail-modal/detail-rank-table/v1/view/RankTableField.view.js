@@ -23,7 +23,7 @@ export function RankTableFieldView({
                         <tr>
                             {viewRecordInfos?.map(info => {
                                 return (
-                                    <th width={100} className='fixed-header' key={info.id}>
+                                    <th style={{ minWidth: '110px' }} className='fixed-header' key={info.id}>
                                         <div>
                                             <div>{dateToMMDD(info.created_at)} </div>
                                             <div style={{ fontSize: '10px', fontWeight: '500' }}>({dateToHHmm(info.created_at)})</div>

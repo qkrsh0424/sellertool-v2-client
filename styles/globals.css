@@ -1,6 +1,8 @@
 @import url(./mgl.flex.css);
 @import url(./mgl.font.css);
-@import url(./font-style/pretendard.css);
+/* @import url(./font-style/Pretendard.css); */
+@import url(./font-style/NanumSquareNeo.css);
+
 :root {
     --mainColor: #344b98;
     --mainColorHover: #344b98f0;
@@ -53,6 +55,8 @@
     --contentHeadBackground: #eef2f9;
     --publicWorkspaceColor:#5fcf80;
     --plusWorkspaceColor:#8250df;
+
+    --mainFont: 'NanumSquareNeo'
 }
 
 html,
@@ -69,7 +73,9 @@ body {
 
 body * {
     /* Pretendard 실패 시 뒤에 선언된 폰트들로 렌더링 */
-    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕",
+    /* font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕",
+        helvetica, "Apple SD Gothic Neo", sans-serif; */
+    font-family: var(--mainFont), -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕",
         helvetica, "Apple SD Gothic Neo", sans-serif;
 }
 

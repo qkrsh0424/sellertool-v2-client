@@ -1,9 +1,11 @@
 import _ from "lodash";
 import { useEffect, useState } from "react";
-import { productSubCategoryDataConnect } from "../../../../../data_connect/productSubCategoryDataConnect";
+import { ProductSubCategoryDataConnect } from "../../../../../data_connect/productSubCategoryDataConnect";
 import defaultErrorHandler from "../../../../../handler/dataConnectErrorHandler";
 import { customBackdropController } from "../../../../../components/backdrop/default/v1/core";
 import { useSelector } from "react-redux";
+
+const productSubCategoryDataConnect = ProductSubCategoryDataConnect.baseInventoryPage();
 
 export default function useProductSubCategoriesHook({
     productCategory
@@ -31,7 +33,7 @@ export default function useProductSubCategoriesHook({
         let headers = {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
-        await productSubCategoryDataConnect().searchList(params, headers)
+        await productSubCategoryDataConnect.searchList(params, headers)
             .then(res => {
                 if (res.status === 200) {
                     setProductSubCategories(res.data.data);

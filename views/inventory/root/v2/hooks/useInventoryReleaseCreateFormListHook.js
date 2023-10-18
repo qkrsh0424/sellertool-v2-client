@@ -11,7 +11,8 @@ const generate = (productOption) => {
         productOptionName: productOption?.name,
         productOptionId: productOption?.id,
         unit: '0',
-        memo: ''
+        memo: '',
+        stockReflectDateTime: new Date()
     }
 }
 

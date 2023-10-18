@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import PrimaryNavbarMainComponent from "../../../views/navbar/primary-navbar";
 import SecondaryNavbarMainComponent from "../../../views/navbar/secondary-navbar-v2";
-import MainComponent from "../../../views/inventory/property";
+import MainComponent from "../../../views/inventory/property-v2";
 
 export default function InventoryPropertyPage(props) {
     const userRedux = useSelector(state => state.userRedux);

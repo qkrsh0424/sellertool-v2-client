@@ -51,8 +51,10 @@
     --defaultPurpleColorOpacity700: #9065e3;
     --defaultModalCloseColor: #959eae;
     --contentHeadBackground: #eef2f9;
-    --publicWorkspaceColor:#5fcf80;
-    --plusWorkspaceColor:#8250df;
+    --publicWorkspaceColor: #5fcf80;
+    --plusWorkspaceColor: #8250df;
+    --grayButtonColor: #efefef;
+    --grayButtonHoverColor: #dbdbdb;
 }
 
 html,

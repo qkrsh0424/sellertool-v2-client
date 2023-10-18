@@ -2,7 +2,9 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { inventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
+import { InventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
+
+const inventoryDataConnect = InventoryDataConnect.baseInventoryPage();
 
 export default function useInventoryStockCyclePageHook(props) {
     const router = useRouter();
@@ -61,7 +63,7 @@ export default function useInventoryStockCyclePageHook(props) {
             wsId: workspaceId
         }
 
-        await inventoryDataConnect().inventoryStockCyclePage(params, headers)
+        await inventoryDataConnect.inventoryStockCyclePage(params, headers)
             .then(res => {
                 if (res.status === 200) {
                     setInventoryStockCyclePage(res.data.data);

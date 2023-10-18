@@ -1,11 +1,15 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { inventoryDataConnect } from "../../../../../../data_connect/inventoryDataConnect";
-import { inventoryReceiveDataConnect } from "../../../../../../data_connect/inventoryReceiveDataConnect";
-import { inventoryReleaseDataConnect } from "../../../../../../data_connect/inventoryReleaseDataConnect";
+import { InventoryDataConnect } from "../../../../../../data_connect/inventoryDataConnect";
+import { InventoryReceiveDataConnect } from "../../../../../../data_connect/inventoryReceiveDataConnect";
+import { InventoryReleaseDataConnect } from "../../../../../../data_connect/inventoryReleaseDataConnect";
 import { getEndDate, getStartDate } from "../../../../../../utils/dateFormatUtils";
 import { customToast, defaultOptions } from "../../../../../../components/toast/custom-react-toastify/v1";
+
+const inventoryDataConnect = InventoryDataConnect.baseInventoryPage();
+const inventoryReceiveDataConnect = InventoryReceiveDataConnect.baseInventoryPage();
+const inventoryReleaseDataConnect = InventoryReleaseDataConnect.baseInventoryPage();
 
 export default function useInventoryStockRegisterStatusesHook({
     productOptionId
@@ -36,7 +40,7 @@ export default function useInventoryStockRegisterStatusesHook({
             endDateTime: getEndDate(endDateTime || new Date())
         }
 
-        await inventoryDataConnect().searchInventoryStockRegisterStatuses(params, headers)
+        await inventoryDataConnect.searchInventoryStockRegisterStatuses(params, headers)
             .then(res => {
                 if (res.status === 200) {
                     setInventoryStockRegisterStatuses(res.data.data);
@@ -62,7 +66,7 @@ export default function useInventoryStockRegisterStatusesHook({
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await inventoryReceiveDataConnect().changeMemo(body, headers)
+        await inventoryReceiveDataConnect.changeMemo(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();
@@ -94,7 +98,7 @@ export default function useInventoryStockRegisterStatusesHook({
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await inventoryReleaseDataConnect().changeMemo(body, headers)
+        await inventoryReleaseDataConnect.changeMemo(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();
@@ -122,7 +126,7 @@ export default function useInventoryStockRegisterStatusesHook({
         const headers = {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
-        await inventoryReceiveDataConnect().delete(body, headers)
+        await inventoryReceiveDataConnect.delete(body, headers)
             .then(async res => {
                 if (res.status === 200) {
                     await successCallback();
@@ -150,7 +154,7 @@ export default function useInventoryStockRegisterStatusesHook({
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await inventoryReleaseDataConnect().delete(body, headers)
+        await inventoryReleaseDataConnect.delete(body, headers)
             .then(async res => {
                 if (res.status === 200) {
                     await successCallback();

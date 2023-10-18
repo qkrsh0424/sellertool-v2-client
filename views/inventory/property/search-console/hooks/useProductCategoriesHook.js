@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { productCategoryDataConnect } from "../../../../../data_connect/productCategoryDataConnect";
+import { ProductCategoryDataConnect } from "../../../../../data_connect/productCategoryDataConnect";
 import defaultErrorHandler from "../../../../../handler/dataConnectErrorHandler";
 import { customBackdropController } from "../../../../../components/backdrop/default/v1/core";
 import { useSelector } from "react-redux";
+
+const productCategoryDataConnect = ProductCategoryDataConnect.baseInventoryPage();
 
 export default function useProductCategoriesHook() {
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
@@ -27,7 +29,7 @@ export default function useProductCategoriesHook() {
 
     const reqSearchCategoryAnalysis = async (body, headers) => {
         customBackdrop.showBackdrop();
-        await productCategoryDataConnect().searchList(body, headers)
+        await productCategoryDataConnect.searchList(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     setProductCategories(res.data.data);

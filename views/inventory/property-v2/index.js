@@ -11,6 +11,7 @@ import { FdItemList } from "./components/FdItemList/FdItemList";
 import { useInventoryAssetHook } from "./hooks/useInventoryAssetHook";
 import { CustomDateUtils } from "../../../utils/CustomDateUtils";
 import { CustomURIEncoderUtils } from "../../../utils/CustomURIEncoderUtils";
+import { FdAmount } from "./components/FdAmount/FdAmount";
 
 const customDateUtils = CustomDateUtils();
 const customURIEncoderUtils = CustomURIEncoderUtils();
@@ -19,6 +20,8 @@ export default function Inventory_PropertyComponent() {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
+
+    const recordDate = customDateUtils.dateToYYYYMMDD(customDateUtils.setPlusDate(new Date(), 0, 0, -1), '-');
     const selectedProductCategoryId = router?.query?.productCategoryId;
     const selectedProductSubCategoryId = router?.query?.productSubCategoryId;
     const page = router?.query?.page;
@@ -61,14 +64,14 @@ export default function Inventory_PropertyComponent() {
         fetchProductSubCategoryList();
     }, [wsId, selectedProductCategoryId]);
 
+    // fetch inventoryAssetPage
     useEffect(() => {
         if (!wsId) {
             return;
         }
 
         const params = {
-            // recordDate: customDateUtils.dateToYYYYMMDD(customDateUtils.setPlusDate(new Date(), 0, 0, -1), '-'),
-            recordDate: '2023-10-16',
+            recordDate: recordDate,
             productCategoryId: selectedProductCategoryId,
             productSubCategoryId: selectedProductSubCategoryId,
             page: page || 1,
@@ -79,7 +82,7 @@ export default function Inventory_PropertyComponent() {
 
         apiHook.reqFetchInventoryAssetPage({ params: params, headers: { wsId: wsId } }, (results, response) => {
             inventoryAssetHook.onSetInventoryAssetPage(results);
-        })
+        });
     }, [
         wsId,
         selectedProductCategoryId,
@@ -87,6 +90,29 @@ export default function Inventory_PropertyComponent() {
         page,
         size,
         sortTypes,
+        searchFilter,
+    ]);
+
+    // fetch inventoryAssetAmount
+    useEffect(() => {
+        if (!wsId) {
+            return;
+        }
+
+        const params = {
+            recordDate: customDateUtils.dateToYYYYMMDD(customDateUtils.setPlusDate(new Date(), 0, 0, -1), '-'),
+            productCategoryId: selectedProductCategoryId,
+            productSubCategoryId: selectedProductSubCategoryId,
+            searchFilter: searchFilter,
+        }
+
+        apiHook.reqFetchInventoryAssetAmount({ params: params, headers: { wsId: wsId } }, (results, response) => {
+            inventoryAssetHook.onSetInventoryAssetAmount(results);
+        });
+    }, [
+        wsId,
+        selectedProductCategoryId,
+        selectedProductSubCategoryId,
         searchFilter,
     ]);
 
@@ -147,6 +173,9 @@ export default function Inventory_PropertyComponent() {
                             productSubCategory={productSubCategory}
                             onSelectProductCategory={handleSelectProductCategory}
                             onSelectProductSubCategory={handleSelectProductSubCategory}
+                        />
+                        <FdAmount
+                            inventoryAssetAmount={inventoryAssetHook?.inventoryAssetAmount}
                         />
                         <FdItemList
                             inventoryAssetPage={inventoryAssetHook?.inventoryAssetPage}

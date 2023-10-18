@@ -23,6 +23,22 @@ export function useApiHook(props) {
             })
     }
 
+    const reqFetchInventoryAssetAmount = async ({ params = {}, headers = {} }, callbackFn = (results, response) => { }) => {
+        await inventoryAssetDataConnect.searchAmount({ params, headers })
+            .then(res => {
+                callbackFn(res?.data?.data, res);
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            })
+            ;
+    }
+
     const reqFetchProductCategoryList = async ({ headers = {} }, callbackFn = (results, response) => { }) => {
         await productCategoryDataConnect.searchList(headers)
             .then(res => {
@@ -58,8 +74,9 @@ export function useApiHook(props) {
     }
 
     return {
+        reqFetchInventoryAssetPage,
+        reqFetchInventoryAssetAmount,
         reqFetchProductCategoryList,
         reqFetchProductSubCategoryList,
-        reqFetchInventoryAssetPage
     }
 }

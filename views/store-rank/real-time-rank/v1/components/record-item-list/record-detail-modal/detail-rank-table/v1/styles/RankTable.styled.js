@@ -1,38 +1,6 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-    padding: 20px 20px 0 20px;
-    margin-bottom: 50px;
-`;
-
 export const Wrapper = styled.div`
-    position:relative;
-    border-radius: 15px;
-    box-shadow: var(--defaultBoxShadow);
-    background-color: #fff;
-    border: 1px solid #eef2f9;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    .record-info-box {
-        font-size: 14px;
-        font-weight: 600;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-
-    .image-box {
-        width: 90px;
-        height: 90px;
-        margin-bottom: 10px;
-
-        @media screen and (max-width: 992px){
-            width: 80px;
-            height: 80px;
-        }
-    }
-
     .table-box {
         width: 100%;
         position:relative;
@@ -46,12 +14,6 @@ export const Wrapper = styled.div`
         @media only screen and (max-width:768px){
             font-size: 10px;
         }
-    }
-
-    .image-el {
-        border-radius: 10px;
-        box-shadow: var(--defaultBoxShadow);
-        border: 1px solid #ededed;
     }
 
     .table-box .fixed-header {

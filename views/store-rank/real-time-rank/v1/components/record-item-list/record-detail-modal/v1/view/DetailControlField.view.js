@@ -55,7 +55,7 @@ export default function DetailControlFieldView({
                                 onChange={(e) => onChangeSelectedRecordInfo(e)}
                                 disabled={isPending}
                             >
-                                {recordInfos.map(r => {
+                                {recordInfos?.map(r => {
                                     return (
                                         <option key={r.id} value={r.id}>
                                             {`${dateToYYMMDD(r.created_at)} ${dateToHHmm(r.created_at)}`}

@@ -17,21 +17,10 @@ export default function useNRankRecordInfoHook({
         onInitLastSearchedRecordInfo();
     }, [record])
 
-    useEffect(() => {
-        if(!record) {
-            return;
-        }
-
-        if(currentRecordInfoIdx !== 0 && !currentRecordInfoIdx) {
-            return;
-        }
-
-        onUpdateSelectedRecordInfo();
-    }, [record, currentRecordInfoIdx])
-
     const onInitLastSearchedRecordInfo = () => {
         let info = record.nrank_record_info
         setLastSearchedRecordInfo(info)
+        setSelectedRecordInfo(info);
     }
 
     const onSetCurrentRecordInfoIdx = (idx) => {
@@ -40,11 +29,6 @@ export default function useNRankRecordInfoHook({
         }
 
         setCurrentRecordInfoIdx(idx);
-    }
-
-    const onUpdateSelectedRecordInfo = () => {
-        let infoId = recordInfos[currentRecordInfoIdx]
-        setSelectedRecordInfo(infoId);
     }
 
     const onChangeSelectedRecordInfo = (e) => {

@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
 import { Container, Wrapper } from "./styles/RecordItemList.styled";
-import { RecordDetailModalComponent } from "../record-detail-modal/v1";
+// import { RecordDetailModalComponent } from "../record-detail-modal/v1";
+import { RecordDetailModalComponent } from "../record-detail-modal/v2";
 import { CategorySelectorModalComponent } from '../category-selector-modal/v1';
 import { CustomBoxImage } from "../../../modules";
 import HighlightedText from "../../../../../../modules/text/HighlightedText";

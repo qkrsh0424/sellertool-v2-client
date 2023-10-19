@@ -1,12 +1,71 @@
+import { useEffect, useState } from "react";
 import FieldLoadingV2 from "../../../../../../../../../modules/loading/FieldLoadingV2";
 import { CustomBoxImage } from "../../../../../../modules";
 import { dateToHHmm, dateToMMDD } from "../../../../../../utils/dateFormatUtils";
 import { Wrapper } from "../styles/RankTable.styled";
 
 export function RankTableFieldView({
-    recordViewDetails,
-    viewRecordInfos
+    recordInfos,
+    recordDetail,
+    recordRankDetails
 }) {
+    const [recordViewDetails, setRecordViewDetails] = useState(null);
+
+    let viewRecordInfos = recordInfos && [...recordInfos].reverse();
+
+    useEffect(() => {
+        if(!recordDetail) {
+            return;
+        }
+
+        if(!recordRankDetails) {
+            return;
+        }
+
+        handleInitRecordDetailView();
+    }, [recordDetail, recordRankDetails])
+
+    const handleInitRecordDetailView = () => {
+        let prevRank = null;
+        let prevPriceComparisionRank = null;
+        
+        let currentDetails = recordRankDetails.filter(r => (r.mall_product_id === recordDetail.mall_product_id) && (r.item_id === recordDetail.item_id));
+
+        let results = recordInfos.map(info => {
+            let result = currentDetails.find(detail => detail.nrank_record_info_id === info.id) || {};
+
+            return result;
+        })
+
+        let results2 = results.map(r => {
+            let rankTrend = 0;
+            let priceComparisionRankTrend = 0;
+
+            if(!prevRank) {
+                rankTrend = null
+            }else {
+                rankTrend = prevRank - r.rank;
+            }
+
+            if(!prevPriceComparisionRank) {
+                priceComparisionRankTrend = null;
+            }else {
+                priceComparisionRankTrend = prevPriceComparisionRank - r.priceComparisionRank;
+            }
+
+            prevRank = r.rank;
+            prevPriceComparisionRank = r.comparision_rank;
+
+            return {
+                ...r,
+                rankTrend,
+                priceComparisionRankTrend
+            }
+        })
+
+        setRecordViewDetails(results2)
+    }
+
     return (
         <Wrapper>
             <div className='table-box'>
@@ -35,8 +94,8 @@ export function RankTableFieldView({
                     </thead>
                     <tbody>
                         <tr style={{ height: '130px' }}>
-                            {viewRecordInfos?.map((info, idx) => {
-                                let detail = recordViewDetails?.find(r => r.nrank_record_info_id === info.id);
+                            {recordViewDetails && viewRecordInfos?.map((info, idx) => {
+                                let detail = recordViewDetails.find(r => r.nrank_record_info_id === info.id);
 
                                 if (detail) {
                                     return (
@@ -63,7 +122,7 @@ export function RankTableFieldView({
                                                     }
                                                 </div>
                                                 <div>
-                                                    {detail.rankTrend ?
+                                                    {(detail.rankTrend !== 0 && detail.rankTrend) ?
                                                         (detail.rankTrend > 0 ?
                                                             <div className='trend-box'>
                                                                 <div style={{ color: '#e56767' }}>{detail.rankTrend}</div>
@@ -86,7 +145,18 @@ export function RankTableFieldView({
                                                             </div>
                                                         )
                                                         :
-                                                        <div>-</div>
+                                                        (detail.rankTrend === 0 ?
+                                                            <div className='trend-box'>
+                                                                <div>
+                                                                    <CustomBoxImage
+                                                                        src='/images/icon/trending_flat_default_808080.svg'
+                                                                        size='15px'
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            :
+                                                            <span>-</span>
+                                                        )
                                                     }
                                                 </div>
                                             </div>
@@ -96,7 +166,7 @@ export function RankTableFieldView({
                                     return (
                                         <td key={idx}>
                                             <div>
-                                                -
+                                                <span style={{ fontSize: '10px', color: '#959595' }}>1200위 밖</span>
                                             </div>
                                         </td>
                                     )

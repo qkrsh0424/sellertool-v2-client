@@ -17,7 +17,7 @@ import { customBackdropController } from "../../../../../../../../components/bac
 import FieldLoadingV2 from "../../../../../../../modules/loading/FieldLoadingV2";
 import DetailControlFieldView from "./view/DetailControlField.view";
 import useNRankRecordInfoHook from "./hooks/useNRankRecordInfoHook";
-import { DetailRankTableComponent } from "../detail-rank-table/v1";
+import { DetailRankTableComponent } from "../detail-rank-table/v2";
 import _ from "lodash";
 
 const customBackdropControl = customBackdropController();
@@ -68,7 +68,6 @@ export function RecordDetailModalComponent({
     const [isInitSearchLoading, setIsInitSearchLoading] = useState(false);
 
     const [detailGraphModalOpen, setDetailGraphModalOpen] = useState(false);
-    const [selectedRecordDetail, setSelectedRecordDetail] = useState(null);
 
     useEffect(() => {
         if(!wsId) {
@@ -186,29 +185,25 @@ export function RecordDetailModalComponent({
         })
     }
 
-    const handleOpenDetailGraphModal = (e, detail) => {
+    const handleOpenDetailGraphModal = (e) => {
         e.stopPropagation();
 
-        try {
-            if(!detail.mall_product_id) {
-                throw new Error("검색이 불가능한 항목입니다.");
-            }
-        } catch (err) {
-            customToast.error(err?.message, {
+        let details = isAdRankView ? adRecordDetails : recordDetails;
+        if(!details.length > 0 ) {
+            let message = '조회데이터가 존재하지 않습니다.';
+
+            customToast.error(message, {
                 ...defaultOptions,
-                toastId: err?.message
+                toastId: message
             });
-            return;
+            return;    
         }
 
-        setSelectedRecordDetail(detail);
         setDetailGraphModalOpen(true);
     }
 
 
     const handleCloseDetailGraphModal = () => {
-        setSelectedRecordDetail(null);
-        
         setDetailGraphModalOpen(false);
     }
 
@@ -228,25 +223,33 @@ export function RecordDetailModalComponent({
                         record={record}
                         lastSearchedRecordInfo={lastSearchedRecordInfo}
                     />
+                    
                     {/* <SubInfoFieldView
                         record={record}
                     /> */}
+
                     <ButtonFieldView
                         lastSearchedRecordInfo={lastSearchedRecordInfo}
                         isPending={isPending}
                         isInitSearchLoading={isInitSearchLoading}
                         onSubmit={handleChangeNRankRecordStatusToPending}
                     />
+
                     <DetailControlFieldView
                         isPending={isPending}
                         record={record}
                         recordInfos={recordInfos}
                         currentRecordInfoIdx={currentRecordInfoIdx}
                         selectedRecordInfo={selectedRecordInfo}
+                        isAdRankView={isAdRankView}
+                        recordDetails={recordDetails}
+                        adRecordDetails={adRecordDetails}
+
                         onActionFoldAllOptions={onActionFoldAllOptions}
                         onActionUnfoldAllOptions={onActionUnfoldAllOptions}
                         onSetCurrentRecordInfoIdx={onSetCurrentRecordInfoIdx}
                         onChangeSelectedRecordInfo={onChangeSelectedRecordInfo}
+                        onOpenDetailGraphModal={handleOpenDetailGraphModal}
                     />
 
                     <ViewControlFieldView
@@ -289,8 +292,6 @@ export function RecordDetailModalComponent({
                                             openedSubInfoRecordDetailIds={openedSubInfoRecordDetailIds}
                                             onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
                                             onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
-
-                                            onOpenDetailGraphModal={handleOpenDetailGraphModal}
                                         />
                                         :
                                         <RankDetailFieldView
@@ -300,21 +301,21 @@ export function RecordDetailModalComponent({
                                             openedSubInfoRecordDetailIds={openedSubInfoRecordDetailIds}
                                             onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
                                             onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
-
-                                            onOpenDetailGraphModal={handleOpenDetailGraphModal}
                                         />
                                     }
                                 </>
                             }
 
-                            {/* v1 */}
-                            <DetailRankTableComponent
-                                open={detailGraphModalOpen}
-                                onClose={() => handleCloseDetailGraphModal()}
-                                record={record}
-                                recordInfos={recordInfos}
-                                selectedRecordDetail={selectedRecordDetail}
-                            />
+                            {/* detail rank trend modal */}
+                            {detailGraphModalOpen &&
+                                <DetailRankTableComponent
+                                    open={detailGraphModalOpen}
+                                    onClose={() => handleCloseDetailGraphModal()}
+                                    record={record}
+                                    recordInfos={recordInfos}
+                                    recordDetails={isAdRankView ? adRecordDetails : recordDetails}
+                                />
+                            }
                         </div>
                     </div>
 

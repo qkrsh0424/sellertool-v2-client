@@ -23,8 +23,8 @@ export function useApiHook(props) {
             })
     }
 
-    const reqFetchInventoryAssetAmount = async ({ params = {}, headers = {} }, callbackFn = (results, response) => { }) => {
-        await inventoryAssetDataConnect.searchAmount({ params, headers })
+    const reqFetchInventoryAssetAmountList = async ({ params = {}, headers = {} }, callbackFn = (results, response) => { }) => {
+        await inventoryAssetDataConnect.searchAmountList({ params, headers })
             .then(res => {
                 callbackFn(res?.data?.data, res);
             })
@@ -75,7 +75,7 @@ export function useApiHook(props) {
 
     return {
         reqFetchInventoryAssetPage,
-        reqFetchInventoryAssetAmount,
+        reqFetchInventoryAssetAmountList,
         reqFetchProductCategoryList,
         reqFetchProductSubCategoryList,
     }

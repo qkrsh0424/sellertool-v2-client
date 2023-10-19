@@ -39,23 +39,32 @@ export default function DetailControlFieldView({
                 </div>
 
                 <div className='rank-trend-box'>
-                    <button
-                        type='button'
-                        className='open-button'
-                        onClick={(e) => onOpenDetailGraphModal(e)}
-                    >
-                        {isAdRankView ?
-                            <span>광고({adRecordDetails?.length || 0}) 추세</span>
-                            :
-                            <span>일반({recordDetails?.length || 0}) 추세</span>
-                        }
-                        <div>
-                            <CustomBoxImage
-                                src='/images/icon/monitoring_default_344b98.svg'
-                                size='25px'
-                            />
-                        </div>
-                    </button>
+                    {isPending ?
+                        <CustomBlockButton
+                            type='button'
+                            className='open-button disabled-btn'
+                        >
+                            -
+                        </CustomBlockButton>
+                        :
+                        <CustomBlockButton
+                            type='button'
+                            className='open-button'
+                            onClick={(e) => onOpenDetailGraphModal(e)}
+                        >
+                            {isAdRankView ?
+                                <span>광고({adRecordDetails?.length || 0}) 추세</span>
+                                :
+                                <span>일반({recordDetails?.length || 0}) 추세</span>
+                            }
+                            <div>
+                                <CustomBoxImage
+                                    src='/images/icon/monitoring_default_344b98.svg'
+                                    size='25px'
+                                />
+                            </div>
+                        </CustomBlockButton>
+                    }
                 </div>
             </div>
 

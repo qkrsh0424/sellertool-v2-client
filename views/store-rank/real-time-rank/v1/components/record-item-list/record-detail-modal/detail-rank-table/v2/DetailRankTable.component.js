@@ -72,7 +72,7 @@ export function DetailRankTableComponent({
             <CustomDialog
                 open={open}
                 onClose={() => handleClose()}
-                maxWidth="sm"
+                maxWidth="md"
             >
                 <CustomDialog.CloseButton onClose={() => handleClose()} />
                 <CustomDialog.Title>랭킹 추세</CustomDialog.Title>

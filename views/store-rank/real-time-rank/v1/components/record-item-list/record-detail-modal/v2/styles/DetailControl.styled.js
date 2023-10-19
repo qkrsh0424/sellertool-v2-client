@@ -81,6 +81,7 @@ export const Wrapper = styled.div`
         justify-content: flex-end;
         gap: 5px;
         font-size: 12px;
+        min-width: 120px;
     }
 
     .rank-trend-box .open-button {
@@ -98,11 +99,19 @@ export const Wrapper = styled.div`
         font-size: 12px;
         cursor: pointer;
         transition: 0.15s;
+        height: 30px;
 
         &:hover {
             color: #fff;
             background-color: var(--mainColorOpacity500);
             border: 1px solid var(--mainColorOpacity500);
         }
+    }
+
+    .rank-trend-box .disabled-btn {
+        border: 1px solid #e3e3e3;
+        color: #e3e3e3;
+        pointer-events: none;
+        cursor: not-allowed;
     }
 `;

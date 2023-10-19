@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import ViewControlFieldView from "./view/ViewControlField.view";
 import { CustomDialog } from "../../../../../../../../components/dialog/v1/CustomDialog";
 import { CustomProgressIcon } from "../../../../modules/progress/progress-icon/v1";
-import SubInfoFieldView from "./view/SubInfoField.view";
+// import SubInfoFieldView from "./view/SubInfoField.view";
 import { useApiHook } from "./hooks/useApiHook";
 import { useSelector } from "react-redux";
 import RankDetailSkeletonFieldView from "./view/RankDetailSkeletonField.view";
@@ -79,7 +79,9 @@ export function RecordDetailModalComponent({
         }
 
         async function initialize() {
+            setIsInitSearchLoading(true);
             await handleSearchNRankRecordInfos();
+            setIsInitSearchLoading(false);
         }
 
         initialize();
@@ -139,11 +141,11 @@ export function RecordDetailModalComponent({
             headers: { wsId: wsId }
         },{
             success: (results) => {
-                let rankDetails = []
-                let adRankDetails = []
-                results.forEach(r => r.advertising_yn === 'y' ? adRankDetails.push(r) : rankDetails.push(r))
-                onSetRecordDetails(rankDetails)
-                onSetAdRecordDetails(adRankDetails)
+                let rankDetails = [];
+                let adRankDetails = [];
+                results.forEach(r => r.advertising_yn === 'y' ? adRankDetails.push(r) : rankDetails.push(r));
+                onSetRecordDetails(rankDetails);
+                onSetAdRecordDetails(adRankDetails);
             }
         })
     }
@@ -235,22 +237,34 @@ export function RecordDetailModalComponent({
                         onSubmit={handleChangeNRankRecordStatusToPending}
                     />
 
-                    <DetailControlFieldView
-                        isPending={isPending}
-                        record={record}
-                        recordInfos={recordInfos}
-                        currentRecordInfoIdx={currentRecordInfoIdx}
-                        selectedRecordInfo={selectedRecordInfo}
-                        isAdRankView={isAdRankView}
-                        recordDetails={recordDetails}
-                        adRecordDetails={adRecordDetails}
+                    <div style={{ position: 'relative' }}>
+                        <DetailControlFieldView
+                            isPending={isPending}
+                            record={record}
+                            recordInfos={recordInfos}
+                            currentRecordInfoIdx={currentRecordInfoIdx}
+                            selectedRecordInfo={selectedRecordInfo}
+                            isAdRankView={isAdRankView}
+                            recordDetails={recordDetails}
+                            adRecordDetails={adRecordDetails}
 
-                        onActionFoldAllOptions={onActionFoldAllOptions}
-                        onActionUnfoldAllOptions={onActionUnfoldAllOptions}
-                        onSetCurrentRecordInfoIdx={onSetCurrentRecordInfoIdx}
-                        onChangeSelectedRecordInfo={onChangeSelectedRecordInfo}
-                        onOpenDetailGraphModal={handleOpenDetailGraphModal}
-                    />
+                            onActionFoldAllOptions={onActionFoldAllOptions}
+                            onActionUnfoldAllOptions={onActionUnfoldAllOptions}
+                            onSetCurrentRecordInfoIdx={onSetCurrentRecordInfoIdx}
+                            onChangeSelectedRecordInfo={onChangeSelectedRecordInfo}
+                            onOpenDetailGraphModal={handleOpenDetailGraphModal}
+                        />
+                        {/* detail rank trend modal */}
+                        {detailGraphModalOpen &&
+                            <DetailRankTableComponent
+                                open={detailGraphModalOpen}
+                                onClose={() => handleCloseDetailGraphModal()}
+                                record={record}
+                                recordInfos={recordInfos}
+                                recordDetails={isAdRankView ? adRecordDetails : recordDetails}
+                            />
+                        }
+                    </div>
 
                     <ViewControlFieldView
                         isAdRankView={isAdRankView}
@@ -304,17 +318,6 @@ export function RecordDetailModalComponent({
                                         />
                                     }
                                 </>
-                            }
-
-                            {/* detail rank trend modal */}
-                            {detailGraphModalOpen &&
-                                <DetailRankTableComponent
-                                    open={detailGraphModalOpen}
-                                    onClose={() => handleCloseDetailGraphModal()}
-                                    record={record}
-                                    recordInfos={recordInfos}
-                                    recordDetails={isAdRankView ? adRecordDetails : recordDetails}
-                                />
                             }
                         </div>
                     </div>

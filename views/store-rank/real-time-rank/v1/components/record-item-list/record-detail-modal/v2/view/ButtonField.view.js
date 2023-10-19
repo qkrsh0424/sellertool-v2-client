@@ -77,7 +77,8 @@ export default function ButtonFieldView({
                             <CustomBlockButton
                                 type='submit'
                                 className='button-item'
-                                disabled={disabledBtn || isInitSearchLoading}
+                                // disabled={disabledBtn || isInitSearchLoading}
+                                disabled={disabledBtn}
                             >
                                 조회
                             </CustomBlockButton>

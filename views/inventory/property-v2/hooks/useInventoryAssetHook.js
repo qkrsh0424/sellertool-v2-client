@@ -2,20 +2,27 @@ import { useState } from "react";
 
 export function useInventoryAssetHook(props) {
     const [inventoryAssetPage, setInventoryAssetPage] = useState(null);
-    const [inventoryAssetAmount, setInventoryAssetAmount] = useState(null);
+    const [inventoryAssetAmountList, setInventoryAssetAmountList] = useState(null);
+    const [selectedInventoryAssetAmount, setSelectedInventoryAssetAmount] = useState(null);
 
     const onSetInventoryAssetPage = (values) => {
         setInventoryAssetPage(values);
     }
 
-    const onSetInventoryAssetAmount = (value) => {
-        setInventoryAssetAmount(value);
+    const onSetInventoryAssetAmountList = (value) => {
+        setInventoryAssetAmountList(value);
+    }
+
+    const onSetSelectedInventoryAssetAmount = (value) => {
+        setSelectedInventoryAssetAmount(value);
     }
 
     return {
         inventoryAssetPage,
-        inventoryAssetAmount,
+        inventoryAssetAmountList,
+        selectedInventoryAssetAmount,
         onSetInventoryAssetPage,
-        onSetInventoryAssetAmount
+        onSetInventoryAssetAmountList,
+        onSetSelectedInventoryAssetAmount
     }
 }

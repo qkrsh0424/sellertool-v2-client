@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../layout/Layout";
 import { FdSearchConsole } from "./components/FdSearchConsole/FdSearchConsole";
 import { useApiHook } from "./hooks/useApiHook";
@@ -12,16 +12,24 @@ import { useInventoryAssetHook } from "./hooks/useInventoryAssetHook";
 import { CustomDateUtils } from "../../../utils/CustomDateUtils";
 import { CustomURIEncoderUtils } from "../../../utils/CustomURIEncoderUtils";
 import { FdAmount } from "./components/FdAmount/FdAmount";
+import { Alert } from "@mui/material";
+import { FdGraph } from "./components/FdGraph/FdGraph";
 
 const customDateUtils = CustomDateUtils();
 const customURIEncoderUtils = CustomURIEncoderUtils();
+const CURRENT_LOCAL_DATETIME = new Date();
+const YESTERDAY_LOCAL_DATETIME = customDateUtils.setPlusDate(CURRENT_LOCAL_DATETIME, 0, 0, -1);
+const LAST30DAY_LOCAL_DATETIME = customDateUtils.setPlusDate(CURRENT_LOCAL_DATETIME, 0, 0, -30);
+const YESTERDAY_DATE = customDateUtils.dateToYYYYMMDD(YESTERDAY_LOCAL_DATETIME, '-');
 
+/*
+    TODO : 재고자산 추이 그래프 나타내기 작업.
+*/
 export default function Inventory_PropertyComponent() {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const recordDate = customDateUtils.dateToYYYYMMDD(customDateUtils.setPlusDate(new Date(), 0, 0, -1), '-');
     const selectedProductCategoryId = router?.query?.productCategoryId;
     const selectedProductSubCategoryId = router?.query?.productSubCategoryId;
     const page = router?.query?.page;
@@ -33,6 +41,8 @@ export default function Inventory_PropertyComponent() {
     const productCategoryHook = useProductCategoryHook();
     const productSubCategoryHook = useProductSubCategoryHook();
     const inventoryAssetHook = useInventoryAssetHook();
+
+    const [recordDate, setRecordDate] = useState(YESTERDAY_DATE);
 
     // fetch productCategoryList
     useEffect(() => {
@@ -95,20 +105,36 @@ export default function Inventory_PropertyComponent() {
 
     // fetch inventoryAssetAmount
     useEffect(() => {
-        if (!wsId) {
-            return;
+
+        async function fetchInitialize() {
+            if (!wsId) {
+                return;
+            }
+
+            const params = {
+                startRecordDate: LAST30DAY_LOCAL_DATETIME,
+                lastRecordDate: recordDate,
+                productCategoryId: selectedProductCategoryId,
+                productSubCategoryId: selectedProductSubCategoryId,
+                searchFilter: searchFilter,
+            }
+
+            let inventoryAssetAmountList = null;
+            let selectedInventoryAssetAmount = null;
+            await apiHook.reqFetchInventoryAssetAmountList({ params: params, headers: { wsId: wsId } }, (results, response) => {
+                inventoryAssetAmountList = results;
+            });
+
+            if (inventoryAssetAmountList) {
+                selectedInventoryAssetAmount = inventoryAssetAmountList.find(r => r.recordDate === recordDate);
+            }
+
+            inventoryAssetHook.onSetInventoryAssetAmountList(inventoryAssetAmountList);
+            inventoryAssetHook.onSetSelectedInventoryAssetAmount(selectedInventoryAssetAmount);
         }
 
-        const params = {
-            recordDate: customDateUtils.dateToYYYYMMDD(customDateUtils.setPlusDate(new Date(), 0, 0, -1), '-'),
-            productCategoryId: selectedProductCategoryId,
-            productSubCategoryId: selectedProductSubCategoryId,
-            searchFilter: searchFilter,
-        }
+        fetchInitialize();
 
-        apiHook.reqFetchInventoryAssetAmount({ params: params, headers: { wsId: wsId } }, (results, response) => {
-            inventoryAssetHook.onSetInventoryAssetAmount(results);
-        });
     }, [
         wsId,
         selectedProductCategoryId,
@@ -166,6 +192,14 @@ export default function Inventory_PropertyComponent() {
                     sidebarColor={'#ffffff'}
                 >
                     <>
+                        <Alert>재고자산은 매일 09:00 AM 에 자동 업데이트 됩니다.</Alert>
+                        {inventoryAssetHook?.inventoryAssetAmountList &&
+                            <FdGraph
+                                yesterdayLocalDateTime={YESTERDAY_LOCAL_DATETIME}
+                                last30dayLocalDateTime={LAST30DAY_LOCAL_DATETIME}
+                                inventoryAssetAmountList={inventoryAssetHook?.inventoryAssetAmountList}
+                            />
+                        }
                         <FdSearchConsole
                             productCategoryList={productCategoryHook?.productCategoryList}
                             productSubCategoryList={productSubCategoryHook?.productSubCategoryList}
@@ -175,7 +209,7 @@ export default function Inventory_PropertyComponent() {
                             onSelectProductSubCategory={handleSelectProductSubCategory}
                         />
                         <FdAmount
-                            inventoryAssetAmount={inventoryAssetHook?.inventoryAssetAmount}
+                            inventoryAssetAmount={inventoryAssetHook?.selectedInventoryAssetAmount}
                         />
                         <FdItemList
                             inventoryAssetPage={inventoryAssetHook?.inventoryAssetPage}

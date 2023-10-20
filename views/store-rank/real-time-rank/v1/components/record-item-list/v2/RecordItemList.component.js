@@ -268,6 +268,14 @@ function TableBodyRow({
         <tr onClick={(e) => onOpenDetailSearchModal(e, item)} {...virtuosoData}>
             <td>
                 <div className='thumbnail'>
+                    {(isPending || (item.status === RECORD_STATUS.PENDING)) &&
+                        <FieldLoadingV2
+                            oxStyle={{
+                                borderRadius: '15px'
+                            }}
+                        />
+                    }
+
                     <CustomBoxImage
                         src={currentRecordInfo?.thumbnail_url}
                     />

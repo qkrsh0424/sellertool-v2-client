@@ -94,14 +94,4 @@ export const Wrapper = styled.div`
         justify-content: center;
         gap: 5px;
     }
-
-    .column-box .sub-info-box {
-        text-align: center;
-        border: 1px solid var(--thisBoxColor);
-        color: var(--thisBoxColor);
-        border-radius: 5px;
-        font-weight: 600;
-        font-size: 11px;
-        padding: 1px 7px;
-    }
 `;

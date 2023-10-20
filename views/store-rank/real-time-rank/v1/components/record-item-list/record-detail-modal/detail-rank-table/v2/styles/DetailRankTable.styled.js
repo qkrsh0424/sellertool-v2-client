@@ -9,13 +9,14 @@ export const Wrapper = styled.div`
     max-height: 50vh;
     overflow: auto;
     margin-bottom: 50px;
+    /* background-color: #fff; */
+    border-radius: 0 0 15px 15px;
+    box-shadow: var(--defaultBoxShadow);
+    background-color: #fff;
+    border-bottom: 4px solid #eef2f9;
 
     .trend-wrapper {
         position:relative;
-        border-radius: 15px;
-        box-shadow: var(--defaultBoxShadow);
-        background-color: #fff;
-        border: 1px solid #eef2f9;
         display: flex;
         flex-direction: column;
         justify-content: space-between;

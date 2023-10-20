@@ -27,4 +27,25 @@ export const Wrapper = styled.div`
         box-shadow: var(--defaultBoxShadow);
         border: 1px solid #ededed;
     }
+
+    .info-box {
+        display: flex;
+    }
+
+    .info-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        overflow: hidden;
+    }
+
+    .sub-info-box {
+        text-align: center;
+        background-color: #919dbd;
+        border: 1px solid #919dbd;
+        color: white;
+        border-radius: 2px;
+        margin-right: 5px;
+    }
 `;

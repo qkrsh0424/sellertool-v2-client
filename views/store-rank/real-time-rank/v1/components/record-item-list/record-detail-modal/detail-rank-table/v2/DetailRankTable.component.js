@@ -1,23 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useApiHook } from "./hooks/useApiHook";
 import { useSelector } from "react-redux";
 import { CustomDialog } from "../../../../../../../../../components/dialog/v1/CustomDialog";
 import { Container, Wrapper } from "./styles/DetailRankTable.styled";
 import { RankTableFieldView } from "./view/RankTableField.view";
 import RecordDetailInfoFieldView from "./view/RecordDetailInfoField.view";
+import _ from "lodash";
+import ViewControlFieldView from "./view/ViewControlField.view";
 
 export function DetailRankTableComponent({
     open,
     onClose,
     record,
     recordInfos,
-    recordDetails
+    recordDetails,
+    adRecordDetails,
+    isAdRankView
 }) {
+    const scrollRef = useRef(null);
+
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const { onReqSearchNRankRecordDetailByFilter } = useApiHook();
     const [recordRankDetails, setRecordRankDetails] = useState(null);
+    const [isAdRankTrakView, setIsAdRankTrakView] = useState(null);
+
+    let details = isAdRankTrakView ? adRecordDetails : recordDetails;
 
     useEffect(() => {
         if(!wsId) {
@@ -28,7 +37,7 @@ export function DetailRankTableComponent({
             return;
         }
 
-        if(!recordDetails) {
+        if(!(recordDetails && adRecordDetails)) {
             return;
         }
 
@@ -37,12 +46,27 @@ export function DetailRankTableComponent({
         }
 
         fetchInit();
-    }, [record, recordDetails, wsId])
+    }, [record, recordDetails, adRecordDetails, wsId])
+
+    useEffect(() => {
+        if(isAdRankView) {
+            onChangeAdRankTrakView();
+        }else {
+            onChangeRankTrakView();
+        }
+    }, [isAdRankView])
+
+    useEffect(() => {
+        if(scrollRef.current) {
+            scrollRef.current.scrollTop = 0;
+        }
+    }, [isAdRankTrakView])
 
     const handleSearchNRankRecordDetailByFilter = async () => {
+        let totalDetails = [...recordDetails, ...adRecordDetails];
         let infoIds = recordInfos?.map(r => r.id);
-        let itemIds = recordDetails?.map(r => r.item_id);
-        let mallProductIds = recordDetails?.map(r => r.mall_product_id);
+        let itemIds = totalDetails?.map(r => r.item_id);
+        let mallProductIds = totalDetails?.map(r => r.mall_product_id);
 
         let body = {
             info_ids: infoIds,
@@ -58,38 +82,49 @@ export function DetailRankTableComponent({
                 setRecordRankDetails(results);
             },
             fail: () => {
-                handleClose();
+                onClose();
             }
         })
     }
 
-    const handleClose = () => {
-        onClose();
+    const onChangeAdRankTrakView = () => {
+        setIsAdRankTrakView(true);
+    }
+
+    const onChangeRankTrakView = () => {
+        setIsAdRankTrakView(false);
     }
 
     return (
         <>
             <CustomDialog
                 open={open}
-                onClose={() => handleClose()}
+                onClose={() => onClose()}
                 maxWidth="md"
             >
-                <CustomDialog.CloseButton onClose={() => handleClose()} />
+                <CustomDialog.CloseButton onClose={() => onClose()} />
                 <CustomDialog.Title>랭킹 추세</CustomDialog.Title>
                 <Container>
-                    <Wrapper>
-                        {recordDetails?.map((recordDetail, idx) => {
+                    <ViewControlFieldView
+                        isAdRankTrakView={isAdRankTrakView}
+                        handleChangeRankTrakView={onChangeRankTrakView}
+                        handleChangeAdRankTrakView={onChangeAdRankTrakView}
+                        recordDetails={recordDetails}
+                        adRecordDetails={adRecordDetails}
+                    />
+                    <Wrapper ref={scrollRef}>
+                        {details?.map((detail, idx) => {
                             return (
                                 <div
                                     key={'record_trend_wrapper_idx' + idx}
-                                    className='trend-wrapper'    
+                                    className='trend-wrapper'
                                 >
                                     <RecordDetailInfoFieldView
-                                        recordDetail={recordDetail}
+                                        recordDetail={detail}
                                     />
                                     <RankTableFieldView
                                         recordInfos={recordInfos}
-                                        recordDetail={recordDetail}
+                                        recordDetail={detail}
                                         recordRankDetails={recordRankDetails}
                                     />
                                 </div>

@@ -29,7 +29,12 @@ export function RankTableFieldView({
         let prevRank = null;
         let prevPriceComparisionRank = null;
         
-        let currentDetails = recordRankDetails.filter(r => (r.mall_product_id === recordDetail.mall_product_id) && (r.item_id === recordDetail.item_id));
+        let currentDetails = recordRankDetails.filter(r => 
+            (r.mall_product_id === recordDetail.mall_product_id) &&
+            (r.item_id === recordDetail.item_id) &&
+            (r.advertising_yn === recordDetail.advertising_yn) &&
+            (r.price_comparision_yn === recordDetail.price_comparision_yn)
+        );
 
         let results = recordInfos.map(info => {
             let result = currentDetails.find(detail => detail.nrank_record_info_id === info.id) || {};
@@ -101,18 +106,6 @@ export function RankTableFieldView({
                                     return (
                                         <td key={detail.id}>
                                             <div className='column-box'>
-                                                <div>
-                                                    {detail.advertising_yn === 'y' &&
-                                                        <span className='sub-info-box' style={{ "--thisBoxColor": "#456cba" }}>
-                                                            <span>광고</span>
-                                                        </span>
-                                                    }
-                                                    {detail.price_comparision_yn === 'y' &&
-                                                        <span className='sub-info-box' style={{ "--thisBoxColor": "#636b82" }}>
-                                                            <span>가격비교</span>
-                                                        </span>
-                                                    }
-                                                </div>
                                                 <div>
                                                     <span className='rank-box'>{detail.rank}위</span>
                                                 </div>

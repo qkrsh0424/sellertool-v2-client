@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 
-export default function useNRankRecordDetailHook({
-    record
-}) {
+export default function useNRankRecordDetailHook() {
     const [recordDetails, setRecordDetails] = useState([]);
     const [adRecordDetails, setAdRecordDetails] = useState([]);
     const [openedSubInfoRecordDetailIds, setOpenedSubInfoRecordDetailIds] = useState([]);
+    const [isFoldAll, setIsFoldAll] = useState(false);
+
+    useEffect(() => {
+        if(!(recordDetails && adRecordDetails)) {
+            return;
+        }
+
+        handleInitOpenedSubInfoRecordDetailIds();
+    }, [isFoldAll, recordDetails, adRecordDetails])
 
     const onSetRecordDetails = (data) => {
         setRecordDetails([...data])
@@ -25,13 +32,21 @@ export default function useNRankRecordDetailHook({
     }
 
     const onActionFoldAllOptions = () => {
-        let ids = recordDetails?.map(r => r.id);
-        let adIds = adRecordDetails?.map(r => r.id);
-        setOpenedSubInfoRecordDetailIds([...ids, ...adIds])
+        setIsFoldAll(true);
+    }
+
+    const handleInitOpenedSubInfoRecordDetailIds = () => {
+        if(isFoldAll) {
+            let ids = recordDetails?.map(r => r.id);
+            let adIds = adRecordDetails?.map(r => r.id);
+            setOpenedSubInfoRecordDetailIds([...ids, ...adIds])
+        }else {
+            setOpenedSubInfoRecordDetailIds([]);
+        }
     }
 
     const onActionUnfoldAllOptions = () => {
-        setOpenedSubInfoRecordDetailIds([]);
+        setIsFoldAll(false);
     }
 
     return {

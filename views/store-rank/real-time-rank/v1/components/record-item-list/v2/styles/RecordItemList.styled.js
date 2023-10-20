@@ -86,6 +86,7 @@ export const Wrapper = styled.div`
         height: 50px;
         border-radius: 10px;
         overflow: hidden;
+        position: relative;
     }
 
     .control-btn {

@@ -10,7 +10,6 @@ export default function DetailControlFieldView({
     recordInfos,
     currentRecordInfoIdx,
     selectedRecordInfo,
-    isAdRankView,
     recordDetails,
     adRecordDetails,
     onActionFoldAllOptions,
@@ -52,11 +51,7 @@ export default function DetailControlFieldView({
                             className='open-button'
                             onClick={(e) => onOpenDetailGraphModal(e)}
                         >
-                            {isAdRankView ?
-                                <span>광고({adRecordDetails?.length || 0}) 추세</span>
-                                :
-                                <span>일반({recordDetails?.length || 0}) 추세</span>
-                            }
+                            <span>랭킹 추세 ( {(recordDetails?.length || 0) + (adRecordDetails?.length || 0)} ) </span>
                             <div>
                                 <CustomBoxImage
                                     src='/images/icon/monitoring_default_344b98.svg'

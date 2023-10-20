@@ -29,20 +29,22 @@ export function RankTableFieldView({
         let prevRank = null;
         let prevPriceComparisionRank = null;
         
-        let currentDetails = recordRankDetails.filter(r => 
-            (r.mall_product_id === recordDetail.mall_product_id) &&
-            (r.item_id === recordDetail.item_id) &&
-            (r.advertising_yn === recordDetail.advertising_yn) &&
-            (r.price_comparision_yn === recordDetail.price_comparision_yn)
-        );
+        // let currentDetails = recordRankDetails.filter(r => 
+        //     (r.mall_product_id === recordDetail.mall_product_id) &&
+        //     (r.item_id === recordDetail.item_id) &&
+        //     (r.advertising_yn === recordDetail.advertising_yn) &&
+        //     (r.price_comparision_yn === recordDetail.price_comparision_yn)
+        // );
+
+        // let results = recordInfos.map(info => {
+        //     return currentDetails.find(detail => detail.nrank_record_info_id === info.id) || {};
+        // })
 
         let results = recordInfos.map(info => {
-            let result = currentDetails.find(detail => detail.nrank_record_info_id === info.id) || {};
-
-            return result;
+            return recordRankDetails.find(detail => detail.nrank_record_info_id === info.id) || {};
         })
 
-        let results2 = results.map(r => {
+        let includedTrendResults = results.map(r => {
             let rankTrend = 0;
             let priceComparisionRankTrend = 0;
 
@@ -68,7 +70,7 @@ export function RankTableFieldView({
             }
         })
 
-        setRecordViewDetails(results2)
+        setRecordViewDetails(includedTrendResults)
     }
 
     return (

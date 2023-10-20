@@ -142,7 +142,7 @@ export default function MainComponent(){
 
     const handleReqChangeNRankRecordListStatusToFail = async (ids) => {
         await onReqChangeNRankRecordListStatusToFail({
-            body: {ids: ids},
+            body: {record_ids: ids},
             headers: { wsId: wsId }
         }, {
             success: () => {

@@ -26,7 +26,7 @@ export function DetailRankTableComponent({
     const [recordRankDetails, setRecordRankDetails] = useState(null);
     const [isAdRankTrakView, setIsAdRankTrakView] = useState(null);
 
-    let details = isAdRankTrakView ? adRecordDetails : recordDetails;
+    let viewRecordDetails = isAdRankTrakView ? adRecordDetails : recordDetails;
 
     useEffect(() => {
         if(!wsId) {
@@ -113,7 +113,14 @@ export function DetailRankTableComponent({
                         adRecordDetails={adRecordDetails}
                     />
                     <Wrapper ref={scrollRef}>
-                        {details?.map((detail, idx) => {
+                        {recordRankDetails && viewRecordDetails?.map((detail, idx) => {
+                            let currentRankDetails = recordRankDetails.filter(r => 
+                                (r.mall_product_id === detail.mall_product_id) &&
+                                (r.item_id === detail.item_id) &&
+                                (r.advertising_yn === detail.advertising_yn) &&
+                                (r.price_comparision_yn === detail.price_comparision_yn)
+                            );
+
                             return (
                                 <div
                                     key={'record_trend_wrapper_idx' + idx}
@@ -122,14 +129,20 @@ export function DetailRankTableComponent({
                                     <RecordDetailInfoFieldView
                                         recordDetail={detail}
                                     />
+
                                     <RankTableFieldView
                                         recordInfos={recordInfos}
                                         recordDetail={detail}
-                                        recordRankDetails={recordRankDetails}
+                                        recordRankDetails={currentRankDetails}
                                     />
                                 </div>
                             )
                         })}
+                        {viewRecordDetails?.length === 0 &&
+                            <div className='blank-info-text'>
+                                <div>데이터가 존재하지 않습니다.</div>
+                            </div>
+                        }
                     </Wrapper>
                 </Container>
             </CustomDialog>

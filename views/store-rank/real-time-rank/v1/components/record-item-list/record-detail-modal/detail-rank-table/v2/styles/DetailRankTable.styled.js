@@ -26,4 +26,13 @@ export const Wrapper = styled.div`
             margin-bottom: 0;
         }
     }
+
+    .blank-info-text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 20vh;
+        font-size: 12px;
+        color: #909090;
+    }
 `;

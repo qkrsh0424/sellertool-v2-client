@@ -14,17 +14,18 @@ import { CustomURIEncoderUtils } from "../../../utils/CustomURIEncoderUtils";
 import { FdAmount } from "./components/FdAmount/FdAmount";
 import { Alert } from "@mui/material";
 import { FdGraph } from "./components/FdGraph/FdGraph";
+import { FdRecordDate } from "./components/FdRecordDate/FdRecordDate";
+import { customBackdropController } from "../../../components/backdrop/default/v1";
 
 const customDateUtils = CustomDateUtils();
 const customURIEncoderUtils = CustomURIEncoderUtils();
+const customBackdropControl = customBackdropController();
+
 const CURRENT_LOCAL_DATETIME = new Date();
 const YESTERDAY_LOCAL_DATETIME = customDateUtils.setPlusDate(CURRENT_LOCAL_DATETIME, 0, 0, -1);
 const LAST30DAY_LOCAL_DATETIME = customDateUtils.setPlusDate(CURRENT_LOCAL_DATETIME, 0, 0, -30);
 const YESTERDAY_DATE = customDateUtils.dateToYYYYMMDD(YESTERDAY_LOCAL_DATETIME, '-');
 
-/*
-    TODO : 재고자산 추이 그래프 나타내기 작업.
-*/
 export default function Inventory_PropertyComponent() {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
@@ -80,6 +81,40 @@ export default function Inventory_PropertyComponent() {
             return;
         }
 
+        handleReqFetchInventoryAssetPage();
+
+    }, [
+        wsId,
+        selectedProductCategoryId,
+        selectedProductSubCategoryId,
+        page,
+        size,
+        sortTypes,
+        searchFilter,
+        recordDate
+    ]);
+
+    // fetch inventoryAssetAmount
+    useEffect(() => {
+
+        async function fetchInitialize() {
+            if (!wsId) {
+                return;
+            }
+
+            await handleReqFetchInventoryAssetAmountList();
+        }
+
+        fetchInitialize();
+
+    }, [
+        wsId,
+        selectedProductCategoryId,
+        selectedProductSubCategoryId,
+        searchFilter,
+    ]);
+
+    const handleReqFetchInventoryAssetPage = async () => {
         const params = {
             recordDate: recordDate,
             productCategoryId: selectedProductCategoryId,
@@ -93,54 +128,60 @@ export default function Inventory_PropertyComponent() {
         apiHook.reqFetchInventoryAssetPage({ params: params, headers: { wsId: wsId } }, (results, response) => {
             inventoryAssetHook.onSetInventoryAssetPage(results);
         });
-    }, [
-        wsId,
-        selectedProductCategoryId,
-        selectedProductSubCategoryId,
-        page,
-        size,
-        sortTypes,
-        searchFilter,
-    ]);
+    }
 
-    // fetch inventoryAssetAmount
-    useEffect(() => {
-
-        async function fetchInitialize() {
-            if (!wsId) {
-                return;
-            }
-
-            const params = {
-                startRecordDate: LAST30DAY_LOCAL_DATETIME,
-                lastRecordDate: recordDate,
-                productCategoryId: selectedProductCategoryId,
-                productSubCategoryId: selectedProductSubCategoryId,
-                searchFilter: searchFilter,
-            }
-
-            let inventoryAssetAmountList = null;
-            let selectedInventoryAssetAmount = null;
-            await apiHook.reqFetchInventoryAssetAmountList({ params: params, headers: { wsId: wsId } }, (results, response) => {
-                inventoryAssetAmountList = results;
-            });
-
-            if (inventoryAssetAmountList) {
-                selectedInventoryAssetAmount = inventoryAssetAmountList.find(r => r.recordDate === recordDate);
-            }
-
-            inventoryAssetHook.onSetInventoryAssetAmountList(inventoryAssetAmountList);
-            inventoryAssetHook.onSetSelectedInventoryAssetAmount(selectedInventoryAssetAmount);
+    const handleReqFetchInventoryAssetAmountList = async () => {
+        const params = {
+            startRecordDate: customDateUtils.dateToYYYYMMDD(LAST30DAY_LOCAL_DATETIME, '-'),
+            lastRecordDate: customDateUtils.dateToYYYYMMDD(YESTERDAY_LOCAL_DATETIME, '-'),
+            productCategoryId: selectedProductCategoryId,
+            productSubCategoryId: selectedProductSubCategoryId,
+            searchFilter: searchFilter,
         }
 
-        fetchInitialize();
+        let inventoryAssetAmountList = null;
+        let selectedInventoryAssetAmount = null;
+        await apiHook.reqFetchInventoryAssetAmountList({ params: params, headers: { wsId: wsId } }, (results, response) => {
+            inventoryAssetAmountList = results;
+        });
 
-    }, [
-        wsId,
-        selectedProductCategoryId,
-        selectedProductSubCategoryId,
-        searchFilter,
-    ]);
+        if (inventoryAssetAmountList) {
+            selectedInventoryAssetAmount = inventoryAssetAmountList.find(r => r.recordDate === recordDate);
+        }
+
+        inventoryAssetHook.onSetInventoryAssetAmountList(inventoryAssetAmountList);
+        inventoryAssetHook.onSetSelectedInventoryAssetAmount(selectedInventoryAssetAmount);
+    }
+
+    const handleReqSychronizeInventoryAssets = async () => {
+        if (!wsId || !recordDate) {
+            return;
+        }
+        customBackdropControl.showBackdrop();
+
+        let headers = {
+            wsId: wsId
+        }
+
+        let body = {
+            recordDate: recordDate
+        }
+
+        await apiHook.reqSynchronizeInventoryAssets({ body, headers }, (results, response) => {
+            if (results) {
+                alert(`${recordDate} 의 재고자산 데이터를 동기화 했습니다.`);
+                handleReqFetchInventoryAssetPage();
+                handleReqFetchInventoryAssetAmountList();
+            }
+        })
+        customBackdropControl.hideBackdrop();
+    }
+
+    const handleChangeRecordDate = (value) => {
+        setRecordDate(value);
+        let selectedInventoryAssetAmount = inventoryAssetHook?.inventoryAssetAmountList?.find(r => r.recordDate === value);
+        inventoryAssetHook.onSetSelectedInventoryAssetAmount(selectedInventoryAssetAmount);
+    }
 
     const handleSelectProductCategory = (value) => {
         const productCategoryId = value?.id;
@@ -193,13 +234,18 @@ export default function Inventory_PropertyComponent() {
                 >
                     <>
                         <Alert>재고자산은 매일 09:00 AM 에 자동 업데이트 됩니다.</Alert>
-                        {inventoryAssetHook?.inventoryAssetAmountList &&
-                            <FdGraph
-                                yesterdayLocalDateTime={YESTERDAY_LOCAL_DATETIME}
-                                last30dayLocalDateTime={LAST30DAY_LOCAL_DATETIME}
-                                inventoryAssetAmountList={inventoryAssetHook?.inventoryAssetAmountList}
-                            />
-                        }
+                        <FdGraph
+                            yesterdayLocalDateTime={YESTERDAY_LOCAL_DATETIME}
+                            last30dayLocalDateTime={LAST30DAY_LOCAL_DATETIME}
+                            inventoryAssetAmountList={inventoryAssetHook?.inventoryAssetAmountList}
+                        />
+                        <FdRecordDate
+                            recordDate={recordDate}
+                            yesterdayLocalDateTime={YESTERDAY_LOCAL_DATETIME}
+                            last30dayLocalDateTime={LAST30DAY_LOCAL_DATETIME}
+                            onChangeRecordDate={handleChangeRecordDate}
+                            onReqSynchronizeInventoryAssets={handleReqSychronizeInventoryAssets}
+                        />
                         <FdSearchConsole
                             productCategoryList={productCategoryHook?.productCategoryList}
                             productSubCategoryList={productSubCategoryHook?.productSubCategoryList}

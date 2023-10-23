@@ -3,13 +3,16 @@ import styled from 'styled-components';
 export const St = {
     Container: styled.div`
         padding: 0 20px;
+        margin-top: 20px;
+        @media all and (max-width:992px){
+            padding: 0 10px;
+        }
     `,
     CardItemWrapper: styled.div`
         display: flex;
         flex-direction: row;
         gap: 10px;
         overflow-y:auto;
-        padding: 20px 0;
         .card{
             display: flex;
             flex-direction: column;

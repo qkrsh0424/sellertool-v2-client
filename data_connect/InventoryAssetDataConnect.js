@@ -33,6 +33,16 @@ function baseInventoryPage() {
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
+        },
+        synchronize: async function ({ body, headers }) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${BASE_URL}/synchronize`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         }
     }
 }

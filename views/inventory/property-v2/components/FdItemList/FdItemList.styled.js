@@ -8,7 +8,8 @@ export const St = {
 
 export const StHeadControl = {
     Container: styled.div`
-        padding: 20px 20px 0 20px;
+        padding: 0 20px;
+        margin-top: 20px;
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
@@ -19,6 +20,10 @@ export const StHeadControl = {
             flex-direction: column;
             align-items: flex-end;
             gap: 5px;
+
+            @media all and (max-width:992px){
+                padding: 0 10px;
+            }
         }
     `,
     BadStockEndDateWrapper: styled.div`
@@ -53,10 +58,13 @@ export const StHeadControl = {
 
 export const StTable = {
     Container: styled.div`
-
+        padding: 0 20px;
+        margin-top: 20px;
+        @media all and (max-width:992px){
+            padding: 0 10px;
+        }
     `,
     TableWrapper: styled.div`
-        padding: 10px 20px 0px 20px;
     `,
     TableBox: styled.div`
         position: relative;

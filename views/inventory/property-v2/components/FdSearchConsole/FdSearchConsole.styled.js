@@ -2,7 +2,12 @@ import styled from "styled-components";
 
 export const St = {
     Container: styled.div`
-        padding: 20px;
+        padding: 0 20px;
+        margin-top: 20px;
+
+        @media all and (max-width:992px){
+            padding: 0 10px;
+        }
     `,
     Wrapper: styled.div`
         width: 100%;

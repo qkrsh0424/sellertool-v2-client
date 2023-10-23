@@ -1,4 +1,5 @@
 import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
+import { CustomErrorHandler } from "../../../../data_connect/CustomErrorHandler";
 import { InventoryAssetDataConnect } from "../../../../data_connect/InventoryAssetDataConnect"
 import { ProductCategoryDataConnect } from "../../../../data_connect/productCategoryDataConnect";
 import { ProductSubCategoryDataConnect } from "../../../../data_connect/productSubCategoryDataConnect";
@@ -20,6 +21,16 @@ export function useApiHook(props) {
                     ...defaultOptions,
                     toastId: res?.data?.memo
                 });
+            })
+    }
+
+    const reqSynchronizeInventoryAssets = async ({ body = {}, headers = {} }, callbackFn = (results, response) => { }) => {
+        await inventoryAssetDataConnect.synchronize({ body, headers })
+            .then(res => {
+                callbackFn(res?.data?.data, res);
+            })
+            .catch(err=>{
+                CustomErrorHandler.error(err);
             })
     }
 
@@ -75,6 +86,7 @@ export function useApiHook(props) {
 
     return {
         reqFetchInventoryAssetPage,
+        reqSynchronizeInventoryAssets,
         reqFetchInventoryAssetAmountList,
         reqFetchProductCategoryList,
         reqFetchProductSubCategoryList,

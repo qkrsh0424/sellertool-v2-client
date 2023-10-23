@@ -1,9 +1,10 @@
-import { St } from "./FdGraph.styled";
+import { St, StEmpty, StLoading } from "./FdGraph.styled";
 import { CustomNumberUtils } from "../../../../../utils/CustomNumberUtils";
 import { CustomDateUtils } from "../../../../../utils/CustomDateUtils";
 import { useEffect, useRef } from "react";
 import { CustomChart } from "../../../../../components/CustomChart/v1";
 import { useState } from "react";
+import { withPendingComponent } from "../../../../../hoc/loading/withPendingComponent";
 
 const customNumberUtils = CustomNumberUtils();
 const customDateUtils = CustomDateUtils();
@@ -20,14 +21,20 @@ const returnDates = (startDateTime, endDateTime) => {
     return dates;
 }
 
+const InventoryAssetAmountChartPending = withPendingComponent({
+    Component: InventoryAssetAmountChart,
+    LoadingComponent: () => <ChartLoading />,
+    EmptyComponent: () => <ChartEmpty />
+})
+
 export function FdGraph({
     yesterdayLocalDateTime,
     last30dayLocalDateTime,
     inventoryAssetAmountList
 }) {
     const dateList = returnDates(last30dayLocalDateTime, yesterdayLocalDateTime);
-    const inventoryAssetAmountListInRange = dateList.map(date => {
-        let inventoryAssetAmount = inventoryAssetAmountList.find(r => r.recordDate === date);
+    const inventoryAssetAmountListInRange = dateList?.map(date => {
+        let inventoryAssetAmount = inventoryAssetAmountList?.find(r => r.recordDate === date);
         if (!inventoryAssetAmount) {
             return {
                 remainedAssetsAmount: 0,
@@ -73,7 +80,8 @@ export function FdGraph({
                             총 재고수량
                         </div>
                     </div>
-                    <InventoryAssetAmountChart
+                    <InventoryAssetAmountChartPending
+                        pendingDatas={inventoryAssetAmountList}
                         dateList={dateList}
                         inventoryAssetAmountListInRange={inventoryAssetAmountListInRange}
                         selectedViewer={selectedViewer}
@@ -154,5 +162,25 @@ function InventoryAssetAmountChart({
                 options={options}
             />
         </div>
+    );
+}
+
+function ChartLoading() {
+    return (
+        <StLoading.Container>
+            <div className='text'>
+                통계 그래프를 불러오는 중 입니다.
+            </div>
+        </StLoading.Container>
+    );
+}
+
+function ChartEmpty() {
+    return (
+        <StEmpty.Container>
+            <div className='text'>
+                아직 통계가 생성되지 않았습니다.
+            </div>
+        </StEmpty.Container>
     );
 }

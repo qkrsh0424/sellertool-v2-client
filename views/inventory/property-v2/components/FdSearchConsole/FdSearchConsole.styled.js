@@ -48,6 +48,10 @@ export const St = {
 
         .control-box{
             width:250px;
+
+            @media all and (max-width: 992px){
+                width: 100%;
+            }
         }
 
         .label{

@@ -237,7 +237,7 @@ export function RecordDetailModalComponent({
     const handleOpenDetailGraphModal = (e) => {
         e.stopPropagation();
 
-        if(!recordDetailsBySearchedInfos.length > 0 ) {
+        if(![...traceableAdRecordDetails, ...traceableRecordDetails].length > 0 ) {
             let message = '조회데이터가 존재하지 않습니다.';
 
             customToast.error(message, {
@@ -281,7 +281,6 @@ export function RecordDetailModalComponent({
 
                     <DetailControlFieldView
                         isPending={isPending}
-                        record={record}
                         recordInfos={recordInfos}
                         currentRecordInfoIdx={currentRecordInfoIdx}
                         selectedRecordInfo={selectedRecordInfo}

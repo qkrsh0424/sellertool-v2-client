@@ -28,7 +28,7 @@ export function DetailRankTableComponent({
             return;
         }
 
-        handleInitDetailsTrend();
+        handleInitDetailsRankTrend();
     }, [recordDetailsBySearchedInfos])
 
     useEffect(() => {
@@ -37,11 +37,10 @@ export function DetailRankTableComponent({
         }
     }, [isAdRankTrakView])
 
-    const handleInitDetailsTrend = () => {
+    const handleInitDetailsRankTrend = () => {
         let rankDetails = [];
         let adRankDetails = [];
 
-        // recordDetails과 adRecordDetails 내에서 mall_product_id + item_id + advertising_yn 값이 고유하도록 세팅
         recordDetailsBySearchedInfos.forEach(r => {
             if (r.advertising_yn === 'y') {
                 adRankDetails.push(r);
@@ -49,7 +48,6 @@ export function DetailRankTableComponent({
                 rankDetails.push(r);
             }
         });
-
         setRecordRankDetails(rankDetails);
         setRecordAdRankDetails(adRankDetails);
     }

@@ -28,18 +28,8 @@ export function RankTableFieldView({
     const handleInitRecordDetailView = () => {
         let prevRank = null;
         let prevPriceComparisionRank = null;
-        
-        // let currentDetails = recordRankDetails.filter(r => 
-        //     (r.mall_product_id === recordDetail.mall_product_id) &&
-        //     (r.item_id === recordDetail.item_id) &&
-        //     (r.advertising_yn === recordDetail.advertising_yn) &&
-        //     (r.price_comparision_yn === recordDetail.price_comparision_yn)
-        // );
 
-        // let results = recordInfos.map(info => {
-        //     return currentDetails.find(detail => detail.nrank_record_info_id === info.id) || {};
-        // })
-
+        // 조회된 infos에 대한 rank details 세팅. 없다면 빈 값 {} 세팅.
         let results = recordInfos.map(info => {
             return recordRankDetails.find(detail => detail.nrank_record_info_id === info.id) || {};
         })

@@ -11,7 +11,7 @@ export function useApiHook() {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordInfoDataConnect().searchList(options.headers, options.params)
+        await nRankRecordInfoDataConnect().searchLimitListByRecordId(options.headers, options.params)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data);
@@ -32,7 +32,7 @@ export function useApiHook() {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDetailDataConnect().searchListByInfos(options.headers, options.body)
+        await nRankRecordDetailDataConnect().searchListByInfoIds(options.headers, options.body)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data, res);
@@ -53,7 +53,7 @@ export function useApiHook() {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().changeStatusToPending(options.headers, options.params, options.body)
+        await nRankRecordDataConnect().changeStatusToPendingAndCreateRecordInfo(options.headers, options.params, options.body)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data);

@@ -12,6 +12,7 @@ export default function DetailControlFieldView({
     selectedRecordInfo,
     traceableRecordDetails,
     traceableAdRecordDetails,
+    
     onActionFoldAllOptions,
     onActionUnfoldAllOptions,
     onSetCurrentRecordInfoIdx,

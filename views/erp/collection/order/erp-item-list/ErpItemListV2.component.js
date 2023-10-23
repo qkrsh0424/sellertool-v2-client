@@ -28,6 +28,7 @@ export default function ErpItemListComponent({
     onSelectErpItem,
     onSelectAllErpItems,
     onSelectClearAllErpItemsInPage,
+    onSelectClearAllErpItems,
     erpItemPagePending,
     onSubmitChangeOptionCode,
     onSubmitChangeReleaseOptionCode,
@@ -74,10 +75,11 @@ export default function ErpItemListComponent({
 
     const handleSubmitEditOptionCode = (selectedOptionCode) => {
         let body = {
-            id: targetErpItem?.id,
+            id: targetErpItem.id,
             optionCode: selectedOptionCode
         }
 
+        onSelectClearAllErpItems();
         onSubmitChangeOptionCode(body, () => {
             handleCloseEditOptionCodeModal();
         })
@@ -85,10 +87,11 @@ export default function ErpItemListComponent({
 
     const handleSubmitEditReleaseOptionCode = (selectedOptionCode) => {
         let body = {
-            id: targetErpItem?.id,
+            id: targetErpItem.id,
             releaseOptionCode: selectedOptionCode
         }
 
+        onSelectClearAllErpItems();
         onSubmitChangeReleaseOptionCode(body, () => {
             handleCloseEditReleaseOptionCodeModal();
         })

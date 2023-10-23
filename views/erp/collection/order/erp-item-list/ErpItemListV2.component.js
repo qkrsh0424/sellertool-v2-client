@@ -10,7 +10,7 @@ import CommonModalComponent from "../../../../modules/modal/CommonModalComponent
 import ItemsForSameReceiverModalComponent from "./modal/ItemsForSameReceiverModal.component";
 import { PinButtonBox, TableFieldWrapper, ViewHeaderSelectNotice } from "./styles/ErpItemListV2.styled";
 import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
-import { CustomVirtualTable } from "../../../../../components/table/virtual-table/v1";
+import { CustomVirtualTable } from "../../../../../components/table/virtual-table/v2";
 import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 import { TextDragableDancer } from "../../../../../components/tapdancer/v1";
 import { Base64Utils } from "../../../../../utils/base64Utils";
@@ -149,7 +149,6 @@ export default function ErpItemListComponent({
                             }}
                         />
                     }
-
                     <div className='table-box'>
                         <CustomVirtualTable
                             ref={virtuosoScrollRef}

@@ -36,18 +36,24 @@ export function RecordDetailModalComponent({
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const {
-        onReqSearchNRankRecordDetails,
+        onReqSearchNRankRecordInfos,
+        onReqSearchNRankRecordDetailsByInfos,
         onReqChangeNRankRecordStatusToPending,
         onReqCreateNRankRecordDetails,
-        onReqSearchNRankRecordInfos
     } = useApiHook();
 
     const {
         recordDetails,
         adRecordDetails,
         openedSubInfoRecordDetailIds,
+        recordDetailsBySearchedInfos,
+        traceableRecordDetails,
+        traceableAdRecordDetails,
+        onSetRecordDetailsBySearchedInfos,
         onSetRecordDetails,
         onSetAdRecordDetails,
+        onSetTraceableRecordDetails,
+        onSetTraceableAdRecordDetails,
         onAddOpenedSubInfoRecordDetailId,
         onRemoveOpenedSubInfoRecordDetailId,
         onActionFoldAllOptions,
@@ -92,26 +98,44 @@ export function RecordDetailModalComponent({
             return;
         }
 
+        async function searchDetails() {
+            await handleSearchNRankRecordDetailsByInfos();
+        }
+
+        searchDetails();
         onSetCurrentRecordInfoIdx(recordInfos.length-1)
     }, [recordInfos])
 
     useEffect(() => {
-        if(!wsId) {
-            return;
-        }
-
         if(!selectedRecordInfo) {
             return;
         }
 
-        async function fetchSearchDetails() {
-            setIsInitSearchLoading(true);
-            await handleSearchNRankRecordDetail()
-            setIsInitSearchLoading(false);
+        if(!recordDetailsBySearchedInfos) {
+            return;
         }
 
-        fetchSearchDetails();
-    }, [selectedRecordInfo, wsId])
+        
+        handleInitDetailsBySelectedRecordInfo();
+    }, [selectedRecordInfo, recordDetailsBySearchedInfos])
+
+    const handleInitDetailsBySelectedRecordInfo = () => {
+        let data = recordDetailsBySearchedInfos.filter(r => r.nrank_record_info_id === selectedRecordInfo.id);
+
+        let details = [];
+        let adDetails = [];
+
+        data.forEach(r => {
+            if(r.advertising_yn === 'y') {
+                adDetails.push(r);
+            }else {
+                details.push(r);
+            }
+        })
+
+        onSetRecordDetails(details);
+        onSetAdRecordDetails(adDetails);
+    }
 
     const handleChangeAdRankView = () => {
         setIsAdRankView(true);
@@ -129,23 +153,6 @@ export function RecordDetailModalComponent({
             success: (results) => {
                 let sortedResults = _.sortBy(results, 'created_at');
                 onSetRecordInfos(sortedResults);
-            }
-        })
-    }
-
-    const handleSearchNRankRecordDetail = async () => {
-        let selectedRecordInfoId = selectedRecordInfo?.id;
-
-        await onReqSearchNRankRecordDetails({
-            params: { record_info_id: selectedRecordInfoId},
-            headers: { wsId: wsId }
-        },{
-            success: (results) => {
-                let rankDetails = [];
-                let adRankDetails = [];
-                results.forEach(r => r.advertising_yn === 'y' ? adRankDetails.push(r) : rankDetails.push(r));
-                onSetRecordDetails(rankDetails);
-                onSetAdRecordDetails(adRankDetails);
             }
         })
     }
@@ -180,6 +187,46 @@ export function RecordDetailModalComponent({
         customBackdropControl.hideBackdrop();
     }
 
+    const handleSearchNRankRecordDetailsByInfos = async () => {
+        let infoIds = recordInfos?.map(r => r.id);
+
+        let body = {
+            record_info_ids: infoIds
+        }
+
+        await onReqSearchNRankRecordDetailsByInfos({
+            headers: { wsId: wsId },
+            body
+        }, {
+            success: (results) => {
+                let itemSet = new Set([]);
+                let details = [];
+                let adDetails = [];
+                
+                results.forEach(r => {
+                    let detailStr = r.mall_product_id + r.item_id + r.advertising_yn;
+
+                    if (r.mall_product_id && r.item_id && !itemSet.has(detailStr)) {
+                        itemSet.add(detailStr);
+
+                        if (r.advertising_yn === 'y') {
+                            adDetails.push(r);
+                        } else {
+                            details.push(r);
+                        }
+                    }
+                })
+
+                onSetRecordDetailsBySearchedInfos(results);
+                onSetTraceableRecordDetails(details);
+                onSetTraceableAdRecordDetails(adDetails);
+            },
+            fail: () => {
+                onClose();
+            }
+        })
+    }
+
     const handleCreateNRankRecordDetail = async () => {
         await onReqCreateNRankRecordDetails({
             body: { record_id: record.id, record_info_id: createRecordInfoId },
@@ -190,8 +237,7 @@ export function RecordDetailModalComponent({
     const handleOpenDetailGraphModal = (e) => {
         e.stopPropagation();
 
-        let details = [...adRecordDetails, ...recordDetails];
-        if(!details.length > 0 ) {
+        if(!recordDetailsBySearchedInfos.length > 0 ) {
             let message = '조회데이터가 존재하지 않습니다.';
 
             customToast.error(message, {
@@ -239,9 +285,8 @@ export function RecordDetailModalComponent({
                         recordInfos={recordInfos}
                         currentRecordInfoIdx={currentRecordInfoIdx}
                         selectedRecordInfo={selectedRecordInfo}
-                        // isAdRankView={isAdRankView}
-                        recordDetails={recordDetails}
-                        adRecordDetails={adRecordDetails}
+                        traceableRecordDetails={traceableRecordDetails}
+                        traceableAdRecordDetails={traceableAdRecordDetails}
 
                         onActionFoldAllOptions={onActionFoldAllOptions}
                         onActionUnfoldAllOptions={onActionUnfoldAllOptions}
@@ -321,10 +366,9 @@ export function RecordDetailModalComponent({
                     onClose={() => handleCloseDetailGraphModal()}
                     record={record}
                     recordInfos={recordInfos}
-                    // recordDetails={isAdRankView ? adRecordDetails : recordDetails}
-                    adRecordDetails={adRecordDetails}
-                    recordDetails={recordDetails}
-                    isAdRankView={isAdRankView}
+                    recordDetailsBySearchedInfos={recordDetailsBySearchedInfos}
+                    traceableRecordDetails={traceableRecordDetails}
+                    traceableAdRecordDetails={traceableAdRecordDetails}
                 />
             }
         </>

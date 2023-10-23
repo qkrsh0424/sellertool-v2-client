@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useApiHook } from "./hooks/useApiHook";
-import { useSelector } from "react-redux";
 import { CustomDialog } from "../../../../../../../../../components/dialog/v1/CustomDialog";
 import { Container, Wrapper } from "./styles/DetailRankTable.styled";
 import { RankTableFieldView } from "./view/RankTableField.view";
@@ -11,50 +9,27 @@ import ViewControlFieldView from "./view/ViewControlField.view";
 export function DetailRankTableComponent({
     open,
     onClose,
-    record,
     recordInfos,
-    recordDetails,
-    adRecordDetails,
-    isAdRankView
+    recordDetailsBySearchedInfos,
+    traceableRecordDetails,
+    traceableAdRecordDetails
 }) {
     const scrollRef = useRef(null);
 
-    const workspaceRedux = useSelector(state => state.workspaceRedux);
-    const wsId = workspaceRedux?.workspaceInfo?.id;
-
-    const { onReqSearchNRankRecordDetailByFilter } = useApiHook();
     const [recordRankDetails, setRecordRankDetails] = useState(null);
-    const [isAdRankTrakView, setIsAdRankTrakView] = useState(null);
+    const [recordAdRankDetails, setRecordAdRankDetails] = useState(null);
+    const [isAdRankTrakView, setIsAdRankTrakView] = useState(false);
 
-    let viewRecordDetails = isAdRankTrakView ? adRecordDetails : recordDetails;
-
-    useEffect(() => {
-        if(!wsId) {
-            return;
-        }
-
-        if(!record) {
-            return;
-        }
-
-        if(!(recordDetails && adRecordDetails)) {
-            return;
-        }
-
-        async function fetchInit() {
-            await handleSearchNRankRecordDetailByFilter()
-        }
-
-        fetchInit();
-    }, [record, recordDetails, adRecordDetails, wsId])
+    let viewRecordDetails = isAdRankTrakView ? traceableAdRecordDetails : traceableRecordDetails;
+    let viewRankDetails = isAdRankTrakView ? recordAdRankDetails : recordRankDetails;
 
     useEffect(() => {
-        if(isAdRankView) {
-            onChangeAdRankTrakView();
-        }else {
-            onChangeRankTrakView();
+        if(!recordDetailsBySearchedInfos) {
+            return;
         }
-    }, [isAdRankView])
+
+        handleInitDetailsTrend();
+    }, [recordDetailsBySearchedInfos])
 
     useEffect(() => {
         if(scrollRef.current) {
@@ -62,29 +37,21 @@ export function DetailRankTableComponent({
         }
     }, [isAdRankTrakView])
 
-    const handleSearchNRankRecordDetailByFilter = async () => {
-        let totalDetails = [...recordDetails, ...adRecordDetails];
-        let infoIds = recordInfos?.map(r => r.id);
-        let itemIds = totalDetails?.map(r => r.item_id);
-        let mallProductIds = totalDetails?.map(r => r.mall_product_id);
+    const handleInitDetailsTrend = () => {
+        let rankDetails = [];
+        let adRankDetails = [];
 
-        let body = {
-            info_ids: infoIds,
-            detail_item_ids: itemIds,
-            detail_mall_product_ids: mallProductIds
-        }
-
-        await onReqSearchNRankRecordDetailByFilter({
-            headers: { wsId: wsId },
-            body
-        }, {
-            success: (results) => {
-                setRecordRankDetails(results);
-            },
-            fail: () => {
-                onClose();
+        // recordDetails과 adRecordDetails 내에서 mall_product_id + item_id + advertising_yn 값이 고유하도록 세팅
+        recordDetailsBySearchedInfos.forEach(r => {
+            if (r.advertising_yn === 'y') {
+                adRankDetails.push(r);
+            } else {
+                rankDetails.push(r);
             }
-        })
+        });
+
+        setRecordRankDetails(rankDetails);
+        setRecordAdRankDetails(adRankDetails);
     }
 
     const onChangeAdRankTrakView = () => {
@@ -109,17 +76,12 @@ export function DetailRankTableComponent({
                         isAdRankTrakView={isAdRankTrakView}
                         handleChangeRankTrakView={onChangeRankTrakView}
                         handleChangeAdRankTrakView={onChangeAdRankTrakView}
-                        recordDetails={recordDetails}
-                        adRecordDetails={adRecordDetails}
+                        recordDetails={traceableRecordDetails}
+                        adRecordDetails={traceableAdRecordDetails}
                     />
                     <Wrapper ref={scrollRef}>
-                        {recordRankDetails && viewRecordDetails?.map((detail, idx) => {
-                            let currentRankDetails = recordRankDetails.filter(r => 
-                                (r.mall_product_id === detail.mall_product_id) &&
-                                (r.item_id === detail.item_id) &&
-                                (r.advertising_yn === detail.advertising_yn) &&
-                                (r.price_comparision_yn === detail.price_comparision_yn)
-                            );
+                        {viewRankDetails && viewRecordDetails?.map((detail, idx) => {
+                            let currentRankDetails = viewRankDetails?.filter(r => r.mall_product_id === detail.mall_product_id);
 
                             return (
                                 <div

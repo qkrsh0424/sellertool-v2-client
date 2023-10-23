@@ -10,8 +10,8 @@ export default function DetailControlFieldView({
     recordInfos,
     currentRecordInfoIdx,
     selectedRecordInfo,
-    recordDetails,
-    adRecordDetails,
+    traceableRecordDetails,
+    traceableAdRecordDetails,
     onActionFoldAllOptions,
     onActionUnfoldAllOptions,
     onSetCurrentRecordInfoIdx,
@@ -51,7 +51,7 @@ export default function DetailControlFieldView({
                             className='open-button'
                             onClick={(e) => onOpenDetailGraphModal(e)}
                         >
-                            <span>랭킹 추세 ( {(recordDetails?.length || 0) + (adRecordDetails?.length || 0)} ) </span>
+                            <span>랭킹 추세 ( {(traceableRecordDetails?.length || 0) + (traceableAdRecordDetails?.length || 0)} ) </span>
                             <div>
                                 <CustomBoxImage
                                     src='/images/icon/monitoring_default_344b98.svg'

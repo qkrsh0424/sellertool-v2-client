@@ -5,6 +5,10 @@ export default function useNRankRecordDetailHook() {
     const [adRecordDetails, setAdRecordDetails] = useState([]);
     const [openedSubInfoRecordDetailIds, setOpenedSubInfoRecordDetailIds] = useState([]);
     const [isFoldAll, setIsFoldAll] = useState(false);
+    const [traceableRecordDetails, setTraceableRecordDetails] = useState(null);
+    const [traceableAdRecordDetails, setTraceableAdRecordDetails] = useState(null);
+
+    const [recordDetailsBySearchedInfos, setRecordDetailsBySearchedInfos] = useState(null);
 
     useEffect(() => {
         if(!(recordDetails && adRecordDetails)) {
@@ -14,12 +18,24 @@ export default function useNRankRecordDetailHook() {
         handleInitOpenedSubInfoRecordDetailIds();
     }, [isFoldAll, recordDetails, adRecordDetails])
 
+    const onSetRecordDetailsBySearchedInfos = (data) => {
+        setRecordDetailsBySearchedInfos([...data]);
+    }
+
     const onSetRecordDetails = (data) => {
         setRecordDetails([...data])
     }
 
     const onSetAdRecordDetails = (data) => {
         setAdRecordDetails([...data])
+    }
+
+    const onSetTraceableRecordDetails = (data) => {
+        setTraceableRecordDetails([...data])
+    }
+
+    const onSetTraceableAdRecordDetails = (data) => {
+        setTraceableAdRecordDetails([...data])
     }
 
     const onAddOpenedSubInfoRecordDetailId = (recordId) => {
@@ -53,8 +69,14 @@ export default function useNRankRecordDetailHook() {
         recordDetails,
         adRecordDetails,
         openedSubInfoRecordDetailIds,
+        recordDetailsBySearchedInfos,
+        traceableRecordDetails,
+        traceableAdRecordDetails,
+        onSetRecordDetailsBySearchedInfos,
         onSetRecordDetails,
         onSetAdRecordDetails,
+        onSetTraceableRecordDetails,
+        onSetTraceableAdRecordDetails,
         onAddOpenedSubInfoRecordDetailId,
         onRemoveOpenedSubInfoRecordDetailId,
         onActionFoldAllOptions,

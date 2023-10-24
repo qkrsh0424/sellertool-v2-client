@@ -4,31 +4,29 @@ import { LabelGroup, Wrapper } from "../styles/RecordInfo.styled";
 
 export default function RecordInfoFieldView({
     record,
-    recordInfo
+    lastSearchedRecordInfo
 }) {
     return (
         record &&
         <Wrapper>
             <div className="image-box">
                 <CustomBoxImage
-                    src={recordInfo?.thumbnail_url}
+                    src={lastSearchedRecordInfo?.thumbnail_url}
                 />
             </div>
-            <div style={{ overflow: 'hidden' }}>
+            <div>
                 <LabelGroup>
-                    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        <span className='content-value' style={{ color: 'var(--mainColor)' }}>{record.mall_name}</span>
-                        <span> | </span>
-                        <span className='content-value'>{record.keyword}</span>
-                    </div>
+                    <span className='content-value' style={{ color: 'var(--mainColor)' }}>{record.mall_name}</span>
+                    <span> | </span>
+                    <span className='content-value'>{record.keyword}</span>
                 </LabelGroup>
                 <LabelGroup style={{ color: '#808080' }}>
                     <span>최근조회 </span>
                     <span>
-                        {recordInfo ?
+                        {lastSearchedRecordInfo ?
                             <>
-                                <span>{dateToYYYYMMDD(recordInfo.created_at)} </span>
-                                <span>{dateToHHmm(recordInfo.created_at)}</span>
+                                <span>{dateToYYYYMMDD(lastSearchedRecordInfo.created_at)} </span>
+                                <span>{dateToHHmm(lastSearchedRecordInfo.created_at)}</span>
                             </>
                             :
                             '-'

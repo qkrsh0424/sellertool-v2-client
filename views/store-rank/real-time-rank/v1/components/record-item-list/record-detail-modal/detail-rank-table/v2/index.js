@@ -1,0 +1,1 @@
+export { DetailRankTableComponent } from "./DetailRankTable.component"

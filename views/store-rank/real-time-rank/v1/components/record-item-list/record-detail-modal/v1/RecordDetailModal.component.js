@@ -17,6 +17,8 @@ import { customBackdropController } from "../../../../../../../../components/bac
 import FieldLoadingV2 from "../../../../../../../modules/loading/FieldLoadingV2";
 import DetailControlFieldView from "./view/DetailControlField.view";
 import useNRankRecordInfoHook from "./hooks/useNRankRecordInfoHook";
+import { DetailRankTableComponent } from "../detail-rank-table/v1";
+import _ from "lodash";
 
 const customBackdropControl = customBackdropController();
 
@@ -33,16 +35,19 @@ export function RecordDetailModalComponent({
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const { onReqSearchNRankRecordDetail, onReqChangeNRankRecordStatusToPending, onReqCreateNRankRecordDetail } = useApiHook();
-    
+    const {
+        onReqSearchNRankRecordDetails,
+        onReqChangeNRankRecordStatusToPending,
+        onReqCreateNRankRecordDetails,
+        onReqSearchNRankRecordInfos
+    } = useApiHook();
+
     const {
         recordDetails,
         adRecordDetails,
-        lastSearchedRecordInfo,
         openedSubInfoRecordDetailIds,
         onSetRecordDetails,
         onSetAdRecordDetails,
-        onActionUpdateLastSearchedRecordInfo,
         onAddOpenedSubInfoRecordDetailId,
         onRemoveOpenedSubInfoRecordDetailId,
         onActionFoldAllOptions,
@@ -50,26 +55,44 @@ export function RecordDetailModalComponent({
     } = useNRankRecordDetailHook({ record });
 
     const {
+        recordInfos,
         selectedRecordInfo,
         currentRecordInfoIdx,
+        lastSearchedRecordInfo,
         onSetCurrentRecordInfoIdx,
+        onSetRecordInfos,
         onChangeSelectedRecordInfo
     } = useNRankRecordInfoHook({ record });
 
     const [isAdRankView, setIsAdRankView] = useState(false);
     const [isInitSearchLoading, setIsInitSearchLoading] = useState(false);
 
-    useEffect(() => {
-        if(record?.infos.length > 0) {
-            onSetCurrentRecordInfoIdx(record.infos.length-1)
-        }
+    const [detailGraphModalOpen, setDetailGraphModalOpen] = useState(false);
+    const [selectedRecordDetail, setSelectedRecordDetail] = useState(null);
 
-        if(!(record?.current_nrank_record_info_id)) {
+    useEffect(() => {
+        if(!wsId) {
             return;
         }
 
-        onActionUpdateLastSearchedRecordInfo(record.current_nrank_record_info_id)
-    }, [record])
+        if(!record) {
+            return;
+        }
+
+        async function initialize() {
+            await handleSearchNRankRecordInfos();
+        }
+
+        initialize();
+    }, [record, wsId])
+
+    useEffect(() => {
+        if(!recordInfos) {
+            return;
+        }
+
+        onSetCurrentRecordInfoIdx(recordInfos.length-1)
+    }, [recordInfos])
 
     useEffect(() => {
         if(!wsId) {
@@ -80,13 +103,13 @@ export function RecordDetailModalComponent({
             return;
         }
 
-        async function initialize() {
+        async function fetchSearchDetails() {
             setIsInitSearchLoading(true);
             await handleSearchNRankRecordDetail()
             setIsInitSearchLoading(false);
         }
 
-        initialize()
+        fetchSearchDetails();
     }, [selectedRecordInfo, wsId])
 
     const handleChangeAdRankView = () => {
@@ -97,10 +120,22 @@ export function RecordDetailModalComponent({
         setIsAdRankView(false);
     }
 
+    const handleSearchNRankRecordInfos = async () => {
+        await onReqSearchNRankRecordInfos({
+            params: { record_id: record.id },
+            headers: { wsId: wsId }
+        }, {
+            success: (results) => {
+                let sortedResults = _.sortBy(results, 'created_at');
+                onSetRecordInfos(sortedResults);
+            }
+        })
+    }
+
     const handleSearchNRankRecordDetail = async () => {
         let selectedRecordInfoId = selectedRecordInfo?.id;
 
-        await onReqSearchNRankRecordDetail({
+        await onReqSearchNRankRecordDetails({
             params: { record_info_id: selectedRecordInfoId},
             headers: { wsId: wsId }
         },{
@@ -145,10 +180,36 @@ export function RecordDetailModalComponent({
     }
 
     const handleCreateNRankRecordDetail = async () => {
-        await onReqCreateNRankRecordDetail({
+        await onReqCreateNRankRecordDetails({
             body: { record_id: record.id, record_info_id: createRecordInfoId },
             headers: { wsId: wsId }
         })
+    }
+
+    const handleOpenDetailGraphModal = (e, detail) => {
+        e.stopPropagation();
+
+        try {
+            if(!detail.mall_product_id) {
+                throw new Error("검색이 불가능한 항목입니다.");
+            }
+        } catch (err) {
+            customToast.error(err?.message, {
+                ...defaultOptions,
+                toastId: err?.message
+            });
+            return;
+        }
+
+        setSelectedRecordDetail(detail);
+        setDetailGraphModalOpen(true);
+    }
+
+
+    const handleCloseDetailGraphModal = () => {
+        setSelectedRecordDetail(null);
+        
+        setDetailGraphModalOpen(false);
     }
 
     let isPending = currentPendingRecordIds?.includes(record?.id);
@@ -165,13 +226,13 @@ export function RecordDetailModalComponent({
                 <Wrapper>
                     <RecordInfoFieldView
                         record={record}
-                        recordInfo={lastSearchedRecordInfo}
+                        lastSearchedRecordInfo={lastSearchedRecordInfo}
                     />
                     {/* <SubInfoFieldView
                         record={record}
                     /> */}
                     <ButtonFieldView
-                        recordInfo={lastSearchedRecordInfo}
+                        lastSearchedRecordInfo={lastSearchedRecordInfo}
                         isPending={isPending}
                         isInitSearchLoading={isInitSearchLoading}
                         onSubmit={handleChangeNRankRecordStatusToPending}
@@ -179,6 +240,7 @@ export function RecordDetailModalComponent({
                     <DetailControlFieldView
                         isPending={isPending}
                         record={record}
+                        recordInfos={recordInfos}
                         currentRecordInfoIdx={currentRecordInfoIdx}
                         selectedRecordInfo={selectedRecordInfo}
                         onActionFoldAllOptions={onActionFoldAllOptions}
@@ -222,12 +284,13 @@ export function RecordDetailModalComponent({
 
                                     {isAdRankView ?
                                         <AdRankDetailFieldView
-                                            record={record}
                                             lastSearchedRecordInfo={lastSearchedRecordInfo}
                                             adRecordDetails={adRecordDetails}
                                             openedSubInfoRecordDetailIds={openedSubInfoRecordDetailIds}
                                             onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
                                             onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
+
+                                            onOpenDetailGraphModal={handleOpenDetailGraphModal}
                                         />
                                         :
                                         <RankDetailFieldView
@@ -237,17 +300,28 @@ export function RecordDetailModalComponent({
                                             openedSubInfoRecordDetailIds={openedSubInfoRecordDetailIds}
                                             onAddOpenedSubInfoRecordDetailId={onAddOpenedSubInfoRecordDetailId}
                                             onRemoveOpenedSubInfoRecordDetailId={onRemoveOpenedSubInfoRecordDetailId}
+
+                                            onOpenDetailGraphModal={handleOpenDetailGraphModal}
                                         />
                                     }
                                 </>
                             }
+
+                            {/* v1 */}
+                            <DetailRankTableComponent
+                                open={detailGraphModalOpen}
+                                onClose={() => handleCloseDetailGraphModal()}
+                                record={record}
+                                recordInfos={recordInfos}
+                                selectedRecordDetail={selectedRecordDetail}
+                            />
                         </div>
                     </div>
 
                     <div className='detail-info-text'>
                         <span>{currentRecordInfoIdx + 1}</span>
                         <span> / </span>
-                        <span>{record?.infos.length || 1}</span>
+                        <span>{recordInfos?.length || 1}</span>
                     </div>
                 </Wrapper>
             </CustomDialog>

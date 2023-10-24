@@ -47,9 +47,10 @@ export function RecordItemListComponent({
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
     const [recordDeleteModalOpen, setRecordDeleteModalOpen] = useState(false);
-
-    const [createRecordInfoId, setCreateRecordInfoId] = useState(null);
     const [categorySelectorModalOpen, setCategorySelectorModalOpen] = useState(false);
+
+    // 랭킹 조회 요청 시 client에서 생성한 record info id를 참고해 record info 를 생성한다
+    const [createRecordInfoId, setCreateRecordInfoId] = useState(null);
 
     useEffect(() => {
         if(!recordList) {

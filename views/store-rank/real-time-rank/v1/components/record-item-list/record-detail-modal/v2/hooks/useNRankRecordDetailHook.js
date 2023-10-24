@@ -65,6 +65,12 @@ export default function useNRankRecordDetailHook() {
         setIsFoldAll(false);
     }
 
+    const checkStatusForModalOpen = () => {
+        if(![...traceableAdRecordDetails, ...traceableRecordDetails].length > 0 ) {
+            throw Error('조회데이터가 존재하지 않습니다.')
+        }
+    }
+
     return {
         recordDetails,
         adRecordDetails,
@@ -80,6 +86,7 @@ export default function useNRankRecordDetailHook() {
         onAddOpenedSubInfoRecordDetailId,
         onRemoveOpenedSubInfoRecordDetailId,
         onActionFoldAllOptions,
-        onActionUnfoldAllOptions
+        onActionUnfoldAllOptions,
+        checkStatusForModalOpen
     }
 }

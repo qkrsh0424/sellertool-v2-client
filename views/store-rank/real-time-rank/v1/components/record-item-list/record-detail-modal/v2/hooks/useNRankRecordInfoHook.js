@@ -38,7 +38,6 @@ export default function useNRankRecordInfoHook({
         if(idx < 0 || idx >= recordInfos?.length) {
             return;
         }
-
         setCurrentRecordInfoIdx(idx);
     }
 

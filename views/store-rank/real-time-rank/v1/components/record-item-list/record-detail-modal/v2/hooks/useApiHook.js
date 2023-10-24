@@ -47,7 +47,7 @@ export function useApiHook() {
             })
     }
 
-    const onReqChangeNRankRecordStatusToPending = async (
+    const onReqChangeNRankRecordStatusToPendingAndCreateNRankRecordInfo = async (
         options = {headers: {}, params: {}, body: {}},
         callbackFn = {
             success: (results, response) => {},
@@ -82,7 +82,7 @@ export function useApiHook() {
     }
 
     return {
-        onReqChangeNRankRecordStatusToPending,
+        onReqChangeNRankRecordStatusToPendingAndCreateNRankRecordInfo,
         onReqCreateNRankRecordDetails,
         onReqSearchNRankRecordDetailsByInfos,
         onReqSearchNRankRecordInfos

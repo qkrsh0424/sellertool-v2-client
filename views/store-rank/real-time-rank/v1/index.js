@@ -41,15 +41,15 @@ export default function MainComponent(){
         onReqSearchSubscriptionPlanSearchInfo,
         onReqCreateSearchInput,
         onReqDeleteNRankRecord,
-        onReqSearchNRankRecordList,
-        onReqSearchNRankRecordListCount,
+        onReqSearchNRankRecordSlice,
+        onReqSearchNRankRecordCountOfSlice,
         onReqChangeNRankRecordListStatusToFail,
         onReqSearchNRankRecordCategories
     } = useApiHook();
 
     const { rankSearchInfo, onSetRankSearchInfo } = useSubscriptionPlanSearchInfoHook();
-    const { keyword, mallName, onChangeKeyword, onChangeMallName, onClearKeyword, onClearMallName, checkSearchInfoForm } = useSearchInputHook();
     const { recordList, recordListPage, currentPendingRecordIds, onSetRecordList, onSetRecordListPage, onSetCurrentPendingRecordIds } = useNRankRecordListHook();
+    const { keyword, mallName, onChangeKeyword, onChangeMallName, onClearKeyword, onClearMallName, checkSearchInfoForm } = useSearchInputHook({ recordList });
     const { categories, onSetCategories } = useNRankRecordCategoriesHook();
     const { totalSize, totalPages, onSetTotalSize, onSetTotalPages } = useItemCountHook();
 
@@ -93,10 +93,6 @@ export default function MainComponent(){
         e.preventDefault();
 
         try {
-            if(recordList?.find(r => r.keyword === keyword && r.mall_name === mallName)) {
-                throw Error("동일한 검색 항목이 존재합니다")
-            }
-
             checkSearchInfoForm();
         } catch (err) {
             customToast.error(err?.message, {
@@ -174,7 +170,7 @@ export default function MainComponent(){
             size: router?.query?.size || DEFAULT_SIZE
         }
 
-        await onReqSearchNRankRecordList({
+        await onReqSearchNRankRecordSlice({
             headers: { wsId: wsId },
             params
         }, {
@@ -205,7 +201,7 @@ export default function MainComponent(){
             size
         }
 
-        await onReqSearchNRankRecordListCount({
+        await onReqSearchNRankRecordCountOfSlice({
             headers: { wsId: wsId },
             params
         }, {

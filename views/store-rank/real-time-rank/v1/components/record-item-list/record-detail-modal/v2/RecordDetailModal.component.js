@@ -19,6 +19,7 @@ import DetailControlFieldView from "./view/DetailControlField.view";
 import useNRankRecordInfoHook from "./hooks/useNRankRecordInfoHook";
 import { DetailRankTableComponent } from "../detail-rank-table/v2";
 import _ from "lodash";
+import InfoSelectorFieldView from "./view/InfoSelectorField.view";
 
 const customBackdropControl = customBackdropController();
 
@@ -38,7 +39,7 @@ export function RecordDetailModalComponent({
     const {
         onReqSearchNRankRecordInfos,
         onReqSearchNRankRecordDetailsByInfos,
-        onReqChangeNRankRecordStatusToPending,
+        onReqChangeNRankRecordStatusToPendingAndCreateNRankRecordInfo,
         onReqCreateNRankRecordDetails,
     } = useApiHook();
 
@@ -57,7 +58,8 @@ export function RecordDetailModalComponent({
         onAddOpenedSubInfoRecordDetailId,
         onRemoveOpenedSubInfoRecordDetailId,
         onActionFoldAllOptions,
-        onActionUnfoldAllOptions
+        onActionUnfoldAllOptions,
+        checkStatusForModalOpen
     } = useNRankRecordDetailHook();
 
     const {
@@ -72,8 +74,7 @@ export function RecordDetailModalComponent({
 
     const [isAdRankView, setIsAdRankView] = useState(false);
     const [isInitSearchLoading, setIsInitSearchLoading] = useState(false);
-
-    const [detailGraphModalOpen, setDetailGraphModalOpen] = useState(false);
+    const [detailTrendModalOpen, setDetailTrendModalOpen] = useState(false);
 
     useEffect(() => {
         if(!wsId) {
@@ -98,11 +99,11 @@ export function RecordDetailModalComponent({
             return;
         }
 
-        async function searchDetails() {
+        async function fetchRecordDetails() {
             await handleSearchNRankRecordDetailsByInfos();
         }
 
-        searchDetails();
+        fetchRecordDetails();
         onSetCurrentRecordInfoIdx(recordInfos.length-1)
     }, [recordInfos])
 
@@ -114,36 +115,9 @@ export function RecordDetailModalComponent({
         if(!recordDetailsBySearchedInfos) {
             return;
         }
-
         
         handleInitDetailsBySelectedRecordInfo();
     }, [selectedRecordInfo, recordDetailsBySearchedInfos])
-
-    const handleInitDetailsBySelectedRecordInfo = () => {
-        let data = recordDetailsBySearchedInfos.filter(r => r.nrank_record_info_id === selectedRecordInfo.id);
-
-        let details = [];
-        let adDetails = [];
-
-        data.forEach(r => {
-            if(r.advertising_yn === 'y') {
-                adDetails.push(r);
-            }else {
-                details.push(r);
-            }
-        })
-
-        onSetRecordDetails(details);
-        onSetAdRecordDetails(adDetails);
-    }
-
-    const handleChangeAdRankView = () => {
-        setIsAdRankView(true);
-    }
-
-    const handleChangeRankView = () => {
-        setIsAdRankView(false);
-    }
 
     const handleSearchNRankRecordInfos = async () => {
         await onReqSearchNRankRecordInfos({
@@ -172,7 +146,7 @@ export function RecordDetailModalComponent({
 
         customBackdropControl.showBackdrop();
         let recordId = record.id;
-        await onReqChangeNRankRecordStatusToPending({
+        await onReqChangeNRankRecordStatusToPendingAndCreateNRankRecordInfo({
             headers: { wsId: wsId },
             params: { id: recordId },
             body: { record_info_id: createRecordInfoId }
@@ -216,7 +190,6 @@ export function RecordDetailModalComponent({
                         }
                     }
                 })
-
                 onSetRecordDetailsBySearchedInfos(results);
                 onSetTraceableRecordDetails(details);
                 onSetTraceableAdRecordDetails(adDetails);
@@ -234,25 +207,49 @@ export function RecordDetailModalComponent({
         })
     }
 
-    const handleOpenDetailGraphModal = (e) => {
-        e.stopPropagation();
+    const handleInitDetailsBySelectedRecordInfo = () => {
+        let data = recordDetailsBySearchedInfos.filter(r => r.nrank_record_info_id === selectedRecordInfo.id);
 
-        if(![...traceableAdRecordDetails, ...traceableRecordDetails].length > 0 ) {
-            let message = '조회데이터가 존재하지 않습니다.';
+        let details = [];
+        let adDetails = [];
 
-            customToast.error(message, {
-                ...defaultOptions,
-                toastId: message
-            });
-            return;    
-        }
+        data.forEach(r => {
+            if(r.advertising_yn === 'y') {
+                adDetails.push(r);
+            }else {
+                details.push(r);
+            }
+        })
 
-        setDetailGraphModalOpen(true);
+        onSetRecordDetails(details);
+        onSetAdRecordDetails(adDetails);
     }
 
+    const handleChangeAdRankView = () => {
+        setIsAdRankView(true);
+    }
 
-    const handleCloseDetailGraphModal = () => {
-        setDetailGraphModalOpen(false);
+    const handleChangeRankView = () => {
+        setIsAdRankView(false);
+    }
+
+    const handleOpenDetailTrendModal = (e) => {
+        e.stopPropagation();
+
+        try {
+            checkStatusForModalOpen();
+        } catch (err) {
+            customToast.error(err?.message, {
+                ...defaultOptions,
+                toastId: err?.message
+            });
+            return;
+        }
+        setDetailTrendModalOpen(true);
+    }
+
+    const handleCloseDetailTrendModal = () => {
+        setDetailTrendModalOpen(false);
     }
 
     let isPending = currentPendingRecordIds?.includes(record?.id);
@@ -291,7 +288,16 @@ export function RecordDetailModalComponent({
                         onActionUnfoldAllOptions={onActionUnfoldAllOptions}
                         onSetCurrentRecordInfoIdx={onSetCurrentRecordInfoIdx}
                         onChangeSelectedRecordInfo={onChangeSelectedRecordInfo}
-                        onOpenDetailGraphModal={handleOpenDetailGraphModal}
+                        onOpenDetailTrendModal={handleOpenDetailTrendModal}
+                    />
+
+                    <InfoSelectorFieldView
+                        isPending={isPending}
+                        recordInfos={recordInfos}
+                        currentRecordInfoIdx={currentRecordInfoIdx}
+                        selectedRecordInfo={selectedRecordInfo}
+                        onSetCurrentRecordInfoIdx={onSetCurrentRecordInfoIdx}
+                        onChangeSelectedRecordInfo={onChangeSelectedRecordInfo}
                     />
 
                     <ViewControlFieldView
@@ -359,10 +365,10 @@ export function RecordDetailModalComponent({
             </CustomDialog>
 
             {/* detail rank trend modal */}
-            {detailGraphModalOpen &&
+            {detailTrendModalOpen &&
                 <DetailRankTableComponent
-                    open={detailGraphModalOpen}
-                    onClose={() => handleCloseDetailGraphModal()}
+                    open={detailTrendModalOpen}
+                    onClose={() => handleCloseDetailTrendModal()}
                     record={record}
                     recordInfos={recordInfos}
                     recordDetailsBySearchedInfos={recordDetailsBySearchedInfos}

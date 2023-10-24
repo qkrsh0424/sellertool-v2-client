@@ -69,7 +69,7 @@ export function useApiHook() {
             })
     }
 
-    const onReqSearchNRankRecordList = async (
+    const onReqSearchNRankRecordSlice = async (
         options = {headers: {}, params: {}},
         callbackFn = {
             success: (results, response) => {},
@@ -90,7 +90,7 @@ export function useApiHook() {
             })
     }
 
-    const onReqSearchNRankRecordListCount = async (
+    const onReqSearchNRankRecordCountOfSlice = async (
         options = {headers: {}, params: {}},
         callbackFn = {
             success: (results, response) => {},
@@ -157,8 +157,8 @@ export function useApiHook() {
         onReqSearchSubscriptionPlanSearchInfo,
         onReqCreateSearchInput,
         onReqDeleteNRankRecord,
-        onReqSearchNRankRecordList,
-        onReqSearchNRankRecordListCount,
+        onReqSearchNRankRecordSlice,
+        onReqSearchNRankRecordCountOfSlice,
         onReqChangeNRankRecordListStatusToFail,
         onReqSearchNRankRecordCategories
     }

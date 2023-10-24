@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { productOptionDataConnect } from "../../../../../../../data_connect/productOptionDataConnect";
+import { ProductOptionDataConnect } from "../../../../../../../data_connect/productOptionDataConnect";
 import defaultErrorHandler from "../../../../../../../handler/dataConnectErrorHandler";
 import { useSelector } from "react-redux";
+
+const productOptionDataConnect = ProductOptionDataConnect.baseInventoryPage();
 
 export default function useProductOptionsHook() {
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
@@ -29,7 +31,7 @@ export default function useProductOptionsHook() {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await productOptionDataConnect().searchPositionTotalSize(params, headers)
+        await productOptionDataConnect.searchPositionTotalSize(params, headers)
             .then(res => {
                 if (res.status === 200) {
                     let result = res.data.data;

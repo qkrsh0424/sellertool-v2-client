@@ -1,8 +1,10 @@
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { productCategoryDataConnect } from "../../../../../data_connect/productCategoryDataConnect";
+import { ProductCategoryDataConnect } from "../../../../../data_connect/productCategoryDataConnect";
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
+
+const productCategoryDataConnect = ProductCategoryDataConnect.baseInventoryPage();
 
 export default function useProductCategoriesHook(props) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
@@ -23,7 +25,7 @@ export default function useProductCategoriesHook(props) {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await productCategoryDataConnect().searchList(headers)
+        await productCategoryDataConnect.searchList(headers)
             .then(res => {
                 if (res.status === 200) {
                     setProductCategories(res.data.data);

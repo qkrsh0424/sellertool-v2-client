@@ -2,8 +2,10 @@ import _ from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { productSubCategoryDataConnect } from "../../../../../data_connect/productSubCategoryDataConnect";
+import { ProductSubCategoryDataConnect } from "../../../../../data_connect/productSubCategoryDataConnect";
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
+
+const productSubCategoryDataConnect = ProductSubCategoryDataConnect.baseInventoryPage();
 
 export default function useProductSubCategoriesHook({
     productCategory
@@ -29,7 +31,7 @@ export default function useProductSubCategoriesHook({
         let headers = {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
-        await productSubCategoryDataConnect().searchList(params, headers)
+        await productSubCategoryDataConnect.searchList(params, headers)
             .then(res => {
                 if (res.status === 200) {
                     setProductSubCategories(res.data.data);

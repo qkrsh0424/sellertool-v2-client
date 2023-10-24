@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { productOptionDataConnect } from "../../../../../data_connect/productOptionDataConnect";
+import { ProductOptionDataConnect } from "../../../../../data_connect/productOptionDataConnect";
 import defaultErrorHandler from "../../../../../handler/dataConnectErrorHandler";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+
+const productOptionDataConnect = ProductOptionDataConnect.baseInventoryPage();
 
 export default function useProductOptionsHook(props) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
@@ -52,7 +54,7 @@ export default function useProductOptionsHook(props) {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await productOptionDataConnect().searchPagePositionInventory(params, headers)
+        await productOptionDataConnect.searchPagePositionInventory(params, headers)
             .then(res => {
                 if (res.status === 200) {
                     setProductOptionPage(res.data.data);

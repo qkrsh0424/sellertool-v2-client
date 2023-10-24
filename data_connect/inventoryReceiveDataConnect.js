@@ -3,10 +3,16 @@ import withMainApiCsrfWrapper from "../utils/withMainApiCsrfWrapper";
 
 const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress;
 
-const inventoryReceiveDataConnect = () => {
+export const InventoryReceiveDataConnect = {
+    baseInventoryPage: baseInventoryPage
+}
+
+function baseInventoryPage() {
+    const BASE_URL = `${API_ADDRESS}/page-api/inventory/v1/inventory-receives`;
+
     return {
         searchSeperatedItems: async function (params, headers) {
-            return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/inventory-receives/${params?.inventoryReceiveId}/inventory-receive-seperated-items`, {
+            return await axiosAuthInterceptor.get(`${BASE_URL}/${params?.inventoryReceiveId}/inventory-receive-seperated-items`, {
                 headers: headers,
                 withCredentials: true,
                 xsrfCookieName: 'x_api_csrf_token',
@@ -23,7 +29,7 @@ const inventoryReceiveDataConnect = () => {
          */
         createAll: async function (body, headers) {
             return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory-receives/all`, body, {
+                () => axiosAuthInterceptor.post(`${BASE_URL}/all`, body, {
                     headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
@@ -41,7 +47,7 @@ const inventoryReceiveDataConnect = () => {
          */
         changeMemo: async function (body, headers) {
             return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/inventory-receives/target:memo`, body, {
+                () => axiosAuthInterceptor.patch(`${BASE_URL}/target:memo`, body, {
                     headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
@@ -59,7 +65,7 @@ const inventoryReceiveDataConnect = () => {
          */
         delete: async function (body, headers) {
             return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/inventory-receives/${body.id}`, {
+                () => axiosAuthInterceptor.delete(`${BASE_URL}/${body.id}`, {
                     headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
@@ -69,7 +75,7 @@ const inventoryReceiveDataConnect = () => {
         },
         changePurchaseCost_InventoryReceiveSeperatedItems: async function (body, headers) {
             return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/inventory-receives/${body?.inventoryReceiveId}/inventory-receive-seperated-items/target:purchaseCost`, body?.inventoryReceiveSeperatedItems, {
+                () => axiosAuthInterceptor.patch(`${BASE_URL}/${body?.inventoryReceiveId}/inventory-receive-seperated-items/target:purchaseCost`, body?.inventoryReceiveSeperatedItems, {
                     headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
@@ -78,8 +84,4 @@ const inventoryReceiveDataConnect = () => {
             )
         }
     }
-}
-
-export {
-    inventoryReceiveDataConnect
 }

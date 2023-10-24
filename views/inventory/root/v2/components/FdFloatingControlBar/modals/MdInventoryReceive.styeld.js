@@ -12,6 +12,65 @@ export const ContentContainer = styled.div`
     padding: 0 20px;
 `;
 
+export const DateTimeWrapper = styled.div`
+    margin-bottom: 20px;
+
+    .flexible-row{
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 5px;
+    }
+
+    .flexible-align-center{
+        align-items: center;
+    }
+
+    .flexible-gap-5{
+        gap: 5px;
+    }
+
+    label{
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 700;
+        color: #222;
+    }
+
+    .resetBtn{
+        cursor: pointer;
+        border:none;
+        border-radius: 5px;
+        padding:0;
+        margin: 0;
+        width:60px;
+        height: 25px;
+        font-size: 13px;
+        font-weight: 600;
+        background: var(--grayButtonColor);
+        color: #000;
+
+        &:hover{
+            background: var(--grayButtonHoverColor);
+        }
+    }
+
+    .timeSelectorBtn{
+        width:200px;
+        height: 40px;
+        background: #fff;
+        border: 1px solid #f0f0f0;
+        color:#444;
+        border-radius: 5px;
+        font-size: 13px;
+        font-weight: 700;
+        transition: all .3s;
+
+        &:hover{
+            box-shadow: var(--defaultBoxShadow);
+        }
+    }
+`;
+
 export const TableWrapper = styled.div`
     /* padding: 10px 20px; */
 `;

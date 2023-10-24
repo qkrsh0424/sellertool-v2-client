@@ -174,8 +174,8 @@ export default function RankDetailFieldView({
                                                 />
                                             </div>
                                             <div>
-                                                <span>{detail.score_info ?? 0}</span>
-                                                <span>({detail.review_count ?? 0})</span>
+                                                <span>{detail.score_info ?? '-'}</span>
+                                                <span>({detail.review_count ?? '-'})</span>
                                             </div>
                                         </DetailInfoBox>
                                         <DetailInfoBox>
@@ -186,7 +186,7 @@ export default function RankDetailFieldView({
                                                 />
                                             </div>
                                             <div>
-                                                <span>({detail.purchase_count ?? 0})</span>
+                                                <span>({detail.purchase_count ?? '-'})</span>
                                             </div>
                                         </DetailInfoBox>
                                         <DetailInfoBox>
@@ -197,7 +197,7 @@ export default function RankDetailFieldView({
                                                 />
                                             </div>
                                             <div>
-                                                <span>({detail.keep_count ?? 0})</span>
+                                                <span>({detail.keep_count ?? '-'})</span>
                                             </div>
                                         </DetailInfoBox>
                                     </SubInfoGroupBox>

@@ -148,8 +148,7 @@ export function RecordDetailModalComponent({
         let recordId = record.id;
         await onReqChangeNRankRecordStatusToPendingAndCreateNRankRecordInfo({
             headers: { wsId: wsId },
-            params: { id: recordId },
-            body: { record_info_id: createRecordInfoId }
+            body: { record_id: recordId, record_info_id: createRecordInfoId }
         }, {
             success: () => {
                 let recordIds = [...currentPendingRecordIds].concat(recordId);

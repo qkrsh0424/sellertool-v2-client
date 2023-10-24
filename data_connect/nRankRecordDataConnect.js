@@ -39,20 +39,9 @@ const nRankRecordDataConnect = () => {
                 })
             )
         },
-        // deprecated..
-        // changeStatusToPending: async function (headers, params, body) {
-        //     return await withStoreRankApiCsrfWrapper(
-        //         () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/nrank-records/${params.id}/target:status/action:pending`, body,  {
-        //             headers,
-        //             withCredentials: true,
-        //             xsrfCookieName: 'x_nrank_api_csrf_token',
-        //             xsrfHeaderName: 'X-XSRF-TOKEN'
-        //         })
-        //     )
-        // },
-        changeStatusToPendingAndCreateRecordInfo: async function (headers, params, body) {
+        changeStatusToPendingAndCreateRecordInfo: async function (headers, body) {
             return await withStoreRankApiCsrfWrapper(
-                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/nrank-records/${params.id}/target:status/action:pending`, body,  {
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/nrank-records/for:nrankSearchModal/action:searchStart`, body,  {
                     headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_nrank_api_csrf_token',

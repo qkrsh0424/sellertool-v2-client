@@ -48,12 +48,12 @@ export function useApiHook() {
     }
 
     const onReqChangeNRankRecordStatusToPendingAndCreateNRankRecordInfo = async (
-        options = {headers: {}, params: {}, body: {}},
+        options = {headers: {}, body: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().changeStatusToPendingAndCreateRecordInfo(options.headers, options.params, options.body)
+        await nRankRecordDataConnect().changeStatusToPendingAndCreateRecordInfo(options.headers, options.body)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data);

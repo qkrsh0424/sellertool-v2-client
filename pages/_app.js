@@ -25,7 +25,12 @@ import "nprogress/nprogress.css";
 import { CustomToastContainer } from '../components/toast/custom-react-toastify/v1';
 import { CustomDefaultBackdrop } from '../components/backdrop/default/v1';
 
-const theme = createTheme();
+// const theme = createTheme();
+const theme = createTheme({
+	typography: {
+		fontFamily: 'var(--mainFont)'
+	}
+});
 
 Router.onRouteChangeStart = () => {
 	NProgress.start();

@@ -22,6 +22,11 @@ function dateToYYYYMMDD(idate) {
     return moment(date).format("YYYY.MM.DD");
 }
 
+function dateToMMDD(idate) {
+    var date = new Date(idate);
+    return moment(date).format("MM.DD");
+}
+
 function dateToHHmm(idate) {
     var date = new Date(idate);
     // var h = date.getHours() < 12 ? "오전 " : "오후 ";
@@ -56,6 +61,7 @@ export {
     setPlusTime,
     diffTimeToHHmmss,
     dateToYYYYMMDD,
+    dateToMMDD,
     dateToHHmm,
     strToYYYYMMDD,
     getUTCStartTime

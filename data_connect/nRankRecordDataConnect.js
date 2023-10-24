@@ -15,14 +15,14 @@ const nRankRecordDataConnect = () => {
                 })
             )
         },
-        searchRecordList: async function (headers, params) {
+        searchSlice: async function (headers, params) {
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-records/slice`, {
                 headers,
                 params,
                 withCredentials: true
             })
         },
-        searchRecordListCount: async function (headers, params) {
+        searchCountOfSlice: async function (headers, params) {
             return await axiosAuthInterceptor.get(`${API_ADDRESS}/api/v1/nrank-records/count`, {
                 headers,
                 params,
@@ -39,9 +39,9 @@ const nRankRecordDataConnect = () => {
                 })
             )
         },
-        changeStatusToPending: async function (headers, params, body) {
+        changeStatusToPendingAndCreateRecordInfo: async function (headers, body) {
             return await withStoreRankApiCsrfWrapper(
-                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/nrank-records/${params.id}/target:status/action:pending`, body,  {
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/nrank-records/for:nrankSearchModal/action:searchStart`, body,  {
                     headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_nrank_api_csrf_token',

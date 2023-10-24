@@ -4,6 +4,8 @@ import { useState } from "react"
 export default function useNRankRecordInfoHook({
     record
 }) {
+    const [recordInfos, setRecordInfos] = useState(null);
+    const [lastSearchedRecordInfo, setLastSearchedRecordInfo] = useState(null);
     const [currentRecordInfoIdx, setCurrentRecordInfoIdx] = useState(null);
     const [selectedRecordInfo, setSelectedRecordInfo] = useState(null);
 
@@ -12,40 +14,57 @@ export default function useNRankRecordInfoHook({
             return;
         }
 
+        onInitLastSearchedRecordInfo();
+    }, [record])
+
+    useEffect(() => {
+        if(!recordInfos) {
+            return;
+        }
+
         if(currentRecordInfoIdx !== 0 && !currentRecordInfoIdx) {
             return;
         }
 
-        onUpdateSelectedRecordInfo();
-    }, [record, currentRecordInfoIdx])
+        onSetSelectedRecordInfoByCurrentIdx();
+    }, [recordInfos, currentRecordInfoIdx])
+
+    const onInitLastSearchedRecordInfo = () => {
+        let info = record.nrank_record_info
+        setLastSearchedRecordInfo(info)
+    }
 
     const onSetCurrentRecordInfoIdx = (idx) => {
-        if(idx < 0 || idx >= record?.infos.length) {
+        if(idx < 0 || idx >= recordInfos?.length) {
             return;
         }
 
         setCurrentRecordInfoIdx(idx);
     }
 
-    const onUpdateSelectedRecordInfo = () => {
-        let infos = [...record.infos]
-        let infoId = infos[currentRecordInfoIdx]
-        setSelectedRecordInfo(infoId);
-    }
-
     const onChangeSelectedRecordInfo = (e) => {
         let infoId = e.target.value;
-        let infoIdx = record.infos.findIndex(r => r.id === infoId);
-        let value = record.infos[infoIdx];
+        let infoIdx = recordInfos.findIndex(r => r.id === infoId);
 
         setCurrentRecordInfoIdx(infoIdx);
-        setSelectedRecordInfo(value);
+    }
+
+    const onSetRecordInfos = (infos) => {
+        setRecordInfos([...infos]);
+    }
+
+    const onSetSelectedRecordInfoByCurrentIdx = () => {
+        let info = recordInfos[currentRecordInfoIdx];
+        setSelectedRecordInfo(info);
     }
 
     return {
+        recordInfos,
+        lastSearchedRecordInfo,
         selectedRecordInfo,
         currentRecordInfoIdx,
         onSetCurrentRecordInfoIdx,
-        onChangeSelectedRecordInfo
+        onChangeSelectedRecordInfo,
+        onSetRecordInfos
     }
 }

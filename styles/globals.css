@@ -10,7 +10,6 @@
     --mainColorOpacity200: #ccd2e6;
     --mainColorOpacity300: #b3bbd9;
     --mainColorOpacity400: #9aa5cc;
-    /* --mainColorOpacity500: #344b9880; */
     --mainColorOpacity500: #808fbf;
     --mainColorOpacity600: #6677b2;
     --mainColorOpacity700: #596cac;
@@ -51,8 +50,10 @@
     --defaultPurpleColorOpacity700: #9065e3;
     --defaultModalCloseColor: #959eae;
     --contentHeadBackground: #eef2f9;
-    --publicWorkspaceColor:#5fcf80;
-    --plusWorkspaceColor:#8250df;
+    --publicWorkspaceColor: #5fcf80;
+    --plusWorkspaceColor: #8250df;
+    --grayButtonColor: #efefef;
+    --grayButtonHoverColor: #dbdbdb;
 }
 
 html,

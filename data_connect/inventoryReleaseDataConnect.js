@@ -3,7 +3,13 @@ import withMainApiCsrfWrapper from "../utils/withMainApiCsrfWrapper";
 
 const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress;
 
-const inventoryReleaseDataConnect = () => {
+export const InventoryReleaseDataConnect = {
+    baseInventoryPage: baseInventoryPage
+}
+
+function baseInventoryPage() {
+    const BASE_URL = `${API_ADDRESS}/page-api/inventory/v1/inventory-releases`;
+
     return {
         /**
          * 
@@ -15,7 +21,7 @@ const inventoryReleaseDataConnect = () => {
          */
         createAll: async function (body, headers) {
             return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/inventory-releases/all`, body, {
+                () => axiosAuthInterceptor.post(`${BASE_URL}/all`, body, {
                     headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
@@ -33,7 +39,7 @@ const inventoryReleaseDataConnect = () => {
          */
         changeMemo: async function (body, headers) {
             return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.patch(`${API_ADDRESS}/api/v1/inventory-releases/target:memo`, body, {
+                () => axiosAuthInterceptor.patch(`${BASE_URL}/target:memo`, body, {
                     headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
@@ -51,7 +57,7 @@ const inventoryReleaseDataConnect = () => {
          */
         delete: async function (body, headers) {
             return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.delete(`${API_ADDRESS}/api/v1/inventory-releases/${body.id}`, {
+                () => axiosAuthInterceptor.delete(`${BASE_URL}/${body.id}`, {
                     headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',
@@ -60,8 +66,4 @@ const inventoryReleaseDataConnect = () => {
             )
         }
     }
-}
-
-export {
-    inventoryReleaseDataConnect
 }

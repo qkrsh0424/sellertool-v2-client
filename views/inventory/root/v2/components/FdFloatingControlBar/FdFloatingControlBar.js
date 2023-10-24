@@ -1,6 +1,4 @@
 import { useState } from "react";
-// import InventoryReceiveModalComponent from "./modal/InventoryReceiveModal.component";
-// import InventoryReleaseModalComponent from "./modal/InventoryReleaseModal.component";
 import { customToast, defaultOptions } from "../../../../../../components/toast/custom-react-toastify/v1";
 import CustomBlockButton from "../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { Container, ControlButtonsContainer } from "./FdFloatingControlBar.styled";
@@ -126,20 +124,6 @@ export function FdFloatingControlBar({
                     onReqBulkCreateInventoryReleases={onReqBulkCreateInventoryReleases}
                 />
             }
-            {/* {inventoryReleaseModalOpen &&
-                <CommonModalComponent
-                    open={inventoryReleaseModalOpen}
-                    onClose={handleCloseInventoryReleaseModal}
-                    maxWidth={'sm'}
-                >
-                    <InventoryReleaseModalComponent
-                        selectedProductOptions={selectedProductOptions}
-                        onClose={handleCloseInventoryReleaseModal}
-                        onActionSelectProductOption={onActionSelectProductOption}
-                        onReqFetchInventoryStocks={onReqFetchInventoryStocks}
-                    />
-                </CommonModalComponent>
-            } */}
         </>
     );
 }

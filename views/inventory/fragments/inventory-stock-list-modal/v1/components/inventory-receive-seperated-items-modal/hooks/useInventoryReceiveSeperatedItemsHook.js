@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { inventoryReceiveDataConnect } from "../../../../../../../../data_connect/inventoryReceiveDataConnect";
+import { InventoryReceiveDataConnect } from "../../../../../../../../data_connect/inventoryReceiveDataConnect";
 import { customToast, defaultOptions } from "../../../../../../../../components/toast/custom-react-toastify/v1";
 import { getRemovedPrefixZero } from "../../../../../../../../utils/numberFormatUtils";
+
+const inventoryReceiveDataConnect = InventoryReceiveDataConnect.baseInventoryPage();
 
 export default function useInventoryReceiveSeperatedItemsHook({
     inventoryReceiveId
@@ -28,7 +30,7 @@ export default function useInventoryReceiveSeperatedItemsHook({
             inventoryReceiveId: inventoryReceiveId
         }
 
-        await inventoryReceiveDataConnect().searchSeperatedItems(params, headers)
+        await inventoryReceiveDataConnect.searchSeperatedItems(params, headers)
             .then(res => {
                 if (res.status === 200) {
                     setInventoryReceiveSeperatedItems(res?.data?.data);
@@ -50,7 +52,7 @@ export default function useInventoryReceiveSeperatedItemsHook({
             wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        await inventoryReceiveDataConnect().changePurchaseCost_InventoryReceiveSeperatedItems(body, headers)
+        await inventoryReceiveDataConnect.changePurchaseCost_InventoryReceiveSeperatedItems(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     successCallback();

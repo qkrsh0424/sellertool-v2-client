@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import useDisabledBtn from "../../../../../../../hooks/button/useDisabledBtn";
 import { CustomDialog } from "../../../../../../../components/dialog/v1/CustomDialog";
-import { ContentContainer, TableBox, TableWrapper } from "./MdInventoryRelease.styled";
+import { ContentContainer, DateTimeWrapper, TableBox, TableWrapper } from "./MdInventoryRelease.styled";
 import CustomBlockButton from "../../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import ResizableTh from "../../../../../../../components/table/th/v1/ResizableTh";
 import CustomImage from "../../../../../../../components/image/CustomImage";
@@ -12,6 +12,10 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { MdBulkChangeUnit } from "./MdBulkChangeUnit";
 import { MdBulkChangeMemo } from "./MdBulkChangeMemo";
+import CustomDateTimeSelector from "../../../../../../../components/date-time-selector/v1/CustomDateTimeSelector";
+import { CustomDateUtils } from "../../../../../../../utils/CustomDateUtils";
+
+const customDateUtils = CustomDateUtils();
 
 export function MdInventoryRelease({
     open,
@@ -29,6 +33,9 @@ export function MdInventoryRelease({
 
     const [bulkChangeUnitModalOpen, setBulkChangeUnitModalOpen] = useState(false);
     const [bulkChangeMemoModalOpen, setBulkChangeMemoModalOpen] = useState(false);
+
+    const [dateTimeSelectorModalOpen, setDateTimeSelectorModalOpen] = useState(false);
+    const [stockReflectDateTime, setStockReflectDateTime] = useState(null);
 
     useEffect(() => {
         if (!wsId || !selectedProductOptions) {
@@ -70,6 +77,19 @@ export function MdInventoryRelease({
         setBulkChangeMemoModalOpen(setOpen);
     }
 
+    const toggleDateTimeSelectorModalOpen = (bool) => {
+        setDateTimeSelectorModalOpen(bool);
+    }
+
+    const handleChangeStockReflectDateTime = (value) => {
+        if (!value) {
+            setStockReflectDateTime(null);
+        } else {
+            setStockReflectDateTime(new Date(value));
+        }
+        toggleDateTimeSelectorModalOpen(false);
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setDisabledBtn(true);
@@ -81,7 +101,16 @@ export function MdInventoryRelease({
             return;
         }
 
-        await onReqBulkCreateInventoryReleases(_inventoryReleaseCreateFormListHook.inventoryReleaseCreateFormList, () => {
+        const body = {
+            inventoryReleases: _inventoryReleaseCreateFormListHook?.inventoryReleaseCreateFormList?.map(r => {
+                return {
+                    ...r,
+                    stockReflectDateTime: !stockReflectDateTime ? new Date() : new Date(stockReflectDateTime)
+                }
+            })
+        }
+
+        await onReqBulkCreateInventoryReleases(body, () => {
             onClose();
         })
     }
@@ -96,6 +125,11 @@ export function MdInventoryRelease({
                 <CustomDialog.Title>출고등록</CustomDialog.Title>
                 <form onSubmit={(e) => { e.stopPropagation(); handleSubmit(e) }}>
                     <ContentContainer>
+                        <ViewDateTimeSelector
+                            dateTimeSelectorModalOpen={() => toggleDateTimeSelectorModalOpen(true)}
+                            stockReflectDateTime={stockReflectDateTime}
+                            onRefreshStockReflectDateTime={() => handleChangeStockReflectDateTime(null)}
+                        />
                         <Table
                             inventoryReleaseCreateFormList={_inventoryReleaseCreateFormListHook?.inventoryReleaseCreateFormList}
                             inventoryStocks={_inventoryStocksHook?.inventoryStocks}
@@ -150,8 +184,44 @@ export function MdInventoryRelease({
                     onConfirm={(value) => _inventoryReleaseCreateFormListHook.onBulkChangeMemo(value)}
                 />
             }
+
+            {dateTimeSelectorModalOpen &&
+                <CustomDateTimeSelector
+                    open={dateTimeSelectorModalOpen}
+                    onClose={() => toggleDateTimeSelectorModalOpen(false)}
+                    onConfirm={(value) => handleChangeStockReflectDateTime(value)}
+                    initialDateTime={stockReflectDateTime}
+                    label='날짜선택'
+                />
+            }
         </>
     );
+}
+
+function ViewDateTimeSelector({
+    dateTimeSelectorModalOpen,
+    stockReflectDateTime,
+    onRefreshStockReflectDateTime
+}) {
+    return (
+        <DateTimeWrapper>
+            <div className='flexible-row flexible-align-center flexible-gap-5'>
+                <label>재고반영시간</label>
+                <button
+                    type='button'
+                    className='resetBtn'
+                    onClick={() => onRefreshStockReflectDateTime()}
+                >초기화</button>
+            </div>
+            <CustomBlockButton
+                type='button'
+                className='timeSelectorBtn'
+                onClick={() => dateTimeSelectorModalOpen()}
+            >
+                {stockReflectDateTime ? customDateUtils.dateToYYYYMMDDhhmmss(new Date(stockReflectDateTime)) : '현재시간'}
+            </CustomBlockButton>
+        </DateTimeWrapper>
+    )
 }
 
 function Table({

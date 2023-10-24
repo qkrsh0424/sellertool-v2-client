@@ -64,9 +64,10 @@ function dateToYYMMDD(date) {
     return moment(d).format("YY.MM.DD");
 }
 
-function dateToYYYYMMDD(date) {
+function dateToYYYYMMDD(date, dateSeperator) {
     var d = new Date(date)
-    return moment(d).format("YYYY-MM-DD");
+    let dsep = dateSeperator ? dateSeperator : '-';
+    return moment(d).format(`YYYY${dsep}MM${dsep}DD`);
 }
 
 function dateToYYYYMMDDhhmmss(idate) {

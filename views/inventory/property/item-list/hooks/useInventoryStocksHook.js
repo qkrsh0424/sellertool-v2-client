@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { inventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
+import { InventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
 import defaultErrorHandler from "../../../../../handler/dataConnectErrorHandler";
 import { useSelector } from "react-redux";
+
+const inventoryDataConnect = InventoryDataConnect.baseInventoryPage();
 
 export default function useInventoryStocksHook({
     productOptions
@@ -28,7 +30,7 @@ export default function useInventoryStocksHook({
             productOptionIds: productOptionIds
         }
 
-        await inventoryDataConnect().searchList(body, headers)
+        await inventoryDataConnect.searchList(body, headers)
             .then(res => {
                 if (res.status === 200) {
                     setInventoryStocks(res.data.data);

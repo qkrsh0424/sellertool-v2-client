@@ -36,8 +36,8 @@ export function RecordItemListComponent({
     onSetCurrentPendingRecordIds,
     onDeleteRankRecord,
     onSearchSubscriptionPlanSearchInfo,
-    onSearchNRankRecordList,
-    onSearchNRankRecordListCount
+    onSearchNRankRecordSlice,
+    onSearchNRankRecordCountOfSlice
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
@@ -72,8 +72,8 @@ export function RecordItemListComponent({
             body: { nrank_record_category_id: selectedRecord.nrank_record_category_id }
         }, {
             success: () => {
-                onSearchNRankRecordList();
-                onSearchNRankRecordListCount();
+                onSearchNRankRecordSlice();
+                onSearchNRankRecordCountOfSlice();
                 handleCloseCategorySelectorModal();
 
                 let message = '완료되었습니다.'

@@ -76,6 +76,8 @@ export function RecordDetailModalComponent({
     const [isInitSearchLoading, setIsInitSearchLoading] = useState(false);
     const [detailTrendModalOpen, setDetailTrendModalOpen] = useState(false);
 
+    let isPending = currentPendingRecordIds?.includes(record?.id);
+
     useEffect(() => {
         if(!wsId) {
             return;
@@ -100,7 +102,9 @@ export function RecordDetailModalComponent({
         }
 
         async function fetchRecordDetails() {
+            setIsInitSearchLoading(true);
             await handleSearchNRankRecordDetailsByInfos();
+            setIsInitSearchLoading(false);
         }
 
         fetchRecordDetails();
@@ -251,8 +255,6 @@ export function RecordDetailModalComponent({
         setDetailTrendModalOpen(false);
     }
 
-    let isPending = currentPendingRecordIds?.includes(record?.id);
-
     return (
         <>
             <CustomDialog
@@ -324,7 +326,7 @@ export function RecordDetailModalComponent({
 
                             {!isPending &&
                                 <>
-                                    {isInitSearchLoading &&
+                                    {isInitSearchLoading && !recordInfos &&
                                         <FieldLoadingV2
                                             oxStyle={{
                                                 borderRadius: '15px'

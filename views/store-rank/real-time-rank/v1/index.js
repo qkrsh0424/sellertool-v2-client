@@ -6,7 +6,7 @@ import useNRankRecordListHook from "./hooks/useNRankRecordListHook";
 import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
 import { useSelector } from "react-redux";
 import { useApiHook } from "./hooks/useApiHook";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setPlusTime } from "./utils/dateFormatUtils";
 import { getRecordPendingStatusExceedSeconds } from "../../../../static-data/nRankRecordOptions";
 import useSubscriptionPlanSearchInfoHook from "./hooks/useSubscriptionPlanSearchInfoHook";
@@ -58,8 +58,8 @@ export default function MainComponent(){
             return;
         }
 
-        handleReqSearchNRankRecordList();
-        handleReqSearchNRankRecordListCount();
+        handleReqSearchNRankRecordSlice();
+        handleReqSearchNRankRecordCountOfSlice();
     }, [wsId, router?.query])
 
     useEffect(() => {
@@ -82,8 +82,8 @@ export default function MainComponent(){
 
         // poling 방식 nrank record 조회 요청
         const fetch = setInterval(() => {
-            handleReqSearchNRankRecordList();
-            handleReqSearchNRankRecordListCount();
+            handleReqSearchNRankRecordSlice();
+            handleReqSearchNRankRecordCountOfSlice();
         }, [3000])
 
         return () => clearInterval(fetch);
@@ -112,8 +112,8 @@ export default function MainComponent(){
             success: () => {
                 onClearKeyword();
                 onClearMallName();
-                handleReqSearchNRankRecordList();
-                handleReqSearchNRankRecordListCount();
+                handleReqSearchNRankRecordSlice();
+                handleReqSearchNRankRecordCountOfSlice();
             }
         })
     }
@@ -130,8 +130,8 @@ export default function MainComponent(){
                     toastId: content
                 });
                 modalClose();
-                handleReqSearchNRankRecordList();
-                handleReqSearchNRankRecordListCount();
+                handleReqSearchNRankRecordSlice();
+                handleReqSearchNRankRecordCountOfSlice();
             }
         })
     }
@@ -157,7 +157,7 @@ export default function MainComponent(){
         })
     }
 
-    const handleReqSearchNRankRecordList = async () => {
+    const handleReqSearchNRankRecordSlice = async () => {
         const params = {
             search_condition: router?.query?.searchCondition,
             search_query: router?.query?.searchQuery,
@@ -186,7 +186,7 @@ export default function MainComponent(){
         })
     }
 
-    const handleReqSearchNRankRecordListCount = async () => {
+    const handleReqSearchNRankRecordCountOfSlice = async () => {
         let size = router?.query?.size || DEFAULT_SIZE;
 
         const params = {
@@ -315,8 +315,8 @@ export default function MainComponent(){
                         onDeleteRankRecord={handleReqDeleteRankRecord}
                         onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
                         onSearchSubscriptionPlanSearchInfo={handleReqSearchSubscriptionPlanSearchInfo}
-                        onSearchNRankRecordList={handleReqSearchNRankRecordList}
-                        onSearchNRankRecordListCount={handleReqSearchNRankRecordListCount}
+                        onSearchNRankRecordSlice={handleReqSearchNRankRecordSlice}
+                        onSearchNRankRecordCountOfSlice={handleReqSearchNRankRecordCountOfSlice}
                         onSearchNRankRecordCategories={handleReqSearchNRankRecordCategories}
                     />
                 </Layout>

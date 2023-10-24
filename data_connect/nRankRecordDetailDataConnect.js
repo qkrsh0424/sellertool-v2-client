@@ -13,7 +13,7 @@ const nRankRecordDetailDataConnect = () => {
         },
         createList: async function (headers, body) {
             return await withStoreRankApiCsrfWrapper(
-                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/nrank-record-details`, body, {
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/nrank-record-details/for:nrankSearchModal/action:check`, body, {
                     headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_nrank_api_csrf_token',

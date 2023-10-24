@@ -15,6 +15,17 @@ export const Wrapper = styled.div`
         max-width: 90px;
         height: 90px;
     }
+
+    @media screen and (max-width: 576px) {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+        overflow: hidden;
+
+        .image-el {
+            border-radius: 10px;
+        }
+    }
 `;
 
 export const LabelGroup = styled.div`

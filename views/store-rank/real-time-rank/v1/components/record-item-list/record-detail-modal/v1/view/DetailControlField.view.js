@@ -36,7 +36,7 @@ export default function DetailControlFieldView({
             <div className='detail-header'>
                 <CustomBlockButton
                     type='button'
-                    className='button-el'
+                    className='arrow-button'
                     onClick={() => onSetCurrentRecordInfoIdx(currentRecordInfoIdx - 1)}
                     disabled={isPending || !currentRecordInfoIdx}
                 >
@@ -73,7 +73,7 @@ export default function DetailControlFieldView({
 
                 <CustomBlockButton
                     type='button'
-                    className='button-el'
+                    className='arrow-button'
                     onClick={() => onSetCurrentRecordInfoIdx(currentRecordInfoIdx + 1)}
                     disabled={isPending || (currentRecordInfoIdx !== 0 && !currentRecordInfoIdx) || currentRecordInfoIdx === (recordInfos?.length - 1)}
                 >

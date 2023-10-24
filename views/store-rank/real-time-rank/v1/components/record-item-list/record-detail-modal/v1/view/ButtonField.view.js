@@ -54,7 +54,7 @@ export default function ButtonFieldView({
                                 size='20px'
                                 />
                         </div>
-                        <div>{timer}</div>
+                        <div style={{ minWidth: '80px', textAlign: 'left' }}>{timer}</div>
                     </CustomBlockButton>
                 }
 

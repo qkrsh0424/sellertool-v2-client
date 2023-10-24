@@ -9,7 +9,7 @@ import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
 import { dateToHHmm } from "../../../utils/dateFormatUtils";
 import ResizableTh from "../../../../../../../components/table/th/v1/ResizableTh";
-import { CustomVirtualTable } from "../../../../../../../components/table/virtual-table/v1";
+import { CustomVirtualTable } from "../../../../../../../components/table/virtual-table/v2";
 import FieldLoadingV2 from "../../../../../../modules/loading/FieldLoadingV2";
 import { useApiHook } from './hooks/useApiHook';
 import { useSelector } from 'react-redux';

@@ -1,6 +1,8 @@
 import { useState } from "react";
 
-export default function useSearchInputHook() {
+export default function useSearchInputHook({
+    recordList
+}) {
     const [keyword, setKeyword] = useState(null);
     const [mallName, setMallName] = useState(null);
 
@@ -23,6 +25,10 @@ export default function useSearchInputHook() {
     }
 
     const checkSearchInfoForm = () => {
+        if(recordList?.find(r => r.keyword === keyword && r.mall_name === mallName)) {
+            throw Error("동일한 검색 항목이 존재합니다")
+        }
+
         if(!keyword || keyword.trim() === '') {
             throw new Error("검색 키워드를 정확하게 입력해주세요.")
         }

@@ -69,13 +69,13 @@ export function useApiHook() {
             })
     }
 
-    const onReqSearchNRankRecordList = async (
+    const onReqSearchNRankRecordSlice = async (
         options = {headers: {}, params: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().searchRecordList(options?.headers, options?.params)
+        await nRankRecordDataConnect().searchSlice(options?.headers, options?.params)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data, res);
@@ -90,13 +90,13 @@ export function useApiHook() {
             })
     }
 
-    const onReqSearchNRankRecordListCount = async (
+    const onReqSearchNRankRecordCountOfSlice = async (
         options = {headers: {}, params: {}},
         callbackFn = {
             success: (results, response) => {},
         }
     ) => {
-        await nRankRecordDataConnect().searchRecordListCount(options?.headers, options?.params)
+        await nRankRecordDataConnect().searchCountOfSlice(options?.headers, options?.params)
             .then(res => {
                 if (res.status === 200) {
                     callbackFn.success(res?.data?.data, res);
@@ -157,8 +157,8 @@ export function useApiHook() {
         onReqSearchSubscriptionPlanSearchInfo,
         onReqCreateSearchInput,
         onReqDeleteNRankRecord,
-        onReqSearchNRankRecordList,
-        onReqSearchNRankRecordListCount,
+        onReqSearchNRankRecordSlice,
+        onReqSearchNRankRecordCountOfSlice,
         onReqChangeNRankRecordListStatusToFail,
         onReqSearchNRankRecordCategories
     }

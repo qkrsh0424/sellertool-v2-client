@@ -1,14 +1,15 @@
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
 import { Container, Wrapper } from "./styles/RecordItemList.styled";
-import { RecordDetailModalComponent } from "../record-detail-modal/v1";
+// import { RecordDetailModalComponent } from "../record-detail-modal/v1";
+import { RecordDetailModalComponent } from "../record-detail-modal/v2";
 import { CategorySelectorModalComponent } from '../category-selector-modal/v1';
 import { CustomBoxImage } from "../../../modules";
 import HighlightedText from "../../../../../../modules/text/HighlightedText";
 import ConfirmModalComponentV2 from "../../../../../../modules/modal/ConfirmModalComponentV2";
 import { dateToHHmm } from "../../../utils/dateFormatUtils";
 import ResizableTh from "../../../../../../../components/table/th/v1/ResizableTh";
-import { CustomVirtualTable } from "../../../../../../../components/table/virtual-table/v1";
+import { CustomVirtualTable } from "../../../../../../../components/table/virtual-table/v2";
 import FieldLoadingV2 from "../../../../../../modules/loading/FieldLoadingV2";
 import { useApiHook } from './hooks/useApiHook';
 import { useSelector } from 'react-redux';
@@ -35,8 +36,8 @@ export function RecordItemListComponent({
     onSetCurrentPendingRecordIds,
     onDeleteRankRecord,
     onSearchSubscriptionPlanSearchInfo,
-    onSearchNRankRecordList,
-    onSearchNRankRecordListCount
+    onSearchNRankRecordSlice,
+    onSearchNRankRecordCountOfSlice
 }) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
@@ -46,10 +47,10 @@ export function RecordItemListComponent({
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [detailSearchModalOpen, setDetailSearchModalOpen] = useState(false);
     const [recordDeleteModalOpen, setRecordDeleteModalOpen] = useState(false);
-
-    const [createRecordInfoId, setCreateRecordInfoId] = useState(null);
     const [categorySelectorModalOpen, setCategorySelectorModalOpen] = useState(false);
 
+    // 랭킹 조회 요청 시 client에서 생성한 record info id를 참고해 record info 를 생성한다
+    const [createRecordInfoId, setCreateRecordInfoId] = useState(null);
 
     useEffect(() => {
         if(!recordList) {
@@ -71,8 +72,8 @@ export function RecordItemListComponent({
             body: { nrank_record_category_id: selectedRecord.nrank_record_category_id }
         }, {
             success: () => {
-                onSearchNRankRecordList();
-                onSearchNRankRecordListCount();
+                onSearchNRankRecordSlice();
+                onSearchNRankRecordCountOfSlice();
                 handleCloseCategorySelectorModal();
 
                 let message = '완료되었습니다.'
@@ -260,7 +261,7 @@ function TableBodyRow({
     let item = virtuosoData?.item;
     let isKeywordAccent = keyword && (item.keyword).includes(keyword);
     let isMallNameAccent = mallName && (item.mall_name).includes(mallName);
-    let currentRecordInfo = item.infos?.find(info => item.current_nrank_record_info_id === info.id);
+    let currentRecordInfo = item.nrank_record_info;
     let isPending = currentPendingRecordIds?.includes(item.id);
     let category = categories?.find(r => r.id === item.nrank_record_category_id);
 
@@ -268,6 +269,14 @@ function TableBodyRow({
         <tr onClick={(e) => onOpenDetailSearchModal(e, item)} {...virtuosoData}>
             <td>
                 <div className='thumbnail'>
+                    {(isPending || (item.status === RECORD_STATUS.PENDING)) &&
+                        <FieldLoadingV2
+                            oxStyle={{
+                                borderRadius: '15px'
+                            }}
+                        />
+                    }
+
                     <CustomBoxImage
                         src={currentRecordInfo?.thumbnail_url}
                     />

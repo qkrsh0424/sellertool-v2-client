@@ -13,7 +13,7 @@ export function RecordItemListSkeletonComponent() {
                 <Wrapper>
                     {EMPTY_ARRAY.map(r => {
                         return (
-                            <RecordInfoSkeletonBox key={'record-info-idx' + r} >
+                            <RecordInfoSkeletonBox key={'record_info_idx' + r} >
                                 <RecordInfo>
                                     <div className='content-box'>
                                         <div><SkeletonEl variant="rounded" width={100} height={100} /></div>

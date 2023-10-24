@@ -79,7 +79,7 @@ export function RecordItemListComponent({
                         let isPending = currentPendingRecordIds?.includes(item.id);
 
                         return (
-                            <RecordItemBox key={'record-info-idx' + index} >
+                            <RecordItemBox key={'record_info_idx' + index} >
                                 <ControlBox>
                                     <div className='delete-box'>
                                         <button

@@ -10,7 +10,9 @@ export default function AdRankDetailFieldView({
     targetRecordInfo,
     openedSubInfoRecordDetailIds,
     onAddOpenedSubInfoRecordDetailId,
-    onRemoveOpenedSubInfoRecordDetailId
+    onRemoveOpenedSubInfoRecordDetailId,
+
+    onOpenDetailGraphModal
 }) {
     return (
         <Wrapper>
@@ -19,6 +21,7 @@ export default function AdRankDetailFieldView({
 
                 return (
                     <DetailInfoWrapper key={'record_detail_list_idx' + idx}>
+                        <button type='button' onClick={(e) => onOpenDetailGraphModal(e, detail)}>click</button>
                         <MainInfoWrapper>
                             <div className='image-box'>
                                 <CustomBoxImage
@@ -36,7 +39,7 @@ export default function AdRankDetailFieldView({
                                         </div>
                                         <div className='highlight' style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                             {detail.price_comparision_yn === 'y' ?
-                                                <a href={NAVER_SHOPPING_PRICE_COMPARISION_URL + detail.mall_product_id} target="_blank" rel="noopener">
+                                                <a href={NAVER_SHOPPING_PRICE_COMPARISION_URL + detail.item_id} target="_blank" rel="noopener">
                                                     <span className='accent-text'>{detail.product_title}</span>
                                                 </a>
                                                 :

@@ -7,7 +7,7 @@ import { Wrapper } from "../styles/DetailControl.styled";
 
 export default function DetailControlFieldView({
     isPending,
-    record,
+    recordInfos,
     currentRecordInfoIdx,
     selectedRecordInfo,
     onActionFoldAllOptions,
@@ -36,7 +36,7 @@ export default function DetailControlFieldView({
             <div className='detail-header'>
                 <CustomBlockButton
                     type='button'
-                    className='button-el'
+                    className='arrow-button'
                     onClick={() => onSetCurrentRecordInfoIdx(currentRecordInfoIdx - 1)}
                     disabled={isPending || !currentRecordInfoIdx}
                 >
@@ -55,7 +55,7 @@ export default function DetailControlFieldView({
                                 onChange={(e) => onChangeSelectedRecordInfo(e)}
                                 disabled={isPending}
                             >
-                                {record?.infos.map(r => {
+                                {recordInfos?.map(r => {
                                     return (
                                         <option key={r.id} value={r.id}>
                                             {`${dateToYYMMDD(r.created_at)} ${dateToHHmm(r.created_at)}`}
@@ -73,9 +73,9 @@ export default function DetailControlFieldView({
 
                 <CustomBlockButton
                     type='button'
-                    className='button-el'
+                    className='arrow-button'
                     onClick={() => onSetCurrentRecordInfoIdx(currentRecordInfoIdx + 1)}
-                    disabled={isPending || (currentRecordInfoIdx !== 0 && !currentRecordInfoIdx) || currentRecordInfoIdx === (record?.infos.length - 1)}
+                    disabled={isPending || (currentRecordInfoIdx !== 0 && !currentRecordInfoIdx) || currentRecordInfoIdx === (recordInfos?.length - 1)}
                 >
                     <CustomBoxImage
                         src='/images/icon/arrowRight_chevron_808080.svg'

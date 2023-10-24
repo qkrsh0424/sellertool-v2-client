@@ -1,17 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useNRankRecordDetailHook({
     record
 }) {
     const [recordDetails, setRecordDetails] = useState([]);
     const [adRecordDetails, setAdRecordDetails] = useState([]);
-    const [lastSearchedRecordInfo, setLastSearchedRecordInfo] = useState(null);
     const [openedSubInfoRecordDetailIds, setOpenedSubInfoRecordDetailIds] = useState([]);
-
-    const onActionUpdateLastSearchedRecordInfo = (targetId) => {
-        let target = record?.infos.find(info => info.id === targetId);
-        setLastSearchedRecordInfo(target);
-    }
 
     const onSetRecordDetails = (data) => {
         setRecordDetails([...data])
@@ -43,9 +37,7 @@ export default function useNRankRecordDetailHook({
     return {
         recordDetails,
         adRecordDetails,
-        lastSearchedRecordInfo,
         openedSubInfoRecordDetailIds,
-        onActionUpdateLastSearchedRecordInfo,
         onSetRecordDetails,
         onSetAdRecordDetails,
         onAddOpenedSubInfoRecordDetailId,

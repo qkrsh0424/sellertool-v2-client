@@ -6,7 +6,7 @@ import useNRankRecordListHook from "./hooks/useNRankRecordListHook";
 import { customToast, defaultOptions } from "../../../../components/toast/custom-react-toastify/v1";
 import { useSelector } from "react-redux";
 import { useApiHook } from "./hooks/useApiHook";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setPlusTime } from "./utils/dateFormatUtils";
 import { getRecordPendingStatusExceedSeconds } from "../../../../static-data/nRankRecordOptions";
 import useSubscriptionPlanSearchInfoHook from "./hooks/useSubscriptionPlanSearchInfoHook";
@@ -41,15 +41,15 @@ export default function MainComponent(){
         onReqSearchSubscriptionPlanSearchInfo,
         onReqCreateSearchInput,
         onReqDeleteNRankRecord,
-        onReqSearchNRankRecordList,
-        onReqSearchNRankRecordListCount,
+        onReqSearchNRankRecordSlice,
+        onReqSearchNRankRecordCountOfSlice,
         onReqChangeNRankRecordListStatusToFail,
         onReqSearchNRankRecordCategories
     } = useApiHook();
 
     const { rankSearchInfo, onSetRankSearchInfo } = useSubscriptionPlanSearchInfoHook();
-    const { keyword, mallName, onChangeKeyword, onChangeMallName, onClearKeyword, onClearMallName, checkSearchInfoForm } = useSearchInputHook();
     const { recordList, recordListPage, currentPendingRecordIds, onSetRecordList, onSetRecordListPage, onSetCurrentPendingRecordIds } = useNRankRecordListHook();
+    const { keyword, mallName, onChangeKeyword, onChangeMallName, onClearKeyword, onClearMallName, checkSearchInfoForm } = useSearchInputHook({ recordList });
     const { categories, onSetCategories } = useNRankRecordCategoriesHook();
     const { totalSize, totalPages, onSetTotalSize, onSetTotalPages } = useItemCountHook();
 
@@ -58,8 +58,8 @@ export default function MainComponent(){
             return;
         }
 
-        handleReqSearchNRankRecordList();
-        handleReqSearchNRankRecordListCount();
+        handleReqSearchNRankRecordSlice();
+        handleReqSearchNRankRecordCountOfSlice();
     }, [wsId, router?.query])
 
     useEffect(() => {
@@ -82,8 +82,8 @@ export default function MainComponent(){
 
         // poling 방식 nrank record 조회 요청
         const fetch = setInterval(() => {
-            handleReqSearchNRankRecordList();
-            handleReqSearchNRankRecordListCount();
+            handleReqSearchNRankRecordSlice();
+            handleReqSearchNRankRecordCountOfSlice();
         }, [3000])
 
         return () => clearInterval(fetch);
@@ -93,10 +93,6 @@ export default function MainComponent(){
         e.preventDefault();
 
         try {
-            if(recordList?.find(r => r.keyword === keyword && r.mall_name === mallName)) {
-                throw Error("동일한 검색 항목이 존재합니다")
-            }
-
             checkSearchInfoForm();
         } catch (err) {
             customToast.error(err?.message, {
@@ -116,8 +112,8 @@ export default function MainComponent(){
             success: () => {
                 onClearKeyword();
                 onClearMallName();
-                handleReqSearchNRankRecordList();
-                handleReqSearchNRankRecordListCount();
+                handleReqSearchNRankRecordSlice();
+                handleReqSearchNRankRecordCountOfSlice();
             }
         })
     }
@@ -134,15 +130,15 @@ export default function MainComponent(){
                     toastId: content
                 });
                 modalClose();
-                handleReqSearchNRankRecordList();
-                handleReqSearchNRankRecordListCount();
+                handleReqSearchNRankRecordSlice();
+                handleReqSearchNRankRecordCountOfSlice();
             }
         })
     }
 
     const handleReqChangeNRankRecordListStatusToFail = async (ids) => {
         await onReqChangeNRankRecordListStatusToFail({
-            body: {ids: ids},
+            body: {record_ids: ids},
             headers: { wsId: wsId }
         }, {
             success: () => {
@@ -161,7 +157,7 @@ export default function MainComponent(){
         })
     }
 
-    const handleReqSearchNRankRecordList = async () => {
+    const handleReqSearchNRankRecordSlice = async () => {
         const params = {
             search_condition: router?.query?.searchCondition,
             search_query: router?.query?.searchQuery,
@@ -174,7 +170,7 @@ export default function MainComponent(){
             size: router?.query?.size || DEFAULT_SIZE
         }
 
-        await onReqSearchNRankRecordList({
+        await onReqSearchNRankRecordSlice({
             headers: { wsId: wsId },
             params
         }, {
@@ -190,7 +186,7 @@ export default function MainComponent(){
         })
     }
 
-    const handleReqSearchNRankRecordListCount = async () => {
+    const handleReqSearchNRankRecordCountOfSlice = async () => {
         let size = router?.query?.size || DEFAULT_SIZE;
 
         const params = {
@@ -205,7 +201,7 @@ export default function MainComponent(){
             size
         }
 
-        await onReqSearchNRankRecordListCount({
+        await onReqSearchNRankRecordCountOfSlice({
             headers: { wsId: wsId },
             params
         }, {
@@ -319,8 +315,8 @@ export default function MainComponent(){
                         onDeleteRankRecord={handleReqDeleteRankRecord}
                         onSetCurrentPendingRecordIds={onSetCurrentPendingRecordIds}
                         onSearchSubscriptionPlanSearchInfo={handleReqSearchSubscriptionPlanSearchInfo}
-                        onSearchNRankRecordList={handleReqSearchNRankRecordList}
-                        onSearchNRankRecordListCount={handleReqSearchNRankRecordListCount}
+                        onSearchNRankRecordSlice={handleReqSearchNRankRecordSlice}
+                        onSearchNRankRecordCountOfSlice={handleReqSearchNRankRecordCountOfSlice}
                         onSearchNRankRecordCategories={handleReqSearchNRankRecordCategories}
                     />
                 </Layout>

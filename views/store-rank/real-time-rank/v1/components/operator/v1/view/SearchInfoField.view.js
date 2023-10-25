@@ -26,7 +26,7 @@ export function SearchInfoFieldView({
                             tooltipBox={
                                 <CustomBoxImage
                                     src='/images/icon/exclamation_default_a3a8b2.svg'
-                                    className='exclamation-icon tooltip'
+                                    className='exclamation-icon'
                                     size='15px'
                                 />
                             }

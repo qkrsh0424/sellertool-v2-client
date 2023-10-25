@@ -1,11 +1,27 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    justify-content: space-between;
-    margin-bottom: 10px;
+    .info-text {
+        font-size: 12px;
+        margin-bottom: 10px;
+        color: #4b4b4b;
+
+        @media screen and (max-width: 992px){
+            font-size: 10px;
+        }
+    }
+
+    .info-text .accent-text {
+        font-weight: 700;
+    }
+
+    .selector-box {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
 
     .button-el {
         width: 30px;

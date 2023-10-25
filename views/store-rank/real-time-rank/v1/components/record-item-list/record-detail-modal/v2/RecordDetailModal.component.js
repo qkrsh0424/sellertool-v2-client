@@ -97,6 +97,10 @@ export function RecordDetailModalComponent({
     }, [record, wsId])
 
     useEffect(() => {
+        if(!wsId) {
+            return;
+        }
+
         if(!recordInfos) {
             return;
         }
@@ -109,7 +113,7 @@ export function RecordDetailModalComponent({
 
         fetchRecordDetails();
         onSetCurrentRecordInfoIdx(recordInfos.length-1)
-    }, [recordInfos])
+    }, [recordInfos, wsId])
 
     useEffect(() => {
         if(!selectedRecordInfo) {

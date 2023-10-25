@@ -41,15 +41,16 @@ export const St = {
             border-radius: 5px;
             transition: all .3s;
 
+            @media all and (max-width:992px){
+                width: 100px;
+            }
+
             &:hover{
                 background: var(--mainColorOpacity100);
             }
         }
 
         .linkBtn-active{
-            /* color: var(--mainColor);
-            font-weight: 800;
-            border: 1px solid var(--mainColor); */
             background: var(--mainColor);
             color:#fff;
 

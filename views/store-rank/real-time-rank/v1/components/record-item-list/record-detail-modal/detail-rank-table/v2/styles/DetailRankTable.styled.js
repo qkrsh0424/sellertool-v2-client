@@ -5,8 +5,8 @@ export const Container = styled.div`
 `;
 
 export const Wrapper = styled.div`
-    min-height: 50vh;
-    max-height: 50vh;
+    min-height: 40vh;
+    /* max-height: 50vh; */
     overflow: auto;
     margin-bottom: 50px;
     /* background-color: #fff; */

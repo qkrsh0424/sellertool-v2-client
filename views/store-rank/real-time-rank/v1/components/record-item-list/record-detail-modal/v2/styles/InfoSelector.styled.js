@@ -3,8 +3,8 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
     .info-text {
         font-size: 12px;
-        margin-bottom: 10px;
-        color: #4b4b4b;
+        margin-bottom: 30px;
+        color: #626262;
 
         @media screen and (max-width: 992px){
             font-size: 10px;
@@ -24,8 +24,8 @@ export const Wrapper = styled.div`
     }
 
     .button-el {
-        width: 30px;
-        height: 30px;
+        width: 35px;
+        height: 35px;
         border: none;
         background-color: inherit;
         border-radius: 100%;
@@ -42,10 +42,10 @@ export const Wrapper = styled.div`
 
    .select-item{
         width: 100%;
-        height: 30px;
+        height: 35px;
         border: 1px solid var(--defaultGrayColor);
         border-radius: 5px;
-        font-size: 12px;
+        font-size: 14px;
         text-align: center;
 
         @media all and (max-width: 992px){

@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
         /* overflow: hidden; */
         overflow: auto;
         border: none;
-        border-radius: 10px;
+        background-color: #f8f8f8;
         box-shadow: var(--defaultBoxShadow);
 
         @media only screen and (max-width:768px){

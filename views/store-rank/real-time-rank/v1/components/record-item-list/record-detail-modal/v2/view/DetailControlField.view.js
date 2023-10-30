@@ -4,8 +4,6 @@ import { Wrapper } from "../styles/DetailControl.styled";
 
 export default function DetailControlFieldView({
     isPending,
-    traceableRecordDetails,
-    traceableAdRecordDetails,
     onActionFoldAllOptions,
     onActionUnfoldAllOptions,
     onOpenDetailTrendModal
@@ -42,7 +40,7 @@ export default function DetailControlFieldView({
                         className='open-button'
                         onClick={(e) => onOpenDetailTrendModal(e)}
                     >
-                        <span>랭킹 추세 ( {(traceableRecordDetails?.length || 0) + (traceableAdRecordDetails?.length || 0)} ) </span>
+                        <span>랭킹 추세</span>
                         <div>
                             <CustomBoxImage
                                 src='/images/icon/monitoring_default_344b98.svg'

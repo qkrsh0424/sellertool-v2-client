@@ -22,13 +22,17 @@ export default function ButtonFieldView({
     } = useTargetTimeTimerHook();
 
     useEffect(() => {
+        if(isPending) {
+            return;
+        }
+
         if(!lastSearchedRecordInfo) {
             return;
         }
-        
+
         let targetTime = setPlusTime(lastSearchedRecordInfo?.created_at, 0, 0, getSearchableDiffSeconds());
         onUpdateTargetTime(targetTime);
-    }, [lastSearchedRecordInfo])
+    }, [lastSearchedRecordInfo, isPending])
 
     const handleSubmit = (e) => {
         e.preventDefault();

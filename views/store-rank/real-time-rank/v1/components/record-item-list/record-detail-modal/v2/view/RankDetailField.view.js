@@ -52,15 +52,15 @@ export default function RankDetailFieldView({
                                 </div>
                                 <div>
                                     <InfoGroupBox>
-                                        <div className='mgl-flex mgl-flex-alignItems-center' style={{ marginRight: '5px' }}>
-                                            <div className='rank-box accent-text' style={{ marginRight: '5px' }}>
-                                                <a href={`${NAVER_SHOPPING_SEARCH_URL}?query=${record.keyword}&pagingIndex=${detail.page}`} target="_blank" rel="noopener">
+                                        <div className='mgl-flex mgl-flex-alignItems-center'>
+                                            <a href={`${NAVER_SHOPPING_SEARCH_URL}?query=${record.keyword}&pagingIndex=${detail.page}`} target="_blank" rel="noopener">
+                                                <div className='rank-box accent-text' style={{ marginRight: '5px' }}>
                                                     <span>{detail.rank}위</span>
-                                                </a>
-                                            </div>
+                                                </div>
+                                            </a>
                                             <div>
                                                 <span>({detail.page}페이지 </span>
-                                                <span>{detail.rank % 40 === 0 ? 40 : (detail.rank % 40)}위)</span>
+                                                <span>{detail.rank % 40 === 0 ? 40 : (detail.rank % 40)}위) </span>
                                             </div>
                                         </div>
                                         <div className='mgl-flex mgl-flex-alignItems-center'>

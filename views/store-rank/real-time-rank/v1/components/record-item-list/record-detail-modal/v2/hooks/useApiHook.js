@@ -26,6 +26,27 @@ export function useApiHook() {
             })
     }
 
+    const onReqSearchNRankRecordDetailsByInfo = async (
+        options = {headers: {}, params: {}},
+        callbackFn = {
+            success: (results, response) => {},
+        }
+    ) => {
+        await nRankRecordDetailDataConnect().searchListByInfoId(options.headers, options.params)
+            .then(res => {
+                if (res.status === 200) {
+                    callbackFn.success(res?.data?.data, res);
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                })
+            })
+    }
+
     const onReqSearchNRankRecordDetailsByInfos = async (
         options = {headers: {}, body: {}},
         callbackFn = {
@@ -84,6 +105,7 @@ export function useApiHook() {
     return {
         onReqChangeNRankRecordStatusToPendingAndCreateNRankRecordInfo,
         onReqCreateNRankRecordDetails,
+        onReqSearchNRankRecordDetailsByInfo,
         onReqSearchNRankRecordDetailsByInfos,
         onReqSearchNRankRecordInfos
     }

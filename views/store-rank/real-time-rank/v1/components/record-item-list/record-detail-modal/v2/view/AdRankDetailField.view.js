@@ -49,12 +49,12 @@ export default function AdRankDetailFieldView({
                                 </div>
                                 <div>
                                     <InfoGroupBox>
-                                        <div className='mgl-flex mgl-flex-alignItems-center' style={{ marginRight: '5px' }}>
+                                        <div className='mgl-flex mgl-flex-alignItems-center'>
                                             <div className='ad-rank-box accent-text' style={{ marginRight: '5px' }}>
                                                 <span>광고 {detail.rank}위</span>
                                             </div>
                                         </div>
-                                </InfoGroupBox>
+                                    </InfoGroupBox>
                                 </div>
                             </div>
                             <div>

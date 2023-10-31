@@ -5,6 +5,7 @@ export const St = {
         display: flex;
         flex-direction: row;
         min-height: 1000px;
+        background: var(--defaultBackground);
         @media all and (max-width:992px){
             flex-direction: column;
         }
@@ -13,11 +14,11 @@ export const St = {
         display: flex;
         flex-direction: column;
         gap: 20px;
-        width:110px;
+        width:120px;
         background: #fff;
         border-right: 1px solid #f0f0f0;
-        padding: 20px;
-        background-color: #f9f9f9;
+        padding: 10px;
+        /* background-color: #f9f9f9; */
 
         @media all and (max-width:992px){
             flex-direction: row;
@@ -28,25 +29,39 @@ export const St = {
 
         .linkBtn{
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             display: inline-block;
             border:1px solid #00000000;
             color:#444;
             font-weight: 600;
             letter-spacing: 3px;
+            text-align: center;
+            width: 100%;
+            padding: 5px 0;
+            border-radius: 5px;
+            transition: all .3s;
+
+            @media all and (max-width:992px){
+                width: 100px;
+            }
 
             &:hover{
-                color: var(--mainColor);    
+                background: var(--mainColorOpacity100);
             }
         }
 
         .linkBtn-active{
-            color: var(--mainColor);
-            font-weight: 800;
+            background: var(--mainColor);
+            color:#fff;
+
+            &:hover{
+                background: var(--mainColor);
+            }
+            
         }
     `,
     MainContainer: styled.div`
         flex:1;
-        background: var(--defaultBackground);
+        padding-bottom: 300px;
     `,
 }

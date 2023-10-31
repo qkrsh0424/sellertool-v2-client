@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const St = {
     Container: styled.div`
         margin-bottom: 20px;
-        max-width: 1280px;
+        max-width: 800px;
         margin-left: auto;
         margin-right: auto;
     `,
@@ -11,55 +11,64 @@ export const St = {
         border-radius: 10px;
         display: grid;
         grid-template-columns: repeat(6, 1fr);
-        gap: 10px;
-        margin-bottom: 20px;
+        gap: 40px;
+        margin-bottom: 40px;
 
         @media all and (max-width:992px){
             grid-template-columns: repeat(2, 1fr) !important;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
         .result-box{
             flex:1;
             overflow: hidden;
-            padding: 10px;
-            background: #fff;
-            border:1px solid #e0e0e0;
-            border-radius: 5px;
+            padding: 20px;
+            background:#fff;
+            box-shadow: var(--defaultBoxShadow2);
+            border-radius: 15px;
             color: #404040;
-            box-shadow: var(--defaultBoxShadow);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            @media all and (max-width:992px){
+                padding: 10px;
+            }
 
             .title{
-                font-size: 14px;
+                font-size: 16px;
                 font-weight: 700;
-                margin-bottom: 10px;
 
                 word-break: break-all;
                 white-space:pre-line;
                 
                 @media all and (max-width:992px){
                     grid-template-columns: repeat(2, 1fr);
+                    font-size: 15px;
                 }
             }
 
             .result{
-                float: right;
-                font-size: 16px;
+                /* float: right; */
+                display: flex;
+                justify-content: flex-end;
+                font-size: 18px;
                 font-weight: 700;
 
                 word-break: break-all;
                 white-space:pre-line;
+
+                @media all and (max-width:992px){
+                    font-size: 15px;
+                }
             }
         }
     `,
     CalculatorWrapper: styled.div`
         display: flex;
         flex-direction: column;
-        gap: 20px;
-        /* background-color: var(--mainColorOpacity100); */
-        background-color: #fff;
-        border-radius: 1px solid #f0f0f0;
-        box-shadow: var(--defaultBoxShadow);
-        padding: 20px;
+        gap: 40px;
         border-radius: 10px;
         .button-wrapper{
             display: flex;
@@ -77,29 +86,48 @@ export const St = {
 
             .calculatorBtn{
                 width:200px;
+                height: 60px;
                 background: var(--mainColor);
                 color:#fff;
                 font-size: 16px;
                 font-weight: 700;
-                border-radius: 5px;
+                border-radius: 15px;
                 border:none;
+                box-shadow: var(--defaultBoxShadow2);
+
+                @media all and (max-width:992px){
+                    width:100%;
+                }
             }
         }
         .control-wrapper{
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 10px;
+            border-radius: 15px;
+            gap: 40px;
+
+            &:last-child{
+                box-shadow: none;
+            }
+            
             .title{
                 font-size: 18px;
                 font-weight: 700;
-                color:#555;
+                padding: 0 20px;
+                color:#222;
+                writing-mode: vertical-lr;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-right: 1px solid #e0e0e0;
+                letter-spacing: 5px;
             }
 
             .flexible{
                 display: flex;
                 flex-direction: row;
-                gap: 15px;
+                gap: 40px;
+                width: 100%;
 
                 @media all and (max-width:992px){
                     flex-direction: column;
@@ -113,37 +141,47 @@ export const St = {
                     display: inline-block;
                     font-size: 13px;
                     margin-bottom: 5px;
-                    color:#666;
+                    color:#222;
                     font-weight: 700;
                 }
 
                 input{
-                    height: 40px;
-                    border-radius: 5px;
+                    height: 50px;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 15px;
+                    background: var(--defaultBlueColorOpacity50);
                     border-top-right-radius: 0;
                     border-bottom-right-radius: 0;
                     transition: all .3s;
                     text-align: end;
                     font-weight: 700;
-                    background: var(--defaultBlueColorOpacity50);
+                    font-size: 15px;
                     &:focus{
                         z-index: 10;
-                        scale: 1.01;
-                        border-top-right-radius: 5px;
-                        border-bottom-right-radius: 5px;
+                        scale: 1.03;
                         background: #fff;
+                        border-color:var(--mainColor);
+                        border-radius: 15px;
                     }
                 }
 
                 select{
-                    width:300px;
-                    height: 40px;
-                    border-radius: 5px;
+                    width:100%;
+                    height: 50px;
+                    font-size: 15px;
+                    background-color: var(--defaultBlueColorOpacity50);
+                    border: 1px solid #e0e0e0;
+                    border-radius: 15px;
+                    transition: all .3s;
+
+                    @media all and (max-width:992px){
+                        width:100%;
+                    }
+
                     &:focus{
                         z-index: 10;
-                        scale: 1.01;
-                        border-top-right-radius: 5px;
-                        border-bottom-right-radius: 5px;
+                        scale: 1.03;
+                        background-color: #fff;
                         border:1px solid var(--mainColor);
                     }
                 }
@@ -151,17 +189,17 @@ export const St = {
                 .currency{
                     display: flex;
                     justify-content: center;
-                    border:1px solid #e0e0e0;
                     align-items: center;
-                    height: 40px;
-                    width: 80px;
-                    border-radius: 5px;
+                    height: 50px;
+                    width: 100px;
                     font-size: 10px;
                     font-weight: 600;
                     background: #fff;
                     margin-left: -1px;
-                    border-top-left-radius: 0;
-                    border-bottom-left-radius: 0;
+                    background: none;
+                    border:1px solid #e0e0e0;
+                    border-top-right-radius: 15px;
+                    border-bottom-right-radius: 15px;
                 }
 
                 .flexItem{

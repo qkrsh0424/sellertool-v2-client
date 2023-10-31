@@ -41,13 +41,13 @@ export const FdCalculator = ({
                 <St.ResultWrapper
                     ref={resultWrapperRef}
                     style={{
-                        gridTemplateColumns: resultDetailModeOpen ? 'repeat(6, 1fr)' : 'repeat(2, 1fr)'
+                        gridTemplateColumns: resultDetailModeOpen ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)'
                     }}
                 >
                     <div
                         className='result-box'
                         style={{
-                            border: '1px solid var(--mainColor)'
+                            color: 'var(--mainColor)'
                         }}
                     >
                         <div className='title'>마진율 (세전)</div>
@@ -56,7 +56,7 @@ export const FdCalculator = ({
                     <div
                         className='result-box'
                         style={{
-                            border: '1px solid var(--mainColor)'
+                            color: 'var(--mainColor)'
                         }}
                     >
                         <div className='title'>마진액 (세전)</div>
@@ -95,13 +95,13 @@ export const FdCalculator = ({
                     resultDetailModeOpen={resultDetailModeOpen}
                     onToggleResultDetailModeOpen={() => toggleResultDetailModeOpen()}
                 />
+                <div style={{height:'1px', background:'#e0e0e0', marginBottom:'40px'}}></div>
                 <form onSubmit={(e) => handleSubmitCalculateMargin(e)}>
                     <St.CalculatorWrapper>
                         <div className='button-wrapper'>
                             <CustomBlockButton type='button' className='refreshBtn' onClick={() => marginRecordFormHook.onActionClearForm()}>새로고침</CustomBlockButton>
                         </div>
                         <div className='control-wrapper'>
-                            <div className='title'>판매정보</div>
                             <div className='flexible'>
                                 <div className='input-box'>
                                     <label>판매가격</label>
@@ -130,9 +130,6 @@ export const FdCalculator = ({
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className='control-wrapper'>
-                            <div className='title'>매입정보</div>
                             <div className='flexible'>
                                 <div className='input-box'>
                                     <label>매입단가</label>
@@ -177,9 +174,6 @@ export const FdCalculator = ({
                                 </div>
                                 <div className='input-box'></div>
                             </div>
-                        </div>
-                        <div className='control-wrapper'>
-                            <div className='title'>마켓 수수료</div>
                             <div className='flexible'>
                                 <div className='input-box'>
                                     <label>마켓선택</label>
@@ -242,9 +236,6 @@ export const FdCalculator = ({
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className='control-wrapper'>
-                            <div className='title'>기타비용</div>
                             <div className='flexible'>
                                 <div className='input-box'>
                                     <label>마케팅비용</label>
@@ -273,6 +264,7 @@ export const FdCalculator = ({
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                         <div className='control-wrapper'>
                             <div className='button-wrapper'>

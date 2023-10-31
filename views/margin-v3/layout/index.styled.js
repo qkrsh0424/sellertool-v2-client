@@ -5,7 +5,7 @@ export const St = {
         display: flex;
         flex-direction: row;
         min-height: 1000px;
-        background: var(--defaultBackground);
+        /* background: var(--defaultBackground); */
         @media all and (max-width:992px){
             flex-direction: column;
         }

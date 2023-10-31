@@ -1,39 +1,76 @@
 import styled from 'styled-components';
 
+
 export const St = {
     Container: styled.div`
         margin-bottom: 20px;
-        max-width: 800px;
+        
+    `,
+    Wrapper: styled.div`
+        display: flex;
+        flex-direction: row;
+        max-width: 992px;
         margin-left: auto;
         margin-right: auto;
+        align-items: normal;
+        // mobile
+        @media all and (max-width:992px){
+            flex-direction: column;
+            align-items: normal;
+        }
     `,
     ResultWrapper: styled.div`
-        border-radius: 10px;
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        gap: 40px;
-        margin-bottom: 40px;
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        overflow: hidden;
+        padding: 0 20px;
+        border-left: none;
+        
 
         @media all and (max-width:992px){
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 20px;
-            margin-bottom: 20px;
+            width: 100%;
+            border: 1px solid #e0e0e0;
+            border-top: none;
+            height: 600px;
+        }
+
+        .result-detail-button-box{
+            display: flex;
+            justify-content: flex-end;
+
+            button{
+                width: 100px;
+                height: 40px;
+                background-color: var(--grayButtonColor);
+                border:none;
+                border-radius: 5px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+
         }
 
         .result-box{
             flex:1;
+            width:100%;
             overflow: hidden;
-            padding: 20px;
             background:#fff;
-            box-shadow: var(--defaultBoxShadow2);
-            border-radius: 15px;
             color: #404040;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            justify-content: space-evenly;
+            border-bottom: 1px solid #e0e0e0;
 
+            &:last-child{
+                border-bottom: none;
+            }
+            
             @media all and (max-width:992px){
                 padding: 10px;
+                height: 400px;
             }
 
             .title{
@@ -44,13 +81,11 @@ export const St = {
                 white-space:pre-line;
                 
                 @media all and (max-width:992px){
-                    grid-template-columns: repeat(2, 1fr);
                     font-size: 15px;
                 }
             }
 
             .result{
-                /* float: right; */
                 display: flex;
                 justify-content: flex-end;
                 font-size: 18px;
@@ -66,26 +101,43 @@ export const St = {
         }
     `,
     CalculatorWrapper: styled.div`
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
-        border-radius: 10px;
+        flex:1;
+        border: 1px solid #e0e0e0;
+        padding: 20px;
+        border-radius: 20px;
+        border-right: 1px dashed #e0e0e0;
+
+        @media all and (max-width:992px){
+            border: 1px solid #e0e0e0;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+
         .button-wrapper{
             display: flex;
             justify-content: flex-end;
+            gap: 10px;
 
+            @media all and (max-width:992px){
+                flex-direction: column-reverse;
+            }
+            
             .refreshBtn{
-                width:100px;
-                height: 40px;
+                width:150px;
+                height: 60px;
                 background:#b0b0b0;
                 color:#fff;
-                border-radius: 5px;
-                font-weight: 600;
+                font-size: 16px;
+                font-weight: 700;
+                border-radius: 15px;
                 border:none;
+
+                @media all and (max-width:992px){
+                    width:100%;
+                }
             }
 
             .calculatorBtn{
-                width:200px;
+                width:250px;
                 height: 60px;
                 background: var(--mainColor);
                 color:#fff;
@@ -93,7 +145,6 @@ export const St = {
                 font-weight: 700;
                 border-radius: 15px;
                 border:none;
-                box-shadow: var(--defaultBoxShadow2);
 
                 @media all and (max-width:992px){
                     width:100%;
@@ -104,7 +155,7 @@ export const St = {
             display: flex;
             flex-direction: column;
             border-radius: 15px;
-            gap: 40px;
+            gap: 30px;
 
             &:last-child{
                 box-shadow: none;
@@ -126,12 +177,27 @@ export const St = {
             .flexible{
                 display: flex;
                 flex-direction: row;
-                gap: 40px;
+                gap: 30px;
                 width: 100%;
 
                 @media all and (max-width:992px){
                     flex-direction: column;
                 }
+            }
+
+            .flexible-col{
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+                width: 100%;
+
+                @media all and (max-width:992px){
+                    flex-direction: column;
+                }
+            }
+
+            .flexible-alignItems-start{
+                align-items: flex-start;
             }
 
             .input-box{
@@ -207,25 +273,6 @@ export const St = {
                     align-items: center;
                 }
 
-            }
-        }
-    `,
-    Wrapper: styled.div`
-        background: #fff;
-        background: #fff;
-        box-shadow: var(--defaultBoxShadow);
-        padding: 20px;
-        border-radius: 10px;
-
-        .flex-wrapper{
-            display:flex;
-            flex-direction: row;
-            .calculator-wrapper{
-                flex:1;
-            }
-
-            .result-wrapper{
-                /* width:  */
             }
         }
     `,

@@ -5,23 +5,59 @@ import { RankTableFieldView } from "./view/RankTableField.view";
 import RecordDetailInfoFieldView from "./view/RecordDetailInfoField.view";
 import _ from "lodash";
 import ViewControlFieldView from "./view/ViewControlField.view";
+import { useApiHook } from "./hooks/useApiHook";
+import useNRankRecordDetailHook from "./hooks/useNRankRecordDetailHook";
+import { useSelector } from "react-redux";
+import FieldLoadingV2 from "../../../../../../../../modules/loading/FieldLoadingV2";
 
 export function DetailRankTableComponent({
     open,
     onClose,
-    recordInfos,
-    recordDetailsBySearchedInfos,
-    traceableRecordDetails,
-    traceableAdRecordDetails
+    recordInfos
 }) {
     const scrollRef = useRef(null);
+
+    const workspaceRedux = useSelector(state => state.workspaceRedux);
+    const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const [recordRankDetails, setRecordRankDetails] = useState(null);
     const [recordAdRankDetails, setRecordAdRankDetails] = useState(null);
     const [isAdRankTrakView, setIsAdRankTrakView] = useState(false);
+    const [isInitSearchLoading, setIsInitSearchLoading] = useState(false);
+
+    const {
+        onReqSearchNRankRecordDetailsByInfos
+    } = useApiHook();
+
+    const {
+        recordDetailsBySearchedInfos,
+        traceableRecordDetails,
+        traceableAdRecordDetails,
+        onSetRecordDetailsBySearchedInfos,
+        onSetTraceableRecordDetails,
+        onSetTraceableAdRecordDetails
+    } = useNRankRecordDetailHook();
 
     let viewRecordDetails = isAdRankTrakView ? traceableAdRecordDetails : traceableRecordDetails;
     let viewRankDetails = isAdRankTrakView ? recordAdRankDetails : recordRankDetails;
+
+    useEffect(() => {
+        if(!wsId) {
+            return;
+        }
+
+        if(!recordInfos) {
+            return;
+        }
+
+        async function initialize() {
+            setIsInitSearchLoading(true);
+            await handleSearchNRankRecordDetailsByInfos();
+            setIsInitSearchLoading(false);
+        }
+
+        initialize();
+    }, [recordInfos, wsId])
 
     useEffect(() => {
         if(!recordDetailsBySearchedInfos) {
@@ -37,11 +73,54 @@ export function DetailRankTableComponent({
         }
     }, [isAdRankTrakView])
 
+    const handleSearchNRankRecordDetailsByInfos = async () => {
+        let infoIds = recordInfos?.map(r => r.id);
+
+        let body = {
+            record_info_ids: infoIds
+        }
+
+        await onReqSearchNRankRecordDetailsByInfos({
+            headers: { wsId: wsId },
+            body
+        }, {
+            success: (results) => {
+                let itemSet = new Set([]);
+                let details = [];
+                let adDetails = [];
+                
+                results.forEach(r => {
+                    let detailStr = r.mall_product_id + r.item_id + r.advertising_yn;
+
+                    if (r.mall_product_id && r.item_id && !itemSet.has(detailStr)) {
+                        itemSet.add(detailStr);
+
+                        if (r.advertising_yn === 'y') {
+                            adDetails.push(r);
+                        } else {
+                            details.push(r);
+                        }
+                    }
+                })
+                onSetRecordDetailsBySearchedInfos(results);
+                onSetTraceableRecordDetails(details);
+                onSetTraceableAdRecordDetails(adDetails);
+            },
+            fail: () => {
+                onClose();
+            }
+        })
+    }
+
     const handleInitDetailsRankTrend = () => {
         let rankDetails = [];
         let adRankDetails = [];
 
         recordDetailsBySearchedInfos.forEach(r => {
+            if(!(r.mall_product_id && r.item_id)) {
+                return;
+            }
+
             if (r.advertising_yn === 'y') {
                 adRankDetails.push(r);
             } else {
@@ -78,6 +157,15 @@ export function DetailRankTableComponent({
                         adRecordDetails={traceableAdRecordDetails}
                     />
                     <Wrapper ref={scrollRef}>
+                        {/* {!recordDetailsBySearchedInfos && */}
+                        {isInitSearchLoading &&
+                            <FieldLoadingV2
+                                oxStyle={{
+                                    borderRadius: '15px'
+                                }}
+                            />
+                        }
+
                         {viewRankDetails && viewRecordDetails?.map((detail, idx) => {
                             let currentRankDetails = viewRankDetails?.filter(r => r.mall_product_id === detail.mall_product_id);
 

@@ -39,12 +39,11 @@ export const SearchInfoBox = styled.div`
         border-radius: 10px;
     }
 
-    .tooltip {
-        
-    }
-
     .tooltip-text {
         width: 300px;
+        background-color: #ffffea;
+        color: #463f1e;
+        font-weight: 500;
     }
 
     .red-text {

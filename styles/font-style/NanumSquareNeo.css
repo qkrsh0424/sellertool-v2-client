@@ -1,6 +1,15 @@
-@font-face {
+/* @font-face {
     font-family: 'NanumSquareNeo';
     font-weight: normal;
+    font-style: normal;
+    size-adjust: 90%;
+    src: url('/fonts/nanumsquare-neo/woff2/NanumSquareNeo-Variable.woff2') format('woff2'),
+        url('/fonts/nanumsquare-neo/woff/NanumSquareNeo-Variable.woff') format('woff')
+} */
+
+@font-face {
+    font-family: 'NanumSquareNeo';
+    font-variation-settings: 'wght' normal;
     font-style: normal;
     size-adjust: 90%;
     src: url('/fonts/nanumsquare-neo/woff2/NanumSquareNeo-Variable.woff2') format('woff2'),

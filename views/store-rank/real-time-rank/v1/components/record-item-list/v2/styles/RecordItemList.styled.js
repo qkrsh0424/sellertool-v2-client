@@ -121,4 +121,18 @@ export const Wrapper = styled.div`
             background-color: #d4dbe9;
         }
     }
+
+    .info-text {
+        position:absolute;
+        top: -200px;
+        left:0;
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #979ba5;
+        font-size: 14px;
+    }
 `;

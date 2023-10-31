@@ -176,6 +176,9 @@ export function RecordItemListComponent({
                                     )
                                 }
                             />
+                            {recordList?.length === 0 &&
+                                <div className='info-text'>검색할 키워드와 스토어를 등록해주세요 !</div>
+                            }
                         </div>
                     </div>
                 </Wrapper>

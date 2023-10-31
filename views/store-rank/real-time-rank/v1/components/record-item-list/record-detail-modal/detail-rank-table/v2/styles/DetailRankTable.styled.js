@@ -2,11 +2,12 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     padding: 20px 20px 0 20px;
+    height: 70vh;
 `;
 
 export const Wrapper = styled.div`
-    min-height: 50vh;
-    max-height: 50vh;
+    min-height: 40vh;
+    /* max-height: 50vh; */
     overflow: auto;
     margin-bottom: 50px;
     /* background-color: #fff; */

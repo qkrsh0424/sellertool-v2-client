@@ -66,7 +66,7 @@ export default function useNRankRecordDetailHook() {
     }
 
     const checkStatusForModalOpen = () => {
-        if(![...traceableAdRecordDetails, ...traceableRecordDetails].length > 0 ) {
+        if(![...recordDetails, ...adRecordDetails].length > 0 ) {
             throw Error('조회데이터가 존재하지 않습니다.')
         }
     }

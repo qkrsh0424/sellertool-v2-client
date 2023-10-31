@@ -1,9 +1,7 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-    min-height: 45vh;
-    max-height: 45vh;
-    /* margin-bottom: 20px; */
+    min-height: 40vh;
     margin-bottom: 5px;
     border-radius: 0 0 15px 15px;
     box-shadow: var(--defaultBoxShadow);

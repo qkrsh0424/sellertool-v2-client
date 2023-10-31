@@ -38,7 +38,7 @@ export function RecordDetailModalComponent({
 
     const {
         onReqSearchNRankRecordInfos,
-        onReqSearchNRankRecordDetailsByInfos,
+        onReqSearchNRankRecordDetailsByInfo,
         onReqChangeNRankRecordStatusToPendingAndCreateNRankRecordInfo,
         onReqCreateNRankRecordDetails,
     } = useApiHook();
@@ -47,14 +47,8 @@ export function RecordDetailModalComponent({
         recordDetails,
         adRecordDetails,
         openedSubInfoRecordDetailIds,
-        recordDetailsBySearchedInfos,
-        traceableRecordDetails,
-        traceableAdRecordDetails,
-        onSetRecordDetailsBySearchedInfos,
         onSetRecordDetails,
         onSetAdRecordDetails,
-        onSetTraceableRecordDetails,
-        onSetTraceableAdRecordDetails,
         onAddOpenedSubInfoRecordDetailId,
         onRemoveOpenedSubInfoRecordDetailId,
         onActionFoldAllOptions,
@@ -87,6 +81,11 @@ export function RecordDetailModalComponent({
             return;
         }
 
+        // recordInfos가 이미 조회되었고, pending상태가 아니라면 recordInfos 재조회 요청을 하지 않는다
+        if(recordInfos && !isPending) {
+            return;
+        }
+
         async function initialize() {
             setIsInitSearchLoading(true);
             await handleSearchNRankRecordInfos();
@@ -97,31 +96,26 @@ export function RecordDetailModalComponent({
     }, [record, wsId])
 
     useEffect(() => {
-        if(!recordInfos) {
-            return;
-        }
-
-        async function fetchRecordDetails() {
-            setIsInitSearchLoading(true);
-            await handleSearchNRankRecordDetailsByInfos();
-            setIsInitSearchLoading(false);
-        }
-
-        fetchRecordDetails();
-        onSetCurrentRecordInfoIdx(recordInfos.length-1)
-    }, [recordInfos])
-
-    useEffect(() => {
         if(!selectedRecordInfo) {
             return;
         }
 
-        if(!recordDetailsBySearchedInfos) {
+        async function initialize() {
+            setIsInitSearchLoading(true);
+            await handleSearchNRankRecordDetailsByInfo();
+            setIsInitSearchLoading(false);
+        }
+
+        initialize();
+    }, [selectedRecordInfo])
+
+    useEffect(() => {
+        if(!recordInfos) {
             return;
         }
-        
-        handleInitDetailsBySelectedRecordInfo();
-    }, [selectedRecordInfo, recordDetailsBySearchedInfos])
+
+        onSetCurrentRecordInfoIdx(recordInfos.length-1)
+    }, [recordInfos])
 
     const handleSearchNRankRecordInfos = async () => {
         await onReqSearchNRankRecordInfos({
@@ -164,38 +158,27 @@ export function RecordDetailModalComponent({
         customBackdropControl.hideBackdrop();
     }
 
-    const handleSearchNRankRecordDetailsByInfos = async () => {
-        let infoIds = recordInfos?.map(r => r.id);
+    const handleSearchNRankRecordDetailsByInfo = async () => {
+        let infoId = selectedRecordInfo.id;
 
-        let body = {
-            record_info_ids: infoIds
-        }
-
-        await onReqSearchNRankRecordDetailsByInfos({
+        await onReqSearchNRankRecordDetailsByInfo({
             headers: { wsId: wsId },
-            body
+            params : { record_info_id: infoId }
         }, {
             success: (results) => {
-                let itemSet = new Set([]);
-                let details = [];
                 let adDetails = [];
+                let details = [];
                 
                 results.forEach(r => {
-                    let detailStr = r.mall_product_id + r.item_id + r.advertising_yn;
-
-                    if (r.mall_product_id && r.item_id && !itemSet.has(detailStr)) {
-                        itemSet.add(detailStr);
-
-                        if (r.advertising_yn === 'y') {
-                            adDetails.push(r);
-                        } else {
-                            details.push(r);
-                        }
+                    if(r.advertising_yn === 'y') {
+                        adDetails.push(r);
+                    }else {
+                        details.push(r);
                     }
                 })
-                onSetRecordDetailsBySearchedInfos(results);
-                onSetTraceableRecordDetails(details);
-                onSetTraceableAdRecordDetails(adDetails);
+                
+                onSetRecordDetails(details);
+                onSetAdRecordDetails(adDetails);
             },
             fail: () => {
                 onClose();
@@ -208,24 +191,6 @@ export function RecordDetailModalComponent({
             body: { record_id: record.id, record_info_id: createRecordInfoId },
             headers: { wsId: wsId }
         })
-    }
-
-    const handleInitDetailsBySelectedRecordInfo = () => {
-        let data = recordDetailsBySearchedInfos.filter(r => r.nrank_record_info_id === selectedRecordInfo.id);
-
-        let details = [];
-        let adDetails = [];
-
-        data.forEach(r => {
-            if(r.advertising_yn === 'y') {
-                adDetails.push(r);
-            }else {
-                details.push(r);
-            }
-        })
-
-        onSetRecordDetails(details);
-        onSetAdRecordDetails(adDetails);
     }
 
     const handleChangeAdRankView = () => {
@@ -282,8 +247,6 @@ export function RecordDetailModalComponent({
                         recordInfos={recordInfos}
                         currentRecordInfoIdx={currentRecordInfoIdx}
                         selectedRecordInfo={selectedRecordInfo}
-                        traceableRecordDetails={traceableRecordDetails}
-                        traceableAdRecordDetails={traceableAdRecordDetails}
 
                         onActionFoldAllOptions={onActionFoldAllOptions}
                         onActionUnfoldAllOptions={onActionUnfoldAllOptions}
@@ -370,11 +333,7 @@ export function RecordDetailModalComponent({
                 <DetailRankTableComponent
                     open={detailTrendModalOpen}
                     onClose={() => handleCloseDetailTrendModal()}
-                    record={record}
                     recordInfos={recordInfos}
-                    recordDetailsBySearchedInfos={recordDetailsBySearchedInfos}
-                    traceableRecordDetails={traceableRecordDetails}
-                    traceableAdRecordDetails={traceableAdRecordDetails}
                 />
             }
         </>

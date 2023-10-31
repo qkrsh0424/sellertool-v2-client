@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import CustomBlockButton from '../../../../../components/buttons/block-button/v1/CustomBlockButton';
 
 const Container = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 `;
 
 const Wrapper = styled.div`

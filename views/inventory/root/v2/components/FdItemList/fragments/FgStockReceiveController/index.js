@@ -1,0 +1,1 @@
+export { FgStockReceiveController } from './FgStockReceiveController';

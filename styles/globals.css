@@ -20,6 +20,7 @@
     --defaultBoxShadow: 1px 1px 10px 0 rgb(72 75 108 / 8%);
     --defaultBoxShadow2: 4px 12px 30px 6px rgba(0,0,0,.09);
     --defaultBoxShadow2Hover:4px 12px 20px 6px rgba(0,0,0,.18);
+    --defaultBoxShadow3: 2px 6px 30px 0px rgba(0,0,0,.09);
     --defaultBlueColor: #418cff;
     --defaultBlueColorOpacity50: #f3f8ff;
     --defaultBlueColorOpacity100: #e9f0ff;

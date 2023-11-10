@@ -1,1 +1,1 @@
-export { FgRegisteredStockByDate } from './FgRegisteredStockByDate';
+export { FgRegisteredStockByDate } from './FgRegisteredStockByDate/FgRegisteredStockByDate';

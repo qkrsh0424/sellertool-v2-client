@@ -1,11 +1,7 @@
-import CloseButton from "./CloseButton";
-import FooterButtonGroup from "./FooterButtonGroup";
-import Title from "./Title";
-
-import { Dialog } from '@mui/material';
+import { Dialog, Slide } from '@mui/material';
 import styled from 'styled-components';
-import FooterButton from "./FooterButton";
 import React from "react";
+import CloseButton from './CloseButton';
 
 const DialogContainer = styled(Dialog)`
     .MuiPaper-root::-webkit-scrollbar{
@@ -33,6 +29,10 @@ const DialogContainer = styled(Dialog)`
 
 const Container = styled.div`
 `;
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 
 /**
@@ -67,6 +67,7 @@ function DialogMain({
                 onClose={typeof (onClose) === 'function' ? () => onClose() : () => { ; }}
                 backdropcolor={backdropColor || '#00000080'}
                 border_radius={borderRadius}
+                TransitionComponent={Transition}
             >
                 <Container style={{ background: backgroundColor ? backgroundColor : 'var(--defaultBackground)' }}>
                     {children}
@@ -76,9 +77,9 @@ function DialogMain({
     );
 }
 
-export const CustomDialog = Object.assign(DialogMain, {
+export const CustomSlideDialog = Object.assign(DialogMain, {
     CloseButton: CloseButton,
-    Title: Title,
-    FooterButtonGroup: FooterButtonGroup,
-    FooterButton: FooterButton
+    // Title: Title,
+    // FooterButtonGroup: FooterButtonGroup,
+    // FooterButton: FooterButton
 })

@@ -8,6 +8,7 @@ export const St = {
     Wrapper: styled.div`
         display: flex;
         align-items: center;
+        gap: 20px;
 
         button{
             width:40px;
@@ -15,7 +16,8 @@ export const St = {
             background: #fff;
             border-radius: 50%;
             border: none;
-            background: var(--grayButtonColor);
+            background: #fff;
+            transition: all .3s;
 
             &:hover{
                 background: var(--grayButtonHoverColor);
@@ -24,8 +26,6 @@ export const St = {
 
         .title-box{
             flex:1;
-            text-align: center;
-            margin-left: -40px;
             font-size: 22px;
             font-weight: 700;
         }

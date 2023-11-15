@@ -2,7 +2,8 @@ import CustomBlockButton from "../../../../../../../../../../components/buttons/
 import { St } from "./FdFooterAppBar.styled";
 
 export function FdFooterAppBar({
-    onClose
+    onClose,
+    onConfirm
 }) {
     return (
         <>
@@ -18,6 +19,7 @@ export function FdFooterAppBar({
                     <CustomBlockButton
                         type='button'
                         className='confirm-button'
+                        onClick={() => onConfirm()}
                     >
                         확인
                     </CustomBlockButton>

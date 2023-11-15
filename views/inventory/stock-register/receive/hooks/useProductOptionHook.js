@@ -9,6 +9,6 @@ export function useProductOptionHook(props) {
 
     return {
         productOptionPage,
-        onSetProductOptionPage
+        onSetProductOptionPage,
     }
 }

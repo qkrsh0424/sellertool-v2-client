@@ -14,13 +14,17 @@ import { useInventoryStocksHook } from "../../../../../../root/v2/hooks";
 import { FdFooterAppBar } from "./components/FdFooterAppBar";
 import { FdPagenation } from "./components/FdPagenation/FdPagenation";
 import { useSortTypeGlobalHook } from "../../../../../../../../hooks/sort_type/v1";
+import { v4 as uuidv4 } from 'uuid';
 
 const DEFAULT_PAGE = 0;
 const DEFAULT_SIZE = 50;
 
 export function MdProductOptionList({
     open,
-    onClose
+    onClose,
+
+    stockReceiveItemList,
+    onConcatStockReceiveItems
 }) {
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
@@ -187,12 +191,29 @@ export function MdProductOptionList({
         setSize(value);
     }
 
-    console.log(
-        sortTypeHook.sortMethodList,
-        sortTypeHook.convertSortMethodListToSortTypes(sortTypeHook.sortMethodList),
-        sortTypeHook.encodeURI(sortTypeHook.convertSortMethodListToSortTypes(sortTypeHook.sortMethodList)),
-        sortTypeHook.decodeURI(sortTypeHook.encodeURI(sortTypeHook.convertSortMethodListToSortTypes(sortTypeHook.sortMethodList))),
-    )
+    const handleSubmitConfirm = () => {
+        /** @type {useStockReceiveItemHook.stockReceiveItem[]} */
+        let targetItemList = selectedItemList.filter(r => !stockReceiveItemList.some(r2 => r2.productOptionId === r.id))
+            .map(r => {
+                return {
+                    id: uuidv4(),
+                    unit: '0',
+                    memo: '',
+                    purchaseCost: r?.totalPurchasePrice,
+                    productOptionId: r?.id,
+                    productThumbnailUri: r?.product?.thumbnailUri,
+                    productName: r?.product.name,
+                    productTag: r?.product.productTag,
+                    productOptionCode: r?.code,
+                    productOptionName: r?.name,
+                    productOptionTag: r?.optionTag,
+                }
+            });
+
+        onConcatStockReceiveItems(targetItemList);
+        handleClearAllSelectedItemList();
+        onClose();
+    }
     return (
         <>
             <CustomSlideDialog
@@ -244,6 +265,7 @@ export function MdProductOptionList({
                     <FdFooterAppBar
                         selectedItemList={selectedItemList}
                         onClose={() => onClose()}
+                        onConfirm={() => handleSubmitConfirm()}
                     />
                 </St.Container>
             </CustomSlideDialog>

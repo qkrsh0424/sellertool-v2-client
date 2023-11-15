@@ -4,7 +4,10 @@ import { St } from "./FdButtonGroup.styled";
 import { MdProductOptionList } from "./modals/MdProductOptionList/MdProductOptionList";
 import { useRouter } from "next/router";
 
-export function FdButtonGroup(props) {
+export function FdButtonGroup({
+    stockReceiveItemList,
+    onConcatStockReceiveItems
+}) {
     const router = useRouter();
     const poListMd = router?.query?.poListMd;
 
@@ -49,6 +52,9 @@ export function FdButtonGroup(props) {
             <MdProductOptionList
                 open={productOptionListModalOpen}
                 onClose={() => toggleProductOptionListModalOpen(false)}
+
+                stockReceiveItemList={stockReceiveItemList}
+                onConcatStockReceiveItems={(stockReceiveItems) => onConcatStockReceiveItems(stockReceiveItems)}
             />
         </>
     );

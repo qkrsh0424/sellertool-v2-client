@@ -13,6 +13,7 @@ import { FdItemList } from "./components/FdItemList/FdItemList";
 import { useInventoryStocksHook } from "../../../../../../root/v2/hooks";
 import { FdFooterAppBar } from "./components/FdFooterAppBar";
 import { FdPagenation } from "./components/FdPagenation/FdPagenation";
+import { useSortTypeGlobalHook } from "../../../../../../../../hooks/sort_type/v1";
 
 const DEFAULT_PAGE = 0;
 const DEFAULT_SIZE = 50;
@@ -23,6 +24,8 @@ export function MdProductOptionList({
 }) {
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
+
+    const sortTypeHook = useSortTypeGlobalHook();
 
     const apiHook = useApiHook();
     const productCategoryHook = useProductCategoryHook();
@@ -82,6 +85,7 @@ export function MdProductOptionList({
             fetchProductOptionPageParams.packageYn = 'n';
             fetchProductOptionPageParams.page = page;
             fetchProductOptionPageParams.size = size;
+            fetchProductOptionPageParams.sortTypes = sortTypeHook.encodeURI(sortTypeHook.sortTypes);
 
             await apiHook.reqFetchProductOptionPage({
                 params: fetchProductOptionPageParams,
@@ -116,7 +120,8 @@ export function MdProductOptionList({
         productSubCategoryHook?.productSubCategory,
         searchFilterHook?.searchFilter,
         page,
-        size
+        size,
+        sortTypeHook.sortTypes
     ]);
 
     const handleSelectProductCategory = (value) => {
@@ -134,6 +139,18 @@ export function MdProductOptionList({
     const handleSetSearchFilter = (value) => {
         searchFilterHook.onSetSearchFilter(value);
         setPage(DEFAULT_PAGE);
+    }
+
+    const handlePushSortMethod = (sortTarget) => {
+        sortTypeHook.onPushSortMethod(sortTarget);
+    }
+
+    const handleRemoveSortMethod = (sortTarget) => {
+        sortTypeHook.onRemoveSortMethod(sortTarget);
+    }
+
+    const handleChangeSortDirection = (sortTarget) => {
+        sortTypeHook.onChangeSortDirection(sortTarget);
     }
 
     const handleClearAllSearchCondition = () => {
@@ -170,6 +187,12 @@ export function MdProductOptionList({
         setSize(value);
     }
 
+    console.log(
+        sortTypeHook.sortMethodList,
+        sortTypeHook.convertSortMethodListToSortTypes(sortTypeHook.sortMethodList),
+        sortTypeHook.encodeURI(sortTypeHook.convertSortMethodListToSortTypes(sortTypeHook.sortMethodList)),
+        sortTypeHook.decodeURI(sortTypeHook.encodeURI(sortTypeHook.convertSortMethodListToSortTypes(sortTypeHook.sortMethodList))),
+    )
     return (
         <>
             <CustomSlideDialog
@@ -187,10 +210,17 @@ export function MdProductOptionList({
                         productCategory={productCategoryHook?.productCategory}
                         productSubCategory={productSubCategoryHook?.productSubCategory}
                         searchFilter={searchFilterHook?.searchFilter}
+                        sortMethodList={sortTypeHook.sortMethodList}
 
                         onSelectProductCategory={handleSelectProductCategory}
                         onSelectProductSubCategory={handleSelectProductSubCategory}
+
                         onSetSearchFilter={handleSetSearchFilter}
+
+                        onPushSortMethod={handlePushSortMethod}
+                        onRemoveSortMethod={handleRemoveSortMethod}
+                        onChangeSortDirection={handleChangeSortDirection}
+
                         onClearAllSearchCondition={handleClearAllSearchCondition}
                     />
                     <FdPagenation

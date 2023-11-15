@@ -72,7 +72,99 @@ export const St = {
         }
     `,
     SearchConditionContainer: styled.div`
-        padding: 30px 20px 0 20px;
+        padding: 20px 20px 0 20px;
+
+        .label{
+            font-size: 13px;
+            color: #404040;
+            margin-bottom: 5px;
+        }
+
+        .control-group{
+            display: flex;
+            gap:20px;
+
+            @media all and (max-width:992px){
+                flex-direction: column;
+            }
+
+            .control-box{
+                width:250px;
+
+                @media all and (max-width:992px){
+                    width: 100%;
+                }
+
+                .select-item{
+                    border-radius: 5px;
+                    height: 40px;
+                }
+
+                .input-item{
+                    border-radius: 5px;
+                    height: 40px;
+                }
+
+            }
+
+            .add-button{
+                border-radius: 5px;
+                width: 80px;
+                height: 40px;
+                background: var(--grayButtonColor);
+                font-weight: bold;
+                border: none;
+
+                @media all and (max-width:992px){
+                    width: 100%;
+                }
+            }
+        }
+
+        .searchFilter-item-group{
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+            
+            .subject{
+                font-size: 14px;
+                font-weight: 600;
+                padding: 10px 5px;
+            }
+
+            .searchFilter-item{
+                display: flex;
+                gap: 5px;
+                align-items: center;
+                border: none;
+                background: var(--grayButtonColor);
+                padding: 3px 8px;
+                border-radius: 5px;
+
+                .text{
+                    font-size: 11px;
+                    font-weight: 500;
+                }
+
+                .deleteIconBtn{
+                    cursor: pointer;
+                    width:25px;
+                    height: 25px;
+                    background: none;
+                    padding:5px;
+                    border-radius: 50%;
+
+                    &:hover{
+                        background:#fff;
+                    }
+                }
+            }
+        }
+    `,
+    SortTypesContainer: styled.div`
+        padding: 20px 20px 0 20px;
 
         .label{
             font-size: 13px;
@@ -116,8 +208,8 @@ export const St = {
             }
         }
 
-        .searchFilter-item-group{
-            margin-top: 20px;
+        .aggregation-item-group{
+            margin-top: 10px;
             display: flex;
             align-items: center;
             gap: 5px;
@@ -129,18 +221,18 @@ export const St = {
                 padding: 10px 5px;
             }
 
-            .searchFilter-item{
+            .aggregation-item{
                 display: flex;
                 gap: 5px;
                 align-items: center;
                 border: none;
                 background: var(--grayButtonColor);
-                padding: 5px 10px;
+                padding: 3px 8px;
                 border-radius: 5px;
 
                 .text{
-                    font-size: 12px;
-                    font-weight: 400;
+                    font-size: 11px;
+                    font-weight: 500;
                 }
 
                 .deleteIconBtn{

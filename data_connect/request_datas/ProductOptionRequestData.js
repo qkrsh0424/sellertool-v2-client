@@ -9,6 +9,7 @@ export const ProductOptionRequestData = () => {
             searchFilter: null,
             page: null,
             size: null,
+            sortTypes: null
         }
     }
 }

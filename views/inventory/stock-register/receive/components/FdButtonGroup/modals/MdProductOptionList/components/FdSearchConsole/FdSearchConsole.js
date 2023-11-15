@@ -17,10 +17,17 @@ export function FdSearchConsole({
     productCategory,
     productSubCategory,
     searchFilter,
+    sortMethodList,
 
     onSelectProductCategory,
     onSelectProductSubCategory,
+
     onSetSearchFilter,
+
+    onPushSortMethod,
+    onRemoveSortMethod,
+    onChangeSortDirection,
+
     onClearAllSearchCondition
 }) {
     const [isHide, setIsHide] = useState(false);
@@ -95,9 +102,25 @@ export function FdSearchConsole({
         }
     }
 
+    const handlePushSortMethod = (sortTarget) => {
+        if(!sortTarget){
+            return;
+        }
+        onPushSortMethod(sortTarget);
+    }
+
+    const handleRemoveSortMethod = (sortTarget) => {
+        onRemoveSortMethod(sortTarget);
+    }
+
+    const handleChangeSortDirection = (sortTarget) => {
+        onChangeSortDirection(sortTarget);
+    }
+
     const handleClearAll = () => {
         onClearAllSearchCondition();
     }
+
     return (
         <>
             <St.Container>
@@ -131,7 +154,6 @@ export function FdSearchConsole({
                                 </div>
                             </St.CategorySelectorContainer>
                             <St.SearchConditionContainer>
-                                <div className='label'>조회 필터</div>
                                 <form className='control-group' onSubmit={(e) => { e.preventDefault(); handlePushSearchFilter() }}>
                                     <div className='control-box'>
                                         <CustomSelect
@@ -139,7 +161,7 @@ export function FdSearchConsole({
                                             value={searchCondition || ''}
                                             onChange={(e) => handleChangeSearchConditionFromEvent(e)}
                                         >
-                                            <option value=''>선택</option>
+                                            <option value=''>== 검색 항목 선택 ==</option>
                                             {SEARCH_CONDITIONS?.map(r => {
                                                 return (
                                                     <option
@@ -174,7 +196,7 @@ export function FdSearchConsole({
                                     }
                                 </form>
                                 <div className='searchFilter-item-group'>
-                                    <div className='subject'>필터 집합 : </div>
+                                    <div className='subject'>검색 집합 : </div>
                                     {searchFilterList?.map((searchFilter, index) => {
                                         const searchConditionName = SEARCH_CONDITIONS?.find(r => r.fieldName === searchFilter?.searchCondition)?.name;
                                         return (
@@ -193,6 +215,62 @@ export function FdSearchConsole({
                                     })}
                                 </div>
                             </St.SearchConditionContainer>
+                            <St.SortTypesContainer>
+                                <div className='control-group'>
+                                    <div className='control-box'>
+                                        <CustomSelect
+                                            className='select-item'
+                                            value={''}
+                                            onChange={(e) => handlePushSortMethod(e.target.value)}
+                                        >
+                                            <option value=''>== 정렬 항목 선택 ==</option>
+                                            {SORT_METHODS?.filter(r => !sortMethodList?.some(r2 => r2.sortTarget === r.sortTarget))?.map(r => {
+                                                return (
+                                                    <option
+                                                        key={r.sortTarget}
+                                                        value={r.sortTarget}
+                                                    >
+                                                        {r.name}
+                                                    </option>
+                                                );
+                                            })}
+                                        </CustomSelect>
+                                    </div>
+                                </div>
+                                <div className='aggregation-item-group'>
+                                    <div className='subject'>정렬 순서 : </div>
+                                    {sortMethodList?.map((sortMethod, index) => {
+                                        const sortName = SORT_METHODS?.find(r => r.sortTarget === sortMethod.sortTarget)?.name;
+                                        return (
+                                            <div key={index} className='aggregation-item'>
+                                                <div className='text'>{sortName}</div>
+                                                <div
+                                                    className='deleteIconBtn'
+                                                    onClick={() => handleChangeSortDirection(sortMethod.sortTarget)}
+                                                >
+                                                    {sortMethod.sortDirection === 'DESC' ?
+                                                        <CustomImage
+                                                            src={'/images/icon/arrow_downward_808080.svg'}
+                                                        />
+                                                        :
+                                                        <CustomImage
+                                                            src={'/images/icon/arrow_upward_808080.svg'}
+                                                        />
+                                                    }
+                                                </div>
+                                                <div
+                                                    className='deleteIconBtn'
+                                                    onClick={() => handleRemoveSortMethod(sortMethod.sortTarget)}
+                                                >
+                                                    <CustomImage
+                                                        src={'/images/icon/close_default_e56767.svg'}
+                                                    />
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </St.SortTypesContainer>
                             <St.FooterButtonContainer>
                                 <div className='button-group'>
                                     <CustomBlockButton
@@ -297,4 +375,39 @@ const SEARCH_CONDITIONS = [
         fieldName: 'PRODUCT_OPTION_RELEASE_LOCATION',
         name: '출고지',
     }
+]
+
+const SORT_METHODS = [
+    {
+        sortTarget: 'PRODUCT_CID',
+        name: '상품등록'
+    },
+    {
+        sortTarget: 'PRODUCT_NAME',
+        name: '상품명'
+    },
+    {
+        sortTarget: 'PRODUCT_TAG',
+        name: '상품태그'
+    },
+    {
+        sortTarget: 'PRODUCT_OPTION_NAME',
+        name: '옵션명'
+    },
+    {
+        sortTarget: 'PRODUCT_OPTION_TAG',
+        name: '옵션태그'
+    },
+    {
+        sortTarget: 'STATUS',
+        name: '상태'
+    },
+    {
+        sortTarget: 'RELEASE_LOCATION',
+        name: '출고지'
+    },
+    {
+        sortTarget: 'MEMO',
+        name: '메모'
+    },
 ]

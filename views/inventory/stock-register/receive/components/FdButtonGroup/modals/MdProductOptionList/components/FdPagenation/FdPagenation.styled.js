@@ -15,7 +15,13 @@ export const St = {
             }
         }
 
-        .wrapper > .selectedCount{
+        .wrapper > .selectedCount-box {
+            @media all and (max-width:992px){
+                width:100%;
+            }
+        }
+
+        .wrapper > .selectedCount-box > .selectedCount{
             background: var(--grayButtonColor);
             border: none;
             color:#000;
@@ -37,6 +43,14 @@ export const St = {
 
             &:hover > span{
                 display: none;
+            }
+        }
+
+        .wrapper > .pagenation-control-box{
+            @media all and (max-width:992px){
+                display: flex;
+                justify-content: flex-end;
+                width:100%;
             }
         }
     `,

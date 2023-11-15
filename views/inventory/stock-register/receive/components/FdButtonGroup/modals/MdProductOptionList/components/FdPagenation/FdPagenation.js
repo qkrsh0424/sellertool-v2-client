@@ -14,24 +14,28 @@ export function FdPagenation({
         <>
             <St.Container>
                 <div className='wrapper'>
-                    <CustomBlockButton
-                        type='button'
-                        className='selectedCount'
-                        onClick={() => onClearAllSelectedItemList()}
-                    >
-                        <span>{selectedItemList?.length} 개 선택됨</span>
-                    </CustomBlockButton>
-                    <PagenationComponentStateV2
-                        pageIndex={productOptionPage?.number}
-                        totalElements={productOptionPage?.totalElements}
-                        totalPages={productOptionPage?.totalPages}
-                        sizeElements={[50, 100]}
-                        isFirst={productOptionPage?.first}
-                        isLast={productOptionPage?.last}
-                        onChangePage={(value) => onChangePage(value)}
-                        onChangeSize={(value) => onChangeSize(value)}
-                        size={size}
-                    />
+                    <div className='selectedCount-box'>
+                        <CustomBlockButton
+                            type='button'
+                            className='selectedCount'
+                            onClick={() => onClearAllSelectedItemList()}
+                        >
+                            <span>{selectedItemList?.length} 개 선택됨</span>
+                        </CustomBlockButton>
+                    </div>
+                    <div className='pagenation-control-box'>
+                        <PagenationComponentStateV2
+                            pageIndex={productOptionPage?.number}
+                            totalElements={productOptionPage?.totalElements}
+                            totalPages={productOptionPage?.totalPages}
+                            sizeElements={[50, 100]}
+                            isFirst={productOptionPage?.first}
+                            isLast={productOptionPage?.last}
+                            onChangePage={(value) => onChangePage(value)}
+                            onChangeSize={(value) => onChangeSize(value)}
+                            size={size}
+                        />
+                    </div>
                 </div>
             </St.Container>
         </>

@@ -2,18 +2,20 @@ import { useState } from "react";
 import { CustomDialog } from "../../../../../../../../../../../components/dialog/v1/CustomDialog";
 import HighlightedText from "../../../../../../../../../../../components/text/highlight/HighlightedText";
 import { St } from "./MdSelectCategory.styled";
+import { useSearchAggregationActionsHook, useSearchAggregationValueHook } from "../../../../../../../hooks/SearchAggregationHook";
 
 export function MdSelectCategory({
     open = false,
-    productCategory,
     productCategories,
     onClose = () => { },
-    onSelectCategory
 }) {
+    const searchAggregationValueHook = useSearchAggregationValueHook();
+    const searchAggregationActionsHook = useSearchAggregationActionsHook();
+
     const [inputValue, setInputValue] = useState('');
 
     const handleSelectCategory = (data) => {
-        onSelectCategory(data);
+        searchAggregationActionsHook.onChangeProductCategory(data);
         onClose();
     }
 
@@ -45,7 +47,7 @@ export function MdSelectCategory({
                     <div className='content-group'>
                         <div className='content-box'>
                             <span
-                                className={`tag ${!productCategory && 'tag-accent'}`}
+                                className={`tag ${!searchAggregationValueHook?.productCategory && 'tag-accent'}`}
                                 onClick={() => handleSelectCategory()}
                             >
                                 전체
@@ -57,7 +59,7 @@ export function MdSelectCategory({
                                     return (
                                         <span
                                             key={r.id}
-                                            className={`tag ${productCategory?.id === r.id && 'tag-accent'}`}
+                                            className={`tag ${searchAggregationValueHook?.productCategory?.id === r.id && 'tag-accent'}`}
                                             onClick={() => handleSelectCategory(r)}
                                         >
                                             {r.name}
@@ -69,7 +71,7 @@ export function MdSelectCategory({
                                     return (
                                         <span
                                             key={r.id}
-                                            className={`tag ${productCategory?.id === r.id && 'tag-accent'}`}
+                                            className={`tag ${searchAggregationValueHook?.productCategory?.id === r.id && 'tag-accent'}`}
                                             onClick={() => handleSelectCategory(r)}
                                         >
                                             <HighlightedText

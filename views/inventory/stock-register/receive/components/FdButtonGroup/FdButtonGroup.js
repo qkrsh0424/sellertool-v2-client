@@ -1,8 +1,8 @@
-import { useState } from "react";
 import CustomBlockButton from "../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { St } from "./FdButtonGroup.styled";
 import { MdProductOptionList } from "./modals/MdProductOptionList/MdProductOptionList";
 import { useRouter } from "next/router";
+import { SearchAggregationProvider } from "../../contexts/SearchAggregationProvider";
 
 export function FdButtonGroup({
     stockReceiveItemList,
@@ -38,24 +38,23 @@ export function FdButtonGroup({
                         type='button'
                         onClick={() => toggleProductOptionListModalOpen(true)}
                     >
-                        입고제품 추가
+                        입고제품추가
                     </CustomBlockButton>
                     <CustomBlockButton>
-                        엑셀 일괄등록
-                    </CustomBlockButton>
-                    <CustomBlockButton>
-                        일괄입력
+                        엑셀일괄추가
                     </CustomBlockButton>
                 </div>
             </St.Container>
 
-            <MdProductOptionList
-                open={productOptionListModalOpen}
-                onClose={() => toggleProductOptionListModalOpen(false)}
+            <SearchAggregationProvider>
+                <MdProductOptionList
+                    open={productOptionListModalOpen}
+                    onClose={() => toggleProductOptionListModalOpen(false)}
 
-                stockReceiveItemList={stockReceiveItemList}
-                onConcatStockReceiveItems={(stockReceiveItems) => onConcatStockReceiveItems(stockReceiveItems)}
-            />
+                    stockReceiveItemList={stockReceiveItemList}
+                    onConcatStockReceiveItems={(stockReceiveItems) => onConcatStockReceiveItems(stockReceiveItems)}
+                />
+            </SearchAggregationProvider>
         </>
     );
 }

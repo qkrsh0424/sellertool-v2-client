@@ -6,38 +6,33 @@ import { MdSelectCategory } from "./modals/MdSelectCategory";
 import { MdSelectSubCategory } from "./modals/MdSelectSubCategory";
 import CustomSelect from "../../../../../../../../../../components/select/default/v1/CustomSelect";
 import CustomInput from "../../../../../../../../../../components/input/default/v1/CustomInput";
-import { useRouter } from "next/router";
 import { CustomURIEncoderUtils } from "../../../../../../../../../../utils/CustomURIEncoderUtils";
+import { useSearchAggregationActionsHook, useSearchAggregationValueHook } from "../../../../../../hooks/SearchAggregationHook";
+import { SortFormatUtils } from "../../../../../../../../../../utils/sortFormatUtils";
+
+const SORT_DIRECTION_ASC = 'ASC';
+const SORT_DIRECTION_DESC = 'DESC';
+const DEFAULT_SORT_DIRECTION = SORT_DIRECTION_ASC;
 
 const customURIEncoderUtils = CustomURIEncoderUtils();
+const sortFormatUtils = SortFormatUtils();
 
 export function FdSearchConsole({
     productCategoryList,
     productSubCategoryList,
-    productCategory,
-    productSubCategory,
-    searchFilter,
-    sortMethodList,
-
-    onSelectProductCategory,
-    onSelectProductSubCategory,
-
-    onSetSearchFilter,
-
-    onPushSortMethod,
-    onRemoveSortMethod,
-    onChangeSortDirection,
-
-    onClearAllSearchCondition
 }) {
+    const searchAggregationValueHook = useSearchAggregationValueHook();
+    const searchAggregationActionsHook = useSearchAggregationActionsHook();
+
     const [isHide, setIsHide] = useState(false);
     const [selectCategoryModalOpen, setSelectCategoryModalOpen] = useState(false);
     const [selectSubCategoryModalOpen, setSelectSubCategoryModalOpen] = useState(false);
     const [searchCondition, setSearchCondition] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
-    let searchFilterList = searchFilter ? customURIEncoderUtils.decodeJSONList(searchFilter) : [];
-
+    let searchFilterList = searchAggregationValueHook?.searchFilter ? customURIEncoderUtils.decodeJSONList(searchAggregationValueHook?.searchFilter) : [];
+    let sortMethodList = searchAggregationValueHook?.sortTypes ? sortFormatUtils.convertSortTypesToSortMethodList(customURIEncoderUtils.decodeJSONList(searchAggregationValueHook?.sortTypes)) : [];
+    
     const toggleIsHide = (bool) => {
         setIsHide(bool);
     }
@@ -48,14 +43,6 @@ export function FdSearchConsole({
 
     const toggleSelectSubCategoryModalOpen = (bool) => {
         setSelectSubCategoryModalOpen(bool);
-    }
-
-    const handleSelectProductCategory = (value) => {
-        onSelectProductCategory(value);
-    }
-
-    const handleSelectSubProductCategory = (value) => {
-        onSelectProductSubCategory(value);
     }
 
     const handleChangeSearchConditionFromEvent = (e) => {
@@ -88,7 +75,7 @@ export function FdSearchConsole({
             ]
         }
 
-        onSetSearchFilter(currentSearchFilterList);
+        searchAggregationActionsHook.onChangeSearchFilter(currentSearchFilterList);
         setSearchQuery('');
     }
 
@@ -96,29 +83,54 @@ export function FdSearchConsole({
         let currentSearchFilterList = [...searchFilterList].filter(r => r.searchCondition !== targetSearchCondtion);
 
         if (!currentSearchFilterList || currentSearchFilterList?.length <= 0) {
-            onSetSearchFilter([]);
+            searchAggregationActionsHook.onChangeSearchFilter([]);
         } else {
-            onSetSearchFilter(currentSearchFilterList);
+            searchAggregationActionsHook.onChangeSearchFilter(currentSearchFilterList);
         }
     }
 
     const handlePushSortMethod = (sortTarget) => {
-        if(!sortTarget){
+        if (!sortTarget) {
             return;
         }
-        onPushSortMethod(sortTarget);
+
+        let newSortMethodList = [...sortMethodList];
+        let duplicatedSortMethod = newSortMethodList?.some(r => r.sortTarget === sortTarget);
+        if (duplicatedSortMethod) {
+            return;
+        }
+
+        newSortMethodList.push({
+            sortTarget: sortTarget,
+            sortDirection: DEFAULT_SORT_DIRECTION
+        })
+
+        const sortTypes = sortFormatUtils.convertSortMethodListToSortTypes(newSortMethodList);
+        searchAggregationActionsHook.onChangeSortTypes(sortTypes);
     }
 
     const handleRemoveSortMethod = (sortTarget) => {
-        onRemoveSortMethod(sortTarget);
+        let newSortMethodList = [...sortMethodList].filter(r => r.sortTarget !== sortTarget);
+        const sortTypes = sortFormatUtils.convertSortMethodListToSortTypes(newSortMethodList);
+        searchAggregationActionsHook.onChangeSortTypes(sortTypes);
     }
 
     const handleChangeSortDirection = (sortTarget) => {
-        onChangeSortDirection(sortTarget);
+        let newSortMethodList = [...sortMethodList].map(sortMethod => {
+            if (sortMethod.sortTarget === sortTarget) {
+                return {
+                    ...sortMethod,
+                    sortDirection: sortMethod.sortDirection === SORT_DIRECTION_ASC ? SORT_DIRECTION_DESC : SORT_DIRECTION_ASC
+                }
+            } else { return { ...sortMethod } }
+        })
+
+        const sortTypes = sortFormatUtils.convertSortMethodListToSortTypes(newSortMethodList);
+        searchAggregationActionsHook.onChangeSortTypes(sortTypes);
     }
 
     const handleClearAll = () => {
-        onClearAllSearchCondition();
+        searchAggregationActionsHook.onClear();
     }
 
     return (
@@ -139,7 +151,7 @@ export function FdSearchConsole({
                                         className='select-button'
                                         onClick={() => toggleSelectCategoryModalOpen(true)}
                                     >
-                                        {productCategory?.name ?? '전체'}
+                                        {searchAggregationValueHook?.productCategory?.name ?? '전체'}
                                     </CustomBlockButton>
                                 </div>
                                 <div className='control-box'>
@@ -149,7 +161,7 @@ export function FdSearchConsole({
                                         className='select-button'
                                         onClick={() => toggleSelectSubCategoryModalOpen(true)}
                                     >
-                                        {productSubCategory?.name ?? '전체'}
+                                        {searchAggregationValueHook?.productSubCategory?.name ?? '전체'}
                                     </CustomBlockButton>
                                 </div>
                             </St.CategorySelectorContainer>
@@ -290,20 +302,16 @@ export function FdSearchConsole({
             {selectCategoryModalOpen &&
                 <MdSelectCategory
                     open={selectCategoryModalOpen}
-                    productCategory={productCategory}
                     productCategories={productCategoryList}
                     onClose={() => toggleSelectCategoryModalOpen(false)}
-                    onSelectCategory={handleSelectProductCategory}
                 />
             }
 
             {selectSubCategoryModalOpen &&
                 <MdSelectSubCategory
                     open={selectSubCategoryModalOpen}
-                    productSubCategory={productSubCategory}
                     productSubCategories={productSubCategoryList}
                     onClose={() => toggleSelectSubCategoryModalOpen(false)}
-                    onSelectSubCategory={handleSelectSubProductCategory}
                 />
             }
         </>

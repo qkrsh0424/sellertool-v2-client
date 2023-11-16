@@ -1,22 +1,18 @@
 import { FdButtonGroup } from "./components/FdButtonGroup/FdButtonGroup";
 import { FdItemList } from "./components/FdItemList";
 import { FdTopNavBar } from "./components/FdTopNavBar";
-import { useStockReceiveItemHook } from "./hooks/useStockReceiveItemHook";
+import { PrepareReceiveItemListProvider } from "./contexts/PrepareReceiveItemListProvider";
 import { St } from "./index.styled";
 
-export default function MainComponent(props) {;
-    const stockReceiveItemHook = useStockReceiveItemHook();
+export default function MainComponent(props) {
     return (
         <>
             <St.Container>
                 <FdTopNavBar />
-                <FdButtonGroup
-                    stockReceiveItemList={stockReceiveItemHook?.stockReceiveItemList}
-                    onConcatStockReceiveItems={stockReceiveItemHook.onConcatStockReceiveItems}
-                />
-                <FdItemList
-                    stockReceiveItemList={stockReceiveItemHook.stockReceiveItemList}
-                />
+                <PrepareReceiveItemListProvider>
+                    <FdButtonGroup />
+                    <FdItemList />
+                </PrepareReceiveItemListProvider>
             </St.Container>
         </>
     );

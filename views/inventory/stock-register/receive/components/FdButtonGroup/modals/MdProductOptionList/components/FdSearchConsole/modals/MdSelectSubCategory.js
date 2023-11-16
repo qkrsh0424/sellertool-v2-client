@@ -2,18 +2,20 @@ import { useState } from "react";
 import { CustomDialog } from "../../../../../../../../../../../components/dialog/v1/CustomDialog";
 import HighlightedText from "../../../../../../../../../../../components/text/highlight/HighlightedText";
 import { St } from "./MdSelectSubCategory.styled";
+import { useSearchAggregationActionsHook, useSearchAggregationValueHook } from "../../../../../../../hooks/SearchAggregationHook";
 
 export function MdSelectSubCategory({
     open = false,
-    productSubCategory,
     productSubCategories,
     onClose = () => { },
-    onSelectSubCategory
 }) {
+    const searchAggregationValueHook = useSearchAggregationValueHook();
+    const searchAggregationActionsHook = useSearchAggregationActionsHook();
+
     const [inputValue, setInputValue] = useState('');
 
     const handleSelectSubCategory = (data) => {
-        onSelectSubCategory(data);
+        searchAggregationActionsHook.onChanageProductSubCategory(data);
         onClose();
     }
 
@@ -45,7 +47,7 @@ export function MdSelectSubCategory({
                     <div className='content-group'>
                         <div className='content-box'>
                             <span
-                                className={`tag ${!productSubCategory && 'tag-accent'}`}
+                                className={`tag ${!searchAggregationValueHook?.productSubCategory && 'tag-accent'}`}
                                 onClick={() => handleSelectSubCategory()}
                             >
                                 전체
@@ -57,7 +59,7 @@ export function MdSelectSubCategory({
                                     return (
                                         <span
                                             key={r.id}
-                                            className={`tag ${productSubCategory?.id === r.id && 'tag-accent'}`}
+                                            className={`tag ${searchAggregationValueHook?.productSubCategory?.id === r.id && 'tag-accent'}`}
                                             onClick={() => handleSelectSubCategory(r)}
                                         >
                                             {r.name}
@@ -69,7 +71,7 @@ export function MdSelectSubCategory({
                                     return (
                                         <span
                                             key={r.id}
-                                            className={`tag ${productSubCategory?.id === r.id && 'tag-accent'}`}
+                                            className={`tag ${searchAggregationValueHook?.productSubCategory?.id === r.id && 'tag-accent'}`}
                                             onClick={() => handleSelectSubCategory(r)}
                                         >
                                             <HighlightedText

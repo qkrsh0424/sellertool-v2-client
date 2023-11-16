@@ -1,1 +1,0 @@
-export { useSortTypeGlobalHook } from './useSortTypeGlobalHook';

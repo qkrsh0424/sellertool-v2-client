@@ -2,19 +2,17 @@ import React, { useEffect, useRef } from "react";
 import CustomImage from "../../../../../../../../../../components/image/CustomImage";
 import FieldCircleLoading from "../../../../../../../../../../components/loading/field-loading/v1/FieldCircleLoading";
 import ResizableTh from "../../../../../../../../../../components/table/th/v1/ResizableTh";
-import { CustomDateUtils } from "../../../../../../../../../../utils/CustomDateUtils";
-import { CustomNumberUtils } from "../../../../../../../../../../utils/CustomNumberUtils";
-import { CustomURIEncoderUtils } from "../../../../../../../../../../utils/CustomURIEncoderUtils";
 import { St, StTable } from "./FdItemList.styled";
+import { useSearchAggregationValueHook } from "../../../../../../hooks/SearchAggregationHook";
 
 export function FdItemList({
     productOptionPage,
     inventoryStocks,
     selectedItemList,
-    page,
-    size,
     onSelectItem
 }) {
+    const searchAggregationValueHook = useSearchAggregationValueHook();
+
     const scrollRef = useRef();
 
     const productOptionList = productOptionPage?.content;
@@ -27,7 +25,9 @@ export function FdItemList({
             top: 0,
             behavior: 'smooth'
         });
-    }, [page, size])
+    }, [
+        searchAggregationValueHook.page,
+    ])
 
     return (
         <>

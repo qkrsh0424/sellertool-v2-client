@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const St = {
     CardListContainer: styled.div`
-        padding: 20px;
-
+        margin-top: 20px;
+        margin-bottom: 400px;
         .wrapper{
             display: flex;
             flex-direction: column;
@@ -59,6 +59,13 @@ export const St = {
             }
         }
 
+        .wrapper > .cardItem > .contents > .information > div > .tag{
+            font-size: 13px;
+            font-weight: 500;
+            color: #808080;
+            flex:1;
+        }
+
         .wrapper > .cardItem > .contents > .form-items{
             width: 300px;
             display: flex;
@@ -108,5 +115,48 @@ export const St = {
                 background: #fff;
             }
         }
+    `,
+    FooterAppBar: styled.div`
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        z-index: 99;
+        width: 100%;
+        background-color: none;
+        padding: 10px 20px;
+        .wrapper{
+            display: flex;
+            justify-content: flex-end;
+            gap:10px;
+            align-items: center;
+        }
+
+        .wrapper .selectedCount{
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .wrapper button{
+            width: auto;
+            border: none;
+            width: 100px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .wrapper .confirm-button{
+            background: var(--mainColor);
+            color: #fff;
+        }
+
+        .wrapper .cancel-button{
+            background: var(--defaultModalCloseColor);
+            color: #fff;
+        }
+
     `,
 }

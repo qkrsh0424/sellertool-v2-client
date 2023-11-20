@@ -1,9 +1,23 @@
 import styled from 'styled-components';
 
 export const St = {
+    ControllerContainer: styled.div`
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+
+        @media all and (max-width:992px){
+            gap: 10px;
+        }
+    `,
     CardListContainer: styled.div`
         margin-top: 20px;
         margin-bottom: 400px;
+
+        @media all and (max-width:992px){
+            margin-top: 10px;
+        }
+
         .wrapper{
             display: flex;
             flex-direction: column;
@@ -19,6 +33,32 @@ export const St = {
             gap: 20px;
             align-items: center;
             background: #fff;
+            
+            @media all and (max-width:992px){
+                gap: 10px;
+                flex-direction: column;
+            }
+        }
+
+        .wrapper > .cardItem > .delete-button-field{
+            align-self: flex-start;
+            @media all and (max-width:992px){
+                align-self: flex-end;
+            }
+        }
+
+        .wrapper > .cardItem > .delete-button-field > button{
+            width: 26px;
+            height: 26px;
+            border-radius: 5px;
+            overflow: hidden;
+            border: none;
+            transition: all .3s;
+
+            &:hover{
+                scale: 1.2;
+                background: var(--grayButtonColor);
+            }
         }
 
         .wrapper > .cardItem > .image-figure{
@@ -26,13 +66,24 @@ export const St = {
             height: 60px;
             border-radius: 5px;
             overflow: hidden;
+
+            @media all and (max-width:992px){
+                /* display: none; */
+                align-self: flex-start;
+            }
         }
 
         .wrapper > .cardItem > .contents{
             flex:1;
             display: flex;
+            flex-direction: row;
             gap: 20px;
             align-items: flex-start;
+
+            @media all and (max-width:992px){
+                width: 100%;
+                flex-direction: column;
+            }
         }
 
         .wrapper > .cardItem > .contents > .information{
@@ -40,12 +91,16 @@ export const St = {
             font-weight: 500;
             color: #222;
             flex:1;
+
+            @media all and (max-width:992px){
+                width: 100%;
+            }
         }
 
         .wrapper > .cardItem > .contents > .information > div{
             padding: 8px 0;
             border-bottom: 1px solid #f0f0f0;
-
+            word-break: break-all;
 
             &:last-child{
                 display: flex;
@@ -71,6 +126,10 @@ export const St = {
             display: flex;
             flex-direction: column;
             gap: 10px;
+
+            @media all and (max-width:992px){
+                width: 100%;
+            }
         }
 
         .wrapper > .cardItem > .contents > .form-items > div{

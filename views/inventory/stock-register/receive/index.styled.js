@@ -5,5 +5,6 @@ export const St = {
         max-width: 1280px;
         margin-left: auto;
         margin-right: auto;
+        padding: 10px;
     `,
 }

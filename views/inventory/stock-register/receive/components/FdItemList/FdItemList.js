@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CustomImage from "../../../../../../components/image/CustomImage";
 import CustomInput from "../../../../../../components/input/default/v1/CustomInput";
 import { St } from "./FdItemList.styled";
-import { usePrepareReceiveItemListValueHook } from "../../contexts/PrepareReceiveItemListProvider";
+import { usePrepareReceiveItemListActionsHook, usePrepareReceiveItemListValueHook } from "../../contexts/PrepareReceiveItemListProvider";
 import { v4 as uuidv4 } from 'uuid';
 import { CustomNumberUtils } from "../../../../../../utils/CustomNumberUtils";
 import CustomBlockButton from "../../../../../../components/buttons/block-button/v1/CustomBlockButton";
@@ -26,6 +26,7 @@ export function FdItemList({
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const prepareReceiveItemListValueHook = usePrepareReceiveItemListValueHook();
+    const prepareReceiveItemListActionsHook = usePrepareReceiveItemListActionsHook();
 
     const apiHook = useApiHook();
     const inventoryStocksHook = useInventoryStocksHook();
@@ -37,6 +38,7 @@ export function FdItemList({
 
     useEffect(() => {
         if (!wsId || !prepareReceiveItemListValueHook || prepareReceiveItemListValueHook?.length <= 0) {
+            setInventoryReceiveItemList([]);
             return;
         }
 
@@ -97,6 +99,12 @@ export function FdItemList({
         )
 
         inventoryStocksHook.onSetInventoryStocks(resultInventoryStocks);
+    }
+
+    const handleDeleteItem = (productOptionId) => {
+        let newItemList = [...prepareReceiveItemListValueHook];
+        newItemList = newItemList.filter(r => r.id !== productOptionId);
+        prepareReceiveItemListActionsHook.onSet(newItemList);
     }
 
     const handleChangeUnit = (reqIndex, value) => {
@@ -245,7 +253,7 @@ export function FdItemList({
             customToast.error(err.message);
             return;
         }
-        
+
         setDisabledBtn(true);
         customBackdropControl.showBackdrop();
         const body = {
@@ -276,7 +284,7 @@ export function FdItemList({
 
     return (
         <>
-            <div className='mgl-flex mgl-flex-gap-20 mgl-flex-alignItems-flexStart'>
+            <St.ControllerContainer>
                 <FdBulkInput
                     onChangeUnitBulk={handleChangeUnitBulk}
                     onChangePurchaseCostBulk={handleChangePurchaseCostBulk}
@@ -286,7 +294,7 @@ export function FdItemList({
                     stockReflectDateTime={stockReflectDateTime}
                     onChangeStockReflectDateTime={handleChangeStockReflectDateTime}
                 />
-            </div>
+            </St.ControllerContainer>
             <St.CardListContainer>
                 <div className="wrapper">
                     {inventoryReceiveItemList?.map((inventoryReceiveItem, index) => {
@@ -294,6 +302,16 @@ export function FdItemList({
 
                         return (
                             <div key={inventoryReceiveItem?.id} className='cardItem'>
+                                <div className='delete-button-field'>
+                                    <CustomBlockButton
+                                        type='button'
+                                        onClick={() => handleDeleteItem(inventoryReceiveItem?.productOptionId)}
+                                    >
+                                        <CustomImage
+                                            src={'/images/icon/close_default_e56767.svg'}
+                                        />
+                                    </CustomBlockButton>
+                                </div>
                                 <div className='image-figure'>
                                     <CustomImage
                                         src={inventoryReceiveItem?.productThumbnailUri}

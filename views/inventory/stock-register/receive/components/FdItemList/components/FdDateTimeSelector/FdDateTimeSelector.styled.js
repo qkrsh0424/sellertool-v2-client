@@ -19,6 +19,10 @@ export const St = {
             background: #fff;
             padding: 20px;
 
+            @media all and (max-width:992px){
+                padding: 15px;
+            }
+
             &:hover{
                 background-color: var(--grayButtonColor);
             }
@@ -27,6 +31,10 @@ export const St = {
         .head-wrapper .title{
             font-size: 18px;
             font-weight: 700;
+
+            @media all and (max-width:992px){
+                font-size: 16px;
+            }
         }
 
         .head-wrapper .icon-button{

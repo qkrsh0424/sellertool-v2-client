@@ -1,7 +1,7 @@
 import { useState } from "react";
-import CustomBlockButton from "../../../../../../../components/buttons/block-button/v1/CustomBlockButton";
+import CustomBlockButton from "../../../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { RegisteredStockByDateContainer } from "./FgRegisteredStockByDate.styled";
-import { MdRegisteredStockByDate } from "../modals/MdRegisteredStockByDate";
+import { MdRegisteredStockByDate } from "../../modals/MdRegisteredStockByDate";
 
 export function FgRegisteredStockByDate(props) {
     const [modalOpen, setModalOpen] = useState(false);

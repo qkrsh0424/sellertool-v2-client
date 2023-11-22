@@ -39,6 +39,15 @@ function baseInventoryPage() {
                 }
             })
         },
+        searchPageV2: async function (params, headers) {
+            return await axiosAuthInterceptor.get(`${BASE_URL}/page`, {
+                params: params,
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN',
+            })
+        },
         /**
          * 
          * @param {object} params 

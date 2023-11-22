@@ -29,12 +29,20 @@ const SecondaryNavbarMainComponent = (props) => {
             >
                 <Container>
                     <Wrapper>
-                        <MenuButton
+                    <MenuButton
                             type='button'
                             onClick={() => toggleMenuListOpen(!menuListOpen)}
                         >
-                            <div style={{ width: 24, height: 24 }}><CustomImage src='/images/icon/menu_hamburg_808080.svg' priority={true} loading='eager' /></div>
-                            <div style={{ flex: 1 }}>전체 서비스</div>
+                            <div className='wrapper'>
+                                <div className='icon-figure'>
+                                    <CustomImage
+                                        src='/images/icon/menu_hamburg_808080.svg'
+                                        alt="셀러툴 전체 서비스"
+                                        loading='lazy'
+                                    />
+                                </div>
+                                <div className='text'>전체 서비스</div>
+                            </div>
                         </MenuButton>
                         {workspaceRedux?.workspaceInfo &&
                             <SelectorBtnBox>

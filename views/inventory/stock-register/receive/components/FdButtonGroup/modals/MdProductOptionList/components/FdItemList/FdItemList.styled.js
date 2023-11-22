@@ -201,6 +201,10 @@ export const StTable = {
             }
         }
 
+        .product-info{
+            font-weight: 600;
+        }
+
         .button-box {
             border: none;
             width: 100%;
@@ -210,7 +214,6 @@ export const StTable = {
             &:hover {
                 text-decoration: underline;
                 color: var(--mainColor);
-                
             }
         }
     `,

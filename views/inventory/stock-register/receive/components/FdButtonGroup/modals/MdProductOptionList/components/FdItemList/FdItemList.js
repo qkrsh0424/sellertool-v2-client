@@ -124,14 +124,9 @@ const TableField = React.forwardRef(function MyTableView({
                                             </div>
                                         </td>
                                         <td>
-                                            <div className='content-box'>
-                                                <button
-                                                    type='button'
-                                                    className='button-box'
-                                                >
-                                                    <div>{productOption?.productCategory?.name} / {productOption?.productSubCategory?.name}</div>
-                                                    <div><span style={{ color: 'var(--mainColor)' }}>{productOption?.product?.name}</span> [{productOption?.product?.productTag || '태그 미지정'}]</div>
-                                                </button>
+                                            <div className='content-box product-info'>
+                                                <div>{productOption?.productCategory?.name} / {productOption?.productSubCategory?.name}</div>
+                                                <div><span style={{ color: 'var(--mainColor)' }}>{productOption?.product?.name}</span> [{productOption?.product?.productTag || '태그 미지정'}]</div>
                                             </div>
                                         </td>
                                         <td>
@@ -235,48 +230,5 @@ const TABLE_HEADER = [
         name: 'memo',
         headerName: '메모',
         defaultWidth: 200
-    },
-]
-
-const SORT_TYPES = [
-    {
-        sortType: 'REMAINED_ASSETS$DESC',
-        name: '재고자산 내림차순'
-    },
-    {
-        sortType: 'REMAINED_ASSETS$ASC',
-        name: '재고자산 오름차순'
-    },
-    {
-        sortType: 'ESTIMATE_SALES$DESC',
-        name: '예상 매출액 내림차순'
-    },
-    {
-        sortType: 'ESTIMATE_SALES$ASC',
-        name: '예상 매출액 오름차순'
-    },
-    {
-        sortType: 'TOTAL_REMAINED_QUANTITY$DESC',
-        name: '재고수량 내림차순'
-    },
-    {
-        sortType: 'TOTAL_REMAINED_QUANTITY$ASC',
-        name: '재고수량 오름차순'
-    },
-    {
-        sortType: 'PRODUCT_CID$DESC',
-        name: '상품등록 최신순'
-    },
-    {
-        sortType: 'PRODUCT_CID$ASC',
-        name: '상품등록 오래된순'
-    },
-    {
-        sortType: 'PRODUCT_NAME$DESC',
-        name: '상품명 내림차순'
-    },
-    {
-        sortType: 'PRODUCT_NAME$ASC',
-        name: '상품명 오름차순'
     },
 ]

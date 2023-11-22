@@ -105,7 +105,7 @@ export default function CustomExcelFileUploader({
     onConfirm = ({ formData }) => { }
 }) {
     const uploaderRef = useRef();
-    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn(1000);
     const [formData, setFormData] = useState(null);
     const [rowStartNumber, setRowStartNumber] = useState('1');
     const [passwordModeOpen, setPasswordModeOpen] = useState(false);

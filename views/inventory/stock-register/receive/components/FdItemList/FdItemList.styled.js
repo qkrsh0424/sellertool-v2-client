@@ -10,8 +10,46 @@ export const St = {
             gap: 10px;
         }
     `,
-    CardListContainer: styled.div`
+    DeleteContainer: styled.div`
         margin-top: 20px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+
+        .flexible-row{
+            display: flex;
+            gap: 10px;
+        }
+        button{
+            width: 100px;
+            border-radius: 10px;
+            font-weight: 700;
+            height: 40px;
+            border:none;
+            color: #fff;
+        }
+
+        .count-text{
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .delete-mode-button{
+            background: var(--grayButtonColor);
+            color: #000;
+        }
+
+        .delete-button{
+            background: var(--defaultRedColor);
+        }
+
+        .cancel-button{
+            background:var(--defaultModalCloseColor);
+        }
+    `,
+    CardListContainer: styled.div`
+        margin-top: 10px;
         margin-bottom: 400px;
 
         @media all and (max-width:992px){
@@ -48,17 +86,16 @@ export const St = {
         }
 
         .wrapper > .cardItem > .delete-button-field > button{
+            cursor: pointer;
             width: 26px;
             height: 26px;
             border-radius: 5px;
             overflow: hidden;
             border: none;
             transition: all .3s;
-
-            &:hover{
-                scale: 1.2;
-                background: var(--grayButtonColor);
-            }
+            background: none;
+            padding:0;
+            margin:0;
         }
 
         .wrapper > .cardItem > .image-figure{
@@ -152,6 +189,12 @@ export const St = {
                 background: #fff;
                 border-color:var(--mainColor);
             }
+
+            &:disabled{
+                background: #efefef;
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
         }
 
         .wrapper > .cardItem > .contents > .form-items > div > textarea{
@@ -172,6 +215,12 @@ export const St = {
                 height: 80px;
                 scale: 1.03;
                 background: #fff;
+            }
+
+            &:disabled{
+                background: #efefef;
+                opacity: 0.5;
+                cursor: not-allowed;
             }
         }
     `,

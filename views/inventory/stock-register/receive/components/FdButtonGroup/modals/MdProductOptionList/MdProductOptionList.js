@@ -14,6 +14,7 @@ import { FdFooterAppBar } from "./components/FdFooterAppBar";
 import { FdPagenation } from "./components/FdPagenation/FdPagenation";
 import { useSearchAggregationValueHook } from "../../../../hooks/SearchAggregationHook";
 import { usePrepareReceiveItemListActionsHook, usePrepareReceiveItemListValueHook } from "../../../../contexts/PrepareReceiveItemListProvider";
+import { v4 as uuidv4 } from 'uuid';
 
 export function MdProductOptionList({
     open,
@@ -139,9 +140,22 @@ export function MdProductOptionList({
 
     const handleSubmitConfirm = () => {
         let newItemList = [...prepareReceiveItemListValueHook];
-        let addItemList = selectedItemList.filter(r => !newItemList.some(r2 => r2.id === r.id));
 
-        newItemList = newItemList.concat([...addItemList])
+        newItemList = newItemList.concat(selectedItemList.map(r => {
+            return {
+                id: uuidv4(),
+                unit: '',
+                memo: '',
+                purchaseCost: r?.totalPurchasePrice,
+                productOptionId: r?.id,
+                productThumbnailUri: r?.product?.thumbnailUri,
+                productName: r?.product?.name,
+                productTag: r?.product?.productTag,
+                productOptionCode: r?.code,
+                productOptionName: r?.name,
+                productOptionTag: r?.optionTag,
+            }
+        }))
 
         prepareReceiveItemListActionsHook.onSet(newItemList);
         handleClearAllSelectedItemList();

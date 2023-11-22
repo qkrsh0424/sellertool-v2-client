@@ -35,6 +35,8 @@ export function FdItemList({
 
     const [inventoryReceiveItemList, setInventoryReceiveItemList] = useState([]);
     const [stockReflectDateTime, setStockReflectDateTime] = useState(null);
+    const [deleteModeOpen, setDeleteModeOpen] = useState(false);
+    const [selectedDeleteItemIdList, setSelectedDeleteItemIdList] = useState([]);
 
     useEffect(() => {
         if (!wsId || !prepareReceiveItemListValueHook || prepareReceiveItemListValueHook?.length <= 0) {
@@ -57,7 +59,7 @@ export function FdItemList({
     const initializeInventoryReceiveItemList = () => {
         setInventoryReceiveItemList((prev) => {
             return prepareReceiveItemListValueHook?.map(prepareReceiveItem => {
-                let existedItem = prev?.find(r => r?.productOptionId === prepareReceiveItem?.id);
+                let existedItem = prev?.find(r => r?.id === prepareReceiveItem?.id);
                 if (existedItem) {
                     return {
                         ...existedItem
@@ -65,17 +67,17 @@ export function FdItemList({
                 }
 
                 return {
-                    id: uuidv4(),
-                    unit: '',
-                    memo: '',
-                    purchaseCost: prepareReceiveItem?.totalPurchasePrice,
-                    productOptionId: prepareReceiveItem?.id,
-                    productThumbnailUri: prepareReceiveItem?.product?.thumbnailUri,
-                    productName: prepareReceiveItem?.product?.name,
-                    productTag: prepareReceiveItem?.product?.productTag,
-                    productOptionCode: prepareReceiveItem?.code,
-                    productOptionName: prepareReceiveItem?.name,
-                    productOptionTag: prepareReceiveItem?.optionTag,
+                    id: prepareReceiveItem?.id,
+                    unit: prepareReceiveItem?.unit,
+                    memo: prepareReceiveItem?.memo,
+                    purchaseCost: prepareReceiveItem?.purchaseCost,
+                    productOptionId: prepareReceiveItem?.productOptionId,
+                    productThumbnailUri: prepareReceiveItem?.productThumbnailUri,
+                    productName: prepareReceiveItem?.productName,
+                    productTag: prepareReceiveItem?.productTag,
+                    productOptionCode: prepareReceiveItem?.productOptionCode,
+                    productOptionName: prepareReceiveItem?.productOptionName,
+                    productOptionTag: prepareReceiveItem?.productOptionTag,
                 }
             })
         })
@@ -87,7 +89,7 @@ export function FdItemList({
         }
 
         let resultInventoryStocks = null;
-        let productOptionIds = prepareReceiveItemListValueHook?.map(r => r.id);
+        let productOptionIds = prepareReceiveItemListValueHook?.map(r => r.productOptionId);
 
         await apiHook.reqFetchInventoryStocks({
             body: { productOptionIds: productOptionIds },
@@ -101,10 +103,29 @@ export function FdItemList({
         inventoryStocksHook.onSetInventoryStocks(resultInventoryStocks);
     }
 
-    const handleDeleteItem = (productOptionId) => {
+    const toggleDeleteModeOpen = (bool) => {
+        setSelectedDeleteItemIdList([]);
+        setDeleteModeOpen(bool);
+    }
+
+    const handleDeleteItemList = () => {
         let newItemList = [...prepareReceiveItemListValueHook];
-        newItemList = newItemList.filter(r => r.id !== productOptionId);
+        newItemList = newItemList.filter(r => !selectedDeleteItemIdList.includes(r.id));
         prepareReceiveItemListActionsHook.onSet(newItemList);
+        toggleDeleteModeOpen(false);
+    }
+
+    const handleSelectDeleteItemId = (id) => {
+        let newItemList = [...selectedDeleteItemIdList];
+        let existed = newItemList.includes(id);
+
+        if (existed) {
+            newItemList = newItemList.filter(r => r !== id);
+        } else {
+            newItemList.push(id);
+        }
+
+        setSelectedDeleteItemIdList(newItemList);
     }
 
     const handleChangeUnit = (reqIndex, value) => {
@@ -295,23 +316,75 @@ export function FdItemList({
                     onChangeStockReflectDateTime={handleChangeStockReflectDateTime}
                 />
             </St.ControllerContainer>
+
+            {!deleteModeOpen &&
+                <St.DeleteContainer>
+                    <div className='count-text'>총 {inventoryReceiveItemList?.length || 0} 개</div>
+                    <CustomBlockButton
+                        type='button'
+                        className='delete-mode-button'
+                        onClick={() => toggleDeleteModeOpen(true)}
+                    >
+                        삭제
+                    </CustomBlockButton>
+                </St.DeleteContainer>
+            }
+            {deleteModeOpen &&
+                <St.DeleteContainer>
+                    <div className='count-text' style={{color:'var(--defaultRedColor)'}}>{selectedDeleteItemIdList?.length || 0} 개 선택됨</div>
+                    <div className="flexible-row">
+                        <CustomBlockButton
+                            type='button'
+                            className='delete-button'
+                            onClick={() => handleDeleteItemList()}
+                        >
+                            선택 삭제
+                        </CustomBlockButton>
+                        <CustomBlockButton
+                            type='button'
+                            className='cancel-button'
+                            onClick={() => toggleDeleteModeOpen(false)}
+                        >
+                            취소
+                        </CustomBlockButton>
+                    </div>
+                </St.DeleteContainer>
+            }
             <St.CardListContainer>
                 <div className="wrapper">
                     {inventoryReceiveItemList?.map((inventoryReceiveItem, index) => {
+                        const isTargetDeleteItem = selectedDeleteItemIdList.includes(inventoryReceiveItem?.id);
                         const remainedQuantity = inventoryStocksHook?.inventoryStocks?.find(r => r.productOptionId === inventoryReceiveItem?.productOptionId)?.stockUnit;
 
                         return (
-                            <div key={inventoryReceiveItem?.id} className='cardItem'>
-                                <div className='delete-button-field'>
-                                    <CustomBlockButton
-                                        type='button'
-                                        onClick={() => handleDeleteItem(inventoryReceiveItem?.productOptionId)}
-                                    >
-                                        <CustomImage
-                                            src={'/images/icon/close_default_e56767.svg'}
-                                        />
-                                    </CustomBlockButton>
-                                </div>
+                            <div
+                                key={inventoryReceiveItem?.id}
+                                className='cardItem'
+                                onClick={() => {
+                                    return deleteModeOpen ? handleSelectDeleteItemId(inventoryReceiveItem?.id) : {}
+                                }}
+                                style={{
+                                    border: isTargetDeleteItem ? '1px solid var(--defaultRedColor)' : '',
+                                    cursor: deleteModeOpen ? 'pointer' : ''
+                                }}
+                            >
+                                {deleteModeOpen &&
+                                    <div className='delete-button-field'>
+                                        <button
+                                            type='button'
+                                        >
+                                            {isTargetDeleteItem ?
+                                                <CustomImage
+                                                    src={'/images/icon/check_circle_e56767.svg'}
+                                                />
+                                                :
+                                                <CustomImage
+                                                    src={'/images/icon/circle_default_e0e0e0.svg'}
+                                                />
+                                            }
+                                        </button>
+                                    </div>
+                                }
                                 <div className='image-figure'>
                                     <CustomImage
                                         src={inventoryReceiveItem?.productThumbnailUri}
@@ -337,14 +410,16 @@ export function FdItemList({
                                             <CustomInput
                                                 placeholder={'입고수량'}
                                                 name='unit'
-                                                value={customNumberUtils.numberWithCommas2(inventoryReceiveItem?.unit) || ''}
+                                                value={customNumberUtils.numberWithCommas2(inventoryReceiveItem?.unit) ?? ''}
                                                 onChange={(e) => handleChangeUnit(index, e.target.value)}
+                                                disabled={deleteModeOpen}
                                             />
                                             <CustomInput
                                                 placeholder={'매입단가'}
                                                 name='purchaseCost'
-                                                value={customNumberUtils.numberWithCommas2(inventoryReceiveItem?.purchaseCost) || ''}
+                                                value={customNumberUtils.numberWithCommas2(inventoryReceiveItem?.purchaseCost) ?? ''}
                                                 onChange={(e) => handleChangePurchaseCost(index, e.target.value)}
+                                                disabled={deleteModeOpen}
                                             />
                                         </div>
                                         <div>
@@ -353,6 +428,7 @@ export function FdItemList({
                                                 name='memo'
                                                 value={inventoryReceiveItem?.memo || ''}
                                                 onChange={(e) => handleChangeMemo(index, e.target.value)}
+                                                disabled={deleteModeOpen}
                                             />
                                         </div>
                                     </div>
@@ -362,18 +438,20 @@ export function FdItemList({
                     })}
                 </div>
             </St.CardListContainer>
-            <St.FooterAppBar>
-                <div className="wrapper">
-                    <CustomBlockButton
-                        type='button'
-                        className='confirm-button'
-                        onClick={() => handleSubmitRegister()}
-                        disabled={disabledBtn}
-                    >
-                        등록
-                    </CustomBlockButton>
-                </div>
-            </St.FooterAppBar>
+            {!deleteModeOpen &&
+                <St.FooterAppBar>
+                    <div className="wrapper">
+                        <CustomBlockButton
+                            type='button'
+                            className='confirm-button'
+                            onClick={() => handleSubmitRegister()}
+                            disabled={disabledBtn}
+                        >
+                            등록
+                        </CustomBlockButton>
+                    </div>
+                </St.FooterAppBar>
+            }
         </>
     );
 }

@@ -27,7 +27,7 @@ export default function CustomPopper({
     ...props
 }) {
     return (
-        <div>
+        <>
             <Popper
                 open={open}
                 anchorEl={anchorEl}
@@ -38,6 +38,6 @@ export default function CustomPopper({
                     {element}
                 </ContentWrapper>
             </Popper>
-        </div>
+        </>
     );
 }

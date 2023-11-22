@@ -37,6 +37,16 @@ function baseInventoryPage() {
                 })
             )
         },
+        inventoryReceiveBulkCreateExcelUpload: async function (formData, headers) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${BASE_URL}/bulkCreateExcelUpload/register-stocks`, formData, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
         /**
          * 
          * @param {object} body 

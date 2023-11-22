@@ -1,7 +1,6 @@
 @import url(./mgl.flex.css);
 @import url(./mgl.font.css);
-/* @import url(./font-style/Pretendard.css); */
-@import url(./font-style/NanumSquareNeo.css);
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 
 :root {
     --mainColor: #344b98;
@@ -18,8 +17,8 @@
     --mainColorSelected1: #344b9820;
     --defaultBackground: #f9fbfc;
     --defaultBoxShadow: 1px 1px 10px 0 rgb(72 75 108 / 8%);
-    --defaultBoxShadow2: 4px 12px 30px 6px rgba(0,0,0,.09);
-    --defaultBoxShadow2Hover:4px 12px 20px 6px rgba(0,0,0,.18);
+    --defaultBoxShadow2: 4px 12px 30px 6px rgba(0, 0, 0, 0.09);
+    --defaultBoxShadow2Hover: 4px 12px 20px 6px rgba(0, 0, 0, 0.18);
     --defaultBlueColor: #418cff;
     --defaultBlueColorOpacity50: #f3f8ff;
     --defaultBlueColorOpacity100: #e9f0ff;
@@ -54,7 +53,7 @@
     --defaultPurpleColorOpacity700: #9065e3;
     --defaultModalCloseColor: #959eae;
     --contentHeadBackground: #eef2f9;
-    --mainFont: 'Pretendard';
+    --mainFont: 'Noto Sans KR';
     --publicWorkspaceColor: #5fcf80;
     --plusWorkspaceColor: #8250df;
     --grayButtonColor: #efefef;
@@ -69,17 +68,15 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif; */
     /* font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕",
         helvetica, "Apple SD Gothic Neo", sans-serif; */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    line-height: 1.5;
 }
 
 body * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     /* mainFont 실패 시 뒤에 선언된 폰트들로 렌더링 */
-    font-family: var(--mainFont), -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕",
-        helvetica, "Apple SD Gothic Neo", sans-serif;
+    font-family: var(--mainFont), -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕", helvetica, "Apple SD Gothic Neo", sans-serif;
+    /* font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕", helvetica, "Apple SD Gothic Neo", sans-serif; */
 }
-
 body::-webkit-scrollbar {
     width: 7px;
 }

@@ -47,7 +47,7 @@ const MenuButton = styled(CustomBlockButton)`
     padding: 0 10px;
     height: 38px;
     border-radius: 5px;
-    width: 150px;
+    width: 160px;
     border: none;
 
     &:hover{

@@ -21,12 +21,6 @@ export function FgStockReceiveController(props) {
     return (
         <>
             <St.Container>
-                {/* <CustomBlockButton
-                    type='button'
-                    onClick={() => toggleModalOpen(true)}
-                >
-                    입고등록
-                </CustomBlockButton> */}
                 <CustomBlockButton
                     type='button'
                     onClick={() => handleClickRegister()}

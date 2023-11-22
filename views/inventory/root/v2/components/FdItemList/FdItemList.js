@@ -14,6 +14,7 @@ import { FdFloatingControlBar } from "../FdFloatingControlBar";
 import { customBackdropController } from "../../../../../../components/backdrop/default/v1";
 import { customToast, defaultOptions } from "../../../../../../components/toast/custom-react-toastify/v1";
 import { FgStockReceiveController } from "./fragments/FgStockReceiveController/FgStockReceiveController";
+import { FgStockReleaseController } from "./fragments/FgStockReleaseController/FgStockReleaseController";
 
 const DEFAULT_SORT = 'product.cid_desc';
 const DEFAULT_PAGE = 1;
@@ -166,11 +167,10 @@ export function FdItemList() {
         <>
             <Container>
                 <ControlFieldContainer>
-                    <div className='mgl-flex mgl-flex-alignItems-center mgl-flex-gap-10'>
-                        <FgRegisteredStockByDate />
-                        <FgStockReceiveController />
-                    </div>
-                    <SortControlContainer>
+                    <FgRegisteredStockByDate />
+                    <FgStockReceiveController />
+                    <FgStockReleaseController />
+                    {/* <SortControlContainer>
                         <CustomSelect
                             className='select-item'
                             onChange={(e) => handleSelectSort(e)}
@@ -182,7 +182,7 @@ export function FdItemList() {
                                 )
                             })}
                         </CustomSelect>
-                    </SortControlContainer>
+                    </SortControlContainer> */}
                 </ControlFieldContainer>
                 <Table
                     productOptions={_productOptionPageHook?.productOptionPage?.content}

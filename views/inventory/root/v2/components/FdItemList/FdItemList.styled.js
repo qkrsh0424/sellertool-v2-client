@@ -209,9 +209,9 @@ export const PagenationContainer = styled.div`
 export const ControlFieldContainer = styled.div`
     padding: 20px 20px 0 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+    gap: 10px;
 `;
-
 export const SortControlContainer = styled.div`
     /* display: flex;
     justify-content: flex-end; */

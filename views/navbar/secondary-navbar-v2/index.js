@@ -33,7 +33,7 @@ const SecondaryNavbarMainComponent = (props) => {
                             type='button'
                             onClick={() => toggleMenuListOpen(!menuListOpen)}
                         >
-                            <div style={{ width: 24, height: 24, marginRight: '10px' }}><CustomImage src='/images/icon/menu_hamburg_808080.svg' priority={true} loading='eager' /></div>
+                            <div style={{ width: 24, height: 24 }}><CustomImage src='/images/icon/menu_hamburg_808080.svg' priority={true} loading='eager' /></div>
                             <div style={{ flex: 1 }}>전체 서비스</div>
                         </MenuButton>
                         {workspaceRedux?.workspaceInfo &&

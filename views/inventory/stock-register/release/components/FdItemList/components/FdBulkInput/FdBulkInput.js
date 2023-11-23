@@ -6,14 +6,12 @@ import { CustomNumberUtils } from "../../../../../../../../utils/CustomNumberUti
 import CustomImage from "../../../../../../../../components/image/CustomImage";
 
 const NAME_UNIT = 'unit';
-const NAME_PURCHASE_COST = 'purchaseCost';
 const NAME_MEMO = 'memo';
 
 const customNumberUtils = CustomNumberUtils();
 
 export function FdBulkInput({
     onChangeUnitBulk,
-    onChangePurchaseCostBulk,
     onChangeMemoBulk
 }) {
     const [fieldOpen, setFieldOpen] = useState(false);
@@ -38,15 +36,6 @@ export function FdBulkInput({
         }
     }
 
-    const handleChangePurchaseCost = (reqValue) => {
-        reqValue = reqValue.replaceAll(',', '');
-        reqValue = customNumberUtils.getRemovedPrefixZero(reqValue);
-
-        if (reqValue.match(/^[0-9]{0,8}$/)) {
-            setValue(reqValue);
-        }
-    }
-
     const handleChangeMemo = (reqValue) => {
         if (reqValue && reqValue?.length > 150) {
             return;
@@ -61,9 +50,6 @@ export function FdBulkInput({
         switch (currentName) {
             case NAME_UNIT:
                 onChangeUnitBulk(value);
-                break;
-            case NAME_PURCHASE_COST:
-                onChangePurchaseCostBulk(value);
                 break;
             case NAME_MEMO:
                 onChangeMemoBulk(value);
@@ -101,14 +87,7 @@ export function FdBulkInput({
                                 className={`${currentName === NAME_UNIT ? 'button-active' : ''}`}
                                 onClick={() => handleChangeCurrentName(NAME_UNIT)}
                             >
-                                입고수량
-                            </CustomBlockButton>
-                            <CustomBlockButton
-                                type='button'
-                                className={`${currentName === NAME_PURCHASE_COST ? 'button-active' : ''}`}
-                                onClick={() => handleChangeCurrentName(NAME_PURCHASE_COST)}
-                            >
-                                매입단가
+                                출고수량
                             </CustomBlockButton>
                             <CustomBlockButton
                                 type='button'
@@ -122,17 +101,9 @@ export function FdBulkInput({
                             {currentName === NAME_UNIT &&
                                 <CustomInput
                                     type='text'
-                                    placeholder='입고수량을 입력해 주세요.'
+                                    placeholder='출고수량을 입력해 주세요.'
                                     value={customNumberUtils.numberWithCommas2(value) || ''}
                                     onChange={(e) => handleChangeUnit(e.target.value)}
-                                />
-                            }
-                            {currentName === NAME_PURCHASE_COST &&
-                                <CustomInput
-                                    type='text'
-                                    placeholder='매입단가를 입력해 주세요.'
-                                    value={customNumberUtils.numberWithCommas2(value) || ''}
-                                    onChange={(e) => handleChangePurchaseCost(e.target.value)}
                                 />
                             }
                             {currentName === NAME_MEMO &&

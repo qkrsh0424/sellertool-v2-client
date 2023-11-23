@@ -1,30 +1,30 @@
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 import CustomBlockButton from "../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { St } from "./FdButtonGroup.styled";
-import { MdProductOptionList } from "./modals/MdProductOptionList/MdProductOptionList";
-import { useRouter } from "next/router";
+import { useApiHook } from "../../hooks/useApiHook";
 import { SearchAggregationProvider } from "../../contexts/SearchAggregationProvider";
-import CustomPopper from "../../../../../../components/popper/CustomPopper";
+import { MdProductOptionList } from "./modals/MdProductOptionList/MdProductOptionList";
 import usePopperHook from "../../../../../../hooks/popper/usePopperHook";
-import { StockReceiveBulkCreateTemplate } from "../../../../../../utils/excel-template";
+import { useState } from "react";
+import { StockReleaseBulkCreateTemplate } from "../../../../../../utils/excel-template/register-stocks";
+import { usePrepareReleaseItemListActionsHook, usePrepareReleaseItemListValueHook } from "../../contexts/PrepareReleaseItemListProvider";
+import { customBackdropController } from "../../../../../../components/backdrop/default/v1";
+import CustomPopper from "../../../../../../components/popper/CustomPopper";
 import CustomImage from "../../../../../../components/image/CustomImage";
 import CustomExcelFileUploader from "../../../../../../components/uploader/CustomExcelFileUploader";
-import { useState } from "react";
-import { useApiHook } from "../../hooks/useApiHook";
-import { useSelector } from "react-redux";
-import { customBackdropController } from "../../../../../../components/backdrop/default/v1";
-import { usePrepareReceiveItemListActionsHook, usePrepareReceiveItemListValueHook } from "../../contexts/PrepareReceiveItemListProvider";
 import { v4 as uuidv4 } from 'uuid';
 
 const customBackdropControl = customBackdropController();
 
-export function FdButtonGroup() {
+export function FdButtonGroup(props) {
     const router = useRouter();
     const poListMd = router?.query?.poListMd;
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const prepareReceiveItemListValueHook = usePrepareReceiveItemListValueHook();
-    const prepareReceiveItemListActionsHook = usePrepareReceiveItemListActionsHook();
+    const prepareReleaseItemListValueHook = usePrepareReleaseItemListValueHook();
+    const prepareReleaseItemListActionsHook = usePrepareReleaseItemListActionsHook();
 
     const apiHook = useApiHook();
 
@@ -60,11 +60,11 @@ export function FdButtonGroup() {
     }
 
     const handleDownloadSampleExcel = async () => {
-        const url = StockReceiveBulkCreateTemplate.assetUrl;
+        const url = StockReleaseBulkCreateTemplate.assetUrl;
         const link = document.createElement('a');
         link.href = url;
 
-        link.setAttribute('download', StockReceiveBulkCreateTemplate.assetName);
+        link.setAttribute('download', StockReleaseBulkCreateTemplate.assetName);
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -73,20 +73,20 @@ export function FdButtonGroup() {
 
     const handleSubmitExcelFileUploaded = async ({ formData }) => {
         customBackdropControl.showBackdrop();
-        let newPrepareReceiveItemList = [...prepareReceiveItemListValueHook];
-        let resultsPrepareReceiveItemList = null;
+        let newPrepareReleaseItemList = [...prepareReleaseItemListValueHook];
+        let resultsPrepareReleaseItemList = null;
 
-        await apiHook.reqInventoryReceiveBulkCreateExcelUpload({
+        await apiHook.reqInventoryReleaseBulkCreateExcelUpload({
             formData,
             headers: { wsId: wsId }
         },
             (results, res) => {
-                resultsPrepareReceiveItemList = results;
+                resultsPrepareReleaseItemList = results;
                 toggleExcelFileUploaderOpen(false);
             });
 
-        if (resultsPrepareReceiveItemList) {
-            newPrepareReceiveItemList = newPrepareReceiveItemList.concat(resultsPrepareReceiveItemList?.map(r => {
+        if (resultsPrepareReleaseItemList) {
+            newPrepareReleaseItemList = newPrepareReleaseItemList.concat(resultsPrepareReleaseItemList?.map(r => {
                 return {
                     ...r,
                     id: uuidv4()
@@ -94,7 +94,7 @@ export function FdButtonGroup() {
             }));
         }
 
-        prepareReceiveItemListActionsHook.onSet(newPrepareReceiveItemList);
+        prepareReleaseItemListActionsHook.onSet(newPrepareReleaseItemList);
         customBackdropControl.hideBackdrop();
     }
 
@@ -108,7 +108,7 @@ export function FdButtonGroup() {
                         type='button'
                         onClick={() => toggleProductOptionListModalOpen(true)}
                     >
-                        입고제품추가
+                        출고제품추가
                     </CustomBlockButton>
                     <CustomBlockButton
                         type='button'

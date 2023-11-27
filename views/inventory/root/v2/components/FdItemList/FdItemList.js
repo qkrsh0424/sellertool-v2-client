@@ -1,18 +1,17 @@
 import { useRouter } from "next/router";
-import { useApiHook, useInventoryStocksHook, useProductOptionPageHook, useSelectedProductOptionsHook } from "../../hooks";
+import { useApiHook, useInventoryStocksHook, useProductOptionPageHook } from "../../hooks";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Container, ControlFieldContainer, PagenationContainer, SortControlContainer, TableBox, TableWrapper } from "./FdItemList.styled";
-import CustomSelect from "../../../../../../components/select/default/v1/CustomSelect";
 import { FgRegisteredStockByDate } from "./fragments";
 import ResizableTh from "../../../../../../components/table/th/v1/ResizableTh";
 import CustomImage from "../../../../../../components/image/CustomImage";
 import CustomBlockButton from "../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import PagenationComponentV2 from "../../../../../../components/pagenation/PagenationComponentV2";
 import { InventoryStockListModalComponent } from "../../../../fragments/inventory-stock-list-modal/v1";
-import { FdFloatingControlBar } from "../FdFloatingControlBar";
-import { customBackdropController } from "../../../../../../components/backdrop/default/v1";
 import { customToast, defaultOptions } from "../../../../../../components/toast/custom-react-toastify/v1";
+import { FgStockReceiveController } from "./fragments/FgStockReceiveController/FgStockReceiveController";
+import { FgStockReleaseController } from "./fragments/FgStockReleaseController/FgStockReleaseController";
 
 const DEFAULT_SORT = 'product.cid_desc';
 const DEFAULT_PAGE = 1;
@@ -26,18 +25,10 @@ export function FdItemList() {
     const _apiHook = useApiHook();
     const _productOptionPageHook = useProductOptionPageHook();
     const _inventoryStocksHook = useInventoryStocksHook();
-    const {
-        selectedProductOptions,
-        onSelectProductOption,
-        onSelectAllProductOptions,
-        onSelectClearAllProductOptionsInPage,
-        onSelectClearAllProductOptions
-    } = useSelectedProductOptionsHook();
 
     const [targetProductOption, setTargetProductOption] = useState(null);
     const [stockRegisterStatusModalOpen, setStockRegisterStatusModalOpen] = useState(false);
 
-    const customBackdropControl = customBackdropController();
     useEffect(() => {
         if (!wsId) {
             return;
@@ -107,52 +98,6 @@ export function FdItemList() {
         setTargetProductOption(null);
     }
 
-    const handleReqBulkCreateInventoryReceives = async (body, callbackFn) => {
-        customBackdropControl.showBackdrop();
-        await _apiHook.onReqBulkCreateInventoryReceives({
-            body: { inventoryReceives: body?.inventoryReceives },
-            headers: { wsId: wsId }
-        },
-            (results, response) => {
-                callbackFn();
-            }
-        );
-
-        let productOptionIds = _productOptionPageHook?.productOptionPage?.content?.map(r => r.id);
-        await _apiHook.onReqFetchInventoryStocks({
-            body: { productOptionIds: productOptionIds },
-            headers: { wsId: wsId }
-        },
-            (results, response) => {
-                _inventoryStocksHook.onSetInventoryStocks(results);
-            }
-        )
-        customBackdropControl.hideBackdrop();
-    }
-
-    const handleReqBulkCreateInventoryReleases = async (body, callbackFn) => {
-        customBackdropControl.showBackdrop();
-        await _apiHook.onReqBulkCreateInventoryReleases({
-            body: { inventoryReleases: body?.inventoryReleases },
-            headers: { wsId: wsId }
-        },
-            (results, response) => {
-                callbackFn();
-            }
-        );
-
-        let productOptionIds = _productOptionPageHook?.productOptionPage?.content?.map(r => r.id);
-        await _apiHook.onReqFetchInventoryStocks({
-            body: { productOptionIds: productOptionIds },
-            headers: { wsId: wsId }
-        },
-            (results, response) => {
-                _inventoryStocksHook.onSetInventoryStocks(results);
-            }
-        )
-        customBackdropControl.hideBackdrop();
-    }
-
     const handleCopyToClipboardWithOptionCode = async (text) => {
         const successMessage = '클립보드에 복사되었습니다.';
         await navigator.clipboard.writeText(text);
@@ -166,7 +111,9 @@ export function FdItemList() {
             <Container>
                 <ControlFieldContainer>
                     <FgRegisteredStockByDate />
-                    <SortControlContainer>
+                    <FgStockReceiveController />
+                    <FgStockReleaseController />
+                    {/* <SortControlContainer>
                         <CustomSelect
                             className='select-item'
                             onChange={(e) => handleSelectSort(e)}
@@ -178,15 +125,12 @@ export function FdItemList() {
                                 )
                             })}
                         </CustomSelect>
-                    </SortControlContainer>
+                    </SortControlContainer> */}
                 </ControlFieldContainer>
                 <Table
                     productOptions={_productOptionPageHook?.productOptionPage?.content}
                     inventoryStocks={_inventoryStocksHook?.inventoryStocks}
-                    selectedProductOptions={selectedProductOptions}
-                    onActionSelectProductOption={onSelectProductOption}
-                    onActionSelectAllProductOptions={onSelectAllProductOptions}
-                    onActionSelectClearAllProductOptionsInPage={onSelectClearAllProductOptionsInPage}
+
                     onActionOpenStockRegisterStatusModal={handleOpenStockRegisterStatusModal}
                     onCopyToClipboardWithOptionCode={handleCopyToClipboardWithOptionCode}
                 />
@@ -204,15 +148,6 @@ export function FdItemList() {
                     popperDisablePortal={true}
                 />
             </PagenationContainer>
-
-            {selectedProductOptions?.length > 0 &&
-                <FdFloatingControlBar
-                    selectedProductOptions={selectedProductOptions}
-                    onSelectClearAllProductOptions={onSelectClearAllProductOptions}
-                    onReqBulkCreateInventoryReceives={(inventoryReceiveCreateFormList, callbackFn) => handleReqBulkCreateInventoryReceives(inventoryReceiveCreateFormList, callbackFn)}
-                    onReqBulkCreateInventoryReleases={(inventoryReleaseCreateFormList, callbackFn) => handleReqBulkCreateInventoryReleases(inventoryReleaseCreateFormList, callbackFn)}
-                />
-            }
 
             {stockRegisterStatusModalOpen &&
                 <InventoryStockListModalComponent
@@ -245,10 +180,7 @@ export function FdItemList() {
 function Table({
     productOptions,
     inventoryStocks,
-    selectedProductOptions,
-    onActionSelectProductOption,
-    onActionSelectAllProductOptions,
-    onActionSelectClearAllProductOptionsInPage,
+    
     onActionOpenStockRegisterStatusModal,
     onCopyToClipboardWithOptionCode
 }) {
@@ -260,28 +192,6 @@ function Table({
                 >
                     <thead>
                         <tr>
-                            <th
-                                className="fixed-header"
-                                scope="col"
-                                width={50}
-                                style={{
-                                    zIndex: '10'
-                                }}
-                            >
-                                {productOptions?.every(r => selectedProductOptions.some(r2 => r2.id === r.id)) ?
-                                    <input
-                                        type='checkbox'
-                                        onChange={() => onActionSelectClearAllProductOptionsInPage(productOptions)}
-                                        checked={true}
-                                    ></input>
-                                    :
-                                    <input
-                                        type='checkbox'
-                                        onChange={() => onActionSelectAllProductOptions(productOptions)}
-                                        checked={false}
-                                    ></input>
-                                }
-                            </th>
                             {TABLE_HEADER?.map(r => {
                                 if (r.resizable) {
                                     return (
@@ -317,22 +227,11 @@ function Table({
                     </thead>
                     <tbody>
                         {productOptions?.map((option) => {
-                            const isSelected = selectedProductOptions?.find(r => r.id === option.id);
 
                             return (
                                 <tr
                                     key={option.id}
-                                    className={`${isSelected ? 'tr-selected' : ''}`}
-                                    onClick={(e) => { e.stopPropagation(); onActionSelectProductOption(option); }}
                                 >
-                                    <td>
-                                        <input
-                                            type='checkbox'
-                                            onChange={() => onActionSelectProductOption(option)}
-                                            onClick={(e) => e.stopPropagation()}
-                                            checked={isSelected ?? false}
-                                        ></input>
-                                    </td>
                                     <td>
                                         <div className='content-box'>
                                             <div className='thumbnail-figure'>

@@ -23,6 +23,10 @@ function numberWithCommas(number) {
 
 // 소숫점 아래에는 콤마 표시를 하지않는 버전
 function numberWithCommas2(number) {
+    if(number === 0){
+        return 0;
+    }
+    
     let num = number || '';
     // 숫자를 정수 부분과 소수 부분으로 분리
     let parts = num.toString().split(".");

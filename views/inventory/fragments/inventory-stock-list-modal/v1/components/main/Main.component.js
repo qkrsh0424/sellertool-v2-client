@@ -17,7 +17,6 @@ import { customBackdropController } from "../../../../../../../components/backdr
 import { EditMemoModalComponent } from "../edit-memo-modal";
 import { StockChartComponent } from "../stock-chart";
 import useInventoryStockRegisterStatusesHook from "../../hooks/useInventoryStockRegisterStatusesHook";
-import { InventoryReceiveSeperatedItemsModalComponent } from "../inventory-receive-seperated-items-modal";
 
 function returnTotalUnitByType(inventoryStockRegisterStatuses, type) {
     const totalUnit = inventoryStockRegisterStatuses?.reduce((accumulator, currentValue, index, src) => {
@@ -61,7 +60,6 @@ export function InventoryStockListModalComponent({
         productOptionId: productOptionId
     });
     const [editMemoModalOpen, setEditMemoModalOpen] = useState(false);
-    const [inventoryReceiveSeperatedItemsModalOpen, setInventoryReceiveSeperatedItemsModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [deleteInventoryStockRecordModalOpen, setDeleteInventoryStockRecordModalOpen] = useState(false);
     const [deleteInventoryStockRecordInfoModalOpen, setDeleteInventoryStockRecordInfoModalOpen] = useState(false);
@@ -87,21 +85,6 @@ export function InventoryStockListModalComponent({
             return;
         }
         setDeleteInventoryStockRecordInfoModalOpen(setOpen)
-    }
-
-    const toggleInventoryReceiveSeperatedItemsModalOpen = (setOpen, item) => {
-        if (readOnly) {
-            return;
-        }
-
-        if (setOpen && item?.type === 'receive') {
-            setSelectedItem(item);
-            setInventoryReceiveSeperatedItemsModalOpen(true);
-        } else {
-            setSelectedItem(null);
-            setInventoryReceiveSeperatedItemsModalOpen(false);
-        }
-
     }
 
     const handleSubmitSearch = async (e) => {
@@ -311,10 +294,6 @@ export function InventoryStockListModalComponent({
                             return (
                                 <ItemCardBox
                                     key={r.id}
-                                    onClick={readOnly ? () => { } : () => toggleInventoryReceiveSeperatedItemsModalOpen(true, r)}
-                                    style={{
-                                        cursor: readOnly ? 'default' : 'pointer'
-                                    }}
                                 >
                                     {!readOnly &&
 
@@ -382,14 +361,6 @@ export function InventoryStockListModalComponent({
                 />
             }
 
-            {
-                inventoryReceiveSeperatedItemsModalOpen &&
-                <InventoryReceiveSeperatedItemsModalComponent
-                    open={inventoryReceiveSeperatedItemsModalOpen}
-                    inventoryStockData={selectedItem}
-                    onClose={() => toggleInventoryReceiveSeperatedItemsModalOpen(false)}
-                />
-            }
             {
                 deleteInventoryStockRecordModalOpen &&
                 <CustomDialog

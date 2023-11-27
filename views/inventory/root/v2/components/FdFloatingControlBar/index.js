@@ -1,1 +1,0 @@
-export { FdFloatingControlBar } from './FdFloatingControlBar';

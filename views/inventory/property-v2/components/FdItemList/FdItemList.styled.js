@@ -257,6 +257,7 @@ export const StTable = {
             width: 100%;
             background-color: inherit;
             cursor: pointer;
+            font-size: 12px;
 
             &:hover {
                 text-decoration: underline;

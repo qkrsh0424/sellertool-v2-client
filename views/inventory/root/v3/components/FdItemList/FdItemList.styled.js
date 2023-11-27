@@ -135,15 +135,17 @@ export const TableBox = styled.div`
 
             .stockRegisterStatusView-button-item{
                 margin:0;
-                padding:0;
-                width: 50px;
+                padding:0 16px;
+                width: auto;
                 height: 30px;
                 margin-left: auto;
                 margin-right: auto;
-                border-radius: 5px;
-                color: #606060;
-                background: #f5f5f5;
+                border-radius: 10px;
+                color: #222;
+                border: none;
+                background: var(--grayButtonColor);
                 font-size: 12px;
+                font-weight: 700;
             }
 
             .optionCodeText{

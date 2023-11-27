@@ -28,7 +28,7 @@ export function FdSearchConsole() {
     const [isHide, setIsHide] = useState(false);
     const [selectCategoryModalOpen, setSelectCategoryModalOpen] = useState(false);
     const [selectSubCategoryModalOpen, setSelectSubCategoryModalOpen] = useState(false);
-    const [searchCondition, setSearchCondition] = useState('');
+    const [searchCondition, setSearchCondition] = useState('PRODUCT_NAME');
     const [searchQuery, setSearchQuery] = useState('');
 
     const productCategory = productCategoryHook?.productCategoryList?.find(r => r?.id === routerSearchAggregationHook?.productCategoryId);

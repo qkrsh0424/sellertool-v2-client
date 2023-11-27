@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CustomImage from "../../../../../components/image/CustomImage";
 import FieldCircleLoading from "../../../../../components/loading/field-loading/v1/FieldCircleLoading";
 import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
@@ -29,8 +29,23 @@ export function FdItemList({
 }) {
     const router = useRouter();
     const inventoryAssetList = inventoryAssetPage?.content;
+
+    const scrollRef = useRef();
+
     const [badStockEndDate, setBadStockEndDate] = useState(DEFAULT_START_DATE);
     const [badStockEndDatePopperOpen, setBadStockEndDatePopperOpen] = useState(false);
+
+    useEffect(() => {
+        if (!scrollRef) {
+            return;
+        }
+        scrollRef?.current?.querySelector('.table-box').scroll({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, [
+        router?.query?.page,
+    ])
 
     const toggleBadStockEndDatePopperOpen = (bool) => {
         setBadStockEndDatePopperOpen(bool);
@@ -71,7 +86,7 @@ export function FdItemList({
             query: {
                 ...router?.query,
                 searchFilter: customURIEncoderUtils.encodeJSONList(searchFilter),
-                page:1,
+                page: 1,
             }
         }, undefined, { scroll: false })
     }
@@ -129,10 +144,11 @@ export function FdItemList({
                     </StHeadControl.SortWrapper>
                 </StHeadControl.Container>
                 <StTable.Container>
-                    <TableFieldView
+                    <TableField
                         inventoryAssetList={inventoryAssetList}
                         badStockEndDate={badStockEndDate}
                         handleClickProductInfo={handleClickProductInfo}
+                        ref={scrollRef}
                     />
                 </StTable.Container>
             </St.Container>
@@ -154,20 +170,20 @@ export function FdItemList({
     );
 }
 
-function TableFieldView({
+const TableField = React.forwardRef(function MyTableView({
     inventoryAssetList,
     badStockEndDate,
     handleClickProductInfo
-}) {
+}, ref) {
     const isTableLoading = !inventoryAssetList;
 
     return (
-        <StTable.TableWrapper>
+        <StTable.TableWrapper ref={ref}>
             <div style={{ position: 'relative' }}>
                 {isTableLoading &&
                     <FieldCircleLoading boxStyle={{ borderRadius: '15px' }} />
                 }
-                <StTable.TableBox>
+                <StTable.TableBox className='table-box'>
                     <table
                         cellSpacing={0}
                     >
@@ -297,7 +313,7 @@ function TableFieldView({
             </div>
         </StTable.TableWrapper >
     );
-}
+});
 
 const TABLE_HEADER = [
     {

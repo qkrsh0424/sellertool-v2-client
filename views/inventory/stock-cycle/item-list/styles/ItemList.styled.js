@@ -14,6 +14,7 @@ export const TableBox = styled.div`
     border: 1px solid #f0f0f0;
     border-radius: 5px;
     background:#ffffff;
+    height: 600px;
 
     &::-webkit-scrollbar{
         background: #e1e1e130;

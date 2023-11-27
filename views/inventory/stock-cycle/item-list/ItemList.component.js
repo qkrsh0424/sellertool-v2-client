@@ -4,7 +4,7 @@ import PagenationComponentV2 from "../../../modules/pagenation/PagenationCompone
 import CustomSelect from "../../../modules/select/CustomSelect";
 import { Container, ControlFieldContainer, PagenationContainer, SortControlContainer, TableBox, TableWrapper } from "./styles/ItemList.styled";
 import useInventoryStockCyclePageHook from "./hooks/useInventoryStockCyclePageHook";
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CustomBlockButton from "../../../../components/buttons/block-button/v1/CustomBlockButton";
 import SafetyIndexVariableModalComponent from "./modal/SafetyIndexVariableModal.component";
 import { getDiffDate } from "../../../../utils/dateFormatUtils";
@@ -27,6 +27,8 @@ export default function ItemListComponent(props) {
     const days = router?.query?.days;
     const leadTime = router?.query?.leadTime;
 
+    const scrollRef = useRef();
+
     const [safetyIndexVariableForOutOfStockPeriod, setSafetyIndexVariableForOutOfStockPeriod] = useState(30);
     const [safetyIndexVariableForTotal, setSafetyIndexVariableForTotal] = useState(1);
     const [safetyIndexVariableModalOpen, setSafetyIndexVariableModalOpen] = useState(false);
@@ -36,6 +38,18 @@ export default function ItemListComponent(props) {
     const {
         inventoryStockCyclePage
     } = useInventoryStockCyclePageHook();
+
+    useEffect(() => {
+        if (!scrollRef) {
+            return;
+        }
+        scrollRef?.current?.querySelector('.table-box').scroll({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, [
+        router?.query?.page,
+    ])
 
     const handleSelectSort = (e) => {
         let value = e.target.value;
@@ -94,7 +108,7 @@ export default function ItemListComponent(props) {
                         </CustomSelect>
                     </SortControlContainer>
                 </ControlFieldContainer>
-                <Table
+                <TableField
                     inventoryStockCycles={inventoryStockCyclePage?.content}
                     days={days}
                     leadTime={leadTime}
@@ -102,6 +116,8 @@ export default function ItemListComponent(props) {
                     safetyIndexVariableForTotal={safetyIndexVariableForTotal}
                     onOpenSafetyIndexVariableModal={() => toggleSafetyIndexVariableModalOpen(true)}
                     onActionOpenStockRegisterStatusModal={handleOpenStockRegisterStatusModal}
+                    
+                    ref={scrollRef}
                 />
 
             </Container>
@@ -145,7 +161,7 @@ export default function ItemListComponent(props) {
 
 }
 
-function Table({
+const TableField = React.forwardRef(function MyTableView({
     inventoryStockCycles,
     days,
     leadTime,
@@ -153,10 +169,10 @@ function Table({
     safetyIndexVariableForTotal,
     onOpenSafetyIndexVariableModal,
     onActionOpenStockRegisterStatusModal
-}) {
+}, ref) {
     return (
-        <TableWrapper>
-            <TableBox>
+        <TableWrapper ref={ref}>
+            <TableBox className='table-box'>
                 <table
                     cellSpacing={0}
                 >
@@ -280,17 +296,17 @@ function Table({
                                     </td>
                                     <td>
                                         <div className='content-box'>
-                                            <div style={{ color: '#444', fontWeight: '500' }}>{inventoryStockCycle?.stockUnit} 개</div>
+                                            <div style={{ color: '#444', fontWeight: '500' }}>{inventoryStockCycle?.stockUnit}</div>
                                         </div>
                                     </td>
                                     <td>
                                         <div className='content-box'>
-                                            <div style={{ color: '#444', fontWeight: '500' }}>{inventoryStockCycle?.releaseUnitPerPeriod} 개</div>
+                                            <div style={{ color: '#444', fontWeight: '500' }}>{inventoryStockCycle?.releaseUnitPerPeriod}</div>
                                         </div>
                                     </td>
                                     <td>
                                         <div className='content-box'>
-                                            <div style={{ color: '#444', fontWeight: '500' }}>{inventoryStockCycle?.averageReleaseUnitPerDay} 개</div>
+                                            <div style={{ color: '#444', fontWeight: '500' }}>{inventoryStockCycle?.averageReleaseUnitPerDay}</div>
                                         </div>
                                     </td>
                                     <td>
@@ -324,7 +340,7 @@ function Table({
             </TableBox>
         </TableWrapper >
     );
-}
+});
 
 const TABLE_HEADER = [
     {
@@ -366,20 +382,20 @@ const TABLE_HEADER = [
     {
         resizable: true,
         name: 'stockUnit',
-        headerName: '재고수량',
-        defaultWidth: 100
+        headerName: '재고수량 (개)',
+        defaultWidth: 120
     },
     {
         resizable: true,
         name: 'releaseUnitPerPeriod',
-        headerName: '기간내 출고량',
-        defaultWidth: 100
+        headerName: '기간내 출고량 (개)',
+        defaultWidth: 120
     },
     {
         resizable: true,
         name: 'averageReleaseUnitPerDay',
-        headerName: '일평균 출고량',
-        defaultWidth: 100
+        headerName: '일평균 출고량 (개)',
+        defaultWidth: 120
     },
     {
         resizable: true,

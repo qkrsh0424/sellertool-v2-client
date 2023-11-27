@@ -33,7 +33,7 @@ export function FdBulkInput({
         reqValue = reqValue.replaceAll(',', '');
         reqValue = customNumberUtils.getRemovedPrefixZero(reqValue);
 
-        if (reqValue.match(/^[0-9]{0,4}$/)) {
+        if (reqValue.match(/^[0-9]{0,6}$/)) {
             setValue(reqValue);
         }
     }
@@ -139,7 +139,7 @@ export function FdBulkInput({
                                 <CustomInput
                                     type='text'
                                     placeholder='메모를 입력해 주세요.'
-                                    value={customNumberUtils.numberWithCommas2(value) || ''}
+                                    value={value || ''}
                                     onChange={(e) => handleChangeMemo(e.target.value)}
                                 />
                             }

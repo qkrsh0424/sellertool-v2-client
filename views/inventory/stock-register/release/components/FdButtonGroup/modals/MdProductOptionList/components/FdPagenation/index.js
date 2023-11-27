@@ -1,0 +1,1 @@
+export { FdPagenation } from './FdPagenation';

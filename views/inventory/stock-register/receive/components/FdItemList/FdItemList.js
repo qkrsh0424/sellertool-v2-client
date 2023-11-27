@@ -132,7 +132,7 @@ export function FdItemList({
         value = value.replaceAll(',', '');
         value = customNumberUtils.getRemovedPrefixZero(value);
 
-        if (value.match(/^[0-9]{0,4}$/)) {
+        if (value.match(/^[0-9]{0,6}$/)) {
             setInventoryReceiveItemList((prev) => {
                 return prev?.map((r, index) => {
                     if (reqIndex === index) {
@@ -153,7 +153,7 @@ export function FdItemList({
         value = value.replaceAll(',', '');
         value = customNumberUtils.getRemovedPrefixZero(value);
 
-        if (value.match(/^[0-9]{0,4}$/)) {
+        if (value.match(/^[0-9]{0,6}$/)) {
             setInventoryReceiveItemList((prev) => {
                 return prev?.map((r, index) => {
                     return {

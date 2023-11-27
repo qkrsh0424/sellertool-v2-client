@@ -17,10 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const customBackdropControl = customBackdropController();
 
-export function FdButtonGroup({
-    stockReceiveItemList,
-    onConcatStockReceiveItems
-}) {
+export function FdButtonGroup() {
     const router = useRouter();
     const poListMd = router?.query?.poListMd;
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
@@ -126,9 +123,6 @@ export function FdButtonGroup({
                 <MdProductOptionList
                     open={productOptionListModalOpen}
                     onClose={() => toggleProductOptionListModalOpen(false)}
-
-                    stockReceiveItemList={stockReceiveItemList}
-                    onConcatStockReceiveItems={(stockReceiveItems) => onConcatStockReceiveItems(stockReceiveItems)}
                 />
             </SearchAggregationProvider>
 

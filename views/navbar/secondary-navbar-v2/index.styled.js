@@ -38,21 +38,33 @@ const SelectorBtnBox = styled.div`
 `;
 
 const MenuButton = styled(CustomBlockButton)`
-    color: #404040;
-    font-size: 18px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 0 10px;
     height: 38px;
     border-radius: 5px;
-    width: 160px;
+    width: 150px;
     border: none;
 
     &:hover{
         background: #f6f6f6;
         box-shadow: var(--defaultBoxShadow);
+    }
+
+    .wrapper{
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    .wrapper > .icon-figure{
+        width: 28px;
+        height: 28px;
+    }
+
+    .wrapper > .text{
+        color: #333;
+        font-weight: 700;
+        font-size: 17px;
+        margin-top: -1px;
     }
 `;
 

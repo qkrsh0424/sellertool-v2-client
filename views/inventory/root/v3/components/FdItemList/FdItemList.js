@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useApiHook, useInventoryStocksHook, useProductOptionPageHook } from "../../hooks";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Container, ControlFieldContainer, PagenationContainer, SortControlContainer, TableBox, TableWrapper } from "./FdItemList.styled";
 import { FgRegisteredStockByDate } from "./fragments";
 import ResizableTh from "../../../../../../components/table/th/v1/ResizableTh";
@@ -19,6 +19,8 @@ export function FdItemList() {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
+
+    const scrollRef = useRef();
 
     const _apiHook = useApiHook();
     const _productOptionPageHook = useProductOptionPageHook();
@@ -72,6 +74,18 @@ export function FdItemList() {
         initialize();
     }, [wsId, router?.query]);
 
+    useEffect(() => {
+        if (!scrollRef) {
+            return;
+        }
+        scrollRef?.current?.querySelector('.table-box').scroll({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, [
+        routerSearchAggregationHook.page,
+    ])
+
     const handleOpenStockRegisterStatusModal = (e, productOption) => {
         e.stopPropagation();
         setStockRegisterStatusModalOpen(true);
@@ -99,12 +113,13 @@ export function FdItemList() {
                     <FgStockReceiveController />
                     <FgStockReleaseController />
                 </ControlFieldContainer>
-                <Table
+                <TableField
                     productOptions={_productOptionPageHook?.productOptionPage?.content}
                     inventoryStocks={_inventoryStocksHook?.inventoryStocks}
 
                     onActionOpenStockRegisterStatusModal={handleOpenStockRegisterStatusModal}
                     onCopyToClipboardWithOptionCode={handleCopyToClipboardWithOptionCode}
+                    ref={scrollRef}
                 />
             </Container>
             <PagenationContainer>
@@ -149,16 +164,18 @@ export function FdItemList() {
     );
 }
 
-function Table({
+const TableField = React.forwardRef(function MyTableView({
     productOptions,
     inventoryStocks,
 
     onActionOpenStockRegisterStatusModal,
     onCopyToClipboardWithOptionCode
-}) {
+}, ref) {
     return (
-        <TableWrapper>
-            <TableBox>
+        <TableWrapper
+            ref={ref}
+        >
+            <TableBox className='table-box'>
                 <table
                     cellSpacing={0}
                 >
@@ -273,9 +290,9 @@ function Table({
                     </tbody>
                 </table>
             </TableBox>
-        </TableWrapper >
+        </TableWrapper>
     );
-}
+});
 
 const TABLE_HEADER = [
     {

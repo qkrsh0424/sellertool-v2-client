@@ -143,15 +143,32 @@ export const TableBox = styled.div`
 
             .stockRegisterStatusView-button-item{
                 margin:0;
-                padding:0;
-                width: 50px;
+                padding:0 16px;
+                /* width: 50px; */
+                width: auto;
                 height: 30px;
                 margin-left: auto;
                 margin-right: auto;
-                border-radius: 5px;
-                color: #606060;
-                background: #f5f5f5;
+                border-radius: 10px;
+                background: var(--grayButtonColor);
+                border: none;
+                color: #222;
                 font-size: 12px;
+                font-weight: 700;
+            }
+
+            .purchaseLink-button{
+                /* display: flex; */
+                display: inline-block;
+                width: auto;
+                padding: 8px 16px;
+                border-radius:10px;
+                border: none;
+                background-color: var(--grayButtonColor);
+                margin: 0 auto;
+                color: #222;
+                font-size: 12px;
+                font-weight: 700;
             }
         }
     }

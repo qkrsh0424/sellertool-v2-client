@@ -231,7 +231,7 @@ const TableField = React.forwardRef(function MyTableView({
                                         </div>
                                     </td>
                                     <td>
-                                        <div className='content-box'>
+                                        <div className='content-box mgl-fw600'>
                                             <div>{option?.productCategory?.name} / {option?.productSubCategory?.name}</div>
                                             <div><span style={{ color: 'var(--mainColor)' }}>{option?.product?.name}</span> [{option?.product?.productTag || '태그 미지정'}]</div>
                                         </div>

@@ -10,6 +10,7 @@ import SafetyIndexVariableModalComponent from "./modal/SafetyIndexVariableModal.
 import { getDiffDate } from "../../../../utils/dateFormatUtils";
 import ResizableTh from "../../../../components/table/th/v1/ResizableTh";
 import { InventoryStockListModalComponent } from "../../fragments/inventory-stock-list-modal/v1";
+import Link from "next/link";
 
 function returnRecommendPurchaseUnits(
     stockUnit,
@@ -116,7 +117,7 @@ export default function ItemListComponent(props) {
                     safetyIndexVariableForTotal={safetyIndexVariableForTotal}
                     onOpenSafetyIndexVariableModal={() => toggleSafetyIndexVariableModalOpen(true)}
                     onActionOpenStockRegisterStatusModal={handleOpenStockRegisterStatusModal}
-                    
+
                     ref={scrollRef}
                 />
 
@@ -258,7 +259,7 @@ const TableField = React.forwardRef(function MyTableView({
                                         </div>
                                     </td>
                                     <td>
-                                        <div className='content-box'>
+                                        <div className='content-box mgl-fw600'>
                                             <div>{inventoryStockCycle?.productCategoryName} / {inventoryStockCycle?.productSubCategoryName}</div>
                                             <div><span style={{ color: 'var(--mainColor)' }}>{inventoryStockCycle?.productName}</span> [{inventoryStockCycle?.productName || '태그 미지정'}]</div>
                                         </div>
@@ -329,6 +330,24 @@ const TableField = React.forwardRef(function MyTableView({
                                                         )
                                                     }
                                                 </div>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className='content-box'>
+                                            {inventoryStockCycle?.productPurchaseUri &&
+                                                <Link
+                                                    href={inventoryStockCycle?.productPurchaseUri}
+                                                    passHref
+                                                >
+                                                    <a
+                                                        type='button'
+                                                        className='purchaseLink-button'
+                                                        target='_blank'
+                                                    >
+                                                        구매링크
+                                                    </a>
+                                                </Link>
                                             }
                                         </div>
                                     </td>
@@ -407,6 +426,12 @@ const TABLE_HEADER = [
         resizable: true,
         name: 'recommendPurchaseUnit',
         headerName: '추천 구매 수량',
+        defaultWidth: 150
+    },
+    {
+        resizable: true,
+        name: 'productPurchaseUri',
+        headerName: '구매 URL',
         defaultWidth: 150
     },
 ]

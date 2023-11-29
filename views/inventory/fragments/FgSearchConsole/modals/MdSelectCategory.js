@@ -1,21 +1,20 @@
 import { useState } from "react";
-import { CustomDialog } from "../../../../../../../components/dialog/v1/CustomDialog";
-import HighlightedText from "../../../../../../../components/text/highlight/HighlightedText";
+import { CustomDialog } from "../../../../../components/dialog/v1/CustomDialog";
+import HighlightedText from "../../../../../components/text/highlight/HighlightedText";
 import { St } from "./MdSelectCategory.styled";
-import { useRouterSearchAggregationHook } from "../../../hooks/useRouterSearchAggregationHook";
 
 export function MdSelectCategory({
     open = false,
-    productCategories,
+    productCategoryList,
     productCategory,
+    onSelect,
     onClose = () => { },
 }) {
-    const routerSearchAggregationHook = useRouterSearchAggregationHook();
 
     const [inputValue, setInputValue] = useState('');
 
     const handleSelectCategory = (data) => {
-        routerSearchAggregationHook.onChangeProductCategoryId(data?.id);
+        onSelect(data?.id);
         onClose();
     }
 
@@ -52,7 +51,7 @@ export function MdSelectCategory({
                             >
                                 전체
                             </span>
-                            {productCategories?.map(r => {
+                            {productCategoryList?.map(r => {
                                 let isMatched = inputValue && r.name.includes(inputValue);
 
                                 if (!inputValue) {

@@ -1,11 +1,15 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    margin-bottom: 100px;
+    margin-bottom: 300px;
 `;
 
 export const TableWrapper = styled.div`
     padding: 10px 20px 0px 20px;
+
+    @media all and (max-width:992px){
+        padding: 10px 10px 0px 10px;
+    }
 `;
 
 export const TableBox = styled.div`

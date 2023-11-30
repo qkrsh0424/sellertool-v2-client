@@ -1,21 +1,20 @@
 import { useState } from "react";
-import { CustomDialog } from "../../../../../../../../../../../components/dialog/v1/CustomDialog";
-import HighlightedText from "../../../../../../../../../../../components/text/highlight/HighlightedText";
-import { St } from "./MdSelectSubCategory.styled";
-import { useSearchAggregationActionsHook, useSearchAggregationValueHook } from "../../../../../../../hooks/SearchAggregationHook";
+import { CustomDialog } from "../../../../../components/dialog/v1/CustomDialog";
+import HighlightedText from "../../../../../components/text/highlight/HighlightedText";
+import { St } from "./MdSelectCategory.styled";
 
-export function MdSelectSubCategory({
+export function MdSelectCategory({
     open = false,
-    productSubCategories,
+    productCategoryList,
+    productCategory,
+    onSelect,
     onClose = () => { },
 }) {
-    const searchAggregationValueHook = useSearchAggregationValueHook();
-    const searchAggregationActionsHook = useSearchAggregationActionsHook();
 
     const [inputValue, setInputValue] = useState('');
 
-    const handleSelectSubCategory = (data) => {
-        searchAggregationActionsHook.onChanageProductSubCategory(data);
+    const handleSelectCategory = (data) => {
+        onSelect(data?.id);
         onClose();
     }
 
@@ -47,20 +46,20 @@ export function MdSelectSubCategory({
                     <div className='content-group'>
                         <div className='content-box'>
                             <span
-                                className={`tag ${!searchAggregationValueHook?.productSubCategory && 'tag-accent'}`}
-                                onClick={() => handleSelectSubCategory()}
+                                className={`tag ${!productCategory && 'tag-accent'}`}
+                                onClick={() => handleSelectCategory()}
                             >
                                 전체
                             </span>
-                            {productSubCategories?.map(r => {
+                            {productCategoryList?.map(r => {
                                 let isMatched = inputValue && r.name.includes(inputValue);
 
                                 if (!inputValue) {
                                     return (
                                         <span
                                             key={r.id}
-                                            className={`tag ${searchAggregationValueHook?.productSubCategory?.id === r.id && 'tag-accent'}`}
-                                            onClick={() => handleSelectSubCategory(r)}
+                                            className={`tag ${productCategory?.id === r.id && 'tag-accent'}`}
+                                            onClick={() => handleSelectCategory(r)}
                                         >
                                             {r.name}
                                         </span>
@@ -71,8 +70,8 @@ export function MdSelectSubCategory({
                                     return (
                                         <span
                                             key={r.id}
-                                            className={`tag ${searchAggregationValueHook?.productSubCategory?.id === r.id && 'tag-accent'}`}
-                                            onClick={() => handleSelectSubCategory(r)}
+                                            className={`tag ${productCategory?.id === r.id && 'tag-accent'}`}
+                                            onClick={() => handleSelectCategory(r)}
                                         >
                                             <HighlightedText
                                                 text={`${r.name}`}

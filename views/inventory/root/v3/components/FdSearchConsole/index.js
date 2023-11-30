@@ -1,1 +1,0 @@
-export { FdSearchConsole } from './FdSearchConsole';

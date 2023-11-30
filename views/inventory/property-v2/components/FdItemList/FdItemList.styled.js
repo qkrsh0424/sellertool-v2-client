@@ -46,14 +46,6 @@ export const StHeadControl = {
             left: 70px;
         }
     `,
-    SortWrapper: styled.div`
-        .select-item{
-            width: 130px;
-            height: 35px;
-            font-size: 12px;
-            border-radius: 5px;
-        }
-    `,
 }
 
 export const StTable = {

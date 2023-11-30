@@ -1,24 +1,22 @@
 import { useEffect, useState } from "react";
 import Layout from "../layout/Layout";
-import { FdSearchConsole } from "./components/FdSearchConsole/FdSearchConsole";
 import { useApiHook } from "./hooks/useApiHook";
 import { useProductCategoryHook } from "./hooks/useProductCategoryHook";
 import { Container } from "./index.styled";
 import { useSelector } from "react-redux";
-import { useRouter } from "next/router";
 import { useProductSubCategoryHook } from "./hooks/useProductSubCategoryHook";
 import { FdItemList } from "./components/FdItemList/FdItemList";
 import { useInventoryAssetHook } from "./hooks/useInventoryAssetHook";
 import { CustomDateUtils } from "../../../utils/CustomDateUtils";
-import { CustomURIEncoderUtils } from "../../../utils/CustomURIEncoderUtils";
 import { FdAmount } from "./components/FdAmount/FdAmount";
 import { Alert } from "@mui/material";
 import { FdGraph } from "./components/FdGraph/FdGraph";
 import { FdRecordDate } from "./components/FdRecordDate/FdRecordDate";
 import { customBackdropController } from "../../../components/backdrop/default/v1";
+import { SearchConsoleState } from "./components/SearchConsoleState";
+import { useRouterSearchAggregationHook } from "./hooks/useRouterSearchAggregationHook";
 
 const customDateUtils = CustomDateUtils();
-const customURIEncoderUtils = CustomURIEncoderUtils();
 const customBackdropControl = customBackdropController();
 
 const CURRENT_LOCAL_DATETIME = new Date();
@@ -27,21 +25,14 @@ const LAST30DAY_LOCAL_DATETIME = customDateUtils.setPlusDate(CURRENT_LOCAL_DATET
 const YESTERDAY_DATE = customDateUtils.dateToYYYYMMDD(YESTERDAY_LOCAL_DATETIME, '-');
 
 export default function Inventory_PropertyComponent() {
-    const router = useRouter();
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
-
-    const selectedProductCategoryId = router?.query?.productCategoryId;
-    const selectedProductSubCategoryId = router?.query?.productSubCategoryId;
-    const page = router?.query?.page;
-    const size = router?.query?.size;
-    const searchFilter = router?.query?.searchFilter;
-    const sortTypes = router?.query?.sortTypes;
 
     const apiHook = useApiHook();
     const productCategoryHook = useProductCategoryHook();
     const productSubCategoryHook = useProductSubCategoryHook();
     const inventoryAssetHook = useInventoryAssetHook();
+    const routerSearchAggregationHook = useRouterSearchAggregationHook();
 
     const [recordDate, setRecordDate] = useState(YESTERDAY_DATE);
 
@@ -63,17 +54,17 @@ export default function Inventory_PropertyComponent() {
     // fetch productSubCategoryList
     useEffect(() => {
         async function fetchProductSubCategoryList() {
-            if (!wsId || !selectedProductCategoryId) {
+            if (!wsId || !routerSearchAggregationHook?.productCategoryId) {
                 return;
             }
 
-            await apiHook.reqFetchProductSubCategoryList({ params: { productCategoryId: selectedProductCategoryId }, headers: { wsId: wsId } }, (results) => {
+            await apiHook.reqFetchProductSubCategoryList({ params: { productCategoryId: routerSearchAggregationHook?.productCategoryId }, headers: { wsId: wsId } }, (results) => {
                 productSubCategoryHook.onSetProductSubCategoryList(results);
             })
         }
 
         fetchProductSubCategoryList();
-    }, [wsId, selectedProductCategoryId]);
+    }, [wsId, routerSearchAggregationHook?.productCategoryId]);
 
     // fetch inventoryAssetPage
     useEffect(() => {
@@ -85,12 +76,12 @@ export default function Inventory_PropertyComponent() {
 
     }, [
         wsId,
-        selectedProductCategoryId,
-        selectedProductSubCategoryId,
-        page,
-        size,
-        sortTypes,
-        searchFilter,
+        routerSearchAggregationHook?.productCategoryId,
+        routerSearchAggregationHook?.productSubCategoryId,
+        routerSearchAggregationHook?.page,
+        routerSearchAggregationHook?.size,
+        routerSearchAggregationHook?.searchFilter,
+        routerSearchAggregationHook?.sortTypes,
         recordDate
     ]);
 
@@ -109,20 +100,20 @@ export default function Inventory_PropertyComponent() {
 
     }, [
         wsId,
-        selectedProductCategoryId,
-        selectedProductSubCategoryId,
-        searchFilter,
+        routerSearchAggregationHook?.productCategoryId,
+        routerSearchAggregationHook?.productSubCategoryId,
+        routerSearchAggregationHook?.searchFilter,
     ]);
 
     const handleReqFetchInventoryAssetPage = async () => {
         const params = {
             recordDate: recordDate,
-            productCategoryId: selectedProductCategoryId,
-            productSubCategoryId: selectedProductSubCategoryId,
-            page: page || 1,
-            size: size || 50,
-            sortTypes: sortTypes || customURIEncoderUtils.encodeJSONList(['REMAINED_ASSETS$DESC']),
-            searchFilter: searchFilter,
+            productCategoryId: routerSearchAggregationHook?.productCategoryId,
+            productSubCategoryId: routerSearchAggregationHook?.productSubCategoryId,
+            page: routerSearchAggregationHook?.page || 1,
+            size: routerSearchAggregationHook?.size || 50,
+            sortTypes: routerSearchAggregationHook?.sortTypes || routerSearchAggregationHook?.DEFAULT_SORT_TYPES,
+            searchFilter: routerSearchAggregationHook?.searchFilter,
         }
 
         apiHook.reqFetchInventoryAssetPage({ params: params, headers: { wsId: wsId } }, (results, response) => {
@@ -134,9 +125,9 @@ export default function Inventory_PropertyComponent() {
         const params = {
             startRecordDate: customDateUtils.dateToYYYYMMDD(LAST30DAY_LOCAL_DATETIME, '-'),
             lastRecordDate: customDateUtils.dateToYYYYMMDD(YESTERDAY_LOCAL_DATETIME, '-'),
-            productCategoryId: selectedProductCategoryId,
-            productSubCategoryId: selectedProductSubCategoryId,
-            searchFilter: searchFilter,
+            productCategoryId: routerSearchAggregationHook?.productCategoryId,
+            productSubCategoryId: routerSearchAggregationHook?.productSubCategoryId,
+            searchFilter: routerSearchAggregationHook?.searchFilter,
         }
 
         let inventoryAssetAmountList = null;
@@ -183,47 +174,6 @@ export default function Inventory_PropertyComponent() {
         inventoryAssetHook.onSetSelectedInventoryAssetAmount(selectedInventoryAssetAmount);
     }
 
-    const handleSelectProductCategory = (value) => {
-        const productCategoryId = value?.id;
-
-        let query = { ...router?.query, page: 1 }
-
-        delete query?.productSubCategoryId
-
-        if (!productCategoryId) {
-            delete query?.productCategoryId
-        } else {
-            query.productCategoryId = productCategoryId
-        }
-
-        router.replace({
-            pathname: router?.pathname,
-            query: { ...query }
-        }, undefined, { scroll: false });
-    }
-
-    const handleSelectProductSubCategory = (value) => {
-        const productSubCategoryId = value?.id;
-
-        let query = {
-            ...router?.query,
-            page: 1
-        }
-
-        if (!productSubCategoryId) {
-            delete query?.productSubCategoryId
-        } else {
-            query.productSubCategoryId = productSubCategoryId
-        }
-
-        router.replace({
-            pathname: router?.pathname,
-            query: { ...query }
-        }, undefined, { scroll: false });
-    }
-
-    const productCategory = productCategoryHook?.productCategoryList?.find(r => r.id === selectedProductCategoryId);
-    const productSubCategory = productSubCategoryHook?.productSubCategoryList?.find(r => r.id === selectedProductSubCategoryId);
     return (
         <>
             <Container>
@@ -246,14 +196,7 @@ export default function Inventory_PropertyComponent() {
                             onChangeRecordDate={handleChangeRecordDate}
                             onReqSynchronizeInventoryAssets={handleReqSychronizeInventoryAssets}
                         />
-                        <FdSearchConsole
-                            productCategoryList={productCategoryHook?.productCategoryList}
-                            productSubCategoryList={productSubCategoryHook?.productSubCategoryList}
-                            productCategory={productCategory}
-                            productSubCategory={productSubCategory}
-                            onSelectProductCategory={handleSelectProductCategory}
-                            onSelectProductSubCategory={handleSelectProductSubCategory}
-                        />
+                        <SearchConsoleState />
                         <FdAmount
                             inventoryAssetAmount={inventoryAssetHook?.selectedInventoryAssetAmount}
                         />

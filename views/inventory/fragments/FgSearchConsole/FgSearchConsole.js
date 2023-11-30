@@ -8,6 +8,8 @@ import CustomInput from "../../../../components/input/default/v1/CustomInput";
 import { MdSelectCategory } from "./modals/MdSelectCategory";
 import { MdSelectSubCategory } from "./modals/MdSelectSubCategory";
 
+const SORT_DIRECTION_ASC = 'ASC';
+const SORT_DIRECTION_DESC = 'DESC';
 export function FgSearchConsole({
     SEARCH_CONDITIONS,
     SORT_METHODS,

@@ -29,7 +29,7 @@ export function FdAmount({
                         <label>
                             총 재고수량
                         </label>
-                        <div className='amount'>{totalRemainedQuantityAmount} 개</div>
+                        <div className='amount'>{customNumberUtils.numberWithCommas2(totalRemainedQuantityAmount)} 개</div>
                     </div>
                 </St.CardItemWrapper>
             </St.Container>

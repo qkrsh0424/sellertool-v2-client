@@ -9,7 +9,6 @@ import moment from "moment";
 import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { ClickableWrapper } from "../../../../../components/clickable-wrapper/v1";
 import { CustomDateSelectButtonGroup } from "../../../../../components/buttons/date-select/v1/CustomDateSelectButtonGroup";
-import CustomSelect from "../../../../../components/select/default/v1/CustomSelect";
 import { useRouter } from "next/router";
 import PagenationComponentV2 from "../../../../../components/pagenation/PagenationComponentV2";
 import { CustomURIEncoderUtils } from "../../../../../utils/CustomURIEncoderUtils";
@@ -55,21 +54,7 @@ export function FdItemList({
         setBadStockEndDate(value);
         toggleBadStockEndDatePopperOpen(false);
     }
-
-    const handleSelectSortTypeFromEvent = (e) => {
-        let value = e.target.value;
-        let query = { ...router?.query };
-        let sortTypes = [value];
-
-        query.sortTypes = customURIEncoderUtils.encodeJSONList(sortTypes);
-        query.page = 1;
-
-        router.replace({
-            pathname: router?.pathname,
-            query: { ...query }
-        }, undefined, { scroll: false })
-    }
-
+    
     const handleClickProductInfo = (e, targetInventoryAsset) => {
         e.preventDefault();
         e.stopPropagation();
@@ -129,19 +114,6 @@ export function FdItemList({
                             }
                         </ClickableWrapper>
                     </StHeadControl.BadStockEndDateWrapper>
-                    <StHeadControl.SortWrapper>
-                        <CustomSelect
-                            className='select-item'
-                            onChange={(e) => handleSelectSortTypeFromEvent(e)}
-                            value={customURIEncoderUtils.decodeJSONList(router?.query?.sortTypes)[0] || SORT_TYPES[0]}
-                        >
-                            {SORT_TYPES?.map(r => {
-                                return (
-                                    <option key={r.sortType} value={r.sortType}>{r.name}</option>
-                                )
-                            })}
-                        </CustomSelect>
-                    </StHeadControl.SortWrapper>
                 </StHeadControl.Container>
                 <StTable.Container>
                     <TableField

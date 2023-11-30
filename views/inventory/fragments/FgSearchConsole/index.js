@@ -1,0 +1,1 @@
+export { FgSearchConsole } from './FgSearchConsole';

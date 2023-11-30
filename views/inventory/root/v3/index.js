@@ -1,5 +1,6 @@
 import Layout from "../../layout/Layout";
-import { FdItemList, FdSearchConsole } from "./components";
+import { FdItemList } from "./components/FdItemList";
+import { SearchConsoleState } from "./components/SearchConsoleState";
 import { Container } from "./index.styled";
 
 export default function MainComponent(props) {
@@ -12,7 +13,7 @@ export default function MainComponent(props) {
                     sidebarColor={'#ffffff'}
                 >
                     <>
-                        <FdSearchConsole />
+                        <SearchConsoleState />
                         <FdItemList />
                     </>
                 </Layout>

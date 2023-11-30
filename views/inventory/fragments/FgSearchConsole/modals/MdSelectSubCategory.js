@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { CustomDialog } from "../../../../../../components/dialog/v1/CustomDialog";
-import HighlightedText from "../../../../../../components/text/highlight/HighlightedText";
-import { St } from "./MdSelectCategory.styled";
+import { CustomDialog } from "../../../../../components/dialog/v1/CustomDialog";
+import HighlightedText from "../../../../../components/text/highlight/HighlightedText";
+import { St } from "./MdSelectSubCategory.styled";
 
-export function MdSelectCategory({
+export function MdSelectSubCategory({
     open = false,
-    productCategory,
-    productCategories,
+    productSubCategoryList,
+    productSubCategory,
+    onSelect,
     onClose = () => { },
-    onSelectCategory
 }) {
     const [inputValue, setInputValue] = useState('');
 
-    const handleSelectCategory = (data) => {
-        onSelectCategory(data);
+    const handleSelectSubCategory = (data) => {
+        onSelect(data?.id);
         onClose();
     }
 
@@ -45,20 +45,20 @@ export function MdSelectCategory({
                     <div className='content-group'>
                         <div className='content-box'>
                             <span
-                                className={`tag ${!productCategory && 'tag-accent'}`}
-                                onClick={() => handleSelectCategory()}
+                                className={`tag ${!productSubCategory && 'tag-accent'}`}
+                                onClick={() => handleSelectSubCategory()}
                             >
                                 전체
                             </span>
-                            {productCategories?.map(r => {
+                            {productSubCategoryList?.map(r => {
                                 let isMatched = inputValue && r.name.includes(inputValue);
 
                                 if (!inputValue) {
                                     return (
                                         <span
                                             key={r.id}
-                                            className={`tag ${productCategory?.id === r.id && 'tag-accent'}`}
-                                            onClick={() => handleSelectCategory(r)}
+                                            className={`tag ${productSubCategory?.id === r.id && 'tag-accent'}`}
+                                            onClick={() => handleSelectSubCategory(r)}
                                         >
                                             {r.name}
                                         </span>
@@ -69,8 +69,8 @@ export function MdSelectCategory({
                                     return (
                                         <span
                                             key={r.id}
-                                            className={`tag ${productCategory?.id === r.id && 'tag-accent'}`}
-                                            onClick={() => handleSelectCategory(r)}
+                                            className={`tag ${productSubCategory?.id === r.id && 'tag-accent'}`}
+                                            onClick={() => handleSelectSubCategory(r)}
                                         >
                                             <HighlightedText
                                                 text={`${r.name}`}

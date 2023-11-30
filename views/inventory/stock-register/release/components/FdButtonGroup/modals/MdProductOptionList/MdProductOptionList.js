@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { CustomSlideDialog } from "../../../../../../../../components/dialog/slide-v1/CustomSlideDialog";
-import { FdSearchConsole } from "./components/FdSearchConsole/FdSearchConsole";
 import { St } from "./MdProductOptionList.styled";
 import { useApiHook } from "../../../../hooks/useApiHook";
 import { useSelector } from "react-redux";
-import { useProductCategoryHook } from "../../../../hooks/useProductCategoryHook";
-import { useProductSubCategoryHook } from "../../../../hooks/useProductSubCategoryHook";
 import { ProductOptionRequestData } from "../../../../../../../../data_connect/request_datas/ProductOptionRequestData";
 import { useProductOptionHook } from "../../../../hooks/useProductOptionHook";
 import { FdItemList } from "./components/FdItemList/FdItemList";
@@ -15,6 +12,7 @@ import { FdPagenation } from "./components/FdPagenation/FdPagenation";
 import { usePrepareReleaseItemListActionsHook, usePrepareReleaseItemListValueHook } from "../../../../contexts/PrepareReleaseItemListProvider";
 import { v4 as uuidv4 } from 'uuid';
 import { useSearchAggregationValueHook } from "../../../../contexts/SearchAggregationProvider";
+import { SearchConsoleState } from "./components/SearchConsoleState";
 
 export function MdProductOptionList({
     open,
@@ -22,48 +20,16 @@ export function MdProductOptionList({
 }) {
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
-    
+
     const searchAggregationValueHook = useSearchAggregationValueHook();
     const prepareReleaseItemListValueHook = usePrepareReleaseItemListValueHook();
     const prepareReleaseItemListActionsHook = usePrepareReleaseItemListActionsHook();
 
     const apiHook = useApiHook();
-    const productCategoryHook = useProductCategoryHook();
-    const productSubCategoryHook = useProductSubCategoryHook();
     const productOptionHook = useProductOptionHook();
     const inventoryStocksHook = useInventoryStocksHook();
 
     const [selectedItemList, setSelectedItemList] = useState([]);
-
-    // fetch productCategoryList
-    useEffect(() => {
-        async function fetchProductCategoryList() {
-            if (!wsId || !open) {
-                return;
-            }
-
-            await apiHook.reqFetchProductCategoryList({ headers: { wsId: wsId } }, (results) => {
-                productCategoryHook.onSetProductCategoryList(results);
-            })
-        }
-
-        fetchProductCategoryList();
-    }, [open, wsId]);
-
-    // fetch productSubCategoryList
-    useEffect(() => {
-        async function fetchProductSubCategoryList() {
-            if (!open || !wsId || !searchAggregationValueHook?.productCategory) {
-                return;
-            }
-
-            await apiHook.reqFetchProductSubCategoryList({ params: { productCategoryId: searchAggregationValueHook?.productCategory?.id }, headers: { wsId: wsId } }, (results) => {
-                productSubCategoryHook.onSetProductSubCategoryList(results);
-            })
-        }
-
-        fetchProductSubCategoryList();
-    }, [open, wsId, searchAggregationValueHook?.productCategory]);
 
     // fetch productOptionPage And inventoryStocks
     useEffect(() => {
@@ -76,12 +42,12 @@ export function MdProductOptionList({
             let resultInventoryStocks = null;
 
             let fetchProductOptionPageParams = { ...ProductOptionRequestData().SearchPage };
-            fetchProductOptionPageParams.productCategoryId = searchAggregationValueHook?.productCategory?.id;
-            fetchProductOptionPageParams.productSubCategoryId = searchAggregationValueHook?.productSubCategory?.id;
+            fetchProductOptionPageParams.productCategoryId = searchAggregationValueHook?.productCategoryId;
+            fetchProductOptionPageParams.productSubCategoryId = searchAggregationValueHook?.productSubCategoryId;
             fetchProductOptionPageParams.page = searchAggregationValueHook?.page;
             fetchProductOptionPageParams.size = searchAggregationValueHook?.size;
             fetchProductOptionPageParams.searchFilter = searchAggregationValueHook?.searchFilter;
-            fetchProductOptionPageParams.sortTypes = searchAggregationValueHook?.sortTypes;
+            fetchProductOptionPageParams.sortTypes = searchAggregationValueHook?.sortTypes || searchAggregationValueHook?.DEFAULT_SORT_TYPES;
             fetchProductOptionPageParams.packageYn = 'n';
 
             await apiHook.reqFetchProductOptionPage({
@@ -113,8 +79,8 @@ export function MdProductOptionList({
     }, [
         open,
         wsId,
-        searchAggregationValueHook?.productCategory,
-        searchAggregationValueHook?.productSubCategory,
+        searchAggregationValueHook?.productCategoryId,
+        searchAggregationValueHook?.productSubCategoryId,
         searchAggregationValueHook?.page,
         searchAggregationValueHook?.size,
         searchAggregationValueHook?.searchFilter,
@@ -172,10 +138,7 @@ export function MdProductOptionList({
             >
                 <CustomSlideDialog.CloseButton onClose={() => onClose()} />
                 <St.Container>
-                    <FdSearchConsole
-                        productCategoryList={productCategoryHook?.productCategoryList}
-                        productSubCategoryList={productSubCategoryHook?.productSubCategoryList}
-                    />
+                    <SearchConsoleState />
                     <FdPagenation
                         productOptionPage={productOptionHook?.productOptionPage}
                         selectedItemList={selectedItemList}

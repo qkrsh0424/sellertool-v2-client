@@ -10,6 +10,49 @@ import { MdSelectSubCategory } from "./modals/MdSelectSubCategory";
 
 const SORT_DIRECTION_ASC = 'ASC';
 const SORT_DIRECTION_DESC = 'DESC';
+const checkRequiredProps = ({
+    SEARCH_CONDITIONS,
+    SORT_METHODS,
+    DEFAULT_SORT_DIRECTION,
+    onSelectProductCategoryId,
+    onSelectProductSubCategoryId,
+    onChangeSearchFilter,
+    onChangeSortTypes,
+    onClear
+}) => {
+    if (SEARCH_CONDITIONS === undefined) {
+        throw new Error('SEARCH_CONDITIONS 는 필수 props 입니다.');
+    }
+
+    if (SORT_METHODS === undefined) {
+        throw new Error('SORT_METHODS 는 필수 props 입니다.');
+    }
+
+    if (DEFAULT_SORT_DIRECTION === undefined) {
+        throw new Error('DEFAULT_SORT_DIRECTION 는 필수 props 입니다.');
+    }
+
+    if (onSelectProductCategoryId === undefined) {
+        throw new Error('onSelectProductCategoryId() 는 필수 props 입니다.');
+    }
+
+    if (onSelectProductSubCategoryId === undefined) {
+        throw new Error('onSelectProductSubCategoryId() 는 필수 props 입니다.');
+    }
+
+    if (onChangeSearchFilter === undefined) {
+        throw new Error('onChangeSearchFilter() 는 필수 props 입니다.');
+    }
+
+    if (onChangeSortTypes === undefined) {
+        throw new Error('onChangeSortTypes() 는 필수 props 입니다.');
+    }
+
+    if (onClear === undefined) {
+        throw new Error('onClear() 는 필수 props 입니다.');
+    }
+}
+
 export function FgSearchConsole({
     SEARCH_CONDITIONS,
     SORT_METHODS,
@@ -29,6 +72,16 @@ export function FgSearchConsole({
     onChangeSortTypes,
     onClear
 }) {
+    checkRequiredProps({
+        SEARCH_CONDITIONS,
+        SORT_METHODS,
+        DEFAULT_SORT_DIRECTION,
+        onSelectProductCategoryId,
+        onSelectProductSubCategoryId,
+        onChangeSearchFilter,
+        onChangeSortTypes,
+        onClear
+    });
     const [isHide, setIsHide] = useState(true);
     const [productCategoryListModalOpen, setProductCategoryListModalOpen] = useState(false);
     const [productSubCategoryListModalOpen, setProductSubCategoryListModalOpen] = useState(false);

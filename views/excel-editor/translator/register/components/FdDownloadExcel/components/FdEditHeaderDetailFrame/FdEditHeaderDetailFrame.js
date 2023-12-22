@@ -6,14 +6,16 @@ import CustomBlockButton from '../../../../../../../../components/buttons/block-
 import CustomInput from '../../../../../../../../components/input/default/v1/CustomInput';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import CustomImage from '../../../../../../../../components/image/CustomImage';
-import { MdSeperator } from './modals/MdSeperator/MdSeperator';
+import { MdSeparator } from './modals/MdSeparator/MdSeparator';
 import { ListUtils } from '../../../../../../utils/ListUtils';
-import { SeperatorUtils } from '../../../../../../utils/SeperatorUtils';
 import { useRef } from 'react';
 import { MdAdd } from './modals/MdAdd/MdAdd';
+import { customToast } from '../../../../../../../../components/toast/custom-react-toastify/v1';
+import { SeparatorUtils } from '../../../../../../utils/SeparatorUtils';
 
 const listUtils = ListUtils();
-const seperatorUtils = SeperatorUtils();
+const separatorUtils = SeparatorUtils();
+
 
 const VALUE_TYPE = {
     FIXED: 'FIXED',
@@ -28,7 +30,7 @@ export function FdEditHeaderDetailFrame({
 }) {
     const excelTranslatorReferenceHeaderListValueHook = useExcelTranslatorReferenceHeaderListValueHook();
     const [selectedItem, setSelectedItem] = useState(null);
-    const [seperatorModalOpen, setSeperatorModalOpen] = useState(false);
+    const [separatorModalOpen, setSeparatorModalOpen] = useState(false);
     const [addModalOpen, setAddModalOpen] = useState(false);
 
     useEffect(() => {
@@ -45,8 +47,8 @@ export function FdEditHeaderDetailFrame({
         setSelectedItem(excelTranslatorDownloadHeader);
     }
 
-    const toggleSeperatorModalOpen = (bool) => {
-        setSeperatorModalOpen(bool);
+    const toggleSeparatorModalOpen = (bool) => {
+        setSeparatorModalOpen(bool);
     }
 
     const toggleAddModalOpen = (bool) => {
@@ -117,20 +119,30 @@ export function FdEditHeaderDetailFrame({
 
         const newMappingValueList = listUtils.pushAt(excelTranslatorReferenceHeaderName, destinationDroppableIndex, mappingValueList);
 
+        if (newMappingValueList?.length > 5) {
+            customToast.error('매핑값은 최대 5개 까지 등록 가능합니다.');
+            return;
+        }
+
         setSelectedItem(prev => {
             return { ...prev, mappingValues: JSON.stringify(newMappingValueList) };
         });
     }
 
-    const handleChangeSeperator = (seperator) => {
+    const handleChangeSeparator = (separator) => {
         setSelectedItem(prev => {
-            return { ...prev, seperator: seperator };
+            return { ...prev, separator: separator };
         })
     }
 
     const handleAddMappingValue = (mappingValue) => {
         let newMappingValueList = selectedItem?.mappingValues ? JSON.parse(selectedItem?.mappingValues) : [];
         newMappingValueList.push(mappingValue);
+
+        if (newMappingValueList?.length > 5) {
+            customToast.error('매핑값은 최대 5개 까지 등록 가능합니다.');
+            return;
+        }
 
         setSelectedItem(prev => {
             return { ...prev, mappingValues: JSON.stringify(newMappingValueList) };
@@ -148,6 +160,51 @@ export function FdEditHeaderDetailFrame({
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        try {
+            if (selectedItem?.headerName?.length <= 0 || selectedItem?.headerName?.length > 30) {
+                throw new Error('필드명은 1-30자 이내로 입력해 주세요.');
+            }
+
+            const duplicatedHeaderName = excelTranslatorDownloadHeaderList.some(r => r.headerName === selectedItem?.headerName && r.id !== selectedItem?.id);
+            if (duplicatedHeaderName) {
+                throw new Error('이미 존재하는 필드명 입니다. 필드명의 중복은 허용되지 않습니다.');
+            }
+
+            if (selectedItem?.valueType !== VALUE_TYPE.FIXED && selectedItem?.valueType !== VALUE_TYPE.MAPPING) {
+                throw new Error('결과 타입은 고정값 또는 매핑값만 선택 가능합니다. 같은 문제가 지속적으로 발생시 새로고침 후 재시도 해주세요.');
+            }
+
+            if (selectedItem?.valueType === VALUE_TYPE.FIXED && selectedItem?.fixedValue?.length > 100) {
+                throw new Error(`고정값은 최대 100자 까지만 입력이 가능합니다.`);
+            }
+
+            if (selectedItem?.valueType === VALUE_TYPE.MAPPING) {
+                const mappingValueList = selectedItem?.mappingValues ? JSON.parse(selectedItem?.mappingValues) : [];
+
+                if (selectedItem?.separator === null || selectedItem?.separator === undefined) {
+                    throw new Error(`매핑값 구분자는 필수 선택입니다.`);
+                }
+
+                if (mappingValueList?.length <= 0 || mappingValueList?.length > 5) {
+                    throw new Error(`매핑값은 1-5개 필수 등록 입니다.`);
+                }
+
+                let checkDuplicateMappingValueSet = new Set();
+                mappingValueList?.forEach(r => {
+                    if (checkDuplicateMappingValueSet.has(r)) {
+                        throw new Error(`동일한 이름의 매핑값 중복 등록은 허용되지 않습니다.`);
+                    }
+
+                    if (!r || r?.length <= 0 || r?.length > 30) {
+                        throw new Error(`매핑값의 이름은 1-30자 이내로 입력해 주세요.`);
+                    }
+                    checkDuplicateMappingValueSet.add(r);
+                })
+            }
+        } catch (err) {
+            customToast.error(err.message);
+            return;
+        }
 
         onSetExcelTranslatorDownloadHeaderList(
             excelTranslatorDownloadHeaderList?.map(r => {
@@ -196,7 +253,7 @@ export function FdEditHeaderDetailFrame({
                         <CustomInput
                             value={selectedItem?.headerName || ''}
                             onChange={(e) => handleChangeHeaderNameFromEvent(e)}
-                            placeholder='헤더명을 1-20자로 입력하세요.'
+                            placeholder='필드명을 1-30자로 입력하세요.'
                             autoFocus
                         />
                     </div>
@@ -234,9 +291,9 @@ export function FdEditHeaderDetailFrame({
                                     <div className='contentForm__mappingValueLayout__seperatorWrapper__description'>매핑값들을 연결해줄 구분자를 선택해주세요.</div>
                                     <CustomBlockButton
                                         type='button'
-                                        onClick={() => toggleSeperatorModalOpen(true)}
+                                        onClick={() => toggleSeparatorModalOpen(true)}
                                     >
-                                        {seperatorUtils.getValueString(selectedItem?.seperator)}
+                                        {separatorUtils.getValueString(selectedItem?.separator)}
                                     </CustomBlockButton>
                                 </div>
                                 <div className='contentForm__mappingValueLayout__mappingValueListContainer'>
@@ -313,12 +370,12 @@ export function FdEditHeaderDetailFrame({
                     }
                 </form>
             </St.ContentLayout>
-            {seperatorModalOpen &&
-                <MdSeperator
-                    open={seperatorModalOpen}
-                    onClose={() => toggleSeperatorModalOpen(false)}
-                    currentSeperator={selectedItem?.seperator}
-                    onChangeSeperator={handleChangeSeperator}
+            {separatorModalOpen &&
+                <MdSeparator
+                    open={separatorModalOpen}
+                    onClose={() => toggleSeparatorModalOpen(false)}
+                    currentSeparator={selectedItem?.separator}
+                    onChangeSeparator={handleChangeSeparator}
                 />
             }
 

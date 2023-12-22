@@ -1,18 +1,18 @@
-import CustomBlockButton from "../../../../../../../../components/buttons/block-button/v1/CustomBlockButton";
-import { CustomDialog } from "../../../../../../../../components/dialog/v1/CustomDialog";
-import { SeperatorUtils } from "../../../../../../utils/SeperatorUtils";
-import * as St from './MdSeperator.styled';
+import CustomBlockButton from "../../../../../../../../../../components/buttons/block-button/v1/CustomBlockButton";
+import { CustomDialog } from "../../../../../../../../../../components/dialog/v1/CustomDialog";
+import { SeparatorUtils } from "../../../../../../../../utils/SeparatorUtils";
+import * as St from './MdSeparator.styled';
 
-export function MdSeperator({
+export function MdSeparator({
     open,
     onClose,
-    currentSeperator,
-    onChangeSeperator
+    currentSeparator,
+    onChangeSeparator
 }) {
-    const seperatorUtils = SeperatorUtils();
+    const separatorUtils = SeparatorUtils();
 
     const handleSelect = (value) => {
-        onChangeSeperator(value);
+        onChangeSeparator(value);
         onClose();
     }
 
@@ -24,22 +24,22 @@ export function MdSeperator({
             >
                 <CustomDialog.CloseButton onClose={() => onClose()} />
                 <CustomDialog.Title>매핑값 구분자 선택</CustomDialog.Title>
-                <St.SeperatorContainer>
+                <St.SeparatorContainer>
                     <div className='wrapper'>
-                        {seperatorUtils.getValueList()?.map(r => {
+                        {separatorUtils.getValueList()?.map(r => {
                             return (
                                 <CustomBlockButton
                                     key={r}
                                     type='button'
-                                    className={`${currentSeperator === r ? 'button__isActive' : ''}`}
+                                    className={`${currentSeparator === r ? 'button__isActive' : ''}`}
                                     onClick={() => handleSelect(r)}
                                 >
-                                    {seperatorUtils?.getValueString(r)}
+                                    {separatorUtils?.getValueString(r)}
                                 </CustomBlockButton>
                             );
                         })}
                     </div>
-                </St.SeperatorContainer>
+                </St.SeparatorContainer>
             </CustomDialog >
         </>
     );

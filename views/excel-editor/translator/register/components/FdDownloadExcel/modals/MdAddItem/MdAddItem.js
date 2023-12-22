@@ -95,7 +95,7 @@ export function MdAddItem({
             cellType: 'Object',
             valueType: 'FIXED',
             fixedValue: '',
-            seperator: '\n',
+            separator: '\n',
             mappingValues: null,
             orderNumber: 0
         }

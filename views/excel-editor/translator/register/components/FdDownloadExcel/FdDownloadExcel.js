@@ -44,7 +44,7 @@ export function FdDownloadExcel({
         // Shift + A가 눌렸을 때 실행할 함수 호출
         if (e.shiftKey && (e.key === '+')) {
             toggleModalOpen({ type: 'ADD', targetIndex: 0 });
-            event.preventDefault();
+            e.preventDefault();
         }
     }
 

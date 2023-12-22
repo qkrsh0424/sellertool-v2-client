@@ -4,10 +4,10 @@ import { FdEditName } from "./components/FdEditName/FdEditName";
 import { FdDownloadExcel } from "./components/FdDownloadExcel/FdDownloadExcel";
 import { useSelector } from "react-redux";
 import { useApiHook } from "./hooks/useApiHook";
-import { ExcelTranslatorReferenceHeaderListProvider, useExcelTranslatorReferenceHeaderListActionsHook, useExcelTranslatorReferenceHeaderListValueHook } from "./contexts/ExcelTranslatorReferenceHeaderListProvider";
-import { FdUploadExcel } from "./components/FdUploadExcel/FdUploadExcel";
+import { ExcelTranslatorReferenceHeaderListProvider, useExcelTranslatorReferenceHeaderListActionsHook } from "./contexts/ExcelTranslatorReferenceHeaderListProvider";
 import { FdFloatingButton } from "./components/FdFloatingButton/FdFloatingButton";
 import { customToast } from "../../../../components/toast/custom-react-toastify/v1";
+import { v4 as uuidv4 } from 'uuid';
 
 const VALUE_TYPE = {
     FIXED: 'FIXED',
@@ -23,6 +23,17 @@ export default function MainComponent(props) {
 }
 
 function MainComponentCore() {
+    const workspaceRedux = useSelector(state => state.workspaceRedux);
+    const wsId = workspaceRedux?.workspaceInfo?.id;
+
+    const apiHook = useApiHook();
+
+    const [excelTranslator, setExcelTranslator] = useState({
+        id: uuidv4(),
+        name: null,
+        downloadHeaderCount: null,
+        excelTranslatorDownloadHeaderList: null,
+    })
     const [excelTranslatorName, setExcelTranslatorName] = useState('');
     const [excelTranslatorDownloadHeaderList, setExcelTranslatorDownloadHeaderList] = useState(null);
     const [enabledDnd, setEnabledDnd] = useState(false);
@@ -51,12 +62,12 @@ function MainComponentCore() {
     }
 
     const handleReqCreate = () => {
-        try {
-            checkCreateForm({ excelTranslatorName: excelTranslatorName, excelTranslatorDownloadHeaderList: excelTranslatorDownloadHeaderList });
-        } catch (err) {
-            customToast.error(err.message);
-            return;
-        }
+        // try {
+        //     checkCreateForm({ excelTranslatorName: excelTranslatorName, excelTranslatorDownloadHeaderList: excelTranslatorDownloadHeaderList });
+        // } catch (err) {
+        //     customToast.error(err.message);
+        //     return;
+        // }
 
         let newExcelTranslatorName = excelTranslatorName.trim();
         let newExcelTranslatorDownloadHeaderList = excelTranslatorDownloadHeaderList?.map((r, index) => {
@@ -69,7 +80,19 @@ function MainComponentCore() {
                 orderNumber: index
             }
         })
-        console.log(newExcelTranslatorName, newExcelTranslatorDownloadHeaderList);
+
+        const body = {
+            ...excelTranslator,
+            name: newExcelTranslatorName,
+            downloadHeaderCount: newExcelTranslatorDownloadHeaderList?.length,
+            excelTranslatorDownloadHeaderList: newExcelTranslatorDownloadHeaderList,
+        }
+
+        apiHook.reqCreateExcelTranslator({ body: body, headers: { wsId: wsId } },
+            (results, response) => {
+                console.log(results);
+            }
+        )
     }
 
     if (!enabledDnd) {
@@ -165,12 +188,12 @@ function checkCreateForm({
 
         if (r.valueType === VALUE_TYPE.MAPPING) {
             const mappingValueList = r?.mappingValues ? JSON.parse(r?.mappingValues) : [];
-            if (r?.seperator === null || r?.seperator === undefined) {
+            if (r?.separator === null || r?.separator === undefined) {
                 throw new Error(`매핑값 구분자는 필수 선택입니다.\n${index + 1}열의 세부 내용을 확인해 주세요.`);
             }
 
-            if(mappingValueList?.length > 5){
-                throw new Error(`매핑값은 최대 5개 까지 등록 가능합니다.\n${index + 1}열의 세부 내용을 확인해 주세요.`);
+            if (mappingValueList?.length <= 0 || mappingValueList?.length > 5) {
+                throw new Error(`매핑값은 1-5개 필수 등록 입니다.\n${index + 1}열의 세부 내용을 확인해 주세요.`);
             }
             let checkDuplicateMappingValueSet = new Set();
             mappingValueList?.forEach(r => {

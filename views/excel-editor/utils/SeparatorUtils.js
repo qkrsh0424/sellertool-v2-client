@@ -1,5 +1,5 @@
-export function SeperatorUtils() {
-    const seperatorList = [
+export function SeparatorUtils() {
+    const separatorList = [
         '\n',
         '\t',
         ' ',
@@ -20,7 +20,7 @@ export function SeperatorUtils() {
     ];
 
     function getValueList() {
-        return seperatorList;
+        return separatorList;
     }
 
     function getValueString(value) {

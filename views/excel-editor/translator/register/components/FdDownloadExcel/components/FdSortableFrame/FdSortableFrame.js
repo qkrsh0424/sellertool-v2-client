@@ -4,10 +4,10 @@ import CustomImage from '../../../../../../../../components/image/CustomImage';
 import CustomBlockButton from '../../../../../../../../components/buttons/block-button/v1/CustomBlockButton';
 import { useEffect, useRef, useState } from 'react';
 import { ListUtils } from '../../../../../../utils/ListUtils';
-import { SeperatorUtils } from '../../../../../../utils/SeperatorUtils';
+import { SeparatorUtils } from '../../../../../../utils/SeparatorUtils';
 
 const listUtils = ListUtils();
-const seperatorUtils = SeperatorUtils();
+const separatorUtils = SeparatorUtils();
 
 const VALUE_TYPE = {
     FIXED: 'FIXED',
@@ -194,7 +194,7 @@ export function FdSortableFrame({
                                                                         <div className='itemContent__itemList__item__detailWrapper__mappingValueWrapper'>
                                                                             <div className='itemContent__itemList__item__detailWrapper__mappingValueWrapper__seperatorBox'>
                                                                                 <label>매핑값 구분자</label>
-                                                                                <div className='itemContent__itemList__item__detailWrapper__mappingValueWrapper__seperatorBox__valueText'>{seperatorUtils.getValueString(item?.seperator)}</div>
+                                                                                <div className='itemContent__itemList__item__detailWrapper__mappingValueWrapper__seperatorBox__valueText'>{separatorUtils.getValueString(item?.separator)}</div>
                                                                             </div>
                                                                             <div className='itemContent__itemList__item__detailWrapper__mappingValueWrapper__contentBox'>
                                                                                 <label>매핑값</label>

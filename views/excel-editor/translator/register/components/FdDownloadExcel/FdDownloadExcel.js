@@ -6,6 +6,7 @@ import CustomBlockButton from "../../../../../../components/buttons/block-button
 import { useMediaQuery } from "@mui/material";
 import { FdSortableFrame } from "./components/FdSortableFrame/FdSortableFrame";
 import { FdEditHeaderDetailFrame } from "./components/FdEditHeaderDetailFrame/FdEditHeaderDetailFrame";
+import { MdLoadExisted } from './modals/MdLoadExisted/MdLoadExisted';
 
 // scrollWidth : 스크롤 박스의 총 너비 (보이지 않는 요소의 너비 포함)
 // offsetWidth : 박스의 보이는 부분의 너비
@@ -43,7 +44,7 @@ export function FdDownloadExcel({
     const eventKeyDown = (e) => {
         // Shift + A가 눌렸을 때 실행할 함수 호출
         if (e.shiftKey && (e.key === '+')) {
-            toggleModalOpen({ type: 'ADD', targetIndex: 0 });
+            toggleModalOpen({ type: 'ADD' });
             e.preventDefault();
         }
     }
@@ -85,6 +86,7 @@ export function FdDownloadExcel({
     }
 
     const addModalOpen = modalInfo?.type === 'ADD';
+    const loadModalOpen = modalInfo?.type === 'LOAD';
 
     return (
         <>
@@ -98,15 +100,21 @@ export function FdDownloadExcel({
                             <CustomBlockButton
                                 type='button'
                                 className='add__button'
-                                onClick={() => toggleModalOpen({ type: 'ADD', targetIndex: 0 })}
+                                onClick={() => toggleModalOpen({ type: 'ADD' })}
                             >
                                 추가
                             </CustomBlockButton>
                             <CustomBlockButton
                                 type='button'
-                                onClick={() => toggleModalOpen({ type: 'ADD', targetIndex: 0 })}
+                                onClick={() => toggleModalOpen({ type: 'ADD' })}
                             >
                                 엑셀 업로드
+                            </CustomBlockButton>
+                            <CustomBlockButton
+                                type='button'
+                                onClick={() => toggleModalOpen({ type: 'LOAD' })}
+                            >
+                                불러오기
                             </CustomBlockButton>
                         </div>
                     </St.ButtonGroupLayout>
@@ -142,12 +150,21 @@ export function FdDownloadExcel({
                     </St.TipsLayout>
                 </St.Wrapper>
             </St.Container>
+
             {addModalOpen &&
                 <MdAddItem
                     open={addModalOpen}
                     excelTranslatorDownloadHeaderList={excelTranslatorDownloadHeaderList}
                     onSetExcelTranslatorDownloadHeaderList={onSetExcelTranslatorDownloadHeaderList}
                     onClose={() => toggleModalOpen(null)}
+                />
+            }
+
+            {loadModalOpen &&
+                <MdLoadExisted
+                    open={loadModalOpen}
+                    onClose={() => toggleModalOpen(null)}
+                    onSubmit={onSetExcelTranslatorDownloadHeaderList}
                 />
             }
         </>

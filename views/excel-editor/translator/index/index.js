@@ -51,10 +51,10 @@ export default function MainComponent(props) {
             downloadHeaderList: excelTranslatorHook?.downloadHeaderList,
             downloadRowDataList: excelTranslatorHook?.downloadRowDataList
         }
-        
+
         customBackdropController().showBackdrop();
         await apiHook.reqDownloadResultExcel({ body: body, headers: { wsId: wsId } }, (results, response) => {
-            console.log(results);
+            console.log(`변환기 결과 엑셀 다운로드 상태: ${results}`);
         })
         customBackdropController().hideBackdrop();
     }

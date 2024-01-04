@@ -7,6 +7,18 @@ const excelTranslatorDataConnect = ExcelTranslatorDataConnect.baseExcelEditorPag
 const excelTranslatorReferenceHeaderDataConnect = ExcelTranslatorReferenceHeaderDataConnect.baseExcelEditorPage();
 
 export function useApiHook(props) {
+    const reqFetchExcelTranslatorList = async ({ params, headers }, callbackFn = (results, response) => { }) => {
+        await excelTranslatorDataConnect.searchList({ params, headers })
+            .then(res => {
+                if (res?.status === 200) {
+                    callbackFn(res?.data?.data, res);
+                }
+            })
+            .catch(err => {
+                CustomErrorHandler.error(err);
+            })
+    }
+
     const reqCreateExcelTranslator = async ({ params = {}, body = {}, headers = {} }, callbackFn = (results, response) => { }) => {
         await excelTranslatorDataConnect.create({ params, body, headers })
             .then(res => {
@@ -33,6 +45,7 @@ export function useApiHook(props) {
     }
 
     return {
+        reqFetchExcelTranslatorList,
         reqCreateExcelTranslator,
         reqFetchExcelTranslatorReferenceHeaderList
     }

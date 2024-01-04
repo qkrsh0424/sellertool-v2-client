@@ -8,6 +8,8 @@ import { ExcelTranslatorReferenceHeaderListProvider, useExcelTranslatorReference
 import { FdFloatingButton } from "./components/FdFloatingButton/FdFloatingButton";
 import { customToast } from "../../../../components/toast/custom-react-toastify/v1";
 import { v4 as uuidv4 } from 'uuid';
+import { useCdnHook } from "./hooks/useCdnHook";
+import { useRouter } from "next/router";
 
 const VALUE_TYPE = {
     FIXED: 'FIXED',
@@ -23,10 +25,12 @@ export default function MainComponent(props) {
 }
 
 function MainComponentCore() {
+    const router = useRouter();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const apiHook = useApiHook();
+    const cdnHook = useCdnHook();
 
     const [excelTranslator, setExcelTranslator] = useState({
         id: uuidv4(),
@@ -48,6 +52,14 @@ function MainComponentCore() {
         };
     }, []);
 
+    useEffect(() => {
+        async function fetchExcelTranslatorSampleList() {
+            let result = await cdnHook.getExcelTranslatorSampleListJson();
+            console.log(result);
+        }
+        fetchExcelTranslatorSampleList();
+    }, []);
+
     const toggleDisabledCreate = (bool) => {
         setDisabledCreate(bool)
     }
@@ -61,13 +73,13 @@ function MainComponentCore() {
         setExcelTranslatorDownloadHeaderList(excelTranslatorDownloadHeaderList)
     }
 
-    const handleReqCreate = () => {
-        // try {
-        //     checkCreateForm({ excelTranslatorName: excelTranslatorName, excelTranslatorDownloadHeaderList: excelTranslatorDownloadHeaderList });
-        // } catch (err) {
-        //     customToast.error(err.message);
-        //     return;
-        // }
+    const handleReqCreate = async () => {
+        try {
+            checkCreateForm({ excelTranslatorName: excelTranslatorName, excelTranslatorDownloadHeaderList: excelTranslatorDownloadHeaderList });
+        } catch (err) {
+            customToast.error(err.message);
+            return;
+        }
 
         let newExcelTranslatorName = excelTranslatorName.trim();
         let newExcelTranslatorDownloadHeaderList = excelTranslatorDownloadHeaderList?.map((r, index) => {
@@ -88,9 +100,13 @@ function MainComponentCore() {
             excelTranslatorDownloadHeaderList: newExcelTranslatorDownloadHeaderList,
         }
 
-        apiHook.reqCreateExcelTranslator({ body: body, headers: { wsId: wsId } },
+        await apiHook.reqCreateExcelTranslator({ body: body, headers: { wsId: wsId } },
             (results, response) => {
-                console.log(results);
+                if (results) {
+                    router?.replace({
+                        pathname: '/excel-editor/translator'
+                    })
+                }
             }
         )
     }

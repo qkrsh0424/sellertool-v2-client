@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useExcelTranslatorReferenceHeaderListValueHook } from '../../../../contexts/ExcelTranslatorReferenceHeaderListProvider';
 import * as St from './FdEditHeaderDetailFrame.styled';
 import { useEffect } from 'react';
 import CustomBlockButton from '../../../../../../../../components/buttons/block-button/v1/CustomBlockButton';
@@ -12,6 +11,7 @@ import { useRef } from 'react';
 import { MdAdd } from './modals/MdAdd/MdAdd';
 import { customToast } from '../../../../../../../../components/toast/custom-react-toastify/v1';
 import { SeparatorUtils } from '../../../../../../utils/SeparatorUtils';
+import { useExcelTranslatorReferenceHeaderBucketListValueHook } from '../../../../contexts/ExcelTranslatorReferenceHeaderBucketListProvider';
 
 const listUtils = ListUtils();
 const separatorUtils = SeparatorUtils();
@@ -28,7 +28,8 @@ export function FdEditHeaderDetailFrame({
     onSetExcelTranslatorDownloadHeaderList,
     onClose,
 }) {
-    const excelTranslatorReferenceHeaderListValueHook = useExcelTranslatorReferenceHeaderListValueHook();
+    const excelTranslatorReferenceHeaderBucketListValueHook = useExcelTranslatorReferenceHeaderBucketListValueHook();
+
     const [selectedItem, setSelectedItem] = useState(null);
     const [separatorModalOpen, setSeparatorModalOpen] = useState(false);
     const [addModalOpen, setAddModalOpen] = useState(false);
@@ -110,8 +111,12 @@ export function FdEditHeaderDetailFrame({
         const draggableId = e.draggableId;
         const referenceHeaderDraggableId = draggableId.split('$')[1];
 
-        const excelTranslatorReferenceHeader = excelTranslatorReferenceHeaderListValueHook?.find((r, index) => r.id === referenceHeaderDraggableId);
+        const excelTranslatorReferenceHeader = excelTranslatorReferenceHeaderBucketListValueHook
+            ?.reduce((prev, current, index) => prev.concat([...current?.excelTranslatorReferenceHeaderList]), [])
+            ?.find((r, index) => r.id === referenceHeaderDraggableId);
+
         const excelTranslatorReferenceHeaderName = excelTranslatorReferenceHeader?.headerName;
+        
         if (mappingValueList.includes(excelTranslatorReferenceHeaderName)) {
             alert('매핑값을 중복으로 설정 할 수 없습니다.');
             return;
@@ -365,7 +370,7 @@ export function FdEditHeaderDetailFrame({
                                     </Droppable>
                                 </div>
                                 <ReferenceHeaderListFrame
-                                    excelTranslatorReferenceHeaderListValueHook={excelTranslatorReferenceHeaderListValueHook}
+                                    excelTranslatorReferenceHeaderBucketList={excelTranslatorReferenceHeaderBucketListValueHook}
                                     mappingValueList={mappingValueList}
                                 />
                             </div>
@@ -395,38 +400,23 @@ export function FdEditHeaderDetailFrame({
 }
 
 function ReferenceHeaderListFrame({
-    excelTranslatorReferenceHeaderListValueHook,
+    excelTranslatorReferenceHeaderBucketList,
     mappingValueList
 }) {
     const contentLayoutRef = useRef();
 
-    const [bucketList, setBucketList] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedBucketId, setSelectedBucketId] = useState(null);
+    const [selectedBucket, setSelectedBucket] = useState(null);
 
     useEffect(() => {
-        if (!excelTranslatorReferenceHeaderListValueHook) {
+        if (!excelTranslatorReferenceHeaderBucketList) {
             return;
         }
 
-        let newBucketList = [];
-        let bucketIdSet = new Set();
-        excelTranslatorReferenceHeaderListValueHook.forEach(r => {
-            if (!bucketIdSet.has(r.excelTranslatorReferenceHeaderBucketId)) {
-                bucketIdSet.add(r.excelTranslatorReferenceHeaderBucketId)
-                newBucketList.push({
-                    id: r.excelTranslatorReferenceHeaderBucketId,
-                    name: r.bucketName,
-                    bucketType: r.bucketType
-                })
-            }
-        })
+        const defaultSelectedBucket = excelTranslatorReferenceHeaderBucketList[0];
 
-        const defaultSelectedBucket = newBucketList.filter(r => r.bucketType === 'DEFAULT')[0];
-
-        setBucketList([...newBucketList]);
-        setSelectedBucketId(defaultSelectedBucket?.id);
-    }, [excelTranslatorReferenceHeaderListValueHook]);
+        setSelectedBucket(defaultSelectedBucket);
+    }, [excelTranslatorReferenceHeaderBucketList]);
 
     const handleChangeSearchQueryFromEvent = (e) => {
         const value = e.target.value;
@@ -434,8 +424,8 @@ function ReferenceHeaderListFrame({
         setSearchQuery(value);
     }
 
-    const handleChangeSelectedBucketId = (bucketId) => {
-        setSelectedBucketId(bucketId);
+    const handleChangeSelectedBucketId = (bucket) => {
+        setSelectedBucket(bucket);
     }
 
     return (
@@ -462,10 +452,15 @@ function ReferenceHeaderListFrame({
                                     {...droppableProvided.droppableProps}
                                     className='container__contentWrapper__itemListWrapper'
                                 >
-                                    {excelTranslatorReferenceHeaderListValueHook?.filter(r => r.excelTranslatorReferenceHeaderBucketId === selectedBucketId && r.headerName?.includes(searchQuery))?.map((item, index) => {
+                                    {selectedBucket?.excelTranslatorReferenceHeaderList?.filter(r => r.headerName?.includes(searchQuery))?.map((item, index) => {
                                         const disabledDraggable = mappingValueList?.includes(item?.headerName);
                                         return (
-                                            <Draggable key={item.id} draggableId={`referenceHeaderDraggableId$${item.id}`} index={index} isDragDisabled={disabledDraggable}>
+                                            <Draggable
+                                                key={item.id}
+                                                draggableId={`referenceHeaderDraggableId$${item.id}`}
+                                                index={index}
+                                                isDragDisabled={disabledDraggable}
+                                            >
                                                 {(draggableProvided) => (
                                                     <div
                                                         className={`container__contentWrapper__itemListWrapper__itemWrapper ${disabledDraggable ? 'container__contentWrapper__itemListWrapper__itemWrapper-disabled' : ''}`}
@@ -494,9 +489,9 @@ function ReferenceHeaderListFrame({
                     <div className='container__bucketListWrapper'>
                         <div className='container__bucketListWrapper__headTitle'>보관함</div>
                         <div className='container__bucketListWrapper__itemListWrapper'>
-                            {bucketList?.map(bucket => {
+                            {excelTranslatorReferenceHeaderBucketList?.map(bucket => {
                                 return (
-                                    <div key={bucket.id} className={`container__bucketListWrapper__itemListWrapper__item ${bucket?.id === selectedBucketId && 'container__bucketListWrapper__itemListWrapper__item-isActive'}`} onClick={() => handleChangeSelectedBucketId(bucket?.id)}>{bucket?.name}</div>
+                                    <div key={bucket.id} className={`container__bucketListWrapper__itemListWrapper__item ${bucket?.id === selectedBucket?.id && 'container__bucketListWrapper__itemListWrapper__item-isActive'}`} onClick={() => handleChangeSelectedBucketId(bucket)}>{bucket?.name}</div>
                                 );
                             })}
                         </div>

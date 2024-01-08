@@ -7,7 +7,12 @@ export function useCdnHook(props) {
         return await excelTranslatorCdnConnect.getExcelTranslatorSampleListJson();
     }
 
+    const getExcelTranslatorReferenceHeaderBucketListJson = async () => {
+        return await excelTranslatorCdnConnect.getExcelTranslatorReferenceHeaderBucketListJson();
+    }
+
     return {
-        getExcelTranslatorSampleListJson
+        getExcelTranslatorSampleListJson,
+        getExcelTranslatorReferenceHeaderBucketListJson
     }
 }

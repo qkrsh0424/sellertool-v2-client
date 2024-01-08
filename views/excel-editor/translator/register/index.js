@@ -4,11 +4,12 @@ import { FdEditName } from "./components/FdEditName/FdEditName";
 import { FdDownloadExcel } from "./components/FdDownloadExcel/FdDownloadExcel";
 import { useSelector } from "react-redux";
 import { useApiHook } from "./hooks/useApiHook";
-import { ExcelTranslatorReferenceHeaderListProvider, useExcelTranslatorReferenceHeaderListActionsHook } from "./contexts/ExcelTranslatorReferenceHeaderListProvider";
 import { FdFloatingButton } from "./components/FdFloatingButton/FdFloatingButton";
 import { customToast } from "../../../../components/toast/custom-react-toastify/v1";
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from "next/router";
+import { useCdnHook } from "./hooks/useCdnHook";
+import { ExcelTranslatorReferenceHeaderBucketListProvider, useExcelTranslatorReferenceHeaderBucketListActionsHook } from "./contexts/ExcelTranslatorReferenceHeaderBucketListProvider";
 
 const VALUE_TYPE = {
     FIXED: 'FIXED',
@@ -17,9 +18,9 @@ const VALUE_TYPE = {
 
 export default function MainComponent(props) {
     return (
-        <ExcelTranslatorReferenceHeaderListProvider>
+        <ExcelTranslatorReferenceHeaderBucketListProvider>
             <MainComponentCore />
-        </ExcelTranslatorReferenceHeaderListProvider>
+        </ExcelTranslatorReferenceHeaderBucketListProvider>
     );
 }
 
@@ -137,23 +138,26 @@ function MainComponentCore() {
 }
 
 function ContextFetch() {
-    const workspaceRedux = useSelector(state => state?.workspaceRedux);
-    const wsId = workspaceRedux?.workspaceInfo?.id;
+    const excelTranslatorReferenceHeaderBucketListActionsHook = useExcelTranslatorReferenceHeaderBucketListActionsHook();
 
-    const excelTranslatorReferenceHeaderListActionsHook = useExcelTranslatorReferenceHeaderListActionsHook();
-    const apiHook = useApiHook();
+    const cdnHook = useCdnHook();
 
     useEffect(() => {
-        if (!wsId) {
-            return;
+        async function fetchReferenceHeaderBucketList() {
+            await cdnHook.getExcelTranslatorReferenceHeaderBucketListJson().then(res => {
+                if (res?.status === 200) {
+                    excelTranslatorReferenceHeaderBucketListActionsHook.onSet(res?.data);
+                }
+            })
+                .catch(err => {
+                    console.log(err?.response);
+                })
         }
 
-        apiHook.reqFetchExcelTranslatorReferenceHeaderList({ headers: { wsId: wsId } }, (results, response) => {
-            excelTranslatorReferenceHeaderListActionsHook.onSet(results);
-        })
+        fetchReferenceHeaderBucketList();
 
-        return () => excelTranslatorReferenceHeaderListActionsHook.onSet(null);
-    }, [wsId]);
+        return () => excelTranslatorReferenceHeaderBucketListActionsHook.onSet(null);
+    }, []);
 
     return null;
 }

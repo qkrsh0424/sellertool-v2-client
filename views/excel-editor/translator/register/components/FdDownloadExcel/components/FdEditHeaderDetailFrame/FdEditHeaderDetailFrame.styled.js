@@ -169,6 +169,12 @@ export const ContentLayout = styled.div`
                     gap: 10px;
                     /* height: 100%; */
 
+                    .valueListWrapper-isError{
+                        border: 1px solid var(--defaultRedColor);
+                        background: var(--defaultRedColorOpacity100);
+                        color: var(--defaultRedColor);
+                    }
+
                     &__valueBox{
                         background: #fff;
                         border: none;

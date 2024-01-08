@@ -149,10 +149,11 @@ export function FdEditHeaderDetailFrame({
         });
     }
 
-    const handleDeleteMappingValue = (value) => {
+    const handleDeleteMappingValue = (reqIndex) => {
         const mappingValueList = selectedItem?.mappingValues ? JSON.parse(selectedItem?.mappingValues) : [];
 
-        const newMappingValueList = mappingValueList.filter(r => r !== value);
+        const newMappingValueList = mappingValueList.filter((_, index) => index !== reqIndex);
+
         setSelectedItem(prev => {
             return { ...prev, mappingValues: JSON.stringify(newMappingValueList) };
         });
@@ -317,13 +318,15 @@ export function FdEditHeaderDetailFrame({
                                                 className='contentForm__mappingValueLayout__mappingValueListContainer__valueListWrapper'
                                             >
                                                 {mappingValueList?.map((mappingValue, mappingValueIndex) => {
+                                                    let isErrorMappingValue = mappingValue ? false : true;
+
                                                     return (
-                                                        <Draggable key={mappingValue} draggableId={`mappingValue$${mappingValue}`} index={mappingValueIndex}>
+                                                        <Draggable key={mappingValueIndex} draggableId={`mappingValue$${mappingValueIndex}`} index={mappingValueIndex}>
                                                             {(draggableProvided) => (
                                                                 <div
                                                                     ref={draggableProvided.innerRef}
                                                                     {...draggableProvided.draggableProps}
-                                                                    className={`contentForm__mappingValueLayout__mappingValueListContainer__valueListWrapper__valueBox`}
+                                                                    className={`contentForm__mappingValueLayout__mappingValueListContainer__valueListWrapper__valueBox ${isErrorMappingValue ? 'valueListWrapper-isError' : ''}`}
                                                                 >
                                                                     <div className='contentForm__mappingValueLayout__mappingValueListContainer__valueListWrapper__valueBox__contentBox'>
                                                                         <div
@@ -334,10 +337,10 @@ export function FdEditHeaderDetailFrame({
                                                                                 src='/images/icon/drag_indicator_000000.svg'
                                                                             />
                                                                         </div>
-                                                                        <div className='contentForm__mappingValueLayout__mappingValueListContainer__valueListWrapper__valueBox__contentBox__columnName'>{mappingValue}</div>
+                                                                        <div className='contentForm__mappingValueLayout__mappingValueListContainer__valueListWrapper__valueBox__contentBox__columnName'>{isErrorMappingValue ? "#Error" : mappingValue}</div>
                                                                         <div
                                                                             className='contentForm__mappingValueLayout__mappingValueListContainer__valueListWrapper__valueBox__contentBox__iconFigure-clickable'
-                                                                            onClick={(e) => { e.stopPropagation(); handleDeleteMappingValue(mappingValue); }}
+                                                                            onClick={(e) => { e.stopPropagation(); handleDeleteMappingValue(mappingValueIndex); }}
                                                                         >
                                                                             <CustomImage
                                                                                 src='/images/icon/delete_default_e56767.svg'

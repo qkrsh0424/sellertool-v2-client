@@ -8,7 +8,6 @@ import { ExcelTranslatorReferenceHeaderListProvider, useExcelTranslatorReference
 import { FdFloatingButton } from "./components/FdFloatingButton/FdFloatingButton";
 import { customToast } from "../../../../components/toast/custom-react-toastify/v1";
 import { v4 as uuidv4 } from 'uuid';
-import { useCdnHook } from "./hooks/useCdnHook";
 import { useRouter } from "next/router";
 
 const VALUE_TYPE = {
@@ -30,7 +29,6 @@ function MainComponentCore() {
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const apiHook = useApiHook();
-    const cdnHook = useCdnHook();
 
     const [excelTranslator, setExcelTranslator] = useState({
         id: uuidv4(),
@@ -50,14 +48,6 @@ function MainComponentCore() {
             window.cancelAnimationFrame(animation);
             setEnabledDnd(false);
         };
-    }, []);
-
-    useEffect(() => {
-        async function fetchExcelTranslatorSampleList() {
-            let result = await cdnHook.getExcelTranslatorSampleListJson();
-            console.log(result);
-        }
-        fetchExcelTranslatorSampleList();
     }, []);
 
     const toggleDisabledCreate = (bool) => {

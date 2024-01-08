@@ -199,9 +199,15 @@ export function FdSortableFrame({
                                                                             <div className='itemContent__itemList__item__detailWrapper__mappingValueWrapper__contentBox'>
                                                                                 <label>매핑값</label>
                                                                                 <div className='itemContent__itemList__item__detailWrapper__mappingValueWrapper__contentBox__mappingValueListBox'>
-                                                                                    {mappingValueList?.map(r => {
+                                                                                    {mappingValueList?.map((r, index) => {
+                                                                                        if(!r){
+                                                                                            return (
+                                                                                                <div key={index} className='itemContent__itemList__item__detailWrapper__mappingValueWrapper__contentBox__mappingValueListBox__mappingValueText mappingValueText-isError'>#Error</div>
+                                                                                            );
+                                                                                        }
+
                                                                                         return (
-                                                                                            <div key={r} className='itemContent__itemList__item__detailWrapper__mappingValueWrapper__contentBox__mappingValueListBox__mappingValueText'>{r}</div>
+                                                                                            <div key={index} className='itemContent__itemList__item__detailWrapper__mappingValueWrapper__contentBox__mappingValueListBox__mappingValueText'>{r}</div>
                                                                                         );
                                                                                     })}
                                                                                 </div>

@@ -7,6 +7,7 @@ import { useMediaQuery } from "@mui/material";
 import { FdSortableFrame } from "./components/FdSortableFrame/FdSortableFrame";
 import { FdEditHeaderDetailFrame } from "./components/FdEditHeaderDetailFrame/FdEditHeaderDetailFrame";
 import { MdLoadExisted } from './modals/MdLoadExisted/MdLoadExisted';
+import { MdExcelUpload } from './modals/MdExcelUpload/MdExcelUpload';
 
 // scrollWidth : 스크롤 박스의 총 너비 (보이지 않는 요소의 너비 포함)
 // offsetWidth : 박스의 보이는 부분의 너비
@@ -86,6 +87,7 @@ export function FdDownloadExcel({
     }
 
     const addModalOpen = modalInfo?.type === 'ADD';
+    const excelUploadModalOpen = modalInfo?.type === 'EXCEL_UPLOAD';
     const loadModalOpen = modalInfo?.type === 'LOAD';
 
     return (
@@ -106,7 +108,7 @@ export function FdDownloadExcel({
                             </CustomBlockButton>
                             <CustomBlockButton
                                 type='button'
-                                onClick={() => toggleModalOpen({ type: 'ADD' })}
+                                onClick={() => toggleModalOpen({ type: 'EXCEL_UPLOAD' })}
                             >
                                 엑셀 업로드
                             </CustomBlockButton>
@@ -157,6 +159,14 @@ export function FdDownloadExcel({
                     excelTranslatorDownloadHeaderList={excelTranslatorDownloadHeaderList}
                     onSetExcelTranslatorDownloadHeaderList={onSetExcelTranslatorDownloadHeaderList}
                     onClose={() => toggleModalOpen(null)}
+                />
+            }
+
+            {excelUploadModalOpen &&
+                <MdExcelUpload
+                    open={excelUploadModalOpen}
+                    onClose={() => toggleModalOpen(null)}
+                    onSubmit={onSetExcelTranslatorDownloadHeaderList}
                 />
             }
 

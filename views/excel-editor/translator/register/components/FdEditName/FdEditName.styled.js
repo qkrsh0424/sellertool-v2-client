@@ -33,9 +33,6 @@ export const InputWrapper = styled.div`
         transition: all .3s;
         font-size: 14px;
         font-weight: 500;
-        &:hover{
-            border: 1px solid var(--mainColor);
-        }
 
         &:focus{
             scale: 1.05;

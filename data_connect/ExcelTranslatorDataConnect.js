@@ -42,6 +42,17 @@ function baseExcelEditorPage() {
                 })
             );
         },
+        uploadSettingExcel: async function ({ params, body, headers }) {
+            return withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${BASE_URL}/upload/setting-excel`, body, {
+                    params: params,
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            );
+        },
         downloadResultExcel: async function ({ params, body, headers }) {
             return withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.post(`${BASE_URL}/download/result-excel`, body, {

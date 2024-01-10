@@ -64,6 +64,17 @@ function baseExcelEditorPage() {
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
             );
+        },
+        update: async function ({ params, body, headers }) {
+            return withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.put(`${BASE_URL}/update`, body, {
+                    params: params,
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            );
         }
     }
 }

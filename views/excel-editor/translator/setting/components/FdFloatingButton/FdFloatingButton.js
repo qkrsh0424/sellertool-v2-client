@@ -31,7 +31,7 @@ export function FdFloatingButton({
                     className='button-submit'
                     onClick={() => handleSubmit()}
                 >
-                    등록
+                    수정
                 </CustomBlockButton>
             </St.Container>
         </>

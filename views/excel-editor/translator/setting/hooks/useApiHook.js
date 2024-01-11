@@ -91,11 +91,29 @@ export function useApiHook(props) {
             })
     }
 
+    const reqDeleteExcelTranslator = async ({ params, body, headers }, callbackFn = (results, response) => { }) => {
+        await excelTranslatorDataConnect.delete({ params, body, headers })
+            .then(res => {
+                if (res?.status === 200) {
+                    callbackFn(res?.data?.data, res);
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            })
+    }
+
     return {
         reqFetchExcelTranslatorList,
         reqCreateExcelTranslator,
         reqFetchExcelTranslatorReferenceHeaderList,
         reqUploadSettingExcel,
-        reqUpdateExcelTranslator
+        reqUpdateExcelTranslator,
+        reqDeleteExcelTranslator
     }
 }

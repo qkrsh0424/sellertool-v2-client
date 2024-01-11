@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import Layout from "../../layout/Layout";
-// import { FdEditName } from "./components/FdEditName/FdEditName";
-// import { FdDownloadExcel } from "./components/FdDownloadExcel/FdDownloadExcel";
 import { useSelector } from "react-redux";
 import { useApiHook } from "./hooks/useApiHook";
-// import { FdFloatingButton } from "./components/FdFloatingButton/FdFloatingButton";
 import { customToast } from "../../../../components/toast/custom-react-toastify/v1";
-import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from "next/router";
 import { useCdnHook } from "./hooks/useCdnHook";
 import { ExcelTranslatorReferenceHeaderBucketListProvider, useExcelTranslatorReferenceHeaderBucketListActionsHook } from "./contexts/ExcelTranslatorReferenceHeaderBucketListProvider";
@@ -14,10 +10,19 @@ import { FdSelector } from "./components/FdSelector/FdSelector";
 import { useExcelTranslatorHook } from "./hooks/useExcelTranslatorHook";
 import { FdEditName } from "./components/FdEditName/FdEditName";
 import { FdFloatingButton } from "./components/FdFloatingButton/FdFloatingButton";
+import { FdDelete } from "./components/FdDelete/FdDelete";
+import { customBackdropController } from "../../../../components/backdrop/default/v1";
+import { FdDownloadExcel } from "./components/FdDownloadExcel/FdDownloadExcel";
+import { FdMode } from "./components/FdMode/FdMode";
 
 const VALUE_TYPE = {
     FIXED: 'FIXED',
     MAPPING: 'MAPPING'
+}
+
+const MODE = {
+    EDIT: 'EDIT',
+    DELETE: 'DELETE'
 }
 
 export default function MainComponent(props) {
@@ -37,16 +42,9 @@ function MainComponentCore() {
     const apiHook = useApiHook();
     const excelTranslatorHook = useExcelTranslatorHook();
 
-    const [excelTranslator, setExcelTranslator] = useState({
-        id: uuidv4(),
-        name: null,
-        downloadHeaderCount: null,
-        excelTranslatorDownloadHeaderList: null,
-    })
-    const [excelTranslatorName, setExcelTranslatorName] = useState('');
-    const [excelTranslatorDownloadHeaderList, setExcelTranslatorDownloadHeaderList] = useState(null);
     const [enabledDnd, setEnabledDnd] = useState(false);
-    const [disabledCreate, setDisabledCreate] = useState(false);
+    const [disabledSubmit, setDisabledSubmit] = useState(false);
+    const [mode, setMode] = useState(MODE.EDIT);
 
     useEffect(() => {
         const animation = window.requestAnimationFrame(() => setEnabledDnd(true));
@@ -95,9 +93,12 @@ function MainComponentCore() {
         };
     }, [excelTranslatorId, excelTranslatorHook?.excelTranslatorList])
 
-    console.log(excelTranslatorHook?.excelTranslatorList)
-    const toggleDisabledCreate = (bool) => {
-        setDisabledCreate(bool)
+    const toggleDisabledSubmit = (bool) => {
+        setDisabledSubmit(bool)
+    }
+
+    const handleChangeMode = (mode) => {
+        setMode(mode);
     }
 
     const handleChangeExcelTranslatorNameFromEvent = (e) => {
@@ -111,10 +112,18 @@ function MainComponentCore() {
     }
 
     const handleSetExcelTranslatorDownloadHeaderList = (excelTranslatorDownloadHeaderList) => {
-        setExcelTranslatorDownloadHeaderList(excelTranslatorDownloadHeaderList)
+        let newSelectedExcelTranslator = {
+            ...excelTranslatorHook?.selectedExcelTranslator,
+            excelTranslatorDownloadHeaderList: [...excelTranslatorDownloadHeaderList]
+        }
+
+        excelTranslatorHook.onSetSelectedExcelTranslator(newSelectedExcelTranslator);
     }
 
-    const handleReqCreate = async () => {
+    const handleReqUpdate = async () => {
+        let excelTranslatorName = excelTranslatorHook?.selectedExcelTranslator?.name;
+        let excelTranslatorDownloadHeaderList = excelTranslatorHook?.selectedExcelTranslator?.excelTranslatorDownloadHeaderList;
+
         try {
             checkCreateForm({ excelTranslatorName: excelTranslatorName, excelTranslatorDownloadHeaderList: excelTranslatorDownloadHeaderList });
         } catch (err) {
@@ -135,31 +144,34 @@ function MainComponentCore() {
         })
 
         const body = {
-            ...excelTranslator,
+            ...excelTranslatorHook?.selectedExcelTranslator,
             name: newExcelTranslatorName,
             downloadHeaderCount: newExcelTranslatorDownloadHeaderList?.length,
             excelTranslatorDownloadHeaderList: newExcelTranslatorDownloadHeaderList,
         }
-
-        await apiHook.reqCreateExcelTranslator({ body: body, headers: { wsId: wsId } },
-            (results, response) => {
-                if (results) {
-                    router?.replace({
-                        pathname: '/excel-editor/translator'
-                    })
-                }
-            }
-        )
-    }
-
-    const handleReqUpdate = async () => {
-        let body = { ...excelTranslatorHook?.selectedExcelTranslator };
 
         await apiHook.reqUpdateExcelTranslator({ body: body, headers: { wsId: wsId } }, (results, response) => {
             router.replace({
                 pathname: '/excel-editor/translator'
             })
         })
+    }
+
+    const handleReqDelete = async ({ successCallback }) => {
+        let body = {
+            id: excelTranslatorHook?.selectedExcelTranslator?.id
+        }
+
+        customBackdropController().showBackdrop();
+        await apiHook.reqDeleteExcelTranslator({ body: body, headers: { wsId: wsId } }, (results, response) => {
+            if (results) {
+                successCallback();
+                router.replace({
+                    pathname: '/excel-editor/translator'
+                })
+            }
+        });
+        customBackdropController().hideBackdrop();
     }
 
     if (!enabledDnd) {
@@ -176,22 +188,41 @@ function MainComponentCore() {
             >
                 {enabledDnd &&
                     <>
+                        <FdMode
+                            mode={mode}
+                            onChangeMode={handleChangeMode}
+                        />
                         <FdSelector
                             excelTranslatorList={excelTranslatorHook?.excelTranslatorList}
                         />
-                        <FdEditName
-                            excelTranslatorName={excelTranslatorHook?.selectedExcelTranslator?.name}
-                            onChangeExcelTranslatorNameFromEvent={handleChangeExcelTranslatorNameFromEvent}
-                        />
-                        {/* <FdDownloadExcel
-                            excelTranslatorDownloadHeaderList={excelTranslatorDownloadHeaderList}
-                            onSetExcelTranslatorDownloadHeaderList={handleSetExcelTranslatorDownloadHeaderList}
-                            onToggleDisabledCreate={toggleDisabledCreate}
-                        /> */}
-                        {!disabledCreate &&
-                            <FdFloatingButton
-                                onSubmit={handleReqUpdate}
-                            />
+                        {excelTranslatorHook?.selectedExcelTranslator &&
+                            <>
+                                {mode === MODE.EDIT &&
+                                    <>
+                                        <FdEditName
+                                            excelTranslatorName={excelTranslatorHook?.selectedExcelTranslator?.name}
+                                            onChangeExcelTranslatorNameFromEvent={handleChangeExcelTranslatorNameFromEvent}
+                                        />
+                                        <FdDownloadExcel
+                                            excelTranslatorDownloadHeaderList={excelTranslatorHook?.selectedExcelTranslator?.excelTranslatorDownloadHeaderList}
+                                            onSetExcelTranslatorDownloadHeaderList={handleSetExcelTranslatorDownloadHeaderList}
+                                            onToggleDisabledCreate={toggleDisabledSubmit}
+                                        />
+                                        {!disabledSubmit &&
+                                            <FdFloatingButton
+                                                onSubmit={handleReqUpdate}
+                                            />
+                                        }
+                                    </>
+                                }
+                                {mode === MODE.DELETE &&
+                                    <>
+                                        <FdDelete
+                                            onReqDelete={handleReqDelete}
+                                        />
+                                    </>
+                                }
+                            </>
                         }
                     </>
                 }

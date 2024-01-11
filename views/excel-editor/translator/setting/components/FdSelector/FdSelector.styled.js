@@ -21,7 +21,7 @@ export const Title = styled.div`
 export const SelectWrapper = styled.div`
     margin-top: 20px;
     width: 300px;
-
+    
     @media all and (max-width:992px){
         width: 100%;
     }

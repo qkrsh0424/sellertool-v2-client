@@ -4,6 +4,10 @@ export const Container = styled.div`
     margin-top: 20px;
     padding: 0 20px;
 
+    @media all and (max-width:992px){
+        padding: 0 10px;
+    }
+
     .wrapper{
         border-radius: 15px;
         background: #fff;
@@ -37,39 +41,46 @@ export const Container = styled.div`
                 }
             }
 
-            &__textButton{
-                width: 48px;
-                height: 48px;
-                background: var(--grayButtonColor);
-                font-weight: 700;
-                font-size: 14px;
-                border: none;
-                border-radius: 10px;
+            &__buttonGroup{
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
 
-                @media all and (max-width:992px){
-                    width: 100%;
+                &__textButton{
+                    width: 48px;
+                    height: 48px;
+                    background: var(--grayButtonColor);
+                    font-weight: 700;
+                    font-size: 14px;
+                    border: none;
+                    border-radius: 10px;
+    
+                    @media all and (max-width:992px){
+                        width: 100%;
+                    }
+                }
+    
+                &__iconButton{
+                    width: 48px;
+                    height: 48px;
+                    background: var(--grayButtonColor);
+                    font-weight: 700;
+                    font-size: 14px;
+                    border: none;
+                    border-radius: 10px;
+    
+                    > .iconFigure{
+                        width: 24px;
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+    
+                    @media all and (max-width:992px){
+                        width: 100%;
+                    }
                 }
             }
 
-            &__iconButton{
-                width: 48px;
-                height: 48px;
-                background: var(--grayButtonColor);
-                font-weight: 700;
-                font-size: 14px;
-                border: none;
-                border-radius: 10px;
-
-                > .iconFigure{
-                    width: 24px;
-                    margin-left: auto;
-                    margin-right: auto;
-                }
-
-                @media all and (max-width:992px){
-                    width: 100%;
-                }
-            }
         }
     }
 `;

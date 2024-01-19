@@ -21,7 +21,7 @@ export function FdSelector({
         router?.replace({
             pathname: router?.pathname,
             query: query
-        })
+        }, undefined, { scroll: false })
     }
     return (
         <>

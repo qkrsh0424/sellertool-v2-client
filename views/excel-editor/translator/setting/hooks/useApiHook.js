@@ -17,14 +17,22 @@ export function useApiHook(props) {
      * reqFetchExcelTranslatorList({headers:{wsId:wsId}}, (results, response) => {...})
      */
     const reqFetchExcelTranslatorList = async ({ params, headers }, callbackFn = (results, response) => { }) => {
-        await excelTranslatorDataConnect.searchList({ params, headers })
+        return await excelTranslatorDataConnect.searchList({ params, headers })
             .then(res => {
                 if (res?.status === 200) {
                     callbackFn(res?.data?.data, res);
+                    return {
+                        results: res?.data?.data,
+                        response: res
+                    }
                 }
             })
             .catch(err => {
                 CustomErrorHandler.error(err);
+                return {
+                    results: null,
+                    response: res
+                }
             })
     }
 
@@ -75,10 +83,14 @@ export function useApiHook(props) {
     }
 
     const reqUpdateExcelTranslator = async ({ params, body, headers }, callbackFn = (results, response) => { }) => {
-        await excelTranslatorDataConnect.update({ params, body, headers })
+        return await excelTranslatorDataConnect.update({ params, body, headers })
             .then(res => {
                 if (res?.status === 200) {
                     callbackFn(res?.data?.data, res);
+                    return {
+                        results: res?.data?.data,
+                        response: res
+                    }
                 }
             })
             .catch(err => {
@@ -88,14 +100,23 @@ export function useApiHook(props) {
                     ...defaultOptions,
                     toastId: res?.data?.memo
                 });
+
+                return {
+                    results: null,
+                    response: res
+                }
             })
     }
 
     const reqDeleteExcelTranslator = async ({ params, body, headers }, callbackFn = (results, response) => { }) => {
-        await excelTranslatorDataConnect.delete({ params, body, headers })
+        return await excelTranslatorDataConnect.delete({ params, body, headers })
             .then(res => {
                 if (res?.status === 200) {
                     callbackFn(res?.data?.data, res);
+                    return {
+                        results: res?.data?.data,
+                        response: res
+                    }
                 }
             })
             .catch(err => {
@@ -105,6 +126,10 @@ export function useApiHook(props) {
                     ...defaultOptions,
                     toastId: res?.data?.memo
                 });
+                return {
+                    results: null,
+                    response: res
+                }
             })
     }
 

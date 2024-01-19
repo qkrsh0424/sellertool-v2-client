@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router';
 import CustomBlockButton from '../../../../../../components/buttons/block-button/v1/CustomBlockButton';
 import * as St from './FdFloatingButton.styled';
+import useDisabledBtn from '../../../../../../hooks/button/useDisabledBtn';
 
 export function FdFloatingButton({
     onSubmit
 }) {
     const router = useRouter();
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
 
     const handleCancel = () => {
         router.replace({
@@ -14,6 +16,11 @@ export function FdFloatingButton({
     }
 
     const handleSubmit = () => {
+        setDisabledBtn(true);
+        if (disabledBtn) {
+            return;
+        }
+        
         onSubmit();
     }
 
@@ -30,6 +37,7 @@ export function FdFloatingButton({
                     type='button'
                     className='button-submit'
                     onClick={() => handleSubmit()}
+                    disabled={disabledBtn}
                 >
                     수정
                 </CustomBlockButton>

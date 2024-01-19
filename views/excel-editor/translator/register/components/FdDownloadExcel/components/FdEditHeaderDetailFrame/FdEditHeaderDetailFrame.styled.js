@@ -29,6 +29,7 @@ export const ContentLayout = styled.div`
         }
 
         &__headerName{
+            margin-top: 20px;
             & > input{
                 width: 300px;
                 border-radius: 10px;
@@ -51,7 +52,7 @@ export const ContentLayout = styled.div`
         }
 
         &__valueTypeSelector{
-            margin-top: 40px;
+            margin-top: 20px;
             display: flex;
             gap: 5px;
 
@@ -67,7 +68,7 @@ export const ContentLayout = styled.div`
         }
 
         &__fixedValue{
-            margin-top: 40px;
+            margin-top: 20px;
             > input{
                 width: 300px;
                 border-radius: 10px;
@@ -90,7 +91,7 @@ export const ContentLayout = styled.div`
         }
 
         &__mappingValueLayout{
-            margin-top: 40px;
+            margin-top: 20px;
             display: flex;
             gap: 10px;
             align-items: flex-start;
@@ -103,6 +104,10 @@ export const ContentLayout = styled.div`
                 width: 300px;
                 border-radius: 15px;
                 padding: 10px;
+
+                @media all and (max-width:992px){
+                    width: 100%;
+                }
 
                 &__description{
                     font-size: 12px;

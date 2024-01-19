@@ -1,5 +1,6 @@
 import CustomBlockButton from "../../../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { CustomDialog } from "../../../../../../../../components/dialog/v1/CustomDialog";
+import useDisabledBtn from "../../../../../../../../hooks/button/useDisabledBtn";
 import * as St from './MdDeleteConfirmation.styled';
 
 export function MdDeleteConfirmation({
@@ -7,8 +8,18 @@ export function MdDeleteConfirmation({
     onClose,
     onConfirm
 }) {
+    const [disabledBtn, setDisabledBtn] = useDisabledBtn();
 
+    const handleSubmit = () => {
+        setDisabledBtn(true);
 
+        if (disabledBtn) {
+            return;
+        }
+
+        onConfirm();
+    }
+    
     return (
         <>
             <CustomDialog
@@ -32,7 +43,8 @@ export function MdDeleteConfirmation({
                             <CustomBlockButton
                                 type='button'
                                 className='wrapper__buttonGroup__isConfirmButton'
-                                onClick={() => onConfirm()}
+                                onClick={() => handleSubmit()}
+                                disabled={disabledBtn}
                             >
                                 예
                             </CustomBlockButton>

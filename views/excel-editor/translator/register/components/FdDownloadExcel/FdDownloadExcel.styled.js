@@ -3,6 +3,10 @@ import styled from 'styled-components';
 export const Container = styled.div`
     margin-top: 20px;
     padding: 0 20px;
+
+    @media all and (max-width:992px){
+        padding: 0 10px;
+    }
 `;
 
 export const Wrapper = styled.div`

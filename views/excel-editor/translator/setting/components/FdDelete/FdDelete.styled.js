@@ -3,6 +3,10 @@ import styled from 'styled-components';
 export const Container = styled.div`
     margin-top: 20px;
     padding: 0 20px;
+
+    @media all and (max-width:992px){
+        padding: 0 10px;
+    }
 `;
 
 export const Wrapper = styled.div`
@@ -23,10 +27,12 @@ export const ContentLayout = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 20px;
 
     .description{
         font-weight: 500;
         font-size: 14px;
+        word-break: keep-all;
     }
 
     .deleteButtonBox{

@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from "next/router";
 import { useCdnHook } from "./hooks/useCdnHook";
 import { ExcelTranslatorReferenceHeaderBucketListProvider, useExcelTranslatorReferenceHeaderBucketListActionsHook } from "./contexts/ExcelTranslatorReferenceHeaderBucketListProvider";
+import { customBackdropController } from "../../../../components/backdrop/default/v1";
 
 const VALUE_TYPE = {
     FIXED: 'FIXED',
@@ -91,6 +92,7 @@ function MainComponentCore() {
             excelTranslatorDownloadHeaderList: newExcelTranslatorDownloadHeaderList,
         }
 
+        customBackdropController().showBackdrop();
         await apiHook.reqCreateExcelTranslator({ body: body, headers: { wsId: wsId } },
             (results, response) => {
                 if (results) {
@@ -100,6 +102,7 @@ function MainComponentCore() {
                 }
             }
         )
+        customBackdropController().hideBackdrop();
     }
 
     if (!enabledDnd) {

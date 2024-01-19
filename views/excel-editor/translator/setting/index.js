@@ -150,11 +150,24 @@ function MainComponentCore() {
             excelTranslatorDownloadHeaderList: newExcelTranslatorDownloadHeaderList,
         }
 
-        await apiHook.reqUpdateExcelTranslator({ body: body, headers: { wsId: wsId } }, (results, response) => {
+        customBackdropController().showBackdrop();
+        let updateResult = await apiHook.reqUpdateExcelTranslator({ body: body, headers: { wsId: wsId } });
+        let fetchResult = null;
+
+        if (updateResult?.results) {
+            fetchResult = await apiHook.reqFetchExcelTranslatorList({ headers: { wsId: wsId } });
+
+            if (fetchResult?.results) {
+                excelTranslatorHook.onSetExcelTranslatorList(fetchResult?.results);
+            }
+
+            customToast.success('수정이 완료되었습니다.');
             router.replace({
-                pathname: '/excel-editor/translator'
+                pathname: '/excel-editor/translator/setting'
             })
-        })
+        }
+
+        customBackdropController().hideBackdrop();
     }
 
     const handleReqDelete = async ({ successCallback }) => {
@@ -163,14 +176,23 @@ function MainComponentCore() {
         }
 
         customBackdropController().showBackdrop();
-        await apiHook.reqDeleteExcelTranslator({ body: body, headers: { wsId: wsId } }, (results, response) => {
-            if (results) {
-                successCallback();
-                router.replace({
-                    pathname: '/excel-editor/translator'
-                })
+        let deleteResult = await apiHook.reqDeleteExcelTranslator({ body: body, headers: { wsId: wsId } });
+        let fetchResult = null;
+
+        if (deleteResult?.results) {
+            fetchResult = await apiHook.reqFetchExcelTranslatorList({ headers: { wsId: wsId } });
+
+            if (fetchResult?.results) {
+                excelTranslatorHook.onSetExcelTranslatorList(fetchResult?.results);
             }
-        });
+
+            customToast.success('삭제가 완료되었습니다.')
+            successCallback();
+            router.replace({
+                pathname: '/excel-editor/translator/setting'
+            })
+        }
+
         customBackdropController().hideBackdrop();
     }
 

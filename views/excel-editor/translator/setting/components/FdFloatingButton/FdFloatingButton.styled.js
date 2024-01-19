@@ -13,6 +13,10 @@ export const Container = styled.div`
     background: #f7f7f7e0;
     gap: 10px;
 
+    @media all and (max-width:992px){
+        padding: 10px;
+    }
+
     button{
         width: 100px;
         background: var(--grayButtonColor2);

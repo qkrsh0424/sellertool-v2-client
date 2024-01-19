@@ -73,7 +73,8 @@ export default function MainComponent(props) {
                 headerName={'대시보드'}
             >
                 <FdSelector
-                    excelTranslatorList={excelTranslatorHook.excelTranslatorList}
+                    excelTranslatorList={excelTranslatorHook?.excelTranslatorList}
+                    selectedExcelTranslator={excelTranslatorHook?.selectedExcelTranslator}
                     onSetSelectedExcelTranslator={excelTranslatorHook.onSetSelectedExcelTranslator}
                 />
                 {excelTranslatorHook?.selectedExcelTranslator &&

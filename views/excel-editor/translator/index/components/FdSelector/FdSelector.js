@@ -6,6 +6,7 @@ import * as St from './FdSelector.styled';
 import { MdViewSetting } from './modals/MdViewSetting/MdViewSetting';
 import { useState } from 'react';
 import { useSellertoolDatas } from '../../../../../../hooks/sellertool-datas';
+import { useApiHook } from '../../hooks/useApiHook';
 
 export function FdSelector({
     excelTranslatorList,

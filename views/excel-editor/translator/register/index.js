@@ -10,12 +10,19 @@ import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from "next/router";
 import { useCdnHook } from "./hooks/useCdnHook";
 import { ExcelTranslatorReferenceHeaderBucketListProvider, useExcelTranslatorReferenceHeaderBucketListActionsHook } from "./contexts/ExcelTranslatorReferenceHeaderBucketListProvider";
+import { useQueryClient } from "@tanstack/react-query";
 import { customBackdropController } from "../../../../components/backdrop/default/v1";
+import { ExcelTranslatorReactQuery } from "../../react-query/ExcelTranslatorReactQuery";
+import { GlobalReactQueryUtils } from "../../../../react-query/GlobalReactQueryUtils";
 
 const VALUE_TYPE = {
     FIXED: 'FIXED',
     MAPPING: 'MAPPING'
 }
+
+// react-query 관련
+const globalReactQueryUtils = GlobalReactQueryUtils();
+const excelTranslatorReactQuery = ExcelTranslatorReactQuery();
 
 export default function MainComponent(props) {
     return (
@@ -30,7 +37,10 @@ function MainComponentCore() {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
+    // react-query 관련
+    const queryClient = useQueryClient();
     const apiHook = useApiHook();
+    const RQ_CreateExcelTranslator = excelTranslatorReactQuery.useCreateOne();
 
     const [excelTranslator, setExcelTranslator] = useState({
         id: uuidv4(),
@@ -93,16 +103,20 @@ function MainComponentCore() {
         }
 
         customBackdropController().showBackdrop();
-        await apiHook.reqCreateExcelTranslator({ body: body, headers: { wsId: wsId } },
-            (results, response) => {
-                if (results) {
-                    router?.replace({
-                        pathname: '/excel-editor/translator'
-                    })
-                }
+        RQ_CreateExcelTranslator.mutateAsync({ body, headers: { wsId: wsId } }, {
+            onSuccess: (data, variables, context) => {
+                const wsId = variables?.headers?.wsId;
+                queryClient.invalidateQueries({
+                    queryKey: globalReactQueryUtils.generateQueryKey(globalReactQueryUtils.queryKeys.EXCEL_TRANSLATOR_LIST, globalReactQueryUtils.queryKeyPaths.EXCEL_EDITOR, { wsId: wsId })
+                });
+                router?.replace({
+                    pathname: '/excel-editor/translator'
+                })
+            },
+            onSettled: (data, error, variables, context) => {
+                customBackdropController().hideBackdrop();
             }
-        )
-        customBackdropController().hideBackdrop();
+        });
     }
 
     if (!enabledDnd) {

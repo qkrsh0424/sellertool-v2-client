@@ -8,6 +8,10 @@ import { FdSortableFrame } from "./components/FdSortableFrame/FdSortableFrame";
 import { FdEditHeaderDetailFrame } from "./components/FdEditHeaderDetailFrame/FdEditHeaderDetailFrame";
 import { MdLoadExisted } from './modals/MdLoadExisted/MdLoadExisted';
 import { MdExcelUpload } from './modals/MdExcelUpload/MdExcelUpload';
+import usePopperHook from '../../../../../../hooks/popper/usePopperHook';
+import { ExcelTranslatorSettingTemplate } from '../../../../../../utils/excel-template/excel-editor/ExcelTranslatorSettingTemplate';
+import CustomPopper from '../../../../../../components/popper/CustomPopper';
+import CustomImage from '../../../../../../components/image/CustomImage';
 
 // scrollWidth : 스크롤 박스의 총 너비 (보이지 않는 요소의 너비 포함)
 // offsetWidth : 박스의 보이는 부분의 너비
@@ -17,8 +21,16 @@ export function FdDownloadExcel({
     onSetExcelTranslatorDownloadHeaderList,
     onToggleDisabledCreate
 }) {
-    const [selectedItemId, setSelectedItemId] = useState(null);
     const isMobile = useMediaQuery(`(max-width: 992px)`);
+
+    const {
+        popperAnchorEl,
+        popperOpen,
+        onActionOpenPopper,
+        onActionClosePopper
+    } = usePopperHook();
+
+    const [selectedItemId, setSelectedItemId] = useState(null);
 
     /**
      * {
@@ -56,6 +68,10 @@ export function FdDownloadExcel({
             return;
         }
 
+        if (modalInfoValue?.type === 'EXCEL_UPLOAD') {
+            onActionClosePopper();
+        }
+
         setModalInfo(modalInfoValue);
     }
 
@@ -86,6 +102,18 @@ export function FdDownloadExcel({
         handleChangeSelectedItemId(null);
     }
 
+    const handleDownloadSampleExcel = async () => {
+        const url = ExcelTranslatorSettingTemplate.assetUrl;
+        const link = document.createElement('a');
+        link.href = url;
+
+        link.setAttribute('download', ExcelTranslatorSettingTemplate.assetName);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        onActionClosePopper();
+    }
+
     const addModalOpen = modalInfo?.type === 'ADD';
     const excelUploadModalOpen = modalInfo?.type === 'EXCEL_UPLOAD';
     const loadModalOpen = modalInfo?.type === 'LOAD';
@@ -108,9 +136,9 @@ export function FdDownloadExcel({
                             </CustomBlockButton>
                             <CustomBlockButton
                                 type='button'
-                                onClick={() => toggleModalOpen({ type: 'EXCEL_UPLOAD' })}
+                                onClick={(e) => onActionOpenPopper(e)}
                             >
-                                엑셀 업로드
+                                엑셀로 설정
                             </CustomBlockButton>
                             <CustomBlockButton
                                 type='button'
@@ -152,6 +180,47 @@ export function FdDownloadExcel({
                     </St.TipsLayout>
                 </St.Wrapper>
             </St.Container>
+
+            <CustomPopper
+                open={popperOpen}
+                anchorEl={popperAnchorEl}
+                placement='bottom-start'
+                element={
+                    (
+                        <>
+                            <St.PopperContainer>
+                                <div className='header-frame'>
+                                    <div className="title">엑셀로 설정</div>
+                                    <button
+                                        type='button'
+                                        className='close-button-el'
+                                        onClick={() => onActionClosePopper()}
+                                    >
+                                        <CustomImage
+                                            src='/images/icon/close_default_959eae.svg'
+                                        />
+                                    </button>
+                                </div>
+                                <div className='wrapper'>
+                                    <CustomBlockButton
+                                        type='button'
+                                        className='upload-button'
+                                        onClick={() => toggleModalOpen({ type: 'EXCEL_UPLOAD' })}
+                                    >
+                                        엑셀 업로드
+                                    </CustomBlockButton>
+                                    <CustomBlockButton
+                                        type='button'
+                                        onClick={() => handleDownloadSampleExcel()}
+                                    >
+                                        양식 다운로드
+                                    </CustomBlockButton>
+                                </div>
+                            </St.PopperContainer>
+                        </>
+                    )
+                }
+            />
 
             {addModalOpen &&
                 <MdAddItem

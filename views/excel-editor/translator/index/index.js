@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Layout from "../../layout/Layout";
 import { FdPreview } from "./components/FdPreview/FdPreview";
 import { FdSelector } from "./components/FdSelector/FdSelector";
@@ -7,28 +6,25 @@ import { useApiHook } from "./hooks/useApiHook";
 import { useSelector } from "react-redux";
 import { useExcelTranslatorHook } from "./hooks/useExcelTranslatorHook";
 import { customBackdropController } from "../../../../components/backdrop/default/v1";
+import { useEffect } from "react";
+import { ExcelTranslatorReactQuery } from "../../react-query/ExcelTranslatorReactQuery";
+
+const excelTranslatorReactQuery = ExcelTranslatorReactQuery();
 
 export default function MainComponent(props) {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const apiHook = useApiHook();
+    const RQ_ExcelTranslatorList = excelTranslatorReactQuery.useFetchList({ headers: { wsId: wsId } });
+
     const excelTranslatorHook = useExcelTranslatorHook();
 
     useEffect(() => {
-        if (!wsId) {
-            return;
+        if (RQ_ExcelTranslatorList?.data) {
+            excelTranslatorHook?.onSetExcelTranslatorList(RQ_ExcelTranslatorList?.data?.data?.data);
         }
-        handleReqFetchExcelTranslatorList();
-    }, [wsId]);
-
-    const handleReqFetchExcelTranslatorList = async () => {
-        await apiHook.reqFetchExcelTranslatorList({ headers: { wsId: wsId } },
-            (results) => {
-                excelTranslatorHook.onSetExcelTranslatorList(results);
-            }
-        )
-    }
+    }, [RQ_ExcelTranslatorList?.data])
 
     const handleReqUploadExcel = async (formData, successCallback) => {
         customBackdropController().showBackdrop();
@@ -65,6 +61,13 @@ export default function MainComponent(props) {
         excelTranslatorHook.onSetDownloadHeaderList(null);
         excelTranslatorHook.onSetDownloadRowDataList(null);
     }
+
+    if (RQ_ExcelTranslatorList.isLoading) {
+        customBackdropController().showBackdrop();
+    } else {
+        customBackdropController().hideBackdrop();
+    }
+
     return (
         <>
             <Layout

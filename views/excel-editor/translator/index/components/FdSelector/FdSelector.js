@@ -62,6 +62,9 @@ export function FdSelector({
                             <option disabled>===== 즐겨찾기 =====</option>
                             {sellertoolDatas?.bookmarkExcelTranslatorIdListForTranslator?.map(bookmarkExcelTranslatorId => {
                                 let excelTranslator = excelTranslatorList?.find(r => r.id === bookmarkExcelTranslatorId);
+                                if(!excelTranslator){
+                                    return null;
+                                }
                                 return (
                                     <option key={bookmarkExcelTranslatorId} value={excelTranslator?.id}>{excelTranslator?.name}</option>
                                 );

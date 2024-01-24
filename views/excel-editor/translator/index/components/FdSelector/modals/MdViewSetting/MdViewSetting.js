@@ -63,7 +63,8 @@ export function MdViewSetting({
     }
 
     const handleSubmit = () => {
-        onConfirm(currentBookmarkExcelTranslatorIdList);
+        let newList = [...new Set(currentBookmarkExcelTranslatorIdList?.filter(r => excelTranslatorList?.some(r2 => r2.id === r)))];
+        onConfirm(newList);
         onClose();
     }
 
@@ -102,6 +103,10 @@ export function MdViewSetting({
                                 <div className='mainLayout__contentLayout__contentList'>
                                     {currentBookmarkExcelTranslatorIdList?.map(bookmarkExcelTranslatorId => {
                                         let excelTranslator = excelTranslatorList?.find(r => r.id === bookmarkExcelTranslatorId);
+                                        if (!excelTranslator) {
+                                            return null;
+                                        }
+
                                         return (
                                             <div
                                                 key={excelTranslator?.id}

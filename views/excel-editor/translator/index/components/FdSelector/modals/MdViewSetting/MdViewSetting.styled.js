@@ -62,7 +62,7 @@ export const Wrapper = styled.div`
                 display: flex;
                 flex-direction: column;
                 height: 300px;
-                overflow: hidden;
+                overflow: auto;
             }
 
             .mainLayout__contentLayout__contentList__item{

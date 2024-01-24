@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../../layout/Layout";
 import { useSelector } from "react-redux";
-import { useApiHook } from "./hooks/useApiHook";
 import { customToast } from "../../../../components/toast/custom-react-toastify/v1";
 import { useRouter } from "next/router";
 import { useCdnHook } from "./hooks/useCdnHook";
@@ -14,6 +13,9 @@ import { FdDelete } from "./components/FdDelete/FdDelete";
 import { customBackdropController } from "../../../../components/backdrop/default/v1";
 import { FdDownloadExcel } from "./components/FdDownloadExcel/FdDownloadExcel";
 import { FdMode } from "./components/FdMode/FdMode";
+import { ExcelTranslatorReactQuery } from "../../react-query/ExcelTranslatorReactQuery";
+import { useQueryClient } from "@tanstack/react-query";
+import { GlobalReactQueryUtils } from "../../../../react-query/GlobalReactQueryUtils";
 
 const VALUE_TYPE = {
     FIXED: 'FIXED',
@@ -24,6 +26,9 @@ const MODE = {
     EDIT: 'EDIT',
     DELETE: 'DELETE'
 }
+
+const globalReactQueryUtils = GlobalReactQueryUtils();
+const excelTranslatorReactQuery = ExcelTranslatorReactQuery();
 
 export default function MainComponent(props) {
     return (
@@ -39,7 +44,12 @@ function MainComponentCore() {
     const workspaceRedux = useSelector(state => state.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const apiHook = useApiHook();
+    // react-query 관련
+    const queryClient = useQueryClient();
+    const RQ_ExcelTranslatorList = excelTranslatorReactQuery.useFetchList({ headers: { wsId: wsId } });
+    const RQ_UpdateExcelTranslator = excelTranslatorReactQuery.useUpdate();
+    const RQ_DeleteExcelTranslator = excelTranslatorReactQuery.useDelete();
+
     const excelTranslatorHook = useExcelTranslatorHook();
 
     const [enabledDnd, setEnabledDnd] = useState(false);
@@ -55,27 +65,17 @@ function MainComponentCore() {
         };
     }, []);
 
-    // fetch excelTranslatorList
     useEffect(() => {
-        if (!wsId) {
+        if (!RQ_ExcelTranslatorList?.data?.data?.data) {
             return;
         }
 
-        async function fetchExcelTranslatorList() {
-            await apiHook.reqFetchExcelTranslatorList({ headers: { wsId: wsId } }, (results, response) => {
-                if (results) {
-                    excelTranslatorHook.onSetExcelTranslatorList(results);
-                }
-            });
-        }
-
-        fetchExcelTranslatorList();
+        excelTranslatorHook.onSetExcelTranslatorList(RQ_ExcelTranslatorList?.data?.data?.data);
 
         return () => {
             excelTranslatorHook.onSetExcelTranslatorList(null);
         }
-    }, [wsId]);
-
+    }, [RQ_ExcelTranslatorList?.data?.data?.data])
 
     useEffect(() => {
         if (!excelTranslatorId || !excelTranslatorHook?.excelTranslatorList) {
@@ -151,23 +151,20 @@ function MainComponentCore() {
         }
 
         customBackdropController().showBackdrop();
-        let updateResult = await apiHook.reqUpdateExcelTranslator({ body: body, headers: { wsId: wsId } });
-        let fetchResult = null;
-
-        if (updateResult?.results) {
-            fetchResult = await apiHook.reqFetchExcelTranslatorList({ headers: { wsId: wsId } });
-
-            if (fetchResult?.results) {
-                excelTranslatorHook.onSetExcelTranslatorList(fetchResult?.results);
+        RQ_UpdateExcelTranslator.mutateAsync({ body, headers: { wsId: wsId } }, {
+            onSuccess: (data, variables, context) => {
+                const wsId = variables?.headers?.wsId;
+                queryClient.invalidateQueries({
+                    queryKey: globalReactQueryUtils.generateQueryKey(globalReactQueryUtils.queryKeys.EXCEL_TRANSLATOR_LIST, globalReactQueryUtils.queryKeyPaths.EXCEL_EDITOR, { wsId: wsId })
+                });
+                router?.replace({
+                    pathname: '/excel-editor/translator/setting'
+                })
+            },
+            onSettled: (data, error, variables, context) => {
+                customBackdropController().hideBackdrop();
             }
-
-            customToast.success('수정이 완료되었습니다.');
-            router.replace({
-                pathname: '/excel-editor/translator/setting'
-            })
-        }
-
-        customBackdropController().hideBackdrop();
+        })
     }
 
     const handleReqDelete = async ({ successCallback }) => {
@@ -176,28 +173,32 @@ function MainComponentCore() {
         }
 
         customBackdropController().showBackdrop();
-        let deleteResult = await apiHook.reqDeleteExcelTranslator({ body: body, headers: { wsId: wsId } });
-        let fetchResult = null;
-
-        if (deleteResult?.results) {
-            fetchResult = await apiHook.reqFetchExcelTranslatorList({ headers: { wsId: wsId } });
-
-            if (fetchResult?.results) {
-                excelTranslatorHook.onSetExcelTranslatorList(fetchResult?.results);
+        RQ_DeleteExcelTranslator.mutateAsync({ body: body, headers: { wsId: wsId } }, {
+            onSuccess: (data, variables, context) => {
+                const wsId = variables?.headers?.wsId;
+                queryClient.invalidateQueries({
+                    queryKey: globalReactQueryUtils.generateQueryKey(globalReactQueryUtils.queryKeys.EXCEL_TRANSLATOR_LIST, globalReactQueryUtils.queryKeyPaths.EXCEL_EDITOR, { wsId: wsId })
+                });
+                customToast.success('삭제가 완료되었습니다.')
+                successCallback();
+                router?.replace({
+                    pathname: '/excel-editor/translator/setting'
+                })
+            },
+            onSettled: (data, error, variables, context) => {
+                customBackdropController().hideBackdrop();
             }
-
-            customToast.success('삭제가 완료되었습니다.')
-            successCallback();
-            router.replace({
-                pathname: '/excel-editor/translator/setting'
-            })
-        }
-
-        customBackdropController().hideBackdrop();
+        });
     }
 
     if (!enabledDnd) {
         return null;
+    }
+
+    if (RQ_ExcelTranslatorList.isLoading) {
+        customBackdropController().showBackdrop();
+    } else {
+        customBackdropController().hideBackdrop();
     }
 
     return (

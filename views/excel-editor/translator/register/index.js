@@ -3,7 +3,6 @@ import Layout from "../../layout/Layout";
 import { FdEditName } from "./components/FdEditName/FdEditName";
 import { FdDownloadExcel } from "./components/FdDownloadExcel/FdDownloadExcel";
 import { useSelector } from "react-redux";
-import { useApiHook } from "./hooks/useApiHook";
 import { FdFloatingButton } from "./components/FdFloatingButton/FdFloatingButton";
 import { customToast } from "../../../../components/toast/custom-react-toastify/v1";
 import { v4 as uuidv4 } from 'uuid';
@@ -39,7 +38,6 @@ function MainComponentCore() {
 
     // react-query 관련
     const queryClient = useQueryClient();
-    const apiHook = useApiHook();
     const RQ_CreateExcelTranslator = excelTranslatorReactQuery.useCreateOne();
 
     const [excelTranslator, setExcelTranslator] = useState({

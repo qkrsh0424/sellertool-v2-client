@@ -2,15 +2,19 @@ import { useEffect, useState } from "react";
 import CustomBlockButton from "../../../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { CustomDialog } from "../../../../../../../../components/dialog/v1/CustomDialog";
 import * as St from './MdLoadExisted.styled';
-import { useApiHook } from "../../../../hooks/useApiHook";
 import { useCdnHook } from "../../../../hooks/useCdnHook";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
+import { ExcelTranslatorReactQuery } from "../../../../../../react-query/ExcelTranslatorReactQuery";
 
 const LOAD_TYPE = {
     SAMPLE: 'SAMPLE',
     MY: 'MY'
 }
+
+// react-query
+const excelTranslatorReactQuery = ExcelTranslatorReactQuery();
+
 export function MdLoadExisted({
     open,
     onClose,
@@ -19,17 +23,17 @@ export function MdLoadExisted({
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
-    const apiHook = useApiHook();
     const cdnHook = useCdnHook();
+    const RQ_ExcelTranslatorList = excelTranslatorReactQuery.useFetchList({ headers: { wsId: wsId } });
 
     const [loadType, setLoadType] = useState(LOAD_TYPE.SAMPLE);
     const [excelTranslatorSampleList, setExcelTranslatorSampleList] = useState(null);
-    const [excelTranslatorList, setExcelTranslatorList] = useState(null);
     const [selectedExcelTranslatorInfo, setSelectedExcelTranslatorInfo] = useState(null);
+
+    const excelTranslatorList = RQ_ExcelTranslatorList?.data?.data?.data;
 
     useEffect(() => {
         handleCdnFetchExcelTranslatorSampleList();
-        handleReqFetchExcelTranslatorList();
     }, []);
 
     const handleCdnFetchExcelTranslatorSampleList = async () => {
@@ -39,14 +43,6 @@ export function MdLoadExisted({
                     setExcelTranslatorSampleList(res?.data);
                 }
             })
-    }
-
-    const handleReqFetchExcelTranslatorList = async () => {
-        await apiHook.reqFetchExcelTranslatorList({ headers: { wsId: wsId } }, (results) => {
-            if (results) {
-                setExcelTranslatorList(results);
-            }
-        })
     }
 
     const handleChangeLoadType = (loadType) => {

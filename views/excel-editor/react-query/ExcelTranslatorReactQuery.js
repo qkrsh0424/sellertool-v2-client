@@ -31,6 +31,22 @@ export function ExcelTranslatorReactQuery(props) {
                     CustomErrorHandler.errorReactQuery(error);
                 },
             })
+        },
+        useUpdate: () => {
+            return useMutation({
+                mutationFn: ({ params, body, headers }) => excelTranslatorDataConnect.update({ params, body, headers }),
+                onError: (error) => {
+                    CustomErrorHandler.errorReactQuery(error);
+                }
+            })
+        },
+        useDelete: () => {
+            return useMutation({
+                mutationFn: ({ params, body, headers }) => excelTranslatorDataConnect.delete({ params, body, headers }),
+                onError: (error) => {
+                    CustomErrorHandler.errorReactQuery(error);
+                }
+            })
         }
     }
 }

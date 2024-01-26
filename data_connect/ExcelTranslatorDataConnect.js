@@ -4,7 +4,8 @@ import withMainApiCsrfWrapper from "../utils/withMainApiCsrfWrapper";
 const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress;
 
 export const ExcelTranslatorDataConnect = {
-    baseExcelEditorPage: baseExcelEditorPage
+    baseExcelEditorPage: baseExcelEditorPage,
+    baseErpcPage: baseErpcPage
 }
 
 function baseExcelEditorPage() {
@@ -87,5 +88,21 @@ function baseExcelEditorPage() {
                 })
             );
         }
+    }
+}
+
+function baseErpcPage() {
+    const BASE_URL = `${API_ADDRESS}/page-api/erpc/v1/excel-translators`;
+
+    return {
+        searchList: async function ({ params, headers }) {
+            return axiosAuthInterceptor.get(`${BASE_URL}`, {
+                params: params,
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
     }
 }

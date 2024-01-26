@@ -16,6 +16,7 @@ export function useSellertoolDatasV1() {
     const releaseCompleteHeaderIdForErpc = sellertoolData?.releaseCompleteHeaderIdForErpc ?? null;
     const holdHeaderIdForErpc = sellertoolData?.holdHeaderIdForErpc ?? null;
     const bookmarkExcelTranslatorIdListForTranslator = sellertoolData?.bookmarkExcelTranslatorIdListForTranslator ?? [];
+    const bookmarkExcelTranslatorIdListForErpc = sellertoolData?.bookmarkExcelTranslatorIdListForErpc ?? [];
 
     const _onResetDatas = (workspaces) => {
         if (workspaces && workspaces?.length > 0) {
@@ -221,6 +222,28 @@ export function useSellertoolDatasV1() {
         }
     }
 
+    const _onSetBookmarkExcelTranslatorIdListForErpc = (array) => {
+        if (!sellertoolData) {
+            setSellertoolDatas([...sellertoolDatas, {
+                wsId: wsId,
+                bookmarkExcelTranslatorIdListForErpc: [...array]
+            }])
+        } else {
+            setSellertoolDatas(sellertoolDatas.map(r => {
+                if (r.wsId === wsId) {
+                    return {
+                        ...r,
+                        bookmarkExcelTranslatorIdListForErpc: [...array]
+                    }
+                } else {
+                    return {
+                        ...r
+                    }
+                }
+            }))
+        }
+    }
+
     return {
         excelTranslatorHeaderIds,
         favoriteExcelTranslatorHeaderIdsForErpcUpload,
@@ -231,6 +254,7 @@ export function useSellertoolDatasV1() {
         releaseCompleteHeaderIdForErpc,
         holdHeaderIdForErpc,
         bookmarkExcelTranslatorIdListForTranslator,
+        bookmarkExcelTranslatorIdListForErpc,
 
         _onResetDatas,
         _onSetExcelTranslatorHeaderIds,
@@ -242,5 +266,6 @@ export function useSellertoolDatasV1() {
         _onSetReleaseCompleteHeaderIdForErpc,
         _onSetHoldHeaderIdForErpc,
         _onSetBookmarkExcelTranslatorIdListForTranslator,
+        _onSetBookmarkExcelTranslatorIdListForErpc
     }
 }

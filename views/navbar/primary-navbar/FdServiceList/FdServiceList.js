@@ -16,7 +16,7 @@ export function FdServiceList() {
             target: '_self'
         },
         {
-            href: '/excel-translator',
+            href: '/excel-editor/translator',
             name: '엑셀 변환기',
             isReady: true,
             target: '_self'

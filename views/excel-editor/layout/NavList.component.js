@@ -2,8 +2,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import * as St from "./styles/NavList.styled";
 
-const SALES_ANALYSIS_CLIENT_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.salesAnalisisClientAddress : process.env.production.salesAnalisisClientAddress;
-
 export default function NavListComponent({
     onActionClickLink
 }) {
@@ -20,6 +18,7 @@ export default function NavListComponent({
                             >
                                 <St.LinkItem
                                     active={router?.pathname?.includes(link.matcher)}
+                                    style={link?.isPreparingService ? {color:'#cccccc'} : {}}
                                 >
                                     <Link
                                         href={link.pathname}
@@ -37,6 +36,7 @@ export default function NavListComponent({
                                                 <St.SubLinkItem
                                                     key={subLink.pathname}
                                                     active={router?.pathname === subLink.matcher}
+                                                    style={link?.isPreparingService ? {color:'#cccccc'} : {}}
                                                 >
                                                     <Link
                                                         href={subLink.pathname}
@@ -85,13 +85,22 @@ const NAV_LIST = [
     },
     {
         name: '엑셀 조합기',
-        pathname: `/excel-editor/combinator`,
+        // pathname: `/excel-editor/combinator`,
+        pathname: `#`,
         matcher: '/excel-editor/combinator',
+        isPreparingService: true,
         subLinkList: [
+            // {
+            //     name: '대시보드',
+            //     pathname: '/excel-editor/combinator',
+            //     matcher: '/excel-editor/combinator'
+            // },
             {
-                name: '대시보드',
-                pathname: '/excel-editor/combinator',
-                matcher: '/excel-editor/combinator'
+                name: '서비스 준비중',
+                // pathname: '/excel-editor/combinator',
+                pathname: '#',
+                matcher: '/excel-editor/combinator',
+                isPreparingService: true,
             },
         ]
     },

@@ -270,6 +270,7 @@ export default function CustomExcelFileUploader({
                                                 value={filePassword || ''}
                                                 onChange={(e) => __handle.change.filePassword(e)}
                                                 placeholder="파일 비밀번호"
+                                                autoFocus
                                             ></input>
                                         </div>
                                     </div>

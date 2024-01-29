@@ -319,9 +319,16 @@ const erpItemDataConnect = () => {
          * @returns 
          */
         uploadWithExcel: async function (formData, headers) {
-
+            // return await withMainApiCsrfWrapper(
+            //     () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/upload/excel`, formData, {
+            //         headers: headers,
+            //         withCredentials: true,
+            //         xsrfCookieName: 'x_api_csrf_token',
+            //         xsrfHeaderName: 'X-XSRF-TOKEN'
+            //     })
+            // )
             return await withMainApiCsrfWrapper(
-                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/erp-items/upload/excel`, formData, {
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/page-api/erpc/v1/erp-items/upload/excel`, formData, {
                     headers: headers,
                     withCredentials: true,
                     xsrfCookieName: 'x_api_csrf_token',

@@ -1,6 +1,5 @@
 import Head from 'next/head';
-import MainComponent from '../../../../views/erp/collection/order-upload';
-import FooterMain from '../../../../views/footer/FooterMain';
+import MainComponent from '../../../../views/erp/collection/order-upload-v2';
 import PrimaryNavbarMainComponent from '../../../../views/navbar/primary-navbar';
 import SecondaryNavbarMainComponent from '../../../../views/navbar/secondary-navbar-v2';
 import { useSelector } from 'react-redux';

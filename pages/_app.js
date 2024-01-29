@@ -25,6 +25,19 @@ import "nprogress/nprogress.css";
 import { CustomToastContainer } from '../components/toast/custom-react-toastify/v1';
 import { CustomDefaultBackdrop } from '../components/backdrop/default/v1';
 
+// react-query
+import {
+	useQuery,
+	useMutation,
+	useQueryClient,
+	QueryClient,
+	QueryClientProvider,
+	QueryCache,
+} from '@tanstack/react-query'
+import { useState } from 'react';
+import { CustomErrorHandler } from '../data_connect/CustomErrorHandler';
+import { GlobalReactQueryUtils } from '../react-query/GlobalReactQueryUtils';
+
 // const theme = createTheme();
 const theme = createTheme({
 	typography: {
@@ -46,7 +59,19 @@ Router.onRouteChangeError = () => {
 };
 // == NProgress Module END ==
 
+// react-query
+const globalReactQueryUtils = GlobalReactQueryUtils();
+
 function MyApp({ Component, pageProps }) {
+	const [queryClient] = useState(() => new QueryClient({
+		defaultOptions: { ...globalReactQueryUtils.customDefaultOptionsForQueryClient },
+		queryCache: new QueryCache({
+			onError: (error, query) => {
+				CustomErrorHandler.errorReactQuery(error, query?.meta?.errorOrigin);
+			},
+		})
+	}));
+
 	return (
 		<>
 			<Head>
@@ -116,7 +141,9 @@ function MyApp({ Component, pageProps }) {
 			<CustomToastContainer />
 			<CustomDefaultBackdrop />
 			<ThemeProvider theme={theme}>
-				<Component {...pageProps} />
+				<QueryClientProvider client={queryClient}>
+					<Component {...pageProps} />
+				</QueryClientProvider>
 			</ThemeProvider>
 		</>
 	)

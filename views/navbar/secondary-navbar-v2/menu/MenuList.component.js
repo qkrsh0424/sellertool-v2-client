@@ -156,7 +156,7 @@ const MENU_LIST = [
             },
             {
                 title: '엑셀 변환기',
-                href: '/excel-translator',
+                href: '/excel-editor/translator',
                 targetBlank: false,
                 status: 'OPEN'
             },

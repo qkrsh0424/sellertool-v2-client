@@ -1,10 +1,8 @@
-import { ExcelTranslatorReferenceHeaderDataConnect } from "../../../../../data_connect/ExcelTranslatorReferenceHeaderDataConnect";
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 import { ExcelTranslatorDataConnect } from "../../../../../data_connect/ExcelTranslatorDataConnect";
 import { CustomErrorHandler } from "../../../../../data_connect/CustomErrorHandler";
 
 const excelTranslatorDataConnect = ExcelTranslatorDataConnect.baseExcelEditorPage();
-const excelTranslatorReferenceHeaderDataConnect = ExcelTranslatorReferenceHeaderDataConnect.baseExcelEditorPage();
 
 export function useApiHook(props) {
     const reqFetchExcelTranslatorList = async ({ params, headers }, callbackFn = (results, response) => { }) => {
@@ -29,21 +27,6 @@ export function useApiHook(props) {
             })
     }
 
-    const reqFetchExcelTranslatorReferenceHeaderList = async ({ params = {}, headers = {} }, callbackFn = (results, response) => { }) => {
-        await excelTranslatorReferenceHeaderDataConnect.searchList({ params, headers })
-            .then(res => {
-                callbackFn(res?.data?.data, res);
-            })
-            .catch(err => {
-                const res = err.response;
-                console.log(res);
-                customToast.error(res?.data?.memo, {
-                    ...defaultOptions,
-                    toastId: res?.data?.memo
-                });
-            })
-    }
-
     const reqUploadSettingExcel = async ({ params, body, headers }, callbackFn = (results, response) => { }) => {
         await excelTranslatorDataConnect.uploadSettingExcel({ params, body, headers })
             .then(res => {
@@ -62,7 +45,6 @@ export function useApiHook(props) {
     return {
         reqFetchExcelTranslatorList,
         reqCreateExcelTranslator,
-        reqFetchExcelTranslatorReferenceHeaderList,
         reqUploadSettingExcel
     }
 }

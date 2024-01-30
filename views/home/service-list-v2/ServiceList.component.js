@@ -33,7 +33,8 @@ const ServiceListComponent = () => {
                     </CardContainer>
                     <CardContainer>
                         <Link
-                            href={'/excel-translator'}
+                            // href={'/excel-translator'}
+                            href={'/excel-editor/translator'}
                             passHref
                         >
                             <CardWrapper onClick={() => gtagClickEventHandler({ custom_source: 'home', custom_link: '/excel-translator', custom_name: '엑셀 변환기' })}>

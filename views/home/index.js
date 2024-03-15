@@ -8,6 +8,7 @@ import Section1Component from "./section1/Section1.component";
 import Link from "next/link";
 import { PurchaseCostCalculatorModal } from "../../components/PurchaseCostCalculatorModal/v1";
 import { FdEvent } from "./FdEvent";
+import { CustomMainPopup } from "../../components/popup/main/v1/CustomMainPopup";
 
 const Container = styled.div`
     background: var(--mainColorOpacity50);
@@ -78,6 +79,8 @@ const HomeMain = () => {
                 <Section1Component />
                 <FdEvent />
             </Container>
+
+            <CustomMainPopup />
 
             <CommonModalComponent
                 open={workspaceNoticeModalOpen}

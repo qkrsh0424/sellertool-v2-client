@@ -15,7 +15,10 @@ export const CustomDateUtils = () => {
         getDiffDays: getDiffDays,
         dateToHHmm: dateToHHmm,
         getDiffHourWithUTC: getDiffHourWithUTC,
-        setPlusDate: setPlusDate
+        setPlusDate: setPlusDate,
+        plusHours: plusHours,
+        plusMinutes: plusMinutes,
+        plusSeconds: plusSeconds,
     }
 }
 
@@ -136,4 +139,25 @@ function setPlusDate(idate, prevYear, prevMonth, prevDay) {
     date.setMonth(date.getMonth() + prevMonth);
     date.setDate(date.getDate() + prevDay);
     return new Date(moment(date));
+}
+
+function plusHours(idate, hours) {
+    var date = new Date(idate);
+    date.setHours(date.getHours() + hours);
+
+    return date;
+}
+
+function plusMinutes(idate, minutes) {
+    var date = new Date(idate);
+    date.setMinutes(date.getMinutes() + minutes);
+
+    return date;
+}
+
+function plusSeconds(idate, seconds) {
+    var date = new Date(idate);
+    date.setSeconds(date.getSeconds() + seconds);
+
+    return date;
 }

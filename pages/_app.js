@@ -37,6 +37,7 @@ import {
 import { useState } from 'react';
 import { CustomErrorHandler } from '../data_connect/CustomErrorHandler';
 import { GlobalReactQueryUtils } from '../react-query/GlobalReactQueryUtils';
+import { CookiesProvider } from 'react-cookie';
 
 // const theme = createTheme();
 const theme = createTheme({

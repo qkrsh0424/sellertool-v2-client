@@ -33,7 +33,11 @@ export function MdPurchaseUnitPriceCalculator({
         }
 
         handleReqFetchMrBaseExchangeRateList();
-    }, [wsId, mrBaseExchangeRateList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        wsId,
+        mrBaseExchangeRateList,
+    ]);
 
     const handleReqFetchMrBaseExchangeRateList = async () => {
         await dataSourceHook?.onReqFetchMrBaseExchangeRateList({ headers: { wsId: wsId } }, (results, response) => {

@@ -41,6 +41,24 @@ const productOptionPackageDataConnect = () => {
         /**
          * 
          * @param {object} body 
+         * @param {string[]} body.productOptionIds
+         * @param {object} headers 
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        searchProductInfoListByProductOptionIdsWithStocks: async function (body, headers) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${API_ADDRESS}/api/v1/product-option-packages/search/product-infos-with-stocks`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
+        /**
+         * 
+         * @param {object} body 
          * @param {string} body.productOptionId
          * @param {object[]} body.productOptionPackages [...moreItems]
          * @param {object} headers 

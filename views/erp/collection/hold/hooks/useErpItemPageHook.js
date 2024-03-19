@@ -8,13 +8,21 @@ import { customToast, defaultOptions } from "../../../../../components/toast/cus
 export default function useErpItemPageHook(props) {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
+    const [isLoading, setIsLoading] = useState(true);
     const [erpItemPage, setErpItemPage] = useState(null);
     const [erpItemPagePending, setErpItemPagePending] = useState(false);
     const [totalSize, setTotalSize] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
+        if (router.isReady) {
+            setIsLoading(false);
+        }
+    }, [router.isReady]);
+
+    useEffect(() => {
         if (
+            isLoading ||
             !workspaceRedux?.workspaceInfo?.id
         ) {
             return;
@@ -22,18 +30,35 @@ export default function useErpItemPageHook(props) {
         reqFetchErpItemPage();
         return () => setErpItemPage(null);
     }, [
+        isLoading,
         workspaceRedux?.workspaceInfo?.id,
-        router?.query,
+        router?.query?.salesYn,
+        router?.query?.releaseYn,
+        router?.query?.periodSearchCondition,
+        router?.query?.startDateTime,
+        router?.query?.endDateTime,
+        router?.query?.mpSearchCondition,
+        router?.query?.mpSearchQuery,
+        router?.query?.oiSearchCondition,
+        router?.query?.oiSearchQuery,
+        router?.query?.riSearchCondition,
+        router?.query?.riSearchQuery,
+        router?.query?.diSearchCondition,
+        router?.query?.diSearchQuery,
+        router?.query?.size,
+        router?.query?.matchedCode
     ]);
 
     useEffect(() => {
         if (
+            isLoading ||
             !workspaceRedux?.workspaceInfo?.id
         ) {
             return;
         }
         reqFetchCountErpItems();
     }, [
+        isLoading,
         workspaceRedux?.workspaceInfo?.id,
         router?.query?.salesYn,
         router?.query?.releaseYn,
@@ -58,9 +83,9 @@ export default function useErpItemPageHook(props) {
         }
 
         let params = {
-            salesYn:'n',
-            releaseYn:'n',
-            holdYn:'y',
+            salesYn: 'n',
+            releaseYn: 'n',
+            holdYn: 'y',
             periodSearchCondition: router?.query?.periodSearchCondition,
             startDateTime: router?.query?.startDateTime && getStartDate(router?.query?.startDateTime),
             endDateTime: router?.query?.endDateTime && getEndDate(router?.query?.endDateTime),
@@ -112,7 +137,7 @@ export default function useErpItemPageHook(props) {
         let params = {
             salesYn: 'n',
             releaseYn: 'n',
-            holdYn:'y',
+            holdYn: 'y',
             periodSearchCondition: router?.query?.periodSearchCondition,
             startDateTime: router?.query?.startDateTime && getStartDate(router?.query?.startDateTime),
             endDateTime: router?.query?.endDateTime && getEndDate(router?.query?.endDateTime),
@@ -217,7 +242,7 @@ export default function useErpItemPageHook(props) {
         let headers = {
             wsId: workspaceRedux?.workspaceInfo?.id
         }
-        
+
         await erpItemDataConnect().updateAll(body, headers)
             .then(res => {
                 if (res.status === 200) {

@@ -24,6 +24,7 @@ export default function ErpItemListComponent({
     selectedErpItems,
     inventoryStocks,
     erpItemSameReceiverHints,
+    productOptionPackageInfoList,
 
     onSelectErpItem,
     onSelectAllErpItems,
@@ -173,6 +174,7 @@ export default function ErpItemListComponent({
                                 (virtuosoData) => (
                                     <TableBodyRow
                                         virtuosoData={virtuosoData}
+                                        productOptionPackageInfoList={productOptionPackageInfoList}
 
                                         selectedErpItems={selectedErpItems}
                                         header={erpCollectionHeader}
@@ -318,6 +320,7 @@ function TableHeaderRow({
 
 function TableBodyRow({
     virtuosoData,
+    productOptionPackageInfoList,
     selectedErpItems,
     header,
     inventoryStocks,
@@ -331,14 +334,24 @@ function TableBodyRow({
     const item = virtuosoData?.item;
     const isSelected = selectedErpItems?.find(r => r.id === item?.id);
     let inventoryStock = inventoryStocks?.find(r => r.productOptionId === item?.productOptionId);
-    let isOutOfStock = inventoryStock && inventoryStock?.stockUnit <= 0;
     let isPackaged = item?.packageYn === 'y' ? true : false;
+    let isOutOfStock = !isPackaged && inventoryStock && inventoryStock?.stockUnit <= 0;
+
+    if (isPackaged) {
+        let childOptionList = productOptionPackageInfoList?.filter(r => r.parentProductOptionId === item?.productOptionId);
+        for (let i = 0; i < childOptionList?.length; i++) {
+            if ((childOptionList[i].unit * item?.unit) > childOptionList[i]?.stockUnit) {
+                isOutOfStock = true;
+                break;
+            }
+        }
+    }
 
     return (
         <TextDragableDancer
             type='tr'
             {...virtuosoData}
-            className={`${isSelected ? 'tr-active' : ''} ${(isOutOfStock && !isPackaged) ? 'tr-highlight' : ''}`}
+            className={`${isSelected ? 'tr-active' : ''} ${(isOutOfStock) ? 'tr-highlight' : ''}`}
             style={{
                 position: 'relative',
                 background: !item?.productOptionId ? 'var(--defaultYellowColorOpacity30)' : ''
@@ -601,7 +614,7 @@ function OptionStockUnitTd(props) {
 
     if (isPackaged) {
         return (
-            <td style={{ background: (isOutOfStock && !isPackaged) ? 'var(--defaultRedColorOpacity500)' : '', color: 'var(--defaultGreenColor)' }}>패키지상품</td>
+            <td style={{ background: (isOutOfStock) ? 'var(--defaultRedColorOpacity500)' : '', color: 'var(--defaultGreenColor)' }}>패키지상품</td>
         );
     } else {
         return (

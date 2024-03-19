@@ -245,6 +245,7 @@ export function useSellertoolDatasV1() {
     }
 
     return {
+        wsId: wsId,
         excelTranslatorHeaderIds,
         favoriteExcelTranslatorHeaderIdsForErpcUpload,
         favoriteViewHeaderIdsForErpc,

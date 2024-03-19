@@ -12,10 +12,14 @@ import useSelectedErpItemsHook from "./hooks/useSelectedErpItemsHook";
 import { Container } from "./index.styled";
 import SortFieldComponent from "./sort-field/SortField.component";
 import { useSellertoolDatas } from "../../../../hooks/sellertool-datas";
+import { useApiHook } from "./hooks/useApiHook";
+import { useEffect, useState } from "react";
 
 export default function MainComponent(props) {
     const sellertoolDatas = useSellertoolDatas();
     const erpcHoldHeaderId = sellertoolDatas?.holdHeaderIdForErpc;
+
+    const apiHook = useApiHook();
 
     const {
         erpCollectionHeader
@@ -53,6 +57,44 @@ export default function MainComponent(props) {
         reqFetchSelectedErpItems,
     } = useSelectedErpItemsHook();
 
+    const [productOptionPackageInfoList, setProductOptionPackageInfoList] = useState({
+        content: null,
+        isLoading: true
+    });
+
+    useEffect(() => {
+        if (!erpItemPage?.content || !sellertoolDatas?.wsId) {
+            return;
+        }
+
+        async function fetchProductOptionPackageList() {
+            const productOptionIds = Array.from(new Set(erpItemPage?.content?.filter(r => r.packageYn === 'y').map(r => r.productOptionId)));
+
+            if (!productOptionIds || productOptionIds?.length <= 0) {
+                return;
+            }
+
+            let body = {
+                productOptionIds: productOptionIds
+            }
+
+            let headers = {
+                wsId: sellertoolDatas?.wsId
+            }
+
+            const result = await apiHook.reqFetchProductOptionPackageList({ body, headers });
+
+            if (result?.content) {
+                setProductOptionPackageInfoList({
+                    isLoading: false,
+                    content: result?.content
+                })
+            }
+        }
+
+        fetchProductOptionPackageList();
+    }, [erpItemPage?.content, sellertoolDatas?.wsId]);
+
     return (
         <>
             <Container>
@@ -75,6 +117,7 @@ export default function MainComponent(props) {
                             selectedErpItems={selectedErpItems}
                             inventoryStocks={inventoryStocks}
                             erpItemSameReceiverHints={erpItemSameReceiverHints}
+                            productOptionPackageInfoList={productOptionPackageInfoList?.content || []}
 
                             onSelectErpItem={onSelectErpItem}
                             onSelectAllErpItems={onSelectAllErpItems}

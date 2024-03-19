@@ -47,6 +47,7 @@ export function MrBaseExchangeRateModal({
             })
         }
         initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wsId]);
 
     const toggleAddItemModeOpen = (bool) => {

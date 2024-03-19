@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FooterMain from "../views/footer/FooterMain";
 import MainComponent from "../views/login-v2";
@@ -9,16 +9,31 @@ import PrimaryNavbarMainComponent from "../views/navbar/primary-navbar";
 const LoginPage = () => {
     const userRedux = useSelector(state => state.userRedux);
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (router?.isReady) {
+            setIsLoading(false);
+        }
+
+    }, [router?.isReady]);
 
     useEffect(() => {
         async function fetchInit() {
+            if (isLoading) {
+                return;
+            }
             if (userRedux.isLoading === false && userRedux.userInfo) {
                 router.replace('/');
                 return;
             }
         }
         fetchInit();
-    }, [userRedux]);
+    }, [
+        isLoading,
+        router,
+        userRedux
+    ]);
 
     return (
         <>

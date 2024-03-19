@@ -29,6 +29,7 @@ export function PurchaseCostCalculatorModal({
         }
 
         handleReqFetchMrBaseExchangeRateList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wsId, mrBaseExchangeRateRedux?.mrBaseExchangeRateList]);
 
     useEffect(() => {
@@ -44,6 +45,7 @@ export function PurchaseCostCalculatorModal({
             return;
         }
         mrPurchaseModuleHook.onSetSelectedMrPurchaseModule(mrPurchaseModuleRedux?.mrPurchaseModuleList?.find(r => r.id === selectedMrPurchaseModuleId) || null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mrPurchaseModuleRedux?.mrPurchaseModuleList, selectedMrPurchaseModuleId])
 
     const handleReqFetchMrPurchaseModuleList = () => {

@@ -52,6 +52,7 @@ export function FdPurchaseUnitPriceCalculator({
             return;
         }
         purchaseUnitPriceFormHook.onInitializedSet(selectedMrPurchaseModule)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedMrPurchaseModule]);
 
     const toggleMrBaseExchangeRateModalOpen = (bool, name) => {

@@ -4,14 +4,26 @@ import SecondaryNavbarMainComponent from "../../../views/navbar/secondary-navbar
 import MainComponent from "../../../views/product-v2/edit-product/v2";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function ProductEditProductPage(props) {
-    const userRedux = useSelector(state => state.userRedux);
     const router = useRouter();
+    const userRedux = useSelector(state => state.userRedux);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (router?.isReady) {
+            setIsLoading(false);
+        }
+
+    }, [router?.isReady]);
 
     useEffect(() => {
         async function fetchInit() {
+            if(isLoading){
+                return;
+            }
+            
             if (userRedux.isLoading === false && !userRedux.userInfo) {
                 alert('로그인이 필요한 서비스 입니다.');
                 router.replace('/');
@@ -19,7 +31,12 @@ export default function ProductEditProductPage(props) {
             }
         }
         fetchInit();
-    }, [userRedux.isLoading, userRedux.userInfo]);
+    }, [
+        isLoading,
+        router,
+        userRedux.isLoading,
+        userRedux.userInfo
+    ]);
 
     if (userRedux.isLoading || !userRedux.userInfo) {
         return null;

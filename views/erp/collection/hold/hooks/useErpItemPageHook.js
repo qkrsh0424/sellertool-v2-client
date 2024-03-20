@@ -15,6 +15,12 @@ export default function useErpItemPageHook(props) {
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
+        if (router.isReady) {
+            setIsLoading(false);
+        }
+    }, [router.isReady]);
+    
+    useEffect(() => {
         if (
             isLoading ||
             !workspaceRedux?.workspaceInfo?.id

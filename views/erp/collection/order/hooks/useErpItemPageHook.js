@@ -46,9 +46,12 @@ export default function useErpItemPageHook(props) {
         router?.query?.diSearchCondition,
         router?.query?.diSearchQuery,
         router?.query?.size,
-        router?.query?.matchedCode
+        router?.query?.matchedCode,
+        router?.query?.page,
+        router?.query?.sort,
     ]);
 
+    // count를 호출할때는 페이지 변경, sort 변경에서는 반응하지 않도록 한다.
     useEffect(() => {
         if (
             isLoading ||
@@ -74,7 +77,7 @@ export default function useErpItemPageHook(props) {
         router?.query?.diSearchCondition,
         router?.query?.diSearchQuery,
         router?.query?.size,
-        router?.query?.matchedCode
+        router?.query?.matchedCode,
     ]);
 
     const reqFetchCountErpItems = async () => {

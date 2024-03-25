@@ -47,6 +47,7 @@ export default function useErpItemPageHook(props) {
         router?.query?.diSearchQuery,
         router?.query?.mmSearchCondition,
         router?.query?.mmSearchQuery,
+        router?.query?.stockReflectYn,
         router?.query?.size,
         router?.query?.matchedCode,
         router?.query?.page,
@@ -80,6 +81,7 @@ export default function useErpItemPageHook(props) {
         router?.query?.diSearchQuery,
         router?.query?.mmSearchCondition,
         router?.query?.mmSearchQuery,
+        router?.query?.stockReflectYn,
         router?.query?.size,
         router?.query?.matchedCode,
     ]);

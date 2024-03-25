@@ -1,5 +1,4 @@
 import Layout from "../layout/Layout";
-import ConditionFieldComponent from "./condition-field/ConditionField.component";
 import ErpItemListComponent from "./erp-item-list/ErpItemListV2.component";
 import FloatingControlToggle from "./floating-control-toggle/FloatingControlToggle";
 import FloatingPagenationComponent from "./floating-pagenation/FloatingPagenation.component";
@@ -14,6 +13,7 @@ import SortFieldComponent from "./sort-field/SortField.component";
 import { useSellertoolDatas } from "../../../../hooks/sellertool-datas";
 import { useApiHook } from "./hooks/useApiHook";
 import { useEffect, useState } from "react";
+import FdConditionSearch from "../fragments/FdConditionSearch/FdConditionSearch";
 
 export default function MainComponent(props) {
     const sellertoolDatas = useSellertoolDatas();
@@ -109,7 +109,10 @@ export default function MainComponent(props) {
                             favoriteViewHeaderIdsForErpc={sellertoolDatas?.favoriteViewHeaderIdsForErpc}
                             onActionSelectHeaderId={(headerId) => sellertoolDatas?._onSetHoldHeaderIdForErpc(headerId)}
                         />
-                        <ConditionFieldComponent />
+                        <FdConditionSearch
+                            exposurePeriodTypes={['', 'createdAt', 'channelOrderDate', 'holdAt']}
+                            defaultPeriodType='holdAt'
+                        />
                         <SortFieldComponent />
                         <ErpItemListComponent
                             erpCollectionHeader={erpCollectionHeader}

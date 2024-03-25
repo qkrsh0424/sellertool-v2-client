@@ -15,11 +15,17 @@ import useMpSearchConditionFormHook from "./hooks/useMpSearchConditionFormHook";
 import useOiSearchConditionFormHook from "./hooks/useOiSearchConditionFormHook";
 import usePeriodSearchConditionFormHook from "./hooks/usePeriodSearchConditionFormHook";
 import useRiSearchConditionFormHook from "./hooks/useRiSearchConditionFormHook";
-import useStockReflectYnFormHook from "./hooks/useStockReflectYnFormHook";
-import { ConditionContainer, ConditionWrapper, Container, FlexGroup, PeriodWrapper, RadioContainer, RadioWrapper, SubmitButtonContainer, Wrapper } from "./styles/ConditionField.styled";
+import { ConditionContainer, ConditionWrapper, Container, FlexGroup, PeriodWrapper, RadioContainer, SubmitButtonContainer, Wrapper } from "./FdConditionSearch.styled";
+import useMmSearchConditionFormHook from "./hooks/useMmSearchConditionFormHook";
 
-export default function ConditionFieldComponent({
-
+/**
+ * 
+ * @param {*} param0 
+ * @param {*} param0.exposurePeriodTypes - ['', 'createdAt', 'channelOrderDate', 'salesAt', 'releaseAt', 'holdAt']
+ */
+export default function FdConditionSearch({
+    exposurePeriodTypes,
+    defaultPeriodType
 }) {
     const router = useRouter();
 
@@ -67,14 +73,17 @@ export default function ConditionFieldComponent({
     } = useDiSearchConditionFormHook();
 
     const {
+        mmSearchYn,
+        mmSearchCondition,
+        mmSearchQuery,
+        onChangeMmSearchCondition,
+        onChangeMmSearchQuery
+    } = useMmSearchConditionFormHook();
+
+    const {
         matchedCode,
         onChangeMatchedCode
     } = useMatchedCodeFormHook();
-
-    const {
-        stockReflectYn,
-        onChangeStockReflectYn
-    } = useStockReflectYnFormHook();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -130,19 +139,20 @@ export default function ConditionFieldComponent({
             delete params.diSearchQuery;
         }
 
-        const currMatchedCode = MATCHED_CODE_TYPES?.find(r => r.value === matchedCode)?.value;
-        const currStockReflectYn = STOCK_REFLECT_YN_TYPES?.find(r => r.value === stockReflectYn)?.value;
+        if (mmSearchYn === 'y') {
+            params.mmSearchCondition = mmSearchCondition;
+            params.mmSearchQuery = mmSearchQuery;
+        } else {
+            delete params.mmSearchCondition;
+            delete params.mmSearchQuery;
+        }
+
+        let currMatchedCode = MATCHED_CODE_TYPES?.find(r => r.value === matchedCode)?.value;
 
         if (currMatchedCode) {
             params.matchedCode = currMatchedCode;
         } else {
             delete params.matchedCode;
-        }
-
-        if(currStockReflectYn){
-            params.stockReflectYn = currStockReflectYn;
-        }else {
-            delete params.stockReflectYn
         }
 
         router.replace({
@@ -156,14 +166,22 @@ export default function ConditionFieldComponent({
     }
 
     const handleSubmitClear = () => {
+        let query = {
+            page: 1,
+            size: 50,
+            periodSearchCondition: 'createdAt',
+            startDateTime: dateToYYYYMMDD(new Date()),
+            endDateTime: dateToYYYYMMDD(new Date())
+        }
+
+        if (defaultPeriodType) {
+            query.periodSearchCondition = defaultPeriodType;
+        }
+
         router.replace({
             pathname: router?.pathname,
             query: {
-                page: 1,
-                size: 50,
-                periodSearchCondition: 'releaseAt',
-                startDateTime: dateToYYYYMMDD(new Date()),
-                endDateTime: dateToYYYYMMDD(new Date())
+                ...query
             }
         }, undefined, { scroll: false })
     }
@@ -181,16 +199,18 @@ export default function ConditionFieldComponent({
                                     value={periodSearchCondition || ''}
                                     onChange={(e) => onChangePeriodType(e)}
                                 >
-                                    {PERIOD_TYPES?.map(r => {
-                                        return (
-                                            <option
-                                                key={r.value}
-                                                value={r.value}
-                                            >
-                                                {r.name}
-                                            </option>
-                                        );
-                                    })}
+                                    {exposurePeriodTypes &&
+                                        PERIOD_TYPES?.filter(r => exposurePeriodTypes?.includes(r.value))?.map(r => {
+                                            return (
+                                                <option
+                                                    key={r.value}
+                                                    value={r.value}
+                                                >
+                                                    {r.name}
+                                                </option>
+                                            );
+                                        })
+                                    }
                                 </CustomSelect>
                                 <div className='date-box'>
                                     <LocalizationProvider
@@ -381,6 +401,36 @@ export default function ConditionFieldComponent({
                                 </ConditionWrapper>
                             </ConditionContainer>
                         </FlexGroup>
+                        <FlexGroup>
+                            <ConditionContainer>
+                                <div className='label'>관리메모</div>
+                                <ConditionWrapper>
+                                    <CustomSelect
+                                        className='select-item'
+                                        value={mmSearchCondition || ''}
+                                        onChange={(e) => onChangeMmSearchCondition(e)}
+                                    >
+                                        {MANAGEMENT_MEMO_TYPES?.map(r => {
+                                            return (
+                                                <option
+                                                    key={r.value}
+                                                    value={r.value}
+                                                >
+                                                    {r.name}
+                                                </option>
+                                            );
+                                        })}
+                                    </CustomSelect>
+                                    <CustomInput
+                                        type='text'
+                                        className='input-item'
+                                        value={mmSearchQuery || ''}
+                                        onChange={(e) => onChangeMmSearchQuery(e)}
+                                        disabled={!mmSearchCondition}
+                                    ></CustomInput>
+                                </ConditionWrapper>
+                            </ConditionContainer>
+                        </FlexGroup>
                         <RadioContainer>
                             <div className='title'><span className='highlight'>{MATCHED_CODE_TYPES?.find(r => r.value === (matchedCode))?.name || '[M] 출고옵션코드'}</span>를 기준으로 매칭된 관리상품정보를 가져옵니다.</div>
                             <FlexGroup style={{ marginTop: '10px' }}>
@@ -393,27 +443,6 @@ export default function ConditionFieldComponent({
                                                 value={r.value}
                                                 onChange={(e) => onChangeMatchedCode(e)}
                                                 checked={r.value === matchedCode}
-                                            ></input>
-                                            <span className='label'>
-                                                {r.name}
-                                            </span>
-                                        </label>
-                                    );
-                                })}
-                            </FlexGroup>
-                        </RadioContainer>
-                        <RadioContainer>
-                            <div className='title'>재고반영 여부</div>
-                            <FlexGroup style={{ marginTop: '10px' }}>
-                                {STOCK_REFLECT_YN_TYPES?.map(r => {
-                                    return (
-                                        <label className='wrapper' key={r.value}>
-                                            <input
-                                                type='radio'
-                                                className='radio-item'
-                                                value={r.value}
-                                                onChange={(e) => onChangeStockReflectYn(e)}
-                                                checked={r.value === stockReflectYn}
                                             ></input>
                                             <span className='label'>
                                                 {r.name}
@@ -449,26 +478,12 @@ export default function ConditionFieldComponent({
 }
 
 const PERIOD_TYPES = [
-    {
-        value: '',
-        name: '전체'
-    },
-    {
-        value: 'createdAt',
-        name: '주문수집일시'
-    },
-    {
-        value: 'channelOrderDate',
-        name: '채널주문일시'
-    },
-    {
-        value: 'salesAt',
-        name: '주문확정일시'
-    },
-    {
-        value: 'releaseAt',
-        name: '출고완료일시'
-    }
+    { value: '', name: '전체' },
+    { value: 'createdAt', name: '주문수집일시' },
+    { value: 'channelOrderDate', name: '채널주문일시' },
+    { value: 'salesAt', name: '주문확정일시' },
+    { value: 'releaseAt', name: '출고완료일시' },
+    { value: 'holdAt', name: '보류등록일시' },
 ]
 
 const MANAGEMENT_PRODUCT_TYPES = [
@@ -571,6 +586,54 @@ const DELIVERY_INFO_TYPES = [
     },
 ]
 
+const MANAGEMENT_MEMO_TYPES = [
+    {
+        value: '',
+        name: '전체'
+    },
+    {
+        value: 'managementMemo1',
+        name: '관리메모1'
+    },
+    {
+        value: 'managementMemo2',
+        name: '관리메모2'
+    },
+    {
+        value: 'managementMemo3',
+        name: '관리메모3'
+    },
+    {
+        value: 'managementMemo4',
+        name: '관리메모4'
+    },
+    {
+        value: 'managementMemo5',
+        name: '관리메모5'
+    },
+    {
+        value: 'managementMemo6',
+        name: '관리메모6'
+    },
+    {
+        value: 'managementMemo7',
+        name: '관리메모7'
+    },
+    {
+        value: 'managementMemo8',
+        name: '관리메모8'
+    },
+    {
+        value: 'managementMemo9',
+        name: '관리메모9'
+    },
+    {
+        value: 'managementMemo10',
+        name: '관리메모10'
+    },
+]
+
+
 const MATCHED_CODE_TYPES = [
     {
         value: 'optionCode',
@@ -580,19 +643,4 @@ const MATCHED_CODE_TYPES = [
         value: 'releaseOptionCode',
         name: '[M] 출고옵션코드'
     }
-]
-
-const STOCK_REFLECT_YN_TYPES = [
-    {
-        value: '',
-        name: '전체'
-    },
-    {
-        value: 'y',
-        name: '반영'
-    },
-    {
-        value: 'n',
-        name: '미반영'
-    },
 ]

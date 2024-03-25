@@ -151,6 +151,7 @@ export default function MainComponent(props) {
                         <FdConditionSearch 
                             exposurePeriodTypes={['','createdAt', 'channelOrderDate', 'salesAt', 'releaseAt']}
                             defaultPeriodType='releaseAt'
+                            viewStockReflectField={true}
                         />
                         <SortFieldComponent />
                         <ErpItemListComponent

@@ -46,6 +46,8 @@ export default function useErpItemPageHook(props) {
         router?.query?.riSearchQuery,
         router?.query?.diSearchCondition,
         router?.query?.diSearchQuery,
+        router?.query?.mmSearchCondition,
+        router?.query?.mmSearchQuery,
         router?.query?.size,
         router?.query?.matchedCode,
         router?.query?.page,
@@ -77,6 +79,8 @@ export default function useErpItemPageHook(props) {
         router?.query?.riSearchQuery,
         router?.query?.diSearchCondition,
         router?.query?.diSearchQuery,
+        router?.query?.mmSearchCondition,
+        router?.query?.mmSearchQuery,
         router?.query?.size,
         router?.query?.matchedCode,
     ]);
@@ -101,6 +105,8 @@ export default function useErpItemPageHook(props) {
             riSearchQuery: router?.query?.riSearchQuery,
             diSearchCondition: router?.query?.diSearchCondition,
             diSearchQuery: router?.query?.diSearchQuery,
+            mmSearchCondition: router?.query?.mmSearchCondition,
+            mmSearchQuery: router?.query?.mmSearchQuery,
             matchedCode: router?.query?.matchedCode || 'releaseOptionCode'
         }
 
@@ -153,6 +159,8 @@ export default function useErpItemPageHook(props) {
             riSearchQuery: router?.query?.riSearchQuery,
             diSearchCondition: router?.query?.diSearchCondition,
             diSearchQuery: router?.query?.diSearchQuery,
+            mmSearchCondition: router?.query?.mmSearchCondition,
+            mmSearchQuery: router?.query?.mmSearchQuery,
             page: router?.query?.page || 1,
             size: router?.query?.size || 50,
             sort: router?.query?.sort?.split(',') || 'salesAt_asc',

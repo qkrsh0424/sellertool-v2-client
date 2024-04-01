@@ -14,6 +14,7 @@ import { useSellertoolDatas } from "../../../../hooks/sellertool-datas";
 import { useApiHook } from "./hooks/useApiHook";
 import { useEffect, useState } from "react";
 import FdConditionSearch from "../fragments/FdConditionSearch/FdConditionSearch";
+import { FdSortTypes } from "../fragments/FdSortTypes/FdSortTypes";
 
 export default function MainComponent(props) {
     const sellertoolDatas = useSellertoolDatas();
@@ -73,7 +74,7 @@ export default function MainComponent(props) {
         async function fetchProductOptionPackageList() {
             const productOptionIds = Array.from(new Set(erpItemPage?.content?.filter(r => r.packageYn === 'y').map(r => r.productOptionId)));
 
-            if(!productOptionIds || productOptionIds?.length <= 0){
+            if (!productOptionIds || productOptionIds?.length <= 0) {
                 return;
             }
 
@@ -112,11 +113,14 @@ export default function MainComponent(props) {
                             favoriteViewHeaderIdsForErpc={sellertoolDatas?.favoriteViewHeaderIdsForErpc}
                             onActionSelectOrderHeaderId={(headerId) => sellertoolDatas._onSetSalesHeaderIdForErpc(headerId)}
                         />
-                        <FdConditionSearch 
-                            exposurePeriodTypes={['','createdAt', 'channelOrderDate', 'salesAt']}
+                        <FdConditionSearch
+                            exposurePeriodTypes={['', 'createdAt', 'channelOrderDate', 'salesAt']}
                             defaultPeriodType='salesAt'
                         />
-                        <SortFieldComponent />
+                        <FdSortTypes
+                            isLoading={erpItemPagePending}
+                        />
+                        {/* <SortFieldComponent /> */}
                         <ErpItemListComponent
                             erpCollectionHeader={erpCollectionHeader}
                             erpItemPage={erpItemPage}

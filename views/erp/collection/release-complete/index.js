@@ -15,6 +15,7 @@ import { useSellertoolDatas } from "../../../../hooks/sellertool-datas";
 import { useApiHook } from "./hooks/useApiHook";
 import { useEffect, useState } from "react";
 import FdConditionSearch from "../fragments/FdConditionSearch/FdConditionSearch";
+import { FdSortTypes } from "../fragments/FdSortTypes/FdSortTypes";
 
 export default function MainComponent(props) {
     const sellertoolDatas = useSellertoolDatas();
@@ -153,7 +154,10 @@ export default function MainComponent(props) {
                             defaultPeriodType='releaseAt'
                             viewStockReflectField={true}
                         />
-                        <SortFieldComponent />
+                        <FdSortTypes 
+                            isLoading={erpItemPagePending}
+                        />
+                        {/* <SortFieldComponent /> */}
                         <ErpItemListComponent
                             erpCollectionHeader={erpCollectionHeader}
                             erpItemPage={erpItemPage}

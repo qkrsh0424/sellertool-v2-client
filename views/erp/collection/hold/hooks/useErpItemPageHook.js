@@ -4,6 +4,9 @@ import { useSelector } from "react-redux";
 import { erpItemDataConnect } from "../../../../../data_connect/erpItemDataConnect";
 import { getEndDate, getStartDate } from "../../../../../utils/dateFormatUtils";
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
+import { CustomURIEncoderUtils } from "../../../../../utils/CustomURIEncoderUtils";
+
+const customURIEncoderUtils = CustomURIEncoderUtils();
 
 export default function useErpItemPageHook(props) {
     const router = useRouter();
@@ -47,6 +50,7 @@ export default function useErpItemPageHook(props) {
         router?.query?.diSearchQuery,
         router?.query?.mmSearchCondition,
         router?.query?.mmSearchQuery,
+        router?.query?.sortTypes,
         router?.query?.size,
         router?.query?.matchedCode,
         router?.query?.page,
@@ -163,7 +167,8 @@ export default function useErpItemPageHook(props) {
             page: router?.query?.page || 1,
             size: router?.query?.size || 50,
             sort: router?.query?.sort?.split(',') || 'holdAt_asc',
-            matchedCode: router?.query?.matchedCode || 'releaseOptionCode'
+            matchedCode: router?.query?.matchedCode || 'releaseOptionCode',
+            sortTypes: router?.query?.sortTypes || customURIEncoderUtils.encodeJSONList(['HOLD_AT$ASC']),
         }
 
         await erpItemDataConnect().searchSlice(params, headers)

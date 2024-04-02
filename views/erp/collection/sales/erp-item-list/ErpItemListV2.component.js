@@ -18,6 +18,60 @@ import { ClipboardUtils } from "../../../../../utils/ClipboardUtils";
 
 const base64Utils = Base64Utils();
 
+function getViewErpItemContent(erpItemList, viewOptions, productOptionPackageInfoList, inventoryStocks, erpItemSameReceiverHints) {
+    return erpItemList?.filter(item => {
+        let inventoryStock = inventoryStocks?.find(r => r.productOptionId === item?.productOptionId);
+        let isPackaged = item?.packageYn === 'y' ? true : false;
+        let isOutOfStock = !isPackaged && inventoryStock && inventoryStock?.stockUnit <= 0;
+        const sameReceiverHint = base64Utils.encodeBase64(`${item?.receiver}${item?.receiverContact1}${item?.destination}${item?.destinationDetail}`);
+        let hasSameReceiver = erpItemSameReceiverHints?.find(hint => hint.sameReceiverHint === sameReceiverHint)?.count > 1 ? true : false;
+        let stockOptionTypeBool = true;
+        let receiverOptionTypeBool = true;
+
+        if (isPackaged) {
+            let childOptionList = productOptionPackageInfoList?.filter(r => r.parentProductOptionId === item?.productOptionId);
+            for (let i = 0; i < childOptionList?.length; i++) {
+                if ((childOptionList[i].unit * item?.unit) > childOptionList[i]?.stockUnit) {
+                    isOutOfStock = true;
+                    break;
+                }
+            }
+        }
+
+        switch (viewOptions?.stockOptionType) {
+            case 'EXIST':
+                if (isOutOfStock) {
+                    stockOptionTypeBool = false;
+                }
+                break;
+            case 'NOT_EXIST':
+                if (!isOutOfStock) {
+                    stockOptionTypeBool = false
+                }
+                break;
+        }
+
+        switch (viewOptions?.receiverOptionType) {
+            case 'SINGLE':
+                if (hasSameReceiver) {
+                    receiverOptionTypeBool = false;
+                }
+                break;
+            case 'MULTI':
+                if (!hasSameReceiver) {
+                    receiverOptionTypeBool = false;
+                }
+                break;
+        }
+
+        if (!stockOptionTypeBool || !receiverOptionTypeBool) {
+            return false;
+        }
+
+        return true;
+    })
+}
+
 export default function ErpItemListComponent({
     erpCollectionHeader,
     erpItemPage,
@@ -25,6 +79,7 @@ export default function ErpItemListComponent({
     inventoryStocks,
     erpItemSameReceiverHints,
     productOptionPackageInfoList,
+    viewOptions,
 
     onSelectErpItem,
     onSelectAllErpItems,
@@ -126,6 +181,8 @@ export default function ErpItemListComponent({
         );
     }
 
+    const erpItemContentWithViewOptions = getViewErpItemContent(erpItemPage?.content, viewOptions, productOptionPackageInfoList, inventoryStocks, erpItemSameReceiverHints);
+
     return (
         <>
             <PinButtonBox>
@@ -156,12 +213,12 @@ export default function ErpItemListComponent({
                         <CustomVirtualTable
                             ref={virtuosoScrollRef}
                             height={500}
-                            data={erpItemPage?.content}
+                            data={erpItemContentWithViewOptions}
                             THeadRow={
                                 () => (
                                     <TableHeaderRow
                                         header={erpCollectionHeader}
-                                        erpItems={erpItemPage?.content}
+                                        erpItems={erpItemContentWithViewOptions}
                                         selectedErpItems={selectedErpItems}
                                         onSelectClearAllErpItemsInPage={onSelectClearAllErpItemsInPage}
                                         onSelectAllErpItems={onSelectAllErpItems}

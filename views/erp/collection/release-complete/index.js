@@ -9,13 +9,13 @@ import useErpItemSameReceiverHintsHook from "./hooks/useErpItemSameReceiverHints
 import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
 import useSelectedErpItemsHook from "./hooks/useSelectedErpItemsHook";
 import useWaybillRegistrationHook from "./hooks/useWaybillRegistrationHook";
-import { Container } from "./index.styled";
-import SortFieldComponent from "./sort-field/SortField.component";
+import { Container, ViewOptionsContainer } from "./index.styled";
 import { useSellertoolDatas } from "../../../../hooks/sellertool-datas";
 import { useApiHook } from "./hooks/useApiHook";
 import { useEffect, useState } from "react";
 import FdConditionSearch from "../fragments/FdConditionSearch/FdConditionSearch";
 import { FdSortTypes } from "../fragments/FdSortTypes/FdSortTypes";
+import CustomBlockButton from "../../../../components/buttons/block-button/v1/CustomBlockButton";
 
 export default function MainComponent(props) {
     const sellertoolDatas = useSellertoolDatas();
@@ -71,6 +71,11 @@ export default function MainComponent(props) {
         isLoading: true
     });
 
+    const [viewOptions, setViewOptions] = useState({
+        stockOptionType: 'ALL',
+        receiverOptionType: 'ALL'
+    })
+
     useEffect(() => {
         if (!erpItemPage?.content || !sellertoolDatas?.wsId) {
             return;
@@ -79,7 +84,7 @@ export default function MainComponent(props) {
         async function fetchProductOptionPackageList() {
             const productOptionIds = Array.from(new Set(erpItemPage?.content?.filter(r => r.packageYn === 'y').map(r => r.productOptionId)));
 
-            if(!productOptionIds || productOptionIds?.length <= 0){
+            if (!productOptionIds || productOptionIds?.length <= 0) {
                 return;
             }
 
@@ -135,6 +140,21 @@ export default function MainComponent(props) {
         });
     }
 
+    const handleChangeViewOptions = (type, value) => {
+        switch (type) {
+            case 'stockOption':
+                setViewOptions(prev => {
+                    return { ...prev, stockOptionType: value }
+                })
+                break;
+            case 'receiverOption':
+                setViewOptions(prev => {
+                    return { ...prev, receiverOptionType: value }
+                })
+                break;
+        }
+    }
+    
     return (
         <>
             <Container>
@@ -149,15 +169,73 @@ export default function MainComponent(props) {
                             favoriteViewHeaderIdsForErpc={sellertoolDatas?.favoriteViewHeaderIdsForErpc}
                             onActionSelectOrderHeaderId={(headerId) => sellertoolDatas._onSetReleaseCompleteHeaderIdForErpc(headerId)}
                         />
-                        <FdConditionSearch 
-                            exposurePeriodTypes={['','createdAt', 'channelOrderDate', 'salesAt', 'releaseAt']}
+                        <FdConditionSearch
+                            exposurePeriodTypes={['', 'createdAt', 'channelOrderDate', 'salesAt', 'releaseAt']}
                             defaultPeriodType='releaseAt'
                             viewStockReflectField={true}
                         />
-                        <FdSortTypes 
+                        <FdSortTypes
                             isLoading={erpItemPagePending}
                         />
-                        {/* <SortFieldComponent /> */}
+                        <ViewOptionsContainer>
+                            <div className='wrapper'>
+                                <h3 className='title'>보기옵션</h3>
+                                <div className='gridWrapper'>
+                                    <section className='mgl-flex mgl-flex-alignItems-center mgl-flex-gap-10'>
+                                        <label>재고:</label>
+                                        <div className='mgl-flex'>
+                                            <CustomBlockButton
+                                                type='button'
+                                                onClick={() => handleChangeViewOptions('stockOption', 'ALL')}
+                                                className={`${viewOptions?.stockOptionType === 'ALL' ? 'active' : ''}`}
+                                            >
+                                                전체
+                                            </CustomBlockButton>
+                                            <CustomBlockButton
+                                                type='button'
+                                                onClick={() => handleChangeViewOptions('stockOption', 'EXIST')}
+                                                className={`${viewOptions?.stockOptionType === 'EXIST' ? 'active' : ''}`}
+                                            >
+                                                있음
+                                            </CustomBlockButton>
+                                            <CustomBlockButton
+                                                type='button'
+                                                onClick={() => handleChangeViewOptions('stockOption', 'NOT_EXIST')}
+                                                className={`${viewOptions?.stockOptionType === 'NOT_EXIST' ? 'active' : ''}`}
+                                            >
+                                                없음
+                                            </CustomBlockButton>
+                                        </div>
+                                    </section>
+                                    <section className='mgl-flex mgl-flex-alignItems-center mgl-flex-gap-10'>
+                                        <label>수취인:</label>
+                                        <div className='mgl-flex'>
+                                            <CustomBlockButton
+                                                type='button'
+                                                onClick={() => handleChangeViewOptions('receiverOption', 'ALL')}
+                                                className={`${viewOptions?.receiverOptionType === 'ALL' ? 'active' : ''}`}
+                                            >
+                                                전체
+                                            </CustomBlockButton>
+                                            <CustomBlockButton
+                                                type='button'
+                                                onClick={() => handleChangeViewOptions('receiverOption', 'SINGLE')}
+                                                className={`${viewOptions?.receiverOptionType === 'SINGLE' ? 'active' : ''}`}
+                                            >
+                                                단일주문
+                                            </CustomBlockButton>
+                                            <CustomBlockButton
+                                                type='button'
+                                                onClick={() => handleChangeViewOptions('receiverOption', 'MULTI')}
+                                                className={`${viewOptions?.receiverOptionType === 'MULTI' ? 'active' : ''}`}
+                                            >
+                                                복수주문
+                                            </CustomBlockButton>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </ViewOptionsContainer>
                         <ErpItemListComponent
                             erpCollectionHeader={erpCollectionHeader}
                             erpItemPage={erpItemPage}
@@ -165,6 +243,7 @@ export default function MainComponent(props) {
                             inventoryStocks={inventoryStocks}
                             erpItemSameReceiverHints={erpItemSameReceiverHints}
                             productOptionPackageInfoList={productOptionPackageInfoList?.content || []}
+                            viewOptions={viewOptions}
 
                             onSelectErpItem={onSelectErpItem}
                             onSelectAllErpItems={onSelectAllErpItems}

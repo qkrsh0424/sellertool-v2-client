@@ -5,7 +5,43 @@ import withMainApiCsrfWrapper from "../utils/withMainApiCsrfWrapper";
 
 const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress
 
-const erpItemDataConnect = () => {
+
+export const ErpItemDataConnect = {
+    baseErpCollectionPage: baseErpCollectionPage
+}
+
+function baseErpCollectionPage() {
+    const BASE_URL = `${API_ADDRESS}/page-api/erpc/v1/erp-items`;
+
+    return {
+        count: async function ({ params, headers }) {
+            return await axiosAuthInterceptor.get(`${BASE_URL}/count`, {
+                headers: headers,
+                params: params,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN',
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                }
+            })
+        },
+        searchSlice: async function ({ params, headers }) {
+            return await axiosAuthInterceptor.get(`${BASE_URL}/slice`, {
+                headers: headers,
+                params: params,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN',
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                }
+            })
+        },
+    }
+}
+
+export const erpItemDataConnect = () => {
     return {
         /**
          * 
@@ -450,8 +486,4 @@ const erpItemDataConnect = () => {
             })
         }
     }
-}
-
-export {
-    erpItemDataConnect
 }

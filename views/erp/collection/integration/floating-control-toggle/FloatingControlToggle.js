@@ -13,14 +13,14 @@ import { Container } from "./styles/FloatingControlBar.styled";
 import { ProductListModalComponent } from "../../fragments/product-list-modal";
 import { MdBulkUpdateErpItems } from "../../fragments/MdBulkUpdateErpItems/v1";
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
+import { useSelectedErpItemListActionsHook, useSelectedErpItemListValueHook } from "../contexts/SelectedErpItemListProvider";
+import { useApiHook } from "../hooks/useApiHook";
+import { useRouter } from "next/router";
+import { useErpItemActionsHook, useErpItemValueHook } from "../contexts/ErpItemProvider";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
-    selectedErpItems,
     inventoryStocks,
-
-    onActionClearAllSelectedItems,
-    onActionClearSelectedItem,
 
     onSubmitUpdateErpItems,
     onSubmitDeleteErpItems,
@@ -30,9 +30,18 @@ export default function FloatingControlToggle({
     onSubmitStockRelease,
     onSubmitCancelStockRelease,
     onSubmitDownloadSampleExcelForWaybillRegistration,
-    onSubmitUploadWaybillForm
+    onSubmitUploadWaybillForm,
+    onReqCountErpItems
 }) {
+    const router = useRouter();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
+
+    const apiHook = useApiHook();
+    const erpItemValueHook = useErpItemValueHook();
+    const erpItemActionsHook = useErpItemActionsHook();
+    const selectedErpItemListValueHook = useSelectedErpItemListValueHook();
+    const selectedErpItemListActionsHook = useSelectedErpItemListActionsHook();
+
     const [controlDrawerOpen, setControlDrawerOpen] = useState(false);
     const [editErpItemsModalOpen, setEditErpItemsModalOpen] = useState(false);
     const [deleteErpItemsConfirmModalOpen, setDeleteErpItemsConfirmModalOpen] = useState(false);
@@ -50,25 +59,25 @@ export default function FloatingControlToggle({
 
     useEffect(() => {
         return () => {
-            handleToggleControlDrawerOpen(false);
-            handleToggleEditErpItemModalOpen(false);
-            handleToggleDeleteErpItemsConfirmModalOpen(false);
-            handleToggleChangeStatusToSalesModalOpen(false);
-            handleToggleExcelDownloadModalOpen(false);
-            handleToggleBackdropOpen(false);
-            handleToggleCopyCreateErpItemsModalOpen(false);
-            handleToggleViewSelectedModalOpen(false);
+            toggleControlDrawerOpen(false);
+            toggleEditErpItemModalOpen(false);
+            toggleDeleteErpItemsConfirmModalOpen(false);
+            toggleChangeStatusToSalesModalOpen(false);
+            toggleExcelDownloadModalOpen(false);
+            toggleBackdropOpen(false);
+            toggleCopyCreateErpItemsModalOpen(false);
+            toggleViewSelectedModalOpen(false);
             setBackdropOpen(false);
         };
     }, []);
 
-    const handleToggleControlDrawerOpen = (setOpen) => {
+    const toggleControlDrawerOpen = (setOpen) => {
         setControlDrawerOpen(setOpen);
     }
 
-    const handleToggleEditErpItemModalOpen = (setOpen) => {
+    const toggleEditErpItemModalOpen = (setOpen) => {
         if (setOpen) {
-            if (selectedErpItems?.length > 200) {
+            if (selectedErpItemListValueHook?.length > 200) {
                 alert('일괄 수정은 한번에 최대 200개 까지만 가능합니다.');
                 return;
             }
@@ -76,11 +85,11 @@ export default function FloatingControlToggle({
         setEditErpItemsModalOpen(setOpen)
     }
 
-    const handleToggleDeleteErpItemsConfirmModalOpen = (setOpen) => {
+    const toggleDeleteErpItemsConfirmModalOpen = (setOpen) => {
         if (setOpen) {
             let stockReflectedItems = [];
 
-            selectedErpItems?.forEach(r => {
+            selectedErpItemListValueHook?.forEach(r => {
                 if (r.stockReflectYn === 'y') {
                     stockReflectedItems.push(r);
                 }
@@ -95,11 +104,11 @@ export default function FloatingControlToggle({
         setDeleteErpItemsConfirmModalOpen(setOpen);
     }
 
-    const handleToggleChangeStatusToSalesModalOpen = (setOpen) => {
+    const toggleChangeStatusToSalesModalOpen = (setOpen) => {
         if (setOpen) {
             let stockReflectedItems = [];
 
-            selectedErpItems?.forEach(r => {
+            selectedErpItemListValueHook?.forEach(r => {
                 if (r.stockReflectYn === 'y') {
                     stockReflectedItems.push(r);
                 }
@@ -113,28 +122,28 @@ export default function FloatingControlToggle({
         setChangeStatusToSalesModalOpen(setOpen);
     }
 
-    const handleToggleChangeStatusToHoldModalOpen = (setOpen) => {
+    const toggleChangeStatusToHoldModalOpen = (setOpen) => {
         setChangeStatusToHoldModalOpen(setOpen);
     }
 
-    const handleToggleExcelDownloadModalOpen = (setOpen) => {
+    const toggleExcelDownloadModalOpen = (setOpen) => {
         setExcelDownloadModalOpen(setOpen);
     }
 
-    const handleToggleProductListModalOpen = (setOpen) => {
+    const toggleProductListModalOpen = (setOpen) => {
         setProductListModalOpen(setOpen);
     }
 
-    const handleToggleBackdropOpen = (setOpen) => {
+    const toggleBackdropOpen = (setOpen) => {
         setBackdropOpen(setOpen);
     }
 
-    const handleToggleStockReleaseModalOpen = (setOpen) => {
+    const toggleStockReleaseModalOpen = (setOpen) => {
         if (setOpen) {
             let stockReflectedItems = [];
             let notSetReleaseOptionCodeItems = [];
 
-            selectedErpItems?.forEach(r => {
+            selectedErpItemListValueHook?.forEach(r => {
                 if (r.stockReflectYn === 'y') {
                     stockReflectedItems.push(r);
                 }
@@ -157,11 +166,11 @@ export default function FloatingControlToggle({
         setStockReleaseModalOpen(setOpen);
     }
 
-    const handleToggleCancelStockReleaseModalOpen = (setOpen) => {
+    const toggleCancelStockReleaseModalOpen = (setOpen) => {
         if (setOpen) {
             let stockReflectNItems = [];
 
-            selectedErpItems?.forEach(r => {
+            selectedErpItemListValueHook?.forEach(r => {
                 if (r.stockReflectYn === 'n') {
                     stockReflectNItems.push(r);
                 }
@@ -175,19 +184,19 @@ export default function FloatingControlToggle({
         setCancelStockReleaseModalOpen(setOpen);
     }
 
-    const handleToggleCopyCreateErpItemsModalOpen = (setOpen) => {
+    const toggleCopyCreateErpItemsModalOpen = (setOpen) => {
         if (setOpen) {
-            if (!selectedErpItems || selectedErpItems?.length < 1) {
+            if (!selectedErpItemListValueHook || selectedErpItemListValueHook?.length < 1) {
                 alert('데이터를 먼저 선택해 주세요.');
                 return;
-            } else if (selectedErpItems?.length > 10) {
+            } else if (selectedErpItemListValueHook?.length > 10) {
                 alert('한번에 복사 생성 가능한 최대 개수는 10개 입니다.');
                 return;
             }
 
             let stockReflectedItems = [];
 
-            selectedErpItems?.forEach(r => {
+            selectedErpItemListValueHook?.forEach(r => {
                 if (r.stockReflectYn === 'y') {
                     stockReflectedItems.push(r);
                 }
@@ -201,139 +210,216 @@ export default function FloatingControlToggle({
         setCopyCreateErpItemsModalOpen(setOpen);
     }
 
-    const handleToggleViewSelectedModalOpen = (setOpen) => {
+    const toggleViewSelectedModalOpen = (setOpen) => {
         setViewSelectedModalOpen(setOpen)
     }
 
-    const handleToggleWaybillRegistrationModalOpen = (setOpen) => {
+    const toggleWaybillRegistrationModalOpen = (setOpen) => {
         setWaybillRegistrationModalOpen(setOpen);
     }
 
-    const handleSubmitUpdateErpItems = async (body) => {
-        handleToggleBackdropOpen(true)
-        await onSubmitUpdateErpItems(body, () => {
-            handleToggleEditErpItemModalOpen(false);
-            handleToggleControlDrawerOpen(false);
-            onActionClearAllSelectedItems();
-            customToast.success(`${body?.length}건이 수정되었습니다.`, {
-                ...defaultOptions
-            })
-        })
-        handleToggleBackdropOpen(false);
-    }
-
-    const handleSubmitDeleteErpItems = async () => {
-        handleToggleBackdropOpen(true)
-        let body = {
-            ids: selectedErpItems?.map(r => r.id)
-        }
-        await onSubmitDeleteErpItems(body, () => {
-            handleToggleDeleteErpItemsConfirmModalOpen(false);
-            handleToggleControlDrawerOpen(false);
-            onActionClearAllSelectedItems();
-        })
-        handleToggleBackdropOpen(false);
-    }
-
-    const handleSubmitChangeStatusToSales = async () => {
-        handleToggleBackdropOpen(true)
-        let body = {
-            ids: selectedErpItems?.map(r => r.id),
-            initializeFlag: false
-        }
-        await onSubmitChangeStatusToSales(body, () => {
-            handleToggleChangeStatusToSalesModalOpen(false);
-            handleToggleControlDrawerOpen(false);
-            onActionClearAllSelectedItems();
-        })
-        handleToggleBackdropOpen(false);
-    }
-
-    const handleSubmitChangeStatusToHold = async () => {
-        handleToggleBackdropOpen(true)
-        let body = {
-            ids: selectedErpItems?.map(r => r.id),
-            initializeFlag: true
-        }
-        await onSubmitChangeStatusToHold(body, () => {
-            handleToggleChangeStatusToHoldModalOpen(false);
-            handleToggleControlDrawerOpen(false);
-            onActionClearAllSelectedItems();
-        })
-        handleToggleBackdropOpen(false);
-    }
-
-    const handleSubmitCopyCreateErpItems = async () => {
-        handleToggleBackdropOpen(true)
-        let body = {
-            erpItemIds: selectedErpItems?.map(r => r.id)
-        }
-
-        await onSubmitCopyCreateErpItems(body, () => {
-            handleToggleCopyCreateErpItemsModalOpen(false);
-            handleToggleControlDrawerOpen(false);
-            onActionClearAllSelectedItems();
-        })
-        handleToggleBackdropOpen(false);
-    }
-
     const handleClearAllSelectedItems = () => {
-        onActionClearAllSelectedItems();
+        selectedErpItemListActionsHook.onSet([]);
     }
 
     const handleClearSelectedItem = (erpItemId) => {
-        onActionClearSelectedItem(erpItemId);
+        selectedErpItemListActionsHook.onSet([...selectedErpItemListValueHook].filter(r => r.id !== erpItemId));
+    }
+    
+    const handleSubmitUpdateErpItems = async (body) => {
+        toggleBackdropOpen(true)
+
+        let headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        const updateResult = await apiHook.reqUpdateErpItemList({ body, headers });
+
+        if (updateResult?.content) {
+            const updateIds = [...updateResult?.content];
+
+            const fetchResult = await apiHook.reqFetchErpItemListByIds({
+                body: {
+                    ids: updateIds,
+                    matchedCode: router?.query?.matchedCode
+                },
+                headers: headers
+            })
+
+            if (fetchResult?.content) {
+                let newErpItemContent = _.cloneDeep(erpItemValueHook?.content);
+                let newSelectedErpItemList = _.cloneDeep(selectedErpItemListValueHook);
+
+                newErpItemContent.content = newErpItemContent?.content?.map(erpItem => {
+                    let resultErpItem = fetchResult?.content?.find(r => r.id === erpItem?.id);
+                    if (resultErpItem) {
+                        return { ...resultErpItem };
+                    } else { return { ...erpItem } }
+                })
+
+                newSelectedErpItemList = newSelectedErpItemList?.map(erpItem => {
+                    let resultErpItem = fetchResult?.content?.find(r => r.id === erpItem?.id);
+                    if (resultErpItem) {
+                        return { ...resultErpItem };
+                    } else { return { ...erpItem } }
+                })
+
+                erpItemActionsHook.content.onSet(newErpItemContent);
+                selectedErpItemListActionsHook.onSet(newSelectedErpItemList);
+
+                toggleEditErpItemModalOpen(false);
+                toggleControlDrawerOpen(false);
+                customToast.success(`${body?.length}건이 수정되었습니다.`, {
+                    ...defaultOptions
+                })
+            }
+        }
+        toggleBackdropOpen(false);
+    }
+
+    const handleSubmitDeleteErpItems = async () => {
+        toggleBackdropOpen(true);
+
+        let headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        let body = {
+            ids: selectedErpItemListValueHook?.map(r => r.id)
+        }
+
+        const deleteResult = await apiHook.reqDeleteErpItemList({ body, headers });
+
+        if (deleteResult?.content) {
+            const fetchIds = [...deleteResult?.content];
+            let newErpItemContent = _.cloneDeep(erpItemValueHook?.content);
+            let newSelectedErpItemList = _.cloneDeep(selectedErpItemListValueHook);
+
+            newErpItemContent.content = newErpItemContent?.content?.filter(erpItem => {
+                if (fetchIds?.includes(erpItem?.id)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            })
+
+            newSelectedErpItemList = newSelectedErpItemList?.filter(erpItem => {
+                if (fetchIds?.includes(erpItem?.id)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            })
+
+            erpItemActionsHook.content.onSet(newErpItemContent);
+            selectedErpItemListActionsHook.onSet(newSelectedErpItemList);
+
+            
+            onReqCountErpItems();
+            toggleDeleteErpItemsConfirmModalOpen(false);
+            toggleControlDrawerOpen(false);
+            handleClearAllSelectedItems();
+        }
+
+        toggleBackdropOpen(false);
+    }
+
+    // TODO : 새로운 버전 적용하기
+    const handleSubmitChangeStatusToSales = async () => {
+        toggleBackdropOpen(true)
+        let body = {
+            ids: selectedErpItemListValueHook?.map(r => r.id),
+            initializeFlag: false
+        }
+        await onSubmitChangeStatusToSales(body, () => {
+            toggleChangeStatusToSalesModalOpen(false);
+            toggleControlDrawerOpen(false);
+            handleClearAllSelectedItems();
+        })
+        toggleBackdropOpen(false);
+    }
+
+    const handleSubmitChangeStatusToHold = async () => {
+        toggleBackdropOpen(true)
+        let body = {
+            ids: selectedErpItemListValueHook?.map(r => r.id),
+            initializeFlag: true
+        }
+        await onSubmitChangeStatusToHold(body, () => {
+            toggleChangeStatusToHoldModalOpen(false);
+            toggleControlDrawerOpen(false);
+            handleClearAllSelectedItems();
+        })
+        toggleBackdropOpen(false);
+    }
+
+    const handleSubmitCopyCreateErpItems = async () => {
+        toggleBackdropOpen(true)
+        let body = {
+            erpItemIds: selectedErpItemListValueHook?.map(r => r.id)
+        }
+
+        await onSubmitCopyCreateErpItems(body, () => {
+            toggleCopyCreateErpItemsModalOpen(false);
+            toggleControlDrawerOpen(false);
+            handleClearAllSelectedItems();
+        })
+        toggleBackdropOpen(false);
     }
 
     const handleSubmitStockRelease = async (memo) => {
-        handleToggleBackdropOpen(true);
+        toggleBackdropOpen(true);
         let body = {
-            erpItemIds: selectedErpItems?.map(r => r.id),
+            erpItemIds: selectedErpItemListValueHook?.map(r => r.id),
             memo: memo
         }
 
         await onSubmitStockRelease(body, () => {
-            handleToggleStockReleaseModalOpen(false);
-            handleToggleControlDrawerOpen(false);
-            onActionClearAllSelectedItems();
+            toggleStockReleaseModalOpen(false);
+            toggleControlDrawerOpen(false);
+            handleClearAllSelectedItems();
         });
-        handleToggleBackdropOpen(false);
+        toggleBackdropOpen(false);
     }
 
     const handleSubmitCancelStockRelease = async () => {
-        handleToggleBackdropOpen(true);
+        toggleBackdropOpen(true);
         let body = {
-            erpItemIds: selectedErpItems?.map(r => r.id),
+            erpItemIds: selectedErpItemListValueHook?.map(r => r.id),
         }
 
         await onSubmitCancelStockRelease(body, () => {
-            handleToggleCancelStockReleaseModalOpen(false);
-            handleToggleControlDrawerOpen(false);
-            onActionClearAllSelectedItems();
+            toggleCancelStockReleaseModalOpen(false);
+            toggleControlDrawerOpen(false);
+            handleClearAllSelectedItems();
         });
-        handleToggleBackdropOpen(false);
+        toggleBackdropOpen(false);
     }
 
     const handleSubmitDownloadSampleExcelForWaybillRegistration = async () => {
-        handleToggleBackdropOpen(true);
+        toggleBackdropOpen(true);
 
         await onSubmitDownloadSampleExcelForWaybillRegistration();
-        handleToggleBackdropOpen(false);
+        toggleBackdropOpen(false);
     }
 
     const handleSubmitUploadWaybillForm = async (formData, successCallback) => {
-        handleToggleBackdropOpen(true);
+        toggleBackdropOpen(true);
 
         formData.append('workspaceId', workspaceRedux?.workspaceInfo?.id);
-        formData.append('erpItemIds', selectedErpItems?.map(r => r.id));
+        formData.append('erpItemIds', selectedErpItemListValueHook?.map(r => r.id));
 
         await onSubmitUploadWaybillForm(formData, () => {
             successCallback();
-            handleToggleWaybillRegistrationModalOpen(false);
-            handleToggleControlDrawerOpen(false);
-            onActionClearAllSelectedItems();
+            toggleWaybillRegistrationModalOpen(false);
+            toggleControlDrawerOpen(false);
+            handleClearAllSelectedItems();
         })
-        handleToggleBackdropOpen(false);
+        toggleBackdropOpen(false);
+    }
+
+    if (selectedErpItemListValueHook?.length <= 0) {
+        return null;
     }
 
     return (
@@ -342,29 +428,29 @@ export default function FloatingControlToggle({
                 <SingleBlockButton
                     type='button'
                     className='floating-button-item'
-                    onClick={() => handleToggleControlDrawerOpen(true)}
+                    onClick={() => toggleControlDrawerOpen(true)}
                 >
-                    <span className='accent'>{selectedErpItems?.length || '0'}</span> 개 선택됨
+                    <span className='accent'>{selectedErpItemListValueHook?.length || '0'}</span> 개 선택됨
                 </SingleBlockButton>
             </Container>
 
             <FloatingControlBarModalComponent
                 open={controlDrawerOpen}
-                selectedErpItems={selectedErpItems}
+                selectedErpItems={selectedErpItemListValueHook}
 
-                onClose={() => handleToggleControlDrawerOpen(false)}
+                onClose={() => toggleControlDrawerOpen(false)}
 
-                onActionOpenEditErpItemsModal={() => handleToggleEditErpItemModalOpen(true)}
-                onActionOpenChangeStatusToSalesModal={() => handleToggleChangeStatusToSalesModalOpen(true)}
-                onActionOpenChangeStatusToHoldModal={() => handleToggleChangeStatusToHoldModalOpen(true)}
-                onActionOpenDeleteErpItemsConfirmModal={() => handleToggleDeleteErpItemsConfirmModalOpen(true)}
-                onActionOpenExcelDownloadModal={() => handleToggleExcelDownloadModalOpen(true)}
-                onActionOpenCopyCreateErpItemModal={() => handleToggleCopyCreateErpItemsModalOpen(true)}
-                onActionOpenViewSelectedModal={() => handleToggleViewSelectedModalOpen(true)}
-                onActionOpenProductListModal={() => handleToggleProductListModalOpen(true)}
-                onActionOpenStockReleaseModal={() => handleToggleStockReleaseModalOpen(true)}
-                onActionOpenCancelStockReleaseModal={() => handleToggleCancelStockReleaseModalOpen(true)}
-                onActionOpenWaybillRegistrationModal={() => handleToggleWaybillRegistrationModalOpen(true)}
+                onActionOpenEditErpItemsModal={() => toggleEditErpItemModalOpen(true)}
+                onActionOpenChangeStatusToSalesModal={() => toggleChangeStatusToSalesModalOpen(true)}
+                onActionOpenChangeStatusToHoldModal={() => toggleChangeStatusToHoldModalOpen(true)}
+                onActionOpenDeleteErpItemsConfirmModal={() => toggleDeleteErpItemsConfirmModalOpen(true)}
+                onActionOpenExcelDownloadModal={() => toggleExcelDownloadModalOpen(true)}
+                onActionOpenCopyCreateErpItemModal={() => toggleCopyCreateErpItemsModalOpen(true)}
+                onActionOpenViewSelectedModal={() => toggleViewSelectedModalOpen(true)}
+                onActionOpenProductListModal={() => toggleProductListModalOpen(true)}
+                onActionOpenStockReleaseModal={() => toggleStockReleaseModalOpen(true)}
+                onActionOpenCancelStockReleaseModal={() => toggleCancelStockReleaseModalOpen(true)}
+                onActionOpenWaybillRegistrationModal={() => toggleWaybillRegistrationModalOpen(true)}
 
                 onActionClearAllSelectedItems={handleClearAllSelectedItems}
             />
@@ -372,16 +458,16 @@ export default function FloatingControlToggle({
             {editErpItemsModalOpen &&
                 <MdBulkUpdateErpItems
                     open={editErpItemsModalOpen}
-                    onClose={() => handleToggleEditErpItemModalOpen(false)}
+                    onClose={() => toggleEditErpItemModalOpen(false)}
                     maxWidth={'xl'}
-                    selectedErpItems={selectedErpItems}
+                    selectedErpItems={selectedErpItemListValueHook}
                     onSubmitUpdateErpItems={handleSubmitUpdateErpItems}
                 />
             }
 
             <ConfirmModalComponentV2
                 open={deleteErpItemsConfirmModalOpen}
-                onClose={() => handleToggleDeleteErpItemsConfirmModalOpen(false)}
+                onClose={() => toggleDeleteErpItemsConfirmModalOpen(false)}
                 onConfirm={handleSubmitDeleteErpItems}
                 title={'삭제 확인메세지'}
                 message={'선택된 데이터를 영구 삭제 합니다.'}
@@ -392,7 +478,7 @@ export default function FloatingControlToggle({
 
             <ConfirmModalComponentV2
                 open={changeStatusToSalesModalOpen}
-                onClose={() => handleToggleChangeStatusToSalesModalOpen(false)}
+                onClose={() => toggleChangeStatusToSalesModalOpen(false)}
                 onConfirm={handleSubmitChangeStatusToSales}
                 title={'출고취소 확인메세지'}
                 message={'선택된 데이터를 출고취소 합니다.'}
@@ -400,7 +486,7 @@ export default function FloatingControlToggle({
 
             <ConfirmModalComponentV2
                 open={changeStatusToHoldModalOpen}
-                onClose={() => handleToggleChangeStatusToHoldModalOpen(false)}
+                onClose={() => toggleChangeStatusToHoldModalOpen(false)}
                 onConfirm={handleSubmitChangeStatusToHold}
                 title={'보류 데이터 전환'}
                 message={'선택된 데이터를 보류 데이터로 전환합니다.'}
@@ -411,21 +497,21 @@ export default function FloatingControlToggle({
 
             <CommonModalComponent
                 open={excelDownloadModalOpen}
-                onClose={() => handleToggleExcelDownloadModalOpen(false)}
+                onClose={() => toggleExcelDownloadModalOpen(false)}
                 maxWidth={'xl'}
             >
                 <ExcelDownloadModalComponent
                     erpCollectionHeader={erpCollectionHeader}
-                    selectedErpItems={selectedErpItems}
+                    selectedErpItems={selectedErpItemListValueHook}
                     inventoryStocks={inventoryStocks}
 
-                    onClose={() => handleToggleExcelDownloadModalOpen(false)}
+                    onClose={() => toggleExcelDownloadModalOpen(false)}
                 />
             </CommonModalComponent>
 
             <ConfirmModalComponentV2
                 open={copyCreateErpItemsModalOpen}
-                onClose={() => handleToggleCopyCreateErpItemsModalOpen(false)}
+                onClose={() => toggleCopyCreateErpItemsModalOpen(false)}
                 onConfirm={() => handleSubmitCopyCreateErpItems()}
                 message={
                     <>
@@ -437,13 +523,13 @@ export default function FloatingControlToggle({
 
             <CommonModalComponent
                 open={viewSelectedModalOpen}
-                onClose={() => handleToggleViewSelectedModalOpen(false)}
+                onClose={() => toggleViewSelectedModalOpen(false)}
                 maxWidth={'xl'}
             >
                 <ViewSelectedModalComponent
                     erpCollectionHeader={erpCollectionHeader}
-                    selectedErpItems={selectedErpItems}
-                    onClose={() => handleToggleViewSelectedModalOpen(false)}
+                    selectedErpItems={selectedErpItemListValueHook}
+                    onClose={() => toggleViewSelectedModalOpen(false)}
                     onActionClearSelectedItem={handleClearSelectedItem}
                 />
             </CommonModalComponent>
@@ -451,13 +537,13 @@ export default function FloatingControlToggle({
             {productListModalOpen &&
                 <CommonModalComponent
                     open={productListModalOpen}
-                    onClose={() => handleToggleProductListModalOpen(false)}
+                    onClose={() => toggleProductListModalOpen(false)}
                     maxWidth={'xs'}
                 >
                     <ProductListModalComponent
                         erpCollectionHeader={erpCollectionHeader}
-                        selectedErpItems={selectedErpItems}
-                        onClose={() => handleToggleProductListModalOpen(false)}
+                        selectedErpItems={selectedErpItemListValueHook}
+                        onClose={() => toggleProductListModalOpen(false)}
                     />
                 </CommonModalComponent>
             }
@@ -465,7 +551,7 @@ export default function FloatingControlToggle({
             {stockReleaseModalOpen &&
                 <StockReleaseModalComponent
                     open={stockReleaseModalOpen}
-                    onClose={() => handleToggleStockReleaseModalOpen(false)}
+                    onClose={() => toggleStockReleaseModalOpen(false)}
                     onConfirm={handleSubmitStockRelease}
                 />
             }
@@ -473,7 +559,7 @@ export default function FloatingControlToggle({
             {cancelStockReleaseModalOpen &&
                 <ConfirmModalComponentV2
                     open={cancelStockReleaseModalOpen}
-                    onClose={() => handleToggleCancelStockReleaseModalOpen(false)}
+                    onClose={() => toggleCancelStockReleaseModalOpen(false)}
                     onConfirm={handleSubmitCancelStockRelease}
                     message={
                         <div>선택된 데이터들의 재고반영을 취소 합니다.</div>
@@ -482,9 +568,9 @@ export default function FloatingControlToggle({
             }
 
             <WaybillRegistrationModalComponent
-                selectedErpItems={selectedErpItems}
+                selectedErpItems={selectedErpItemListValueHook}
                 open={waybillRegistrationModalOpen}
-                onClose={() => handleToggleWaybillRegistrationModalOpen(false)}
+                onClose={() => toggleWaybillRegistrationModalOpen(false)}
                 onSubmitDownloadSampleExcelForWaybillRegistration={handleSubmitDownloadSampleExcelForWaybillRegistration}
                 onSubmitUploadWaybillForm={handleSubmitUploadWaybillForm}
             />

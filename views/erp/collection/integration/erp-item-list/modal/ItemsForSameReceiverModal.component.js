@@ -8,6 +8,7 @@ import useInventoryStocksHook from "../../hooks/useInventoryStocksHook";
 import useErpItemsFormSameReceiverHook from "../hooks/useErpItemsForSameReceiverHook";
 import { Container, SubmitButtonContainer, TableFieldWrapper } from "../styles/ItemsForSameReceiverModal.styled";
 import ResizableTh from "../../../../../../components/table/th/v1/ResizableTh";
+import { useSelectedErpItemListActionsHook, useSelectedErpItemListValueHook } from "../../contexts/SelectedErpItemListProvider";
 
 function salesYnForTabType(tabType) {
     switch (tabType) {
@@ -56,8 +57,6 @@ const INIT_TAB_TYPE = 'release';
 export default function ItemsForSameReceiverModalComponent({
     targetSameReceiverHint,
     erpCollectionHeader,
-    selectedErpItems,
-    onSelectErpItem,
     onClose
 }) {
     const router = useRouter();
@@ -69,7 +68,29 @@ export default function ItemsForSameReceiverModalComponent({
         inventoryStocks
     } = useInventoryStocksHook(erpItems);
 
+    const selectedErpItemListValueHook = useSelectedErpItemListValueHook();
+    const selectedErpItemActionsHook = useSelectedErpItemListActionsHook();
+
     const [tabType, setTabType] = useState(INIT_TAB_TYPE);
+
+    const handleSelectErpItem = (item) => {
+        let data = selectedErpItemListValueHook?.find(r => r.id === item.id);
+
+        if (data) {
+            selectedErpItemActionsHook.onSet(selectedErpItemListValueHook?.filter(r => r.id !== data.id));
+        } else {
+            try {
+                if (selectedErpItemListValueHook?.length >= 5000) {
+                    throw new Error('최대 선택 가능한 개수는 5000개 입니다.');
+                }
+            } catch (err) {
+                alert(err.message);
+                return;
+            }
+
+            selectedErpItemActionsHook.onSet([...selectedErpItemListValueHook, item]);
+        }
+    }
 
     const handleChangeTabType = (type) => {
         setTabType(type);
@@ -95,8 +116,8 @@ export default function ItemsForSameReceiverModalComponent({
                 <TableField
                     erpItems={erpItems}
                     erpCollectionHeader={erpCollectionHeader}
-                    selectedErpItems={selectedErpItems}
-                    onSelectErpItem={onSelectErpItem}
+                    selectedErpItems={selectedErpItemListValueHook}
+                    onSelectErpItem={handleSelectErpItem}
                     inventoryStocks={inventoryStocks}
                     matchedCode={router?.query?.matchedCode}
 

@@ -16,6 +16,10 @@ import { TextDragableDancer } from "../../../../../components/tapdancer/v1";
 import { Base64Utils } from "../../../../../utils/base64Utils";
 import { ClipboardUtils } from "../../../../../utils/ClipboardUtils";
 import { useViewOptionsValueHook } from "../contexts/ViewOptionsProvider";
+import { useSelectedErpItemListActionsHook, useSelectedErpItemListValueHook } from "../contexts/SelectedErpItemListProvider";
+import { useErpItemActionsHook, useErpItemValueHook } from "../contexts/ErpItemProvider";
+import { useApiHook } from "../hooks/useApiHook";
+import { useSelector } from "react-redux";
 
 const base64Utils = Base64Utils();
 
@@ -75,27 +79,24 @@ function getViewErpItemContent(erpItemList, viewOptions, productOptionPackageInf
 
 export default function ErpItemListComponent({
     erpCollectionHeader,
-    erpItemPage,
-    selectedErpItems,
     inventoryStocks,
     erpItemSameReceiverHints,
     productOptionPackageInfoList,
-
-    onSelectErpItem,
-    onSelectAllErpItems,
-    onSelectClearAllErpItemsInPage,
-    onSelectClearAllErpItems,
-    erpItemPagePending,
-    onSubmitChangeOptionCode,
-    onSubmitChangeReleaseOptionCode,
 }) {
     const router = useRouter();
     const virtuosoScrollRef = useRef();
-    const editOptionCodeModalControl = useSearchOptionCodesModalControl();
-    const editReleaseOptionCodeModalControl = useSearchOptionCodesModalControl();
+    const workspaceRedux = useSelector(state => state?.workspaceRedux);
 
+    const apiHook = useApiHook();
+
+    const erpItemValueHook = useErpItemValueHook();
+    const erpItemActionsHook = useErpItemActionsHook();
+    const selectedErpItemListValueHook = useSelectedErpItemListValueHook();
+    const selectedErpItemActionsHook = useSelectedErpItemListActionsHook();
     const viewOptions = useViewOptionsValueHook();
 
+    const [editOptionCodeModalOpen, setEditOptionCodeModalOpen] = useState(false);
+    const [editReleaseOptionCodeModalOpen, setEditReleaseOptionCodeModalOpen] = useState(false);
     const [targetErpItem, setTargetErpItem] = useState(null);
     const [statusPin, setStatusPin] = useState(true);
 
@@ -108,55 +109,122 @@ export default function ErpItemListComponent({
         }
     }, [router?.query]);
 
-    const handleOpenEditOptionCodeModal = (e, erpItem) => {
-        e.stopPropagation();
-        setTargetErpItem(_.cloneDeep(erpItem));
-        editOptionCodeModalControl.toggleOpen(true);
-    }
-
-    const handleCloseEditOptionCodeModal = () => {
-        editOptionCodeModalControl.toggleOpen(false);
-        setTargetErpItem(null);
-    }
-
-    const handleOpenEditReleaseOptionCodeModal = (e, erpItem) => {
-        e.stopPropagation();
-        if (erpItem.stockReflectYn === 'y') {
-            alert('이미 재고에 반영된 데이터는 [M] 출고옵션코드를 변경할 수 없습니다.\n재고반영을 취소 후 변경해 주세요.');
-            return;
+    const toggleEditOptionCodeModalOpen = (erpItem) => {
+        if (erpItem) {
+            setTargetErpItem(_.cloneDeep(erpItem));
+            setEditOptionCodeModalOpen(true);
+        } else {
+            setTargetErpItem(null);
+            setEditOptionCodeModalOpen(false);
         }
-        setTargetErpItem(_.cloneDeep(erpItem));
-        editReleaseOptionCodeModalControl.toggleOpen(true);
-
     }
 
-    const handleCloseEditReleaseOptionCodeModal = () => {
-        editReleaseOptionCodeModalControl.toggleOpen(false);
-        setTargetErpItem(null);
+    const toggleEditReleaseOptionCodeModalOpen = (erpItem) => {
+        if (erpItem) {
+            setTargetErpItem(_.cloneDeep(erpItem));
+            setEditReleaseOptionCodeModalOpen(true);
+        } else {
+            setTargetErpItem(null);
+            setEditReleaseOptionCodeModalOpen(false);
+        }
     }
 
-    const handleSubmitEditOptionCode = (selectedOptionCode) => {
+    const handleSubmitEditOptionCode = async (selectedOptionCode) => {
+        let headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
+        }
+
         let body = {
             id: targetErpItem.id,
-            optionCode: selectedOptionCode
+            optionCode: selectedOptionCode,
+            matchedCode: router?.query?.matchedCode
         }
 
-        onSelectClearAllErpItems();
-        onSubmitChangeOptionCode(body, () => {
-            handleCloseEditOptionCodeModal();
-        })
+        const updateResult = await apiHook.reqChangeErpItem_OptionCode({ body, headers });
+
+        if (updateResult) {
+            const fetchResult = await apiHook.reqFetchErpItemListByIds({
+                body: {
+                    workspaceId: workspaceRedux?.workspaceInfo?.id,
+                    ids: [targetErpItem.id],
+                    matchedCode: router?.query?.matchedCode
+                }, headers
+            });
+
+            if (fetchResult) {
+                let resultContent = fetchResult?.content;
+                let newErpItemContent = _.cloneDeep(erpItemValueHook?.content);
+                let newSelectedErpItemList = _.cloneDeep(selectedErpItemListValueHook);
+
+                newErpItemContent.content = newErpItemContent?.content?.map(erpItem => {
+                    let resultErpItem = resultContent?.find(r => r.id === erpItem?.id);
+                    if (resultErpItem) {
+                        return { ...resultErpItem };
+                    } else { return { ...erpItem } }
+                })
+
+                newSelectedErpItemList = newSelectedErpItemList?.map(erpItem => {
+                    let resultErpItem = resultContent?.find(r => r.id === erpItem?.id);
+                    if (resultErpItem) {
+                        return { ...resultErpItem };
+                    } else { return { ...erpItem } }
+                })
+
+                erpItemActionsHook.content.onSet(newErpItemContent);
+                selectedErpItemActionsHook.onSet(newSelectedErpItemList);
+            }
+        }
+
+        toggleEditOptionCodeModalOpen(null);
     }
 
-    const handleSubmitEditReleaseOptionCode = (selectedOptionCode) => {
-        let body = {
-            id: targetErpItem.id,
-            releaseOptionCode: selectedOptionCode
+    const handleSubmitEditReleaseOptionCode = async (selectedOptionCode) => {
+        let headers = {
+            wsId: workspaceRedux?.workspaceInfo?.id
         }
 
-        onSelectClearAllErpItems();
-        onSubmitChangeReleaseOptionCode(body, () => {
-            handleCloseEditReleaseOptionCodeModal();
-        })
+        let body = {
+            id: targetErpItem.id,
+            releaseOptionCode: selectedOptionCode,
+            matchedCode: router?.query?.matchedCode
+        }
+
+        const updateResult = await apiHook.reqChangeErpItem_ReleaseOptionCode({ body, headers });
+
+        if (updateResult) {
+            const fetchResult = await apiHook.reqFetchErpItemListByIds({
+                body: {
+                    workspaceId: workspaceRedux?.workspaceInfo?.id,
+                    ids: [targetErpItem.id],
+                    matchedCode: router?.query?.matchedCode
+                }, headers
+            });
+
+            if (fetchResult) {
+                let resultContent = fetchResult?.content;
+                let newErpItemContent = _.cloneDeep(erpItemValueHook?.content);
+                let newSelectedErpItemList = _.cloneDeep(selectedErpItemListValueHook);
+
+                newErpItemContent.content = newErpItemContent?.content?.map(erpItem => {
+                    let resultErpItem = resultContent?.find(r => r.id === erpItem?.id);
+                    if (resultErpItem) {
+                        return { ...resultErpItem };
+                    } else { return { ...erpItem } }
+                })
+
+                newSelectedErpItemList = newSelectedErpItemList?.map(erpItem => {
+                    let resultErpItem = resultContent?.find(r => r.id === erpItem?.id);
+                    if (resultErpItem) {
+                        return { ...resultErpItem };
+                    } else { return { ...erpItem } }
+                })
+
+                erpItemActionsHook.content.onSet(newErpItemContent);
+                selectedErpItemActionsHook.onSet(newSelectedErpItemList);
+            }
+        }
+
+        toggleEditReleaseOptionCodeModalOpen(null);
     }
 
     const handleOpenItemsForSameReceiverModal = (e, sameReceiverHint) => {
@@ -185,7 +253,7 @@ export default function ErpItemListComponent({
         );
     }
 
-    const erpItemContentWithViewOptions = getViewErpItemContent(erpItemPage?.content, viewOptions, productOptionPackageInfoList, inventoryStocks, erpItemSameReceiverHints);
+    const erpItemContentWithViewOptions = getViewErpItemContent(erpItemValueHook?.content?.content, viewOptions, productOptionPackageInfoList, inventoryStocks, erpItemSameReceiverHints);
 
     return (
         <>
@@ -205,7 +273,7 @@ export default function ErpItemListComponent({
             </PinButtonBox>
             <TableFieldWrapper>
                 <div style={{ position: 'relative' }}>
-                    {erpItemPagePending &&
+                    {erpItemValueHook?.isLoading &&
                         <FieldLoadingV2
                             boxStyle={{
                                 borderRadius: '15px'
@@ -223,9 +291,6 @@ export default function ErpItemListComponent({
                                     <TableHeaderRow
                                         header={erpCollectionHeader}
                                         erpItems={erpItemContentWithViewOptions}
-                                        selectedErpItems={selectedErpItems}
-                                        onSelectClearAllErpItemsInPage={onSelectClearAllErpItemsInPage}
-                                        onSelectAllErpItems={onSelectAllErpItems}
                                         statusPin={statusPin}
                                         matchedCode={router?.query?.matchedCode}
                                     />
@@ -237,14 +302,12 @@ export default function ErpItemListComponent({
                                         virtuosoData={virtuosoData}
                                         productOptionPackageInfoList={productOptionPackageInfoList}
 
-                                        selectedErpItems={selectedErpItems}
                                         header={erpCollectionHeader}
-                                        onSelectErpItem={onSelectErpItem}
                                         inventoryStocks={inventoryStocks}
                                         statusPin={statusPin}
                                         erpItemSameReceiverHints={erpItemSameReceiverHints}
-                                        handleOpenEditOptionCodeModal={handleOpenEditOptionCodeModal}
-                                        handleOpenEditReleaseOptionCodeModal={handleOpenEditReleaseOptionCodeModal}
+                                        handleOpenEditOptionCodeModal={toggleEditOptionCodeModalOpen}
+                                        handleOpenEditReleaseOptionCodeModal={toggleEditReleaseOptionCodeModalOpen}
                                         handleOpenItemsForSameReceiverModal={handleOpenItemsForSameReceiverModal}
                                     />
                                 )
@@ -254,18 +317,18 @@ export default function ErpItemListComponent({
                 </div>
             </TableFieldWrapper>
 
-            {editOptionCodeModalControl.open &&
+            {editOptionCodeModalOpen &&
                 <CustomSearchOptionCodesModal
-                    open={editOptionCodeModalControl.open}
-                    onClose={handleCloseEditOptionCodeModal}
+                    open={editOptionCodeModalOpen}
+                    onClose={() => toggleEditOptionCodeModalOpen(null)}
                     onSelect={(result) => handleSubmitEditOptionCode(result)}
                 />
             }
 
-            {editReleaseOptionCodeModalControl.open &&
+            {editReleaseOptionCodeModalOpen &&
                 <CustomSearchOptionCodesModal
-                    open={editReleaseOptionCodeModalControl.open}
-                    onClose={handleCloseEditReleaseOptionCodeModal}
+                    open={editReleaseOptionCodeModalOpen}
+                    onClose={() => toggleEditReleaseOptionCodeModalOpen(null)}
                     onSelect={(result) => handleSubmitEditReleaseOptionCode(result)}
                 />
             }
@@ -279,8 +342,6 @@ export default function ErpItemListComponent({
                     <ItemsForSameReceiverModalComponent
                         targetSameReceiverHint={targetSameReceiverHint}
                         erpCollectionHeader={erpCollectionHeader}
-                        selectedErpItems={selectedErpItems}
-                        onSelectErpItem={onSelectErpItem}
                         onClose={handleCloseItemsForSameReceiverModal}
                     />
                 </CommonModalComponent>
@@ -303,12 +364,41 @@ const HIGHLIGHT_FIELDS = [
 function TableHeaderRow({
     header,
     erpItems,
-    selectedErpItems,
-    onSelectClearAllErpItemsInPage,
-    onSelectAllErpItems,
     statusPin,
     matchedCode
 }) {
+    const selectedErpItemListValueHook = useSelectedErpItemListValueHook();
+    const selectedErpItemListActionsHook = useSelectedErpItemListActionsHook();
+
+    const handleSelectAllSelectedErpItemListInPage = (items) => {
+        let originIds = selectedErpItemListValueHook?.map(r => r.id);
+        let newItems = _.cloneDeep(selectedErpItemListValueHook);
+
+        try {
+
+            items?.forEach(erpItem => {
+                if (originIds?.includes(erpItem.id)) {
+                    return;
+                }
+                if (newItems?.length >= 5000) {
+                    throw new Error('최대 선택 가능한 개수는 5000개 입니다.');
+                }
+                newItems.push(erpItem);
+            });
+        } catch (err) {
+            alert(err.message);
+            return;
+        } finally {
+            selectedErpItemListActionsHook.onSet(newItems);
+        }
+    }
+
+    const handleClearAllSelectedErpItemListInPage = (items) => {
+        selectedErpItemListActionsHook.onSet(
+            selectedErpItemListValueHook?.filter(selected => !items?.some(item => item.id === selected.id))
+        )
+    }
+
     return (
         <tr>
             <th
@@ -321,17 +411,17 @@ function TableHeaderRow({
                 className="fixed-header"
                 width={50}
             >
-                {erpItems?.every(r => selectedErpItems?.some(r2 => r2.id === r.id)) ?
+                {erpItems?.every(r => selectedErpItemListValueHook?.some(r2 => r2.id === r.id)) ?
                     <input
                         type='checkbox'
-                        onChange={() => onSelectClearAllErpItemsInPage(erpItems)}
+                        onChange={() => handleClearAllSelectedErpItemListInPage(erpItems)}
                         checked={true}
                         style={{ cursor: 'pointer' }}
                     ></input>
                     :
                     <input
                         type='checkbox'
-                        onChange={() => onSelectAllErpItems(erpItems)}
+                        onChange={() => handleSelectAllSelectedErpItemListInPage(erpItems)}
                         checked={false}
                         style={{ cursor: 'pointer' }}
                     ></input>
@@ -395,10 +485,8 @@ function TableHeaderRow({
 function TableBodyRow({
     virtuosoData,
     productOptionPackageInfoList,
-    selectedErpItems,
     header,
     inventoryStocks,
-    onSelectErpItem,
     statusPin,
     erpItemSameReceiverHints,
     handleOpenEditOptionCodeModal,
@@ -406,7 +494,11 @@ function TableBodyRow({
     handleOpenItemsForSameReceiverModal,
 }) {
     const item = virtuosoData?.item;
-    const isSelected = selectedErpItems?.find(r => r.id === item?.id);
+
+    const selectedErpItemListValueHook = useSelectedErpItemListValueHook();
+    const selectedErpItemListActionsHook = useSelectedErpItemListActionsHook();
+
+    const isSelected = selectedErpItemListValueHook?.find(r => r.id === item?.id);
     let inventoryStock = inventoryStocks?.find(r => r.productOptionId === item?.productOptionId);
     let isPackaged = item?.packageYn === 'y' ? true : false;
     let isOutOfStock = !isPackaged && inventoryStock && inventoryStock?.stockUnit <= 0;
@@ -421,6 +513,25 @@ function TableBodyRow({
         }
     }
 
+    const handleSelectErpItem = () => {
+        let data = selectedErpItemListValueHook?.find(r => r.id === item.id);
+
+        if (data) {
+            selectedErpItemListActionsHook.onSet(selectedErpItemListValueHook?.filter(r => r.id !== data.id));
+        } else {
+            try {
+                if (selectedErpItemListValueHook?.length >= 5000) {
+                    throw new Error('최대 선택 가능한 개수는 5000개 입니다.');
+                }
+            } catch (err) {
+                alert(err.message);
+                return;
+            }
+
+            selectedErpItemListActionsHook.onSet([...selectedErpItemListValueHook, item]);
+        }
+    }
+
     return (
         <TextDragableDancer
             type='tr'
@@ -430,14 +541,14 @@ function TableBodyRow({
                 position: 'relative',
                 background: !item?.productOptionId ? 'var(--defaultYellowColorOpacity30)' : ''
             }}
-            onTapInRange={(e) => { e.stopPropagation(); onSelectErpItem(item); }}
+            onTapInRange={(e) => { e.stopPropagation(); handleSelectErpItem(item); }}
         >
             <td>{virtuosoData['data-index'] + 1}</td>
             <td>
                 <input
                     type='checkbox'
                     checked={isSelected || false}
-                    onChange={() => onSelectErpItem(item)}
+                    onChange={() => handleSelectErpItem(item)}
                     onClick={(e) => e.stopPropagation()}
                     style={{ cursor: 'pointer' }}
                 ></input>
@@ -641,7 +752,7 @@ function OptionCodeTd(props) {
                 <TextDragableDancer
                     type='button'
                     className='td-control-button-item'
-                    onTapInRange={(e) => onActionOpenEditOptionCodeModal(e, erpItem)}
+                    onTapInRange={(e) => { e.stopPropagation(); onActionOpenEditOptionCodeModal(erpItem); }}
                 >
                     <CustomImage
                         src={'/images/icon/search_default_ffffff.svg'}
@@ -692,7 +803,7 @@ function ReleaseOptionCodeTd(props) {
                 <TextDragableDancer
                     type='button'
                     className='td-control-button-item'
-                    onTapInRange={(e) => onActionOpenEditReleaseOptionCodeModal(e, erpItem)}
+                    onTapInRange={(e) => { e.stopPropagation(); onActionOpenEditReleaseOptionCodeModal(erpItem) }}
                 >
                     <CustomImage
                         src={'/images/icon/search_default_ffffff.svg'}

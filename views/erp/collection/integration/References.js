@@ -280,6 +280,10 @@ export const SORT_METHODS = [
         sortTarget: 'RELEASE_OPTION_CODE'
     },
     {
+        name: '운송장번호',
+        sortTarget: 'WAYBILL_NUMBER'
+    },
+    {
         name: '관리메모1',
         sortTarget: 'MANAGEMENT_MEMO1'
     },

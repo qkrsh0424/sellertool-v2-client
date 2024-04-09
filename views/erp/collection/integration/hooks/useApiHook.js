@@ -61,9 +61,104 @@ export function useApiHook(props) {
             })
     }
 
+    const reqFetchErpItemListByIds = async ({ body, headers }) => {
+        return await erpItemDataConnect.searchListByIds({ body, headers })
+            .then(res => {
+                return {
+                    res: res,
+                    content: res?.data?.data
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            })
+    }
+
+    const reqChangeErpItem_OptionCode = async ({ body, headers }) => {
+        return await erpItemDataConnect.change_optionCode({ body, headers })
+            .then(res => {
+                return {
+                    res: res,
+                    content: res?.data?.data
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            })
+    }
+
+    const reqChangeErpItem_ReleaseOptionCode = async ({ body, headers }) => {
+        return await erpItemDataConnect.change_releaseOptionCode({ body, headers })
+            .then(res => {
+                return {
+                    res: res,
+                    content: res?.data?.data
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            })
+    }
+
+    const reqUpdateErpItemList = async ({ body, headers }) => {
+        return await erpItemDataConnect.updateList({ body, headers })
+            .then(res => {
+                return {
+                    res: res,
+                    content: res?.data?.data
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            })
+    }
+
+    const reqDeleteErpItemList = async ({ body, headers }) => {
+        return await erpItemDataConnect.deleteList({ body, headers })
+            .then(res => {
+                return {
+                    res: res,
+                    content: res?.data?.data
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            })
+    }
+
     return {
         reqFetchProductOptionPackageList,
         reqCountErpItems,
-        reqFetchErpItemSlice
+        reqFetchErpItemSlice,
+        reqFetchErpItemListByIds,
+        reqChangeErpItem_OptionCode,
+        reqChangeErpItem_ReleaseOptionCode,
+        reqUpdateErpItemList,
+        reqDeleteErpItemList
     }
 }

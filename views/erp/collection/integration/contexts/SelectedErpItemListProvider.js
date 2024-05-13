@@ -46,8 +46,5 @@ export function useSelectedErpItemListActionsHook(props) {
 
     return {
         onSet: value.onSet,
-        onSelect: value.onSelect,
-        onSelectErpItemList: value.onSelectErpItemList,
-        onClear: value.onClear,
     };
 }

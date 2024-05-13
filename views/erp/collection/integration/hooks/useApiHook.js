@@ -151,6 +151,24 @@ export function useApiHook(props) {
             })
     }
 
+    const reqChangeErpItemList_Status = async ({ body, headers }) => {
+        return await erpItemDataConnect.changeList_status({ body, headers })
+            .then(res => {
+                return {
+                    res: res,
+                    content: res?.data?.data
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            })
+    }
+
     return {
         reqFetchProductOptionPackageList,
         reqCountErpItems,
@@ -159,6 +177,7 @@ export function useApiHook(props) {
         reqChangeErpItem_OptionCode,
         reqChangeErpItem_ReleaseOptionCode,
         reqUpdateErpItemList,
-        reqDeleteErpItemList
+        reqDeleteErpItemList,
+        reqChangeErpItemList_Status
     }
 }

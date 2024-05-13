@@ -88,6 +88,16 @@ function baseErpCollectionPage() {
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
             )
+        },
+        changeList_status: async function ({ body, headers }) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.patch(`${BASE_URL}/list/status`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         }
     }
 }

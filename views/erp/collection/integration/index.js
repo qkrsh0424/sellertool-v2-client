@@ -7,7 +7,6 @@ import useErpCollectionHeaderHook from "./hooks/useErpCollectionHeaderHook";
 import useErpItemPageHook from "./hooks/useErpItemPageHook";
 import useErpItemSameReceiverHintsHook from "./hooks/useErpItemSameReceiverHintsHook";
 import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
-import useSelectedErpItemsHook from "./hooks/useSelectedErpItemsHook";
 import useWaybillRegistrationHook from "./hooks/useWaybillRegistrationHook";
 import { Container } from "./index.styled";
 import { useSellertoolDatas } from "../../../../hooks/sellertool-datas";
@@ -17,17 +16,22 @@ import { FdClassification } from "./components/FdClassification/FdClassification
 import FdConditionSearch from "./components/FdConditionSearch/FdConditionSearch";
 import { ViewOptionsProvider } from "./contexts/ViewOptionsProvider";
 import { FdViewOptions } from "./components/FdViewOptions/FdViewOptions";
-import { ErpItemProvider, useErpItemActionsHook, useErpItemValueHook } from "./contexts/ErpItemProvider";
+import { ErpItemProvider, useErpItemValueHook } from "./contexts/ErpItemProvider";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import { CustomDateUtils } from "../../../../utils/CustomDateUtils";
-import { CustomURIEncoderUtils } from "../../../../utils/CustomURIEncoderUtils";
-import { CLASSIFICATIONS } from "./References";
 import { SelectedErpItemListProvider } from "./contexts/SelectedErpItemListProvider";
+import { useErpItemFetcherHook } from "./hooks/useErpItemFetcherHook";
 
-const customDateUtils = CustomDateUtils();
-const customURIEncoderUtils = CustomURIEncoderUtils();
-
+/* 
+    TODO:
+    1. 복사생성 신규 로직 적용
+    2. 운송장 일괄등록 신규 로직 적용
+    3. 재고반영 신규로직 적용
+    4. 재고반영 취소 신규로직 적용
+    5. 선택 데이터 보기 신규로직 적용
+    6. 상품리스트 신규 로직 적용
+    7. 엑셀 다운로드 신규 로직 적용
+*/
 export default function MainComponent(props) {
     return (
         <ErpItemProvider>
@@ -47,9 +51,9 @@ function MainComponentCore() {
     const erpcReleaseCompleteHeaderId = sellertoolDatas?.releaseCompleteHeaderIdForErpc;
 
     const apiHook = useApiHook();
+    const erpItemFetcherHook = useErpItemFetcherHook();
 
     const erpItemValueHook = useErpItemValueHook();
-    const erpItemActionsHook = useErpItemActionsHook();
 
     const {
         erpCollectionHeader
@@ -85,16 +89,6 @@ function MainComponentCore() {
     } = useErpItemSameReceiverHintsHook(erpItemValueHook?.content);
 
     const {
-        selectedErpItems,
-        onSelectErpItem,
-        onSelectAllErpItems,
-        onSelectClearAllErpItemsInPage,
-        onSelectClearAllErpItems,
-        onSelectClearErpItem,
-        reqFetchSelectedErpItems,
-    } = useSelectedErpItemsHook();
-
-    const {
         downloadSampleExcelForWaybillRegistration
     } = useWaybillRegistrationHook();
 
@@ -119,7 +113,7 @@ function MainComponentCore() {
         ) {
             return;
         }
-        handleReqFetchErpItemSlice();
+        erpItemFetcherHook.reqFetchErpItemSlice();
     }, [
         isRenderLoading,
         workspaceRedux?.workspaceInfo?.id,
@@ -154,7 +148,7 @@ function MainComponentCore() {
             return;
         }
 
-        handleReqCountErpItems();
+        erpItemFetcherHook.reqCountErpItems();
     }, [
         isRenderLoading,
         workspaceRedux?.workspaceInfo?.id,
@@ -210,133 +204,7 @@ function MainComponentCore() {
         fetchProductOptionPackageList();
     }, [erpItemValueHook?.content?.content, sellertoolDatas?.wsId]);
 
-    const handleReqCountErpItems = async () => {
-        let headers = {
-            wsId: workspaceRedux?.workspaceInfo?.id
-        }
 
-        let params = {
-            periodSearchCondition: router?.query?.periodSearchCondition,
-            startDateTime: router?.query?.startDateTime && customDateUtils.getStartDate(router?.query?.startDateTime),
-            endDateTime: router?.query?.endDateTime && customDateUtils.getEndDate(router?.query?.endDateTime),
-            mpSearchCondition: router?.query?.mpSearchCondition,
-            mpSearchQuery: router?.query?.mpSearchQuery,
-            oiSearchCondition: router?.query?.oiSearchCondition,
-            oiSearchQuery: router?.query?.oiSearchQuery,
-            riSearchCondition: router?.query?.riSearchCondition,
-            riSearchQuery: router?.query?.riSearchQuery,
-            diSearchCondition: router?.query?.diSearchCondition,
-            diSearchQuery: router?.query?.diSearchQuery,
-            mmSearchCondition: router?.query?.mmSearchCondition,
-            mmSearchQuery: router?.query?.mmSearchQuery,
-            matchedCode: router?.query?.matchedCode || 'releaseOptionCode',
-            stockReflectYn: router?.query?.stockReflectYn || null,
-        }
-
-        switch (router?.query?.classificationType) {
-            case 'NEW':
-                params.salesYn = 'n';
-                params.releaseYn = 'n';
-                params.holdYn = 'n';
-                break;
-            case 'CONFIRM':
-                params.salesYn = 'y';
-                params.releaseYn = 'n';
-                params.holdYn = 'n';
-                break;
-            case 'COMPLETE':
-                params.salesYn = 'y';
-                params.releaseYn = 'y';
-                params.holdYn = 'n';
-                break;
-            case 'HOLD':
-                params.salesYn = 'n';
-                params.releaseYn = 'n';
-                params.holdYn = 'y';
-                break;
-        }
-
-        const result = await apiHook.reqCountErpItems({ params, headers });
-
-        if (result) {
-            let totalSize = result?.content?.totalSize;
-            let size = router?.query?.size || 50;
-
-            if (totalSize <= 0) {
-                erpItemActionsHook.totalSize.onSet(0);
-                erpItemActionsHook.totalPages.onSet(1);
-                return;
-            }
-
-            let totalPages = Math.ceil(totalSize / size);
-
-            erpItemActionsHook.totalSize.onSet(totalSize);
-            erpItemActionsHook.totalPages.onSet(totalPages);
-        }
-    }
-
-    const handleReqFetchErpItemSlice = async () => {
-        erpItemActionsHook.isLoading.onSet(true);
-
-        const currClassification = CLASSIFICATIONS.find(r => r.classificationType === router?.query?.classificationType) || CLASSIFICATIONS[0];
-
-        let headers = {
-            wsId: workspaceRedux?.workspaceInfo?.id
-        }
-
-        let params = {
-            periodSearchCondition: router?.query?.periodSearchCondition,
-            startDateTime: router?.query?.startDateTime && customDateUtils.getStartDate(router?.query?.startDateTime),
-            endDateTime: router?.query?.endDateTime && customDateUtils.getEndDate(router?.query?.endDateTime),
-            mpSearchCondition: router?.query?.mpSearchCondition,
-            mpSearchQuery: router?.query?.mpSearchQuery,
-            oiSearchCondition: router?.query?.oiSearchCondition,
-            oiSearchQuery: router?.query?.oiSearchQuery,
-            riSearchCondition: router?.query?.riSearchCondition,
-            riSearchQuery: router?.query?.riSearchQuery,
-            diSearchCondition: router?.query?.diSearchCondition,
-            diSearchQuery: router?.query?.diSearchQuery,
-            mmSearchCondition: router?.query?.mmSearchCondition,
-            mmSearchQuery: router?.query?.mmSearchQuery,
-            page: router?.query?.page || 1,
-            size: router?.query?.size || 50,
-            sort: router?.query?.sort?.split(',') || 'releaseAt_asc',
-            matchedCode: router?.query?.matchedCode || 'releaseOptionCode',
-            stockReflectYn: router?.query?.stockReflectYn || null,
-            sortTypes: router?.query?.sortTypes || customURIEncoderUtils.encodeJSONList(currClassification.defaultSortTypes),
-        }
-
-        switch (router?.query?.classificationType) {
-            case 'NEW':
-                params.salesYn = 'n';
-                params.releaseYn = 'n';
-                params.holdYn = 'n';
-                break;
-            case 'CONFIRM':
-                params.salesYn = 'y';
-                params.releaseYn = 'n';
-                params.holdYn = 'n';
-                break;
-            case 'COMPLETE':
-                params.salesYn = 'y';
-                params.releaseYn = 'y';
-                params.holdYn = 'n';
-                break;
-            case 'HOLD':
-                params.salesYn = 'n';
-                params.releaseYn = 'n';
-                params.holdYn = 'y';
-                break;
-        }
-
-        const result = await apiHook.reqFetchErpItemSlice({ params, headers });
-
-        if (result) {
-            erpItemActionsHook.content.onSet(result?.content);
-        }
-
-        erpItemActionsHook.isLoading.onSet(false);
-    }
 
     const handleSubmitStockRelease = async (body, successCallback) => {
         await reqStockRelease(body, () => {
@@ -407,19 +275,11 @@ function MainComponentCore() {
                 erpCollectionHeader={erpCollectionHeader}
                 inventoryStocks={inventoryStocks}
 
-                onSubmitUpdateErpItems={reqUpdateErpItems}
-                onSubmitFetchSelectedErpItems={reqFetchSelectedErpItems}
-                onSubmitDeleteErpItems={reqDeleteErpItems}
-                onSubmitChangeStatusToSales={reqChangeStatusToSales}
-                onSubmitChangeStatusToRelease={reqChangeStatusToRelease}
-                onSubmitChangeStatusToOrder={reqChangeStatusToOrder}
-                onSubmitChangeStatusToHold={reqChangeStatusToHold}
                 onSubmitCopyCreateErpItems={reqCopyCreateErpItems}
                 onSubmitStockRelease={handleSubmitStockRelease}
                 onSubmitCancelStockRelease={handleSubmitCancelStockRelease}
                 onSubmitDownloadSampleExcelForWaybillRegistration={handleSubmitDownloadSampleExcelForWaybillRegistration}
                 onSubmitUploadWaybillForm={handleSubmitUploadWaybillForm}
-                onReqCountErpItems={handleReqCountErpItems}
             />
         </>
     );

@@ -31,6 +31,7 @@ import { useErpItemFetcherHook } from "./hooks/useErpItemFetcherHook";
     5. 선택 데이터 보기 신규로직 적용
     6. 상품리스트 신규 로직 적용
     7. 엑셀 다운로드 신규 로직 적용
+    8. 주문건 필드에 주문 상태 뱃지 추가 [신규-그린,확정-오렌지,출고-블루,보류-그레이] - 완료
 */
 export default function MainComponent(props) {
     return (

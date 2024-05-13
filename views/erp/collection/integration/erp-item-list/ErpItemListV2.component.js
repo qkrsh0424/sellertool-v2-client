@@ -20,8 +20,10 @@ import { useSelectedErpItemListActionsHook, useSelectedErpItemListValueHook } fr
 import { useErpItemActionsHook, useErpItemValueHook } from "../contexts/ErpItemProvider";
 import { useApiHook } from "../hooks/useApiHook";
 import { useSelector } from "react-redux";
+import { StatusUtils } from "../utils/StatusUtils";
 
 const base64Utils = Base64Utils();
+const statusUtils = StatusUtils();
 
 function getViewErpItemContent(erpItemList, viewOptions, productOptionPackageInfoList, inventoryStocks, erpItemSameReceiverHints) {
     return erpItemList?.filter(item => {
@@ -455,7 +457,7 @@ function TableHeaderRow({
                         width={45}
                         style={{
                             zIndex: '11',
-                            right: 45,
+                            right: 90,
                             borderLeft: '1px dashed #c0c0c0',
                             padding: 0,
                             fontSize: '10px'
@@ -470,11 +472,23 @@ function TableHeaderRow({
                         width={45}
                         style={{
                             zIndex: '11',
+                            right: 45,
                             padding: 0,
                             fontSize: '10px'
                         }}
                     >
                         패키지
+                    </th>
+                    <th
+                        className={`fixed-header fixed-col-right`}
+                        width={45}
+                        style={{
+                            zIndex: '11',
+                            padding: 0,
+                            fontSize: '10px'
+                        }}
+                    >
+                        상태
                     </th>
                 </>
             }
@@ -502,6 +516,7 @@ function TableBodyRow({
     let inventoryStock = inventoryStocks?.find(r => r.productOptionId === item?.productOptionId);
     let isPackaged = item?.packageYn === 'y' ? true : false;
     let isOutOfStock = !isPackaged && inventoryStock && inventoryStock?.stockUnit <= 0;
+    let currStatus = statusUtils.getClassificationTypeForFlags({ salesYn: item?.salesYn, releaseYn: item?.releaseYn, holdYn: item?.holdYn });
 
     if (isPackaged) {
         let childOptionList = productOptionPackageInfoList?.filter(r => r.parentProductOptionId === item?.productOptionId);
@@ -577,7 +592,7 @@ function TableBodyRow({
                         className={`fixed-col-right`}
                         style={{
                             background: '#fff',
-                            right: 45,
+                            right: 90,
                             borderLeft: '1px dashed #c0c0c0',
                             padding: 0
                         }}
@@ -603,6 +618,7 @@ function TableBodyRow({
                         className={`fixed-col-right`}
                         style={{
                             background: '#fff',
+                            right: 45,
                             padding: 0
                         }}
                     >
@@ -617,6 +633,21 @@ function TableBodyRow({
                                     src='/images/icon/check_default_5fcf80.svg'
                                 />
                             </div>
+                        }
+                    </td>
+                    <td
+                        className={`fixed-col-right`}
+                        style={{
+                            background: '#fff',
+                            padding: 0
+                        }}
+                    >
+
+                        {currStatus === 'NEW' ? <div className='statusBadge green'>신규</div> :
+                            currStatus === 'CONFIRM' ? <div className='statusBadge orange'>확정</div> :
+                                currStatus === 'COMPLETE' ? <div className='statusBadge blue'>출고</div> :
+                                    currStatus === 'POSTPONE' ? <div className='statusBadge gray'>보류</div> :
+                                        <div className='statusBadge red'>미확인</div>
                         }
                     </td>
                 </>

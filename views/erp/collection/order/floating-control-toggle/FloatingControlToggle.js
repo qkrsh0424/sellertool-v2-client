@@ -10,7 +10,7 @@ import ViewSelectedModalComponent from "./modal/ViewSelectedModalV2.component";
 import { Container } from "./styles/FloatingControlBar.styled";
 import { ProductListModalComponent } from "../../fragments/product-list-modal";
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
-import { MdBulkUpdateErpItems } from "../../fragments/MdBulkUpdateErpItems/v1";
+import EditErpItemsModalComponent from "../../fragments/edit-erp-items-modal/EditErpItemsModal.component";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -208,11 +208,12 @@ export default function FloatingControlToggle({
             />
 
             {editErpItemsModalOpen &&
-                <MdBulkUpdateErpItems
+                <EditErpItemsModalComponent
                     open={editErpItemsModalOpen}
                     onClose={() => handleToggleEditErpItemModalOpen(false)}
-                    maxWidth={'xl'}
+                    maxWidth='xl'
                     selectedErpItems={selectedErpItems}
+                    onSelectClearErpItem={handleClearSelectedItem}
                     onSubmitUpdateErpItems={handleSubmitUpdateErpItems}
                 />
             }

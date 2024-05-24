@@ -35,6 +35,7 @@ import { useErpItemFetcherHook } from "./hooks/useErpItemFetcherHook";
     9. 데이터 삭제 신규 로직 적용
     10. 탭별로 뷰헤더 각각 설정 하도록 설정
     11. 탭 이동시 조회 조건 및 보기 옵션 초기화 시키기
+    12. 선택 데이터 수정 신규 로직 적용
 */
 export default function MainComponent(props) {
     return (

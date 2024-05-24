@@ -98,6 +98,16 @@ function baseErpCollectionPage() {
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
             )
+        },
+        copyCreate: async function ({ body, headers }) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${BASE_URL}/copy-create`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
         }
     }
 }

@@ -7,7 +7,6 @@ import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalCompo
 import ExcelDownloadModalComponent from "../../fragments/excel-download-modal-v2/ExcelDownloadModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
 import StockReleaseModalComponent from "./modal/StockReleaseModal.component";
-import ViewSelectedModalComponent from "./modal/ViewSelectedModalV2.component";
 import WaybillRegistrationModalComponent from "./modal/WaybillRegistrationModal.component";
 import { Container } from "./styles/FloatingControlBar.styled";
 import { ProductListModalComponent } from "../../fragments/product-list-modal";
@@ -19,6 +18,8 @@ import { useRouter } from "next/router";
 import { useErpItemActionsHook, useErpItemValueHook } from "../contexts/ErpItemProvider";
 import { MdChangeStatus } from "./modal/MdChangeStatus/MdChangeStatus";
 import { useErpItemFetcherHook } from "../hooks/useErpItemFetcherHook";
+import MdViewSelected from "./modal/MdViewSelected/MdViewSelected";
+import { MdCopyCreate } from "./modal/MdCopyCreate/MdCopyCreate";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -57,7 +58,14 @@ export default function FloatingControlToggle({
 
     useEffect(() => {
         selectedErpItemListActionsHook.onSet([]);
-    }, [router?.query?.classificationType])
+    }, [router?.query?.classificationType]);
+
+    useEffect(() => {
+        if (selectedErpItemListValueHook?.length <= 0) {
+            toggleControlDrawerOpen(false);
+            toggleViewSelectedModalOpen(false);
+        }
+    }, [selectedErpItemListValueHook])
 
     const toggleControlDrawerOpen = (setOpen) => {
         setControlDrawerOpen(setOpen);
@@ -192,10 +200,6 @@ export default function FloatingControlToggle({
         selectedErpItemListActionsHook.onSet([]);
     }
 
-    const handleClearSelectedItem = (erpItemId) => {
-        selectedErpItemListActionsHook.onSet([...selectedErpItemListValueHook].filter(r => r.id !== erpItemId));
-    }
-
     // 내용수정 : 선택된 모든 주문건
     const handleSubmitUpdateErpItems = async (body) => {
         toggleBackdropOpen(true)
@@ -283,21 +287,6 @@ export default function FloatingControlToggle({
             handleClearAllSelectedItems();
         }
 
-        toggleBackdropOpen(false);
-    }
-
-    // 복사생성 : 선택된 모든 주문건
-    const handleSubmitCopyCreateErpItems = async () => {
-        toggleBackdropOpen(true)
-        let body = {
-            erpItemIds: selectedErpItemListValueHook?.map(r => r.id)
-        }
-
-        await onSubmitCopyCreateErpItems(body, () => {
-            toggleCopyCreateErpItemsModalOpen(false);
-            toggleControlDrawerOpen(false);
-            handleClearAllSelectedItems();
-        })
         toggleBackdropOpen(false);
     }
 
@@ -426,30 +415,20 @@ export default function FloatingControlToggle({
                 />
             </CommonModalComponent>
 
-            <ConfirmModalComponentV2
-                open={copyCreateErpItemsModalOpen}
-                onClose={() => toggleCopyCreateErpItemsModalOpen(false)}
-                onConfirm={() => handleSubmitCopyCreateErpItems()}
-                message={
-                    <>
-                        <div>선택된 데이터들을 복사 생성 합니다.</div>
-                        <div>복사 생성된 데이터의 <span style={{ color: 'var(--defaultRedColor)' }}>[M] 주문수집번호, [M] 주문수집일시, [M] 주문확정일시, [M] 출고완료일시</span> 는 재설정 됩니디.</div>
-                    </>
-                }
-            />
-
-            <CommonModalComponent
-                open={viewSelectedModalOpen}
-                onClose={() => toggleViewSelectedModalOpen(false)}
-                maxWidth={'xl'}
-            >
-                <ViewSelectedModalComponent
-                    erpCollectionHeader={erpCollectionHeader}
-                    selectedErpItems={selectedErpItemListValueHook}
-                    onClose={() => toggleViewSelectedModalOpen(false)}
-                    onActionClearSelectedItem={handleClearSelectedItem}
+            {copyCreateErpItemsModalOpen &&
+                <MdCopyCreate
+                    open={copyCreateErpItemsModalOpen}
+                    toggleCopyCreateErpItemsModalOpen={toggleCopyCreateErpItemsModalOpen}
+                    toggleControlDrawerOpen={toggleControlDrawerOpen}
                 />
-            </CommonModalComponent>
+            }
+            {viewSelectedModalOpen &&
+                <MdViewSelected
+                    open={viewSelectedModalOpen}
+                    onClose={() => toggleViewSelectedModalOpen(false)}
+                    erpCollectionHeader={erpCollectionHeader}
+                />
+            }
 
             {productListModalOpen &&
                 <CommonModalComponent

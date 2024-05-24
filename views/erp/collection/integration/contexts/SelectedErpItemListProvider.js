@@ -18,7 +18,7 @@ export function SelectedErpItemListProvider({ children }) {
     )
     return (
         <>
-            <SelectedErpItemListActionsContext.Provider value={actions}>
+            <SelectedErpItemListActionsContext.Provider value={{ actions: actions, setValue: setValue }}>
                 <SelectedErpItemListValueContext.Provider value={value}>
                     {children}
                 </SelectedErpItemListValueContext.Provider>
@@ -45,6 +45,7 @@ export function useSelectedErpItemListActionsHook(props) {
     }
 
     return {
-        onSet: value.onSet,
+        onSet: value.actions.onSet,
+        setValue: value.setValue
     };
 }

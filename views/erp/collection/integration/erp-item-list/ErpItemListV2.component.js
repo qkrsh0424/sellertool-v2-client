@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { dateToYYYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import { numberWithCommas } from "../../../../../utils/numberFormatUtils";

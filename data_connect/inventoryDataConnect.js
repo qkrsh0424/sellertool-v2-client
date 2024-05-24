@@ -4,7 +4,8 @@ import withMainApiCsrfWrapper from "../utils/withMainApiCsrfWrapper";
 const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress;
 
 export const InventoryDataConnect = {
-    baseInventoryPage: baseInventoryPage
+    baseInventoryPage: baseInventoryPage,
+    baseErpCollectionPage: baseErpCollectionPage
 }
 
 function baseInventoryPage() {
@@ -94,6 +95,23 @@ function baseInventoryPage() {
                 xsrfCookieName: 'x_api_csrf_token',
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             });
+        },
+    }
+}
+
+function baseErpCollectionPage() {
+    const BASE_URL = `${API_ADDRESS}/page-api/erpc/v1/inventories`;
+
+    return {
+        searchStockList: async function ({ body, headers }) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${BASE_URL}/search/stocks`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN',
+                })
+            )
         },
     }
 }

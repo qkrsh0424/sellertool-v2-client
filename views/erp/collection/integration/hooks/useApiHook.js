@@ -1,9 +1,11 @@
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 import { ErpItemDataConnect } from "../../../../../data_connect/erpItemDataConnect";
+import { InventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
 import { productOptionPackageDataConnect } from "../../../../../data_connect/productOptionPackageDataConnect";
 
 const productOptionPackageDataConn = productOptionPackageDataConnect();
 const erpItemDataConnect = ErpItemDataConnect.baseErpCollectionPage();
+const inventoryDataConnect = InventoryDataConnect.baseErpCollectionPage();
 
 export function useApiHook(props) {
 
@@ -169,6 +171,43 @@ export function useApiHook(props) {
             })
     }
 
+    const reqCopyCreateErpItemList = async ({ body, headers }) => {
+        return await erpItemDataConnect.copyCreate({ body, headers })
+            .then(res => {
+                return {
+                    res: res,
+                    content: res?.data?.data
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            })
+            ;
+    }
+
+    const reqFetchInventoryStockList = async ({ body, headers }) => {
+        return await inventoryDataConnect.searchStockList({ body, headers })
+            .then(res => {
+                return {
+                    res: res,
+                    content: res?.data?.data
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            })
+    }
+
     return {
         reqFetchProductOptionPackageList,
         reqCountErpItems,
@@ -178,6 +217,9 @@ export function useApiHook(props) {
         reqChangeErpItem_ReleaseOptionCode,
         reqUpdateErpItemList,
         reqDeleteErpItemList,
-        reqChangeErpItemList_Status
+        reqChangeErpItemList_Status,
+        reqCopyCreateErpItemList,
+
+        reqFetchInventoryStockList
     }
 }

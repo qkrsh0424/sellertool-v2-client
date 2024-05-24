@@ -25,7 +25,6 @@ export default function FloatingControlToggle({
     erpCollectionHeader,
     inventoryStocks,
 
-    onSubmitCopyCreateErpItems,
     onSubmitStockRelease,
     onSubmitCancelStockRelease,
     onSubmitDownloadSampleExcelForWaybillRegistration,
@@ -37,8 +36,6 @@ export default function FloatingControlToggle({
     const apiHook = useApiHook();
     const erpItemFetcherHook = useErpItemFetcherHook();
 
-    const erpItemValueHook = useErpItemValueHook();
-    const erpItemActionsHook = useErpItemActionsHook();
     const selectedErpItemListValueHook = useSelectedErpItemListValueHook();
     const selectedErpItemListActionsHook = useSelectedErpItemListActionsHook();
 
@@ -142,16 +139,16 @@ export default function FloatingControlToggle({
 
     const toggleCancelStockReleaseModalOpen = (setOpen) => {
         if (setOpen) {
-            let stockReflectNItems = [];
+            let stockReflectedItems = [];
 
             selectedErpItemListValueHook?.forEach(r => {
                 if (r.stockReflectYn === 'n') {
-                    stockReflectNItems.push(r);
+                    stockReflectedItems.push(r);
                 }
             });
 
-            if (stockReflectNItems?.length >= 1) {
-                alert(`재고반영이 되지 않은 데이터가 선택되었습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectNItems?.map(r => r.uniqueCode)?.join()}`);
+            if (stockReflectedItems?.length >= 1) {
+                alert(`재고반영이 되지 않은 데이터가 선택되었습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
                 return;
             }
         }
@@ -198,58 +195,6 @@ export default function FloatingControlToggle({
 
     const handleClearAllSelectedItems = () => {
         selectedErpItemListActionsHook.onSet([]);
-    }
-
-    // 내용수정 : 선택된 모든 주문건
-    const handleSubmitUpdateErpItems = async (body) => {
-        toggleBackdropOpen(true)
-
-        let headers = {
-            wsId: workspaceRedux?.workspaceInfo?.id
-        }
-
-        const updateResult = await apiHook.reqUpdateErpItemList({ body, headers });
-
-        if (updateResult?.content) {
-            const updateIds = [...updateResult?.content];
-
-            const fetchResult = await apiHook.reqFetchErpItemListByIds({
-                body: {
-                    ids: updateIds,
-                    matchedCode: router?.query?.matchedCode
-                },
-                headers: headers
-            })
-
-            if (fetchResult?.content) {
-                let newErpItemContent = _.cloneDeep(erpItemValueHook?.content);
-                let newSelectedErpItemList = _.cloneDeep(selectedErpItemListValueHook);
-
-                newErpItemContent.content = newErpItemContent?.content?.map(erpItem => {
-                    let resultErpItem = fetchResult?.content?.find(r => r.id === erpItem?.id);
-                    if (resultErpItem) {
-                        return { ...resultErpItem };
-                    } else { return { ...erpItem } }
-                })
-
-                newSelectedErpItemList = newSelectedErpItemList?.map(erpItem => {
-                    let resultErpItem = fetchResult?.content?.find(r => r.id === erpItem?.id);
-                    if (resultErpItem) {
-                        return { ...resultErpItem };
-                    } else { return { ...erpItem } }
-                })
-
-                erpItemActionsHook.content.onSet(newErpItemContent);
-                selectedErpItemListActionsHook.onSet(newSelectedErpItemList);
-
-                toggleEditErpItemModalOpen(false);
-                toggleControlDrawerOpen(false);
-                customToast.success(`${body?.length}건이 수정되었습니다.`, {
-                    ...defaultOptions
-                })
-            }
-        }
-        toggleBackdropOpen(false);
     }
 
     // 삭제 : 선택된 모든 주문건
@@ -383,10 +328,9 @@ export default function FloatingControlToggle({
             {editErpItemsModalOpen &&
                 <MdBulkUpdateErpItems
                     open={editErpItemsModalOpen}
-                    onClose={() => toggleEditErpItemModalOpen(false)}
                     maxWidth={'xl'}
-                    selectedErpItems={selectedErpItemListValueHook}
-                    onSubmitUpdateErpItems={handleSubmitUpdateErpItems}
+                    toggleEditErpItemModalOpen={toggleEditErpItemModalOpen}
+                    toggleControlDrawerOpen={toggleControlDrawerOpen}
                 />
             }
 

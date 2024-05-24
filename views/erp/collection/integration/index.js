@@ -24,7 +24,7 @@ import { useErpItemFetcherHook } from "./hooks/useErpItemFetcherHook";
 
 /* 
     TODO:
-    1. 복사생성 신규 로직 적용 - 진행중 240522
+    1. 복사생성 신규 로직 적용 - 완료 240524
     2. 운송장 일괄등록 신규 로직 적용
     3. 재고반영 신규로직 적용
     4. 재고반영 취소 신규로직 적용
@@ -32,6 +32,7 @@ import { useErpItemFetcherHook } from "./hooks/useErpItemFetcherHook";
     6. 상품리스트 신규 로직 적용
     7. 엑셀 다운로드 신규 로직 적용
     8. 주문건 필드에 주문 상태 뱃지 추가 [신규-그린,확정-오렌지,출고-블루,보류-그레이] - 완료 240513
+    9. 데이터 삭제 신규 로직 적용
 */
 export default function MainComponent(props) {
     return (
@@ -276,7 +277,6 @@ function MainComponentCore() {
                 erpCollectionHeader={erpCollectionHeader}
                 inventoryStocks={inventoryStocks}
 
-                onSubmitCopyCreateErpItems={reqCopyCreateErpItems}
                 onSubmitStockRelease={handleSubmitStockRelease}
                 onSubmitCancelStockRelease={handleSubmitCancelStockRelease}
                 onSubmitDownloadSampleExcelForWaybillRegistration={handleSubmitDownloadSampleExcelForWaybillRegistration}

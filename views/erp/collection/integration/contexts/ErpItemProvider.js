@@ -55,7 +55,7 @@ export function ErpItemProvider({ children }) {
 
     return (
         <>
-            <ErpItemActionsContext.Provider value={{ content: contentActions, isLoading: isLoadingActions, totalSize: totalSizeActions, totalPages: totalPagesActions }}>
+            <ErpItemActionsContext.Provider value={{ content: contentActions, isLoading: isLoadingActions, totalSize: totalSizeActions, totalPages: totalPagesActions, setContent: setContent }}>
                 <ErpItemValueContext.Provider value={{ content: content, isLoading: isLoading, totalSize: totalSize, totalPages: totalPages }}>
                     {children}
                 </ErpItemValueContext.Provider>
@@ -98,6 +98,7 @@ export function useErpItemActionsHook(props) {
         },
         totalPages: {
             onSet: value.totalPages.onSet
-        }
+        },
+        setContent: value.setContent
     };
 }

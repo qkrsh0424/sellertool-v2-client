@@ -108,7 +108,17 @@ function baseErpCollectionPage() {
                     xsrfHeaderName: 'X-XSRF-TOKEN'
                 })
             )
-        }
+        },
+        uploadWaybillForm: async function ({formData, headers}) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${BASE_URL}/waybill-bulk-update`, formData, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
     }
 }
 

@@ -3,6 +3,7 @@ import { CustomDialog } from "../../../../../../components/dialog/v1/CustomDialo
 import styled from 'styled-components';
 import { useState } from "react";
 import CustomExcelFileUploader from "../../../../../modules/uploader/CustomExcelFileUploader";
+import { ErpcWaybillBulkUpdateTemplate } from "../../../../../../utils/excel-template/erpc/ErpcWaybillBulkUpdateTemplate";
 
 const Container = styled.div`
     background: var(--defaultBackground);
@@ -48,6 +49,17 @@ export default function WaybillRegistrationModalComponent({
         });
     }
 
+    const handleDownloadCommonExcelSample = () => {
+        const url = ErpcWaybillBulkUpdateTemplate.assetUrl;
+        const link = document.createElement('a');
+        link.href = url;
+
+        link.setAttribute('download', ErpcWaybillBulkUpdateTemplate.assetName);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    }
+
     return (
         <>
             <CustomDialog
@@ -66,7 +78,7 @@ export default function WaybillRegistrationModalComponent({
                         <CustomBlockButton
                             type='button'
                             className='button-item sample-download-button'
-                            onClick={() => onSubmitDownloadSampleExcelForWaybillRegistration()}
+                            onClick={() => handleDownloadCommonExcelSample()}
                         >양식 다운로드</CustomBlockButton>
                     </ContentContainer>
                 </Container>

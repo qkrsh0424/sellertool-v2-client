@@ -19,6 +19,7 @@ import MdViewSelected from "./modal/MdViewSelected/MdViewSelected";
 import { MdCopyCreate } from "./modal/MdCopyCreate/MdCopyCreate";
 import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import { MdDeleteSelected } from "./modal/MdDeleteSelected/MdDeleteSelected";
+import { MdWaybillBulkUpdate } from "./modal/MdWaybillBulkUpdate/MdWaybillBulkUpdate";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -26,8 +27,6 @@ export default function FloatingControlToggle({
 
     onSubmitStockRelease,
     onSubmitCancelStockRelease,
-    onSubmitDownloadSampleExcelForWaybillRegistration,
-    onSubmitUploadWaybillForm,
 }) {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
@@ -227,29 +226,6 @@ export default function FloatingControlToggle({
         toggleBackdropOpen(false);
     }
 
-    // 엑셀다운 : 운송장 일괄 등록 양식
-    const handleSubmitDownloadSampleExcelForWaybillRegistration = async () => {
-        toggleBackdropOpen(true);
-
-        await onSubmitDownloadSampleExcelForWaybillRegistration();
-        toggleBackdropOpen(false);
-    }
-
-    // 운송장 일괄 등록 : 선택된 모든 주문건
-    const handleSubmitUploadWaybillForm = async (formData, successCallback) => {
-        toggleBackdropOpen(true);
-
-        formData.append('workspaceId', workspaceRedux?.workspaceInfo?.id);
-        formData.append('erpItemIds', selectedErpItemListValueHook?.map(r => r.id));
-
-        await onSubmitUploadWaybillForm(formData, () => {
-            successCallback();
-            toggleWaybillRegistrationModalOpen(false);
-            toggleControlDrawerOpen(false);
-            handleClearAllSelectedItems();
-        })
-        toggleBackdropOpen(false);
-    }
 
     if (selectedErpItemListValueHook?.length <= 0) {
         return null;
@@ -367,13 +343,13 @@ export default function FloatingControlToggle({
                 />
             }
 
-            <WaybillRegistrationModalComponent
-                selectedErpItems={selectedErpItemListValueHook}
-                open={waybillRegistrationModalOpen}
-                onClose={() => toggleWaybillRegistrationModalOpen(false)}
-                onSubmitDownloadSampleExcelForWaybillRegistration={handleSubmitDownloadSampleExcelForWaybillRegistration}
-                onSubmitUploadWaybillForm={handleSubmitUploadWaybillForm}
-            />
+            {waybillRegistrationModalOpen &&
+                <MdWaybillBulkUpdate
+                    open={waybillRegistrationModalOpen}
+                    toggleWaybillRegistrationModalOpen={toggleWaybillRegistrationModalOpen}
+                    toggleControlDrawerOpen={toggleControlDrawerOpen}
+                />
+            }
 
             {changeStatusModalOpen &&
                 <MdChangeStatus

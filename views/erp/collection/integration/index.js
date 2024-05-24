@@ -25,7 +25,7 @@ import { useErpItemFetcherHook } from "./hooks/useErpItemFetcherHook";
 /* 
     TODO:
     1. 복사생성 신규 로직 적용 - 완료 240524
-    2. 운송장 일괄등록 신규 로직 적용
+    2. 운송장 일괄등록 신규 로직 적용 - 진행중 240524 로직은 완성되었으나 테스트 해봐야함.
     3. 재고반영 신규로직 적용
     4. 재고반영 취소 신규로직 적용
     5. 선택 데이터 보기 신규로직 적용 - 완료 240513
@@ -33,6 +33,8 @@ import { useErpItemFetcherHook } from "./hooks/useErpItemFetcherHook";
     7. 엑셀 다운로드 신규 로직 적용
     8. 주문건 필드에 주문 상태 뱃지 추가 [신규-그린,확정-오렌지,출고-블루,보류-그레이] - 완료 240513
     9. 데이터 삭제 신규 로직 적용
+    10. 탭별로 뷰헤더 각각 설정 하도록 설정
+    11. 탭 이동시 조회 조건 및 보기 옵션 초기화 시키기
 */
 export default function MainComponent(props) {
     return (
@@ -89,10 +91,6 @@ function MainComponentCore() {
     const {
         erpItemSameReceiverHints
     } = useErpItemSameReceiverHintsHook(erpItemValueHook?.content);
-
-    const {
-        downloadSampleExcelForWaybillRegistration
-    } = useWaybillRegistrationHook();
 
     const [isRenderLoading, setIsRenderLoading] = useState(true);
 
@@ -224,17 +222,6 @@ function MainComponentCore() {
         })
     }
 
-    const handleSubmitDownloadSampleExcelForWaybillRegistration = async () => {
-        await downloadSampleExcelForWaybillRegistration();
-    }
-
-    const handleSubmitUploadWaybillForm = async (formData, successCallback) => {
-        await reqUploadWaybillForm(formData, () => {
-            reqFetchErpItemPage();
-            successCallback();
-        });
-    }
-
     return (
         <>
             <Container>
@@ -279,8 +266,6 @@ function MainComponentCore() {
 
                 onSubmitStockRelease={handleSubmitStockRelease}
                 onSubmitCancelStockRelease={handleSubmitCancelStockRelease}
-                onSubmitDownloadSampleExcelForWaybillRegistration={handleSubmitDownloadSampleExcelForWaybillRegistration}
-                onSubmitUploadWaybillForm={handleSubmitUploadWaybillForm}
             />
         </>
     );

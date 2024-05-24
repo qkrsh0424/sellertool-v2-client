@@ -5,7 +5,7 @@ import { useSelectedErpItemListActionsHook, useSelectedErpItemListValueHook } fr
 import { useApiHook } from '../../../hooks/useApiHook';
 import { useErpItemFetcherHook } from '../../../hooks/useErpItemFetcherHook';
 import ResizableTh from '../../../../../../../components/table/th/v1/ResizableTh';
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { CustomDateUtils } from '../../../../../../../utils/CustomDateUtils';
 import { CustomNumberUtils } from '../../../../../../../utils/CustomNumberUtils';
 import CustomBlockButton from '../../../../../../../components/buttons/block-button/v1/CustomBlockButton';
@@ -27,6 +27,8 @@ export function MdDeleteSelected({
 
     const apiHook = useApiHook();
     const erpItemFetcherHook = useErpItemFetcherHook();
+
+    const [currentDisplayIndex, setCurrentDisplayIndex] = useState(0);
 
     const handleCloseModal = () => {
         toggleDeleteErpItemsConfirmModalOpen(false);
@@ -63,6 +65,29 @@ export function MdDeleteSelected({
         customBackdropController().hideBackdrop(false);
     }
 
+    // Reference. 대량의 데이터를 state화 시킬때 나누어서 처리하는 방법
+    useEffect(() => {
+        if (!selectedErpItemListValueHook) {
+            return;
+        }
+
+        // interval clear, 아래 조건을 걸지 않으면 인터벌이 무한 루프로 처리되기 때문에 필수!
+        if (currentDisplayIndex >= selectedErpItemListValueHook?.length) {
+            return;
+        }
+
+        const chunkSize = 100;
+        const displayMoreData = () => {
+            if (currentDisplayIndex < selectedErpItemListValueHook?.length) {
+                setCurrentDisplayIndex(Math.min(currentDisplayIndex + chunkSize, selectedErpItemListValueHook?.length));
+            }
+        }
+
+        const interval = setInterval(displayMoreData, 100); // 100ms마다 새로운 데이터를 추가
+
+        return () => clearInterval(interval);
+    }, [selectedErpItemListValueHook, currentDisplayIndex]);
+
     return (
         <>
             <CustomDialog open={open} maxWidth={'xl'} onClose={() => handleCloseModal()}>
@@ -91,7 +116,7 @@ export function MdDeleteSelected({
                                     />
                                 </thead>
                                 <tbody>
-                                    {selectedErpItemListValueHook?.map((targetErpItem, rowIndex) => {
+                                    {selectedErpItemListValueHook?.slice(0, currentDisplayIndex)?.map((targetErpItem, rowIndex) => {
                                         return (
                                             <TableBodyRow
                                                 key={targetErpItem?.id}

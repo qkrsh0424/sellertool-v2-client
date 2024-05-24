@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import SingleBlockButton from "../../../../modules/button/SingleBlockButton";
 import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadingComponent";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
@@ -11,15 +10,15 @@ import WaybillRegistrationModalComponent from "./modal/WaybillRegistrationModal.
 import { Container } from "./styles/FloatingControlBar.styled";
 import { ProductListModalComponent } from "../../fragments/product-list-modal";
 import { MdBulkUpdateErpItems } from "../../fragments/MdBulkUpdateErpItems/v1";
-import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
 import { useSelectedErpItemListActionsHook, useSelectedErpItemListValueHook } from "../contexts/SelectedErpItemListProvider";
 import { useApiHook } from "../hooks/useApiHook";
 import { useRouter } from "next/router";
-import { useErpItemActionsHook, useErpItemValueHook } from "../contexts/ErpItemProvider";
 import { MdChangeStatus } from "./modal/MdChangeStatus/MdChangeStatus";
 import { useErpItemFetcherHook } from "../hooks/useErpItemFetcherHook";
 import MdViewSelected from "./modal/MdViewSelected/MdViewSelected";
 import { MdCopyCreate } from "./modal/MdCopyCreate/MdCopyCreate";
+import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
+import { MdDeleteSelected } from "./modal/MdDeleteSelected/MdDeleteSelected";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -197,44 +196,6 @@ export default function FloatingControlToggle({
         selectedErpItemListActionsHook.onSet([]);
     }
 
-    // 삭제 : 선택된 모든 주문건
-    const handleSubmitDeleteErpItems = async () => {
-        toggleBackdropOpen(true);
-
-        let headers = {
-            wsId: workspaceRedux?.workspaceInfo?.id
-        }
-
-        let body = {
-            ids: selectedErpItemListValueHook?.map(r => r.id)
-        }
-
-        const deleteResult = await apiHook.reqDeleteErpItemList({ body, headers });
-
-        if (deleteResult?.content) {
-            const fetchIds = [...deleteResult?.content];
-            let newSelectedErpItemList = _.cloneDeep(selectedErpItemListValueHook);
-
-            newSelectedErpItemList = newSelectedErpItemList?.filter(erpItem => {
-                if (fetchIds?.includes(erpItem?.id)) {
-                    return false;
-                } else {
-                    return true;
-                }
-            })
-
-            selectedErpItemListActionsHook.onSet(newSelectedErpItemList);
-
-            erpItemFetcherHook.reqCountErpItems();
-            erpItemFetcherHook.reqFetchErpItemSlice();
-            toggleDeleteErpItemsConfirmModalOpen(false);
-            toggleControlDrawerOpen(false);
-            handleClearAllSelectedItems();
-        }
-
-        toggleBackdropOpen(false);
-    }
-
     // 재고반영 : 선택된 모든 주문건
     const handleSubmitStockRelease = async (memo) => {
         toggleBackdropOpen(true);
@@ -297,13 +258,13 @@ export default function FloatingControlToggle({
     return (
         <>
             <Container>
-                <SingleBlockButton
+                <CustomBlockButton
                     type='button'
                     className='floating-button-item'
                     onClick={() => toggleControlDrawerOpen(true)}
                 >
                     <span className='accent'>{selectedErpItemListValueHook?.length || '0'}</span> 개 선택됨
-                </SingleBlockButton>
+                </CustomBlockButton>
             </Container>
             <FloatingControlBarModalComponent
                 open={controlDrawerOpen}
@@ -334,16 +295,15 @@ export default function FloatingControlToggle({
                 />
             }
 
-            <ConfirmModalComponentV2
-                open={deleteErpItemsConfirmModalOpen}
-                onClose={() => toggleDeleteErpItemsConfirmModalOpen(false)}
-                onConfirm={handleSubmitDeleteErpItems}
-                title={'삭제 확인메세지'}
-                message={'선택된 데이터를 영구 삭제 합니다.'}
-                confirmBtnStyle={{
-                    background: 'var(--defaultRedColor)'
-                }}
-            />
+            {deleteErpItemsConfirmModalOpen &&
+                <MdDeleteSelected
+                    open={deleteErpItemsConfirmModalOpen}
+                    toggleDeleteErpItemsConfirmModalOpen={toggleDeleteErpItemsConfirmModalOpen}
+                    toggleControlDrawerOpen={toggleControlDrawerOpen}
+
+                    erpCollectionHeader={erpCollectionHeader}
+                />
+            }
 
             <CommonModalComponent
                 open={excelDownloadModalOpen}

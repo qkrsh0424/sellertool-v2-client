@@ -19,8 +19,8 @@ import CustomBlockButton from "../../../../../components/buttons/block-button/v1
 import { MdDeleteSelected } from "./modal/MdDeleteSelected/MdDeleteSelected";
 import { MdWaybillBulkUpdate } from "./modal/MdWaybillBulkUpdate/MdWaybillBulkUpdate";
 import { MdBulkUpdateErpItems } from "./modal/MdBulkUpdateErpItems/v1/MdBulkUpdateErpItems";
-import { StatusUtils } from "../utils/StatusUtils";
 import { MdStockRelease } from "./modal/MdStockRelease/MdStockRelease";
+import { MdCancelStockRelease } from "./modal/MdCancelStockRelease/MdCancelStockRelease";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -109,43 +109,6 @@ export default function FloatingControlToggle({
     }
 
     const toggleStockReleaseModalOpen = (setOpen) => {
-        // if (setOpen) {
-        //     let stockReflectedItems = [];
-        //     let notSetReleaseOptionCodeItems = [];
-        //     let notCompleteItems = [];
-
-        //     selectedErpItemListValueHook?.forEach(r => {
-        //         const classificationType = StatusUtils().getClassificationTypeForFlags({ salesYn: r?.salesYn, releaseYn: r?.releaseYn, holdYn: r?.holdYn });
-
-        //         if (r.stockReflectYn === 'y') {
-        //             stockReflectedItems.push(r);
-        //         }
-
-        //         if (!r.releaseOptionCode) {
-        //             notSetReleaseOptionCodeItems.push(r);
-        //         }
-
-        //         if (classificationType !== 'COMPLETE') {
-        //             notCompleteItems.push(r);
-        //         }
-
-        //     });
-
-        //     if (stockReflectedItems?.length >= 1) {
-        //         alert(`이미 재고반영 처리된 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
-        //         return;
-        //     }
-
-        //     if (notSetReleaseOptionCodeItems?.length >= 1) {
-        //         alert(`[M] 출고옵션코드가 지정되지 않은 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${notSetReleaseOptionCodeItems?.map(r => r.uniqueCode)?.join()}`);
-        //         return;
-        //     }
-
-        //     if (notCompleteItems?.length >= 1) {
-        //         alert(`출고완료 상태가 아닌 주문건이 있습니다. 해당 주문건을 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${notCompleteItems?.map(r => r.uniqueCode)?.join()}`)
-        //         return;
-        //     }
-        // }
         setStockReleaseModalOpen(setOpen);
     }
 
@@ -207,22 +170,6 @@ export default function FloatingControlToggle({
 
     const handleClearAllSelectedItems = () => {
         selectedErpItemListActionsHook.onSet([]);
-    }
-
-    // 재고반영 : 선택된 모든 주문건
-    const handleSubmitStockRelease = async (memo) => {
-        toggleBackdropOpen(true);
-        let body = {
-            erpItemIds: selectedErpItemListValueHook?.map(r => r.id),
-            memo: memo
-        }
-
-        await onSubmitStockRelease(body, () => {
-            toggleStockReleaseModalOpen(false);
-            toggleControlDrawerOpen(false);
-            handleClearAllSelectedItems();
-        });
-        toggleBackdropOpen(false);
     }
 
     // 재고반영 취소 : 선택된 모든 주문건
@@ -338,16 +285,8 @@ export default function FloatingControlToggle({
                 </CommonModalComponent>
             }
 
-            {/* TODO : 재고반영 모달 구성 */}
-            {/* {stockReleaseModalOpen &&
-                <StockReleaseModalComponent
-                    open={stockReleaseModalOpen}
-                    onClose={() => toggleStockReleaseModalOpen(false)}
-                    onConfirm={handleSubmitStockRelease}
-                />
-            } */}
             {stockReleaseModalOpen &&
-                <MdStockRelease 
+                <MdStockRelease
                     open={stockReleaseModalOpen}
                     toggleStockReleaseModalOpen={toggleStockReleaseModalOpen}
                     toggleControlDrawerOpen={toggleControlDrawerOpen}
@@ -356,8 +295,7 @@ export default function FloatingControlToggle({
                 />
             }
 
-
-            {cancelStockReleaseModalOpen &&
+            {/* {cancelStockReleaseModalOpen &&
                 <ConfirmModalComponentV2
                     open={cancelStockReleaseModalOpen}
                     onClose={() => toggleCancelStockReleaseModalOpen(false)}
@@ -365,6 +303,13 @@ export default function FloatingControlToggle({
                     message={
                         <div>선택된 데이터들의 재고반영을 취소 합니다.</div>
                     }
+                />
+            } */}
+            {cancelStockReleaseModalOpen &&
+                <MdCancelStockRelease
+                    open={cancelStockReleaseModalOpen}
+                    toggleCancelStockReleaseModalOpen={toggleCancelStockReleaseModalOpen}
+                    toggleControlDrawerOpen={toggleControlDrawerOpen}
                 />
             }
 

@@ -21,7 +21,8 @@ export const SubmitFormWrapper = styled.form`
     }
 
     .noticeBox{
-        white-space: pre;
+        white-space: pre-line;
+        word-break: keep-all;
         color: var(--defaultRedColor);
         font-size: 12px;
         overflow: auto;

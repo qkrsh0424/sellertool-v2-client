@@ -5,11 +5,10 @@ import * as St from './MdWaybillBulkUpdate.styled';
 import { ErpcWaybillBulkUpdateTemplate } from '../../../../../../../utils/excel-template/erpc/ErpcWaybillBulkUpdateTemplate';
 import CustomExcelFileUploader from '../../../../../../modules/uploader/CustomExcelFileUploader';
 import { useApiHook } from '../../../hooks/useApiHook';
-import { useErpItemFetcherHook } from '../../../hooks/useErpItemFetcherHook';
 import { useSelector } from 'react-redux';
 import { useSelectedErpItemListActionsHook, useSelectedErpItemListValueHook } from '../../../contexts/SelectedErpItemListProvider';
 import _ from 'lodash';
-import { useErpItemActionsHook, useErpItemValueHook } from '../../../contexts/ErpItemProvider';
+import { useErpItemActionsHook } from '../../../contexts/ErpItemProvider';
 import { useRouter } from 'next/router';
 import { customBackdropController } from '../../../../../../../components/backdrop/default/v1';
 import { customToast } from '../../../../../../../components/toast/custom-react-toastify/v1';
@@ -24,9 +23,6 @@ export function MdWaybillBulkUpdate({
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
     const apiHook = useApiHook();
-    const erpItemFetcherHook = useErpItemFetcherHook();
-
-    const erpItemValueHook = useErpItemValueHook();
     const erpItemActionsHook = useErpItemActionsHook();
     const selectedErpItemListValueHook = useSelectedErpItemListValueHook();
     const selectedErpItemListActionsHook = useSelectedErpItemListActionsHook();

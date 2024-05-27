@@ -261,7 +261,7 @@ function getFlagsForErpItemAndTargetClassificationType({ erpItem, targetClassifi
                 salesAt: customDateUtils.getCurrentUTCDateTime(),
                 releaseYn: 'y',
                 releaseAt: customDateUtils.getCurrentUTCDateTime(),
-                holdYn: 'y',
+                holdYn: 'n',
                 holdAt: null,
             };
         } else {

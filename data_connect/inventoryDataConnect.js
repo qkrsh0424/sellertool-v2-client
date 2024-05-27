@@ -113,6 +113,43 @@ function baseErpCollectionPage() {
                 })
             )
         },
+        /**
+         * 
+         * @param {object} body
+         * @param {string[]} body.erpItemIds
+         * @param {string} body.memo
+         * @param {object} headers 
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        createReleaseByErpItems: async function ({ body, headers }) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${BASE_URL}/create/release`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
+        /**
+         * 
+         * @param {object} body
+         * @param {string[]} body.erpItemIds
+         * @param {object} headers 
+         * @param {string} headers.wsId
+         * @returns 
+         */
+        cancelReleaseByErpItems: async function ({ body, headers }) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${BASE_URL}/cancel/release`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        }
     }
 }
 

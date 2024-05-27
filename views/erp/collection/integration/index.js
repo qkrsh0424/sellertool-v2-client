@@ -7,7 +7,6 @@ import useErpCollectionHeaderHook from "./hooks/useErpCollectionHeaderHook";
 import useErpItemPageHook from "./hooks/useErpItemPageHook";
 import useErpItemSameReceiverHintsHook from "./hooks/useErpItemSameReceiverHintsHook";
 import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
-import useWaybillRegistrationHook from "./hooks/useWaybillRegistrationHook";
 import { Container } from "./index.styled";
 import { useSellertoolDatas } from "../../../../hooks/sellertool-datas";
 import { useApiHook } from "./hooks/useApiHook";

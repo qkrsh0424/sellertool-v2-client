@@ -19,6 +19,8 @@ import CustomBlockButton from "../../../../../components/buttons/block-button/v1
 import { MdDeleteSelected } from "./modal/MdDeleteSelected/MdDeleteSelected";
 import { MdWaybillBulkUpdate } from "./modal/MdWaybillBulkUpdate/MdWaybillBulkUpdate";
 import { MdBulkUpdateErpItems } from "./modal/MdBulkUpdateErpItems/v1/MdBulkUpdateErpItems";
+import { StatusUtils } from "../utils/StatusUtils";
+import { MdStockRelease } from "./modal/MdStockRelease/MdStockRelease";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -107,30 +109,43 @@ export default function FloatingControlToggle({
     }
 
     const toggleStockReleaseModalOpen = (setOpen) => {
-        if (setOpen) {
-            let stockReflectedItems = [];
-            let notSetReleaseOptionCodeItems = [];
+        // if (setOpen) {
+        //     let stockReflectedItems = [];
+        //     let notSetReleaseOptionCodeItems = [];
+        //     let notCompleteItems = [];
 
-            selectedErpItemListValueHook?.forEach(r => {
-                if (r.stockReflectYn === 'y') {
-                    stockReflectedItems.push(r);
-                }
+        //     selectedErpItemListValueHook?.forEach(r => {
+        //         const classificationType = StatusUtils().getClassificationTypeForFlags({ salesYn: r?.salesYn, releaseYn: r?.releaseYn, holdYn: r?.holdYn });
 
-                if (!r.releaseOptionCode) {
-                    notSetReleaseOptionCodeItems.push(r);
-                }
-            });
+        //         if (r.stockReflectYn === 'y') {
+        //             stockReflectedItems.push(r);
+        //         }
 
-            if (stockReflectedItems?.length >= 1) {
-                alert(`이미 재고반영 처리된 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
-                return;
-            }
+        //         if (!r.releaseOptionCode) {
+        //             notSetReleaseOptionCodeItems.push(r);
+        //         }
 
-            if (notSetReleaseOptionCodeItems?.length >= 1) {
-                alert(`[M] 출고옵션코드가 지정되지 않은 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${notSetReleaseOptionCodeItems?.map(r => r.uniqueCode)?.join()}`);
-                return;
-            }
-        }
+        //         if (classificationType !== 'COMPLETE') {
+        //             notCompleteItems.push(r);
+        //         }
+
+        //     });
+
+        //     if (stockReflectedItems?.length >= 1) {
+        //         alert(`이미 재고반영 처리된 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
+        //         return;
+        //     }
+
+        //     if (notSetReleaseOptionCodeItems?.length >= 1) {
+        //         alert(`[M] 출고옵션코드가 지정되지 않은 데이터가 있습니다. 해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${notSetReleaseOptionCodeItems?.map(r => r.uniqueCode)?.join()}`);
+        //         return;
+        //     }
+
+        //     if (notCompleteItems?.length >= 1) {
+        //         alert(`출고완료 상태가 아닌 주문건이 있습니다. 해당 주문건을 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${notCompleteItems?.map(r => r.uniqueCode)?.join()}`)
+        //         return;
+        //     }
+        // }
         setStockReleaseModalOpen(setOpen);
     }
 
@@ -323,13 +338,24 @@ export default function FloatingControlToggle({
                 </CommonModalComponent>
             }
 
-            {stockReleaseModalOpen &&
+            {/* TODO : 재고반영 모달 구성 */}
+            {/* {stockReleaseModalOpen &&
                 <StockReleaseModalComponent
                     open={stockReleaseModalOpen}
                     onClose={() => toggleStockReleaseModalOpen(false)}
                     onConfirm={handleSubmitStockRelease}
                 />
+            } */}
+            {stockReleaseModalOpen &&
+                <MdStockRelease 
+                    open={stockReleaseModalOpen}
+                    toggleStockReleaseModalOpen={toggleStockReleaseModalOpen}
+                    toggleControlDrawerOpen={toggleControlDrawerOpen}
+
+                    erpCollectionHeader={erpCollectionHeader}
+                />
             }
+
 
             {cancelStockReleaseModalOpen &&
                 <ConfirmModalComponentV2

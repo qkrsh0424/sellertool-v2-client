@@ -2,10 +2,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadingComponent";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
-import ConfirmModalComponentV2 from "../../../../modules/modal/ConfirmModalComponentV2";
 import ExcelDownloadModalComponent from "../../fragments/excel-download-modal-v2/ExcelDownloadModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
-import StockReleaseModalComponent from "./modal/StockReleaseModal.component";
 import { Container } from "./styles/FloatingControlBar.styled";
 import { ProductListModalComponent } from "../../fragments/product-list-modal";
 import { useSelectedErpItemListActionsHook, useSelectedErpItemListValueHook } from "../contexts/SelectedErpItemListProvider";
@@ -25,9 +23,6 @@ import { MdCancelStockRelease } from "./modal/MdCancelStockRelease/MdCancelStock
 export default function FloatingControlToggle({
     erpCollectionHeader,
     inventoryStocks,
-
-    onSubmitStockRelease,
-    onSubmitCancelStockRelease,
 }) {
     const router = useRouter();
     const workspaceRedux = useSelector(state => state.workspaceRedux);
@@ -172,22 +167,6 @@ export default function FloatingControlToggle({
         selectedErpItemListActionsHook.onSet([]);
     }
 
-    // 재고반영 취소 : 선택된 모든 주문건
-    const handleSubmitCancelStockRelease = async () => {
-        toggleBackdropOpen(true);
-        let body = {
-            erpItemIds: selectedErpItemListValueHook?.map(r => r.id),
-        }
-
-        await onSubmitCancelStockRelease(body, () => {
-            toggleCancelStockReleaseModalOpen(false);
-            toggleControlDrawerOpen(false);
-            handleClearAllSelectedItems();
-        });
-        toggleBackdropOpen(false);
-    }
-
-
     if (selectedErpItemListValueHook?.length <= 0) {
         return null;
     }
@@ -295,16 +274,6 @@ export default function FloatingControlToggle({
                 />
             }
 
-            {/* {cancelStockReleaseModalOpen &&
-                <ConfirmModalComponentV2
-                    open={cancelStockReleaseModalOpen}
-                    onClose={() => toggleCancelStockReleaseModalOpen(false)}
-                    onConfirm={handleSubmitCancelStockRelease}
-                    message={
-                        <div>선택된 데이터들의 재고반영을 취소 합니다.</div>
-                    }
-                />
-            } */}
             {cancelStockReleaseModalOpen &&
                 <MdCancelStockRelease
                     open={cancelStockReleaseModalOpen}

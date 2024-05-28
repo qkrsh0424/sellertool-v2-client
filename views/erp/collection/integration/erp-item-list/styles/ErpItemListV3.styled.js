@@ -68,33 +68,54 @@ export const TableFieldWrapper = styled.div`
         @media only screen and (max-width:768px){
             font-size: 10px;
         }
-    }
 
-    .table-box .col-5-3 {
-        width:50px;
-
-        @media all and (max-width:992px){
-            width:30px;
+        & > div{
+            &::-webkit-scrollbar{
+                background: #e1e1e130;
+                height:7px;
+                width: 5px;
+            }
+        
+            &::-webkit-scrollbar-track{
+                border-radius: 10px;
+            }
+            &::-webkit-scrollbar-thumb{
+                background-color: #00000010;
+                border-radius: 10px;
+            }
         }
     }
 
-    .table-box .col-15-13{
-        width:150px;
 
-        @media all and (max-width:992px){
-            width:130px;
-        }
+    table {
+        position:relative;
+        text-align: center;
+        table-layout: fixed;
+        border: none;
+        width: 100%;
     }
 
-    .table-box thead tr th{
+    tbody::before {
+        display: block;
+        padding-top: var(--tablePaddingTop);
+        content: "";
+    }
+
+    tbody::after {
+        display: block;
+        padding-bottom: var(--tablePaddingBottom);
+        content: "";
+    }
+
+    table thead tr th{
         vertical-align: middle !important;
         text-align: center;
         background: #fff;
-        /* border-bottom: 1px solid #c0c0c0; */
         color: #000;
         font-weight: 700;
         padding: 10px;
         font-size: 12px;
+        border-bottom: 1px solid #e0e0e0;
 
         @media all and (max-width: 992px){
             font-size: 10px;
@@ -102,21 +123,7 @@ export const TableFieldWrapper = styled.div`
         }
     }
 
-    .table-box tbody tr{
-        &:hover{
-            /* background: #0000000a; */
-        }
-    }
-
-    .table-box tbody .tr-active{
-        background: #2C73D230 !important;
-    }
-
-    .table-box tbody .tr-highlight{
-        background: var(--defaultRedColorOpacity30);
-    }
-
-    .table-box tbody tr td{
+    table tbody tr td{
         padding: 7px 5px;
         vertical-align: middle !important;
         border-bottom: 1px solid #e0e0e0;
@@ -134,77 +141,71 @@ export const TableFieldWrapper = styled.div`
         @media all and (max-width: 992px){
             font-size: 10px;
         }
-        
-        .statusBadge{
-            display: inline-block;
-            border: none;
-            padding: 3px 8px;
-            border-radius: 30px;
-            font-size: 10px;
-            color: #fff;
-            font-weight: 700;
-        }
 
-        .statusBadge.green{
-            background-color: var(--defaultGreenColor);
+        &:focus{
+            background:red;
         }
-
-        .statusBadge.orange{
-            background-color: var(--defaultOrangeColor);
-        }
-
-        .statusBadge.blue{
-            background-color: var(--defaultBlueColor);
-        }
-
-        .statusBadge.gray{
-            background-color: var(--defaultModalCloseColor);
-        }
-
-        .statusBadge.red{
-            background-color: var(--defaultRedColor);
-        }
-        /* &:hover{
-            background: #2C73D260;
-            color: white;
-            font-weight: 600;
-        } */
     }
 
-    .table-box tbody tr .td-highlight {
-        background: #2c73d224;
-        font-weight: 600;
-
-        &:hover{
-            background: #2C73D260;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        
+    td.active{
+        background: #2C73D230 !important;
     }
 
-    .table-box tbody tr .user-duplication {
-        color: #ff0000;
+    td.noStocks{
+        background: var(--defaultRedColorOpacity30);
     }
 
-    .option-code-item{
+    td.noOptionCode{
+        background: var(--defaultYellowColorOpacity30);
+    }
+
+    .fixed-header {
+        position: sticky;
+        top: 0;
+        z-index:10;
+        background: white;
+        /* box-shadow: 0 -0.5px 0 0 #e0e0e0 inset; */
+    }
+
+    .fixed-col-left {
+        position: sticky;
+        background: white;
+        left: 0;
+        z-index:10;
+        box-shadow: -0.5px 0 0 0 #e0e0e0 inset;
+    }
+
+    .fixed-col-right {
+        position: sticky;
+        background: white;
+        right: 0;
+        background-color: var(--defaultBlueColorOpacity50);
+    }
+
+    .td-copyable-text{
+        display: inline-block;
         cursor: pointer;
+        &:hover{
+            transform: scale(1.02);
+            font-weight: 500;
+            color:var(--mainColor);
+        }
     }
 
-    .table-box::-webkit-scrollbar{
-        background: #e1e1e130;
-        height:7px;
-        width: 5px;
-    }
-
-    .table-box::-webkit-scrollbar-track{
-        border-radius: 10px;
-    }
-    .table-box::-webkit-scrollbar-thumb{
-        background-color: #00000010;
-        border-radius: 10px;
+    .td-control-button-item{
+        user-select: none;
+        -webkit-tap-highlight-color: #00000000;
+        cursor: pointer;
+        outline: none;
+        font-size: 11px;
+        margin-left: 3px;
+        background: #a0a0a0;
+        border-radius: 3px;
+        border: 1px solid #a0a0a0;
+        color: #404040;
+        padding: 3px;
+        width: 24px;
+        height: 24px;
     }
 
     .fix-button-el{
@@ -233,29 +234,37 @@ export const TableFieldWrapper = styled.div`
         }
     }
 
-    .td-control-button-item{
-        user-select: none;
-        -webkit-tap-highlight-color: #00000000;
+    .option-code-item{
         cursor: pointer;
-        outline: none;
-        font-size: 11px;
-        margin-left: 3px;
-        background: #a0a0a0;
-        border-radius: 3px;
-        border: 1px solid #a0a0a0;
-        color: #404040;
-        padding: 3px;
-        width: 24px;
-        height: 24px;
     }
 
-    .td-copyable-text{
+    .statusBadge{
         display: inline-block;
-        cursor: pointer;
-        &:hover{
-            transform: scale(1.02);
-            font-weight: 500;
-            color:var(--mainColor);
-        }
+        border: none;
+        padding: 3px 8px;
+        border-radius: 30px;
+        font-size: 10px;
+        color: #fff;
+        font-weight: 700;
+    }
+
+    .statusBadge.green{
+        background-color: var(--defaultGreenColor);
+    }
+
+    .statusBadge.orange{
+        background-color: var(--defaultOrangeColor);
+    }
+
+    .statusBadge.blue{
+        background-color: var(--defaultBlueColor);
+    }
+
+    .statusBadge.gray{
+        background-color: var(--defaultModalCloseColor);
+    }
+
+    .statusBadge.red{
+        background-color: var(--defaultRedColor);
     }
 `;

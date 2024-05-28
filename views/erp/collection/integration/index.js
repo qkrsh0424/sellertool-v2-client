@@ -2,7 +2,7 @@ import Layout from "../layout/Layout";
 import ErpItemListComponent from "./erp-item-list/ErpItemListV3.component";
 import FloatingControlToggle from "./floating-control-toggle/FloatingControlToggle";
 import FloatingPagenationComponent from "./floating-pagenation/FloatingPagenation.component";
-import HeaderSettingComponent from "./header-setting/HeaderSetting.component";
+import HeaderSetting from "./header-setting/HeaderSetting";
 import useErpCollectionHeaderHook from "./hooks/useErpCollectionHeaderHook";
 import useErpItemSameReceiverHintsHook from "./hooks/useErpItemSameReceiverHintsHook";
 import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
@@ -199,9 +199,8 @@ function MainComponentCore() {
                             exposurePeriodTypes={['', 'createdAt', 'channelOrderDate', 'salesAt', 'releaseAt', 'holdAt']}
                             viewStockReflectField={true}
                         />
-                        <HeaderSettingComponent
+                        <HeaderSetting
                             erpCollectionHeader={erpCollectionHeader}
-                            favoriteViewHeaderIdsForErpc={sellertoolDatasValueHook?.favoriteViewHeaderIdsForErpc}
                         />
                         <FdViewOptions
                             isLoading={erpItemValueHook.isLoading}

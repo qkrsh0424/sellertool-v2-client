@@ -1,27 +1,53 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { erpCollectionHeaderDataConnect } from "../../../../../data_connect/erpCollectionHeaderDataConnect";
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
+import { useSellertoolDatasValueHook } from "../../../../../contexts/SellertoolDatasGlobalProvider";
+import { useRouter } from "next/router";
 
-export default function useErpCollectionHeaderHook(selectedErpCollectionHeaderId) {
-    const workspaceRedux = useSelector(state => state.workspaceRedux);
+function getErpcHeaderIdFromClassificationType(sellertoolDatas, classificationType) {
+    switch (classificationType) {
+        case 'ALL':
+            return sellertoolDatas?.allHeaderIdForErpc;
+        case 'NEW':
+            return sellertoolDatas?.orderHeaderIdForErpc;
+        case 'CONFIRM':
+            return sellertoolDatas?.salesHeaderIdForErpc;
+        case 'COMPLETE':
+            return sellertoolDatas?.releaseCompleteHeaderIdForErpc;
+        case 'POSTPONE':
+            return sellertoolDatas?.holdHeaderIdForErpc;
+        default:
+            return null;
+    }
+}
+
+export default function useErpCollectionHeaderHook() {
+    const router = useRouter();
+    const classificationType = router?.query?.classificationType || null;
+    const sellertoolDatasValueHook = useSellertoolDatasValueHook();
+    const wsId = sellertoolDatasValueHook?.wsId;
+
+    const currentErpCollectionHeaderId = getErpcHeaderIdFromClassificationType(sellertoolDatasValueHook, classificationType);
+
     const [erpCollectionHeader, setErpCollectionHeader] = useState(null);
 
     useEffect(() => {
-        if (!selectedErpCollectionHeaderId || !workspaceRedux?.workspaceInfo?.id) {
-            return;
+        if (!currentErpCollectionHeaderId || !wsId) {
+            return setErpCollectionHeader(null);
         }
 
         reqFetchErpCollectionHeader();
-    }, [selectedErpCollectionHeaderId, workspaceRedux?.workspaceInfo?.id]);
+
+        return () => setErpCollectionHeader(null);
+    }, [currentErpCollectionHeaderId, wsId]);
 
     const reqFetchErpCollectionHeader = async () => {
         let params = {
-            erpCollectionHeaderId: selectedErpCollectionHeaderId
+            erpCollectionHeaderId: currentErpCollectionHeaderId
         }
 
         let headers = {
-            wsId: workspaceRedux?.workspaceInfo?.id
+            wsId: wsId
         }
 
         await erpCollectionHeaderDataConnect().searchRelatedErpCollectionHeaderDetails(params, headers)

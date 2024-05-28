@@ -11,6 +11,7 @@ export function useSellertoolDatasV1() {
     const favoriteExcelTranslatorHeaderIdsForErpcUpload = sellertoolData?.favoriteExcelTranslatorHeaderIdsForErpcUpload ?? [];
     const favoriteViewHeaderIdsForErpc = sellertoolData?.favoriteViewHeaderIdsForErpc ?? [];
     const favoriteDownloadFormIdsForErpc = sellertoolData?.favoriteDownloadFormIdsForErpc ?? [];
+    const allHeaderIdForErpc = sellertoolData?.allHeaderIdForErpc ?? null;
     const orderHeaderIdForErpc = sellertoolData?.orderHeaderIdForErpc ?? null;
     const salesHeaderIdForErpc = sellertoolData?.salesHeaderIdForErpc ?? null;
     const releaseCompleteHeaderIdForErpc = sellertoolData?.releaseCompleteHeaderIdForErpc ?? null;
@@ -102,6 +103,28 @@ export function useSellertoolDatasV1() {
                     return {
                         ...r,
                         favoriteDownloadFormIdsForErpc: [...array]
+                    }
+                } else {
+                    return {
+                        ...r
+                    }
+                }
+            }))
+        }
+    }
+
+    const _onSetAllHeaderIdForErpc = (headerId) => {
+        if (!sellertoolData) {
+            setSellertoolDatas([...sellertoolDatas, {
+                wsId: wsId,
+                allHeaderIdForErpc: headerId
+            }])
+        } else {
+            setSellertoolDatas(sellertoolDatas.map(r => {
+                if (r.wsId === wsId) {
+                    return {
+                        ...r,
+                        allHeaderIdForErpc: headerId
                     }
                 } else {
                     return {
@@ -250,6 +273,7 @@ export function useSellertoolDatasV1() {
         favoriteExcelTranslatorHeaderIdsForErpcUpload,
         favoriteViewHeaderIdsForErpc,
         favoriteDownloadFormIdsForErpc,
+        allHeaderIdForErpc,
         orderHeaderIdForErpc,
         salesHeaderIdForErpc,
         releaseCompleteHeaderIdForErpc,
@@ -262,6 +286,7 @@ export function useSellertoolDatasV1() {
         _onSetFavoriteExcelTranslatorHeaderIdsForErpcUpload,
         _onSetFavoriteViewHeaderIds,
         _onSetFavoriteDownloadFormIds,
+        _onSetAllHeaderIdForErpc,
         _onSetOrderHeaderIdForErpc,
         _onSetSalesHeaderIdForErpc,
         _onSetReleaseCompleteHeaderIdForErpc,

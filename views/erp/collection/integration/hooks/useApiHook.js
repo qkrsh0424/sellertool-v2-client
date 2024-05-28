@@ -1,4 +1,5 @@
 import { customToast, defaultOptions } from "../../../../../components/toast/custom-react-toastify/v1";
+import { erpCollectionHeaderDataConnect } from "../../../../../data_connect/erpCollectionHeaderDataConnect";
 import { ErpItemDataConnect } from "../../../../../data_connect/erpItemDataConnect";
 import { InventoryDataConnect } from "../../../../../data_connect/inventoryDataConnect";
 import { productOptionPackageDataConnect } from "../../../../../data_connect/productOptionPackageDataConnect";
@@ -8,6 +9,26 @@ const erpItemDataConnect = ErpItemDataConnect.baseErpCollectionPage();
 const inventoryDataConnect = InventoryDataConnect.baseErpCollectionPage();
 
 export function useApiHook(props) {
+
+    const reqFetchErpCollectionHeaderList = async ({ params, headers }) => {
+        return await erpCollectionHeaderDataConnect().searchList(headers)
+            .then(res => {
+                if (res.status === 200) {
+                    return {
+                        res: res,
+                        content: res.data.data
+                    }
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            })
+    }
 
     const reqFetchProductOptionPackageList = async ({ body, headers }) => {
         return await productOptionPackageDataConn.searchProductInfoListByProductOptionIdsWithStocks(body, headers)
@@ -273,6 +294,7 @@ export function useApiHook(props) {
     }
 
     return {
+        reqFetchErpCollectionHeaderList,
         reqFetchProductOptionPackageList,
         reqCountErpItems,
         reqFetchErpItemSlice,

@@ -4,11 +4,9 @@ import FloatingControlToggle from "./floating-control-toggle/FloatingControlTogg
 import FloatingPagenationComponent from "./floating-pagenation/FloatingPagenation.component";
 import HeaderSettingComponent from "./header-setting/HeaderSetting.component";
 import useErpCollectionHeaderHook from "./hooks/useErpCollectionHeaderHook";
-import useErpItemPageHook from "./hooks/useErpItemPageHook";
 import useErpItemSameReceiverHintsHook from "./hooks/useErpItemSameReceiverHintsHook";
 import useInventoryStocksHook from "./hooks/useInventoryStocksHook";
 import { Container } from "./index.styled";
-import { useSellertoolDatas } from "../../../../hooks/sellertool-datas";
 import { useApiHook } from "./hooks/useApiHook";
 import { useEffect, useState } from "react";
 import { FdClassification } from "./components/FdClassification/FdClassification";
@@ -17,9 +15,10 @@ import { ViewOptionsProvider } from "./contexts/ViewOptionsProvider";
 import { FdViewOptions } from "./components/FdViewOptions/FdViewOptions";
 import { ErpItemProvider, useErpItemValueHook } from "./contexts/ErpItemProvider";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
 import { SelectedErpItemListProvider } from "./contexts/SelectedErpItemListProvider";
 import { useErpItemFetcherHook } from "./hooks/useErpItemFetcherHook";
+import { ErpCollectionHeaderProvider } from "./contexts/ErpCollectionHeaderProvider";
+import { SellertoolDatasGlobalProvider, useSellertoolDatasValueHook } from "../../../../contexts/SellertoolDatasGlobalProvider";
 
 /* 
     TODO:
@@ -32,37 +31,40 @@ import { useErpItemFetcherHook } from "./hooks/useErpItemFetcherHook";
     7. 엑셀 다운로드 신규 로직 적용
     8. 주문건 필드에 주문 상태 뱃지 추가 [신규-그린,확정-오렌지,출고-블루,보류-그레이] - 완료 240513
     9. 데이터 삭제 신규 로직 적용 - 완료 240526
-    10. 탭별로 뷰헤더 각각 설정 하도록 설정
-    11. 탭 이동시 조회 조건 및 보기 옵션 초기화 시키기
+    10. 탭별로 뷰헤더 각각 설정 하도록 설정 - 완료 240528
+    11. 탭 이동시 조회 조건 및 보기 옵션 초기화 시키기 - 완료 240528
     12. 선택 데이터 수정 신규 로직 적용
-    13. 주문건 리스트 최적화 하기 - 진행중 240527
+    13. 주문건 리스트 최적화 하기 - 완료 240528
+    14. 동일 수취인 모달창 신규 로직 적용 - 진행중
 */
 export default function MainComponent(props) {
     return (
-        <ErpItemProvider>
-            <SelectedErpItemListProvider>
-                <ViewOptionsProvider>
-                    <MainComponentCore />
-                </ViewOptionsProvider>
-            </SelectedErpItemListProvider>
-        </ErpItemProvider>
+        <SellertoolDatasGlobalProvider>
+            <ErpItemProvider>
+                <SelectedErpItemListProvider>
+                    <ViewOptionsProvider>
+                        <ErpCollectionHeaderProvider>
+                            <MainComponentCore />
+                        </ErpCollectionHeaderProvider>
+                    </ViewOptionsProvider>
+                </SelectedErpItemListProvider>
+            </ErpItemProvider>
+        </SellertoolDatasGlobalProvider>
     );
 }
 
 function MainComponentCore() {
     const router = useRouter();
-    const workspaceRedux = useSelector(state => state.workspaceRedux);
-    const sellertoolDatas = useSellertoolDatas();
-    const erpcReleaseCompleteHeaderId = sellertoolDatas?.releaseCompleteHeaderIdForErpc;
-
+    const sellertoolDatasValueHook = useSellertoolDatasValueHook();
+    
     const apiHook = useApiHook();
     const erpItemFetcherHook = useErpItemFetcherHook();
-
+    
     const erpItemValueHook = useErpItemValueHook();
 
     const {
         erpCollectionHeader
-    } = useErpCollectionHeaderHook(erpcReleaseCompleteHeaderId);
+    } = useErpCollectionHeaderHook();
 
     const {
         inventoryStocks
@@ -79,7 +81,6 @@ function MainComponentCore() {
         isLoading: true
     });
 
-
     useEffect(() => {
         if (router.isReady) {
             setIsRenderLoading(false);
@@ -89,14 +90,14 @@ function MainComponentCore() {
     useEffect(() => {
         if (
             isRenderLoading ||
-            !workspaceRedux?.workspaceInfo?.id
+            !sellertoolDatasValueHook?.wsId
         ) {
             return;
         }
         erpItemFetcherHook.reqFetchErpItemSlice();
     }, [
         isRenderLoading,
-        workspaceRedux?.workspaceInfo?.id,
+        sellertoolDatasValueHook?.wsId,
         router?.query?.classificationType,
         router?.query?.periodSearchCondition,
         router?.query?.startDateTime,
@@ -123,7 +124,7 @@ function MainComponentCore() {
     useEffect(() => {
         if (
             isRenderLoading ||
-            !workspaceRedux?.workspaceInfo?.id
+            !sellertoolDatasValueHook?.wsId
         ) {
             return;
         }
@@ -131,7 +132,7 @@ function MainComponentCore() {
         erpItemFetcherHook.reqCountErpItems();
     }, [
         isRenderLoading,
-        workspaceRedux?.workspaceInfo?.id,
+        sellertoolDatasValueHook?.wsId,
         router?.query?.classificationType,
         router?.query?.periodSearchCondition,
         router?.query?.startDateTime,
@@ -152,7 +153,7 @@ function MainComponentCore() {
     ]);
 
     useEffect(() => {
-        if (!erpItemValueHook?.content?.content || !sellertoolDatas?.wsId) {
+        if (!erpItemValueHook?.content?.content || !sellertoolDatasValueHook?.wsId) {
             return;
         }
 
@@ -168,7 +169,7 @@ function MainComponentCore() {
             }
 
             let headers = {
-                wsId: sellertoolDatas?.wsId
+                wsId: sellertoolDatasValueHook?.wsId
             }
 
             const result = await apiHook.reqFetchProductOptionPackageList({ body, headers });
@@ -182,8 +183,7 @@ function MainComponentCore() {
         }
 
         fetchProductOptionPackageList();
-    }, [erpItemValueHook?.content?.content, sellertoolDatas?.wsId]);
-
+    }, [erpItemValueHook?.content?.content, sellertoolDatasValueHook?.wsId]);
 
     return (
         <>
@@ -201,8 +201,7 @@ function MainComponentCore() {
                         />
                         <HeaderSettingComponent
                             erpCollectionHeader={erpCollectionHeader}
-                            favoriteViewHeaderIdsForErpc={sellertoolDatas?.favoriteViewHeaderIdsForErpc}
-                            onActionSelectOrderHeaderId={(headerId) => sellertoolDatas._onSetReleaseCompleteHeaderIdForErpc(headerId)}
+                            favoriteViewHeaderIdsForErpc={sellertoolDatasValueHook?.favoriteViewHeaderIdsForErpc}
                         />
                         <FdViewOptions
                             isLoading={erpItemValueHook.isLoading}

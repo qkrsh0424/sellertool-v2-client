@@ -15,7 +15,6 @@ export function FdClassification(props) {
         router.replace({
             pathname: router?.pathname,
             query: {
-                ...router.query,
                 classificationType: currClassification?.classificationType,
                 periodSearchCondition: currClassification?.periodSearchCondition,
                 startDateTime: customDateUtils.dateToYYYYMMDD(new Date(), '-'),

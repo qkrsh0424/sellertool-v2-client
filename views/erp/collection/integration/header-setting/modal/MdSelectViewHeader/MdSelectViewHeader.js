@@ -1,17 +1,17 @@
-import Image from "next/image";
 import { useRouter } from "next/router";
-import SingleBlockButton from "../../../../../modules/button/SingleBlockButton";
-import CustomImage from "../../../../../modules/image/CustomImage";
-import { Container, ContentContainer, ItemBox } from "../styles/ViewHeadersModal.styled";
-import { useApiHook } from "../../hooks/useApiHook";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useSellertoolDatasActionsHook } from "../../../../../../contexts/SellertoolDatasGlobalProvider";
+import { useApiHook } from "../../../hooks/useApiHook";
+import { useSellertoolDatasActionsHook, useSellertoolDatasValueHook } from "../../../../../../../contexts/SellertoolDatasGlobalProvider";
+import { useEffect, useState } from "react";
+import * as St from './MdSelectViewHeader.styled';
+import { CustomDialog } from "../../../../../../../components/dialog/v1/CustomDialog";
+import CustomImage from "../../../../../../../components/image/CustomImage";
+import CustomBlockButton from "../../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 
-export default function ViewHeadersModalComponent({
-    erpCollectionHeader,
-    favoriteViewHeaderIdsForErpc,
+export function MdSelectViewHeader({
+    open = false,
     onClose,
+    erpCollectionHeader
 }) {
     const router = useRouter();
     const classificationType = router?.query?.classificationType || null;
@@ -20,7 +20,9 @@ export default function ViewHeadersModalComponent({
 
     const apiHook = useApiHook();
 
+    const sellertoolDatasValueHook = useSellertoolDatasValueHook();
     const sellertoolDatasActionsHook = useSellertoolDatasActionsHook();
+    const bookmarkViewHeaderIds = sellertoolDatasValueHook.bookmarkViewHeaderIdsForErpc || [];
 
     const [erpCollectionHeaderList, setErpCollectionHeaderList] = useState(null);
 
@@ -32,6 +34,18 @@ export default function ViewHeadersModalComponent({
                 erpCollectionHeaderId: erpCollectionHeaderId
             }
         })
+    }
+
+    const handleBookmark = (erpCollectionHeaderId) => {
+        let newBookmarkViewHeaderIds = [...bookmarkViewHeaderIds];
+
+        if (newBookmarkViewHeaderIds?.includes(erpCollectionHeaderId)) {
+            newBookmarkViewHeaderIds = newBookmarkViewHeaderIds?.filter(r => r !== erpCollectionHeaderId);
+        } else {
+            newBookmarkViewHeaderIds.push(erpCollectionHeaderId);
+        }
+
+        sellertoolDatasActionsHook.erpcActions.onSetBookmarkViewHeaderIds(newBookmarkViewHeaderIds);
     }
 
     const handleSelectHeader = (selectedHeader) => {
@@ -53,7 +67,7 @@ export default function ViewHeadersModalComponent({
                 break;
             default:
                 break;
-    
+
         }
         onClose();
     }
@@ -74,45 +88,22 @@ export default function ViewHeadersModalComponent({
         handleReqFetchErpCollectionHeaderList();
     }, [wsId]);
 
+
     return (
         <>
-            <Container>
-                <div className='header-close-button-box'>
-                    <button
-                        type='button'
-                        onClick={typeof (onClose) === 'function' ? () => onClose() : () => { ; }}
-                        className='header-close-button-el'
-                    >
-                        <div className='header-close-button-icon'>
-                            <Image
-                                loader={({ src, width, quality }) => `${src}?q=${quality || 75}`}
-                                src='/images/icon/close_default_959eae.svg'
-                                layout='responsive'
-                                width={1}
-                                height={1}
-                                alt="close icon"
-                                loading="lazy"
-                            ></Image>
-                        </div>
-                    </button>
-                </div>
-                <div
-                    className='title-box'
-                >
-                    <div className='title'>
-                        뷰헤더 선택
-                    </div>
-                </div>
-                <ContentContainer>
+            <CustomDialog open={open} onClose={() => onClose()}>
+                <CustomDialog.CloseButton onClose={() => onClose()} />
+                <CustomDialog.Title>뷰헤더 선택</CustomDialog.Title>
+                <St.BodyContainer>
                     <h4>즐겨찾기</h4>
-                    {favoriteViewHeaderIdsForErpc?.map(favoriteViewHeaderId => {
-                        const currErpCollectionHeader = erpCollectionHeaderList?.find(r => r?.id === favoriteViewHeaderId);
+                    {bookmarkViewHeaderIds?.map(bookmarkViewHeaderId => {
+                        const currErpCollectionHeader = erpCollectionHeaderList?.find(r => r?.id === bookmarkViewHeaderId);
                         if (!currErpCollectionHeader) {
                             return null;
                         }
 
                         return (
-                            <ItemBox
+                            <St.ItemBox
                                 key={currErpCollectionHeader.id}
                                 onClick={() => handleSelectHeader(currErpCollectionHeader)}
                                 style={{
@@ -120,11 +111,22 @@ export default function ViewHeadersModalComponent({
                                 }}
                             >
                                 <div>
+                                    <CustomBlockButton
+                                        type='button'
+                                        className='icon-button-item'
+                                        onClick={(e) => { e.stopPropagation(); handleBookmark(currErpCollectionHeader?.id) }}
+                                    >
+                                        <CustomImage
+                                            src='/images/icon/star_default_ffdf00.svg'
+                                        />
+                                    </CustomBlockButton>
+                                </div>
+                                <div style={{ flex: 1 }}>
                                     <div className='name'>{currErpCollectionHeader.name}</div>
                                     <div className='description'>{currErpCollectionHeader.description || '지정된 설명이 없습니다.'}</div>
                                 </div>
                                 <div className='mgl-flex'>
-                                    <SingleBlockButton
+                                    <CustomBlockButton
                                         type='button'
                                         className='icon-button-item'
                                         onClick={(e) => handleClickSettingButton(e, currErpCollectionHeader.id)}
@@ -132,15 +134,15 @@ export default function ViewHeadersModalComponent({
                                         <CustomImage
                                             src='/images/icon/settings_default_808080.svg'
                                         />
-                                    </SingleBlockButton>
+                                    </CustomBlockButton>
                                 </div>
-                            </ItemBox>
+                            </St.ItemBox>
                         );
                     })}
                     <h4>목록</h4>
-                    {erpCollectionHeaderList?.filter(r => !favoriteViewHeaderIdsForErpc?.includes(r?.id))?.map(r => {
+                    {erpCollectionHeaderList?.filter(r => !bookmarkViewHeaderIds?.includes(r?.id))?.map(r => {
                         return (
-                            <ItemBox
+                            <St.ItemBox
                                 key={r.id}
                                 onClick={() => handleSelectHeader(r)}
                                 style={{
@@ -148,11 +150,22 @@ export default function ViewHeadersModalComponent({
                                 }}
                             >
                                 <div>
+                                    <CustomBlockButton
+                                        type='button'
+                                        className='icon-button-item'
+                                        onClick={(e) => { e.stopPropagation(); handleBookmark(r.id) }}
+                                    >
+                                        <CustomImage
+                                            src='/images/icon/star_border_808080.svg'
+                                        />
+                                    </CustomBlockButton>
+                                </div>
+                                <div style={{ flex: 1 }}>
                                     <div className='name'>{r.name}</div>
                                     <div className='description'>{r.description || '지정된 설명이 없습니다.'}</div>
                                 </div>
                                 <div className='mgl-flex'>
-                                    <SingleBlockButton
+                                    <CustomBlockButton
                                         type='button'
                                         className='icon-button-item'
                                         onClick={(e) => handleClickSettingButton(e, r.id)}
@@ -160,13 +173,13 @@ export default function ViewHeadersModalComponent({
                                         <CustomImage
                                             src='/images/icon/settings_default_808080.svg'
                                         />
-                                    </SingleBlockButton>
+                                    </CustomBlockButton>
                                 </div>
-                            </ItemBox>
+                            </St.ItemBox>
                         );
                     })}
-                </ContentContainer>
-            </Container>
+                </St.BodyContainer>
+            </CustomDialog>
         </>
     );
 }

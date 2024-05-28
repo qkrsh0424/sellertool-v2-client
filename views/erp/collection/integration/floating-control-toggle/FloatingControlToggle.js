@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import BackdropLoadingComponent from "../../../../modules/loading/BackdropLoadingComponent";
 import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
 import ExcelDownloadModalComponent from "../../fragments/excel-download-modal-v2/ExcelDownloadModal.component";
 import FloatingControlBarModalComponent from "./modal/FloatingControlBarModal.component";
 import { Container } from "./styles/FloatingControlBar.styled";
 import { ProductListModalComponent } from "../../fragments/product-list-modal";
 import { useSelectedErpItemListActionsHook, useSelectedErpItemListValueHook } from "../contexts/SelectedErpItemListProvider";
-import { useApiHook } from "../hooks/useApiHook";
 import { useRouter } from "next/router";
 import { MdChangeStatus } from "./modal/MdChangeStatus/MdChangeStatus";
-import { useErpItemFetcherHook } from "../hooks/useErpItemFetcherHook";
 import MdViewSelected from "./modal/MdViewSelected/MdViewSelected";
 import { MdCopyCreate } from "./modal/MdCopyCreate/MdCopyCreate";
 import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
@@ -25,10 +21,6 @@ export default function FloatingControlToggle({
     inventoryStocks,
 }) {
     const router = useRouter();
-    const workspaceRedux = useSelector(state => state.workspaceRedux);
-
-    const apiHook = useApiHook();
-    const erpItemFetcherHook = useErpItemFetcherHook();
 
     const selectedErpItemListValueHook = useSelectedErpItemListValueHook();
     const selectedErpItemListActionsHook = useSelectedErpItemListActionsHook();
@@ -44,8 +36,6 @@ export default function FloatingControlToggle({
     const [cancelStockReleaseModalOpen, setCancelStockReleaseModalOpen] = useState(false);
     const [waybillRegistrationModalOpen, setWaybillRegistrationModalOpen] = useState(false);
     const [changeStatusModalOpen, setChangeStatusModalOpen] = useState(false);
-
-    const [backdropOpen, setBackdropOpen] = useState(false);
 
     useEffect(() => {
         selectedErpItemListActionsHook.onSet([]);
@@ -97,10 +87,6 @@ export default function FloatingControlToggle({
 
     const toggleProductListModalOpen = (setOpen) => {
         setProductListModalOpen(setOpen);
-    }
-
-    const toggleBackdropOpen = (setOpen) => {
-        setBackdropOpen(setOpen);
     }
 
     const toggleStockReleaseModalOpen = (setOpen) => {
@@ -160,6 +146,21 @@ export default function FloatingControlToggle({
     }
 
     const toggleChangeStatusModalOpen = (bool) => {
+        if (bool) {
+            let stockReflectedItems = [];
+
+            selectedErpItemListValueHook?.forEach(r => {
+                if (r.stockReflectYn === 'y') {
+                    stockReflectedItems.push(r);
+                }
+            });
+
+            if (stockReflectedItems?.length >= 1) {
+                alert(`이미 재고반영 처리된 데이터가 있습니다.\n재고반영 처리된 데이터는 상태를 변경할 수 없습니다.\n해당 데이터를 제외 후 실행해 주세요.\n[M] 주문수집번호 :\n${stockReflectedItems?.map(r => r.uniqueCode)?.join()}`);
+                return;
+            }
+        }
+
         setChangeStatusModalOpen(bool);
     }
 
@@ -297,9 +298,6 @@ export default function FloatingControlToggle({
                     onCloseControlDrawer={() => toggleControlDrawerOpen(false)}
                 />
             }
-            <BackdropLoadingComponent
-                open={backdropOpen}
-            />
         </>
     );
 }

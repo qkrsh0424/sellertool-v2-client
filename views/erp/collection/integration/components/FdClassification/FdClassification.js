@@ -3,15 +3,22 @@ import CustomBlockButton from '../../../../../../components/buttons/block-button
 import * as St from './FdClassification.styled';
 import { CustomDateUtils } from '../../../../../../utils/CustomDateUtils';
 import { CLASSIFICATIONS } from '../../References';
+import { useViewOptionsActionsHook } from '../../contexts/ViewOptionsProvider';
 
 const customDateUtils = CustomDateUtils();
 
 export function FdClassification(props) {
     const router = useRouter();
+    const viewOptionsActionsHook = useViewOptionsActionsHook();
 
     const handleChangeClassification = (classificationType) => {
         let currClassification = CLASSIFICATIONS?.find(r => r.classificationType === classificationType) || CLASSIFICATIONS[0];
 
+        viewOptionsActionsHook.onSet({
+            stockOptionType: 'ALL',
+            receiverOptionType: 'ALL'
+        });
+        
         router.replace({
             pathname: router?.pathname,
             query: {
@@ -20,7 +27,7 @@ export function FdClassification(props) {
                 startDateTime: customDateUtils.dateToYYYYMMDD(new Date(), '-'),
                 endDateTime: customDateUtils.dateToYYYYMMDD(new Date(), '-')
             }
-        })
+        });
     }
 
     return (

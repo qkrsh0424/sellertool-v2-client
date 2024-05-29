@@ -287,25 +287,25 @@ export const TableFieldWrapper = styled.div`
         font-size: 10px;
         color: #fff;
         font-weight: 700;
+        &.green{
+            background-color: var(--defaultGreenColor);
+        }
+    
+        &.orange{
+            background-color: var(--defaultOrangeColor);
+        }
+    
+        &.blue{
+            background-color: var(--defaultBlueColor);
+        }
+    
+        &.gray{
+            background-color: var(--defaultModalCloseColor);
+        }
+    
+        &.red{
+            background-color: var(--defaultRedColor);
+        }
     }
 
-    .statusBadge.green{
-        background-color: var(--defaultGreenColor);
-    }
-
-    .statusBadge.orange{
-        background-color: var(--defaultOrangeColor);
-    }
-
-    .statusBadge.blue{
-        background-color: var(--defaultBlueColor);
-    }
-
-    .statusBadge.gray{
-        background-color: var(--defaultModalCloseColor);
-    }
-
-    .statusBadge.red{
-        background-color: var(--defaultRedColor);
-    }
 `;

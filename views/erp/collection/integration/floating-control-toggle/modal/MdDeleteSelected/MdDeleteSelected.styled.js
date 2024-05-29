@@ -128,6 +128,36 @@ export const TableFieldWrapper = styled.div`
         z-index:10;
         box-shadow: 0.5px 0 0 0 #e0e0e0 inset;
     }
+
+    .statusBadge{
+        display: inline-block;
+        border: none;
+        padding: 3px 8px;
+        border-radius: 30px;
+        font-size: 10px;
+        color: #fff;
+        font-weight: 700;
+        &.green{
+            background-color: var(--defaultGreenColor);
+        }
+    
+        &.orange{
+            background-color: var(--defaultOrangeColor);
+        }
+    
+        &.blue{
+            background-color: var(--defaultBlueColor);
+        }
+    
+        &.gray{
+            background-color: var(--defaultModalCloseColor);
+        }
+    
+        &.red{
+            background-color: var(--defaultRedColor);
+        }
+    }
+
 `;
 
 export const ConfirmFieldWrapper = styled.div`

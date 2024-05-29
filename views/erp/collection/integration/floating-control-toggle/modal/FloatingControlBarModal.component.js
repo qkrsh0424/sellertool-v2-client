@@ -3,6 +3,7 @@ import Drawer from '@mui/material/Drawer';
 import styled from 'styled-components';
 import CustomImage from '../../../../../modules/image/CustomImage';
 import CustomBlockButton from '../../../../../../components/buttons/block-button/v1/CustomBlockButton';
+import { useRouter } from 'next/router';
 
 const CloseButtonBox = styled.div`
     height: 100%;
@@ -81,6 +82,9 @@ export default function FloatingControlBarModalComponent({
     onActionOpenWaybillRegistrationModal,
     onActionOpenChangeStatusModal,
 }) {
+    const router = useRouter();
+    const classificationType = router?.query?.classificationType || null;
+
     return (
         <div>
             <Drawer
@@ -132,32 +136,36 @@ export default function FloatingControlBarModalComponent({
                                 운송장 일괄등록
                             </CustomBlockButton>
                         </ContentGroup>
-                        <ContentGroup>
-                            <div className='title'>재고 관리</div>
-                            <CustomBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenStockReleaseModal()}
-                            >
-                                재고반영
-                            </CustomBlockButton>
-                            <CustomBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenCancelStockReleaseModal()}
-                            >
-                                재고반영 취소
-                            </CustomBlockButton>
-                        </ContentGroup>
+                        {['COMPLETE'].includes(classificationType) &&
+                            <ContentGroup>
+                                <div className='title'>재고 관리</div>
+                                <CustomBlockButton
+                                    type='button'
+                                    className='button-item'
+                                    onClick={() => onActionOpenStockReleaseModal()}
+                                >
+                                    재고반영
+                                </CustomBlockButton>
+                                <CustomBlockButton
+                                    type='button'
+                                    className='button-item'
+                                    onClick={() => onActionOpenCancelStockReleaseModal()}
+                                >
+                                    재고반영 취소
+                                </CustomBlockButton>
+                            </ContentGroup>
+                        }
                         <ContentGroup>
                             <div className='title'>상태 관리</div>
-                            <CustomBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenChangeStatusModal()}
-                            >
-                                상태변경
-                            </CustomBlockButton>
+                            {['NEW', 'CONFIRM', 'COMPLETE', 'POSTPONE'].includes(classificationType) &&
+                                <CustomBlockButton
+                                    type='button'
+                                    className='button-item'
+                                    onClick={() => onActionOpenChangeStatusModal()}
+                                >
+                                    상태변경
+                                </CustomBlockButton>
+                            }
                             <CustomBlockButton
                                 type='button'
                                 className='button-item warning-button'

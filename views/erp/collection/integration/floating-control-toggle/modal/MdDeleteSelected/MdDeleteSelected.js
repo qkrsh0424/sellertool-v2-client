@@ -12,6 +12,7 @@ import CustomBlockButton from '../../../../../../../components/buttons/block-but
 import { customBackdropController } from '../../../../../../../components/backdrop/default/v1';
 import _ from 'lodash';
 import { customToast } from '../../../../../../../components/toast/custom-react-toastify/v1';
+import { StatusUtils } from '../../../utils/StatusUtils';
 
 export function MdDeleteSelected({
     open,
@@ -141,6 +142,12 @@ function TableHeaderRow({
 }) {
     return (
         <tr>
+            <th
+                className="fixed-header"
+                width={50}
+            >
+                상태
+            </th>
             {headers?.map(header => {
                 return (
                     <ResizableTh
@@ -168,9 +175,18 @@ const TableBodyRow = memo(function TableBodyRowMemo({
     headers,
     rowIndex,
 }) {
+    const currStatus = StatusUtils().getClassificationTypeForFlags({ salesYn: targetErpItem?.salesYn, releaseYn: targetErpItem?.releaseYn, holdYn: targetErpItem?.holdYn })
     return (
         <>
             <tr>
+                <td>
+                    {currStatus === 'NEW' ? <div className='statusBadge green'>신규</div> :
+                        currStatus === 'CONFIRM' ? <div className='statusBadge orange'>확정</div> :
+                            currStatus === 'COMPLETE' ? <div className='statusBadge blue'>출고</div> :
+                                currStatus === 'POSTPONE' ? <div className='statusBadge gray'>보류</div> :
+                                    <div className='statusBadge red'>미확인</div>
+                    }
+                </td>
                 {headers?.map(header => {
                     if (['channelOrderDate', 'createdAt', 'salesAt', 'releaseAt', 'holdAt'].includes(header?.matchedFieldName)) {
                         return (

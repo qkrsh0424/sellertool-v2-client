@@ -47,6 +47,13 @@ const VIEW_TYPES = [
         masterOnly: true,
         alarm: <span className='alram-tag'>개인 전환 필요</span>
     },
+    {
+        type: 'API_MANAGEMENT',
+        title: 'API 관리',
+        iconSrc: '/images/icon/api_default_808080.svg',
+        default: false,
+        masterOnly: true,
+    },
 ]
 
 export default function NavbarComponent({ workspace, isWorkspaceMaster }) {

@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { getRemovedPrefixZero } from "../../../../../utils/numberFormatUtils";
 
-export function useBulkUpdateErpItemsFormList() {
-    const [bulkUpdateErpItemsFormList, setBulkUpdateErpItemsFormList] = useState(null);
+export function useBulkUpdateErpItemsFormList(initialValue) {
+    const [bulkUpdateErpItemsFormList, setBulkUpdateErpItemsFormList] = useState(initialValue || null);
 
     const onSetBulkUpdateErpItemsFormList = (values) => {
         setBulkUpdateErpItemsFormList(values);

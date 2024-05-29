@@ -64,11 +64,11 @@ const NAV_LIST = [
         pathname: '/erp/collection/hold',
         asPath: `/erp/collection/hold/?periodSearchCondition=holdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
     },
-    // {
-    //     name: '통합주문관리',
-    //     pathname: '/erp/collection/integration',
-    //     asPath: `/erp/collection/integration/?periodSearchCondition=holdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
-    // },
+    {
+        name: '통합주문관리',
+        pathname: '/erp/collection/integration',
+        asPath: `/erp/collection/integration/?classificationType=ALL&periodSearchCondition=createdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}&riSearchCondition=receiver&riSearchQuery=`
+    },
     {
         name: '설정',
         pathname: '/erp/collection/settings',

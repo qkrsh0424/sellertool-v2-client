@@ -24,6 +24,7 @@ import { ConditionContainer, ConditionWrapper, Container, FlexGroup, PeriodWrapp
 import { CLASSIFICATIONS, DELIVERY_INFO_TYPES, MANAGEMENT_MEMO_TYPES, MANAGEMENT_PRODUCT_TYPES, MATCHED_CODE_TYPES, ORDER_INFO_TYPES, PERIOD_TYPES, RECEIVER_INFO_TYPES, STOCK_REFLECT_YN_TYPES } from "../../References";
 
 import { CustomDateUtils } from "../../../../../../utils/CustomDateUtils";
+import { useEffect, useRef } from "react";
 
 const customDateUtils = CustomDateUtils();
 /**
@@ -36,6 +37,7 @@ export default function FdConditionSearch({
     viewStockReflectField,
 }) {
     const router = useRouter();
+    const riSearchQueryRef = useRef();
 
     const {
         periodSearchYn,
@@ -204,6 +206,10 @@ export default function FdConditionSearch({
         }, undefined, { scroll: false })
     }
 
+    useEffect(() => {
+        console.log(riSearchQueryRef?.current);
+        riSearchQueryRef?.current?.focus();
+    }, [router?.query?.classificationType]);
     return (
         <>
             <Container>
@@ -382,11 +388,12 @@ export default function FdConditionSearch({
                                         })}
                                     </CustomSelect>
                                     <CustomInput
+                                        ref={riSearchQueryRef}
                                         type='text'
                                         className='input-item'
                                         value={riSearchQuery || ''}
                                         onChange={(e) => onChangeRiSearchQuery(e)}
-                                        disabled={!riSearchCondition}
+                                        // disabled={!riSearchCondition}
                                     ></CustomInput>
                                 </ConditionWrapper>
                             </ConditionContainer>

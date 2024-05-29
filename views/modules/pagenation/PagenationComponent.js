@@ -105,7 +105,6 @@ const Wrapper = styled.div`
         }
     }
 `;
-// TODO : query-string => nextjs router 로 변경해야됨
 const PagenationComponent = (props) => {
     const router = useRouter();
 

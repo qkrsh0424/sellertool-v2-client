@@ -1,35 +1,48 @@
 import { useEffect, useState } from "react";
-import useDisabledBtn from "../../../../../../hooks/button/useDisabledBtn";
-import { useBulkUpdateErpItemsFormList } from "../../hooks/useBulkUpdateErpItemsFormList";
+import useDisabledBtn from "../../../../../../../../hooks/button/useDisabledBtn";
+import { useBulkUpdateErpItemsFormList } from "../../../hooks/useBulkUpdateErpItemsFormList";
 import _ from "lodash";
-import { CustomDialog } from "../../../../../../components/dialog/v1/CustomDialog";
+import { CustomDialog } from "../../../../../../../../components/dialog/v1/CustomDialog";
 import { NavigationContainer } from "./MdBulkUpdateErpItems.styled";
 import TableViewTypes from "./config/TableViewTypes";
-import CustomBlockButton from "../../../../../../components/buttons/block-button/v1/CustomBlockButton";
+import CustomBlockButton from "../../../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import StaticValues from "./config/StaticValues";
 import { FdDataTable } from "./components";
+import { customToast } from "../../../../../../../../components/toast/custom-react-toastify/v1";
+import { useApiHook } from "../../../../hooks/useApiHook";
+import { useSelectedErpItemListActionsHook, useSelectedErpItemListValueHook } from "../../../../contexts/SelectedErpItemListProvider";
+import { useErpItemActionsHook, useErpItemValueHook } from "../../../../contexts/ErpItemProvider";
+import { customBackdropController } from "../../../../../../../../components/backdrop/default/v1";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 export function MdBulkUpdateErpItems({
     open = false,
-    onClose = () => { },
     maxWidth = 'xl',
-    selectedErpItems,
-    onSubmitUpdateErpItems
+    toggleEditErpItemModalOpen,
+    toggleControlDrawerOpen,
 }) {
+    const router = useRouter();
+    const workspaceRedux = useSelector(state => state?.workspaceRedux);
+    const wsId = workspaceRedux?.workspaceInfo?.id;
+
+    const apiHook = useApiHook();
+
+    const erpItemValueHook = useErpItemValueHook();
+    const erpItemActionsHook = useErpItemActionsHook();
+    const selectedErpItemListValueHook = useSelectedErpItemListValueHook();
+    const selectedErpItemListActionsHook = useSelectedErpItemListActionsHook();
+
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
 
-    const bulkUpdateErpItemsFormListHook = useBulkUpdateErpItemsFormList();
+    const bulkUpdateErpItemsFormListHook = useBulkUpdateErpItemsFormList(_.cloneDeep(selectedErpItemListValueHook));
 
     const [tableView, setTableView] = useState('orderInfo');
     const [tableHeaders, setTableHeaders] = useState(StaticValues.ORDER_INFO_HEADERS);
 
-    useEffect(() => {
-        if (!selectedErpItems) {
-            return;
-        }
-
-        bulkUpdateErpItemsFormListHook.onSetBulkUpdateErpItemsFormList(_.cloneDeep(selectedErpItems));
-    }, [selectedErpItems]);
+    const handleCloseModal = () => {
+        toggleEditErpItemModalOpen(false);
+    }
 
     const handleChangeTableView = (value) => {
         let target = TableViewTypes.find(r => r.value === value);
@@ -41,6 +54,55 @@ export function MdBulkUpdateErpItems({
         }
         setTableView(target.value);
         setTableHeaders(target.tableHeaders);
+    }
+
+    const handleSubmitUpdateErpItems = async (body) => {
+        customBackdropController().showBackdrop();
+
+        let headers = {
+            wsId: wsId
+        }
+
+        const updateResult = await apiHook.reqUpdateErpItemList({ body, headers });
+
+        if (updateResult?.content) {
+            const updateIds = [...updateResult?.content];
+
+            const fetchResult = await apiHook.reqFetchErpItemListByIds({
+                body: {
+                    ids: updateIds,
+                    matchedCode: router?.query?.matchedCode
+                },
+                headers: headers
+            })
+
+            if (fetchResult?.content) {
+                let newErpItemContent = _.cloneDeep(erpItemValueHook?.content);
+                let newSelectedErpItemList = _.cloneDeep(selectedErpItemListValueHook);
+
+                newErpItemContent.content = newErpItemContent?.content?.map(erpItem => {
+                    let resultErpItem = fetchResult?.content?.find(r => r.id === erpItem?.id);
+                    if (resultErpItem) {
+                        return { ...resultErpItem };
+                    } else { return { ...erpItem } }
+                })
+
+                newSelectedErpItemList = newSelectedErpItemList?.map(erpItem => {
+                    let resultErpItem = fetchResult?.content?.find(r => r.id === erpItem?.id);
+                    if (resultErpItem) {
+                        return { ...resultErpItem };
+                    } else { return { ...erpItem } }
+                })
+
+                erpItemActionsHook.content.onSet(newErpItemContent);
+                selectedErpItemListActionsHook.onSet(newSelectedErpItemList);
+
+                toggleEditErpItemModalOpen(false);
+                toggleControlDrawerOpen(false);
+                customToast.success(`${body?.length}건이 수정되었습니다.`)
+            }
+        }
+        customBackdropController().hideBackdrop();
     }
 
     const handleSubmit = async (e) => {
@@ -55,17 +117,17 @@ export function MdBulkUpdateErpItems({
             return;
         }
 
-        await onSubmitUpdateErpItems(body);
+        await handleSubmitUpdateErpItems(body);
     }
 
     return (
         <>
             <CustomDialog
                 open={open}
-                onClose={() => onClose()}
+                onClose={() => handleCloseModal()}
                 maxWidth={maxWidth}
             >
-                <CustomDialog.CloseButton onClose={() => onClose()} />
+                <CustomDialog.CloseButton onClose={() => handleCloseModal()} />
                 <NavigationContainer>
                     <div className='wrapper'>
                         {TableViewTypes?.map(r => {
@@ -108,7 +170,7 @@ export function MdBulkUpdateErpItems({
                                 color: '#fff',
                                 background: 'var(--defaultModalCloseColor)'
                             }}
-                            onClick={() => onClose()}
+                            onClick={() => handleCloseModal()}
                         >
                             취소
                         </CustomDialog.FooterButton>

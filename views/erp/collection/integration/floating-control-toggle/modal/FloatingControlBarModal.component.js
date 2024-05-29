@@ -1,8 +1,10 @@
 import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
-import SingleBlockButton from '../../../../../modules/button/SingleBlockButton';
 import styled from 'styled-components';
 import CustomImage from '../../../../../modules/image/CustomImage';
+import CustomBlockButton from '../../../../../../components/buttons/block-button/v1/CustomBlockButton';
+import { useRouter } from 'next/router';
+
 const CloseButtonBox = styled.div`
     height: 100%;
     .button-item{
@@ -26,12 +28,14 @@ const ContentContainer = styled.div`
 
 const ContentGroup = styled.div`
     margin-top: 20px;
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+
     .title{
         font-size: 12px;
         font-weight: 600;
         color: #808080;
-        border-bottom: 1px solid #f0f0f0;
-        padding: 10px 0;
     }
 
     .button-item{
@@ -40,6 +44,8 @@ const ContentGroup = styled.div`
         color: #606060;
         border-color: #f0f0f0;
         border-radius: 5px;
+        height: 38px;
+        border-radius: 30px;
 
         @media all and (max-width: 992px){
             width: 150px;
@@ -65,10 +71,6 @@ export default function FloatingControlBarModalComponent({
 
     onClose,
     onActionOpenEditErpItemsModal,
-    onActionOpenChangeStatusToSalesModal,
-    onActionOpenChangeStatusToReleaseModal,
-    onActionOpenChangeStatusToOrderModal,
-    onActionOpenChangeStatusToHoldModal,
     onActionOpenDeleteErpItemsConfirmModal,
     onActionOpenExcelDownloadModal,
     onActionOpenCopyCreateErpItemModal,
@@ -78,7 +80,11 @@ export default function FloatingControlBarModalComponent({
     onActionOpenStockReleaseModal,
     onActionOpenCancelStockReleaseModal,
     onActionOpenWaybillRegistrationModal,
+    onActionOpenChangeStatusModal,
 }) {
+    const router = useRouter();
+    const classificationType = router?.query?.classificationType || null;
+
     return (
         <div>
             <Drawer
@@ -93,7 +99,7 @@ export default function FloatingControlBarModalComponent({
                     }}
                 >
                     <CloseButtonBox>
-                        <SingleBlockButton
+                        <CustomBlockButton
                             type='button'
                             className='button-item'
                             onClick={() => onClose()}
@@ -103,104 +109,101 @@ export default function FloatingControlBarModalComponent({
                                     src='/images/icon/arrowRight_chevron_a0a0a0.svg'
                                 />
                             </div>
-                        </SingleBlockButton>
+                        </CustomBlockButton>
                     </CloseButtonBox>
                     <ContentContainer>
                         <ContentGroup>
                             <div className='title'>일괄 데이터 처리</div>
-                            <SingleBlockButton
+                            <CustomBlockButton
                                 type='button'
                                 className='button-item'
                                 onClick={() => onActionOpenEditErpItemsModal()}
                             >
                                 수정
-                            </SingleBlockButton>
-                            <SingleBlockButton
+                            </CustomBlockButton>
+                            <CustomBlockButton
                                 type='button'
                                 className='button-item'
                                 onClick={() => onActionOpenCopyCreateErpItemModal()}
                             >
                                 복사 생성
-                            </SingleBlockButton>
-                            <SingleBlockButton
+                            </CustomBlockButton>
+                            <CustomBlockButton
                                 type='button'
                                 className='button-item'
                                 onClick={() => onActionOpenWaybillRegistrationModal()}
                             >
                                 운송장 일괄등록
-                            </SingleBlockButton>
+                            </CustomBlockButton>
                         </ContentGroup>
-                        <ContentGroup>
-                            <div className='title'>재고 관리</div>
-                            <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenStockReleaseModal()}
-                            >
-                                재고반영
-                            </SingleBlockButton>
-                            <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenCancelStockReleaseModal()}
-                            >
-                                재고반영 취소
-                            </SingleBlockButton>
-                        </ContentGroup>
+                        {['COMPLETE'].includes(classificationType) &&
+                            <ContentGroup>
+                                <div className='title'>재고 관리</div>
+                                <CustomBlockButton
+                                    type='button'
+                                    className='button-item'
+                                    onClick={() => onActionOpenStockReleaseModal()}
+                                >
+                                    재고반영
+                                </CustomBlockButton>
+                                <CustomBlockButton
+                                    type='button'
+                                    className='button-item'
+                                    onClick={() => onActionOpenCancelStockReleaseModal()}
+                                >
+                                    재고반영 취소
+                                </CustomBlockButton>
+                            </ContentGroup>
+                        }
                         <ContentGroup>
                             <div className='title'>상태 관리</div>
-                            <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenChangeStatusToSalesModal()}
-                            >
-                                출고취소
-                            </SingleBlockButton>
-                            <SingleBlockButton
-                                type='button'
-                                className='button-item'
-                                onClick={() => onActionOpenChangeStatusToHoldModal()}
-                            >
-                                보류전환
-                            </SingleBlockButton>
-                            <SingleBlockButton
+                            {['NEW', 'CONFIRM', 'COMPLETE', 'POSTPONE'].includes(classificationType) &&
+                                <CustomBlockButton
+                                    type='button'
+                                    className='button-item'
+                                    onClick={() => onActionOpenChangeStatusModal()}
+                                >
+                                    상태변경
+                                </CustomBlockButton>
+                            }
+                            <CustomBlockButton
                                 type='button'
                                 className='button-item warning-button'
                                 onClick={() => onActionOpenDeleteErpItemsConfirmModal()}
                             >
                                 데이터 삭제
-                            </SingleBlockButton>
+                            </CustomBlockButton>
                         </ContentGroup>
                         <ContentGroup>
                             <div className='title'>기타</div>
-                            <SingleBlockButton
+                            <CustomBlockButton
                                 type='button'
                                 className='button-item'
                                 onClick={() => onActionOpenViewSelectedModal()}
                             >
                                 선택 데이터 보기
-                            </SingleBlockButton>
-                            <SingleBlockButton
+                            </CustomBlockButton>
+                            <CustomBlockButton
                                 type='button'
                                 className='button-item'
                                 onClick={() => onActionOpenProductListModal()}
                             >
                                 상품리스트
-                            </SingleBlockButton>
-                            <SingleBlockButton
+                            </CustomBlockButton>
+                            <CustomBlockButton
                                 type='button'
                                 className='button-item'
                                 onClick={() => onActionOpenExcelDownloadModal()}
                             >
                                 엑셀 다운로드
-                            </SingleBlockButton>
-                            <SingleBlockButton
+                            </CustomBlockButton>
+                            <CustomBlockButton
                                 type='button'
                                 className='button-item'
                                 onClick={() => onActionClearAllSelectedItems()}
                             >
                                 전체해제
-                            </SingleBlockButton>
+                            </CustomBlockButton>
                         </ContentGroup>
                     </ContentContainer>
                 </div>

@@ -10,6 +10,7 @@ import AuthTemplateListComponent from "./auth-template-list/AuthTemplateList.com
 import ProfileComponent from "./profile/Profile.component";
 import SettingsComponent from "./settings/Settings.component";
 import SubscriptionPlanComponent from "./subscription-plan";
+import { ApiManagementComponent } from "./api-management";
 
 const Container = styled.div`
     background-color: var(--defaultBackground);
@@ -110,6 +111,14 @@ const WorkspaceManagementMainComponent = (props) => {
                             (workspace?.masterFlag && viewType && viewType === 'SUBSCRIPTION_PLAN') &&
                             (
                                 <SubscriptionPlanComponent
+                                    workspace={workspace}
+                                />
+                            )
+                        }
+                        {
+                            (workspace?.masterFlag && viewType && viewType === 'API_MANAGEMENT') &&
+                            (
+                                <ApiManagementComponent
                                     workspace={workspace}
                                 />
                             )

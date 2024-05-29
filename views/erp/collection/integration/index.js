@@ -36,7 +36,7 @@ import { SellertoolDatasGlobalProvider, useSellertoolDatasValueHook } from "../.
     12. 선택 데이터 수정 신규 로직 적용
     13. 주문건 리스트 최적화 하기 - 완료 240528
     14. 동일 수취인 모달창 신규 로직 적용 - 완료 240529
-    15. 탭별 플로팅 토글에 보여지는 기능 다르게 하기
+    15. 탭별 플로팅 토글에 보여지는 기능 다르게 하기 - 완료 240529
 */
 export default function MainComponent(props) {
     return (

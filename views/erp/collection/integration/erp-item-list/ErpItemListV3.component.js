@@ -6,10 +6,8 @@ import { dateToYYYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
 import { numberWithCommas } from "../../../../../utils/numberFormatUtils";
 import CustomImage from "../../../../modules/image/CustomImage";
 import FieldLoadingV2 from "../../../../modules/loading/FieldLoadingV2";
-import CommonModalComponent from "../../../../modules/modal/CommonModalComponent";
-import ItemsForSameReceiverModalComponent from "./modal/ItemsForSameReceiverModal.component";
 import { PinButtonBox, TableFieldWrapper, ViewHeaderSelectNotice } from "./styles/ErpItemListV3.styled";
-import { CustomSearchOptionCodesModal, useSearchOptionCodesModalControl } from "../../../../../components/search-option-codes/v2";
+import { CustomSearchOptionCodesModal } from "../../../../../components/search-option-codes/v2";
 import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 import { Base64Utils } from "../../../../../utils/base64Utils";
 import { ClipboardUtils } from "../../../../../utils/ClipboardUtils";
@@ -355,19 +353,6 @@ export default function ErpItemListComponent({
                     erpCollectionHeader={erpCollectionHeader}
                 />
             }
-            {/* {itemsForSameReceiverModalOpen &&
-                <CommonModalComponent
-                    open={itemsForSameReceiverModalOpen}
-                    onClose={handleCloseItemsForSameReceiverModal}
-                    maxWidth={'xl'}
-                >
-                    <ItemsForSameReceiverModalComponent
-                        targetSameReceiverHint={targetSameReceiverHint}
-                        erpCollectionHeader={erpCollectionHeader}
-                        onClose={handleCloseItemsForSameReceiverModal}
-                    />
-                </CommonModalComponent>
-            } */}
         </>
     );
 }

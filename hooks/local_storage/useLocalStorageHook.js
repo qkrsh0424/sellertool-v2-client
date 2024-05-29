@@ -24,7 +24,7 @@ export const useLocalStorageHook = (key, initialValue) => {
     const setValue = useCallback(
         (value) => {
             try {
-                const valueToStore = value instanceof Function ? value(storedValue) : value;
+                const valueToStore = value instanceof Function ? value(state) : value;
                 setState(valueToStore);
                 localStorage.setItem(key, JSON.stringify(valueToStore));
             } catch (error) {

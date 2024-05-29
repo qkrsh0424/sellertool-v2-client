@@ -57,7 +57,7 @@ export const TableFieldWrapper = styled.div`
     .table-box {
         width: 100%;
         position:relative;
-        /* height: 300px; */
+        height: 500px;
         overflow: hidden;
         border: 1px solid #e0e0e0;
         border-radius: 15px;
@@ -135,6 +135,35 @@ export const TableFieldWrapper = styled.div`
             font-size: 10px;
         }
         
+        .statusBadge{
+            display: inline-block;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 30px;
+            font-size: 10px;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .statusBadge.green{
+            background-color: var(--defaultGreenColor);
+        }
+
+        .statusBadge.orange{
+            background-color: var(--defaultOrangeColor);
+        }
+
+        .statusBadge.blue{
+            background-color: var(--defaultBlueColor);
+        }
+
+        .statusBadge.gray{
+            background-color: var(--defaultModalCloseColor);
+        }
+
+        .statusBadge.red{
+            background-color: var(--defaultRedColor);
+        }
         /* &:hover{
             background: #2C73D260;
             color: white;

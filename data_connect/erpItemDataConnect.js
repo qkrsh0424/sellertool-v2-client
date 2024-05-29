@@ -48,6 +48,16 @@ function baseErpCollectionPage() {
                 })
             )
         },
+        searchListBySameReceiverHint: async function ({ body, headers }) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${BASE_URL}/search/bySameReceiverHint`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
         change_optionCode: async function ({ body, headers }) {
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.patch(`${BASE_URL}/${body.id}/target:optionCode`, body, {
@@ -109,7 +119,7 @@ function baseErpCollectionPage() {
                 })
             )
         },
-        uploadWaybillForm: async function ({formData, headers}) {
+        uploadWaybillForm: async function ({ formData, headers }) {
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.post(`${BASE_URL}/waybill-bulk-update`, formData, {
                     headers: headers,

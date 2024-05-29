@@ -9,6 +9,7 @@ import useErpItemsFormSameReceiverHook from "../hooks/useErpItemsForSameReceiver
 import { Container, SubmitButtonContainer, TableFieldWrapper } from "../styles/ItemsForSameReceiverModal.styled";
 import ResizableTh from "../../../../../../components/table/th/v1/ResizableTh";
 import { useSelectedErpItemListActionsHook, useSelectedErpItemListValueHook } from "../../contexts/SelectedErpItemListProvider";
+import { StatusUtils } from "../../utils/StatusUtils";
 
 function salesYnForTabType(tabType) {
     switch (tabType) {
@@ -60,6 +61,8 @@ export default function ItemsForSameReceiverModalComponent({
     onClose
 }) {
     const router = useRouter();
+    const classificationType = router?.query?.classificationType || null;
+
     const {
         erpItems
     } = useErpItemsFormSameReceiverHook(targetSameReceiverHint);
@@ -71,7 +74,7 @@ export default function ItemsForSameReceiverModalComponent({
     const selectedErpItemListValueHook = useSelectedErpItemListValueHook();
     const selectedErpItemActionsHook = useSelectedErpItemListActionsHook();
 
-    const [tabType, setTabType] = useState(INIT_TAB_TYPE);
+    const [tabType, setTabType] = useState(classificationType);
 
     const handleSelectErpItem = (item) => {
         let data = selectedErpItemListValueHook?.find(r => r.id === item.id);
@@ -121,6 +124,7 @@ export default function ItemsForSameReceiverModalComponent({
                     inventoryStocks={inventoryStocks}
                     matchedCode={router?.query?.matchedCode}
 
+                    classificationType={classificationType}
                     tabType={tabType}
                     onChangeTabType={handleChangeTabType}
                 />
@@ -160,20 +164,22 @@ function TableField({
     inventoryStocks,
     matchedCode,
 
+    classificationType,
     tabType,
     onChangeTabType,
 }) {
     const salesYn = salesYnForTabType(tabType);
     const releaseYn = releaseYnForTabType(tabType);
     const holdYn = holdYnForTabType(tabType);
+    const flags = StatusUtils().getFlagsForClassificationType(tabType);
 
     return (
         <TableFieldWrapper>
             <div className='mgl-flex'>
-                <div className={`title ${tabType === 'order' ? 'title-active' : ''}`} onClick={() => onChangeTabType('order')}>주문확인</div>
-                <div className={`title ${tabType === 'sales' ? 'title-active' : ''}`} onClick={() => onChangeTabType('sales')}>주문확정</div>
-                <div className={`title ${tabType === 'release' ? 'title-active' : ''}`} onClick={() => onChangeTabType('release')}>출고완료</div>
-                <div className={`title ${tabType === 'hold' ? 'title-active' : ''}`} onClick={() => onChangeTabType('hold')}>보류데이터</div>
+                <div className={`title ${tabType === 'NEW' ? 'title-active' : ''}`} onClick={() => onChangeTabType('NEW')}>주문확인</div>
+                <div className={`title ${tabType === 'CONFIRM' ? 'title-active' : ''}`} onClick={() => onChangeTabType('CONFIRM')}>주문확정</div>
+                <div className={`title ${tabType === 'COMPLETE' ? 'title-active' : ''}`} onClick={() => onChangeTabType('COMPLETE')}>출고완료</div>
+                <div className={`title ${tabType === 'POSTPONE' ? 'title-active' : ''}`} onClick={() => onChangeTabType('POSTPONE')}>보류데이터</div>
             </div>
             <div style={{ position: 'relative' }}>
                 <div
@@ -188,7 +194,7 @@ function TableField({
                                 >
                                     No.
                                 </th>
-                                {tabType === INIT_TAB_TYPE &&
+                                {tabType === classificationType &&
                                     <th
                                         className="fixed-header"
                                         width={50}
@@ -220,7 +226,7 @@ function TableField({
                             </tr>
                         </thead>
                         <tbody>
-                            {erpItems?.filter(r => r.salesYn === salesYn && r.releaseYn === releaseYn && r.holdYn === holdYn)?.map((r1, rowIndex) => {
+                            {erpItems?.filter(r => StatusUtils().getClassificationTypeForFlags({ salesYn: r.salesYn, releaseYn: r.releaseYn, holdYn: r.holdYn }) === tabType)?.map((r1, rowIndex) => {
                                 const isSelected = selectedErpItems?.find(r => r.id === r1.id);
                                 let inventoryStock = inventoryStocks?.find(r => r.productOptionId === r1.productOptionId);
                                 let isOutOfStock = inventoryStock && inventoryStock?.stockUnit <= 0;
@@ -229,10 +235,10 @@ function TableField({
                                     <tr
                                         key={r1.id}
                                         className={`${isSelected && 'tr-active'} ${isOutOfStock && 'tr-highlight'}`}
-                                        onClick={(e) => { if (tabType === INIT_TAB_TYPE) { e.stopPropagation(); onSelectErpItem(r1); } }}
+                                        onClick={(e) => { if (tabType === classificationType) { e.stopPropagation(); onSelectErpItem(r1); } }}
                                     >
                                         <td>{rowIndex + 1}</td>
-                                        {tabType === INIT_TAB_TYPE &&
+                                        {tabType === classificationType &&
                                             <td>
                                                 <input
                                                     type='checkbox'

@@ -20,6 +20,7 @@ import { useApiHook } from "../hooks/useApiHook";
 import { useSelector } from "react-redux";
 import { StatusUtils } from "../utils/StatusUtils";
 import { TableVirtuoso } from "react-virtuoso";
+import { MdErpItemListForSameReceiver } from "./modal/MdErpItemListForSameReceiver/MdErpItemListForSameReceiver";
 
 const base64Utils = Base64Utils();
 const statusUtils = StatusUtils();
@@ -102,6 +103,7 @@ export default function ErpItemListComponent({
     const [statusPin, setStatusPin] = useState(true);
 
     const [itemsForSameReceiverModalOpen, setItemsFormSameReceiverModalOpen] = useState(false);
+    const [erpItemListForSameReceiverModalOpen, setErpItemListForSameReceiverModalOpen] = useState(false);
     const [targetSameReceiverHint, setTargetSameReceiverHint] = useState(null);
 
     useEffect(() => {
@@ -131,6 +133,16 @@ export default function ErpItemListComponent({
         } else {
             setTargetErpItem(null);
             setEditReleaseOptionCodeModalOpen(false);
+        }
+    }
+
+    const toggleErpItemListForSameReceiverModalOpen = (sameReceiverHint) => {
+        if (sameReceiverHint) {
+            setErpItemListForSameReceiverModalOpen(true);
+            setTargetSameReceiverHint(sameReceiverHint);
+        } else {
+            setErpItemListForSameReceiverModalOpen(false);
+            setTargetSameReceiverHint(null);
         }
     }
 
@@ -311,7 +323,7 @@ export default function ErpItemListComponent({
                                     erpItemSameReceiverHints={erpItemSameReceiverHints}
                                     handleOpenEditOptionCodeModal={toggleEditOptionCodeModalOpen}
                                     handleOpenEditReleaseOptionCodeModal={toggleEditReleaseOptionCodeModalOpen}
-                                    handleOpenItemsForSameReceiverModal={handleOpenItemsForSameReceiverModal}
+                                    handleOpenItemsForSameReceiverModal={toggleErpItemListForSameReceiverModalOpen}
                                 />
                             )}
                         />
@@ -335,7 +347,15 @@ export default function ErpItemListComponent({
                 />
             }
 
-            {itemsForSameReceiverModalOpen &&
+            {erpItemListForSameReceiverModalOpen &&
+                <MdErpItemListForSameReceiver
+                    open={erpItemListForSameReceiverModalOpen}
+                    toggleErpItemListForSameReceiverModalOpen={toggleErpItemListForSameReceiverModalOpen}
+                    targetSameReceiverHint={targetSameReceiverHint}
+                    erpCollectionHeader={erpCollectionHeader}
+                />
+            }
+            {/* {itemsForSameReceiverModalOpen &&
                 <CommonModalComponent
                     open={itemsForSameReceiverModalOpen}
                     onClose={handleCloseItemsForSameReceiverModal}
@@ -347,7 +367,7 @@ export default function ErpItemListComponent({
                         onClose={handleCloseItemsForSameReceiverModal}
                     />
                 </CommonModalComponent>
-            }
+            } */}
         </>
     );
 }
@@ -934,7 +954,7 @@ function ReceiverTd(props) {
                         <button
                             type='button'
                             className='td-control-button-item'
-                            onClick={hasSameReceiver ? (e) => onActionOpenItemsForSameReceiverModal(e, sameReceiverHint) : () => { }}
+                            onClick={hasSameReceiver ? (e) => { e.stopPropagation(); onActionOpenItemsForSameReceiverModal(sameReceiverHint); } : () => { }}
                         >
                             <CustomImage
                                 src={'/images/icon/search_default_ffffff.svg'}

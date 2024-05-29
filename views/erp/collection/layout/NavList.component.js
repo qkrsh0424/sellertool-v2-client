@@ -67,7 +67,7 @@ const NAV_LIST = [
     {
         name: '통합주문관리',
         pathname: '/erp/collection/integration',
-        asPath: `/erp/collection/integration/?classificationType=ALL&periodSearchCondition=createdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
+        asPath: `/erp/collection/integration/?classificationType=ALL&periodSearchCondition=createdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}&riSearchCondition=receiver&riSearchQuery=`
     },
     {
         name: '설정',

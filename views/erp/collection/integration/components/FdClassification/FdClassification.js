@@ -18,14 +18,16 @@ export function FdClassification(props) {
             stockOptionType: 'ALL',
             receiverOptionType: 'ALL'
         });
-        
+
         router.replace({
             pathname: router?.pathname,
             query: {
                 classificationType: currClassification?.classificationType,
                 periodSearchCondition: currClassification?.periodSearchCondition,
                 startDateTime: customDateUtils.dateToYYYYMMDD(new Date(), '-'),
-                endDateTime: customDateUtils.dateToYYYYMMDD(new Date(), '-')
+                endDateTime: customDateUtils.dateToYYYYMMDD(new Date(), '-'),
+                riSearchCondition: 'receiver',
+                riSearchQuery: ''
             }
         });
     }

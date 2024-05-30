@@ -19,6 +19,7 @@ import { SelectedErpItemListProvider } from "./contexts/SelectedErpItemListProvi
 import { useErpItemFetcherHook } from "./hooks/useErpItemFetcherHook";
 import { ErpCollectionHeaderProvider } from "./contexts/ErpCollectionHeaderProvider";
 import { SellertoolDatasGlobalProvider, useSellertoolDatasValueHook } from "../../../../contexts/SellertoolDatasGlobalProvider";
+import { FdIntelligenceOperator } from "./components/FdIntelligenceOperator/FdIntelligenceOperator";
 
 /* 
     TODO:
@@ -38,6 +39,8 @@ import { SellertoolDatasGlobalProvider, useSellertoolDatasValueHook } from "../.
     14. 동일 수취인 모달창 신규 로직 적용 - 완료 240529
     15. 탭별 플로팅 토글에 보여지는 기능 다르게 하기 - 완료 240529
     16. 조건 검색 필드에 대한 신규 로직 적용하기
+    17. 출고가능 주문건 선택 로직 만들기 - 진행중 240529
+
 */
 export default function MainComponent(props) {
     return (
@@ -206,6 +209,9 @@ function MainComponentCore() {
                         />
                         <FdViewOptions
                             isLoading={erpItemValueHook.isLoading}
+                        />
+                        <FdIntelligenceOperator 
+                            
                         />
                         <ErpItemListComponent
                             erpCollectionHeader={erpCollectionHeader}

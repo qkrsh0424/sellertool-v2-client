@@ -300,7 +300,6 @@ export default function ErpItemListComponent({
                         <TableVirtuoso
                             ref={virtuosoScrollRef}
                             data={erpItemContentWithViewOptions}
-                            maxLength={erpItemContentWithViewOptions?.length}
                             fixedHeaderContent={() => (
                                 <TableHeaderRow
                                     header={erpCollectionHeader}

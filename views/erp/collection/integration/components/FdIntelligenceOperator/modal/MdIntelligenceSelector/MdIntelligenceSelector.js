@@ -113,14 +113,17 @@ export function MdIntelligenceSelector({
         let confirmErpItemList = [];
         let completeErpItemList = [];
         let postponeErpItemList = [];
+        let excludeErpItemList = [];
 
         // 옵션코드가 없는 주문건은 패스
         for (let i = 0; i < erpItemList?.length; i++) {
-            if (!erpItemList[i]?.productOptionId) {
+            const erpItem = { ...erpItemList[i] };
+
+            if (!erpItem?.productOptionId) {
+                excludeErpItemList.push(erpItem);
                 continue;
             }
 
-            const erpItem = { ...erpItemList[i] };
             const currStatus = StatusUtils().getClassificationTypeForFlags({ salesYn: erpItem?.salesYn, releaseYn: erpItem?.releaseYn, holdYn: erpItem?.holdYn });
             switch (currStatus) {
                 case 'NEW':
@@ -176,7 +179,10 @@ export function MdIntelligenceSelector({
             default: break;
         }
 
-        return resultList;
+        return {
+            classifiedErpItemList: resultList,
+            excludeErpItemList: excludeErpItemList
+        };
     }
 
     const handleGetProductPackageInfoList = async (productOptionIds) => {
@@ -202,10 +208,10 @@ export function MdIntelligenceSelector({
     const handleLaunchOperator = async () => {
         customBackdropController().showBackdrop();
         const erpItemList = await handleGetErpItemList();
-        const classifiedErpItemList = handleClassifyErpItemList(erpItemList);
+        let { classifiedErpItemList, excludeErpItemList } = handleClassifyErpItemList(erpItemList);
         const packageProductOptionIdSet = new Set();
         const productOptionIdSet = new Set();
-        let excludeErpItemList = [];
+        // let excludeErpItemList = [];
         let excludeSameReceiverHintSet = new Set();
         let newSelectedErpItemList = [];
 
@@ -323,6 +329,7 @@ export function MdIntelligenceSelector({
         console.log('newSelectedErpItemList', newSelectedErpItemList);
         selectedErpItemListActionsHook.onSet(newSelectedErpItemList);
         customBackdropController().hideBackdrop();
+        handleCloseModal();
     }
 
     return (

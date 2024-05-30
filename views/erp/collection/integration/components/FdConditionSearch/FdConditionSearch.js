@@ -207,7 +207,6 @@ export default function FdConditionSearch({
     }
 
     useEffect(() => {
-        console.log(riSearchQueryRef?.current);
         riSearchQueryRef?.current?.focus();
     }, [router?.query?.classificationType]);
     return (

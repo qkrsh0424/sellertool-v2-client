@@ -38,6 +38,18 @@ function baseErpCollectionPage() {
                 }
             })
         },
+        searchList: async function ({ params, headers }) {
+            return await axiosAuthInterceptor.get(`${BASE_URL}/list`, {
+                headers: headers,
+                params: params,
+                withCredentials: true,
+                xsrfCookieName: 'x_api_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN',
+                paramsSerializer: params => {
+                    return qs.stringify(params, { arrayFormat: 'brackets' })
+                }
+            })
+        },
         searchListByIds: async function ({ body, headers }) {
             return await withMainApiCsrfWrapper(
                 () => axiosAuthInterceptor.post(`${BASE_URL}/search/byids`, body, {

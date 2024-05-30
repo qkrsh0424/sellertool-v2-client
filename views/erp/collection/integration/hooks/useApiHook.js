@@ -84,6 +84,24 @@ export function useApiHook(props) {
             })
     }
 
+    const reqFetchErpItemList = async ({ params, headers }) => {
+        return await erpItemDataConnect.searchList({ params, headers })
+            .then(res => {
+                return {
+                    res: res,
+                    content: res?.data?.data
+                }
+            })
+            .catch(err => {
+                const res = err.response;
+                console.log(res);
+                customToast.error(res?.data?.memo, {
+                    ...defaultOptions,
+                    toastId: res?.data?.memo
+                });
+            })
+    }
+
     const reqFetchErpItemListByIds = async ({ body, headers }) => {
         return await erpItemDataConnect.searchListByIds({ body, headers })
             .then(res => {
@@ -319,6 +337,7 @@ export function useApiHook(props) {
         reqFetchProductOptionPackageList,
         reqCountErpItems,
         reqFetchErpItemSlice,
+        reqFetchErpItemList,
         reqFetchErpItemListByIds,
         reqFetchErpItemListForSameReceiverHint,
         reqChangeErpItem_OptionCode,

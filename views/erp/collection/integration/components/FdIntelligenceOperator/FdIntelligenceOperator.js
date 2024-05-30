@@ -15,6 +15,12 @@ export function FdIntelligenceOperator(props) {
         <>
             <St.Container>
                 <St.Wrapper>
+                    <h3>
+                        <div>Intelligence Functions</div>
+                        <div className='icon'>
+                            <CustomImage src='/images/icon/rocket_boom_ai.svg' />
+                        </div>
+                    </h3>
                     <div className='flexBox'>
                         <div className='buttonBox'>
                             <CustomBlockButton

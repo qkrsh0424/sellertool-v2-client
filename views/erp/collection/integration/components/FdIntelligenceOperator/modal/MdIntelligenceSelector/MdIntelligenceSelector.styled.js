@@ -81,17 +81,16 @@ export const LaunchFieldWrapper = styled.div`
     margin-top: 40px;
     .launchButton{
         border-radius: 15px;
-        background-color: #fff;
-        color: #000000;
-        border:1px solid #000000;
+        color: #ffffff;
+        background-color: #696969;
+        border: 1px solid #696969;
         font-weight: 700;
         box-shadow: var(--defaultBoxShadow3);
         animation: backgroundChange 1s infinite;
 
         &:hover{
             animation:none;
-            background-color: #606060;
-            border-color: #606060;
+            opacity: 0.9;
             color:#fff;
         }
 

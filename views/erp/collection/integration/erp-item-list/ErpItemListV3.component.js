@@ -522,7 +522,7 @@ function TableBodyRow({
     const isSelected = selectedErpItemListValueHook?.find(r => r.id === item?.id);
     let inventoryStock = inventoryStocks?.find(r => r.productOptionId === item?.productOptionId);
     let isPackaged = item?.packageYn === 'y' ? true : false;
-    let isOutOfStock = !isPackaged && inventoryStock && inventoryStock?.stockUnit <= targetErpItem?.unit;
+    let isOutOfStock = !isPackaged && inventoryStock && inventoryStock?.stockUnit < targetErpItem?.unit;
     let currStatus = statusUtils.getClassificationTypeForFlags({ salesYn: item?.salesYn, releaseYn: item?.releaseYn, holdYn: item?.holdYn });
 
     if (isPackaged) {

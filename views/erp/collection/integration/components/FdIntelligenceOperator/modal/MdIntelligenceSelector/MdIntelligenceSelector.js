@@ -95,7 +95,7 @@ export function MdIntelligenceSelector({
             mmSearchQuery: null,
             matchedCode: 'releaseOptionCode',
             stockReflectYn: 'n',
-            sortTypes: CustomURIEncoderUtils().encodeJSONList(['CREATED_AT$ASC', 'CHANNEL_ORDER_DATE$ASC']),
+            sortTypes: CustomURIEncoderUtils().encodeJSONList(['CHANNEL_ORDER_DATE$ASC', 'CREATED_AT$ASC']),
         }
 
         const fetchErpItemListResult = await apiHook.reqFetchErpItemList({ params: params, headers: headers });

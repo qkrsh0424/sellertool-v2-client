@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { StatusUtils } from "../utils/StatusUtils";
 import { TableVirtuoso } from "react-virtuoso";
 import { MdErpItemListForSameReceiver } from "./modal/MdErpItemListForSameReceiver/MdErpItemListForSameReceiver";
+import { MdViewPackageList } from "./modal/MdViewPackageList/MdViewPackageList";
 
 const base64Utils = Base64Utils();
 const statusUtils = StatusUtils();
@@ -97,10 +98,10 @@ export default function ErpItemListComponent({
 
     const [editOptionCodeModalOpen, setEditOptionCodeModalOpen] = useState(false);
     const [editReleaseOptionCodeModalOpen, setEditReleaseOptionCodeModalOpen] = useState(false);
+    const [viewPackageListModalOpen, setViewPackageListModalOpen] = useState(false);
     const [targetErpItem, setTargetErpItem] = useState(null);
     const [statusPin, setStatusPin] = useState(true);
 
-    const [itemsForSameReceiverModalOpen, setItemsFormSameReceiverModalOpen] = useState(false);
     const [erpItemListForSameReceiverModalOpen, setErpItemListForSameReceiverModalOpen] = useState(false);
     const [targetSameReceiverHint, setTargetSameReceiverHint] = useState(null);
 
@@ -141,6 +142,16 @@ export default function ErpItemListComponent({
         } else {
             setErpItemListForSameReceiverModalOpen(false);
             setTargetSameReceiverHint(null);
+        }
+    }
+
+    const toggleViewPackageListModalOpen = (erpItem) => {
+        if (erpItem) {
+            setTargetErpItem(erpItem);
+            setViewPackageListModalOpen(true);
+        } else {
+            setTargetErpItem(null);
+            setViewPackageListModalOpen(false);
         }
     }
 
@@ -242,18 +253,6 @@ export default function ErpItemListComponent({
         toggleEditReleaseOptionCodeModalOpen(null);
     }
 
-    const handleOpenItemsForSameReceiverModal = (e, sameReceiverHint) => {
-        e.stopPropagation()
-
-        setTargetSameReceiverHint(sameReceiverHint);
-        setItemsFormSameReceiverModalOpen(true);
-    }
-
-    const handleCloseItemsForSameReceiverModal = () => {
-        setItemsFormSameReceiverModalOpen(false);
-        setTargetSameReceiverHint(null);
-    }
-
     const handleToggleStatusPin = (pin) => {
         setStatusPin(pin)
     }
@@ -321,6 +320,8 @@ export default function ErpItemListComponent({
                                     handleOpenEditOptionCodeModal={toggleEditOptionCodeModalOpen}
                                     handleOpenEditReleaseOptionCodeModal={toggleEditReleaseOptionCodeModalOpen}
                                     handleOpenItemsForSameReceiverModal={toggleErpItemListForSameReceiverModalOpen}
+
+                                    toggleViewPackageListModalOpen={toggleViewPackageListModalOpen}
                                 />
                             )}
                         />
@@ -350,6 +351,14 @@ export default function ErpItemListComponent({
                     toggleErpItemListForSameReceiverModalOpen={toggleErpItemListForSameReceiverModalOpen}
                     targetSameReceiverHint={targetSameReceiverHint}
                     erpCollectionHeader={erpCollectionHeader}
+                />
+            }
+
+            {viewPackageListModalOpen &&
+                <MdViewPackageList
+                    open={viewPackageListModalOpen}
+                    toggleViewPackageListModalOpen={toggleViewPackageListModalOpen}
+                    targetErpItem={targetErpItem}
                 />
             }
         </>
@@ -513,6 +522,7 @@ function TableBodyRow({
     handleOpenEditOptionCodeModal,
     handleOpenEditReleaseOptionCodeModal,
     handleOpenItemsForSameReceiverModal,
+    toggleViewPackageListModalOpen
 }) {
     const item = targetErpItem;
 
@@ -592,6 +602,8 @@ function TableBodyRow({
                         onActionOpenEditOptionCodeModal={handleOpenEditOptionCodeModal}
                         onActionOpenEditReleaseOptionCodeModal={handleOpenEditReleaseOptionCodeModal}
                         onActionOpenItemsForSameReceiverModal={handleOpenItemsForSameReceiverModal}
+
+                        toggleViewPackageListModalOpen={toggleViewPackageListModalOpen}
                     />
                 );
             })}
@@ -635,6 +647,8 @@ function TableBodyRow({
                                     width: 20,
                                     margin: '0 auto'
                                 }}
+                                className='td-clickable-text'
+                                onClick={(e) => { e.stopPropagation(); toggleViewPackageListModalOpen(item); }}
                             >
                                 <CustomImage
                                     src='/images/icon/check_default_5fcf80.svg'
@@ -674,7 +688,9 @@ function Td({
 
     onActionOpenEditOptionCodeModal,
     onActionOpenEditReleaseOptionCodeModal,
-    onActionOpenItemsForSameReceiverModal
+    onActionOpenItemsForSameReceiverModal,
+
+    toggleViewPackageListModalOpen
 }) {
     let renderingType = 'default';
 
@@ -699,7 +715,9 @@ function Td({
         erpItemSameReceiverHints,
         onActionOpenEditOptionCodeModal,
         onActionOpenEditReleaseOptionCodeModal,
-        onActionOpenItemsForSameReceiverModal
+        onActionOpenItemsForSameReceiverModal,
+
+        toggleViewPackageListModalOpen
     })[renderingType];
 }
 
@@ -877,7 +895,12 @@ function OptionStockUnitTd(props) {
                 onClick={(e) => { props?.onClick(erpItem?.id) }}
                 style={{ background: (isOutOfStock) ? 'var(--defaultRedColorOpacity500)' : '', color: 'var(--defaultGreenColor)' }}
             >
-                패키지상품
+                <span
+                    className='td-clickable-text'
+                    onClick={(e) => { e.stopPropagation(); props.toggleViewPackageListModalOpen(erpItem); }}
+                >
+                    패키지상품
+                </span>
             </td>
         );
     } else {

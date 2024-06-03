@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import CustomBlockButton from '../../../../../../components/buttons/block-button/v1/CustomBlockButton';
 import * as St from './FdIntelligenceOperator.styled';
-import { MdIntelligenceSelector } from './modal/MdIntelligenceSelector/MdIntelligenceSelector';
+import { MdIntelligenceSelector } from './modal/MdIntelligenceSelector/MdIntelligenceSelectorV3';
 import CustomImage from '../../../../../../components/image/CustomImage';
 
 export function FdIntelligenceOperator(props) {

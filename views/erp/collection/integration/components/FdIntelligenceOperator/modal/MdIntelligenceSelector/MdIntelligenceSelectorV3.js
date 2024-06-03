@@ -108,21 +108,22 @@ export function MdIntelligenceSelector({
     }
 
     const handleClassifyErpItemList = (erpItemList) => {
-        let resultList = [];
+        let classifiedErpItemList = [];
         let newErpItemList = [];
         let confirmErpItemList = [];
         let completeErpItemList = [];
         let postponeErpItemList = [];
         let excludeErpItemList = [];
+        let currentTabErpItemList = [];
 
         // 옵션코드가 없는 주문건은 패스
         for (let i = 0; i < erpItemList?.length; i++) {
             const erpItem = { ...erpItemList[i] };
 
-            if (!erpItem?.productOptionId) {
-                excludeErpItemList.push(erpItem);
-                continue;
-            }
+            // if (!erpItem?.productOptionId) {
+            //     excludeErpItemList.push(erpItem);
+            //     continue;
+            // }
 
             const currStatus = StatusUtils().getClassificationTypeForFlags({ salesYn: erpItem?.salesYn, releaseYn: erpItem?.releaseYn, holdYn: erpItem?.holdYn });
             switch (currStatus) {
@@ -147,16 +148,16 @@ export function MdIntelligenceSelector({
             const priorityTab = priorityTabList[i];
             switch (priorityTab?.classificationType) {
                 case 'NEW':
-                    resultList = resultList.concat(newErpItemList);
+                    classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(newErpItemList));
                     break;
                 case 'CONFIRM':
-                    resultList = resultList.concat(confirmErpItemList);
+                    classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(confirmErpItemList));
                     break;
                 case 'COMPLETE':
-                    resultList = resultList.concat(completeErpItemList);
+                    classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(completeErpItemList));
                     break;
                 case 'POSTPONE':
-                    resultList = resultList.concat(postponeErpItemList);
+                    classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(postponeErpItemList));
                     break;
                 default: break;
             }
@@ -165,23 +166,28 @@ export function MdIntelligenceSelector({
         // 현재 바라보고 있는 탭의 주문건들을 결과값에 담는다.
         switch (classificationType) {
             case 'NEW':
-                resultList = resultList.concat(newErpItemList);
+                currentTabErpItemList = currentTabErpItemList.concat(_.cloneDeep(newErpItemList))
+                classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(newErpItemList));
                 break;
             case 'CONFIRM':
-                resultList = resultList.concat(confirmErpItemList);
+                currentTabErpItemList = currentTabErpItemList.concat(_.cloneDeep(confirmErpItemList))
+                classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(confirmErpItemList));
                 break;
             case 'COMPLETE':
-                resultList = resultList.concat(completeErpItemList);
+                currentTabErpItemList = currentTabErpItemList.concat(_.cloneDeep(completeErpItemList))
+                classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(completeErpItemList));
                 break;
             case 'POSTPONE':
-                resultList = resultList.concat(postponeErpItemList);
+                currentTabErpItemList = currentTabErpItemList.concat(_.cloneDeep(postponeErpItemList))
+                classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(postponeErpItemList));
                 break;
             default: break;
         }
 
         return {
-            classifiedErpItemList: resultList,
-            excludeErpItemList: excludeErpItemList
+            classifiedErpItemList: classifiedErpItemList,
+            excludeErpItemList: excludeErpItemList,
+            currentTabErpItemList: currentTabErpItemList,
         };
     }
 
@@ -205,18 +211,46 @@ export function MdIntelligenceSelector({
         }
     }
 
+    const handleGetReSortedErpItemList = async (erpItemList) => {
+        let reSortedErpItemList = [];
+
+        while (erpItemList?.length > 0) {
+            let exportSameReceiverHint = null;
+            let removedItemList = [];
+            erpItemList?.forEach((erpItem, index) => {
+                if (index === 0) {
+                    exportSameReceiverHint = Base64Utils().encodeBase64(`${erpItem?.receiver}${erpItem?.receiverContact1}${erpItem?.destination}${erpItem?.destinationDetail}`);
+                    removedItemList.push(erpItem);
+                    return;
+                }
+
+                let currSameReceiverHint = Base64Utils().encodeBase64(`${erpItem?.receiver}${erpItem?.receiverContact1}${erpItem?.destination}${erpItem?.destinationDetail}`);
+                if (exportSameReceiverHint === currSameReceiverHint) {
+                    removedItemList.push(erpItem);
+                }
+            });
+
+            erpItemList = erpItemList?.filter(r => !removedItemList?.some(r2 => r2.id === r.id));
+            reSortedErpItemList = reSortedErpItemList.concat(removedItemList);
+        }
+
+        return reSortedErpItemList;
+    }
+
     const handleLaunchOperator = async () => {
         customBackdropController().showBackdrop();
         const erpItemList = await handleGetErpItemList();
-        let { classifiedErpItemList, excludeErpItemList } = handleClassifyErpItemList(erpItemList);
+        let { classifiedErpItemList, excludeErpItemList, currentTabErpItemList } = handleClassifyErpItemList(erpItemList);
         const packageProductOptionIdSet = new Set();
         const productOptionIdSet = new Set();
-        // let excludeErpItemList = [];
-        let excludeSameReceiverHintSet = new Set();
         let newSelectedErpItemList = [];
 
         for (let i = 0; i < classifiedErpItemList?.length; i++) {
             const item = classifiedErpItemList[i];
+            if(!item?.productOptionId){
+                continue;
+            }
+
             if (item?.packageYn === 'y') {
                 if (!packageProductOptionIdSet.has(item?.productOptionId)) {
                     packageProductOptionIdSet.add(item?.productOptionId);
@@ -227,6 +261,7 @@ export function MdIntelligenceSelector({
                 }
             }
         }
+
 
         // 패키지 인포 불러오기
         const productPackageInfoList = await handleGetProductPackageInfoList([...packageProductOptionIdSet]);
@@ -240,20 +275,94 @@ export function MdIntelligenceSelector({
 
         // 상품의 재고 리스트 불러오기
         let inventoryStockList = await handleGetInventoryStockList([...productOptionIdSet]);
+        let reSortedErpItemList = await handleGetReSortedErpItemList(classifiedErpItemList);
 
+        let dumpErpItemList = [];
+        let dumpSameReceiverHint = null;
+        reSortedErpItemList.forEach((erpItem, currIndex) => {
+            const currentSameReceiverHint = Base64Utils().encodeBase64(`${erpItem?.receiver}${erpItem?.receiverContact1}${erpItem?.destination}${erpItem?.destinationDetail}`);
 
-        for (let i = 0; i < classifiedErpItemList?.length; i++) {
-            let item = classifiedErpItemList[i];
-            // 패키지 상품을 추종하는 주문건에 대한 출고 가능 여부 확인.
-            if (item?.packageYn === 'y') {
-                const targetPackageOptionInfoList = productPackageInfoList?.filter(productPackageInfo => productPackageInfo.parentProductOptionId === item?.productOptionId);
-                let copiedInventoryStockList = _.cloneDeep(inventoryStockList?.filter(inventoryStock => targetPackageOptionInfoList?.some(productPackageInfo => productPackageInfo.productOptionId === inventoryStock.productOptionId)));
-                let isPassed = true;
+            if (!dumpSameReceiverHint || dumpSameReceiverHint === currentSameReceiverHint) {
+                dumpSameReceiverHint = currentSameReceiverHint;
+                dumpErpItemList.push(erpItem);
+                return;
+            }
 
+            // dump 로직 실행
+            let copiedInventoryStockList = _.cloneDeep(inventoryStockList);
+            let isPassed = true;
+
+            for (let i = 0; i < dumpErpItemList?.length; i++) {
+                const dumpErpItem = dumpErpItemList[i];
+                if(!dumpErpItem?.productOptionId){
+                    isPassed = false;
+                    break;
+                }
+
+                if (dumpErpItem?.packageYn === 'y') {
+                    const targetPackageOptionInfoList = productPackageInfoList?.filter(productPackageInfo => productPackageInfo.parentProductOptionId === dumpErpItem?.productOptionId);
+                    targetPackageOptionInfoList?.forEach(packageOptionInfo => {
+                        copiedInventoryStockList = copiedInventoryStockList?.map(copiedInventoryStock => {
+                            if (copiedInventoryStock?.productOptionId === packageOptionInfo?.productOptionId) {
+                                let unit = packageOptionInfo?.unit * dumpErpItem?.unit;
+                                if (unit <= copiedInventoryStock?.stockUnit) {
+                                    return {
+                                        ...copiedInventoryStock,
+                                        stockUnit: copiedInventoryStock?.stockUnit - unit
+                                    }
+                                } else {
+                                    isPassed = false;
+                                }
+                            }
+
+                            return { ...copiedInventoryStock };
+                        })
+                    })
+                } else {
+                    copiedInventoryStockList = copiedInventoryStockList?.map(copiedInventoryStock => {
+                        if (copiedInventoryStock?.productOptionId === dumpErpItem?.productOptionId) {
+                            if (dumpErpItem?.unit <= copiedInventoryStock?.stockUnit) {
+                                return {
+                                    ...copiedInventoryStock,
+                                    stockUnit: copiedInventoryStock?.stockUnit - dumpErpItem?.unit
+                                }
+                            } else {
+                                isPassed = false;
+                            }
+                        }
+
+                        return { ...copiedInventoryStock }
+                    })
+                }
+            }
+
+            if (isPassed) {
+                inventoryStockList = copiedInventoryStockList;
+                newSelectedErpItemList = newSelectedErpItemList.concat(dumpErpItemList?.filter(r => StatusUtils().getClassificationTypeForFlags({ salesYn: r?.salesYn, releaseYn: r?.releaseYn, holdYn: r?.holdYn }) === classificationType));
+            }
+
+            // dump 초기화
+            dumpErpItemList = [erpItem];
+            dumpSameReceiverHint = currentSameReceiverHint;
+        });
+
+        let copiedInventoryStockList = _.cloneDeep(inventoryStockList);
+        let isPassed = true;
+
+        for (let i = 0; i < dumpErpItemList?.length; i++) {
+            const dumpErpItem = dumpErpItemList[i];
+
+            if(!dumpErpItem?.productOptionId){
+                isPassed = false;
+                break;
+            }
+
+            if (dumpErpItem?.packageYn === 'y') {
+                const targetPackageOptionInfoList = productPackageInfoList?.filter(productPackageInfo => productPackageInfo.parentProductOptionId === dumpErpItem?.productOptionId);
                 targetPackageOptionInfoList?.forEach(packageOptionInfo => {
                     copiedInventoryStockList = copiedInventoryStockList?.map(copiedInventoryStock => {
                         if (copiedInventoryStock?.productOptionId === packageOptionInfo?.productOptionId) {
-                            let unit = packageOptionInfo?.unit * item?.unit;
+                            let unit = packageOptionInfo?.unit * dumpErpItem?.unit;
                             if (unit <= copiedInventoryStock?.stockUnit) {
                                 return {
                                     ...copiedInventoryStock,
@@ -267,65 +376,33 @@ export function MdIntelligenceSelector({
                         return { ...copiedInventoryStock };
                     })
                 })
-
-                if (isPassed) {
-                    inventoryStockList = inventoryStockList?.map(inventoryStock => {
-                        let copiedInventoryStock = copiedInventoryStockList?.find(r => r.productOptionId === inventoryStock?.productOptionId);
-                        if (copiedInventoryStock) {
-                            return { ...copiedInventoryStock }
-                        }
-
-                        return { ...inventoryStock };
-                    })
-                } else {
-                    excludeErpItemList.push(item);
-                }
             } else {
-                inventoryStockList = inventoryStockList?.map(inventoryStock => {
-                    if (inventoryStock?.productOptionId === item?.productOptionId) {
-                        if (item?.unit <= inventoryStock?.stockUnit) {
+                copiedInventoryStockList = copiedInventoryStockList?.map(copiedInventoryStock => {
+                    if (copiedInventoryStock?.productOptionId === dumpErpItem?.productOptionId) {
+                        if (dumpErpItem?.unit <= copiedInventoryStock?.stockUnit) {
                             return {
-                                ...inventoryStock,
-                                stockUnit: inventoryStock?.stockUnit - item?.unit
+                                ...copiedInventoryStock,
+                                stockUnit: copiedInventoryStock?.stockUnit - dumpErpItem?.unit
                             }
                         } else {
-                            excludeErpItemList.push(item);
+                            isPassed = false;
                         }
                     }
 
-                    return { ...inventoryStock }
+                    return { ...copiedInventoryStock }
                 })
             }
         }
 
-        // 제외 대상의 동일 수취인 정보를 가져온다.
-        excludeErpItemList?.forEach(excludeErpItem => {
-            let sameReceiverHint = Base64Utils().encodeBase64(`${excludeErpItem?.receiver}${excludeErpItem?.receiverContact1}${excludeErpItem?.destination}${excludeErpItem?.destinationDetail}`)
-            if (!excludeSameReceiverHintSet.has(sameReceiverHint)) {
-                excludeSameReceiverHintSet.add(sameReceiverHint);
-            }
-        })
+        if (isPassed) {
+            inventoryStockList = copiedInventoryStockList;
+            newSelectedErpItemList = newSelectedErpItemList.concat(dumpErpItemList?.filter(r => StatusUtils().getClassificationTypeForFlags({ salesYn: r?.salesYn, releaseYn: r?.releaseYn, holdYn: r?.holdYn }) === classificationType));
+        }
 
-        newSelectedErpItemList = classifiedErpItemList?.filter(erpItem => {
-            let sameReceiverHint = Base64Utils().encodeBase64(`${erpItem?.receiver}${erpItem?.receiverContact1}${erpItem?.destination}${erpItem?.destinationDetail}`)
-            const currStatus = StatusUtils().getClassificationTypeForFlags({ salesYn: erpItem?.salesYn, releaseYn: erpItem?.releaseYn, holdYn: erpItem?.holdYn });
-            const isExcludedErpItem = excludeErpItemList?.find(r => r.id === erpItem?.id);
-            const isExcludedSameReceiver = excludeSameReceiverHintSet.has(sameReceiverHint);
-
-            if (
-                isExcludedErpItem
-                || isExcludedSameReceiver
-                || currStatus !== classificationType
-            ) {
-                return false;
-            }
-
-            return true;
-        });
+        console.log('reSorted 수취인명', reSortedErpItemList?.map(r => r.receiver).join())
         console.log('classifiedErpItemList', classifiedErpItemList);
         console.log('excludeErpItemList', excludeErpItemList);
         console.log('inventoryStockList', inventoryStockList);
-        console.log('excludeSameReceiverHintSet', excludeSameReceiverHintSet);
         console.log('newSelectedErpItemList', newSelectedErpItemList);
         selectedErpItemListActionsHook.onSet(newSelectedErpItemList);
         customBackdropController().hideBackdrop();

@@ -108,12 +108,13 @@ export function MdIntelligenceSelector({
     }
 
     const handleClassifyErpItemList = (erpItemList) => {
-        let resultList = [];
+        let classifiedErpItemList = [];
         let newErpItemList = [];
         let confirmErpItemList = [];
         let completeErpItemList = [];
         let postponeErpItemList = [];
         let excludeErpItemList = [];
+        let currentTabErpItemList = [];
 
         // 옵션코드가 없는 주문건은 패스
         for (let i = 0; i < erpItemList?.length; i++) {
@@ -147,16 +148,16 @@ export function MdIntelligenceSelector({
             const priorityTab = priorityTabList[i];
             switch (priorityTab?.classificationType) {
                 case 'NEW':
-                    resultList = resultList.concat(newErpItemList);
+                    classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(newErpItemList));
                     break;
                 case 'CONFIRM':
-                    resultList = resultList.concat(confirmErpItemList);
+                    classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(confirmErpItemList));
                     break;
                 case 'COMPLETE':
-                    resultList = resultList.concat(completeErpItemList);
+                    classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(completeErpItemList));
                     break;
                 case 'POSTPONE':
-                    resultList = resultList.concat(postponeErpItemList);
+                    classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(postponeErpItemList));
                     break;
                 default: break;
             }
@@ -165,23 +166,28 @@ export function MdIntelligenceSelector({
         // 현재 바라보고 있는 탭의 주문건들을 결과값에 담는다.
         switch (classificationType) {
             case 'NEW':
-                resultList = resultList.concat(newErpItemList);
+                currentTabErpItemList = currentTabErpItemList.concat(_.cloneDeep(newErpItemList))
+                classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(newErpItemList));
                 break;
             case 'CONFIRM':
-                resultList = resultList.concat(confirmErpItemList);
+                currentTabErpItemList = currentTabErpItemList.concat(_.cloneDeep(confirmErpItemList))
+                classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(confirmErpItemList));
                 break;
             case 'COMPLETE':
-                resultList = resultList.concat(completeErpItemList);
+                currentTabErpItemList = currentTabErpItemList.concat(_.cloneDeep(completeErpItemList))
+                classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(completeErpItemList));
                 break;
             case 'POSTPONE':
-                resultList = resultList.concat(postponeErpItemList);
+                currentTabErpItemList = currentTabErpItemList.concat(_.cloneDeep(postponeErpItemList))
+                classifiedErpItemList = classifiedErpItemList.concat(_.cloneDeep(postponeErpItemList));
                 break;
             default: break;
         }
 
         return {
-            classifiedErpItemList: resultList,
-            excludeErpItemList: excludeErpItemList
+            classifiedErpItemList: classifiedErpItemList,
+            excludeErpItemList: excludeErpItemList,
+            currentTabErpItemList: currentTabErpItemList,
         };
     }
 
@@ -208,7 +214,7 @@ export function MdIntelligenceSelector({
     const handleLaunchOperator = async () => {
         customBackdropController().showBackdrop();
         const erpItemList = await handleGetErpItemList();
-        let { classifiedErpItemList, excludeErpItemList } = handleClassifyErpItemList(erpItemList);
+        let { classifiedErpItemList, excludeErpItemList, currentTabErpItemList } = handleClassifyErpItemList(erpItemList);
         const packageProductOptionIdSet = new Set();
         const productOptionIdSet = new Set();
         // let excludeErpItemList = [];
@@ -241,19 +247,16 @@ export function MdIntelligenceSelector({
         // 상품의 재고 리스트 불러오기
         let inventoryStockList = await handleGetInventoryStockList([...productOptionIdSet]);
 
-
-        for (let i = 0; i < classifiedErpItemList?.length; i++) {
-            let item = classifiedErpItemList[i];
-            // 패키지 상품을 추종하는 주문건에 대한 출고 가능 여부 확인.
-            if (item?.packageYn === 'y') {
-                const targetPackageOptionInfoList = productPackageInfoList?.filter(productPackageInfo => productPackageInfo.parentProductOptionId === item?.productOptionId);
+        classifiedErpItemList?.forEach(classifiedErpItem => {
+            if (classifiedErpItem?.packageYn === 'y') {
+                const targetPackageOptionInfoList = productPackageInfoList?.filter(productPackageInfo => productPackageInfo.parentProductOptionId === classifiedErpItem?.productOptionId);
                 let copiedInventoryStockList = _.cloneDeep(inventoryStockList?.filter(inventoryStock => targetPackageOptionInfoList?.some(productPackageInfo => productPackageInfo.productOptionId === inventoryStock.productOptionId)));
                 let isPassed = true;
 
                 targetPackageOptionInfoList?.forEach(packageOptionInfo => {
                     copiedInventoryStockList = copiedInventoryStockList?.map(copiedInventoryStock => {
                         if (copiedInventoryStock?.productOptionId === packageOptionInfo?.productOptionId) {
-                            let unit = packageOptionInfo?.unit * item?.unit;
+                            let unit = packageOptionInfo?.unit * classifiedErpItem?.unit;
                             if (unit <= copiedInventoryStock?.stockUnit) {
                                 return {
                                     ...copiedInventoryStock,
@@ -278,25 +281,25 @@ export function MdIntelligenceSelector({
                         return { ...inventoryStock };
                     })
                 } else {
-                    excludeErpItemList.push(item);
+                    excludeErpItemList.push(classifiedErpItem);
                 }
             } else {
                 inventoryStockList = inventoryStockList?.map(inventoryStock => {
-                    if (inventoryStock?.productOptionId === item?.productOptionId) {
-                        if (item?.unit <= inventoryStock?.stockUnit) {
+                    if (inventoryStock?.productOptionId === classifiedErpItem?.productOptionId) {
+                        if (classifiedErpItem?.unit <= inventoryStock?.stockUnit) {
                             return {
                                 ...inventoryStock,
-                                stockUnit: inventoryStock?.stockUnit - item?.unit
+                                stockUnit: inventoryStock?.stockUnit - classifiedErpItem?.unit
                             }
                         } else {
-                            excludeErpItemList.push(item);
+                            excludeErpItemList.push(classifiedErpItem);
                         }
                     }
 
                     return { ...inventoryStock }
                 })
             }
-        }
+        });
 
         // 제외 대상의 동일 수취인 정보를 가져온다.
         excludeErpItemList?.forEach(excludeErpItem => {
@@ -306,22 +309,116 @@ export function MdIntelligenceSelector({
             }
         })
 
-        newSelectedErpItemList = classifiedErpItemList?.filter(erpItem => {
+        // 동일 수취인 다른 주문건에 의해 제외 대상이 되는 특별한 경우의 주문건을 담는 리스트
+        const specialExcludedErpItemList = [];
+
+        newSelectedErpItemList = currentTabErpItemList?.filter(erpItem => {
             let sameReceiverHint = Base64Utils().encodeBase64(`${erpItem?.receiver}${erpItem?.receiverContact1}${erpItem?.destination}${erpItem?.destinationDetail}`)
-            const currStatus = StatusUtils().getClassificationTypeForFlags({ salesYn: erpItem?.salesYn, releaseYn: erpItem?.releaseYn, holdYn: erpItem?.holdYn });
             const isExcludedErpItem = excludeErpItemList?.find(r => r.id === erpItem?.id);
             const isExcludedSameReceiver = excludeSameReceiverHintSet.has(sameReceiverHint);
 
-            if (
-                isExcludedErpItem
-                || isExcludedSameReceiver
-                || currStatus !== classificationType
-            ) {
+            // 주문건이 제외 대상이고 동일 수취인 제외 대상인 경우 => 자신은 어차피 재고가 없는 상태에서 제외 대상에 포함되었으므로 롤백이 필요 없음.
+            if (isExcludedErpItem && isExcludedSameReceiver) {
+                return false;
+            }
+
+            // 동일 수취인 제외 대상인 경우 => 자신은 재고가 있지만 동일 수취인의 다른 주문건에 재고가 없어서 제외되어야 하는 대상이므로 재고 수량 롤백이 필요함.
+            if (!isExcludedErpItem && isExcludedSameReceiver) {
+                specialExcludedErpItemList.push(erpItem);
+                if (erpItem?.packageYn === 'y') {
+                    const targetPackageOptionInfoList = productPackageInfoList?.filter(productPackageInfo => productPackageInfo.parentProductOptionId === erpItem?.productOptionId);
+
+                    targetPackageOptionInfoList?.forEach(packageOptionInfo => {
+                        inventoryStockList = inventoryStockList?.map(inventoryStock => {
+                            if (inventoryStock?.productOptionId === packageOptionInfo?.productOptionId) {
+                                let unit = packageOptionInfo?.unit * erpItem?.unit;
+                                return {
+                                    ...inventoryStock,
+                                    stockUnit: Number(inventoryStock?.stockUnit) + Number(unit)
+                                }
+                            }
+
+                            return { ...inventoryStock };
+                        })
+                    })
+                } else {
+                    inventoryStockList = inventoryStockList?.map(inventoryStock => {
+                        if (inventoryStock?.productOptionId === erpItem?.productOptionId) {
+                            return {
+                                ...inventoryStock,
+                                stockUnit: Number(inventoryStock?.stockUnit) + Number(erpItem?.unit)
+                            }
+                        }
+
+                        return { ...inventoryStock }
+                    })
+                }
                 return false;
             }
 
             return true;
         });
+
+        currentTabErpItemList.forEach(erpItem => {
+            const isSelectedErpItem = newSelectedErpItemList?.find(r => r.id === erpItem?.id);
+            const isFinalExcludedErpItem = specialExcludedErpItemList?.find(r => r.id === erpItem?.id);
+
+            // 이미 선택된 데이터는 로직을 타지 않는다.
+            if (isSelectedErpItem || isFinalExcludedErpItem) {
+                return;
+            }
+
+            console.log(erpItem);
+            if (erpItem?.packageYn === 'y') {
+                const targetPackageOptionInfoList = productPackageInfoList?.filter(productPackageInfo => productPackageInfo.parentProductOptionId === erpItem?.productOptionId);
+                let copiedInventoryStockList = _.cloneDeep(inventoryStockList?.filter(inventoryStock => targetPackageOptionInfoList?.some(productPackageInfo => productPackageInfo.productOptionId === inventoryStock.productOptionId)));
+                let isPassed = true;
+
+                targetPackageOptionInfoList?.forEach(packageOptionInfo => {
+                    copiedInventoryStockList = copiedInventoryStockList?.map(copiedInventoryStock => {
+                        if (copiedInventoryStock?.productOptionId === packageOptionInfo?.productOptionId) {
+                            let unit = packageOptionInfo?.unit * erpItem?.unit;
+                            if (unit <= copiedInventoryStock?.stockUnit) {
+                                return {
+                                    ...copiedInventoryStock,
+                                    stockUnit: copiedInventoryStock?.stockUnit - unit
+                                }
+                            } else {
+                                isPassed = false;
+                            }
+                        }
+
+                        return { ...copiedInventoryStock };
+                    })
+                })
+
+                if (isPassed) {
+                    newSelectedErpItemList.push(erpItem);
+                    inventoryStockList = inventoryStockList?.map(inventoryStock => {
+                        let copiedInventoryStock = copiedInventoryStockList?.find(r => r.productOptionId === inventoryStock?.productOptionId);
+                        if (copiedInventoryStock) {
+                            return { ...copiedInventoryStock }
+                        }
+
+                        return { ...inventoryStock };
+                    })
+                }
+            } else {
+                inventoryStockList = inventoryStockList?.map(inventoryStock => {
+                    if (inventoryStock?.productOptionId === erpItem?.productOptionId) {
+                        if (erpItem?.unit <= inventoryStock?.stockUnit) {
+                            newSelectedErpItemList.push(erpItem);
+                            return {
+                                ...inventoryStock,
+                                stockUnit: inventoryStock?.stockUnit - erpItem?.unit
+                            }
+                        }
+                    }
+
+                    return { ...inventoryStock }
+                })
+            }
+        })
         console.log('classifiedErpItemList', classifiedErpItemList);
         console.log('excludeErpItemList', excludeErpItemList);
         console.log('inventoryStockList', inventoryStockList);

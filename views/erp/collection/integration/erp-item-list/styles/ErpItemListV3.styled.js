@@ -208,6 +208,15 @@ export const TableFieldWrapper = styled.div`
         height: 24px;
     }
 
+    .td-clickable-text{
+        cursor: pointer;
+        
+        &:hover{
+            text-decoration: underline;
+            scale: 1.2;
+        }
+    }
+
     .fix-button-el{
         user-select: none;
         -webkit-tap-highlight-color: #000000;

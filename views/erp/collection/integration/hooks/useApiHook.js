@@ -30,6 +30,14 @@ export function useApiHook(props) {
             })
     }
 
+    /**
+     * 
+     * @param {Object} param0 
+     * @param {Object} param0.body
+     * @param {Array} param0.body.productOptionIds
+     * @param {Object} param0.headers
+     * @returns 
+     */
     const reqFetchProductOptionPackageList = async ({ body, headers }) => {
         return await productOptionPackageDataConn.searchProductInfoListByProductOptionIdsWithStocks(body, headers)
             .then(res => {

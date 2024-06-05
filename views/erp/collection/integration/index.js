@@ -10,7 +10,7 @@ import { Container } from "./index.styled";
 import { useApiHook } from "./hooks/useApiHook";
 import { useEffect, useState } from "react";
 import { FdClassification } from "./components/FdClassification/FdClassification";
-import FdConditionSearch from "./components/FdConditionSearch/FdConditionSearch";
+import { FdConditionSearch } from "./components/FdConditionSearchV2/FdConditionSearch";
 import { ViewOptionsProvider } from "./contexts/ViewOptionsProvider";
 import { FdViewOptions } from "./components/FdViewOptions/FdViewOptions";
 import { ErpItemProvider, useErpItemValueHook } from "./contexts/ErpItemProvider";
@@ -41,6 +41,7 @@ import { FdIntelligenceOperator } from "./components/FdIntelligenceOperator/FdIn
     16. 조건 검색 필드에 대한 신규 로직 적용하기
     17. 출고가능 주문건 선택 로직 만들기 - 완료 240603
     18. 패키지 상품 재고 및 상태 필드 클릭시 하위 상품 및 재고 현황 보여주기 - 완료 240603
+    19. 조회 검색 조건 필드 새로운 버전으로 변경하기 - 진행중 240604
 
 */
 export default function MainComponent(props) {
@@ -62,10 +63,10 @@ export default function MainComponent(props) {
 function MainComponentCore() {
     const router = useRouter();
     const sellertoolDatasValueHook = useSellertoolDatasValueHook();
-    
+
     const apiHook = useApiHook();
     const erpItemFetcherHook = useErpItemFetcherHook();
-    
+
     const erpItemValueHook = useErpItemValueHook();
 
     const {
@@ -108,16 +109,7 @@ function MainComponentCore() {
         router?.query?.periodSearchCondition,
         router?.query?.startDateTime,
         router?.query?.endDateTime,
-        router?.query?.mpSearchCondition,
-        router?.query?.mpSearchQuery,
-        router?.query?.oiSearchCondition,
-        router?.query?.oiSearchQuery,
-        router?.query?.riSearchCondition,
-        router?.query?.riSearchQuery,
-        router?.query?.diSearchCondition,
-        router?.query?.diSearchQuery,
-        router?.query?.mmSearchCondition,
-        router?.query?.mmSearchQuery,
+        router?.query?.searchFilter,
         router?.query?.stockReflectYn,
         router?.query?.sortTypes,
         router?.query?.size,
@@ -143,16 +135,7 @@ function MainComponentCore() {
         router?.query?.periodSearchCondition,
         router?.query?.startDateTime,
         router?.query?.endDateTime,
-        router?.query?.mpSearchCondition,
-        router?.query?.mpSearchQuery,
-        router?.query?.oiSearchCondition,
-        router?.query?.oiSearchQuery,
-        router?.query?.riSearchCondition,
-        router?.query?.riSearchQuery,
-        router?.query?.diSearchCondition,
-        router?.query?.diSearchQuery,
-        router?.query?.mmSearchCondition,
-        router?.query?.mmSearchQuery,
+        router?.query?.searchFilter,
         router?.query?.stockReflectYn,
         router?.query?.size,
         router?.query?.matchedCode,
@@ -211,8 +194,8 @@ function MainComponentCore() {
                         <FdViewOptions
                             isLoading={erpItemValueHook.isLoading}
                         />
-                        <FdIntelligenceOperator 
-                            
+                        <FdIntelligenceOperator
+
                         />
                         <ErpItemListComponent
                             erpCollectionHeader={erpCollectionHeader}

@@ -83,16 +83,7 @@ export function MdIntelligenceSelector({
             periodSearchCondition: 'createdAt',
             startDateTime: startDateTime,
             endDateTime: endDateTime,
-            mpSearchCondition: null,
-            mpSearchQuery: null,
-            oiSearchCondition: null,
-            oiSearchQuery: null,
-            riSearchCondition: null,
-            riSearchQuery: null,
-            diSearchCondition: null,
-            diSearchQuery: null,
-            mmSearchCondition: null,
-            mmSearchQuery: null,
+            searchFilter: null,
             matchedCode: 'releaseOptionCode',
             stockReflectYn: 'n',
             sortTypes: CustomURIEncoderUtils().encodeJSONList(['CHANNEL_ORDER_DATE$ASC', 'CREATED_AT$ASC']),
@@ -247,7 +238,7 @@ export function MdIntelligenceSelector({
 
         for (let i = 0; i < classifiedErpItemList?.length; i++) {
             const item = classifiedErpItemList[i];
-            if(!item?.productOptionId){
+            if (!item?.productOptionId) {
                 continue;
             }
 
@@ -294,7 +285,7 @@ export function MdIntelligenceSelector({
 
             for (let i = 0; i < dumpErpItemList?.length; i++) {
                 const dumpErpItem = dumpErpItemList[i];
-                if(!dumpErpItem?.productOptionId){
+                if (!dumpErpItem?.productOptionId) {
                     isPassed = false;
                     break;
                 }
@@ -352,7 +343,7 @@ export function MdIntelligenceSelector({
         for (let i = 0; i < dumpErpItemList?.length; i++) {
             const dumpErpItem = dumpErpItemList[i];
 
-            if(!dumpErpItem?.productOptionId){
+            if (!dumpErpItem?.productOptionId) {
                 isPassed = false;
                 break;
             }

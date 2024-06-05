@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -7,16 +7,10 @@ import 'dayjs/locale/ko';
 
 import { CustomDatePeriodButtonGroup } from "../../../../../../components/buttons/date-period/v1/CustomDatePeriodButtonGroup";
 import CustomSelect from "../../../../../../components/select/default/v1/CustomSelect";
-import CustomInput from "../../../../../../components/input/default/v1/CustomInput";
 import CustomBlockButton from "../../../../../../components/buttons/block-button/v1/CustomBlockButton";
 
-import useDiSearchConditionFormHook from "./hooks/useDiSearchConditionFormHook";
 import useMatchedCodeFormHook from "./hooks/useMatchedCodeFormHook";
-import useMpSearchConditionFormHook from "./hooks/useMpSearchConditionFormHook";
-import useOiSearchConditionFormHook from "./hooks/useOiSearchConditionFormHook";
 import usePeriodSearchConditionFormHook from "./hooks/usePeriodSearchConditionFormHook";
-import useRiSearchConditionFormHook from "./hooks/useRiSearchConditionFormHook";
-import useMmSearchConditionFormHook from "./hooks/useMmSearchConditionFormHook";
 import useStockReflectYnFormHook from "./hooks/useStockReflectYnFormHook";
 
 import { ConditionContainer, ConditionWrapper, Container, FlexGroup, PeriodWrapper, RadioContainer, SearchFieldWrapper, SubmitButtonContainer, Wrapper } from "./FdConditionSearch.styled";
@@ -27,6 +21,7 @@ import { CustomDateUtils } from "../../../../../../utils/CustomDateUtils";
 import { useEffect, useRef, useState } from "react";
 import { CustomURIEncoderUtils } from "../../../../../../utils/CustomURIEncoderUtils";
 import CustomImage from "../../../../../../components/image/CustomImage";
+import { useErpItemValueHook } from "../../contexts/ErpItemProvider";
 
 const customDateUtils = CustomDateUtils();
 /**
@@ -40,6 +35,8 @@ export function FdConditionSearch({
 }) {
     const router = useRouter();
     const searchFilter = router?.query?.searchFilter;
+
+    const erpItemValueHook = useErpItemValueHook();
 
     const searchQueryRef = useRef();
     const [searchCondition, setSearchCondition] = useState('RECEIVER');
@@ -359,18 +356,28 @@ export function FdConditionSearch({
                                                         handleSubmit(e);
                                                     }
                                                 }}
-                                                disabled={!searchCondition}
+                                                disabled={!searchCondition || erpItemValueHook?.isLoading}
                                             ></textarea>
                                         </section>
                                     </div>
                                     <div className='addButtonBox'>
-                                        <CustomBlockButton
-                                            type='button'
-                                            onClick={(e) => handleSubmit(e)}
-                                            disabled={!searchCondition || !searchQuery}
-                                        >
-                                            추가
-                                        </CustomBlockButton>
+                                        {erpItemValueHook?.isLoading ?
+                                            <CustomBlockButton
+                                                type='button'
+                                                onClick={(e) => handleSubmit(e)}
+                                                disabled={!searchCondition || !searchQuery}
+                                            >
+                                                <CircularProgress size={20} />
+                                            </CustomBlockButton>
+                                            :
+                                            <CustomBlockButton
+                                                type='button'
+                                                onClick={(e) => handleSubmit(e)}
+                                                disabled={!searchCondition || !searchQuery}
+                                            >
+                                                추가
+                                            </CustomBlockButton>
+                                        }
                                     </div>
                                 </div>
                                 <div className='searchListWrapper'>
@@ -382,13 +389,23 @@ export function FdConditionSearch({
                                                 <div key={searchFilter?.searchCondition} className='aggregationBox'>
                                                     <div className='header'>
                                                         <div className='conditionName'>{name}</div>
-                                                        <CustomBlockButton
-                                                            type='button'
-                                                            className='deleteButton'
-                                                            onClick={() => handleDeleteSearchFilter(searchFilter?.searchCondition)}
-                                                        >
-                                                            <CustomImage src='/images/icon/close_default_e56767.svg' />
-                                                        </CustomBlockButton>
+                                                        {erpItemValueHook?.isLoading ?
+                                                            <CustomBlockButton
+                                                                type='button'
+                                                                className='deleteButton'
+                                                                onClick={() => handleDeleteSearchFilter(searchFilter?.searchCondition)}
+                                                            >
+                                                                <CircularProgress size={10} />
+                                                            </CustomBlockButton>
+                                                            :
+                                                            <CustomBlockButton
+                                                                type='button'
+                                                                className='deleteButton'
+                                                                onClick={() => handleDeleteSearchFilter(searchFilter?.searchCondition)}
+                                                            >
+                                                                <CustomImage src='/images/icon/close_default_e56767.svg' />
+                                                            </CustomBlockButton>
+                                                        }
                                                     </div>
                                                     <div className='queryText'>{searchFilter?.searchQuery}</div>
                                                 </div>
@@ -443,22 +460,44 @@ export function FdConditionSearch({
                             </RadioContainer>
                         }
                         <SubmitButtonContainer>
-                            <CustomBlockButton
-                                type='button'
-                                className='button-item'
-                                style={{
-                                    background: 'var(--defaultModalCloseColor)'
-                                }}
-                                onClick={() => handleSubmitClear()}
-                            >
-                                초기화
-                            </CustomBlockButton>
-                            <CustomBlockButton
-                                type='submit'
-                                className='button-item'
-                            >
-                                조회
-                            </CustomBlockButton>
+                            {erpItemValueHook?.isLoading ?
+                                <>
+                                    <CustomBlockButton
+                                        type='button'
+                                        className='button-item'
+                                        style={{
+                                            background: 'var(--defaultModalCloseColor)'
+                                        }}
+                                    >
+                                        <CircularProgress size={20} />
+                                    </CustomBlockButton>
+                                    <CustomBlockButton
+                                        type='button'
+                                        className='button-item'
+                                    >
+                                        <CircularProgress size={20} />
+                                    </CustomBlockButton>
+                                </>
+                                :
+                                <>
+                                    <CustomBlockButton
+                                        type='button'
+                                        className='button-item'
+                                        style={{
+                                            background: 'var(--defaultModalCloseColor)'
+                                        }}
+                                        onClick={() => handleSubmitClear()}
+                                    >
+                                        초기화
+                                    </CustomBlockButton>
+                                    <CustomBlockButton
+                                        type='submit'
+                                        className='button-item'
+                                    >
+                                        조회
+                                    </CustomBlockButton>
+                                </>
+                            }
                         </SubmitButtonContainer>
                     </form>
                 </Wrapper>

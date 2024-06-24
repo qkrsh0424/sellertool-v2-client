@@ -133,6 +133,15 @@ export function useBulkUpdateErpItemsFormList(initialValue) {
         }))
     }
 
+    const onChangeFieldNameAll = (value, fieldName) => {
+        onSetBulkUpdateErpItemsFormList(bulkUpdateErpItemsFormList?.map(r => {
+            return {
+                ...r,
+                [fieldName]: value
+            }
+        }))
+    }
+
     const onDelete = (erpItemId) => {
         onSetBulkUpdateErpItemsFormList(
             bulkUpdateErpItemsFormList?.filter(r => r?.id !== erpItemId)
@@ -299,6 +308,7 @@ export function useBulkUpdateErpItemsFormList(initialValue) {
         onChangeReleaseOptionCodeAll,
         onChangeChannelOrderDate,
         onChangeChannelOrderDateAll,
+        onChangeFieldNameAll,
         onDelete,
         returnSubmitForm,
         checkSubmitFormatValid

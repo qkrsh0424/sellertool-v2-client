@@ -160,6 +160,7 @@ export function MdBulkUpdateErpItems({
                         onChangeReleaseOptionCode={bulkUpdateErpItemsFormListHook.onChangeReleaseOptionCode}
                         onChangeChannelOrderDate={bulkUpdateErpItemsFormListHook.onChangeChannelOrderDate}
                         onChangeChannelOrderDateAll={bulkUpdateErpItemsFormListHook.onChangeChannelOrderDateAll}
+                        onChangeFieldNameAll={bulkUpdateErpItemsFormListHook.onChangeFieldNameAll}
                         onDelete={bulkUpdateErpItemsFormListHook.onDelete}
                     />
                     <CustomDialog.FooterButtonGroup isFlex>

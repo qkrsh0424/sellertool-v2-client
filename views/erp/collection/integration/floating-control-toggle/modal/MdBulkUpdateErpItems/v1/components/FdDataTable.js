@@ -9,6 +9,7 @@ import CustomBlockButton from "../../../../../../../../../components/buttons/blo
 import CustomImage from "../../../../../../../../../components/image/CustomImage";
 import ReverseScrollObserver from "../../../../../../../../../components/observer/ReverseScrollObserver";
 import InfiniteScrollObserver from "../../../../../../../../../components/observer/InfiniteScrollObserver";
+import { MdBulkUpdateForTargetFieldName } from "../MdBulkUpdateForTargetFieldName";
 
 const TABLE_DATA_VIEW_SIZE = 40;
 const TABLE_DATA_INC_DEC_SIZE = 20;
@@ -24,6 +25,7 @@ export function FdDataTable({
     onChangeReleaseOptionCode,
     onChangeChannelOrderDate,
     onChangeChannelOrderDateAll,
+    onChangeFieldNameAll,
     onDelete
 }) {
     const editAllOptionCodeModalControl = useSearchOptionCodesModalControl();
@@ -36,6 +38,7 @@ export function FdDataTable({
     const [editChannelOrderDateModalOpen, setEditChannelOrderDateModalOpen] = useState(false);
     const [editAllChannelOrderDateModalOpen, setEditAllChannelOrderDateModalOpen] = useState(false);
     const [targetErpItemId, setTargetErpItemId] = useState(null);
+    const [bulkUpdateTargetFieldName, setBulkUpdateTargetFieldName] = useState(null);
 
     useEffect(() => {
         if (viewSize > TABLE_DATA_VIEW_SIZE) {
@@ -161,6 +164,11 @@ export function FdDataTable({
         toggleEditAllChannelOrderDateModalOpen(false);
     }
 
+    const handleChangeBulkUpdateTargetFieldName = (fieldName) => {
+        setBulkUpdateTargetFieldName(fieldName);
+    }
+
+    console.log(bulkUpdateTargetFieldName);
     return (
         <>
             <TableWrapper>
@@ -322,6 +330,17 @@ export function FdDataTable({
                                                     <span className='required-tag'></span>
                                                 }
                                                 {r.headerName}
+                                                <CustomBlockButton
+                                                    type='button'
+                                                    className='control-button-item'
+                                                    onClick={() => handleChangeBulkUpdateTargetFieldName(r.name)}
+                                                >
+                                                    <div className='icon-figure'>
+                                                        <CustomImage
+                                                            src={'/images/icon/edit_note_808080.svg'}
+                                                        />
+                                                    </div>
+                                                </CustomBlockButton>
                                             </div>
                                         </ResizableTh>
                                     )
@@ -578,6 +597,15 @@ export function FdDataTable({
                     onConfirm={(value) => handleChangeChannelOrderDateAll(value)}
                     initialDateTime={new Date()}
                     label="판매채널 주문일시"
+                />
+            }
+
+            {bulkUpdateTargetFieldName &&
+                <MdBulkUpdateForTargetFieldName
+                    open={bulkUpdateTargetFieldName ? true : false}
+                    onChangeBulkUpdateTargetFieldName={handleChangeBulkUpdateTargetFieldName}
+                    targetFieldName={bulkUpdateTargetFieldName}
+                    onChangeFieldNameAll={onChangeFieldNameAll}
                 />
             }
         </>

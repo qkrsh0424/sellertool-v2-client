@@ -114,19 +114,20 @@ const ExcelDownloadModalComponent = ({
             orderItemList.push(...r.collections)
         })
 
+        console.log(orderItemList);
         let s = new Set(); // 수취인명 + 주소 중복 체크를 위한 Set
         let stack = []; // 수취인명 + 주소 중복인 경우 데이터를 담아둘 임시 스텍
         let dataList = []; // 최종 결과물을 저장할 공간
 
         // 수취인명 + 주소 기준으로 정렬
         orderItemList.sort((a, b) => {
-            let str1 = a.receiver + a.destination;
-            let str2 = b.receiver + b.destination;
+            let str1 = a.receiver + a.destination + a.destinationDetail;
+            let str2 = b.receiver + b.destination + b.destinationDetail;
             return str1 < str2 ? -1 : str1 > str2 ? 1 : 0;
         })
 
         orderItemList.forEach((r, index) => {
-            let str = r.receiver + r.destination;
+            let str = r.receiver + r.destination + r.destinationDetail;
 
             if (!s.has(str)) {
                 s.add(str);

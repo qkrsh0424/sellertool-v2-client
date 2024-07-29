@@ -9,6 +9,9 @@ import TipFieldComponent from "./tip-field/TipField.component";
 import { useApiHook } from "./hooks/useApiHook";
 import { useSelector } from "react-redux";
 import { useExcelTranslatorHook } from "./hooks/useExcelTranslatorHook";
+import { customSignitureUtils } from "../../../../utils/customSignitureUtils";
+import { FdTemporaryErpItem } from "./components/FdTemporaryErpItem/FdTemporaryErpItem";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function MainComponent(props) {
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
@@ -20,11 +23,15 @@ export default function MainComponent(props) {
         uploadDatas,
         reqUploadWithExcel,
         reqSaveUploadDatas,
+        onPushList,
         onFillEmptyChannerOrderDate,
         onSubmitUploadWithSingle,
         onDeleteUploadData,
         onDeleteUploadDataAll
     } = useUploadDatasHook();
+
+    const [apiKey, setApiKey] = useState(null);
+    const [temporaryErpItemList, setTemporaryErpItemList] = useState(null);
 
     const [backdropOpen, setBackdropOpen] = useState(false);
 
@@ -34,19 +41,70 @@ export default function MainComponent(props) {
         }
 
         async function fetch() {
-            handleReqFetchExcelTranslatorList();
+            reqFetchExcelTranslatorList();
+            reqFetchApiKey();
         }
 
         fetch();
     }, [wsId]);
 
-    const handleReqFetchExcelTranslatorList = async () => {
+    useEffect(() => {
+        if (apiKey) {
+            reqFetchTemporaryErpItemList();
+        }
+    }, [apiKey]);
+
+    const reqFetchApiKey = async () => {
+        let headers = {
+            wsId: wsId
+        }
+
+        const result = await apiHook.reqFetchWorkspaceApi({ headers });
+
+        if (result?.content) {
+            setApiKey(result?.content)
+        }
+    }
+
+    const reqFetchExcelTranslatorList = async () => {
         let { results, response } = await apiHook.reqFetchExcelTranslatorList({ headers: { wsId: wsId } });
         if (results) {
             excelTranslatorHook.onSetExcelTranslatorList(results);
         }
     }
 
+    const reqFetchTemporaryErpItemList = async () => {
+        const timestamp = Date.now().toString();
+        const signiture = customSignitureUtils.generateSigniture({ apiKey: apiKey?.apiKey, secretKey: apiKey?.secretKey, timestamp: timestamp })
+        let headers = customSignitureUtils.makeHeaders({ apiKey: apiKey?.apiKey, timestamp: timestamp, signiture: signiture });
+
+        const result = await apiHook.reqFetchTemporaryErpItemList({ headers: headers });
+
+        if (result?.content) {
+            setTemporaryErpItemList(result?.content);
+        }
+    }
+
+    const reqDeleteTemporaryErpItemList = async () => {
+        handleOpenBackdrop();
+        const timestamp = Date.now().toString();
+        const signiture = customSignitureUtils.generateSigniture({ apiKey: apiKey?.apiKey, secretKey: apiKey?.secretKey, timestamp: timestamp })
+        let headers = customSignitureUtils.makeHeaders({ apiKey: apiKey?.apiKey, timestamp: timestamp, signiture: signiture });
+
+        const result = await apiHook.reqDeleteTemporaryErpItemList({ headers: headers })
+
+        if(result?.content){
+            alert(`${result?.content} 건의 임시 주문건을 삭제 했습니다.`)
+            setTemporaryErpItemList(null);
+        }
+        handleCloseBackdrop();
+    }
+
+    const handleLoadTemporaryErpItemList = async () => {
+        handleOpenBackdrop();
+        onPushList(temporaryErpItemList?.map(r => ({ ...r, id: uuidv4() })));
+        handleCloseBackdrop();
+    }
 
     const handleSubmitUploadWithExcel = async (formData, successCallback) => {
         formData.append('workspaceId', wsId);
@@ -98,6 +156,13 @@ export default function MainComponent(props) {
                             onSubmitUploadWithExcel={handleSubmitUploadWithExcel}
                             onSubmitUploadWithSingle={onSubmitUploadWithSingle}
                         />
+                        {temporaryErpItemList &&
+                            <FdTemporaryErpItem
+                                temporaryErpItemList={temporaryErpItemList}
+                                onLoadTemporaryErpItemList={handleLoadTemporaryErpItemList}
+                                onReqDeleteTemporaryErpItemList={reqDeleteTemporaryErpItemList}
+                            />
+                        }
                         <UploadDataListFieldComponent
                             uploadDatas={uploadDatas}
                             onActionFillEmptyChannerOrderDate={onFillEmptyChannerOrderDate}

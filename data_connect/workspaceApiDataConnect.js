@@ -21,6 +21,14 @@ const workspaceApiDataConnect = () => {
                 xsrfHeaderName: 'X-XSRF-TOKEN'
             })
         },
+        searchDetailForAny: async function ({ params, headers }) {
+            return await axiosAuthInterceptor.get(`${AUTH_API_ADDRESS}/auth/v1/workspace-apis/any`, {
+                headers: headers,
+                withCredentials: true,
+                xsrfCookieName: 'x_auth_csrf_token',
+                xsrfHeaderName: 'X-XSRF-TOKEN'
+            })
+        },
         generateKey: async function ({ body, headers }) {
             await csrfDataConnect().getAuthCsrf();
             return await axiosAuthInterceptor.post(`${AUTH_API_ADDRESS}/auth/v1/workspace-apis/generateKey`, body, {

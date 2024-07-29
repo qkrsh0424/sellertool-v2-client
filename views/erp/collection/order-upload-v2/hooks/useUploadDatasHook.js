@@ -77,6 +77,12 @@ export default function useUploadDatasHook(props) {
             ;
     }
 
+    const onPushList = (valueList) => {
+        setUploadDatas(prev => {
+            return [...prev, ...valueList];
+        })
+    }
+
     const onFillEmptyChannerOrderDate = () => {
         if (uploadDatas?.length > 0) {
             setUploadDatas(uploadDatas?.map(r => {
@@ -119,6 +125,7 @@ export default function useUploadDatasHook(props) {
         uploadDatas,
         reqUploadWithExcel,
         reqSaveUploadDatas,
+        onPushList,
         onFillEmptyChannerOrderDate,
         onSubmitUploadWithSingle,
         onDeleteUploadData,

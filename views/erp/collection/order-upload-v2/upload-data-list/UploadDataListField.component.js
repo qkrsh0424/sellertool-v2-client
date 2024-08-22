@@ -8,6 +8,9 @@ import InfiniteScrollObserver from "../../../../modules/observer/InfiniteScrollO
 import { Container, ControlWrapper, CountBox, DeleteTd, TableBox, TableWrapper } from "./styles/UploadDataListField.styled";
 import CustomBlockButton from "../../../../../components/buttons/block-button/v1/CustomBlockButton";
 import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
+import Link from "next/link";
+import { CustomDateUtils } from "../../../../../utils/CustomDateUtils";
+import { CustomURIEncoderUtils } from "../../../../../utils/CustomURIEncoderUtils";
 
 const TABLE_DATA_VIEW_SIZE = 50;
 const TABLE_DATA_INC_DEC_SIZE = 30;
@@ -163,6 +166,37 @@ function Table({
                                                 );
                                             }
 
+                                            if (header.fieldName === 'receiver') {
+                                                let url = `/erp/collection/integration/?classificationType=ALL&periodSearchCondition=createdAt&matchedCode=releaseOptionCode&page=1`;
+                                                const currentDateTime = new Date();
+                                                const startDateTime = CustomDateUtils().setPlusDate(currentDateTime, 0, 0, -30);
+                                                const currentDate = CustomDateUtils().dateToYYYYMMDD(currentDateTime, '-');
+                                                const startDate = CustomDateUtils().dateToYYYYMMDD(startDateTime, '-');
+
+                                                url += `&startDateTime=${startDate}&endDateTime=${currentDate}`;
+                                                const searchFilterList = [
+                                                    {
+                                                        searchCondition: 'RECEIVER',
+                                                        searchQuery: data[header.fieldName]
+                                                    }
+                                                ];
+                                                const searchFilter = CustomURIEncoderUtils().encodeJSONList(searchFilterList);
+
+                                                url += `&searchFilter=${searchFilter}`;
+                                                return (
+                                                    <td key={header.fieldName}>
+                                                        <Link
+                                                            href={url}
+                                                            passHref
+                                                        >
+                                                            <a target="_blank" style={{fontWeight:'700', textDecoration:'underline'}}>
+                                                                {data[header.fieldName]}
+                                                            </a>
+                                                        </Link>
+                                                    </td>
+                                                );
+                                            }
+
                                             return (
                                                 <td key={header.fieldName}>
                                                     {data[header.fieldName]}
@@ -192,7 +226,7 @@ function Table({
                         </tbody>
                     </table>
                 </TableBox>
-            </TableWrapper>
+            </TableWrapper >
             {deleteAllModalOpen &&
                 <ConfirmModalComponentV2
                     open={deleteAllModalOpen}

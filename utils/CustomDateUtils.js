@@ -16,7 +16,8 @@ export const CustomDateUtils = () => {
         dateToHHmm: dateToHHmm,
         getDiffHourWithUTC: getDiffHourWithUTC,
         setPlusDate: setPlusDate,
-        getCurrentUTCDateTime: getCurrentUTCDateTime
+        getCurrentUTCDateTime: getCurrentUTCDateTime,
+        convertToUTC: convertToUTC
     }
 }
 
@@ -142,5 +143,9 @@ function setPlusDate(idate, prevYear, prevMonth, prevDay) {
 function getCurrentUTCDateTime() {
     let date = new Date();
 
+    return moment(date).utc().format('YYYY-MM-DDTHH:mm:ss[Z]');
+}
+
+function convertToUTC(date) {
     return moment(date).utc().format('YYYY-MM-DDTHH:mm:ss[Z]');
 }

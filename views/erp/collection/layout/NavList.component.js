@@ -44,30 +44,35 @@ const NAV_LIST = [
         pathname: '/erp/collection/order-upload',
         asPath: '/erp/collection/order-upload'
     },
-    {
-        name: '주문확인',
-        pathname: `/erp/collection/order`,
-        asPath: `/erp/collection/order/?periodSearchCondition=createdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
-    },
-    {
-        name: '주문확정',
-        pathname: '/erp/collection/sales',
-        asPath: `/erp/collection/sales/?periodSearchCondition=salesAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
-    },
-    {
-        name: '출고완료',
-        pathname: '/erp/collection/release-complete',
-        asPath: `/erp/collection/release-complete/?periodSearchCondition=releaseAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
-    },
-    {
-        name: '보류 데이터',
-        pathname: '/erp/collection/hold',
-        asPath: `/erp/collection/hold/?periodSearchCondition=holdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
-    },
+    // {
+    //     name: '주문확인',
+    //     pathname: `/erp/collection/order`,
+    //     asPath: `/erp/collection/order/?periodSearchCondition=createdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
+    // },
+    // {
+    //     name: '주문확정',
+    //     pathname: '/erp/collection/sales',
+    //     asPath: `/erp/collection/sales/?periodSearchCondition=salesAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
+    // },
+    // {
+    //     name: '출고완료',
+    //     pathname: '/erp/collection/release-complete',
+    //     asPath: `/erp/collection/release-complete/?periodSearchCondition=releaseAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
+    // },
+    // {
+    //     name: '보류 데이터',
+    //     pathname: '/erp/collection/hold',
+    //     asPath: `/erp/collection/hold/?periodSearchCondition=holdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}`
+    // },
     {
         name: '통합주문관리',
         pathname: '/erp/collection/integration',
         asPath: `/erp/collection/integration/?classificationType=ALL&periodSearchCondition=createdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}&riSearchCondition=receiver&riSearchQuery=`
+    },
+    {
+        name: '반품/교환관리',
+        pathname: '/erp/collection/return-exchange',
+        asPath: `/erp/collection/return-exchange`
     },
     {
         name: '설정',

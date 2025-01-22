@@ -74,13 +74,15 @@ export default function FloatingControlBarModalComponent({
     onActionOpenDeleteErpItemsConfirmModal,
     onActionOpenExcelDownloadModal,
     onActionOpenCopyCreateErpItemModal,
-    onActionClearAllSelectedItems,
     onActionOpenViewSelectedModal,
     onActionOpenProductListModal,
     onActionOpenStockReleaseModal,
     onActionOpenCancelStockReleaseModal,
     onActionOpenWaybillRegistrationModal,
     onActionOpenChangeStatusModal,
+    onActionOpenRegisterReturnExchangeModal,
+
+    onActionClearAllSelectedItems,
 }) {
     const router = useRouter();
     const classificationType = router?.query?.classificationType || null;
@@ -164,6 +166,15 @@ export default function FloatingControlBarModalComponent({
                                     onClick={() => onActionOpenChangeStatusModal()}
                                 >
                                     상태변경
+                                </CustomBlockButton>
+                            }
+                            {['COMPLETE'].includes(classificationType) &&
+                                <CustomBlockButton
+                                    type='button'
+                                    className='button-item'
+                                    onClick={() => onActionOpenRegisterReturnExchangeModal()}
+                                >
+                                    교환/반품 등록
                                 </CustomBlockButton>
                             }
                             <CustomBlockButton

@@ -33,6 +33,7 @@ export default function CustomPopper({
                 anchorEl={anchorEl}
                 disablePortal={disablePortal}
                 placement={placement}
+                {...props}
             >
                 <ContentWrapper>
                     {element}

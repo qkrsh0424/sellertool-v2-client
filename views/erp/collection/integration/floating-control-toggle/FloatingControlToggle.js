@@ -15,7 +15,6 @@ import { MdWaybillBulkUpdate } from "./modal/MdWaybillBulkUpdate/MdWaybillBulkUp
 import { MdBulkUpdateErpItems } from "./modal/MdBulkUpdateErpItems/v1/MdBulkUpdateErpItems";
 import { MdStockRelease } from "./modal/MdStockRelease/MdStockRelease";
 import { MdCancelStockRelease } from "./modal/MdCancelStockRelease/MdCancelStockRelease";
-import { MdRegisterReturnExchange } from "./modal/MdRegisterReturnExchange/MdRegisterReturnExchange";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -37,7 +36,6 @@ export default function FloatingControlToggle({
     const [cancelStockReleaseModalOpen, setCancelStockReleaseModalOpen] = useState(false);
     const [waybillRegistrationModalOpen, setWaybillRegistrationModalOpen] = useState(false);
     const [changeStatusModalOpen, setChangeStatusModalOpen] = useState(false);
-    const [registerReturnExchangeModalOpen, setRegisterReturnExchangeModalOpen] = useState(false);
 
     useEffect(() => {
         selectedErpItemListActionsHook.onSet([]);
@@ -166,10 +164,6 @@ export default function FloatingControlToggle({
         setChangeStatusModalOpen(bool);
     }
 
-    const toggleRegisterReturnExchangeModalOpen = (setOpen) => {
-        setRegisterReturnExchangeModalOpen(setOpen);
-    }
-
     const handleClearAllSelectedItems = () => {
         selectedErpItemListActionsHook.onSet([]);
     }
@@ -205,7 +199,6 @@ export default function FloatingControlToggle({
                 onActionOpenCancelStockReleaseModal={() => toggleCancelStockReleaseModalOpen(true)}
                 onActionOpenWaybillRegistrationModal={() => toggleWaybillRegistrationModalOpen(true)}
                 onActionOpenChangeStatusModal={() => toggleChangeStatusModalOpen(true)}
-                onActionOpenRegisterReturnExchangeModal={() => toggleRegisterReturnExchangeModalOpen(true)}
 
                 onActionClearAllSelectedItems={handleClearAllSelectedItems}
             />
@@ -303,16 +296,6 @@ export default function FloatingControlToggle({
                     open={changeStatusModalOpen}
                     onClose={() => toggleChangeStatusModalOpen(false)}
                     onCloseControlDrawer={() => toggleControlDrawerOpen(false)}
-                />
-            }
-
-            {registerReturnExchangeModalOpen &&
-                <MdRegisterReturnExchange
-                    open={registerReturnExchangeModalOpen}
-                    toggleOpenClose={toggleRegisterReturnExchangeModalOpen}
-                    toggleControlDrawerOpen={toggleControlDrawerOpen}
-
-                    erpCollectionHeader={erpCollectionHeader}
                 />
             }
         </>

@@ -70,11 +70,6 @@ const NAV_LIST = [
         asPath: `/erp/collection/integration/?classificationType=ALL&periodSearchCondition=createdAt&startDateTime=${dateToYYYYMMDD(new Date())}&endDateTime=${dateToYYYYMMDD(new Date())}&riSearchCondition=receiver&riSearchQuery=`
     },
     {
-        name: '반품/교환관리',
-        pathname: '/erp/collection/return-exchange',
-        asPath: `/erp/collection/return-exchange`
-    },
-    {
         name: '설정',
         pathname: '/erp/collection/settings',
         asPath: '/erp/collection/settings'

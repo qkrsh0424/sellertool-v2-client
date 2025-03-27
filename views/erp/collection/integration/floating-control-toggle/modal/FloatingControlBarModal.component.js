@@ -80,7 +80,6 @@ export default function FloatingControlBarModalComponent({
     onActionOpenCancelStockReleaseModal,
     onActionOpenWaybillRegistrationModal,
     onActionOpenChangeStatusModal,
-    onActionOpenRegisterReturnExchangeModal,
 
     onActionClearAllSelectedItems,
 }) {
@@ -166,15 +165,6 @@ export default function FloatingControlBarModalComponent({
                                     onClick={() => onActionOpenChangeStatusModal()}
                                 >
                                     상태변경
-                                </CustomBlockButton>
-                            }
-                            {['COMPLETE'].includes(classificationType) &&
-                                <CustomBlockButton
-                                    type='button'
-                                    className='button-item'
-                                    onClick={() => onActionOpenRegisterReturnExchangeModal()}
-                                >
-                                    교환/반품 등록
                                 </CustomBlockButton>
                             }
                             <CustomBlockButton

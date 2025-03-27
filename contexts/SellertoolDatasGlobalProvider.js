@@ -19,6 +19,7 @@ export function SellertoolDatasGlobalProvider({ children }) {
     const bookmarkExcelTranslatorIdListForErpc = sellertoolData?.bookmarkExcelTranslatorIdListForErpc ?? [];
     const bookmarkViewHeaderIdsForErpc = sellertoolData?.bookmarkViewHeaderIdsForErpc ?? [];
     const favoriteDownloadFormIdsForErpc = sellertoolData?.favoriteDownloadFormIdsForErpc ?? [];
+    const bookmarkSearchConditionsForErpc = sellertoolData?.bookmarkSearchConditionsForErpc ?? [];
 
     const bookmarkExcelTranslatorIdListForTranslator = sellertoolData?.bookmarkExcelTranslatorIdListForTranslator ?? [];
 
@@ -209,6 +210,27 @@ export function SellertoolDatasGlobalProvider({ children }) {
                             }
                         }))
                     }
+                },
+                onSetBookmarkSearchConditionsForErpc: (array) => {
+                    if (!sellertoolData) {
+                        setSellertoolDatas([...sellertoolDatas, {
+                            wsId: wsId,
+                            bookmarkSearchConditionsForErpc: [...array]
+                        }])
+                    } else {
+                        setSellertoolDatas(sellertoolDatas.map(r => {
+                            if (r.wsId === wsId) {
+                                return {
+                                    ...r,
+                                    bookmarkSearchConditionsForErpc: [...array]
+                                }
+                            } else {
+                                return {
+                                    ...r
+                                }
+                            }
+                        }))
+                    }
                 }
             }
         },
@@ -273,6 +295,7 @@ export function SellertoolDatasGlobalProvider({ children }) {
                         bookmarkExcelTranslatorIdListForErpc: bookmarkExcelTranslatorIdListForErpc,
                         bookmarkViewHeaderIdsForErpc: bookmarkViewHeaderIdsForErpc,
                         favoriteDownloadFormIdsForErpc: favoriteDownloadFormIdsForErpc,
+                        bookmarkSearchConditionsForErpc: bookmarkSearchConditionsForErpc,
 
                         bookmarkExcelTranslatorIdListForTranslator: bookmarkExcelTranslatorIdListForTranslator
                     }}
@@ -302,6 +325,7 @@ export function useSellertoolDatasValueHook(props) {
         bookmarkExcelTranslatorIdListForErpc: value.bookmarkExcelTranslatorIdListForErpc,
         bookmarkViewHeaderIdsForErpc: value.bookmarkViewHeaderIdsForErpc,
         favoriteDownloadFormIdsForErpc: value.favoriteDownloadFormIdsForErpc,
+        bookmarkSearchConditionsForErpc: value.bookmarkSearchConditionsForErpc,
 
         bookmarkExcelTranslatorIdListForTranslator: value.bookmarkExcelTranslatorIdListForTranslator
     };
@@ -327,6 +351,7 @@ export function useSellertoolDatasActionsHook(props) {
             onSetBookmarkExcelTranslatorIdList: value.erpcActions.onSetBookmarkExcelTranslatorIdList,
             onSetBookmarkViewHeaderIds: value.erpcActions.onSetBookmarkViewHeaderIds,
             onSetFavoriteDownloadFormIds: value.erpcActions.onSetFavoriteDownloadFormIds,
+            onSetBookmarkSearchConditionsForErpc: value.erpcActions.onSetBookmarkSearchConditionsForErpc,
         },
         excelTranslatorActions: {
             onSetBookmarkExcelTranslatorIdList: value.excelTranslatorActions.onSetBookmarkExcelTranslatorIdList

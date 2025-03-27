@@ -6,6 +6,7 @@ import { Dialog } from '@mui/material';
 import styled from 'styled-components';
 import FooterButton from "./FooterButton";
 import React from "react";
+import { Header } from "./Header";
 
 const DialogContainer = styled(Dialog)`
     .MuiPaper-root::-webkit-scrollbar{
@@ -85,5 +86,6 @@ export const CustomDialog = Object.assign(DialogMain, {
     CloseButton: CloseButton,
     Title: Title,
     FooterButtonGroup: FooterButtonGroup,
-    FooterButton: FooterButton
+    FooterButton: FooterButton,
+    Header: Header
 })

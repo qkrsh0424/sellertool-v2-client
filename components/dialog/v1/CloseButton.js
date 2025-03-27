@@ -36,7 +36,7 @@ export default function CloseButton({
                 <button
                     type='button'
                     className='header-close-button-el'
-                    onClick={() => onClose()}
+                    onClick={(e) => onClose(e)}
                 >
                     <CustomImage
                         src='/images/icon/close_default_959eae.svg'

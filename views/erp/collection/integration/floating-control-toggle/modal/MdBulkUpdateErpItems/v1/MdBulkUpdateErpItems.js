@@ -35,6 +35,7 @@ export function MdBulkUpdateErpItems({
 
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
 
+    console.log(erpItemValueHook?.content.content[0].channelOrderDate);
     const bulkUpdateErpItemsFormListHook = useBulkUpdateErpItemsFormList(_.cloneDeep(selectedErpItemListValueHook));
 
     const [tableView, setTableView] = useState('orderInfo');

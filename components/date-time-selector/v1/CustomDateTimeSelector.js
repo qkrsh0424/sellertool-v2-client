@@ -87,7 +87,7 @@ export default function CustomDateTimeSelector({
     return (
         <CustomDialog
             open={open}
-            onClose={() => onClose()}
+            onClose={(e) => { onClose(e) }}
         >
             <CustomDialog.CloseButton onClose={() => onClose()} />
             <ContentContainer>
@@ -102,6 +102,7 @@ export default function CustomDateTimeSelector({
                         toolbarFormat="YY.MM.DD dd"
                         showToolbar={false}
                         disableFuture={true}
+                        minDate={new Date('2020-01-01')}
                         value={dayjs(new Date(parseDateTime?.ymd))}
                         onChange={(value) => handleChangeYmd(value)}
                         closeOnSelect={true}

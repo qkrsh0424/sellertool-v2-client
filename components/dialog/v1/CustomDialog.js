@@ -54,6 +54,7 @@ function DialogMain({
     backdropColor,
     backgroundColor,
     borderRadius = 15,
+    paperRef,
     children,
 }) {
 
@@ -64,9 +65,13 @@ function DialogMain({
                 fullScreen={fullScreen}
                 fullWidth={fullWidth ?? true}
                 maxWidth={maxWidth || 'xs'}
-                onClose={typeof (onClose) === 'function' ? () => onClose() : () => { ; }}
+                onClose={typeof (onClose) === 'function' ? (e) => onClose(e) : (e) => { ; }}
                 backdropcolor={backdropColor || '#00000080'}
                 border_radius={borderRadius}
+                PaperProps={{
+                    ref: paperRef || null
+                }}
+
             >
                 <Container style={{ background: backgroundColor ? backgroundColor : 'var(--defaultBackground)' }}>
                     {children}

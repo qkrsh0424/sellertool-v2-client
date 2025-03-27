@@ -1,10 +1,12 @@
+import withMainApiCsrfWrapper from "../utils/withMainApiCsrfWrapper";
 import { axiosAuthInterceptor } from "./axiosInterceptors";
 import qs from 'qs';
 
 const API_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiAddress : process.env.production.apiAddress
 
 export const ProductOptionDataConnect = {
-    baseInventoryPage: baseInventoryPage
+    baseInventoryPage: baseInventoryPage,
+    Common: Common
 }
 
 function baseInventoryPage() {
@@ -105,6 +107,26 @@ function baseInventoryPage() {
                     return qs.stringify(params, { arrayFormat: 'brackets' })
                 }
             })
+        }
+    }
+}
+
+function Common() {
+    const BASE_URL = `${API_ADDRESS}/api/v1/product-options`;
+
+    return {
+        searchAllByCodes: async function ({ body, headers }) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.post(`${BASE_URL}/search-all-by-codes`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN',
+                    paramsSerializer: params => {
+                        return qs.stringify(params, { arrayFormat: 'brackets' })
+                    }
+                })
+            )
         }
     }
 }

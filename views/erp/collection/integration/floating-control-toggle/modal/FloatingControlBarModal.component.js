@@ -74,13 +74,14 @@ export default function FloatingControlBarModalComponent({
     onActionOpenDeleteErpItemsConfirmModal,
     onActionOpenExcelDownloadModal,
     onActionOpenCopyCreateErpItemModal,
-    onActionClearAllSelectedItems,
     onActionOpenViewSelectedModal,
     onActionOpenProductListModal,
     onActionOpenStockReleaseModal,
     onActionOpenCancelStockReleaseModal,
     onActionOpenWaybillRegistrationModal,
     onActionOpenChangeStatusModal,
+
+    onActionClearAllSelectedItems,
 }) {
     const router = useRouter();
     const classificationType = router?.query?.classificationType || null;

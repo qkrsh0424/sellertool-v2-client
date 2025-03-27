@@ -25,6 +25,6 @@ const Container = styled(ToastContainer)`
 
 export function CustomToastContainer(props) {
   return (
-    <Container limit={3} newestOnTop={true} />
+    <Container limit={3} newestOnTop={true} position='bottom-left' />
   );
 }

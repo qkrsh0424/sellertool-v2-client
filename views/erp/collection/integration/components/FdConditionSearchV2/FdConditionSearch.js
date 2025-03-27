@@ -22,6 +22,8 @@ import { useEffect, useRef, useState } from "react";
 import { CustomURIEncoderUtils } from "../../../../../../utils/CustomURIEncoderUtils";
 import CustomImage from "../../../../../../components/image/CustomImage";
 import { useErpItemValueHook } from "../../contexts/ErpItemProvider";
+import { ModalSearchConditionBookmark } from "./modals/modal-search-condition-bookmark";
+import { useSellertoolDatasValueHook } from "../../../../../../contexts/SellertoolDatasGlobalProvider";
 
 const customDateUtils = CustomDateUtils();
 /**
@@ -37,10 +39,12 @@ export function FdConditionSearch({
     const searchFilter = router?.query?.searchFilter;
 
     const erpItemValueHook = useErpItemValueHook();
+    const sellertoolDatasValueHook = useSellertoolDatasValueHook();
 
     const searchQueryRef = useRef();
     const [searchCondition, setSearchCondition] = useState('RECEIVER');
     const [searchQuery, setSearchQuery] = useState('');
+    const [searchConditionBookmarkModalOpen, setSearchConditionBookmarkModalOpen] = useState(false);
 
     const {
         periodSearchYn,
@@ -300,39 +304,54 @@ export function FdConditionSearch({
                             <div className='flexBox gap-20 mobileDynamic'>
                                 <div style={{ flex: 1 }}>
                                     <div className='flexBox gap-20'>
+                                        <section className='conditionBookmarkBox'>
+                                            <CustomBlockButton
+                                                type='button'
+                                                onClick={() => setSearchConditionBookmarkModalOpen(true)}
+                                            >
+                                                <CustomImage src='/images/icon/star_default_ffdf00.svg' />
+                                            </CustomBlockButton>
+                                        </section>
                                         <section className='conditionSelectBox' style={{ flex: 1 }}>
                                             <CustomSelect value={searchCondition || ''} onChange={(e) => handleChangeSearchCondition(e)}>
                                                 <option value={''}>선택</option>
+                                                <optgroup label='- 즐겨찾기'>
+                                                    {sellertoolDatasValueHook?.bookmarkSearchConditionsForErpc?.map(r => {
+                                                        return (
+                                                            <option key={r.fieldName} value={r.fieldName}>{r.name}</option>
+                                                        )
+                                                    })}
+                                                </optgroup>
                                                 <optgroup label='- 관리상품정보'>
-                                                    {M_SEARCH_CONDITIONS?.map(r => {
+                                                    {M_SEARCH_CONDITIONS?.filter(r => !sellertoolDatasValueHook?.bookmarkSearchConditionsForErpc?.some(r2 => r2.fieldName === r.fieldName))?.map(r => {
                                                         return (
                                                             <option key={r.fieldName} value={r.fieldName}>{r.name}</option>
                                                         )
                                                     })}
                                                 </optgroup>
                                                 <optgroup label='- 수취인정보'>
-                                                    {RECEIVER_SEARCH_CONDITIONS?.map(r => {
+                                                    {RECEIVER_SEARCH_CONDITIONS?.filter(r => !sellertoolDatasValueHook?.bookmarkSearchConditionsForErpc?.some(r2 => r2.fieldName === r.fieldName))?.map(r => {
                                                         return (
                                                             <option key={r.fieldName} value={r.fieldName}>{r.name}</option>
                                                         )
                                                     })}
                                                 </optgroup>
                                                 <optgroup label='- 배송정보'>
-                                                    {DELIVERY_SEARCH_CONDITIONS?.map(r => {
+                                                    {DELIVERY_SEARCH_CONDITIONS?.filter(r => !sellertoolDatasValueHook?.bookmarkSearchConditionsForErpc?.some(r2 => r2.fieldName === r.fieldName))?.map(r => {
                                                         return (
                                                             <option key={r.fieldName} value={r.fieldName}>{r.name}</option>
                                                         )
                                                     })}
                                                 </optgroup>
                                                 <optgroup label='- 주문정보'>
-                                                    {ORDER_SEARCH_CONDITIONS?.map(r => {
+                                                    {ORDER_SEARCH_CONDITIONS?.filter(r => !sellertoolDatasValueHook?.bookmarkSearchConditionsForErpc?.some(r2 => r2.fieldName === r.fieldName))?.map(r => {
                                                         return (
                                                             <option key={r.fieldName} value={r.fieldName}>{r.name}</option>
                                                         )
                                                     })}
                                                 </optgroup>
                                                 <optgroup label='- 관리메모'>
-                                                    {MEMO_SEARCH_CONDITIONS?.map(r => {
+                                                    {MEMO_SEARCH_CONDITIONS?.filter(r => !sellertoolDatasValueHook?.bookmarkSearchConditionsForErpc?.some(r2 => r2.fieldName === r.fieldName))?.map(r => {
                                                         return (
                                                             <option key={r.fieldName} value={r.fieldName}>{r.name}</option>
                                                         )
@@ -502,6 +521,18 @@ export function FdConditionSearch({
                     </form>
                 </Wrapper>
             </Container>
+
+            {searchConditionBookmarkModalOpen &&
+                <ModalSearchConditionBookmark
+                    open={searchConditionBookmarkModalOpen}
+                    onClose={() => setSearchConditionBookmarkModalOpen(false)}
+                    M_SEARCH_CONDITIONS={M_SEARCH_CONDITIONS}
+                    ORDER_SEARCH_CONDITIONS={ORDER_SEARCH_CONDITIONS}
+                    RECEIVER_SEARCH_CONDITIONS={RECEIVER_SEARCH_CONDITIONS}
+                    DELIVERY_SEARCH_CONDITIONS={DELIVERY_SEARCH_CONDITIONS}
+                    MEMO_SEARCH_CONDITIONS={MEMO_SEARCH_CONDITIONS}
+                />
+            }
         </>
     );
 }

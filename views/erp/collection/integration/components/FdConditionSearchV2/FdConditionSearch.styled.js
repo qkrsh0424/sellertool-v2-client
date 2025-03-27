@@ -44,6 +44,15 @@ export const SearchFieldWrapper = styled.div`
         }
     }
 
+    .conditionBookmarkBox{
+        button{
+            width: 38px;
+            height: 38px;
+            border:1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+    }
+
     .conditionSelectBox{
         /* width: 200px; */
 

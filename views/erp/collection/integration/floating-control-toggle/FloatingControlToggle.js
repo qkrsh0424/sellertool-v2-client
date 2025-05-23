@@ -15,6 +15,7 @@ import { MdWaybillBulkUpdate } from "./modal/MdWaybillBulkUpdate/MdWaybillBulkUp
 import { MdBulkUpdateErpItems } from "./modal/MdBulkUpdateErpItems/v1/MdBulkUpdateErpItems";
 import { MdStockRelease } from "./modal/MdStockRelease/MdStockRelease";
 import { MdCancelStockRelease } from "./modal/MdCancelStockRelease/MdCancelStockRelease";
+import { ExcelDownloadModal as ExcelDownloadModalV3 } from "../../fragments/excel-download-modal-v3";
 
 export default function FloatingControlToggle({
     erpCollectionHeader,
@@ -29,6 +30,7 @@ export default function FloatingControlToggle({
     const [editErpItemsModalOpen, setEditErpItemsModalOpen] = useState(false);
     const [deleteErpItemsConfirmModalOpen, setDeleteErpItemsConfirmModalOpen] = useState(false);
     const [excelDownloadModalOpen, setExcelDownloadModalOpen] = useState(false);
+    const [excelDownloadModalV3Open, setExcelDownloadModalV3Open] = useState(false);
     const [copyCreateErpItemsModalOpen, setCopyCreateErpItemsModalOpen] = useState(false);
     const [viewSelectedModalOpen, setViewSelectedModalOpen] = useState(false);
     const [productListModalOpen, setProductListModalOpen] = useState(false);
@@ -83,6 +85,10 @@ export default function FloatingControlToggle({
 
     const toggleExcelDownloadModalOpen = (setOpen) => {
         setExcelDownloadModalOpen(setOpen);
+    }
+
+    const toggleExcelDownloadModalV3Open = (setOpen) => {
+        setExcelDownloadModalV3Open(setOpen);
     }
 
     const toggleProductListModalOpen = (setOpen) => {
@@ -192,6 +198,7 @@ export default function FloatingControlToggle({
                 onActionOpenEditErpItemsModal={() => toggleEditErpItemModalOpen(true)}
                 onActionOpenDeleteErpItemsConfirmModal={() => toggleDeleteErpItemsConfirmModalOpen(true)}
                 onActionOpenExcelDownloadModal={() => toggleExcelDownloadModalOpen(true)}
+                onActionOpenExcelDownloadModalV3={() => toggleExcelDownloadModalV3Open(true)}
                 onActionOpenCopyCreateErpItemModal={() => toggleCopyCreateErpItemsModalOpen(true)}
                 onActionOpenViewSelectedModal={() => toggleViewSelectedModalOpen(true)}
                 onActionOpenProductListModal={() => toggleProductListModalOpen(true)}
@@ -222,19 +229,44 @@ export default function FloatingControlToggle({
                 />
             }
 
-            <CommonModalComponent
-                open={excelDownloadModalOpen}
-                onClose={() => toggleExcelDownloadModalOpen(false)}
-                maxWidth={'xl'}
-            >
-                <ExcelDownloadModalComponent
+            {excelDownloadModalOpen &&
+                <CommonModalComponent
+                    open={excelDownloadModalOpen}
+                    onClose={() => toggleExcelDownloadModalOpen(false)}
+                    maxWidth={'xl'}
+                >
+                    <ExcelDownloadModalComponent
+                        erpCollectionHeader={erpCollectionHeader}
+                        selectedErpItems={selectedErpItemListValueHook}
+                        inventoryStocks={inventoryStocks}
+
+                        onClose={() => toggleExcelDownloadModalOpen(false)}
+                    />
+                </CommonModalComponent>
+            }
+
+            {excelDownloadModalV3Open &&
+                <ExcelDownloadModalV3
+                    open={excelDownloadModalV3Open}
+                    onClose={() => toggleExcelDownloadModalV3Open(false)}
                     erpCollectionHeader={erpCollectionHeader}
                     selectedErpItems={selectedErpItemListValueHook}
                     inventoryStocks={inventoryStocks}
-
-                    onClose={() => toggleExcelDownloadModalOpen(false)}
                 />
-            </CommonModalComponent>
+                // <CommonModalComponent
+                //     open={excelDownloadModalOpen}
+                //     onClose={() => toggleExcelDownloadModalOpen(false)}
+                //     maxWidth={'xl'}
+                // >
+                //     <ExcelDownloadModalComponent
+                //         erpCollectionHeader={erpCollectionHeader}
+                //         selectedErpItems={selectedErpItemListValueHook}
+                //         inventoryStocks={inventoryStocks}
+
+                //         onClose={() => toggleExcelDownloadModalOpen(false)}
+                //     />
+                // </CommonModalComponent>
+            }
 
             {copyCreateErpItemsModalOpen &&
                 <MdCopyCreate

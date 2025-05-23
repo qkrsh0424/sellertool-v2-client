@@ -16,6 +16,7 @@ import { useState } from 'react';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import moment from 'moment';
+import { ArrowDown01, ArrowDown10, ArrowUpDown } from 'lucide-react';
 
 const StyledContainer = styled.div`
 
@@ -159,6 +160,7 @@ export function WegetSettings({
     const settingVariables = settingVariablesValueContextHook.settingVariables;
 
     const [tableDatas, setTableDatas] = useState(null);
+    const [sortElements, setSortElements] = useState([])
 
     const handleChangeIsCombineDeliveryFlag = (e) => {
         settingVariablesActionsContextHook.settingVariables.setValue({
@@ -357,6 +359,7 @@ export function WegetSettings({
         customBackdropController().hideBackdrop();
     }
 
+    console.log(sortElements);
     return (
         <>
             <StyledContainer>
@@ -391,7 +394,44 @@ export function WegetSettings({
                                     <tr>
                                         {tableDatas[0]?.map((r, index) => {
                                             return (
-                                                <StyledTableHeaderCell key={index}>{r}</StyledTableHeaderCell>
+                                                <StyledTableHeaderCell key={index}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                                        <div>{r}</div>
+                                                        <div>
+                                                            {/* sortElements에 index에 해당하는 요소가 없으면 ArrowUpDown으로 표시하고, index에 해당하는 요소가 있고 asc이면 ArrowDown01, desc이면 ArrowDown10 아이콘을 쓴다. */}
+                                                            {/* ArrowUpDown 클릭시 sortElements에 [index, 'asc']를, ArrowDown01 클릭시 [index, 'desc']를, ArrowDown10 클릭시 sortElements에서 지우기 */}
+                                                            {/* 바깥쪽 배열은 순서가 중요하므로 asc->desc 로 갈때는 지우고 삽입하는 과정 말고 수정으로 처리해줘 */}
+                                                            {sortElements?.find(item => item[0] === index) ? (
+                                                                sortElements.find(item => item[0] === index)[1] === 'asc' ?
+                                                                    <ArrowDown01 size={14} style={{ cursor: 'pointer', color: '#81C784' }} onClick={() => {
+                                                                        // Update the sort element from 'asc' to 'desc'
+                                                                        const newSortElements = sortElements.map(item =>
+                                                                            item[0] === index ? [index, 'desc'] : item
+                                                                        );
+                                                                        setSortElements(newSortElements);
+                                                                        const sortedData = multiSort(tableDatas.slice(1), newSortElements);
+                                                                        setTableDatas([tableDatas[0], ...sortedData]);
+                                                                    }} />
+                                                                    :
+                                                                    <ArrowDown10 size={14} style={{ cursor: 'pointer', color: '#E57373' }} onClick={() => {
+                                                                        // Remove the sort element for this index
+                                                                        const newSortElements = sortElements.filter(item => item[0] !== index);
+                                                                        setSortElements(newSortElements);
+                                                                        const sortedData = multiSort(tableDatas.slice(1), newSortElements);
+                                                                        setTableDatas([tableDatas[0], ...sortedData]);
+                                                                    }} />
+                                                            ) :
+                                                                <ArrowUpDown size={14} style={{ cursor: 'pointer' }} onClick={() => {
+                                                                    // Add a new sort element with ascending order
+                                                                    const newSortElements = [...sortElements, [index, 'asc']];
+                                                                    setSortElements(newSortElements);
+                                                                    const sortedData = multiSort(tableDatas.slice(1), newSortElements);
+                                                                    setTableDatas([tableDatas[0], ...sortedData]);
+                                                                }} />
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </StyledTableHeaderCell>
                                             )
                                         })}
                                     </tr>
@@ -426,6 +466,25 @@ export function WegetSettings({
             </StyledContainer>
         </>
     );
+}
+
+function multiSort(array, criteria) {
+    return array.sort((a, b) => {
+        for (let [index, order] of criteria) {
+            let compareResult;
+
+            if (typeof a[index] === 'string' && typeof b[index] === 'string') {
+                compareResult = a[index].localeCompare(b[index]);
+            } else {
+                compareResult = a[index] - b[index];
+            }
+
+            if (compareResult !== 0) {
+                return order === 'asc' ? compareResult : -compareResult;
+            }
+        }
+        return 0;
+    });
 }
 
 async function exportStyledExcel(data, fileName = "export.xlsx") {

@@ -73,6 +73,7 @@ export default function FloatingControlBarModalComponent({
     onActionOpenEditErpItemsModal,
     onActionOpenDeleteErpItemsConfirmModal,
     onActionOpenExcelDownloadModal,
+    onActionOpenExcelDownloadModalV3,
     onActionOpenCopyCreateErpItemModal,
     onActionOpenViewSelectedModal,
     onActionOpenProductListModal,
@@ -197,6 +198,13 @@ export default function FloatingControlBarModalComponent({
                                 onClick={() => onActionOpenExcelDownloadModal()}
                             >
                                 엑셀 다운로드
+                            </CustomBlockButton>
+                            <CustomBlockButton
+                                type='button'
+                                className='button-item'
+                                onClick={() => onActionOpenExcelDownloadModalV3()}
+                            >
+                                엑셀 다운로드 v3-beta
                             </CustomBlockButton>
                             <CustomBlockButton
                                 type='button'

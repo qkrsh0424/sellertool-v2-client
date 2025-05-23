@@ -231,8 +231,8 @@ export function WegetSettings({
                 // 패키지 추출한것 주문에 추가
                 packageOrders?.forEach(packageOrder => {
                     packageInfos.forEach(packageInfo => {
-                        const newUnit = packageOrder?.unit * packageInfo?.unit;
-                        if (packageOrder) {
+                        if (packageOrder?.productOptionId === packageInfo?.parentProductOptionId) {
+                            const newUnit = packageOrder?.unit * packageInfo?.unit;
                             newSelectedErpItems.push({
                                 ...packageOrder,
                                 id: uuidv4(),

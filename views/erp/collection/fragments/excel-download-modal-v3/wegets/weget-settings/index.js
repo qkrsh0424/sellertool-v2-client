@@ -255,7 +255,7 @@ export function WegetSettings({
         }
         const inventoryStocks = (await InventoryDataConnect.baseErpCollectionPage().searchStockList({
             body: {
-                productOptionIds: newSelectedErpItems.map(item => item.productOptionId),
+                productOptionIds: newSelectedErpItems?.filter(r => r.productOptionId).map(item => item.productOptionId),
             },
             headers: {
                 wsId: workspaceId

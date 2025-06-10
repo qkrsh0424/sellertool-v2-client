@@ -125,7 +125,6 @@ export function MdBulkUpdateErpItems({
         <>
             <CustomDialog
                 open={open}
-                onClose={() => handleCloseModal()}
                 maxWidth={maxWidth}
             >
                 <CustomDialog.CloseButton onClose={() => handleCloseModal()} />

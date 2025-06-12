@@ -209,6 +209,10 @@ export const ItemCardBox = styled.div`
         .receive-unit{
             color:var(--defaultGreenColor);
             font-weight: 500;
+            cursor: pointer;
+            &:hover{
+                text-decoration: underline;
+            }
         }
 
         .release-unit{
@@ -221,10 +225,11 @@ export const ItemCardBox = styled.div`
         display: flex;
         align-items: center;
         margin-top: 5px;
+        gap: 5px;
     }
 
     .memo{
-        flex:1;
+        /* flex:1; */
         font-size: 13px;
     }
 

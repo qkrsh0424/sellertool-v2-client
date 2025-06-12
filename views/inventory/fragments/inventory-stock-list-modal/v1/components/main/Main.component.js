@@ -17,6 +17,7 @@ import { customBackdropController } from "../../../../../../../components/backdr
 import { EditMemoModalComponent } from "../edit-memo-modal";
 import { StockChartComponent } from "../stock-chart";
 import useInventoryStockRegisterStatusesHook from "../../hooks/useInventoryStockRegisterStatusesHook";
+import { EditUnitModalComponent } from "../edit-unit-modal";
 
 function returnTotalUnitByType(inventoryStockRegisterStatuses, type) {
     const totalUnit = inventoryStockRegisterStatuses?.reduce((accumulator, currentValue, index, src) => {
@@ -54,6 +55,7 @@ export function InventoryStockListModalComponent({
         reqFetchInventoryStockRegisterStatuses,
         reqChangeInventoryReceiveMemo,
         reqChangeInventoryReleaseMemo,
+        reqChangeInventoryReceiveUnit,
         reqDeleteInventoryReceive,
         reqDeleteInventoryRelease
     } = useInventoryStockRegisterStatusesHook({
@@ -63,6 +65,8 @@ export function InventoryStockListModalComponent({
     const [selectedItem, setSelectedItem] = useState(null);
     const [deleteInventoryStockRecordModalOpen, setDeleteInventoryStockRecordModalOpen] = useState(false);
     const [deleteInventoryStockRecordInfoModalOpen, setDeleteInventoryStockRecordInfoModalOpen] = useState(false);
+    const [editUnitModalOpen, setEditUnitModalOpen] = useState(false);
+
     const totalReceiveUnit = returnTotalUnitByType(inventoryStockRegisterStatuses, 'receive');
     const totalReleaseUnit = returnTotalUnitByType(inventoryStockRegisterStatuses, 'release');
 
@@ -125,6 +129,33 @@ export function InventoryStockListModalComponent({
                         reqFetchInventoryStockRegisterStatuses();
                     }
                 })
+                break;
+            default: break;
+        }
+    }
+
+    const handleSubmitChangeUnit = async (unit) => {
+        if (readOnly) {
+            return;
+        }
+        let body = {
+            id: selectedItem?.id,
+            unit: unit,
+            workspaceId: workspaceRedux?.workspaceInfo?.id
+        }
+
+        switch (selectedItem?.type) {
+            case 'receive':
+                await reqChangeInventoryReceiveUnit({
+                    body,
+                    successCallback: () => {
+                        setEditUnitModalOpen(false);
+                        setSelectedItem(null);
+                        reqFetchInventoryStockRegisterStatuses();
+                    }
+                })
+                break;
+            case 'release':
                 break;
             default: break;
         }
@@ -324,7 +355,22 @@ export function InventoryStockListModalComponent({
                                     <div className='right-group'>
                                         <div className='mgl-flex mgl-flex-justifyContent-spaceBetween'>
                                             <div className='status-box'><span className={`${r.type === 'receive' ? 'status-receive' : r.type === 'release' ? 'status-release' : ''}`}>{r.type === 'receive' ? '입고' : r.type === 'release' ? '출고' : ''}</span> ( {dateToYYMMDDhhmmss(r.createdAt || new Date)} )</div>
-                                            <div className='unit-box'>수량: {r.type === 'receive' ? <span className='receive-unit'>+{r.unit}</span> : r.type === 'release' ? <span className='release-unit'>-{r.unit}</span> : ''}</div>
+                                            <div className='unit-box'>
+                                                수량: {r.type === 'receive' ?
+                                                    <span
+                                                        className='receive-unit'
+                                                        onClick={() => {
+                                                            if (readOnly) {
+                                                                return;
+                                                            }
+                                                            setSelectedItem(r);
+                                                            setEditUnitModalOpen(true);
+                                                        }}
+                                                    >+{r.unit}</span>
+                                                    : r.type === 'release' ? <span className='release-unit'>-{r.unit}</span>
+                                                        : ''
+                                                }
+                                            </div>
                                         </div>
                                         <div className='memo-box'>
                                             <div className='memo'>
@@ -358,6 +404,15 @@ export function InventoryStockListModalComponent({
                     inventoryStockData={selectedItem}
                     onClose={handleCloseEditMemoModal}
                     onConfirm={handleSubmitChangeMemo}
+                />
+            }
+
+            {editUnitModalOpen &&
+                <EditUnitModalComponent
+                    open={editUnitModalOpen}
+                    inventoryStockData={selectedItem}
+                    onClose={() => setEditUnitModalOpen(false)}
+                    onConfirm={(value) => { handleSubmitChangeUnit(value) }}
                 />
             }
 

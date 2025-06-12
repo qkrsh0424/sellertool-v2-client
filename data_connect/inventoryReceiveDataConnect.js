@@ -69,6 +69,24 @@ function baseInventoryPage() {
          * 
          * @param {object} body 
          * @param {string} body.id
+         * @param {string} body.unit
+         * @param {object} headers 
+         * @param {string} headers.wsId
+         */
+        changeUnit: async function (body, headers) {
+            return await withMainApiCsrfWrapper(
+                () => axiosAuthInterceptor.patch(`${BASE_URL}/target:unit`, body, {
+                    headers: headers,
+                    withCredentials: true,
+                    xsrfCookieName: 'x_api_csrf_token',
+                    xsrfHeaderName: 'X-XSRF-TOKEN'
+                })
+            )
+        },
+        /**
+         * 
+         * @param {object} body 
+         * @param {string} body.id
          * @param {object} headers
          * @param {string} headers.wsId
          * @returns 

@@ -16,8 +16,8 @@ export function useRouterSearchAggregationHook(props) {
     const query = router?.query;
     const searchFilter = query?.searchFilter;
     const sortTypes = query?.sortTypes;
-    const page = query?.page;
-    const size = query?.size;
+    const page = query?.page || 1;
+    const size = query?.size || 50;
 
     const productCategoryId = query?.productCategoryId;
     const productSubCategoryId = query?.productSubCategoryId;

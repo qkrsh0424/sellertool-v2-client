@@ -243,6 +243,9 @@ export function WegetSettings({
                                 optionName: packageInfo?.productOptionVo?.name,
                                 productOptionName: packageInfo?.productOptionVo?.name,
                                 productOptionId: packageInfo?.productOptionVo?.id,
+                                optionCode: packageInfo?.productOptionVo?.code,
+                                releaseOptionCode: packageInfo?.productOptionVo?.code,
+                                productOptionTag: packageInfo?.productOptionVo?.optionTag,
                                 packageYn: 'n',
                                 unit: newUnit || 0,
                             })
@@ -253,6 +256,7 @@ export function WegetSettings({
                 newSelectedErpItems = newSelectedErpItems.filter(item => item.packageYn !== 'y');
             }
         }
+        console.log(newSelectedErpItems);
         const inventoryStocks = (await InventoryDataConnect.baseErpCollectionPage().searchStockList({
             body: {
                 productOptionIds: newSelectedErpItems?.filter(r => r.productOptionId).map(item => item.productOptionId),

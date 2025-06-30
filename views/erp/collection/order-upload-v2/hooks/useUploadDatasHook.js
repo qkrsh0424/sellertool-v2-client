@@ -99,6 +99,22 @@ export default function useUploadDatasHook(props) {
         }
     }
 
+    const onActionFillEmptyOrderNumber1 = () => {
+        if (uploadDatas?.length > 0) {
+            setUploadDatas(uploadDatas?.map(r => {
+                if (!r.orderNumber1) {
+                    return {
+                        ...r,
+                        orderNumber1: uuidv4()
+                    }
+                }
+                return {
+                    ...r
+                }
+            }))
+        }
+    }
+
     const onSubmitUploadWithSingle = (form) => {
         form = form?.map(r => {
             return {
@@ -127,6 +143,7 @@ export default function useUploadDatasHook(props) {
         reqSaveUploadDatas,
         onPushList,
         onFillEmptyChannerOrderDate,
+        onActionFillEmptyOrderNumber1,
         onSubmitUploadWithSingle,
         onDeleteUploadData,
         onDeleteUploadDataAll

@@ -140,7 +140,6 @@ export const TableBox = styled.div`
         text-overflow:ellipsis;
         white-space:nowrap;
         font-size: 12px;
-        
     }
 
     table tbody tr{

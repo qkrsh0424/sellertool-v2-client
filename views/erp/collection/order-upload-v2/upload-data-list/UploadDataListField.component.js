@@ -11,6 +11,7 @@ import ResizableTh from "../../../../../components/table/th/v1/ResizableTh";
 import Link from "next/link";
 import { CustomDateUtils } from "../../../../../utils/CustomDateUtils";
 import { CustomURIEncoderUtils } from "../../../../../utils/CustomURIEncoderUtils";
+import { ClipboardPlus } from "lucide-react";
 
 const TABLE_DATA_VIEW_SIZE = 50;
 const TABLE_DATA_INC_DEC_SIZE = 30;
@@ -20,6 +21,7 @@ export default function UploadDataListFieldComponent({
     onActionFillEmptyChannerOrderDate,
     onActionDeleteUploadData,
     onActionDeleteUploadDataAll,
+    onActionFillEmptyOrderNumber1,
     onSubmitSaveUploadDatas
 }) {
     const [disabledBtn, setDisabledBtn] = useDisabledBtn();
@@ -49,6 +51,7 @@ export default function UploadDataListFieldComponent({
                     onActionFillEmptyChannerOrderDate={onActionFillEmptyChannerOrderDate}
                     onActionDeleteUploadData={onActionDeleteUploadData}
                     onActionDeleteUploadDataAll={onActionDeleteUploadDataAll}
+                    onActionFillEmptyOrderNumber1={onActionFillEmptyOrderNumber1}
                 />
             </Container>
         </>
@@ -59,7 +62,8 @@ function Table({
     uploadDatas,
     onActionFillEmptyChannerOrderDate,
     onActionDeleteUploadData,
-    onActionDeleteUploadDataAll
+    onActionDeleteUploadDataAll,
+    onActionFillEmptyOrderNumber1
 }) {
     const [viewSize, setViewSize] = useState(TABLE_DATA_VIEW_SIZE);
     const [deleteAllModalOpen, setDeleteAllModalOpen] = useState(false);
@@ -107,6 +111,25 @@ function Table({
                                     삭제
                                 </th>
                                 {TABLE_HEADERS?.map((r, index) => {
+                                    if (r.fieldName === 'orderNumber1') {
+                                        return (
+                                            <ResizableTh
+                                                key={index}
+                                                className="fixed-header"
+                                                scope="col"
+                                                width={r.defaultWidth}
+                                                style={{
+                                                    zIndex: '10'
+                                                }}
+                                            >
+                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
+                                                    {r.headerName}
+                                                    <ClipboardPlus size={18} cursor={'pointer'} onClick={() => onActionFillEmptyOrderNumber1()} />
+                                                </div>
+                                            </ResizableTh>
+                                        )
+                                    }
+
                                     return (
                                         <ResizableTh
                                             key={index}
@@ -189,7 +212,7 @@ function Table({
                                                             href={url}
                                                             passHref
                                                         >
-                                                            <a target="_blank" style={{fontWeight:'700', textDecoration:'underline'}}>
+                                                            <a target="_blank" style={{ fontWeight: '700', textDecoration: 'underline' }}>
                                                                 {data[header.fieldName]}
                                                             </a>
                                                         </Link>

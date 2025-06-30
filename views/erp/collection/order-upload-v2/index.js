@@ -25,6 +25,7 @@ export default function MainComponent(props) {
         reqSaveUploadDatas,
         onPushList,
         onFillEmptyChannerOrderDate,
+        onActionFillEmptyOrderNumber1,
         onSubmitUploadWithSingle,
         onDeleteUploadData,
         onDeleteUploadDataAll
@@ -168,6 +169,7 @@ export default function MainComponent(props) {
                             onActionFillEmptyChannerOrderDate={onFillEmptyChannerOrderDate}
                             onActionDeleteUploadData={onDeleteUploadData}
                             onActionDeleteUploadDataAll={onDeleteUploadDataAll}
+                            onActionFillEmptyOrderNumber1={onActionFillEmptyOrderNumber1}
                             onSubmitSaveUploadDatas={handleSubmitSaveUploadDatas}
                         />
                     </>

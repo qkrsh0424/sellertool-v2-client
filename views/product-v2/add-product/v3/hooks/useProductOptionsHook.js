@@ -105,7 +105,6 @@ export function useProductOptionsHook() {
             if (!optionCodePattern.test(r.code)) {
                 throw new Error(`옵션코드(SKU코드)는 영문, 숫자, -, _ 만 허용되며, 1-50자 이내로 입력해주세요. (행: ${index + 1})`);
             }
-
             if (name.length < 1 || name.length > 50) {
                 throw new Error(`옵션명은 1-50자로 필수 입력입니다. (행: ${index + 1})`);
             }

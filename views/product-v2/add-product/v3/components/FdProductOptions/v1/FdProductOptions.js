@@ -88,6 +88,7 @@ export function FdProductOptions({
         })
         onSetProductOptions(newProductOptions);
     }
+
     return (
         <>
             <Container>

@@ -154,21 +154,6 @@ export function OptionListTable({
                                         </CustomBlockButton>
                                     </td>
                                     {OPTION_HEADER.map((header) => {
-                                        if (header?.readOnly && header?.name === 'code') {
-                                            return (
-                                                <td key={header.name}>
-                                                    <input
-                                                        type='text'
-                                                        className='input-item'
-                                                        name={header.name}
-                                                        value={option[header?.name] || ''}
-                                                        onChange={(e) => onChangeOptionValueOfName(e, option.id)}
-                                                        placeholder={'옵션코드를 입력'}
-                                                        onKeyDown={(e) => onKeyDownMove(e)}
-                                                    ></input>
-                                                </td>
-                                            );
-                                        }
                                         if (header.name === 'salesPrice' || header.name === 'totalPurchasePrice') {
                                             return (
                                                 <td key={header.name}>

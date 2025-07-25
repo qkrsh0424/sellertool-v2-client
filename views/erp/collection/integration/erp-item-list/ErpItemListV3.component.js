@@ -701,6 +701,7 @@ function Td({
         case 'releaseOptionCode': renderingType = 'releaseOptionCode'; break;
         case 'optionStockUnit': renderingType = 'optionStockUnit'; break;
         case 'receiver': renderingType = 'receiver'; break;
+        case 'extraWaybillNumbers': renderingType = 'extraWaybillNumbers'; break;
         default: renderingType = 'default'; break;
     }
 
@@ -728,6 +729,7 @@ const RenderingTdComponent = (props) => ({
     releaseOptionCode: <ReleaseOptionCodeTd {...props} />,
     optionStockUnit: <OptionStockUnitTd {...props} />,
     receiver: <ReceiverTd {...props} />,
+    extraWaybillNumbers: <ExtraWaybillNumbersTd {...props} />,
     default: <DefaultTd {...props} />,
 });
 
@@ -972,6 +974,28 @@ function ReceiverTd(props) {
             </div>
         </td>
     );
+}
+
+function ExtraWaybillNumbersTd(props) {
+    const erpItem = props?.erpItem;
+    const matchedFieldName = props?.matchedFieldName;
+
+    return (
+        <td
+            className={`${props?.isSelected ? 'active' : ''} ${(props?.isOutOfStock) ? 'noStocks' : ''} ${!props?.erpItem?.productOptionId ? 'noOptionCode' : ''}`}
+            onClick={(e) => { props?.onClick(erpItem?.id) }}
+        >
+            <div
+                className='td-copyable-wrap-pre-line-text'
+                onClick={(e) => {
+                    e.stopPropagation();
+                    ClipboardUtils.copyToClipboard(erpItem[matchedFieldName])
+                }}
+            >
+                {erpItem[matchedFieldName]}
+            </div>
+        </td>
+    )
 }
 
 function DefaultTd(props) {

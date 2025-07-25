@@ -638,6 +638,10 @@ const DELIVERY_SEARCH_CONDITIONS = [
         name: '운송장번호',
     },
     {
+        fieldName: 'EXTRA_WAYBILL_NUMBERS',
+        name: '기타운송장번호',
+    },
+    {
         fieldName: 'RELEASE_LOCATION',
         name: '출고지',
     },

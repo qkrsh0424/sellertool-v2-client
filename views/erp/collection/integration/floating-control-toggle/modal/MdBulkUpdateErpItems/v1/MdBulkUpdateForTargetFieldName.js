@@ -38,12 +38,21 @@ export function MdBulkUpdateForTargetFieldName({
             >
                 <CustomDialog.CloseButton onClose={() => handleModalClose(null)} />
                 <St.BodyContainer>
-                    <CustomInput
-                        type={targetFieldValue.valueType === 'number' ? 'number' : 'text'}
-                        placeholder={`${targetFieldValue?.headerName}을 입력하세요.`}
-                        value={inputValue || ''}
-                        onChange={(e) => handleChangeInputValue(e)}
-                    />
+                    {targetFieldName === 'extraWaybillNumbers' ?
+                        <textarea
+                            type={targetFieldValue.valueType === 'number' ? 'number' : 'text'}
+                            placeholder={`${targetFieldValue?.headerName}을 입력하세요.`}
+                            value={inputValue || ''}
+                            onChange={(e) => handleChangeInputValue(e)}
+                        ></textarea>
+                        :
+                        <CustomInput
+                            type={targetFieldValue.valueType === 'number' ? 'number' : 'text'}
+                            placeholder={`${targetFieldValue?.headerName}을 입력하세요.`}
+                            value={inputValue || ''}
+                            onChange={(e) => handleChangeInputValue(e)}
+                        />
+                    }
                 </St.BodyContainer>
                 <CustomDialog.FooterButtonGroup isFlex>
                     <CustomDialog.FooterButton backgroundColor={'var(--defaultModalCloseColor)'} fontColor={'#fff'} width={'40%'} onClick={() => handleModalClose()}>취소</CustomDialog.FooterButton>

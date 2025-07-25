@@ -148,6 +148,34 @@ export const TableBox = styled.div`
             }
         }
 
+        .textarea-item{
+            background: none;
+            text-align: left;
+            padding: 10px 10px;
+            box-sizing: border-box;
+            width: 100%;
+            height: 44px;
+            border: none;
+            outline:none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 12px;
+            resize: none;
+            display: block;
+
+            /* word-break: keep-all;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap; */
+
+            &:focus{
+                border: 1.5px solid var(--defaultBlueColor);
+                box-shadow: var(--defaultBoxShadow);
+                background: var(--defaultBlueColorOpacity100);
+                cursor: text;
+            }
+        }
+
         .optionCodeText{
             flex:1;
             word-break: keep-all;

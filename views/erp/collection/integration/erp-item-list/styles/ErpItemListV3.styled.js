@@ -192,6 +192,22 @@ export const TableFieldWrapper = styled.div`
         }
     }
 
+    .td-copyable-wrap-pre-line-text{
+        cursor: pointer;
+        white-space: pre-line; /* 줄바꿈 유지 */
+        overflow: hidden;
+        line-height: 1.5em; /* 줄 간격 설정 */
+        height: 1.5em; /* 한 줄 높이만큼만 보임 */
+        cursor: pointer;
+
+        &:hover{
+            transform: scale(1.02);
+            font-weight: 500;
+            color:var(--mainColor);
+            height: auto;
+        }
+    }
+
     .td-control-button-item{
         user-select: none;
         -webkit-tap-highlight-color: #00000000;

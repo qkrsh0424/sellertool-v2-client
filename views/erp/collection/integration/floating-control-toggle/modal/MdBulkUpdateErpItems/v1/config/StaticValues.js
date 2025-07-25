@@ -176,6 +176,13 @@ const RECEIEVR_INFO_HEADERS = [
         required: false,
         defaultWidth: 180,
         valueType: 'numberWithCommas'
+    },
+    {
+        name: 'extraWaybillNumbers',
+        headerName: '기타운송장번호',
+        required: false,
+        defaultWidth: 180,
+        valueType: 'string'
     }
 ]
 

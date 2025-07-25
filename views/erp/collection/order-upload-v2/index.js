@@ -12,8 +12,22 @@ import { useExcelTranslatorHook } from "./hooks/useExcelTranslatorHook";
 import { customSignitureUtils } from "../../../../utils/customSignitureUtils";
 import { FdTemporaryErpItem } from "./components/FdTemporaryErpItem/FdTemporaryErpItem";
 import { v4 as uuidv4 } from 'uuid';
+import { ManagedWorkspaceApisContextProvider } from "./contexts/ManagedWorkspaceApisContext";
+import moment from "moment";
+
+
 
 export default function MainComponent(props) {
+    return (
+        <>
+            <ManagedWorkspaceApisContextProvider>
+                <CoreComponent />
+            </ManagedWorkspaceApisContextProvider>
+        </>
+    );
+}
+
+function CoreComponent() {
     const workspaceRedux = useSelector(state => state?.workspaceRedux);
     const wsId = workspaceRedux?.workspaceInfo?.id;
 
@@ -94,7 +108,7 @@ export default function MainComponent(props) {
 
         const result = await apiHook.reqDeleteTemporaryErpItemList({ headers: headers })
 
-        if(result?.content){
+        if (result?.content) {
             alert(`${result?.content} 건의 임시 주문건을 삭제 했습니다.`)
             setTemporaryErpItemList(null);
         }
@@ -114,6 +128,55 @@ export default function MainComponent(props) {
         handleOpenBackdrop();
         await reqUploadWithExcel(formData, () => { successCallback() });
         handleCloseBackdrop();
+    }
+
+    const handleBringErpItemsFromOtherWorkspace = async (erpItems) => {
+        if (!erpItems || erpItems?.length <= 0) {
+            return;
+        }
+
+        onPushList(erpItems?.map(r => {
+            return {
+                channelOrderDate: isNaN(Date.parse(r?.erpItem?.channelOrderDate)) ? null : moment(r?.erpItem?.channelOrderDate).format('YYYY-MM-DD HH:mm:ss'),
+                prodName: r?.erpItemOrderInfo?.prodName || '',
+                optionName: r?.erpItemOrderInfo?.optionName || '',
+                unit: r?.erpItemOrderInfo?.unit || '',
+                receiver: r?.erpItemReceiverInfo?.receiver || '',
+                receiverContact1: r?.erpItemReceiverInfo?.receiverContact1 || '',
+                receiverContact2: r?.erpItemReceiverInfo?.receiverContact2 || '',
+                destination: r?.erpItemDeliveryInfo?.destination || '',
+                destinationDetail: r?.erpItemDeliveryInfo?.destinationDetail || '',
+                salesChannel: r?.erpItemOrderInfo?.salesChannel || '',
+                orderNumber1: r?.erpItemOrderInfo?.orderNumber1 || '',
+                orderNumber2: r?.erpItemOrderInfo?.orderNumber2 || '',
+                channelProdCode: r?.erpItemOrderInfo?.channelProdCode || '',
+                channelOptionCode: r?.erpItemOrderInfo?.channelOptionCode || '',
+                zipCode: r?.erpItemDeliveryInfo?.zipCode || '',
+                courier: r?.erpItemDeliveryInfo?.courier || '',
+                transportType: r?.erpItemDeliveryInfo?.transportType || '',
+                deliveryMessage: r?.erpItemDeliveryInfo?.deliveryMessage || '',
+                waybillNumber: r?.erpItemDeliveryInfo?.waybillNumber || '',
+                price: String(r?.erpItemOrderInfo.price) || '0',
+                deliveryCharge: String(r?.erpItemOrderInfo.deliveryCharge) || '0',
+                barcode: r?.erpItemOrderInfo.barcode || '',
+                prodCode: r.productOption.prodCode,
+                optionCode: r.productOption.code,
+                releaseOptionCode: r.productOption.optionCode,
+                releaseLocation: r.productOption.releaseLocation,
+                managementMemo1: r.erpItemManagementMemo.managementMemo1,
+                managementMemo2: r.erpItemManagementMemo.managementMemo2,
+                managementMemo3: r.erpItemManagementMemo.managementMemo3,
+                managementMemo4: r.erpItemManagementMemo.managementMemo4,
+                managementMemo5: r.erpItemManagementMemo.managementMemo5,
+                managementMemo6: r.erpItemManagementMemo.managementMemo6,
+                managementMemo7: r.erpItemManagementMemo.managementMemo7,
+                managementMemo8: r.erpItemManagementMemo.managementMemo8,
+                managementMemo9: r.erpItemManagementMemo.managementMemo9,
+                managementMemo10: r.erpItemManagementMemo.managementMemo10,
+                id: uuidv4()
+            }
+        }))
+
     }
 
     const handleSubmitSaveUploadDatas = async (datas) => {
@@ -156,6 +219,7 @@ export default function MainComponent(props) {
                             onChangeSelectedExcelTranslator={excelTranslatorHook.onSetSelectedExcelTranslator}
                             onSubmitUploadWithExcel={handleSubmitUploadWithExcel}
                             onSubmitUploadWithSingle={onSubmitUploadWithSingle}
+                            onBringErpItemsFromOtherWorkspace={handleBringErpItemsFromOtherWorkspace}
                         />
                         {temporaryErpItemList &&
                             <FdTemporaryErpItem

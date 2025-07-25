@@ -12,7 +12,7 @@ import axios from 'axios';
 import { customToast } from '../../../../../../components/toast/custom-react-toastify/v1';
 import { BringItemsModal } from './wegets/weget-bring-items-modal';
 
-const API_SERVER_ADDRESS = process.env.NEXT_PUBLIC_API_SERVER_ADDRESS || 'http://localhost:7071';
+const API_SERVER_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiServerAddress : process.env.production.apiServerAddress
 
 const StyledContainer = styled.div`
     margin-top: 20px;

@@ -22,14 +22,14 @@ export function FdServiceList() {
             target: '_self'
         },
         {
-            href: '/store-rank/real-time-rank',
-            name: '스토어 랭킹',
+            href: '/inventory',
+            name: '통합 재고 관리',
             isReady: true,
             target: '_self'
         },
         {
-            href: '/inventory',
-            name: '통합 재고 관리',
+            href: '/erp/collection/dashboard',
+            name: '통합 발주 관리',
             isReady: true,
             target: '_self'
         },

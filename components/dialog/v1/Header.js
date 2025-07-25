@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import CustomImage from '../../image/CustomImage';
 import CustomBlockButton from '../../buttons/block-button/v1/CustomBlockButton';
+import { ChevronLeftIcon } from 'lucide-react';
 
 const Container = styled.div`
     display: flex;
@@ -76,7 +77,8 @@ function Back({
                 type='button'
                 onClick={() => (onClick && typeof onClick === 'function') ? onClick() : {}}
             >
-                <CustomImage src='/images/icon/close_default_000000.svg' />
+                {/* <CustomImage src='/images/icon/close_default_000000.svg' /> */}
+                <ChevronLeftIcon />
             </CustomBlockButton>
         </BackBox>
     );

@@ -90,35 +90,47 @@ function OrderManagementChart({
 
                 switch (clickedIndex) {
                     case 0:
-                        pathname = '/erp/collection/order';
+                        pathname = '/erp/collection/integration';
                         query = {
+                            classificationType: 'NEW',
                             periodSearchCondition: 'createdAt',
                             startDateTime: date,
-                            endDateTime: date
+                            endDateTime: date,
+                            riSearchCondition: 'receiver',
+                            riSearchQuery: ''
                         }
                         break;
                     case 1:
-                        pathname = '/erp/collection/sales';
+                        pathname = '/erp/collection/integration';
                         query = {
+                            classificationType: 'CONFIRM',
                             periodSearchCondition: 'salesAt',
                             startDateTime: date,
-                            endDateTime: date
+                            endDateTime: date,
+                            riSearchCondition: 'receiver',
+                            riSearchQuery: ''
                         }
                         break;
                     case 2:
-                        pathname = '/erp/collection/release-complete';
+                        pathname = '/erp/collection/integration';
                         query = {
+                            classificationType: 'COMPLETE',
                             periodSearchCondition: 'releaseAt',
                             startDateTime: date,
-                            endDateTime: date
+                            endDateTime: date,
+                            riSearchCondition: 'receiver',
+                            riSearchQuery: ''
                         }
                         break;
                     case 3:
-                        pathname = '/erp/collection/hold';
+                        pathname = '/erp/collection/integration';
                         query = {
+                            classificationType: 'POSTPONE',
                             periodSearchCondition: 'holdAt',
                             startDateTime: date,
-                            endDateTime: date
+                            endDateTime: date,
+                            riSearchCondition: 'receiver',
+                            riSearchQuery: ''
                         }
                         break;
                 }
@@ -172,7 +184,7 @@ function OrderManagementChart({
             }
         },
         data: {
-            labels: ['주문확인', '주문확정', '출고완료', '보류 데이터'],
+            labels: ['신규주문', '주문확정', '출고완료', '보류데이터'],
             datasets: [
                 {
                     type: 'bar',

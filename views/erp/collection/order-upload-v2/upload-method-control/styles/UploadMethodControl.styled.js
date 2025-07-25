@@ -6,12 +6,12 @@ export const Container = styled.div`
 
 export const ButtonGroup = styled.div`
     display: flex;
-
+    gap: 20px;
     .button-item{
         cursor: pointer;
         margin: 0;
         padding: 0;
-        width: 100px;
+        /* width: 100px; */
         height: 30px;
         font-weight: 500;
         background: none;

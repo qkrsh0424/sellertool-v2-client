@@ -67,13 +67,6 @@ const HomeMain = () => {
     return (
         <>
             <Container>
-                <div className='link-box'>
-                    <Link
-                        href='https://v1.sellertool.io'
-                    >
-                        <a className='link'>구버전으로 이동</a>
-                    </Link>
-                </div>
                 <BannerComponent />
                 <Section1Component />
                 <FdEvent />

@@ -198,7 +198,7 @@ const TableBox = styled.div`
         font-size: 12px;
     }
 `;
-const API_SERVER_ADDRESS = process.env.NEXT_PUBLIC_API_SERVER_ADDRESS || 'http://localhost:7071';
+const API_SERVER_ADDRESS = process.env.NODE_ENV == 'development' ? process.env.development.apiServerAddress : process.env.production.apiServerAddress
 
 const TABLE_DATA_VIEW_SIZE = 50;
 const TABLE_DATA_INC_DEC_SIZE = 30;

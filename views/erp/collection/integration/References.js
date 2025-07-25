@@ -135,6 +135,10 @@ export const DELIVERY_INFO_TYPES = [
         name: '운송장번호'
     },
     {
+        value: 'extraWaybillNumbers',
+        name: '기타운송장번호'
+    },
+    {
         value: 'releaseLocation',
         name: '출고지'
     },

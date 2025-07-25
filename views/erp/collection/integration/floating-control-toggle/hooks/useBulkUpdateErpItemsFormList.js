@@ -152,40 +152,41 @@ export function useBulkUpdateErpItemsFormList(initialValue) {
         return bulkUpdateErpItemsFormList.map(r => {
             return {
                 ...r,
-                prodCode: r?.prodCode,
-                optionCode: r?.optionCode,
-                releaseOptionCode: r?.releaseOptionCode,
-                prodName: r?.prodName,
-                optionName: r?.optionName,
+                prodCode: r?.prodCode ? r?.prodCode?.trim() : '',
+                optionCode: r?.optionCode ? r?.optionCode?.trim() : '',
+                releaseOptionCode: r?.releaseOptionCode ? r?.releaseOptionCode?.trim() : '',
+                prodName: r?.prodName ? r?.prodName?.trim() : '',
+                optionName: r?.optionName ? r?.optionName?.trim() : '',
                 unit: (!r?.unit || r?.unit < 0) ? 0 : r?.unit,
-                salesChannel: r?.salesChannel,
-                orderNumber1: r?.orderNumber1,
-                orderNumber2: r?.orderNumber2,
-                channelProdCode: r?.channelProdCode,
-                channelOptionCode: r?.channelOptionCode,
+                salesChannel: r?.salesChannel ? r?.salesChannel?.trim() : '',
+                orderNumber1: r?.orderNumber1 ? r?.orderNumber1?.trim() : '',
+                orderNumber2: r?.orderNumber2 ? r?.orderNumber2?.trim() : '',
+                channelProdCode: r?.channelProdCode ? r?.channelProdCode?.trim() : '',
+                channelOptionCode: r?.channelOptionCode ? r?.channelOptionCode?.trim() : '',
                 price: (!r?.price || r?.price < 0) ? 0 : r?.price,
                 deliveryCharge: (!r?.deliveryCharge || r?.deliveryCharge < 0) ? 0 : r?.deliveryCharge,
-                barcode: r?.barcode,
-                receiver: r?.receiver,
-                receiverContact1: r?.receiverContact1,
-                receiverContact2: r?.receiverContact2,
-                destination: r?.destination,
-                destinationDetail: r?.destinationDetail,
-                zipCode: r?.zipCode,
-                courier: r?.courier,
-                transportType: r?.transportType,
-                deliveryMessage: r?.deliveryMessage,
-                waybillNumber: r?.waybillNumber,
-                managementMemo1: r?.managementMemo1,
-                managementMemo2: r?.managementMemo2,
-                managementMemo3: r?.managementMemo3,
-                managementMemo4: r?.managementMemo4,
-                managementMemo5: r?.managementMemo5,
-                managementMemo6: r?.managementMemo6,
-                managementMemo7: r?.managementMemo7,
-                managementMemo8: r?.managementMemo8,
-                managementMemo9: r?.managementMemo9,
-                managementMemo10: r?.managementMemo10,
+                barcode: r?.barcode ? r?.barcode?.trim() : '',
+                receiver: r?.receiver ? r?.receiver?.trim() : '',
+                receiverContact1: r?.receiverContact1 ? r?.receiverContact1?.trim() : '',
+                receiverContact2: r?.receiverContact2 ? r?.receiverContact2?.trim() : '',
+                destination: r?.destination ? r?.destination?.trim() : '',
+                destinationDetail: r?.destinationDetail ? r?.destinationDetail?.trim() : '',
+                zipCode: r?.zipCode ? r?.zipCode?.trim() : '',
+                courier: r?.courier ? r?.courier?.trim() : '',
+                transportType: r?.transportType ? r?.transportType?.trim() : '',
+                deliveryMessage: r?.deliveryMessage ? r?.deliveryMessage?.trim() : '',
+                waybillNumber: r?.waybillNumber ? r?.waybillNumber?.trim() : '',
+                extraWaybillNumbers: r?.extraWaybillNumbers ? r?.extraWaybillNumbers?.trim() : '',
+                managementMemo1: r?.managementMemo1 ? r?.managementMemo1?.trim() : '',
+                managementMemo2: r?.managementMemo2 ? r?.managementMemo2?.trim() : '',
+                managementMemo3: r?.managementMemo3 ? r?.managementMemo3?.trim() : '',
+                managementMemo4: r?.managementMemo4 ? r?.managementMemo4?.trim() : '',
+                managementMemo5: r?.managementMemo5 ? r?.managementMemo5?.trim() : '',
+                managementMemo6: r?.managementMemo6 ? r?.managementMemo6?.trim() : '',
+                managementMemo7: r?.managementMemo7 ? r?.managementMemo7?.trim() : '',
+                managementMemo8: r?.managementMemo8 ? r?.managementMemo8?.trim() : '',
+                managementMemo9: r?.managementMemo9 ? r?.managementMemo9?.trim() : '',
+                managementMemo10: r?.managementMemo10 ? r?.managementMemo10?.trim() : '',
             }
         })
     }
@@ -263,6 +264,9 @@ export function useBulkUpdateErpItemsFormList(initialValue) {
             }
             if (r?.waybillNumber?.length > 30) {
                 throw new Error(`${index + 1}행 : 운송장번호는 30자 이내로 입력해 주세요.`);
+            }
+            if (r?.extraWaybillNumbers?.length > 2000) {
+                throw new Error(`${index + 1}행 : 기타운송장번호는 2000자 이내로 입력해 주세요.`);
             }
             if (r?.managementMemo1?.length > 200) {
                 throw new Error(`${index + 1}행 : 관리메모1은 200자 이내로 입력해 주세요.`);

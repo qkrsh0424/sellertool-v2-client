@@ -510,13 +510,28 @@ export function FdDataTable({
                                                 );
                                             }
 
+                                            if (header.name === 'extraWaybillNumbers') {
+                                                return (
+                                                    <td key={header.name}>
+                                                        <textarea
+                                                            type='text'
+                                                            className='textarea-item'
+                                                            name={header.name}
+                                                            value={erpItem[header.name] || ''}
+                                                            placeholder={`${header.headerName}을(를) 입력`}
+                                                            onChange={(e) => onChangeValueOfName(e, erpItem.id)}
+                                                        ></textarea>
+                                                    </td>
+                                                );
+                                            }
+
                                             return (
                                                 <td key={header.name}>
                                                     <input
                                                         type='text'
                                                         className='input-item'
                                                         name={header.name}
-                                                        value={erpItem[header.name]}
+                                                        value={erpItem[header.name] || ''}
                                                         placeholder={`${header.headerName}을(를) 입력`}
                                                         onChange={(e) => onChangeValueOfName(e, erpItem.id)}
                                                     ></input>

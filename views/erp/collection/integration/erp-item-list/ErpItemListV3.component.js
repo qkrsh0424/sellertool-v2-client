@@ -985,15 +985,17 @@ function ExtraWaybillNumbersTd(props) {
             className={`${props?.isSelected ? 'active' : ''} ${(props?.isOutOfStock) ? 'noStocks' : ''} ${!props?.erpItem?.productOptionId ? 'noOptionCode' : ''}`}
             onClick={(e) => { props?.onClick(erpItem?.id) }}
         >
-            <div
-                className='td-copyable-wrap-pre-line-text'
-                onClick={(e) => {
-                    e.stopPropagation();
-                    ClipboardUtils.copyToClipboard(erpItem[matchedFieldName])
-                }}
-            >
-                {erpItem[matchedFieldName]}
-            </div>
+            {erpItem[matchedFieldName] &&
+                <div
+                    className='td-copyable-wrap-pre-line-text'
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        ClipboardUtils.copyToClipboard(erpItem[matchedFieldName])
+                    }}
+                >
+                    {erpItem[matchedFieldName]}
+                </div>
+            }
         </td>
     )
 }

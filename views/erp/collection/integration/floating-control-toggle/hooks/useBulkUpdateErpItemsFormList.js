@@ -66,7 +66,8 @@ export function useBulkUpdateErpItemsFormList(initialValue) {
             if (r.id === erpItemId) {
                 return {
                     ...r,
-                    optionCode: optionCode
+                    optionCode: optionCode,
+                    releaseOptionCode: optionCode
                 }
             }
 
@@ -95,7 +96,8 @@ export function useBulkUpdateErpItemsFormList(initialValue) {
         onSetBulkUpdateErpItemsFormList(bulkUpdateErpItemsFormList?.map(r => {
             return {
                 ...r,
-                optionCode: optionCode
+                optionCode: optionCode,
+                releaseOptionCode: optionCode
             }
         }))
     }
